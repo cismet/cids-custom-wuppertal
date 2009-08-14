@@ -64,7 +64,7 @@
                                     <destFileName>cidsCustom.jar</destFileName>
                                 </artifactItem>
                             </artifactItems>
-                            <outputDirectory>../cidsDistribution/lib/localWuNDa</outputDirectory>
+                            <outputDirectory>../../cidsDistribution/lib/localWuNDa</outputDirectory>
                             <stripVersion>true</stripVersion>
                         </configuration>
                     </execution>
