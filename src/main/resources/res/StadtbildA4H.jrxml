@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LuftbildschraegaufnahmenA4H" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="image" class="java.lang.Object" isForPrompting="false"/>
+	<parameter name="wupperwurm" class="java.lang.Object" isForPrompting="false"/>
+	<field name="bildnummer" class="java.lang.String"/>
+	<field name="fotograf" class="java.lang.Object"/>
+	<field name="suchworte" class="java.lang.Object"/>
+	<field name="ort" class="java.lang.Object"/>
+	<field name="aufnahmedatum" class="java.util.Date"/>
+	<field name="hausnummer" class="java.lang.String"/>
+	<field name="stadtteil" class="java.lang.Object">
+		<fieldDescription><![CDATA[ort.stadtteil]]></fieldDescription>
+	</field>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="802">
+			<rectangle>
+				<reportElement key="rectangle-1" mode="Transparent" x="12" y="10" width="517" height="757"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement key="rectangle-2" mode="Transparent" x="14" y="12" width="513" height="753"/>
+			</rectangle>
+			<line>
+				<reportElement key="line-4" x="409" y="732" width="118" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement key="line-5" x="2" y="395" width="10" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<image scaleImage="Clip" hAlign="Center" vAlign="Middle">
+				<reportElement key="image-2" x="21" y="17" width="502" height="605"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<imageExpression class="java.awt.Image"><![CDATA[$P{image}]]></imageExpression>
+			</image>
+			<rectangle>
+				<reportElement key="rectangle-3" mode="Transparent" x="14" y="622" width="513" height="143"/>
+			</rectangle>
+			<staticText>
+				<reportElement key="staticText-1" x="21" y="756" width="502" height="7"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Justified">
+					<font fontName="Arial Narrow" size="5"/>
+				</textElement>
+				<text><![CDATA[Vervielfältigungen, Umarbeiten, Veröffentlichungen oder die Weitergabe an Dritte nur mit Zustimmung des Herausgebers, ausgenommen Vervielfältigungen und Umarbeitungen zur ínnerbetrieblichen Verwendung bei Behörden oder zum eigenen Gebrauch.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-3" x="21" y="748" width="153" height="9"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font fontName="Arial Narrow" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dieser Ausdruck ist gesetzlich geschützt.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-4" x="21" y="719" width="96" height="7"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement markup="styled">
+					<font fontName="Arial Narrow" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Herausgeber:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-6" x="21" y="728" width="51" height="8"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font fontName="Arial Narrow" size="6"/>
+				</textElement>
+				<text><![CDATA[Stadt Wuppertal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-7" x="21" y="734" width="118" height="8"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font fontName="Arial Narrow" size="6"/>
+				</textElement>
+				<text><![CDATA[Ressort Vermessung, Katasteramt und Geodaten]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-1" x="409" y="622" width="1" height="125"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement key="staticText-10" x="413" y="717" width="108" height="14"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Stadtbildarchiv]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-13" x="413" y="734" width="39" height="10"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Erstellt am]]></text>
+			</staticText>
+			<textField evaluationTime="Report" pattern="dd.MM.yyyy" isBlankWhenNull="false">
+				<reportElement key="textField" x="454" y="734" width="67" height="10"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement key="line-2" x="14" y="746" width="513" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="211" y="628" width="193" height="21"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{bildnummer}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="211" y="649" width="193" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{aufnahmedatum}.toString()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement x="211" y="669" width="193" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{fotograf}.toString()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="211" y="689" width="193" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{suchworte}.toString()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="211" y="709" width="193" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ort} + ($F{hausnummer} == null ? "": " "+ $F{hausnummer}) + ", " + $F{stadtteil}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement key="line-1" x="139" y="622" width="1" height="125"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="144" y="629" width="67" height="20"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Bildnummer:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="144" y="649" width="67" height="20"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Aufnahmedatum:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="144" y="669" width="67" height="20"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fotograf:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="144" y="689" width="67" height="20"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Suchworte:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="144" y="709" width="67" height="20"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ort:]]></text>
+			</staticText>
+			<image isUsingCache="false">
+				<reportElement x="21" y="689" width="60" height="24"/>
+				<imageExpression class="java.awt.Image"><![CDATA[$P{wupperwurm}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band/>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>
