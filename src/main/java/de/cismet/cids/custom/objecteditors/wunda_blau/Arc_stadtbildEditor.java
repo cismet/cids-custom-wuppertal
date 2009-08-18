@@ -144,6 +144,7 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         panButtons = new javax.swing.JPanel();
         btnAdd = new javax.swing.JButton();
         btnRemove = new javax.swing.JButton();
+        cbHauptsuchwort = new javax.swing.JComboBox();
 
         dlgAddSuchwort.setModal(true);
 
@@ -578,6 +579,20 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(panButtons, gridBagConstraints);
 
+        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.suchworte}");
+        org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, cbHauptsuchwort);
+        bindingGroup.addBinding(jComboBoxBinding);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.objekt}"), cbHauptsuchwort, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent.add(cbHauptsuchwort, gridBagConstraints);
+
         add(panContent, java.awt.BorderLayout.CENTER);
 
         bindingGroup.bind();
@@ -739,6 +754,7 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
     private javax.swing.JButton btnMenOk;
     private javax.swing.JButton btnRemove;
     private javax.swing.JComboBox cbGeometrie;
+    private javax.swing.JComboBox cbHauptsuchwort;
     private javax.swing.JComboBox cbSuchworte;
     private javax.swing.JCheckBox chkAuswahl;
     private javax.swing.JCheckBox chkLager;
