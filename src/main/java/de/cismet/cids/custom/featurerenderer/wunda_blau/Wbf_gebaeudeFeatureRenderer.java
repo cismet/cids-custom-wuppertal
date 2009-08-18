@@ -16,6 +16,7 @@ import de.cismet.cismap.commons.gui.piccolo.FeatureAnnotationSymbol;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.image.BufferedImage;
 import java.util.Collection;
 import org.jdesktop.swingx.image.ColorTintFilter;
@@ -29,7 +30,7 @@ public class Wbf_gebaeudeFeatureRenderer extends CustomCidsFeatureRenderer {
     private CidsBean cidsBean;
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     ColorTintFilter tinter = new ColorTintFilter(Color.BLUE, 0.5f);
-
+    private static Color BCKGRND=new Color(128,128,128,128);
     /** Creates new form Wbf_gebaeudeFeatureRenderer */
     public Wbf_gebaeudeFeatureRenderer() {
         initComponents();
@@ -67,6 +68,18 @@ public class Wbf_gebaeudeFeatureRenderer extends CustomCidsFeatureRenderer {
         cidsBean = metaObject.getBean();
         txtDescription.setText(getHtmlString());
     }
+
+    @Override
+    public float getTransparency() {
+        return 1;
+    }
+
+
+    @Override
+    public Paint getFillingStyle() {
+       return BCKGRND;
+    }
+
 
     @Override
     public FeatureAnnotationSymbol getPointSymbol() {
