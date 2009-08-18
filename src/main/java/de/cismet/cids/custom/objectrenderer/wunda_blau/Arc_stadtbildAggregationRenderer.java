@@ -61,7 +61,8 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
     private static final int MAX_ROWS = 2;
 
     static {
-        final InputStream is = new BufferedInputStream(Arc_stadtbildAggregationRenderer.class.getResourceAsStream("/res/stadtbild_agg_renderer.xml"));
+        final InputStream is = new BufferedInputStream(Arc_stadtbildAggregationRenderer.class.getResourceAsStream("/de/cismet/cids/custom/wunda_blau/res/stadtbild_agg_renderer.xml"));
+//        final InputStream is = new BufferedInputStream(Arc_stadtbildAggregationRenderer.class.getResourceAsStream("/res/stadtbild_agg_renderer.xml"));
         labelParser = new XMLPropertyParser(is);
         //add converters for correct property presentation
         labelParser.addConverterForClass(java.sql.Date.class, new SQLDateToStringConverter());
@@ -167,10 +168,12 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
     // End of variables declaration//GEN-END:variables
 //    private org.jdesktop.beansbinding.BindingGroup bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
+    @Override
     public Collection<CidsBean> getCidsBeans() {
         return cidsBeans;
     }
 
+    @Override
     public void setCidsBeans(Collection<CidsBean> cidsBeans) {
         this.cidsBeans = cidsBeans;
         setTitle(null);
@@ -226,10 +229,12 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
         WORKER_POOL.execute(worker);
     }
 
+    @Override
     public String getTitle() {
         return lblAgrTitle.getText();
     }
 
+    @Override
     public void setTitle(String title) {
         String desc = "Lichtkasten";
         final Collection<CidsBean> beans = cidsBeans;
@@ -239,6 +244,7 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
         lblAgrTitle.setText(desc);
     }
 
+    @Override
     public JComponent getTitleComponent() {
         return panTitle;
     }

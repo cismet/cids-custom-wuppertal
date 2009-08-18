@@ -584,7 +584,7 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
     }// </editor-fold>//GEN-END:initComponents
 
     @Override
-    public void setCidsBean(final CidsBean cidsBean) {
+    public synchronized void setCidsBean(final CidsBean cidsBean) {
         super.setCidsBean(cidsBean);
         domain = cidsBean.getMetaObject().getDomain();
         ClassCacheMultiple.addInstance(domain);

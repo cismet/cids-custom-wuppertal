@@ -19,7 +19,8 @@ import javax.swing.ImageIcon;
  */
 public class StadtbildJasperReportPrint extends AbstractJasperReportPrint {
 
-    public static final ImageIcon WUPPERWURM = new ImageIcon(StadtbildJasperReportPrint.class.getResource("/res/WupperWurm.gif"));
+    public static final ImageIcon WUPPERWURM = new ImageIcon(StadtbildJasperReportPrint.class.getResource("/de/cismet/cids/custom/wunda_blau/res/WupperWurm.gif"));
+//    public static final ImageIcon WUPPERWURM = new ImageIcon(StadtbildJasperReportPrint.class.getResource("/res/WupperWurm.gif"));
 
     public StadtbildJasperReportPrint(String reportURL, Collection<CidsBean> beans) {
         super(reportURL, beans);

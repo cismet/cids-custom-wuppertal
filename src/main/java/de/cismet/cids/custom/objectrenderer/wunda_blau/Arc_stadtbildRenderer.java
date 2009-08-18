@@ -30,7 +30,7 @@ import javax.swing.JPanel;
 public class Arc_stadtbildRenderer extends JPanel implements CidsBeanRenderer, TitleComponentProvider {
 
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
-    public static final String REPORT_FILE = "/res/StadtbildA4H.jasper";
+    public static final String REPORT_FILE = "/de/cismet/cids/custom/wunda_blau/res/StadtbildA4H.jasper";
     private CidsBean cidsBean;
     private String title;
 

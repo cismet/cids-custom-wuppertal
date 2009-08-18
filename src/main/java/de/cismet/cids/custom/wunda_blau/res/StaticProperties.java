@@ -18,9 +18,13 @@ public final class StaticProperties {
 
     static {
 //        propReader = new PropertyReader("/de/cismet/cids/custom/wunda_blau/res/urlconfig.properties");
-        propReader = new PropertyReader("/res/urlconfig.properties");
+        propReader = new PropertyReader("/de/cismet/cids/custom/wunda_blau/res/urlconfig.properties");
         URL_PREFIX = propReader.getProperty("url_prefix");
         URL_SUFFIX = propReader.getProperty("url_suffix");
+    }
+
+    public static final String getProperty(String in) {
+        return propReader.getProperty(in);
     }
 
     private StaticProperties() {
