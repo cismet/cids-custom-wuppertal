@@ -26,6 +26,7 @@ public class Arc_stadtbildFeatureRenderer extends CustomCidsFeatureRenderer {
 
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
     private static final Color BCKGRND = new Color(128, 128, 128, 128);
+    private static final Color PANELCOL = new Color(128, 128, 128, 0);
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Arc_stadtbildFeatureRenderer.class);
     private static final String PREFIX = "<html><table width=\"150\" border=\"0\"><tr><td>";
     private static final String SUFFIX = "</p></td></tr></table></html>";
@@ -35,6 +36,7 @@ public class Arc_stadtbildFeatureRenderer extends CustomCidsFeatureRenderer {
     public Arc_stadtbildFeatureRenderer() {
         initComponents();
         initLblPicture();
+        setBackground(PANELCOL);
         //should work, but doesn't :-(
 //        final org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.foto}"), lblPicture, org.jdesktop.beansbinding.BeanProperty.create("pictureURL"));
 //        binding.setConverter(new BeanUrlToStringConverter(".BMP"));
@@ -71,13 +73,15 @@ public class Arc_stadtbildFeatureRenderer extends CustomCidsFeatureRenderer {
 
         setLayout(new java.awt.BorderLayout());
 
+        panPicture.setOpaque(false);
         panPicture.add(lblPicture);
 
         add(panPicture, java.awt.BorderLayout.CENTER);
 
+        panInfo.setOpaque(false);
         panInfo.setLayout(new java.awt.GridBagLayout());
 
-        lblBildnummer.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lblBildnummer.setFont(new java.awt.Font("Tahoma", 0, 10));
         lblBildnummer.setText("-");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -88,7 +92,7 @@ public class Arc_stadtbildFeatureRenderer extends CustomCidsFeatureRenderer {
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         panInfo.add(lblBildnummer, gridBagConstraints);
 
-        lblDescBildnummer.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        lblDescBildnummer.setFont(new java.awt.Font("Tahoma", 1, 10));
         lblDescBildnummer.setText("Bildnummer:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -98,7 +102,7 @@ public class Arc_stadtbildFeatureRenderer extends CustomCidsFeatureRenderer {
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         panInfo.add(lblDescBildnummer, gridBagConstraints);
 
-        lblAufDat.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lblAufDat.setFont(new java.awt.Font("Tahoma", 0, 10));
         lblAufDat.setText("-");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -108,7 +112,7 @@ public class Arc_stadtbildFeatureRenderer extends CustomCidsFeatureRenderer {
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         panInfo.add(lblAufDat, gridBagConstraints);
 
-        lblDescAufDat.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        lblDescAufDat.setFont(new java.awt.Font("Tahoma", 1, 10));
         lblDescAufDat.setText("Aufnahmedat.:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -118,7 +122,7 @@ public class Arc_stadtbildFeatureRenderer extends CustomCidsFeatureRenderer {
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         panInfo.add(lblDescAufDat, gridBagConstraints);
 
-        lblAuftraggeber.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lblAuftraggeber.setFont(new java.awt.Font("Tahoma", 0, 10));
         lblAuftraggeber.setText("-");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -128,7 +132,7 @@ public class Arc_stadtbildFeatureRenderer extends CustomCidsFeatureRenderer {
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         panInfo.add(lblAuftraggeber, gridBagConstraints);
 
-        lblDescOrt.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        lblDescOrt.setFont(new java.awt.Font("Tahoma", 1, 10));
         lblDescOrt.setText("Ort:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -148,7 +152,7 @@ public class Arc_stadtbildFeatureRenderer extends CustomCidsFeatureRenderer {
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         panInfo.add(lblOrt, gridBagConstraints);
 
-        lblDescAuftraggeber.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        lblDescAuftraggeber.setFont(new java.awt.Font("Tahoma", 1, 10));
         lblDescAuftraggeber.setText("Auftraggeber:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
