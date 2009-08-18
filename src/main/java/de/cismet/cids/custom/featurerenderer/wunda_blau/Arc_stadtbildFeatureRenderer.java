@@ -13,6 +13,8 @@ package de.cismet.cids.custom.featurerenderer.wunda_blau;
 import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.featurerenderer.CustomCidsFeatureRenderer;
+import java.awt.Color;
+import java.awt.Paint;
 import java.text.SimpleDateFormat;
 
 /**
@@ -193,6 +195,20 @@ public class Arc_stadtbildFeatureRenderer extends CustomCidsFeatureRenderer {
 //        });
         }
     }
+
+    @Override
+    public float getTransparency() {
+        return 1;
+    }
+
+    private static Color BCKGRND=new Color(128,128,128,128);
+    @Override
+    public Paint getFillingStyle() {
+       return BCKGRND;
+    }
+
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lblAufDat;
     private javax.swing.JLabel lblAuftraggeber;
