@@ -25,6 +25,7 @@ import java.text.SimpleDateFormat;
 public class Arc_stadtbildFeatureRenderer extends CustomCidsFeatureRenderer {
 
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
+    private static final Color BCKGRND = new Color(128, 128, 128, 128);
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Arc_stadtbildFeatureRenderer.class);
     private static final String PREFIX = "<html><table width=\"150\" border=\"0\"><tr><td>";
     private static final String SUFFIX = "</p></td></tr></table></html>";
@@ -201,14 +202,10 @@ public class Arc_stadtbildFeatureRenderer extends CustomCidsFeatureRenderer {
         return 1;
     }
 
-    private static Color BCKGRND=new Color(128,128,128,128);
     @Override
     public Paint getFillingStyle() {
-       return BCKGRND;
+        return BCKGRND;
     }
-
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lblAufDat;
     private javax.swing.JLabel lblAuftraggeber;
