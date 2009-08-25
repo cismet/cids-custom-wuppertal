@@ -89,15 +89,13 @@ public class LocationinstanceRenderer extends javax.swing.JPanel implements Cids
 
         lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18));
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
-        lblTitle.setText(org.openide.util.NbBundle.getMessage(LocationinstanceRenderer.class, "LocationinstanceRenderer.lblTitle.text")); // NOI18N
+        lblTitle.setText("TITLE");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panTitle.add(lblTitle, gridBagConstraints);
-
-        lblTypeIcons.setText(org.openide.util.NbBundle.getMessage(LocationinstanceRenderer.class, "LocationinstanceRenderer.lblTypeIcons.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         panTitle.add(lblTypeIcons, gridBagConstraints);
@@ -158,14 +156,14 @@ public class LocationinstanceRenderer extends javax.swing.JPanel implements Cids
         panContent.setLayout(new java.awt.GridBagLayout());
 
         lblAdresseDesc.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblAdresseDesc.setText(org.openide.util.NbBundle.getMessage(LocationinstanceRenderer.class, "LocationinstanceRenderer.lblAdresseDesc.text")); // NOI18N
+        lblAdresseDesc.setText("Adresse:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panContent.add(lblAdresseDesc, gridBagConstraints);
 
         lblTelefonDesc.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblTelefonDesc.setText(org.openide.util.NbBundle.getMessage(LocationinstanceRenderer.class, "LocationinstanceRenderer.lblTelefonDesc.text")); // NOI18N
+        lblTelefonDesc.setText("Telefon:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -174,7 +172,7 @@ public class LocationinstanceRenderer extends javax.swing.JPanel implements Cids
         panContent.add(lblTelefonDesc, gridBagConstraints);
 
         lblFaxDesc.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblFaxDesc.setText(org.openide.util.NbBundle.getMessage(LocationinstanceRenderer.class, "LocationinstanceRenderer.lblFaxDesc.text")); // NOI18N
+        lblFaxDesc.setText("Fax.:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -183,7 +181,7 @@ public class LocationinstanceRenderer extends javax.swing.JPanel implements Cids
         panContent.add(lblFaxDesc, gridBagConstraints);
 
         lblInfoDesc.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblInfoDesc.setText(org.openide.util.NbBundle.getMessage(LocationinstanceRenderer.class, "LocationinstanceRenderer.lblInfoDesc.text")); // NOI18N
+        lblInfoDesc.setText("Info:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -192,7 +190,7 @@ public class LocationinstanceRenderer extends javax.swing.JPanel implements Cids
         panContent.add(lblInfoDesc, gridBagConstraints);
 
         lblAlternativnamenDesc.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblAlternativnamenDesc.setText(org.openide.util.NbBundle.getMessage(LocationinstanceRenderer.class, "LocationinstanceRenderer.lblAlternativnamenDesc.text")); // NOI18N
+        lblAlternativnamenDesc.setText("Alternativnamen:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -201,7 +199,7 @@ public class LocationinstanceRenderer extends javax.swing.JPanel implements Cids
         panContent.add(lblAlternativnamenDesc, gridBagConstraints);
 
         lblHaupttypDesc.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblHaupttypDesc.setText(org.openide.util.NbBundle.getMessage(LocationinstanceRenderer.class, "LocationinstanceRenderer.lblHaupttypDesc.text")); // NOI18N
+        lblHaupttypDesc.setText("Haupttyp:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
@@ -210,7 +208,7 @@ public class LocationinstanceRenderer extends javax.swing.JPanel implements Cids
         panContent.add(lblHaupttypDesc, gridBagConstraints);
 
         lblSonstigeTypenDesc.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblSonstigeTypenDesc.setText(org.openide.util.NbBundle.getMessage(LocationinstanceRenderer.class, "LocationinstanceRenderer.lblSonstigeTypenDesc.text")); // NOI18N
+        lblSonstigeTypenDesc.setText("sonstige Typen:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;

@@ -78,7 +78,7 @@ public class LocationtypeEditor extends DefaultCustomObjectEditor {
         panNewSuchwort.setPreferredSize(new java.awt.Dimension(180, 120));
         panNewSuchwort.setLayout(new java.awt.GridBagLayout());
 
-        lblAuswaehlen.setText(org.openide.util.NbBundle.getMessage(LocationtypeEditor.class, "LocationtypeEditor.lblAuswaehlen.text")); // NOI18N
+        lblAuswaehlen.setText("Bitte Lebenslage auswählen:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         panNewSuchwort.add(lblAuswaehlen, gridBagConstraints);
@@ -95,7 +95,7 @@ public class LocationtypeEditor extends DefaultCustomObjectEditor {
 
         panMenButtons.setLayout(new java.awt.GridBagLayout());
 
-        btnMenAbort.setText(org.openide.util.NbBundle.getMessage(LocationtypeEditor.class, "LocationtypeEditor.btnMenAbort.text")); // NOI18N
+        btnMenAbort.setText("Abbrechen");
         btnMenAbort.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMenAbortActionPerformed(evt);
@@ -108,7 +108,7 @@ public class LocationtypeEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panMenButtons.add(btnMenAbort, gridBagConstraints);
 
-        btnMenOk.setText(org.openide.util.NbBundle.getMessage(LocationtypeEditor.class, "LocationtypeEditor.btnMenOk.text")); // NOI18N
+        btnMenOk.setText("Ok");
         btnMenOk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMenOkActionPerformed(evt);
@@ -131,13 +131,13 @@ public class LocationtypeEditor extends DefaultCustomObjectEditor {
 
         setLayout(new java.awt.GridBagLayout());
 
-        lblName.setText(org.openide.util.NbBundle.getMessage(LocationtypeEditor.class, "LocationtypeEditor.lblName.text")); // NOI18N
+        lblName.setText("Name:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(lblName, gridBagConstraints);
 
-        lblDefinition.setText(org.openide.util.NbBundle.getMessage(LocationtypeEditor.class, "LocationtypeEditor.lblDefinition.text")); // NOI18N
+        lblDefinition.setText("Definition:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -145,7 +145,7 @@ public class LocationtypeEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(lblDefinition, gridBagConstraints);
 
-        lblToPublish.setText(org.openide.util.NbBundle.getMessage(LocationtypeEditor.class, "LocationtypeEditor.lblToPublish.text")); // NOI18N
+        lblToPublish.setText("Veröffentlicht:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -153,7 +153,6 @@ public class LocationtypeEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(lblToPublish, gridBagConstraints);
 
-        chkToPublish.setText(org.openide.util.NbBundle.getMessage(LocationtypeEditor.class, "LocationtypeEditor.chkToPublish.text")); // NOI18N
         chkToPublish.setOpaque(false);
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.to_publish}"), chkToPublish, org.jdesktop.beansbinding.BeanProperty.create("selected"));
@@ -214,7 +213,6 @@ public class LocationtypeEditor extends DefaultCustomObjectEditor {
         panButtons.setLayout(new java.awt.GridBagLayout());
 
         btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
-        btnAdd.setText(org.openide.util.NbBundle.getMessage(LocationtypeEditor.class, "LocationtypeEditor.btnAdd.text")); // NOI18N
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddActionPerformed(evt);
@@ -225,7 +223,6 @@ public class LocationtypeEditor extends DefaultCustomObjectEditor {
         panButtons.add(btnAdd, gridBagConstraints);
 
         btnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
-        btnRemove.setText(org.openide.util.NbBundle.getMessage(LocationtypeEditor.class, "LocationtypeEditor.btnRemove.text")); // NOI18N
         btnRemove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRemoveActionPerformed(evt);
@@ -244,7 +241,7 @@ public class LocationtypeEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(panButtons, gridBagConstraints);
 
-        lblLocationTypes.setText(org.openide.util.NbBundle.getMessage(LocationtypeEditor.class, "LocationtypeEditor.lblLocationTypes.text")); // NOI18N
+        lblLocationTypes.setText("Lebenslagen:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -252,7 +249,7 @@ public class LocationtypeEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.insets = new java.awt.Insets(7, 5, 5, 5);
         add(lblLocationTypes, gridBagConstraints);
 
-        jLabel1.setText(org.openide.util.NbBundle.getMessage(LocationtypeEditor.class, "LocationtypeEditor.jLabel1.text")); // NOI18N
+        jLabel1.setText("Signatur:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
