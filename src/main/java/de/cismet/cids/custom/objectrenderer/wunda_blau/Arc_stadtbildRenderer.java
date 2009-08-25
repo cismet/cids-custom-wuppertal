@@ -10,7 +10,7 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import de.cismet.cids.custom.objectrenderer.converter.CollectionToCommaseparatedStringConverter;
+import de.cismet.cids.custom.objectrenderer.converter.CollectionToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.AbstractJasperReportPrint;
 import de.cismet.cids.custom.objectrenderer.utils.FixedLabel;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUIUtils;
@@ -282,7 +282,7 @@ public class Arc_stadtbildRenderer extends JPanel implements CidsBeanRenderer, T
         panContent.add(lblDescSuchworte, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.suchworte}"), lblSuchworte, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setConverter(new CollectionToCommaseparatedStringConverter("suchwort"));
+        binding.setConverter(new CollectionToStringConverter("suchwort"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -490,7 +490,7 @@ public class Arc_stadtbildRenderer extends JPanel implements CidsBeanRenderer, T
             bindingGroup.unbind();
             bindingGroup.bind();
             final String obj = cidsBean.getProperty("bildnummer") + "";
-            lblPicture.setPictureURL(StaticProperties.URL_PREFIX + obj + StaticProperties.URL_SUFFIX);
+            lblPicture.setPictureURL(StaticProperties.ARCHIVAR_URL_PREFIX + obj + StaticProperties.ARCHIVAR_URL_SUFFIX);
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables

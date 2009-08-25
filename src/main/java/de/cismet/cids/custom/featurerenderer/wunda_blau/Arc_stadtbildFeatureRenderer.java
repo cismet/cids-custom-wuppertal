@@ -171,7 +171,7 @@ public class Arc_stadtbildFeatureRenderer extends CustomCidsFeatureRenderer {
         if (cidsBean != null) {
             Object o = cidsBean.getProperty("bildnummer");
             if (o != null) {
-                String url = StaticProperties.URL_PREFIX + o + StaticProperties.URL_SUFFIX;
+                String url = StaticProperties.ARCHIVAR_URL_PREFIX + o + StaticProperties.ARCHIVAR_URL_SUFFIX;
                 lblPicture.setPictureURL(url);
             }
             o = cidsBean.getProperty("ort");

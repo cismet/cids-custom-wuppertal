@@ -4,7 +4,14 @@
  */
 package de.cismet.cids.custom.objectrenderer.utils;
 
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
+import Sirius.server.middleware.types.AbstractAttributeRepresentationFormater;
+import Sirius.server.middleware.types.MetaClass;
+import Sirius.server.middleware.types.MetaObject;
+import Sirius.server.newuser.User;
 import de.cismet.cids.dynamics.CidsBean;
+import de.cismet.cids.utils.ClassCacheMultiple;
 import de.cismet.tools.gui.documents.DefaultDocument;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -24,6 +31,7 @@ import javax.swing.JTable;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import org.jdesktop.swingx.graphics.ShadowRenderer;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -36,6 +44,35 @@ public class ObjectRendererUIUtils {
         MILLISECOND, SECOND, MINUTE, HOUR, DAY, WEEK, MONTH, YEAR
     };
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ObjectRendererUIUtils.class);
+
+    public static final MetaObject[] getLightweightMetaObjectsForTable(String tabName, final String[] fields) {
+        return getLightweightMetaObjectsForTable(tabName, fields, null);
+
+    }
+
+    public static final MetaObject[] getLightweightMetaObjectsForTable(String tabName, final String[] fields, AbstractAttributeRepresentationFormater formatter) {
+        if (formatter == null) {
+            formatter = new AbstractAttributeRepresentationFormater() {
+
+                @Override
+                public String getRepresentation() {
+                    final StringBuffer sb = new StringBuffer();
+                    for (final String attribute : fields) {
+                        sb.append(getAttribute(attribute.toLowerCase())).append(" ");
+                    }
+                    return sb.toString().trim();
+                }
+            };
+        }
+        try {
+            final User user = SessionManager.getSession().getUser();
+            final MetaClass mc = ClassCacheMultiple.getMetaClass(user.getDomain(), tabName);
+            return SessionManager.getProxy().getAllLightweightMetaObjectsForClass(mc.getID(), user, fields, formatter);
+        } catch (Exception ex) {
+            log.error(ex, ex);
+        }
+        return new MetaObject[0];
+    }
 
     public static BufferedImage generateShadow(final Image in, final int shadowPixel) {
         if (in == null) {
@@ -88,6 +125,7 @@ public class ObjectRendererUIUtils {
                         if (finBild != null) {
                             EventQueue.invokeLater(new Runnable() {
 
+                                @Override
                                 public void run() {
                                     if (finBild != null) {
                                         toSet.setIcon(finBild);

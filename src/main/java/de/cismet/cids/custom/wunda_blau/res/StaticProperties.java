@@ -13,14 +13,20 @@ import de.cismet.cids.custom.objectrenderer.utils.PropertyReader;
 public final class StaticProperties {
 
     private static final PropertyReader propReader;
-    public static final String URL_PREFIX;
-    public static final String URL_SUFFIX;
+    public static final String ARCHIVAR_URL_PREFIX;
+    public static final String ARCHIVAR_URL_SUFFIX;
+    public static final String POI_URL_PREFIX;
+    public static final String POI_URL_SUFFIX;
+    public static final String POI_DEFAULT_ICON;
 
     static {
 //        propReader = new PropertyReader("/de/cismet/cids/custom/wunda_blau/res/urlconfig.properties");
         propReader = new PropertyReader("/de/cismet/cids/custom/wunda_blau/res/urlconfig.properties");
-        URL_PREFIX = propReader.getProperty("url_prefix");
-        URL_SUFFIX = propReader.getProperty("url_suffix");
+        ARCHIVAR_URL_PREFIX = propReader.getProperty("archivar_url_prefix");
+        ARCHIVAR_URL_SUFFIX = propReader.getProperty("archivar_url_suffix");
+        POI_URL_PREFIX = propReader.getProperty("poi_url_prefix");
+        POI_URL_SUFFIX = propReader.getProperty("poi_url_suffix");
+        POI_DEFAULT_ICON = propReader.getProperty("poi_default_icon");
     }
 
     public static final String getProperty(String in) {

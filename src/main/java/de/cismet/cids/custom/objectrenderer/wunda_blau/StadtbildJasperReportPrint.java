@@ -40,7 +40,7 @@ public class StadtbildJasperReportPrint extends AbstractJasperReportPrint {
             final Object bnr = current.getProperty("bildnummer");
             if (bnr != null) {
                 try {
-                    final String imageURL = StaticProperties.URL_PREFIX + bnr + StaticProperties.URL_SUFFIX;
+                    final String imageURL = StaticProperties.ARCHIVAR_URL_PREFIX + bnr + StaticProperties.ARCHIVAR_URL_SUFFIX;
                     log.fatal(imageURL);
                     final ImageIcon ii = ObjectRendererUIUtils.loadPicture(imageURL, 300, 300, 0);
                     log.fatal(ii);

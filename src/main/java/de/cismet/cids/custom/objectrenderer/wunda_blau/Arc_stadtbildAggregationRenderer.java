@@ -270,7 +270,7 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
                 ImageIcon ii = null;
                 final Object o = b.getProperty("bildnummer");
                 if (o != null) {
-                    final String url = StaticProperties.URL_PREFIX + o + StaticProperties.URL_SUFFIX;
+                    final String url = StaticProperties.ARCHIVAR_URL_PREFIX + o + StaticProperties.ARCHIVAR_URL_SUFFIX;
                     urls[++j] = url;
                     ii = ObjectRendererUIUtils.loadPicture(url, 300, 300, 4);
                 }
