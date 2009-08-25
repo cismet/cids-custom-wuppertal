@@ -351,8 +351,14 @@ public class LocationinstanceRenderer extends javax.swing.JPanel implements Cids
                 }
             }
         }
-        final Icon joined = Static2DTools.joinIcons(images.toArray(new ImageIcon[0]), 10, Static2DTools.HORIZONTAL, Static2DTools.CENTER);
-        lblTypeIcons.setIcon(joined);
+        final ImageIcon[] imageArr = images.toArray(new ImageIcon[0]);
+        if (imageArr.length > 0) {
+            final Icon joined = Static2DTools.joinIcons(imageArr, 10, Static2DTools.HORIZONTAL, Static2DTools.CENTER);
+            lblTypeIcons.setIcon(joined);
+        } else {
+            lblTypeIcons.setIcon(null);
+        }
+
     }
 
     @Override
