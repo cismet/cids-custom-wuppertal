@@ -23,7 +23,7 @@ public class LocationinstanceFeatureRenderer extends CustomCidsFeatureRenderer {
     private FeatureAnnotationSymbol symbol;
 
     static {
-        DEFAULT_SYMBOL = safeGetSymbolFromURLString(StaticProperties.POI_DEFAULT_ICON);
+        DEFAULT_SYMBOL = safeGetSymbolFromURLString(StaticProperties.POI_SIGNATUR_DEFAULT_ICON);
     }
 
     private static final FeatureAnnotationSymbol safeGetSymbolFromURLString(final String in) {
@@ -75,10 +75,11 @@ public class LocationinstanceFeatureRenderer extends CustomCidsFeatureRenderer {
     private final String getUrlStringFromSignature(Object signature) {
         if (signature instanceof CidsBean) {
             final CidsBean signatur = (CidsBean) signature;
-            String iconUrl = "" + signatur.getProperty("url");
-            final int lastPointIndex = iconUrl.lastIndexOf('.');
-            iconUrl = iconUrl.substring(0, lastPointIndex);
-            return StaticProperties.POI_URL_PREFIX + iconUrl + StaticProperties.POI_URL_SUFFIX;
+            final Object fileName = signatur.getProperty("filename");
+            final Object fileExtension = signatur.getProperty("fileextension");
+            if (fileName != null && fileExtension != null) {
+                return StaticProperties.POI_SIGNATUR_URL_PREFIX + fileName + fileExtension + StaticProperties.POI_SIGNATUR_URL_SUFFIX;
+            }
         }
         return null;
     }

@@ -14,6 +14,6 @@ public class Arc_suchwortToStringConverter extends CustomToStringConverter {
 
     @Override
     public String createString() {
-        return cidsBean.getProperty("suchwort") + "";
+        return String.valueOf(cidsBean.getProperty("suchwort"));
     }
 }

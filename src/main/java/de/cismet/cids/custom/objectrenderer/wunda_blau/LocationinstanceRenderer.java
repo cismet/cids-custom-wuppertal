@@ -13,6 +13,7 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 import Sirius.navigator.tools.BrowserLauncher;
 import de.cismet.cids.custom.objectrenderer.converter.CollectionToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUIUtils;
+import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 import de.cismet.tools.collections.TypeSafeCollections;
@@ -336,13 +337,12 @@ public class LocationinstanceRenderer extends javax.swing.JPanel implements Cids
 
     private final void initLocationTypeImages() {
         final Collection<CidsBean> allTypes = (Collection<CidsBean>) cidsBean.getProperty("locationtypes");
-//            log.fatal(allTypes);
         final List<ImageIcon> images = TypeSafeCollections.newArrayList(allTypes.size());
         if (allTypes.size() > 0) {
             for (final CidsBean type : allTypes) {
                 try {
-                    String filename = type.getProperty("identification") + "";
-                    URL iconURL = getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/64/" + filename + ".png");
+                    final String filename = String.valueOf(type.getProperty("icon"));
+                    final URL iconURL = getClass().getResource(StaticProperties.POI_LOCATIONTYPE_URL_PREFIX + filename + StaticProperties.POI_LOCATIONTYPE_URL_SUFFIX);
                     if (iconURL != null) {
                         images.add(new javax.swing.ImageIcon(iconURL));
                     }
@@ -351,10 +351,9 @@ public class LocationinstanceRenderer extends javax.swing.JPanel implements Cids
                 }
             }
         }
-        final ImageIcon[] imageArr = images.toArray(new ImageIcon[0]);
-        if (imageArr.length > 0) {
-            final Icon joined = Static2DTools.joinIcons(imageArr, 10, Static2DTools.HORIZONTAL, Static2DTools.CENTER);
-            lblTypeIcons.setIcon(joined);
+        if (images.size() > 0) {
+            final Icon joinedIcons = Static2DTools.joinIcons(images.toArray(new ImageIcon[0]), 10, Static2DTools.HORIZONTAL, Static2DTools.CENTER);
+            lblTypeIcons.setIcon(joinedIcons);
         } else {
             lblTypeIcons.setIcon(null);
         }

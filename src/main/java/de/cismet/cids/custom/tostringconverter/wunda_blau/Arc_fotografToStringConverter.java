@@ -14,6 +14,6 @@ public class Arc_fotografToStringConverter extends CustomToStringConverter {
 
     @Override
     public String createString() {
-        return cidsBean.getProperty("fotograf")+"";
+        return String.valueOf(cidsBean.getProperty("fotograf"));
     }
 }

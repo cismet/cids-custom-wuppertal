@@ -14,6 +14,6 @@ public class SpatialreferencesystemusinggeographicidentifiersToStringConverter e
 
     @Override
     public String createString() {
-        return cidsBean.getProperty("theme") + "";
+        return String.valueOf(cidsBean.getProperty("theme"));
     }
 }

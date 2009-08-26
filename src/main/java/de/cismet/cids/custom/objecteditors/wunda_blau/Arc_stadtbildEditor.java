@@ -48,7 +48,7 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         public final String getRepresentation() {
             final Object stadtteil = getAttribute("stadtteil");
             if (stadtteil == null) {
-                return getAttribute("name") + "";
+                return String.valueOf(getAttribute("name"));
             } else {
                 return getAttribute("name") + " (" + stadtteil + ")";
             }

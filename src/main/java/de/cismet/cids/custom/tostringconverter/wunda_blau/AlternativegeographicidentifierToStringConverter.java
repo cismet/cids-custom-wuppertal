@@ -14,6 +14,6 @@ public class AlternativegeographicidentifierToStringConverter extends CustomToSt
 
     @Override
     public String createString() {
-        return cidsBean.getProperty("alternativegeographicidentifier") + "";
+        return String.valueOf(cidsBean.getProperty("alternativegeographicidentifier"));
     }
 }

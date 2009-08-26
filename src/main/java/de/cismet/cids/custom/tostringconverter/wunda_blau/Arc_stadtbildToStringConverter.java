@@ -14,6 +14,6 @@ public class Arc_stadtbildToStringConverter extends CustomToStringConverter {
 
     @Override
     public String createString() {
-        return cidsBean.getProperty("bildnummer") + "";
+        return String.valueOf(cidsBean.getProperty("bildnummer"));
     }
 }

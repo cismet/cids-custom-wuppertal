@@ -14,6 +14,6 @@ public class Arc_auftraggeberToStringConverter extends CustomToStringConverter {
 
     @Override
     public String createString() {
-        return cidsBean.getProperty("auftraggeber") + "";
+        return String.valueOf(cidsBean.getProperty("auftraggeber"));
     }
 }

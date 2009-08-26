@@ -489,7 +489,7 @@ public class Arc_stadtbildRenderer extends JPanel implements CidsBeanRenderer, T
             this.cidsBean = cidsBean;
             bindingGroup.unbind();
             bindingGroup.bind();
-            final String obj = cidsBean.getProperty("bildnummer") + "";
+            final String obj = String.valueOf(cidsBean.getProperty("bildnummer"));
             lblPicture.setPictureURL(StaticProperties.ARCHIVAR_URL_PREFIX + obj + StaticProperties.ARCHIVAR_URL_SUFFIX);
         }
     }

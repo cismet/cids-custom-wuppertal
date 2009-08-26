@@ -15,7 +15,7 @@ public class LocationtypeToStringConverter extends CustomToStringConverter {
 
     @Override
     public String createString() {
-        return cidsBean.getProperty("identification") + "";
+        return String.valueOf(cidsBean.getProperty("identification"));
     }
 
 }

@@ -14,6 +14,6 @@ public class Arc_stadtteilToStringConverter extends CustomToStringConverter {
 
     @Override
     public String createString() {
-        return cidsBean.getProperty("stadtteil")+"";
+        return String.valueOf(cidsBean.getProperty("stadtteil"));
     }
 }

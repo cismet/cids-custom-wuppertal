@@ -177,8 +177,8 @@ public class Arc_stadtbildFeatureRenderer extends CustomCidsFeatureRenderer {
             o = cidsBean.getProperty("ort");
             if (o instanceof CidsBean) {
                 final CidsBean b = (CidsBean) o;
-                String street = b.getProperty("name") + "";
-                String hn = cidsBean.getProperty("hausnummer") + "";
+                String street = String.valueOf(b.getProperty("name"));
+                String hn = String.valueOf(cidsBean.getProperty("hausnummer"));
                 if (!hn.equalsIgnoreCase("null") && !(hn.length() < 1)) {
                     street += " " + hn;
                 }

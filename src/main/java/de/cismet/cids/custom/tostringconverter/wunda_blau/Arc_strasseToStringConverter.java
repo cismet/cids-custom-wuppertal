@@ -14,6 +14,6 @@ public class Arc_strasseToStringConverter extends CustomToStringConverter {
 
     @Override
     public String createString() {
-        return cidsBean.getProperty("name") + "";
+        return String.valueOf(cidsBean.getProperty("name"));
     }
 }

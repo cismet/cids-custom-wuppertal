@@ -15,7 +15,7 @@ public class Arc_filmartToStringConverter extends CustomToStringConverter {
 
     @Override
     public String createString() {
-        return cidsBean.getProperty("filmart")+"";
+        return String.valueOf(cidsBean.getProperty("filmart"));
     }
 
 }

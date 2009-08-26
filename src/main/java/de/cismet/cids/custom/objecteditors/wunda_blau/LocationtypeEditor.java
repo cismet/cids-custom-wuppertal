@@ -131,12 +131,14 @@ public class LocationtypeEditor extends DefaultCustomObjectEditor {
 
         setLayout(new java.awt.GridBagLayout());
 
+        lblName.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblName.setText("Name:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(lblName, gridBagConstraints);
 
+        lblDefinition.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblDefinition.setText("Definition:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -145,6 +147,7 @@ public class LocationtypeEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(lblDefinition, gridBagConstraints);
 
+        lblToPublish.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblToPublish.setText("Veröffentlicht:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -241,6 +244,7 @@ public class LocationtypeEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(panButtons, gridBagConstraints);
 
+        lblLocationTypes.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblLocationTypes.setText("Lebenslagen:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -249,6 +253,7 @@ public class LocationtypeEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.insets = new java.awt.Insets(7, 5, 5, 5);
         add(lblLocationTypes, gridBagConstraints);
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel1.setText("Signatur:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;

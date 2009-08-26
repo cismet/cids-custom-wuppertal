@@ -14,6 +14,6 @@ public class Poi_signaturenToStringConverter extends CustomToStringConverter {
 
     @Override
     public String createString() {
-        return cidsBean.getProperty("definition") + "";
+        return String.valueOf(cidsBean.getProperty("definition"));
     }
 }

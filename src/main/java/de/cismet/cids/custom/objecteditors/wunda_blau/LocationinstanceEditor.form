@@ -132,6 +132,9 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="lblFax">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="11" style="1"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Fax:"/>
           </Properties>
           <Constraints>
@@ -142,6 +145,9 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblEmail">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="11" style="1"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Email:"/>
           </Properties>
           <Constraints>
@@ -152,6 +158,9 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblUrl">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="11" style="1"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Url:"/>
           </Properties>
           <Constraints>
@@ -162,6 +171,9 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblStrasse">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="11" style="1"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Strasse:"/>
           </Properties>
           <Constraints>
@@ -172,6 +184,9 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblTelefon">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="11" style="1"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Telefon:"/>
           </Properties>
           <Constraints>
@@ -182,6 +197,9 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblVeroeffentlicht">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="11" style="1"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Ver&#xf6;ffentlicht:"/>
           </Properties>
           <Constraints>
@@ -192,6 +210,9 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblPLZ">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="11" style="1"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="PLZ:"/>
           </Properties>
           <Constraints>
@@ -202,6 +223,9 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblInfo">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="11" style="1"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Info:"/>
           </Properties>
           <Constraints>
@@ -212,6 +236,9 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblStadt">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="11" style="1"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Stadt:"/>
           </Properties>
           <Constraints>
@@ -222,6 +249,9 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblArt">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="11" style="1"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Art:"/>
           </Properties>
           <Constraints>
@@ -464,6 +494,9 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblMainLocationType">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="11" style="1"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Haupthema:"/>
           </Properties>
           <Constraints>
@@ -474,6 +507,9 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblLocationTypes">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="11" style="1"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Themen:"/>
           </Properties>
           <Constraints>
@@ -484,6 +520,9 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblGeomPoint">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="11" style="1"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Punktgeometrie:"/>
           </Properties>
           <Constraints>
@@ -494,6 +533,9 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblGeomArea">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="11" style="1"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Fl&#xe4;chengeometrie:"/>
           </Properties>
           <Constraints>
@@ -548,7 +590,10 @@
         </Container>
         <Component class="javax.swing.JLabel" name="lblSignatur">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Signatur"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="11" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Signatur:"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -577,6 +622,9 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblBezeichnung">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="11" style="1"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Bezeichnung:"/>
           </Properties>
           <Constraints>
