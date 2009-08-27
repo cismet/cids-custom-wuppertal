@@ -5,7 +5,6 @@
 package de.cismet.cids.custom.objectrenderer.utils;
 
 import Sirius.navigator.connection.SessionManager;
-import Sirius.navigator.exception.ConnectionException;
 import Sirius.server.middleware.types.AbstractAttributeRepresentationFormater;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
@@ -31,7 +30,6 @@ import javax.swing.JTable;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import org.jdesktop.swingx.graphics.ShadowRenderer;
-import org.openide.util.Exceptions;
 
 /**
  *
@@ -166,6 +164,7 @@ public class ObjectRendererUIUtils {
                     if (finBild != null) {
                         EventQueue.invokeLater(new Runnable() {
 
+                            @Override
                             public void run() {
                                 if (finBild != null) {
                                     toSet.setIcon(finBild);
@@ -289,7 +288,7 @@ public class ObjectRendererUIUtils {
 }
 
 /**
- * MouseAdapter for remove sorting from the table when perfoming a right-clck
+ * MouseAdapter for remove sorting from the table when perfoming a right-click
  * on the header
  *
  * @author srichter

@@ -10,11 +10,14 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
+import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUIUtils;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
+import de.cismet.cids.utils.ClassCacheMultiple;
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 import java.util.Arrays;
 import java.util.Collection;
@@ -35,6 +38,25 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
     public LocationinstanceEditor() {
         initComponents();
         dlgAddLocationType.pack();
+        dlgAddZusNamen.pack();
+    }
+
+    private final void deleteItemFromList(String propertyName, Object value, boolean andDeleteObjectFromDB) {
+        if (value instanceof CidsBean && propertyName != null) {
+            final CidsBean bean = (CidsBean) value;
+            if (andDeleteObjectFromDB) {
+                try {
+                    bean.delete();
+                } catch (Exception ex) {
+                    log.error(ex, ex);
+                }
+            } else {
+                final Object coll = cidsBean.getProperty(propertyName);
+                if (coll instanceof Collection) {
+                    ((Collection) coll).remove(bean);
+                }
+            }
+        }
     }
 //
 //    @Override
@@ -54,7 +76,7 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         dlgAddLocationType = new javax.swing.JDialog();
-        panNewSuchwort = new javax.swing.JPanel();
+        panAddLocationType = new javax.swing.JPanel();
         lblAuswaehlen = new javax.swing.JLabel();
         final MetaObject[] locationtypes = ObjectRendererUIUtils.getLightweightMetaObjectsForTable("locationtype", new String[]{"identification"});
         Arrays.sort(locationtypes);
@@ -62,6 +84,13 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
         panMenButtons = new javax.swing.JPanel();
         btnMenAbort = new javax.swing.JButton();
         btnMenOk = new javax.swing.JButton();
+        dlgAddZusNamen = new javax.swing.JDialog();
+        panAddName = new javax.swing.JPanel();
+        lblNamesAuswaehlen = new javax.swing.JLabel();
+        panMenNamesButtons = new javax.swing.JPanel();
+        btnNamesMenAbort = new javax.swing.JButton();
+        btnNamesMenOk = new javax.swing.JButton();
+        txtZusNamen = new javax.swing.JTextField();
         panContent = new javax.swing.JPanel();
         lblFax = new javax.swing.JLabel();
         lblEmail = new javax.swing.JLabel();
@@ -94,24 +123,30 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
         lblGeomPoint = new javax.swing.JLabel();
         lblGeomArea = new javax.swing.JLabel();
         panButtons = new javax.swing.JPanel();
-        btnAdd = new javax.swing.JButton();
-        btnRemove = new javax.swing.JButton();
+        btnAddThema = new javax.swing.JButton();
+        btnRemoveThema = new javax.swing.JButton();
         lblSignatur = new javax.swing.JLabel();
         cbSignatur = new FastBindableReferenceCombo("%1$2s", new String[]{"definition"});
         lblBezeichnung = new javax.swing.JLabel();
         txtBezeichnung = new javax.swing.JTextField();
+        scpZusNamen = new javax.swing.JScrollPane();
+        lstZusNamen = new javax.swing.JList();
+        lblLocationTypes1 = new javax.swing.JLabel();
+        panButtons1 = new javax.swing.JPanel();
+        btnAddZusNamen = new javax.swing.JButton();
+        btnRemoveZusNamen = new javax.swing.JButton();
 
         dlgAddLocationType.setModal(true);
 
-        panNewSuchwort.setMaximumSize(new java.awt.Dimension(180, 120));
-        panNewSuchwort.setMinimumSize(new java.awt.Dimension(180, 120));
-        panNewSuchwort.setPreferredSize(new java.awt.Dimension(180, 120));
-        panNewSuchwort.setLayout(new java.awt.GridBagLayout());
+        panAddLocationType.setMaximumSize(new java.awt.Dimension(180, 120));
+        panAddLocationType.setMinimumSize(new java.awt.Dimension(180, 120));
+        panAddLocationType.setPreferredSize(new java.awt.Dimension(180, 120));
+        panAddLocationType.setLayout(new java.awt.GridBagLayout());
 
         lblAuswaehlen.setText("Bitte Thema auswählen:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        panNewSuchwort.add(lblAuswaehlen, gridBagConstraints);
+        panAddLocationType.add(lblAuswaehlen, gridBagConstraints);
 
         cbTypes.setMaximumSize(new java.awt.Dimension(100, 20));
         cbTypes.setMinimumSize(new java.awt.Dimension(100, 20));
@@ -121,7 +156,7 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panNewSuchwort.add(cbTypes, gridBagConstraints);
+        panAddLocationType.add(cbTypes, gridBagConstraints);
 
         panMenButtons.setLayout(new java.awt.GridBagLayout());
 
@@ -155,16 +190,71 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panNewSuchwort.add(panMenButtons, gridBagConstraints);
+        panAddLocationType.add(panMenButtons, gridBagConstraints);
 
-        dlgAddLocationType.getContentPane().add(panNewSuchwort, java.awt.BorderLayout.CENTER);
+        dlgAddLocationType.getContentPane().add(panAddLocationType, java.awt.BorderLayout.CENTER);
+
+        dlgAddZusNamen.setModal(true);
+
+        panAddName.setMaximumSize(new java.awt.Dimension(180, 120));
+        panAddName.setMinimumSize(new java.awt.Dimension(180, 120));
+        panAddName.setPreferredSize(new java.awt.Dimension(180, 120));
+        panAddName.setLayout(new java.awt.GridBagLayout());
+
+        lblNamesAuswaehlen.setText("Bitte Namen auswählen:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        panAddName.add(lblNamesAuswaehlen, gridBagConstraints);
+
+        panMenNamesButtons.setLayout(new java.awt.GridBagLayout());
+
+        btnNamesMenAbort.setText("Abbrechen");
+        btnNamesMenAbort.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNamesMenAbortActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panMenNamesButtons.add(btnNamesMenAbort, gridBagConstraints);
+
+        btnNamesMenOk.setText("Ok");
+        btnNamesMenOk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNamesMenOkActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panMenNamesButtons.add(btnNamesMenOk, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panAddName.add(panMenNamesButtons, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panAddName.add(txtZusNamen, gridBagConstraints);
+
+        dlgAddZusNamen.getContentPane().add(panAddName, java.awt.BorderLayout.CENTER);
 
         setLayout(new java.awt.BorderLayout());
 
         panContent.setOpaque(false);
         panContent.setLayout(new java.awt.GridBagLayout());
 
-        lblFax.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblFax.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblFax.setText("Fax:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -173,7 +263,7 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblFax, gridBagConstraints);
 
-        lblEmail.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblEmail.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblEmail.setText("Email:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -182,7 +272,7 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblEmail, gridBagConstraints);
 
-        lblUrl.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblUrl.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblUrl.setText("Url:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -191,7 +281,7 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblUrl, gridBagConstraints);
 
-        lblStrasse.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblStrasse.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblStrasse.setText("Strasse:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -200,7 +290,7 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblStrasse, gridBagConstraints);
 
-        lblTelefon.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblTelefon.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblTelefon.setText("Telefon:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -209,7 +299,7 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblTelefon, gridBagConstraints);
 
-        lblVeroeffentlicht.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblVeroeffentlicht.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblVeroeffentlicht.setText("Veröffentlicht:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -218,7 +308,7 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblVeroeffentlicht, gridBagConstraints);
 
-        lblPLZ.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblPLZ.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblPLZ.setText("PLZ:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -227,7 +317,7 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblPLZ, gridBagConstraints);
 
-        lblInfo.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblInfo.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblInfo.setText("Info:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -236,7 +326,7 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.insets = new java.awt.Insets(8, 5, 5, 5);
         panContent.add(lblInfo, gridBagConstraints);
 
-        lblStadt.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblStadt.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblStadt.setText("Stadt:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -245,7 +335,7 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblStadt, gridBagConstraints);
 
-        lblArt.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblArt.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblArt.setText("Art:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -333,7 +423,7 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
         panContent.add(txtEmail, gridBagConstraints);
 
         txtaInfo.setColumns(3);
-        txtaInfo.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        txtaInfo.setFont(new java.awt.Font("Tahoma", 0, 11));
         txtaInfo.setRows(5);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.info}"), txtaInfo, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -429,7 +519,7 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridy = 15;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -437,13 +527,13 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridy = 16;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(cbGeomArea, gridBagConstraints);
 
-        lblMainLocationType.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblMainLocationType.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblMainLocationType.setText("Haupthema:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -452,7 +542,7 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblMainLocationType, gridBagConstraints);
 
-        lblLocationTypes.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblLocationTypes.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblLocationTypes.setText("Themen:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -461,20 +551,20 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.insets = new java.awt.Insets(8, 5, 5, 5);
         panContent.add(lblLocationTypes, gridBagConstraints);
 
-        lblGeomPoint.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblGeomPoint.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblGeomPoint.setText("Punktgeometrie:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridy = 15;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblGeomPoint, gridBagConstraints);
 
-        lblGeomArea.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblGeomArea.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblGeomArea.setText("Flächengeometrie:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridy = 16;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblGeomArea, gridBagConstraints);
@@ -482,27 +572,27 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
         panButtons.setOpaque(false);
         panButtons.setLayout(new java.awt.GridBagLayout());
 
-        btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
-        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+        btnAddThema.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddThema.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddActionPerformed(evt);
+                btnAddThemaActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panButtons.add(btnAdd, gridBagConstraints);
+        panButtons.add(btnAddThema, gridBagConstraints);
 
-        btnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
-        btnRemove.addActionListener(new java.awt.event.ActionListener() {
+        btnRemoveThema.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveThema.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemoveActionPerformed(evt);
+                btnRemoveThemaActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panButtons.add(btnRemove, gridBagConstraints);
+        panButtons.add(btnRemoveThema, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -511,11 +601,11 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(panButtons, gridBagConstraints);
 
-        lblSignatur.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblSignatur.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblSignatur.setText("Signatur:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblSignatur, gridBagConstraints);
@@ -527,13 +617,13 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(4, 5, 4, 4);
         panContent.add(cbSignatur, gridBagConstraints);
 
-        lblBezeichnung.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblBezeichnung.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblBezeichnung.setText("Bezeichnung:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -552,27 +642,77 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(txtBezeichnung, gridBagConstraints);
 
+        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alternativegeographicidentifier}");
+        jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstZusNamen);
+        bindingGroup.addBinding(jListBinding);
+
+        scpZusNamen.setViewportView(lstZusNamen);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent.add(scpZusNamen, gridBagConstraints);
+
+        lblLocationTypes1.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblLocationTypes1.setText("Zusätzliche Namen:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(8, 5, 5, 5);
+        panContent.add(lblLocationTypes1, gridBagConstraints);
+
+        panButtons1.setOpaque(false);
+        panButtons1.setLayout(new java.awt.GridBagLayout());
+
+        btnAddZusNamen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddZusNamen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddZusNamenActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panButtons1.add(btnAddZusNamen, gridBagConstraints);
+
+        btnRemoveZusNamen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveZusNamen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveZusNamenActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panButtons1.add(btnRemoveZusNamen, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent.add(panButtons1, gridBagConstraints);
+
         add(panContent, java.awt.BorderLayout.CENTER);
 
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+    private void btnAddThemaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddThemaActionPerformed
         dlgAddLocationType.setLocationRelativeTo(LocationinstanceEditor.this);
         dlgAddLocationType.setVisible(true);
-}//GEN-LAST:event_btnAddActionPerformed
+}//GEN-LAST:event_btnAddThemaActionPerformed
 
-    private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+    private void btnRemoveThemaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveThemaActionPerformed
         final Object selection = lstLocationTypes.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(this, "Soll das Thema wirklich gelöscht werden?", "Typ entfernen", JOptionPane.YES_NO_OPTION);
             if (answer == JOptionPane.YES_OPTION) {
                 try {
-                    final CidsBean type = (CidsBean) selection;
-                    final Object typesCollection = cidsBean.getProperty("locationtypes");
-                    if (typesCollection instanceof Collection) {
-                        ((Collection) typesCollection).remove(type);
-                    }
+                    deleteItemFromList("locationtypes", selection, false);
                 } catch (Exception ex) {
                     final ErrorInfo ei = new ErrorInfo("Fehler beim Löschen", "Beim Löschen des Themas ist ein Fehler aufgetreten", null,
                             null, ex, Level.SEVERE, null);
@@ -580,7 +720,7 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
                 }
             }
         }
-}//GEN-LAST:event_btnRemoveActionPerformed
+}//GEN-LAST:event_btnRemoveThemaActionPerformed
 
     private void btnMenAbortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbortActionPerformed
         dlgAddLocationType.setVisible(false);
@@ -590,7 +730,7 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
         try {
             final Object selItem = cbTypes.getSelectedItem();
             if (selItem instanceof MetaObject) {
-                addLebenslageBeanToLebenslagen(((MetaObject) selItem).getBean());
+                addBeanToCollection("locationtypes", ((MetaObject) selItem).getBean());
             }
         } catch (Exception ex) {
             log.error(ex, ex);
@@ -598,15 +738,60 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
             dlgAddLocationType.setVisible(false);
         }
 }//GEN-LAST:event_btnMenOkActionPerformed
-    private final void addLebenslageBeanToLebenslagen(final CidsBean newTypeBean) {
-        if (newTypeBean != null) {
-            final Object o = cidsBean.getProperty("locationtypes");
+
+    private void btnAddZusNamenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddZusNamenActionPerformed
+        dlgAddZusNamen.setLocationRelativeTo(LocationinstanceEditor.this);
+        dlgAddZusNamen.setVisible(true);
+    }//GEN-LAST:event_btnAddZusNamenActionPerformed
+
+    private void btnRemoveZusNamenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveZusNamenActionPerformed
+        final Object selection = lstZusNamen.getSelectedValue();
+        if (selection != null) {
+            final int answer = JOptionPane.showConfirmDialog(this, "Soll der zusätzliche Name wirklich gelöscht werden?", "Typ entfernen", JOptionPane.YES_NO_OPTION);
+            if (answer == JOptionPane.YES_OPTION) {
+                try {
+                    deleteItemFromList("alternativegeographicidentifier", selection, true);
+                } catch (Exception ex) {
+                    final ErrorInfo ei = new ErrorInfo("Fehler beim Löschen", "Beim Löschen des zusätzlichen Namens ist ein Fehler aufgetreten", null,
+                            null, ex, Level.SEVERE, null);
+                    JXErrorPane.showDialog(this, ei);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnRemoveZusNamenActionPerformed
+
+    private void btnNamesMenAbortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNamesMenAbortActionPerformed
+        dlgAddZusNamen.setVisible(false);
+        txtZusNamen.setText("");
+    }//GEN-LAST:event_btnNamesMenAbortActionPerformed
+
+    private void btnNamesMenOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNamesMenOkActionPerformed
+        try {
+            final String addName = txtZusNamen.getText();
+            if (addName.length() > 0) {
+                final MetaClass alternativeGeoIdentifierMC = ClassCacheMultiple.getMetaClass(SessionManager.getSession().getUser().getDomain(), "alternativegeographicidentifier");
+                final MetaObject newAGI = alternativeGeoIdentifierMC.getEmptyInstance();
+                final CidsBean newAGIBean = newAGI.getBean();
+                newAGIBean.setProperty("alternativegeographicidentifier", addName);
+                addBeanToCollection("alternativegeographicidentifier", newAGIBean);
+            }
+        } catch (Exception ex) {
+            log.error(ex, ex);
+        } finally {
+            txtZusNamen.setText("");
+            dlgAddZusNamen.setVisible(false);
+        }
+    }//GEN-LAST:event_btnNamesMenOkActionPerformed
+
+    private final void addBeanToCollection(final String propName, final CidsBean newTypeBean) {
+        if (newTypeBean != null && propName != null) {
+            final Object o = cidsBean.getProperty(propName);
             if (o instanceof Collection) {
                 try {
                     final Collection<CidsBean> col = (Collection) o;
                     for (final CidsBean bean : col) {
                         if (newTypeBean.equals(bean)) {
-                            log.info("Locationtype " + newTypeBean.getProperty("identification") + " already present!");
+                            log.info("Bean " + newTypeBean + " already present in " + propName + "!");
                             return;
                         }
                     }
@@ -618,10 +803,14 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnAddThema;
+    private javax.swing.JButton btnAddZusNamen;
     private javax.swing.JButton btnMenAbort;
     private javax.swing.JButton btnMenOk;
-    private javax.swing.JButton btnRemove;
+    private javax.swing.JButton btnNamesMenAbort;
+    private javax.swing.JButton btnNamesMenOk;
+    private javax.swing.JButton btnRemoveThema;
+    private javax.swing.JButton btnRemoveZusNamen;
     private javax.swing.JComboBox cbGeomArea;
     private javax.swing.JComboBox cbGeomPoint;
     private javax.swing.JComboBox cbMainLocationType;
@@ -629,6 +818,7 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
     private javax.swing.JComboBox cbTypes;
     private javax.swing.JCheckBox chkVeroeffentlicht;
     private javax.swing.JDialog dlgAddLocationType;
+    private javax.swing.JDialog dlgAddZusNamen;
     private javax.swing.JLabel lblArt;
     private javax.swing.JLabel lblAuswaehlen;
     private javax.swing.JLabel lblBezeichnung;
@@ -638,7 +828,9 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
     private javax.swing.JLabel lblGeomPoint;
     private javax.swing.JLabel lblInfo;
     private javax.swing.JLabel lblLocationTypes;
+    private javax.swing.JLabel lblLocationTypes1;
     private javax.swing.JLabel lblMainLocationType;
+    private javax.swing.JLabel lblNamesAuswaehlen;
     private javax.swing.JLabel lblPLZ;
     private javax.swing.JLabel lblSignatur;
     private javax.swing.JLabel lblStadt;
@@ -647,12 +839,17 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
     private javax.swing.JLabel lblUrl;
     private javax.swing.JLabel lblVeroeffentlicht;
     private javax.swing.JList lstLocationTypes;
+    private javax.swing.JList lstZusNamen;
+    private javax.swing.JPanel panAddLocationType;
+    private javax.swing.JPanel panAddName;
     private javax.swing.JPanel panButtons;
+    private javax.swing.JPanel panButtons1;
     private javax.swing.JPanel panContent;
     private javax.swing.JPanel panMenButtons;
-    private javax.swing.JPanel panNewSuchwort;
+    private javax.swing.JPanel panMenNamesButtons;
     private javax.swing.JScrollPane scpLstLocationTypes;
     private javax.swing.JScrollPane scpTxtInfo;
+    private javax.swing.JScrollPane scpZusNamen;
     private javax.swing.JTextField txtArt;
     private javax.swing.JTextField txtBezeichnung;
     private javax.swing.JTextField txtEmail;
@@ -662,6 +859,7 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
     private javax.swing.JTextField txtStrasse;
     private javax.swing.JTextField txtTelefon;
     private javax.swing.JTextField txtUrl;
+    private javax.swing.JTextField txtZusNamen;
     private javax.swing.JTextArea txtaInfo;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
