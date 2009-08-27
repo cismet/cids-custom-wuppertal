@@ -17,14 +17,18 @@ public class WBF_VorgangToStringConverter extends CustomToStringConverter {
 
     @Override
     public String createString() {
-
+        String ret="";
         try {
-            Object o = cidsBean.getProperty("vergabenummer");
-            if (o != null) {
-                return o.toString();
-            } else {
-                return null;
+            Object vergabenummer = cidsBean.getProperty("vergabenummer");
+            Object folgenummer = cidsBean.getProperty("folgenummer");
+            if (vergabenummer != null) {
+                ret=vergabenummer.toString();
+            } 
+            if (folgenummer != null && !folgenummer.toString().trim().equals("0")) {
+                ret+="/"+folgenummer;
             }
+
+            return ret;
         } catch (Exception e) {
             log.error("Fehler in toStringConverter", e);
             return "Vorgang ";

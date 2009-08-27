@@ -151,7 +151,7 @@ public class Wbf_gebaeudeFeatureRenderer extends CustomCidsFeatureRenderer {
         Object o = cidsBean.getProperty("vorgaenge");
         if (o instanceof Collection) {
             Collection c = (Collection) o;
-            return c.toString();
+            return c.toArray()[0].toString() + " (Anzahl Vorgänge: "+c.size()+")";
         }
         String ret = (String) cidsBean.getProperty("gebaeude_anschrift");
         if (ret != null) {
@@ -167,9 +167,9 @@ public class Wbf_gebaeudeFeatureRenderer extends CustomCidsFeatureRenderer {
 
     private String getHtmlString() {
         try {
-            String header = "<html><body style=\"font-family: Arial,Helvetica,sans-serif;\">" +
-                    "<h3>Eigentümer: %s</h3>" +
-                    "<p>%s</p>" +
+            String header = "<html><body style=\"font-family: Arial,Helvetica,sans-serif; font-size:11pt\">" +
+                    "<b>Eigentümer: %s</b>" +
+                    "<br>%s" +
                     "<hr>";
 
             String eigentuemer = (String) cidsBean.getProperty("eigentuemer_name");
@@ -190,12 +190,15 @@ public class Wbf_gebaeudeFeatureRenderer extends CustomCidsFeatureRenderer {
             if (o instanceof Collection) {
                 Collection c = (Collection) o;
                 for (Object ob : c) {
-                    String v = "<h4>Vorgang: %s</h4>" +
-                            "<h5>%s</h5>";
+                    String v = "Vorgang: %s (%s)<br>";
 
                     if (ob instanceof CidsBean) {
                         CidsBean cidsBean = (CidsBean) ob;
                         String nr = (String) cidsBean.getProperty("vergabenummer");
+                        String fnr = (String) cidsBean.getProperty("folgenummer");
+                        if (fnr!=null&&!fnr.trim().equals("0")){
+                            nr+="/"+fnr;
+                        }
                         String massnahmenkategorisierung = null;
                         Object massKatOb=cidsBean.getProperty("massnahmenkategorisierung");
 

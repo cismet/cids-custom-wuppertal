@@ -157,7 +157,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
                         if (result.getType().equals(result.ERROR)) {
                             l.setForeground(Color.red);
                         } else {
-                            l.setForeground(Color.orange);
+                            l.setForeground(Color.MAGENTA);
                         }
 
                     } else {
@@ -208,7 +208,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
                     Object target = binding.getTargetObject();
                     if (target instanceof JComponent) {// && !(target instanceof JComboBox)) {
                         JComponent c = (JComponent) target;
-                        c.setForeground(Color.orange);
+                        c.setForeground(Color.magenta);
                         c.setToolTipText(failure.getValidationResult().getDescription());
 
 
@@ -271,6 +271,23 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
 
         cbNutzungsart.setSelectedItem(null);
+        Vector einkommensgruppen=new Vector();
+        einkommensgruppen.add("A");
+        einkommensgruppen.add("B");
+        einkommensgruppen.add(null);
+
+        cbEinkommensgruppe.setModel(new DefaultComboBoxModel(einkommensgruppen));
+        cbEinkommensgruppe.setRenderer(new ListCellRenderer() {
+
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                JLabel l = (JLabel) dlcr.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (value == null) {
+                    l.setText(" ");
+                }
+                return l;
+            }
+        });
 
     }
 
@@ -341,6 +358,10 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         txtBewilligungsNr = new javax.swing.JTextField();
         jXDatePicker2 = new org.jdesktop.swingx.JXDatePicker();
         jXDatePicker3 = new org.jdesktop.swingx.JXDatePicker();
+        lblFolgenummer = new javax.swing.JLabel();
+        txtFolgenummer = new javax.swing.JTextField();
+        lblEinkommensgruppe = new javax.swing.JLabel();
+        cbEinkommensgruppe = new javax.swing.JComboBox();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -564,6 +585,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
+        lstVorgaenge.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstVorgaenge.setMaximumSize(new java.awt.Dimension(39000, 850000));
         lstVorgaenge.setMinimumSize(new java.awt.Dimension(1, 1));
         lstVorgaenge.setPreferredSize(new java.awt.Dimension(1, 1));
@@ -602,7 +624,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         panVorgangX.setLayout(new java.awt.GridBagLayout());
 
-        lblVergabeNr.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblVergabeNr.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblVergabeNr.setText("Vergabenr.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -643,7 +665,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 0.2;
@@ -664,7 +686,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 16;
+        gridBagConstraints.gridy = 18;
         gridBagConstraints.weighty = 0.1;
         panVorgangX.add(jPanel6, gridBagConstraints);
 
@@ -672,7 +694,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         lblSachbearbeiterVerw.setText("Sachbearbeiter Verwaltung");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(lblSachbearbeiterVerw, gridBagConstraints);
@@ -681,7 +703,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         lblSachbearbeiterTech.setText("Sachbearbeiter Technik");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(lblSachbearbeiterTech, gridBagConstraints);
@@ -690,7 +712,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         lblBemerkungen.setText("Bemerkungen");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(lblBemerkungen, gridBagConstraints);
@@ -712,7 +734,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -726,7 +748,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -737,7 +759,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         lblUebergabedatum.setText("Übergabedatum");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(lblUebergabedatum, gridBagConstraints);
@@ -748,7 +770,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(jXDatePicker1, gridBagConstraints);
@@ -757,7 +779,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         jLabel2.setText("Maßnahme");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
         panVorgangX.add(jLabel2, gridBagConstraints);
@@ -766,7 +788,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         lblMassnahmetyp.setText("Maßnahmenkategorisierung");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(lblMassnahmetyp, gridBagConstraints);
@@ -775,7 +797,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         lblBetroffeneWohneinheiten.setText("Betroffene Wohneinheiten");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(lblBetroffeneWohneinheiten, gridBagConstraints);
@@ -784,7 +806,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         lblBeschreibung1.setText("Maßnahmenbeschreibung");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -798,7 +820,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(cbMassnahmenkategorisierung, gridBagConstraints);
@@ -810,7 +832,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(txtBetroffeneWohneinheiten, gridBagConstraints);
@@ -832,7 +854,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(jScrollPane6, gridBagConstraints);
@@ -842,7 +864,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         jLabel3.setText("Kredit");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
         panVorgangX.add(jLabel3, gridBagConstraints);
@@ -851,7 +873,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         lblBindungsdauer.setText("Bindung bis");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(lblBindungsdauer, gridBagConstraints);
@@ -860,7 +882,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         lblHoeheMietpreisbindung.setText("Höhe Mietpreisbindung");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(lblHoeheMietpreisbindung, gridBagConstraints);
@@ -869,7 +891,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         lblBewilligungsNr.setText("Bewilligungsnr.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridy = 16;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(lblBewilligungsNr, gridBagConstraints);
@@ -878,7 +900,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         lblBewilligungsdatum.setText("Bewilligungsdatum");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridy = 17;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(lblBewilligungsdatum, gridBagConstraints);
@@ -891,7 +913,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(txtHoeheMietpreisbindung, gridBagConstraints);
@@ -903,7 +925,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridy = 16;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(txtBewilligungsNr, gridBagConstraints);
@@ -914,7 +936,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridy = 17;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(jXDatePicker2, gridBagConstraints);
@@ -925,10 +947,58 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(jXDatePicker3, gridBagConstraints);
+
+        lblFolgenummer.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblFolgenummer.setText("Folgenr.");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panVorgangX.add(lblFolgenummer, gridBagConstraints);
+
+        txtFolgenummer.setBorder(null);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, lstVorgaenge, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.folgenummer}"), txtFolgenummer, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        txtFolgenummer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFolgenummerActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panVorgangX.add(txtFolgenummer, gridBagConstraints);
+
+        lblEinkommensgruppe.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblEinkommensgruppe.setText("Einkommensgruppe");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panVorgangX.add(lblEinkommensgruppe, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, lstVorgaenge, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.einkommensgruppe}"), cbEinkommensgruppe, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panVorgangX.add(cbEinkommensgruppe, gridBagConstraints);
 
         panVorgang.add(panVorgangX, java.awt.BorderLayout.CENTER);
 
@@ -989,7 +1059,13 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 //            panVorgang.repaint();
         }
     }//GEN-LAST:event_lstVorgaengeValueChanged
+
+    private void txtFolgenummerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFolgenummerActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFolgenummerActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox cbEinkommensgruppe;
     private javax.swing.JComboBox cbMassnahmenkategorisierung;
     private de.cismet.cids.editors.DefaultBindableReferenceCombo cbNutzungsart;
     private javax.swing.JComboBox cboGeom;
@@ -1020,6 +1096,8 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
     private javax.swing.JLabel lblBewilligungsNr;
     private javax.swing.JLabel lblBewilligungsdatum;
     private javax.swing.JLabel lblBindungsdauer;
+    private javax.swing.JLabel lblEinkommensgruppe;
+    private javax.swing.JLabel lblFolgenummer;
     private javax.swing.JLabel lblGeom;
     private javax.swing.JLabel lblHoeheMietpreisbindung;
     private javax.swing.JLabel lblMassnahmetyp;
@@ -1041,6 +1119,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
     private javax.swing.JTextField txtBetroffeneWohneinheiten;
     private javax.swing.JTextField txtBewilligungsNr;
     private javax.swing.JTextField txtEigentuemerName;
+    private javax.swing.JTextField txtFolgenummer;
     private javax.swing.JTextField txtHoeheMietpreisbindung;
     private javax.swing.JTextArea txtMassnahmenbeschreibung;
     private javax.swing.JTextField txtSachbearbeiterTechnik;
