@@ -4,7 +4,7 @@
  */
 
 /*
- * LocationinstanceRenderer.java
+ * Poi_locationinstanceRenderer.java
  *
  * Created on 21.08.2009, 12:02:33
  */
@@ -36,12 +36,12 @@ import org.apache.log4j.Logger;
  *
  * @author srichter
  */
-public class LocationinstanceRenderer extends javax.swing.JPanel implements CidsBeanRenderer, TitleComponentProvider, FooterComponentProvider, BorderProvider {
+public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements CidsBeanRenderer, TitleComponentProvider, FooterComponentProvider, BorderProvider {
 
     private final Logger log = Logger.getLogger(this.getClass());
 
-    /** Creates new form LocationinstanceRenderer */
-    public LocationinstanceRenderer() {
+    /** Creates new form Poi_locationinstanceRenderer */
+    public Poi_locationinstanceRenderer() {
         initComponents();
         ObjectRendererUIUtils.decorateComponentWithMouseOverCursorChange(lblMail, Cursor.HAND_CURSOR, Cursor.DEFAULT_CURSOR);
         ObjectRendererUIUtils.decorateComponentWithMouseOverCursorChange(lblUrl, Cursor.HAND_CURSOR, Cursor.DEFAULT_CURSOR);

@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package de.cismet.cids.custom.tostringconverter.wunda_blau;
 
 import de.cismet.cids.tools.CustomToStringConverter;
@@ -11,11 +10,10 @@ import de.cismet.cids.tools.CustomToStringConverter;
  *
  * @author srichter
  */
-public class LocationinstanceToStringConverter extends CustomToStringConverter {
+public class Poi_spatialreferencesystemusinggeographicidentifiersToStringConverter extends CustomToStringConverter {
 
     @Override
     public String createString() {
-        return String.valueOf(cidsBean.getProperty("geographicidentifier"));
+        return String.valueOf(cidsBean.getProperty("theme"));
     }
-
 }

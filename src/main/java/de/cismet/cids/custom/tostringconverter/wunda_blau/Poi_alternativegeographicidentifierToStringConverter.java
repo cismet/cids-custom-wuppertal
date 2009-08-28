@@ -10,10 +10,10 @@ import de.cismet.cids.tools.CustomToStringConverter;
  *
  * @author srichter
  */
-public class SpatialreferencesystemusinggeographicidentifiersToStringConverter extends CustomToStringConverter {
+public class Poi_alternativegeographicidentifierToStringConverter extends CustomToStringConverter {
 
     @Override
     public String createString() {
-        return String.valueOf(cidsBean.getProperty("theme"));
+        return String.valueOf(cidsBean.getProperty("alternativegeographicidentifier"));
     }
 }

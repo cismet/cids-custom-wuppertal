@@ -4,7 +4,7 @@
  */
 
 /*
- * LocationinstanceEditor.java
+ * Poi_locationinstanceEditor.java
  *
  * Created on 17.08.2009, 15:40:29
  */
@@ -30,12 +30,12 @@ import org.jdesktop.swingx.error.ErrorInfo;
  *
  * @author srichter
  */
-public class LocationinstanceEditor extends DefaultCustomObjectEditor {
+public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor {
 
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
 
-    /** Creates new form LocationinstanceEditor */
-    public LocationinstanceEditor() {
+    /** Creates new form Poi_locationinstanceEditor */
+    public Poi_locationinstanceEditor() {
         initComponents();
         dlgAddLocationType.pack();
         dlgAddZusNamen.pack();
@@ -702,7 +702,7 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddThemaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddThemaActionPerformed
-        dlgAddLocationType.setLocationRelativeTo(LocationinstanceEditor.this);
+        dlgAddLocationType.setLocationRelativeTo(Poi_locationinstanceEditor.this);
         dlgAddLocationType.setVisible(true);
 }//GEN-LAST:event_btnAddThemaActionPerformed
 
@@ -740,7 +740,7 @@ public class LocationinstanceEditor extends DefaultCustomObjectEditor {
 }//GEN-LAST:event_btnMenOkActionPerformed
 
     private void btnAddZusNamenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddZusNamenActionPerformed
-        dlgAddZusNamen.setLocationRelativeTo(LocationinstanceEditor.this);
+        dlgAddZusNamen.setLocationRelativeTo(Poi_locationinstanceEditor.this);
         dlgAddZusNamen.setVisible(true);
     }//GEN-LAST:event_btnAddZusNamenActionPerformed
 

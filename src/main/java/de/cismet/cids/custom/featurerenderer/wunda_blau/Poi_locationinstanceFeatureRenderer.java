@@ -16,9 +16,9 @@ import javax.swing.JComponent;
  *
  * @author srichter
  */
-public class LocationinstanceFeatureRenderer extends CustomCidsFeatureRenderer {
+public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRenderer {
 
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(LocationinstanceFeatureRenderer.class);
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Poi_locationinstanceFeatureRenderer.class);
     private static final FeatureAnnotationSymbol DEFAULT_SYMBOL;
     private FeatureAnnotationSymbol symbol;
 

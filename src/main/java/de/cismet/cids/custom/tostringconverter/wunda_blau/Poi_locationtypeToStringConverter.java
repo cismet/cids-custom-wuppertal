@@ -11,7 +11,7 @@ import de.cismet.cids.tools.CustomToStringConverter;
  *
  * @author srichter
  */
-public class LocationtypeToStringConverter extends CustomToStringConverter {
+public class Poi_locationtypeToStringConverter extends CustomToStringConverter {
 
     @Override
     public String createString() {
