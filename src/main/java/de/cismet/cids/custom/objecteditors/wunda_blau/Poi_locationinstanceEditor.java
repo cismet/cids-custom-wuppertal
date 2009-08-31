@@ -37,6 +37,8 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor {
     /** Creates new form Poi_locationinstanceEditor */
     public Poi_locationinstanceEditor() {
         initComponents();
+        lblGeomArea.setVisible(false);
+        cbGeomArea.setVisible(false);
         dlgAddLocationType.pack();
         dlgAddZusNamen.pack();
     }
@@ -78,76 +80,78 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor {
         dlgAddLocationType = new javax.swing.JDialog();
         panAddLocationType = new javax.swing.JPanel();
         lblAuswaehlen = new javax.swing.JLabel();
-        final MetaObject[] locationtypes = ObjectRendererUIUtils.getLightweightMetaObjectsForTable("locationtype", new String[]{"identification"});
-        Arrays.sort(locationtypes);
-        cbTypes = new javax.swing.JComboBox(locationtypes);
-        panMenButtons = new javax.swing.JPanel();
-        btnMenAbort = new javax.swing.JButton();
-        btnMenOk = new javax.swing.JButton();
-        dlgAddZusNamen = new javax.swing.JDialog();
-        panAddName = new javax.swing.JPanel();
-        lblNamesAuswaehlen = new javax.swing.JLabel();
-        panMenNamesButtons = new javax.swing.JPanel();
-        btnNamesMenAbort = new javax.swing.JButton();
-        btnNamesMenOk = new javax.swing.JButton();
-        txtZusNamen = new javax.swing.JTextField();
-        panContent = new javax.swing.JPanel();
-        lblFax = new javax.swing.JLabel();
-        lblEmail = new javax.swing.JLabel();
-        lblUrl = new javax.swing.JLabel();
-        lblStrasse = new javax.swing.JLabel();
-        lblTelefon = new javax.swing.JLabel();
-        lblVeroeffentlicht = new javax.swing.JLabel();
-        lblPLZ = new javax.swing.JLabel();
-        lblInfo = new javax.swing.JLabel();
-        lblStadt = new javax.swing.JLabel();
-        lblArt = new javax.swing.JLabel();
-        txtFax = new javax.swing.JTextField();
-        txtStrasse = new javax.swing.JTextField();
-        txtStadt = new javax.swing.JTextField();
-        txtPLZ = new javax.swing.JTextField();
-        txtTelefon = new javax.swing.JTextField();
-        txtEmail = new javax.swing.JTextField();
-        scpTxtInfo = new javax.swing.JScrollPane();
-        txtaInfo = new javax.swing.JTextArea();
-        txtArt = new javax.swing.JTextField();
-        txtUrl = new javax.swing.JTextField();
-        chkVeroeffentlicht = new javax.swing.JCheckBox();
-        cbMainLocationType = new javax.swing.JComboBox();
-        scpLstLocationTypes = new javax.swing.JScrollPane();
-        lstLocationTypes = new javax.swing.JList();
-        cbGeomPoint = new DefaultCismapGeometryComboBoxEditor();
-        cbGeomArea = new DefaultCismapGeometryComboBoxEditor();
-        lblMainLocationType = new javax.swing.JLabel();
-        lblLocationTypes = new javax.swing.JLabel();
-        lblGeomPoint = new javax.swing.JLabel();
-        lblGeomArea = new javax.swing.JLabel();
-        panButtons = new javax.swing.JPanel();
-        btnAddThema = new javax.swing.JButton();
-        btnRemoveThema = new javax.swing.JButton();
-        lblSignatur = new javax.swing.JLabel();
-        cbSignatur = new FastBindableReferenceCombo("%1$2s", new String[]{"definition"});
-        lblBezeichnung = new javax.swing.JLabel();
-        txtBezeichnung = new javax.swing.JTextField();
-        scpZusNamen = new javax.swing.JScrollPane();
-        lstZusNamen = new javax.swing.JList();
-        lblLocationTypes1 = new javax.swing.JLabel();
-        panButtons1 = new javax.swing.JPanel();
-        btnAddZusNamen = new javax.swing.JButton();
-        btnRemoveZusNamen = new javax.swing.JButton();
+        final MetaObject[] locationtypes = ObjectRendererUIUtils.getLightweightMetaObjectsForTable("poi_locationtype", new String[]{"identification"});
+        if(locationtypes != null) {
+            Arrays.sort(locationtypes);
+            cbTypes = new javax.swing.JComboBox(locationtypes);
+            panMenButtons = new javax.swing.JPanel();
+            btnMenAbort = new javax.swing.JButton();
+            btnMenOk = new javax.swing.JButton();
+            dlgAddZusNamen = new javax.swing.JDialog();
+            panAddName = new javax.swing.JPanel();
+            lblNamesAuswaehlen = new javax.swing.JLabel();
+            panMenNamesButtons = new javax.swing.JPanel();
+            btnNamesMenAbort = new javax.swing.JButton();
+            btnNamesMenOk = new javax.swing.JButton();
+            txtZusNamen = new javax.swing.JTextField();
+            panContent = new javax.swing.JPanel();
+            lblFax = new javax.swing.JLabel();
+            lblEmail = new javax.swing.JLabel();
+            lblUrl = new javax.swing.JLabel();
+            lblStrasse = new javax.swing.JLabel();
+            lblTelefon = new javax.swing.JLabel();
+            lblVeroeffentlicht = new javax.swing.JLabel();
+            lblPLZ = new javax.swing.JLabel();
+            lblInfo = new javax.swing.JLabel();
+            lblStadt = new javax.swing.JLabel();
+            lblArt = new javax.swing.JLabel();
+            txtFax = new javax.swing.JTextField();
+            txtStrasse = new javax.swing.JTextField();
+            txtStadt = new javax.swing.JTextField();
+            txtPLZ = new javax.swing.JTextField();
+            txtTelefon = new javax.swing.JTextField();
+            txtEmail = new javax.swing.JTextField();
+            scpTxtInfo = new javax.swing.JScrollPane();
+            txtaInfo = new javax.swing.JTextArea();
+            txtArt = new javax.swing.JTextField();
+            txtUrl = new javax.swing.JTextField();
+            chkVeroeffentlicht = new javax.swing.JCheckBox();
+            cbMainLocationType = new javax.swing.JComboBox();
+            scpLstLocationTypes = new javax.swing.JScrollPane();
+            lstLocationTypes = new javax.swing.JList();
+            cbGeomPoint = new DefaultCismapGeometryComboBoxEditor();
+            cbGeomArea = new DefaultCismapGeometryComboBoxEditor();
+            lblMainLocationType = new javax.swing.JLabel();
+            lblLocationTypes = new javax.swing.JLabel();
+            lblGeomPoint = new javax.swing.JLabel();
+            lblGeomArea = new javax.swing.JLabel();
+            panButtons = new javax.swing.JPanel();
+            btnAddThema = new javax.swing.JButton();
+            btnRemoveThema = new javax.swing.JButton();
+            lblSignatur = new javax.swing.JLabel();
+            cbSignatur = new FastBindableReferenceCombo("%1$2s", new String[]{"definition"});
+            lblBezeichnung = new javax.swing.JLabel();
+            txtBezeichnung = new javax.swing.JTextField();
+            scpZusNamen = new javax.swing.JScrollPane();
+            lstZusNamen = new javax.swing.JList();
+            lblLocationTypes1 = new javax.swing.JLabel();
+            panButtons1 = new javax.swing.JPanel();
+            btnAddZusNamen = new javax.swing.JButton();
+            btnRemoveZusNamen = new javax.swing.JButton();
 
-        dlgAddLocationType.setModal(true);
+            dlgAddLocationType.setModal(true);
 
-        panAddLocationType.setMaximumSize(new java.awt.Dimension(180, 120));
-        panAddLocationType.setMinimumSize(new java.awt.Dimension(180, 120));
-        panAddLocationType.setPreferredSize(new java.awt.Dimension(180, 120));
-        panAddLocationType.setLayout(new java.awt.GridBagLayout());
+            panAddLocationType.setMaximumSize(new java.awt.Dimension(180, 120));
+            panAddLocationType.setMinimumSize(new java.awt.Dimension(180, 120));
+            panAddLocationType.setPreferredSize(new java.awt.Dimension(180, 120));
+            panAddLocationType.setLayout(new java.awt.GridBagLayout());
 
-        lblAuswaehlen.setText("Bitte Thema auswählen:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        panAddLocationType.add(lblAuswaehlen, gridBagConstraints);
+            lblAuswaehlen.setText("Bitte Thema auswählen:");
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+            panAddLocationType.add(lblAuswaehlen, gridBagConstraints);
 
+        }
         cbTypes.setMaximumSize(new java.awt.Dimension(100, 20));
         cbTypes.setMinimumSize(new java.awt.Dimension(100, 20));
         cbTypes.setPreferredSize(new java.awt.Dimension(100, 20));
@@ -560,7 +564,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblGeomPoint, gridBagConstraints);
 
-        lblGeomArea.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblGeomArea.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblGeomArea.setText("Flächengeometrie:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -709,7 +713,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor {
     private void btnRemoveThemaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveThemaActionPerformed
         final Object selection = lstLocationTypes.getSelectedValue();
         if (selection != null) {
-            final int answer = JOptionPane.showConfirmDialog(this, "Soll das Thema wirklich gelöscht werden?", "Typ entfernen", JOptionPane.YES_NO_OPTION);
+            final int answer = JOptionPane.showConfirmDialog(this, "Soll das Thema wirklich gelöscht werden?", "Thema entfernen", JOptionPane.YES_NO_OPTION);
             if (answer == JOptionPane.YES_OPTION) {
                 try {
                     deleteItemFromList("locationtypes", selection, false);
@@ -747,7 +751,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor {
     private void btnRemoveZusNamenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveZusNamenActionPerformed
         final Object selection = lstZusNamen.getSelectedValue();
         if (selection != null) {
-            final int answer = JOptionPane.showConfirmDialog(this, "Soll der zusätzliche Name wirklich gelöscht werden?", "Typ entfernen", JOptionPane.YES_NO_OPTION);
+            final int answer = JOptionPane.showConfirmDialog(this, "Soll der zusätzliche Name wirklich gelöscht werden?", "Name entfernen", JOptionPane.YES_NO_OPTION);
             if (answer == JOptionPane.YES_OPTION) {
                 try {
                     deleteItemFromList("alternativegeographicidentifier", selection, true);

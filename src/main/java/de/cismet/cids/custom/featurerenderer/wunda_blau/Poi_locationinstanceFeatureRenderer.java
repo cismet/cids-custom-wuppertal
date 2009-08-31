@@ -75,10 +75,14 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
     private final String getUrlStringFromSignature(Object signature) {
         if (signature instanceof CidsBean) {
             final CidsBean signatur = (CidsBean) signature;
-            final Object fileName = signatur.getProperty("filename");
-            final Object fileExtension = signatur.getProperty("fileextension");
-            if (fileName != null && fileExtension != null) {
-                return StaticProperties.POI_SIGNATUR_URL_PREFIX + fileName + fileExtension + StaticProperties.POI_SIGNATUR_URL_SUFFIX;
+            try {
+                final Object fileName = signatur.getProperty("filename");
+                final Object fileExtension = signatur.getProperty("fileextension");
+                if (fileName != null && fileExtension != null) {
+                    return StaticProperties.POI_SIGNATUR_URL_PREFIX + fileName + fileExtension + StaticProperties.POI_SIGNATUR_URL_SUFFIX;
+                }
+            } catch (Exception ex) {
+                log.error(ex, ex);
             }
         }
         return null;
