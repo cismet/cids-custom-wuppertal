@@ -7,10 +7,8 @@ package de.cismet.cids.custom.featurerenderer.wunda_blau;
 import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.featurerenderer.CustomCidsFeatureRenderer;
-import de.cismet.cismap.commons.Refreshable;
 import de.cismet.cismap.commons.gui.piccolo.FeatureAnnotationSymbol;
 import java.net.URL;
-import javax.swing.JComponent;
 
 /**
  *
@@ -23,25 +21,16 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
     private FeatureAnnotationSymbol symbol;
 
     static {
-        DEFAULT_SYMBOL = safeGetSymbolFromURLString(StaticProperties.POI_SIGNATUR_DEFAULT_ICON);
-    }
-
-    private static final FeatureAnnotationSymbol safeGetSymbolFromURLString(final String in) {
-        FeatureAnnotationSymbol ret = getSymbolFromURLString(in);
-        if (ret != null) {
-            return ret;
-        } else {
-            return new FeatureAnnotationSymbol();
-        }
+        DEFAULT_SYMBOL = getSymbolFromURLString(StaticProperties.POI_SIGNATUR_DEFAULT_ICON);
     }
 
     private static final FeatureAnnotationSymbol getSymbolFromURLString(final String in) {
         if (in != null && in.length() > 0) {
-            FeatureAnnotationSymbol ret;
             try {
-                final URL defaultSymbolURL = new URL(in);
-                ret = new FeatureAnnotationSymbol(defaultSymbolURL);
-                return ret;
+                final URL symbolURL = new URL(in);
+                if (symbolURL != null) {
+                    return new FeatureAnnotationSymbol(symbolURL);
+                }
             } catch (Exception ex) {
                 log.warn(ex, ex);
             }
@@ -51,25 +40,29 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
 
     @Override
     public void assign() {
-        cidsBean = metaObject.getBean();
-        symbol = null;
-        Object o = cidsBean.getProperty("signatur");
-        if (o instanceof CidsBean) {
-            String iconUrl = getUrlStringFromSignature(o);
-            symbol = getSymbolFromURLString(iconUrl);
-        }
-        if (symbol == null) {
-            o = cidsBean.getProperty("mainlocationtype");
-            if (o instanceof CidsBean) {
-                final CidsBean mainLocationType = (CidsBean) o;
-                o = mainLocationType.getProperty("signatur");
-                String iconUrl = getUrlStringFromSignature(o);
-                symbol = getSymbolFromURLString(iconUrl);
+        if (metaObject != null) {
+            cidsBean = metaObject.getBean();
+            if (cidsBean != null) {
+                symbol = null;
+                Object o = cidsBean.getProperty("signatur");
+                if (o instanceof CidsBean) {
+                    String iconUrl = getUrlStringFromSignature(o);
+                    symbol = getSymbolFromURLString(iconUrl);
+                }
+                if (symbol == null) {
+                    o = cidsBean.getProperty("mainlocationtype");
+                    if (o instanceof CidsBean) {
+                        final CidsBean mainLocationType = (CidsBean) o;
+                        o = mainLocationType.getProperty("signatur");
+                        String iconUrl = getUrlStringFromSignature(o);
+                        symbol = getSymbolFromURLString(iconUrl);
+                    }
+                }
+                if (symbol == null) {
+                    symbol = DEFAULT_SYMBOL;
+                }
             }
-        } else {
-            symbol = DEFAULT_SYMBOL;
         }
-
     }
 
     private final String getUrlStringFromSignature(Object signature) {
@@ -77,9 +70,9 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
             final CidsBean signatur = (CidsBean) signature;
             try {
                 final Object fileName = signatur.getProperty("filename");
-                final Object fileExtension = signatur.getProperty("fileextension");
-                if (fileName != null && fileExtension != null) {
-                    return StaticProperties.POI_SIGNATUR_URL_PREFIX + fileName + fileExtension + StaticProperties.POI_SIGNATUR_URL_SUFFIX;
+//                final Object fileExtension = signatur.getProperty("fileextension");
+                if (fileName != null) {
+                    return StaticProperties.POI_SIGNATUR_URL_PREFIX + fileName + StaticProperties.POI_SIGNATUR_URL_SUFFIX;
                 }
             } catch (Exception ex) {
                 log.error(ex, ex);
@@ -99,9 +92,8 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
             return new FeatureAnnotationSymbol();
         }
     }
-
-    @Override
-    public JComponent getInfoComponent(Refreshable refresh) {
-        return null;
-    }
+//    @Override
+//    public JComponent getInfoComponent(Refreshable refresh) {
+//        return null;
+//    }
 }
