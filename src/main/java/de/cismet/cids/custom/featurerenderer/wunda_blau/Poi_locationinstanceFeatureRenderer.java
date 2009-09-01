@@ -21,7 +21,8 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Poi_locationinstanceFeatureRenderer.class);
     private static final FeatureAnnotationSymbol DEFAULT_SYMBOL;
     private FeatureAnnotationSymbol symbol;
-
+    private boolean assigned = false;
+    
     static {
         DEFAULT_SYMBOL = getSymbolFromURLString(StaticProperties.POI_SIGNATUR_DEFAULT_ICON);
     }
@@ -39,7 +40,7 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
         }
         return null;
     }
-    private boolean assigned = false;
+
 
     @Override
     public void assign() {
