@@ -43,19 +43,24 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
         if (metaObject != null) {
             cidsBean = metaObject.getBean();
             if (cidsBean != null) {
+                String iconUrl;
                 symbol = null;
                 Object o = cidsBean.getProperty("signatur");
                 if (o instanceof CidsBean) {
-                    String iconUrl = getUrlStringFromSignature(o);
-                    symbol = getSymbolFromURLString(iconUrl);
+                    iconUrl = getUrlStringFromSignature(o);
+                    if (iconUrl != null) {
+                        symbol = getSymbolFromURLString(iconUrl);
+                    }
                 }
                 if (symbol == null) {
                     o = cidsBean.getProperty("mainlocationtype");
                     if (o instanceof CidsBean) {
                         final CidsBean mainLocationType = (CidsBean) o;
                         o = mainLocationType.getProperty("signatur");
-                        String iconUrl = getUrlStringFromSignature(o);
-                        symbol = getSymbolFromURLString(iconUrl);
+                        iconUrl = getUrlStringFromSignature(o);
+                        if (iconUrl != null) {
+                            symbol = getSymbolFromURLString(iconUrl);
+                        }
                     }
                 }
                 if (symbol == null) {

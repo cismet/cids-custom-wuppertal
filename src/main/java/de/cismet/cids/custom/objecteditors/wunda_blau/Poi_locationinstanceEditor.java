@@ -17,6 +17,7 @@ import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUIUtils;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
+import de.cismet.cids.tools.metaobjectrenderer.Titled;
 import de.cismet.cids.utils.ClassCacheMultiple;
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 import java.util.Arrays;
@@ -30,9 +31,10 @@ import org.jdesktop.swingx.error.ErrorInfo;
  *
  * @author srichter
  */
-public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor {
+public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implements Titled {
 
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
+    private String title = "";
 
     /** Creates new form Poi_locationinstanceEditor */
     public Poi_locationinstanceEditor() {
@@ -205,7 +207,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor {
         panAddName.setPreferredSize(new java.awt.Dimension(180, 120));
         panAddName.setLayout(new java.awt.GridBagLayout());
 
-        lblNamesAuswaehlen.setText("Bitte Namen auswählen:");
+        lblNamesAuswaehlen.setText("Bitte Namen eingeben:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         panAddName.add(lblNamesAuswaehlen, gridBagConstraints);
@@ -349,7 +351,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor {
         panContent.add(lblArt, gridBagConstraints);
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fax}"), txtFax, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("-");
+        binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
 
@@ -362,7 +364,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor {
         panContent.add(txtFax, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.strasse}"), txtStrasse, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("-");
+        binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
 
@@ -375,7 +377,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor {
         panContent.add(txtStrasse, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.stadt}"), txtStadt, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("-");
+        binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
 
@@ -388,7 +390,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor {
         panContent.add(txtStadt, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.plz}"), txtPLZ, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("-");
+        binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
 
@@ -401,7 +403,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor {
         panContent.add(txtPLZ, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.telefon}"), txtTelefon, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("-");
+        binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
 
@@ -414,7 +416,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor {
         panContent.add(txtTelefon, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.email}"), txtEmail, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("-");
+        binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
 
@@ -427,11 +429,11 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor {
         panContent.add(txtEmail, gridBagConstraints);
 
         txtaInfo.setColumns(3);
-        txtaInfo.setFont(new java.awt.Font("Tahoma", 0, 11));
+        txtaInfo.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         txtaInfo.setRows(5);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.info}"), txtaInfo, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("-");
+        binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
 
@@ -446,7 +448,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor {
         panContent.add(scpTxtInfo, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.art_info}"), txtArt, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("-");
+        binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
 
@@ -459,7 +461,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor {
         panContent.add(txtArt, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.url}"), txtUrl, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("-");
+        binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
 
@@ -480,7 +482,6 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 10;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 5);
         panContent.add(chkVeroeffentlicht, gridBagConstraints);
@@ -495,6 +496,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 11;
         gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(cbMainLocationType, gridBagConstraints);
@@ -524,6 +526,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 15;
         gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(cbGeomPoint, gridBagConstraints);
@@ -532,6 +535,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 16;
         gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(cbGeomArea, gridBagConstraints);
@@ -622,6 +626,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 14;
         gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(4, 5, 4, 4);
         panContent.add(cbSignatur, gridBagConstraints);
@@ -634,7 +639,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor {
         panContent.add(lblBezeichnung, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geographicidentifier}"), txtBezeichnung, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("-");
+        binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
 
@@ -866,4 +871,14 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor {
     private javax.swing.JTextArea txtaInfo;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }

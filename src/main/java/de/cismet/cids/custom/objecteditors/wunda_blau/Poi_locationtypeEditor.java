@@ -16,6 +16,7 @@ import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
+import de.cismet.cids.tools.metaobjectrenderer.Titled;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
@@ -29,10 +30,11 @@ import org.jdesktop.swingx.error.ErrorInfo;
  *
  * @author srichter
  */
-public class Poi_locationtypeEditor extends DefaultCustomObjectEditor {
+public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements Titled {
 
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private String latestIconUrl = null;
+    private String title = "";
 
     /** Creates new form LocationinstanceEditor */
     public Poi_locationtypeEditor() {
@@ -186,7 +188,7 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor {
         add(chkToPublish, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.identification}"), txtName, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("-");
+        binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
 
@@ -197,7 +199,7 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor {
         add(txtName, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.definition}"), txtDefinition, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("-");
+        binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
 
@@ -284,11 +286,12 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(4, 5, 4, 4);
         add(cbSignatur, gridBagConstraints);
 
-        lblIcon.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblIcon.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblIcon.setText("Symbol:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -298,7 +301,7 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor {
         add(lblIcon, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.icon}"), txtIcon, org.jdesktop.beansbinding.BeanProperty.create("text_ON_ACTION_OR_FOCUS_LOST"));
-        binding.setSourceNullValue("-");
+        binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
 
@@ -319,7 +322,7 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(txtIcon, gridBagConstraints);
 
-        lblIconImg.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Vorschau"), javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5))); // NOI18N
+        lblIconImg.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Vorschau"), javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5)));
         lblIconImg.setMaximumSize(new java.awt.Dimension(84, 84));
         lblIconImg.setMinimumSize(new java.awt.Dimension(84, 84));
         lblIconImg.setPreferredSize(new java.awt.Dimension(84, 84));
@@ -443,4 +446,14 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor {
     private javax.swing.JTextField txtName;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }

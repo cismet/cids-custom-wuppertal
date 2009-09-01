@@ -132,7 +132,7 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="lblNamesAuswaehlen">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Bitte Namen ausw&#xe4;hlen:"/>
+                <Property name="text" type="java.lang.String" value="Bitte Namen eingeben:"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -350,7 +350,7 @@
           <BindingProperties>
             <BindingProperty name="text" source="Form" sourcePath="${cidsBean.fax}" target="txtFax" targetPath="text" updateStrategy="0" immediately="false">
               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-              <Property name="nullValue" type="java.lang.String" value="-"/>
+              <Property name="nullValue" type="java.lang.String" value=""/>
               <Property name="incompletePathValue" type="java.lang.String" value="&lt;Error&gt;"/>
             </BindingProperty>
           </BindingProperties>
@@ -364,7 +364,7 @@
           <BindingProperties>
             <BindingProperty name="text" source="Form" sourcePath="${cidsBean.strasse}" target="txtStrasse" targetPath="text" updateStrategy="0" immediately="false">
               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-              <Property name="nullValue" type="java.lang.String" value="-"/>
+              <Property name="nullValue" type="java.lang.String" value=""/>
               <Property name="incompletePathValue" type="java.lang.String" value="&lt;Error&gt;"/>
             </BindingProperty>
           </BindingProperties>
@@ -378,7 +378,7 @@
           <BindingProperties>
             <BindingProperty name="text" source="Form" sourcePath="${cidsBean.stadt}" target="txtStadt" targetPath="text" updateStrategy="0" immediately="false">
               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-              <Property name="nullValue" type="java.lang.String" value="-"/>
+              <Property name="nullValue" type="java.lang.String" value=""/>
               <Property name="incompletePathValue" type="java.lang.String" value="&lt;Error&gt;"/>
             </BindingProperty>
           </BindingProperties>
@@ -392,7 +392,7 @@
           <BindingProperties>
             <BindingProperty name="text" source="Form" sourcePath="${cidsBean.plz}" target="txtPLZ" targetPath="text" updateStrategy="0" immediately="false">
               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-              <Property name="nullValue" type="java.lang.String" value="-"/>
+              <Property name="nullValue" type="java.lang.String" value=""/>
               <Property name="incompletePathValue" type="java.lang.String" value="&lt;Error&gt;"/>
             </BindingProperty>
           </BindingProperties>
@@ -406,7 +406,7 @@
           <BindingProperties>
             <BindingProperty name="text" source="Form" sourcePath="${cidsBean.telefon}" target="txtTelefon" targetPath="text" updateStrategy="0" immediately="false">
               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-              <Property name="nullValue" type="java.lang.String" value="-"/>
+              <Property name="nullValue" type="java.lang.String" value=""/>
               <Property name="incompletePathValue" type="java.lang.String" value="&lt;Error&gt;"/>
             </BindingProperty>
           </BindingProperties>
@@ -420,7 +420,7 @@
           <BindingProperties>
             <BindingProperty name="text" source="Form" sourcePath="${cidsBean.email}" target="txtEmail" targetPath="text" updateStrategy="0" immediately="false">
               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-              <Property name="nullValue" type="java.lang.String" value="-"/>
+              <Property name="nullValue" type="java.lang.String" value=""/>
               <Property name="incompletePathValue" type="java.lang.String" value="&lt;Error&gt;"/>
             </BindingProperty>
           </BindingProperties>
@@ -453,7 +453,7 @@
               <BindingProperties>
                 <BindingProperty name="text" source="Form" sourcePath="${cidsBean.info}" target="txtaInfo" targetPath="text" updateStrategy="0" immediately="false">
                   <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-                  <Property name="nullValue" type="java.lang.String" value="-"/>
+                  <Property name="nullValue" type="java.lang.String" value=""/>
                   <Property name="incompletePathValue" type="java.lang.String" value="&lt;Error&gt;"/>
                 </BindingProperty>
               </BindingProperties>
@@ -464,7 +464,7 @@
           <BindingProperties>
             <BindingProperty name="text" source="Form" sourcePath="${cidsBean.art_info}" target="txtArt" targetPath="text" updateStrategy="0" immediately="false">
               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-              <Property name="nullValue" type="java.lang.String" value="-"/>
+              <Property name="nullValue" type="java.lang.String" value=""/>
               <Property name="incompletePathValue" type="java.lang.String" value="&lt;Error&gt;"/>
             </BindingProperty>
           </BindingProperties>
@@ -478,7 +478,7 @@
           <BindingProperties>
             <BindingProperty name="text" source="Form" sourcePath="${cidsBean.url}" target="txtUrl" targetPath="text" updateStrategy="0" immediately="false">
               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-              <Property name="nullValue" type="java.lang.String" value="-"/>
+              <Property name="nullValue" type="java.lang.String" value=""/>
               <Property name="incompletePathValue" type="java.lang.String" value="&lt;Error&gt;"/>
             </BindingProperty>
           </BindingProperties>
@@ -497,7 +497,7 @@
           </BindingProperties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-              <GridBagConstraints gridX="1" gridY="10" gridWidth="2" gridHeight="1" fill="3" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="2" insetsBottom="5" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
+              <GridBagConstraints gridX="1" gridY="10" gridWidth="2" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="2" insetsBottom="5" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -513,7 +513,7 @@
           </BindingProperties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-              <GridBagConstraints gridX="1" gridY="11" gridWidth="2" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
+              <GridBagConstraints gridX="1" gridY="11" gridWidth="2" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -560,7 +560,7 @@
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-              <GridBagConstraints gridX="1" gridY="15" gridWidth="2" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
+              <GridBagConstraints gridX="1" gridY="15" gridWidth="2" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -575,7 +575,7 @@
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-              <GridBagConstraints gridX="1" gridY="16" gridWidth="2" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
+              <GridBagConstraints gridX="1" gridY="16" gridWidth="2" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -703,7 +703,7 @@
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-              <GridBagConstraints gridX="1" gridY="14" gridWidth="2" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="4" insetsLeft="5" insetsBottom="4" insetsRight="4" anchor="17" weightX="0.0" weightY="0.0"/>
+              <GridBagConstraints gridX="1" gridY="14" gridWidth="2" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="4" insetsLeft="5" insetsBottom="4" insetsRight="4" anchor="17" weightX="0.0" weightY="0.0"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -724,7 +724,7 @@
           <BindingProperties>
             <BindingProperty name="text" source="Form" sourcePath="${cidsBean.geographicidentifier}" target="txtBezeichnung" targetPath="text" updateStrategy="0" immediately="false">
               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-              <Property name="nullValue" type="java.lang.String" value="-"/>
+              <Property name="nullValue" type="java.lang.String" value=""/>
               <Property name="incompletePathValue" type="java.lang.String" value="&lt;Error&gt;"/>
             </BindingProperty>
           </BindingProperties>
