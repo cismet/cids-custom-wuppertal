@@ -22,9 +22,13 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
     private static final FeatureAnnotationSymbol DEFAULT_SYMBOL;
     private FeatureAnnotationSymbol symbol;
     private boolean assigned = false;
-    
+
     static {
         DEFAULT_SYMBOL = getSymbolFromURLString(StaticProperties.POI_SIGNATUR_DEFAULT_ICON);
+        if (DEFAULT_SYMBOL != null) {
+            DEFAULT_SYMBOL.setSweetSpotX(0.5d);
+            DEFAULT_SYMBOL.setSweetSpotY(0.5d);
+        }
     }
 
     private static final FeatureAnnotationSymbol getSymbolFromURLString(final String in) {
@@ -44,13 +48,21 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
 
     @Override
     public void assign() {
-        if (!assigned) {
-            if (metaObject != null) {
-                cidsBean = metaObject.getBean();
-                if (cidsBean != null) {
-                    String iconUrl;
-                    symbol = null;
-                    Object o = cidsBean.getProperty("signatur");
+        if (metaObject != null) {
+            cidsBean = metaObject.getBean();
+            if (cidsBean != null) {
+                assigned = true;
+                String iconUrl;
+                symbol = null;
+                Object o = cidsBean.getProperty("signatur");
+                if (o instanceof CidsBean) {
+                    iconUrl = getUrlStringFromSignature(o);
+                    if (iconUrl != null) {
+                        symbol = getSymbolFromURLString(iconUrl);
+                    }
+                }
+                if (symbol == null) {
+                    o = cidsBean.getProperty("mainlocationtype");
                     if (o instanceof CidsBean) {
                         iconUrl = getUrlStringFromSignature(o);
                         if (iconUrl != null) {
@@ -72,7 +84,12 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
                         symbol = DEFAULT_SYMBOL;
                     }
                 }
-            assigned=true;
+                if (symbol == null) {
+                    symbol = DEFAULT_SYMBOL;
+                } else {
+                    symbol.setSweetSpotX(0.5d);
+                    symbol.setSweetSpotY(0.5d);
+                }
             }
         }
     }
@@ -82,7 +99,6 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
             final CidsBean signatur = (CidsBean) signature;
             try {
                 final Object fileName = signatur.getProperty("filename");
-//                final Object fileExtension = signatur.getProperty("fileextension");
                 if (fileName != null) {
                     return StaticProperties.POI_SIGNATUR_URL_PREFIX + fileName + StaticProperties.POI_SIGNATUR_URL_SUFFIX;
                 }
@@ -95,7 +111,10 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
 
     @Override
     public FeatureAnnotationSymbol getPointSymbol() {
-        assign();
+        //BUGFIX - ugly but necessary
+        if (!assigned) {
+            assign();
+        }
         final FeatureAnnotationSymbol ret = symbol;
         if (ret != null) {
             return ret;
@@ -107,12 +126,12 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
     }
 
     @Override
-    public JComponent getInfoComponent(Refreshable refresh) {
-        return null;
+    public float getTransparency() {
+        return 1.0f;
     }
 
     @Override
-    public float getTransparency() {
-        return 1f;
+    public JComponent getInfoComponent(Refreshable refresh) {
+        return null;
     }
 }
