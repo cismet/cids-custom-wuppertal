@@ -777,7 +777,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         try {
             final String addName = txtZusNamen.getText();
             if (addName.length() > 0) {
-                final MetaClass alternativeGeoIdentifierMC = ClassCacheMultiple.getMetaClass(SessionManager.getSession().getUser().getDomain(), "alternativegeographicidentifier");
+                final MetaClass alternativeGeoIdentifierMC = ClassCacheMultiple.getMetaClass(SessionManager.getSession().getUser().getDomain(), "poi_alternativegeographicidentifier");
                 final MetaObject newAGI = alternativeGeoIdentifierMC.getEmptyInstance();
                 final CidsBean newAGIBean = newAGI.getBean();
                 newAGIBean.setProperty("alternativegeographicidentifier", addName);
