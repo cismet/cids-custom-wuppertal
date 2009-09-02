@@ -20,6 +20,7 @@ import de.cismet.cids.editors.FastBindableReferenceCombo;
 import de.cismet.cids.tools.metaobjectrenderer.Titled;
 import de.cismet.cids.utils.ClassCacheMultiple;
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
+import de.cismet.tools.gui.RoundedPanel;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.logging.Level;
@@ -39,10 +40,10 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     /** Creates new form Poi_locationinstanceEditor */
     public Poi_locationinstanceEditor() {
         initComponents();
-        lblGeomArea.setVisible(false);
-        cbGeomArea.setVisible(false);
         dlgAddLocationType.pack();
         dlgAddZusNamen.pack();
+        dlgAddLocationType.getRootPane().setDefaultButton(btnMenOk);
+        dlgAddZusNamen.getRootPane().setDefaultButton(btnNamesMenOk);
     }
 
     private final void deleteItemFromList(String propertyName, Object value, boolean andDeleteObjectFromDB) {
@@ -96,13 +97,13 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
             btnNamesMenAbort = new javax.swing.JButton();
             btnNamesMenOk = new javax.swing.JButton();
             txtZusNamen = new javax.swing.JTextField();
-            panContent = new javax.swing.JPanel();
+            panCenter = new javax.swing.JPanel();
+            panContent = new RoundedPanel();
             lblFax = new javax.swing.JLabel();
             lblEmail = new javax.swing.JLabel();
             lblUrl = new javax.swing.JLabel();
             lblStrasse = new javax.swing.JLabel();
             lblTelefon = new javax.swing.JLabel();
-            lblVeroeffentlicht = new javax.swing.JLabel();
             lblPLZ = new javax.swing.JLabel();
             lblInfo = new javax.swing.JLabel();
             lblStadt = new javax.swing.JLabel();
@@ -117,29 +118,33 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
             txtaInfo = new javax.swing.JTextArea();
             txtArt = new javax.swing.JTextField();
             txtUrl = new javax.swing.JTextField();
-            chkVeroeffentlicht = new javax.swing.JCheckBox();
+            lblBezeichnung = new javax.swing.JLabel();
+            txtBezeichnung = new javax.swing.JTextField();
+            panSpacing1 = new javax.swing.JPanel();
+            lblHeader1 = new javax.swing.JLabel();
+            lblGeomPoint = new javax.swing.JLabel();
+            cbGeomPoint = new DefaultCismapGeometryComboBoxEditor();
+            panContent2 = new RoundedPanel();
+            lblMainLocationType = new javax.swing.JLabel();
             cbMainLocationType = new javax.swing.JComboBox();
+            lblLocationTypes = new javax.swing.JLabel();
             scpLstLocationTypes = new javax.swing.JScrollPane();
             lstLocationTypes = new javax.swing.JList();
-            cbGeomPoint = new DefaultCismapGeometryComboBoxEditor();
-            cbGeomArea = new DefaultCismapGeometryComboBoxEditor();
-            lblMainLocationType = new javax.swing.JLabel();
-            lblLocationTypes = new javax.swing.JLabel();
-            lblGeomPoint = new javax.swing.JLabel();
-            lblGeomArea = new javax.swing.JLabel();
             panButtons = new javax.swing.JPanel();
             btnAddThema = new javax.swing.JButton();
             btnRemoveThema = new javax.swing.JButton();
-            lblSignatur = new javax.swing.JLabel();
-            cbSignatur = new FastBindableReferenceCombo("%1$2s", new String[]{"definition"});
-            lblBezeichnung = new javax.swing.JLabel();
-            txtBezeichnung = new javax.swing.JTextField();
-            scpZusNamen = new javax.swing.JScrollPane();
-            lstZusNamen = new javax.swing.JList();
-            lblLocationTypes1 = new javax.swing.JLabel();
             panButtons1 = new javax.swing.JPanel();
             btnAddZusNamen = new javax.swing.JButton();
             btnRemoveZusNamen = new javax.swing.JButton();
+            scpZusNamen = new javax.swing.JScrollPane();
+            lstZusNamen = new javax.swing.JList();
+            lblLocationTypes1 = new javax.swing.JLabel();
+            lblSignatur = new javax.swing.JLabel();
+            cbSignatur = new FastBindableReferenceCombo("%1$2s", new String[]{"definition"});
+            panSpacing2 = new javax.swing.JPanel();
+            lblVeroeffentlicht = new javax.swing.JLabel();
+            chkVeroeffentlicht = new javax.swing.JCheckBox();
+            lblHeader2 = new javax.swing.JLabel();
 
             dlgAddLocationType.setModal(true);
 
@@ -255,7 +260,10 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         dlgAddZusNamen.getContentPane().add(panAddName, java.awt.BorderLayout.CENTER);
 
-        setLayout(new java.awt.BorderLayout());
+        setLayout(new java.awt.GridBagLayout());
+
+        panCenter.setOpaque(false);
+        panCenter.setLayout(new java.awt.GridBagLayout());
 
         panContent.setOpaque(false);
         panContent.setLayout(new java.awt.GridBagLayout());
@@ -264,7 +272,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lblFax.setText("Fax:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblFax, gridBagConstraints);
@@ -273,7 +281,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lblEmail.setText("Email:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblEmail, gridBagConstraints);
@@ -282,7 +290,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lblUrl.setText("Url:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblUrl, gridBagConstraints);
@@ -291,7 +299,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lblStrasse.setText("Strasse:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblStrasse, gridBagConstraints);
@@ -300,25 +308,16 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lblTelefon.setText("Telefon:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblTelefon, gridBagConstraints);
-
-        lblVeroeffentlicht.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblVeroeffentlicht.setText("Veröffentlicht:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(lblVeroeffentlicht, gridBagConstraints);
 
         lblPLZ.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblPLZ.setText("PLZ:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblPLZ, gridBagConstraints);
@@ -327,7 +326,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lblInfo.setText("Info:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(8, 5, 5, 5);
         panContent.add(lblInfo, gridBagConstraints);
@@ -336,7 +335,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lblStadt.setText("Stadt:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblStadt, gridBagConstraints);
@@ -345,7 +344,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lblArt.setText("Art:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblArt, gridBagConstraints);
@@ -357,8 +356,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(txtFax, gridBagConstraints);
@@ -370,8 +368,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(txtStrasse, gridBagConstraints);
@@ -383,8 +380,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(txtStadt, gridBagConstraints);
@@ -396,8 +392,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(txtPLZ, gridBagConstraints);
@@ -409,8 +404,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(txtTelefon, gridBagConstraints);
@@ -422,15 +416,17 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(txtEmail, gridBagConstraints);
 
-        txtaInfo.setColumns(3);
-        txtaInfo.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        txtaInfo.setColumns(5);
+        txtaInfo.setFont(new java.awt.Font("Tahoma", 0, 11));
         txtaInfo.setRows(5);
+        txtaInfo.setMaximumSize(new java.awt.Dimension(44, 36));
+        txtaInfo.setMinimumSize(new java.awt.Dimension(44, 36));
+        txtaInfo.setPreferredSize(new java.awt.Dimension(44, 36));
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.info}"), txtaInfo, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("");
@@ -441,8 +437,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(scpTxtInfo, gridBagConstraints);
@@ -454,8 +449,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(txtArt, gridBagConstraints);
@@ -467,24 +461,92 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(txtUrl, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.to_publish}"), chkVeroeffentlicht, org.jdesktop.beansbinding.BeanProperty.create("selected"));
-        binding.setSourceNullValue(false);
-        binding.setSourceUnreadableValue(false);
+        lblBezeichnung.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblBezeichnung.setText("Bezeichnung:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent.add(lblBezeichnung, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geographicidentifier}"), txtBezeichnung, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("");
+        binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent.add(txtBezeichnung, gridBagConstraints);
+
+        panSpacing1.setOpaque(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panContent.add(panSpacing1, gridBagConstraints);
+
+        lblHeader1.setFont(new java.awt.Font("Tahoma", 1, 12));
+        lblHeader1.setText("Hauptdaten");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent.add(lblHeader1, gridBagConstraints);
+
+        lblGeomPoint.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblGeomPoint.setText("Geometrie:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 5);
-        panContent.add(chkVeroeffentlicht, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent.add(lblGeomPoint, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.pos}"), cbGeomPoint, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeomPoint).getConverter());
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent.add(cbGeomPoint, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.weighty = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panCenter.add(panContent, gridBagConstraints);
+
+        panContent2.setOpaque(false);
+        panContent2.setLayout(new java.awt.GridBagLayout());
+
+        lblMainLocationType.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblMainLocationType.setText("Haupthema:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent2.add(lblMainLocationType, gridBagConstraints);
 
         org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.locationtypes}");
         org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, cbMainLocationType);
@@ -494,12 +556,21 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(cbMainLocationType, gridBagConstraints);
+        panContent2.add(cbMainLocationType, gridBagConstraints);
+
+        lblLocationTypes.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblLocationTypes.setText("Themen:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(8, 5, 5, 5);
+        panContent2.add(lblLocationTypes, gridBagConstraints);
 
         lstLocationTypes.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
@@ -511,70 +582,12 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(scpLstLocationTypes, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.pos}"), cbGeomPoint, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeomPoint).getConverter());
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 15;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(cbGeomPoint, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 16;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(cbGeomArea, gridBagConstraints);
-
-        lblMainLocationType.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblMainLocationType.setText("Haupthema:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(lblMainLocationType, gridBagConstraints);
-
-        lblLocationTypes.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblLocationTypes.setText("Themen:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(8, 5, 5, 5);
-        panContent.add(lblLocationTypes, gridBagConstraints);
-
-        lblGeomPoint.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblGeomPoint.setText("Punktgeometrie:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 15;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(lblGeomPoint, gridBagConstraints);
-
-        lblGeomArea.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblGeomArea.setText("Flächengeometrie:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 16;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(lblGeomArea, gridBagConstraints);
+        panContent2.add(scpLstLocationTypes, gridBagConstraints);
 
         panButtons.setOpaque(false);
         panButtons.setLayout(new java.awt.GridBagLayout());
@@ -603,74 +616,10 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(panButtons, gridBagConstraints);
-
-        lblSignatur.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblSignatur.setText("Signatur:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 14;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(lblSignatur, gridBagConstraints);
-
-        ((FastBindableReferenceCombo)cbSignatur).setSorted(true);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.signatur}"), cbSignatur, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 14;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(4, 5, 4, 4);
-        panContent.add(cbSignatur, gridBagConstraints);
-
-        lblBezeichnung.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblBezeichnung.setText("Bezeichnung:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(lblBezeichnung, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geographicidentifier}"), txtBezeichnung, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("");
-        binding.setSourceUnreadableValue("<Error>");
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(txtBezeichnung, gridBagConstraints);
-
-        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alternativegeographicidentifier}");
-        jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstZusNamen);
-        bindingGroup.addBinding(jListBinding);
-
-        scpZusNamen.setViewportView(lstZusNamen);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 13;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(scpZusNamen, gridBagConstraints);
-
-        lblLocationTypes1.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblLocationTypes1.setText("Zusätzliche Namen:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(8, 5, 5, 5);
-        panContent.add(lblLocationTypes1, gridBagConstraints);
+        panContent2.add(panButtons, gridBagConstraints);
 
         panButtons1.setOpaque(false);
         panButtons1.setLayout(new java.awt.GridBagLayout());
@@ -699,12 +648,107 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent.add(panButtons1, gridBagConstraints);
+        panContent2.add(panButtons1, gridBagConstraints);
 
-        add(panContent, java.awt.BorderLayout.CENTER);
+        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alternativegeographicidentifier}");
+        jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstZusNamen);
+        bindingGroup.addBinding(jListBinding);
+
+        scpZusNamen.setViewportView(lstZusNamen);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent2.add(scpZusNamen, gridBagConstraints);
+
+        lblLocationTypes1.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblLocationTypes1.setText("Zusätzliche Namen:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(8, 5, 5, 5);
+        panContent2.add(lblLocationTypes1, gridBagConstraints);
+
+        lblSignatur.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblSignatur.setText("Signatur:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent2.add(lblSignatur, gridBagConstraints);
+
+        ((FastBindableReferenceCombo)cbSignatur).setSorted(true);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.signatur}"), cbSignatur, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(4, 5, 4, 4);
+        panContent2.add(cbSignatur, gridBagConstraints);
+
+        panSpacing2.setOpaque(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panContent2.add(panSpacing2, gridBagConstraints);
+
+        lblVeroeffentlicht.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblVeroeffentlicht.setText("Veröffentlicht:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent2.add(lblVeroeffentlicht, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.to_publish}"), chkVeroeffentlicht, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 5);
+        panContent2.add(chkVeroeffentlicht, gridBagConstraints);
+
+        lblHeader2.setFont(new java.awt.Font("Tahoma", 1, 12));
+        lblHeader2.setText("Zusätzliche Einstellungen");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panContent2.add(lblHeader2, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.weighty = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panCenter.add(panContent2, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        add(panCenter, gridBagConstraints);
 
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
@@ -819,7 +863,6 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     private javax.swing.JButton btnNamesMenOk;
     private javax.swing.JButton btnRemoveThema;
     private javax.swing.JButton btnRemoveZusNamen;
-    private javax.swing.JComboBox cbGeomArea;
     private javax.swing.JComboBox cbGeomPoint;
     private javax.swing.JComboBox cbMainLocationType;
     private javax.swing.JComboBox cbSignatur;
@@ -832,8 +875,9 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     private javax.swing.JLabel lblBezeichnung;
     private javax.swing.JLabel lblEmail;
     private javax.swing.JLabel lblFax;
-    private javax.swing.JLabel lblGeomArea;
     private javax.swing.JLabel lblGeomPoint;
+    private javax.swing.JLabel lblHeader1;
+    private javax.swing.JLabel lblHeader2;
     private javax.swing.JLabel lblInfo;
     private javax.swing.JLabel lblLocationTypes;
     private javax.swing.JLabel lblLocationTypes1;
@@ -852,9 +896,13 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
     private javax.swing.JPanel panAddName;
     private javax.swing.JPanel panButtons;
     private javax.swing.JPanel panButtons1;
+    private javax.swing.JPanel panCenter;
     private javax.swing.JPanel panContent;
+    private javax.swing.JPanel panContent2;
     private javax.swing.JPanel panMenButtons;
     private javax.swing.JPanel panMenNamesButtons;
+    private javax.swing.JPanel panSpacing1;
+    private javax.swing.JPanel panSpacing2;
     private javax.swing.JScrollPane scpLstLocationTypes;
     private javax.swing.JScrollPane scpTxtInfo;
     private javax.swing.JScrollPane scpZusNamen;
@@ -874,11 +922,23 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
     @Override
     public String getTitle() {
+        if (title == null || title.length() == 0) {
+            title = getTitleBackup();
+
+        }
         return title;
     }
 
     @Override
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getTitleBackup() {
+        final CidsBean bean = cidsBean;
+        if (bean != null) {
+            return bean.getMetaObject().getMetaClass().getName();
+        }
+        return "poi_locationinstance";
     }
 }
