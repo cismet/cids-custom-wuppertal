@@ -422,11 +422,8 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         panContent.add(txtEmail, gridBagConstraints);
 
         txtaInfo.setColumns(5);
-        txtaInfo.setFont(new java.awt.Font("Tahoma", 0, 11));
+        txtaInfo.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         txtaInfo.setRows(5);
-        txtaInfo.setMaximumSize(new java.awt.Dimension(44, 36));
-        txtaInfo.setMinimumSize(new java.awt.Dimension(44, 36));
-        txtaInfo.setPreferredSize(new java.awt.Dimension(44, 36));
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.info}"), txtaInfo, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("");
