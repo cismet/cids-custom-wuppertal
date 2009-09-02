@@ -14,6 +14,7 @@ import Sirius.navigator.connection.SessionManager;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUIUtils;
+import de.cismet.cids.custom.objectrenderer.wunda_blau.SignaturListCellRenderer;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
@@ -140,7 +141,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
             lstZusNamen = new javax.swing.JList();
             lblLocationTypes1 = new javax.swing.JLabel();
             lblSignatur = new javax.swing.JLabel();
-            cbSignatur = new FastBindableReferenceCombo("%1$2s", new String[]{"definition"});
+            cbSignatur = new FastBindableReferenceCombo("%1$2s", new String[]{"definition, filename"});
             panSpacing2 = new javax.swing.JPanel();
             lblVeroeffentlicht = new javax.swing.JLabel();
             chkVeroeffentlicht = new javax.swing.JCheckBox();
@@ -422,7 +423,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         panContent.add(txtEmail, gridBagConstraints);
 
         txtaInfo.setColumns(5);
-        txtaInfo.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        txtaInfo.setFont(new java.awt.Font("Tahoma", 0, 11));
         txtaInfo.setRows(5);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.info}"), txtaInfo, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -554,7 +555,6 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -686,10 +686,10 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.signatur}"), cbSignatur, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
+        cbSignatur.setRenderer(new SignaturListCellRenderer());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(4, 5, 4, 4);
@@ -713,6 +713,8 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(lblVeroeffentlicht, gridBagConstraints);
+
+        chkVeroeffentlicht.setOpaque(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.to_publish}"), chkVeroeffentlicht, org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);

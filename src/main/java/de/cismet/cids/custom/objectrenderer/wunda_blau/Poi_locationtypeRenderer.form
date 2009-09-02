@@ -225,6 +225,8 @@
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
               <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="Poi_locationtypeRenderer.jCheckBox1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
+            <Property name="enabled" type="boolean" value="false"/>
+            <Property name="opaque" type="boolean" value="false"/>
           </Properties>
           <BindingProperties>
             <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.to_publish}" target="jCheckBox1" targetPath="selected" updateStrategy="1" immediately="false">

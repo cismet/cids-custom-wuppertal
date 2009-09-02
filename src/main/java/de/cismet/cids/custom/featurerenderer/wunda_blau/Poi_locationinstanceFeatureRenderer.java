@@ -24,17 +24,22 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
     private boolean assigned = false;
 
     static {
-        DEFAULT_SYMBOL = getSymbolFromURLString(StaticProperties.POI_SIGNATUR_DEFAULT_ICON);
+        DEFAULT_SYMBOL = getSymbolFromResourceString(StaticProperties.POI_SIGNATUR_DEFAULT_ICON);
         if (DEFAULT_SYMBOL != null) {
             DEFAULT_SYMBOL.setSweetSpotX(0.5d);
             DEFAULT_SYMBOL.setSweetSpotY(0.5d);
         }
     }
 
-    private static final FeatureAnnotationSymbol getSymbolFromURLString(final String in) {
+    private static final FeatureAnnotationSymbol getSymbolFromResourceString(String in) {
         if (in != null && in.length() > 0) {
             try {
-                final URL symbolURL = new URL(in);
+                //first try to load from jar
+                URL symbolURL = Object.class.getResource(in);
+                if (symbolURL == null) {
+                    //otherwise try to resolve directly
+                    symbolURL = new URL(in);
+                }
                 if (symbolURL != null) {
                     return new FeatureAnnotationSymbol(symbolURL);
                 }
@@ -44,7 +49,6 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
         }
         return null;
     }
-
 
     @Override
     public void assign() {
@@ -58,15 +62,15 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
                 if (o instanceof CidsBean) {
                     iconUrl = getUrlStringFromSignature(o);
                     if (iconUrl != null) {
-                        symbol = getSymbolFromURLString(iconUrl);
+                        symbol = getSymbolFromResourceString(iconUrl);
                     }
                 }
                 if (symbol == null) {
                     o = cidsBean.getProperty("mainlocationtype");
                     if (o instanceof CidsBean) {
-                        iconUrl = getUrlStringFromSignature(o);
+                        iconUrl = getUrlStringFromSignature(((CidsBean)o).getProperty("signatur"));
                         if (iconUrl != null) {
-                            symbol = getSymbolFromURLString(iconUrl);
+                            symbol = getSymbolFromResourceString(iconUrl);
                         }
                     }
                     if (symbol == null) {
@@ -76,7 +80,7 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
                             o = mainLocationType.getProperty("signatur");
                             iconUrl = getUrlStringFromSignature(o);
                             if (iconUrl != null) {
-                                symbol = getSymbolFromURLString(iconUrl);
+                                symbol = getSymbolFromResourceString(iconUrl);
                             }
                         }
                     }

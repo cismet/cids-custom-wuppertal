@@ -189,6 +189,8 @@ public class Poi_locationtypeRenderer extends javax.swing.JPanel implements Cids
         jPanel1.add(jLabel12, gridBagConstraints);
 
         jCheckBox1.setText(org.openide.util.NbBundle.getMessage(Poi_locationtypeRenderer.class, "Poi_locationtypeRenderer.jCheckBox1.text")); // NOI18N
+        jCheckBox1.setEnabled(false);
+        jCheckBox1.setOpaque(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.to_publish}"), jCheckBox1, org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);

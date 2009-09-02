@@ -12,6 +12,7 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.server.middleware.types.MetaObject;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUIUtils;
+import de.cismet.cids.custom.objectrenderer.wunda_blau.SignaturListCellRenderer;
 import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
@@ -82,10 +83,11 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
             lblIcon = new javax.swing.JLabel();
             txtIcon = new javax.swing.JTextField();
             lblIconImg = new javax.swing.JLabel();
+            jLabel1 = new javax.swing.JLabel();
             panContent2 = new RoundedPanel();
             lblSignatur = new javax.swing.JLabel();
             lblLocationTypes = new javax.swing.JLabel();
-            cbSignatur = new FastBindableReferenceCombo("%1$2s", new String[]{"definition"});
+            cbSignatur = new FastBindableReferenceCombo("%1$2s", new String[]{"definition,, filename"});
             scpLocationtypeList = new javax.swing.JScrollPane();
             lstLocationTypes = new javax.swing.JList();
             panButtons = new javax.swing.JPanel();
@@ -163,7 +165,7 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         panContent1.setOpaque(false);
         panContent1.setLayout(new java.awt.GridBagLayout());
 
-        lblName.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblName.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblName.setText("Name:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -194,8 +196,8 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent1.add(txtName, gridBagConstraints);
 
-        lblDefinition.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblDefinition.setText("Definition:");
+        lblDefinition.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblDefinition.setText("Definition:        ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -265,6 +267,13 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent1.add(lblIconImg, gridBagConstraints);
 
+        jLabel1.setText("                    ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panContent1.add(jLabel1, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.5;
@@ -300,10 +309,10 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
 
+        cbSignatur.setRenderer(new SignaturListCellRenderer());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(4, 5, 4, 4);
@@ -360,7 +369,7 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         panSpacing2.setOpaque(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
@@ -399,6 +408,8 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         panContent2.add(chkToPublish, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.5;
@@ -505,6 +516,7 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
     private javax.swing.JComboBox cbTypes;
     private javax.swing.JCheckBox chkToPublish;
     private javax.swing.JDialog dlgAddLocationType;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblAuswaehlen;
     private javax.swing.JLabel lblDefinition;
     private javax.swing.JLabel lblHeader1;
