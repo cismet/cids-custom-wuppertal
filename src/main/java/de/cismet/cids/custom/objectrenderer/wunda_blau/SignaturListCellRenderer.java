@@ -26,7 +26,7 @@ import javax.swing.ListCellRenderer;
 public class SignaturListCellRenderer implements ListCellRenderer {
 
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(SignaturListCellRenderer.class);
-    protected DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
+    private static final DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
 
     @Override
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {

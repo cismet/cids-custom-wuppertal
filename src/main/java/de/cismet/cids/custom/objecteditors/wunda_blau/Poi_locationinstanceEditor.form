@@ -809,7 +809,7 @@
                 <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.signatur}" target="cbSignatur" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
               </BindingProperties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo(&quot;%1$2s&quot;, new String[]{&quot;definition, filename&quot;})"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo(&quot;%1$2s&quot;, new String[]{&quot;definition&quot;, &quot;filename&quot;})"/>
                 <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cbSignatur.setRenderer(new SignaturListCellRenderer());"/>
                 <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((FastBindableReferenceCombo)cbSignatur).setSorted(true);"/>
               </AuxValues>

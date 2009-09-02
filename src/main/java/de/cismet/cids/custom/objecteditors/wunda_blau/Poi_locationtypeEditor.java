@@ -87,7 +87,7 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
             panContent2 = new RoundedPanel();
             lblSignatur = new javax.swing.JLabel();
             lblLocationTypes = new javax.swing.JLabel();
-            cbSignatur = new FastBindableReferenceCombo("%1$2s", new String[]{"definition,, filename"});
+            cbSignatur = new FastBindableReferenceCombo("%1$2s", new String[]{"definition", "filename"});
             scpLocationtypeList = new javax.swing.JScrollPane();
             lstLocationTypes = new javax.swing.JList();
             panButtons = new javax.swing.JPanel();
@@ -267,7 +267,7 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent1.add(lblIconImg, gridBagConstraints);
 
-        jLabel1.setText("                    ");
+        jLabel1.setText("                  ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;

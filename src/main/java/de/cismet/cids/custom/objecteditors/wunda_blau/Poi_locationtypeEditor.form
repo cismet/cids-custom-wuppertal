@@ -288,7 +288,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel1">
               <Properties>
-                <Property name="text" type="java.lang.String" value="                    "/>
+                <Property name="text" type="java.lang.String" value="                  "/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -356,7 +356,7 @@
                 </BindingProperty>
               </BindingProperties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo(&quot;%1$2s&quot;, new String[]{&quot;definition,, filename&quot;})"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo(&quot;%1$2s&quot;, new String[]{&quot;definition&quot;, &quot;filename&quot;})"/>
                 <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cbSignatur.setRenderer(new SignaturListCellRenderer());"/>
                 <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((FastBindableReferenceCombo)cbSignatur).setSorted(true);"/>
               </AuxValues>

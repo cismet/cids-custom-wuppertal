@@ -141,7 +141,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
             lstZusNamen = new javax.swing.JList();
             lblLocationTypes1 = new javax.swing.JLabel();
             lblSignatur = new javax.swing.JLabel();
-            cbSignatur = new FastBindableReferenceCombo("%1$2s", new String[]{"definition, filename"});
+            cbSignatur = new FastBindableReferenceCombo("%1$2s", new String[]{"definition", "filename"});
             panSpacing2 = new javax.swing.JPanel();
             lblVeroeffentlicht = new javax.swing.JLabel();
             chkVeroeffentlicht = new javax.swing.JCheckBox();
