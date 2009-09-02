@@ -141,7 +141,8 @@ public class Wbf_gebaeudeFeatureRenderer extends CustomCidsFeatureRenderer {
         ((Graphics2D) tint.getGraphics()).drawImage(bi, 0, 0, null);
         tinter.filter(tint, tint);
 
-        FeatureAnnotationSymbol symb = FeatureAnnotationSymbol.newCustomSweetSpotFeatureAnnotationSymbol(bi, tint, 0.5, 0.5);
+        FeatureAnnotationSymbol symb = FeatureAnnotationSymbol.newCustomSweetSpotFeatureAnnotationSymbol(bi, null, 0.5, 0.5);
+
         return symb;
 
     }
