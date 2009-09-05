@@ -1,20 +1,48 @@
-
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
-        <groupId>de.cismet.maven</groupId>
-        <artifactId>cismetParent</artifactId>
+        <groupId>de.cismet.cids</groupId>
+        <artifactId>cids-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <groupId>de.cismet.cids.custom</groupId>
-    <artifactId>cidsCustomWuppertal</artifactId>
-    <packaging>jar</packaging>
+
+    <groupId>de.cismet.cids.custom.wupp</groupId>
+    <artifactId>cids-custom-wuppertal</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>cidsCustomWuppertal</name>    
+    <packaging>jar</packaging>
+
+    <name>cids Custom Wuppertal</name>
+    <description>!!! description pending !!!</description>
+
     <properties>
-        <de.cismet.lib.type>localWuNDa</de.cismet.lib.type>
+        <!--
+            ToDo make constants for the single values to ease the configuration
+            of the child POMs.
+        -->
+        <de.cismet.libDir>lib/localWuNDa</de.cismet.libDir>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>de.cismet.cismap</groupId>
+            <artifactId>cismap-plugin</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.swinglabs</groupId>
+            <artifactId>jxlayer</artifactId>
+            <version>3.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>de.cismet.cids.custom.wupp</groupId>
+            <artifactId>wuppertal-renderer</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <!-- overwritten because the artifact has to be renamed du to
@@ -25,45 +53,18 @@
                 <executions>
                     <execution>
                         <id>copy-installed</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>${project.groupId}</groupId>
-                                    <artifactId>${project.artifactId}</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>${project.packaging}</type>
                                     <destFileName>cidsCustom.jar</destFileName>
                                 </artifactItem>
                             </artifactItems>
-                            <outputDirectory>../../cidsDistribution/lib/${de.cismet.lib.type}</outputDirectory>
-                            <stripVersion>true</stripVersion>
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>           
+            </plugin>
         </plugins>
     </build>
-    <dependencies>
-        <dependency>
-            <groupId>de.cismet.plugins</groupId>
-            <artifactId>cismapPlugin</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.swinglabs</groupId>
-            <artifactId>jxlayer</artifactId>
-            <version>3.0.3</version>
-        </dependency>
-        <dependency>
-            <groupId>de.cismet.cids.renderer</groupId>
-            <artifactId>wuppertalRenderer</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
 </project>
 
 
