@@ -166,7 +166,7 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         panContent1.setLayout(new java.awt.GridBagLayout());
 
         lblName.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblName.setText("Name:");
+        lblName.setText("Symbol:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -196,7 +196,7 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent1.add(txtName, gridBagConstraints);
 
-        lblDefinition.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblDefinition.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblDefinition.setText("Definition:        ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -217,15 +217,15 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent1.add(txtDefinition, gridBagConstraints);
 
-        lblHeader1.setFont(new java.awt.Font("Tahoma", 1, 12));
-        lblHeader1.setText("Hauptdaten");
+        lblHeader1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblHeader1.setText("        Beschreibung");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent1.add(lblHeader1, gridBagConstraints);
 
-        lblIcon.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblIcon.setText("Symbol:");
+        lblIcon.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblIcon.setText("Name:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -288,7 +288,7 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         lblSignatur.setText("Signatur:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(lblSignatur, gridBagConstraints);
@@ -297,7 +297,7 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         lblLocationTypes.setText("Lebenslagen:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 5, 5, 5);
         panContent2.add(lblLocationTypes, gridBagConstraints);
@@ -305,14 +305,14 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         ((FastBindableReferenceCombo)cbSignatur).setSorted(true);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.signatur}"), cbSignatur, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        binding.setSourceNullValue("-");
+        binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
 
         cbSignatur.setRenderer(new SignaturListCellRenderer());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(4, 5, 4, 4);
@@ -328,7 +328,7 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -361,7 +361,7 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(panButtons, gridBagConstraints);
@@ -375,8 +375,8 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         gridBagConstraints.weighty = 1.0;
         panContent2.add(panSpacing2, gridBagConstraints);
 
-        lblHeader2.setFont(new java.awt.Font("Tahoma", 1, 12));
-        lblHeader2.setText("Zusätzliche Einstellungen");
+        lblHeader2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblHeader2.setText("Einordnung");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -562,6 +562,6 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         if (bean != null) {
             return bean.getMetaObject().getMetaClass().getName();
         }
-        return "poi_locationtype";
+        return "POI-Thema";
     }
 }

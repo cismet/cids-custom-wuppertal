@@ -287,8 +287,8 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblEmail, gridBagConstraints);
 
-        lblUrl.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblUrl.setText("Url:");
+        lblUrl.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblUrl.setText("URL:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
@@ -341,8 +341,8 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblStadt, gridBagConstraints);
 
-        lblArt.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblArt.setText("Art:");
+        lblArt.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblArt.setText("Art der Info:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 9;
@@ -496,8 +496,8 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints.weighty = 1.0;
         panContent.add(panSpacing1, gridBagConstraints);
 
-        lblHeader1.setFont(new java.awt.Font("Tahoma", 1, 12));
-        lblHeader1.setText("Hauptdaten");
+        lblHeader1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblHeader1.setText("Beschreibung");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -513,6 +513,8 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         panContent.add(lblGeomPoint, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.pos}"), cbGeomPoint, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding.setSourceNullValue("");
+        binding.setSourceUnreadableValue("<Error>");
         binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeomPoint).getConverter());
         bindingGroup.addBinding(binding);
 
@@ -541,7 +543,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lblMainLocationType.setText("Haupthema:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(lblMainLocationType, gridBagConstraints);
@@ -550,11 +552,13 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, cbMainLocationType);
         bindingGroup.addBinding(jComboBoxBinding);
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.mainlocationtype}"), cbMainLocationType, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding.setSourceNullValue("");
+        binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -564,7 +568,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lblLocationTypes.setText("Themen:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(8, 5, 5, 5);
         panContent2.add(lblLocationTypes, gridBagConstraints);
@@ -579,7 +583,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -613,7 +617,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(panButtons, gridBagConstraints);
@@ -684,6 +688,8 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         ((FastBindableReferenceCombo)cbSignatur).setSorted(true);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.signatur}"), cbSignatur, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding.setSourceNullValue("");
+        binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
 
         cbSignatur.setRenderer(new SignaturListCellRenderer());
@@ -729,8 +735,8 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints.insets = new java.awt.Insets(5, 2, 5, 5);
         panContent2.add(chkVeroeffentlicht, gridBagConstraints);
 
-        lblHeader2.setFont(new java.awt.Font("Tahoma", 1, 12));
-        lblHeader2.setText("Zusätzliche Einstellungen");
+        lblHeader2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblHeader2.setText("Einordnung");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -938,6 +944,6 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         if (bean != null) {
             return bean.getMetaObject().getMetaClass().getName();
         }
-        return "poi_locationinstance";
+        return "Point of Interest (POI)";
     }
 }

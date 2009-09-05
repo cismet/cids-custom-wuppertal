@@ -5,7 +5,6 @@
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import Sirius.server.middleware.types.LightweightMetaObject;
-import Sirius.server.middleware.types.MetaObject;
 import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 import de.cismet.cids.dynamics.CidsBean;
 import java.awt.Color;
@@ -40,15 +39,19 @@ public class SignaturListCellRenderer implements ListCellRenderer {
 
         if (value instanceof CidsBean) {
             final CidsBean bean = (CidsBean) value;
-            final String filename = "" + bean.getProperty("filename");
+            final String filename = String.valueOf(bean.getProperty("filename"));
             theIcon = createIconFromFileName(filename);
         } else if (value instanceof LightweightMetaObject) {
-            final String filename = "" + ((LightweightMetaObject) value).getAttribute("filename");
+            final String filename = String.valueOf(((LightweightMetaObject) value).getAttribute("filename"));
             theIcon = createIconFromFileName(filename);
         }
         theFont = list.getFont();
         theForeground = list.getForeground();
-        theText = String.valueOf(value);
+        if (value == null) {
+            theText = "keine Signatur ausgewählt";
+        } else {
+            theText = String.valueOf(value);
+        }
         if (!isSelected) {
             renderer.setForeground(theForeground);
         }

@@ -172,8 +172,8 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panContent.add(lblTelefonDesc, gridBagConstraints);
 
-        lblFaxDesc.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblFaxDesc.setText("Fax.:");
+        lblFaxDesc.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblFaxDesc.setText("Fax:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -190,8 +190,8 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panContent.add(lblInfoDesc, gridBagConstraints);
 
-        lblAlternativnamenDesc.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblAlternativnamenDesc.setText("Alternativnamen:");
+        lblAlternativnamenDesc.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblAlternativnamenDesc.setText("Zusätzliche Namen:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -199,8 +199,8 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panContent.add(lblAlternativnamenDesc, gridBagConstraints);
 
-        lblHaupttypDesc.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblHaupttypDesc.setText("Haupttyp:");
+        lblHaupttypDesc.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblHaupttypDesc.setText("Hauptthema:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
@@ -208,8 +208,8 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panContent.add(lblHaupttypDesc, gridBagConstraints);
 
-        lblSonstigeTypenDesc.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblSonstigeTypenDesc.setText("sonstige Typen:");
+        lblSonstigeTypenDesc.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblSonstigeTypenDesc.setText("Themen:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
