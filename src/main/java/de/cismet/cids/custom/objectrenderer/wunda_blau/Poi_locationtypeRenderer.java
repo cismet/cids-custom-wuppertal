@@ -11,10 +11,12 @@
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import de.cismet.cids.custom.objectrenderer.converter.CollectionToStringConverter;
+import de.cismet.cids.custom.objectrenderer.converter.SignaturBeanToStringConverter;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 import de.cismet.tools.gui.TitleComponentProvider;
 import javax.swing.JComponent;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -22,6 +24,7 @@ import javax.swing.JComponent;
  */
 public class Poi_locationtypeRenderer extends javax.swing.JPanel implements CidsBeanRenderer, TitleComponentProvider {
 
+    private final Logger log = Logger.getLogger(this.getClass());
     private CidsBean cidsBean;
     private String title = "";
 
@@ -157,6 +160,7 @@ public class Poi_locationtypeRenderer extends javax.swing.JPanel implements Cids
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.signatur}"), jLabel10, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("<Error>");
+        binding.setConverter(new SignaturBeanToStringConverter());
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -166,7 +170,7 @@ public class Poi_locationtypeRenderer extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel10, gridBagConstraints);
 
-        lblThemen.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblThemen.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblThemen.setText(org.openide.util.NbBundle.getMessage(Poi_locationtypeRenderer.class, "Poi_locationtypeRenderer.lblThemen.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;

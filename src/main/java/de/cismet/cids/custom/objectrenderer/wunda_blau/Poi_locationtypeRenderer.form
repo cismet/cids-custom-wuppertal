@@ -181,6 +181,9 @@
             <BindingProperty name="text" source="Form" sourcePath="${cidsBean.signatur}" target="jLabel10" targetPath="text" updateStrategy="1" immediately="false">
               <Property name="nullValue" type="java.lang.String" value="-"/>
               <Property name="incompletePathValue" type="java.lang.String" value="&lt;Error&gt;"/>
+              <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                <Connection code="new SignaturBeanToStringConverter()" type="code"/>
+              </Property>
             </BindingProperty>
           </BindingProperties>
           <Constraints>
