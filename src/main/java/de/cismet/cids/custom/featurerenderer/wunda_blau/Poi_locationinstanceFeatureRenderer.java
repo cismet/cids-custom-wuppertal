@@ -36,15 +36,23 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
             try {
                 //first try to load from jar
                 URL symbolURL = Object.class.getResource(in);
+
                 if (symbolURL == null) {
                     //otherwise try to resolve directly
                     symbolURL = new URL(in);
                 }
                 if (symbolURL != null) {
-                    return new FeatureAnnotationSymbol(symbolURL);
+                    FeatureAnnotationSymbol ret = new FeatureAnnotationSymbol(symbolURL);
+                    if (ret == null) {
+                        log.error("konnte kein FAS aus:" + symbolURL + "erzeugen");
+                    }
+                    return ret;
+
+                } else {
+                    log.error("FAS: konnte URL nicht erzeugen:" + symbolURL);
                 }
             } catch (Exception ex) {
-                log.warn(ex, ex);
+                log.warn("Fehler in getSymbolFromResourceString(" + in + ")", ex);
             }
         }
         return null;
@@ -68,7 +76,7 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
                 if (symbol == null) {
                     o = cidsBean.getProperty("mainlocationtype");
                     if (o instanceof CidsBean) {
-                        iconUrl = getUrlStringFromSignature(((CidsBean)o).getProperty("signatur"));
+                        iconUrl = getUrlStringFromSignature(((CidsBean) o).getProperty("signatur"));
                         if (iconUrl != null) {
                             symbol = getSymbolFromResourceString(iconUrl);
                         }
@@ -104,7 +112,9 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
             try {
                 final Object fileName = signatur.getProperty("filename");
                 if (fileName != null) {
-                    return StaticProperties.POI_SIGNATUR_URL_PREFIX + fileName + StaticProperties.POI_SIGNATUR_URL_SUFFIX;
+                    String ret = StaticProperties.POI_SIGNATUR_URL_PREFIX + fileName + StaticProperties.POI_SIGNATUR_URL_SUFFIX;
+                    log.info("Signatur Url: " + ret);
+                    return ret;
                 }
             } catch (Exception ex) {
                 log.error(ex, ex);
