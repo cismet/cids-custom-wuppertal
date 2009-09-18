@@ -11,6 +11,7 @@ import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.newuser.User;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.utils.ClassCacheMultiple;
+import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.gui.documents.DefaultDocument;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -114,7 +115,7 @@ public class ObjectRendererUIUtils {
      */
     public static void loadPictureAndSet(final String bildURL, final int maxPixelX, final int maxPixelY, final int shadowSize, final JLabel toSet) {
         if (bildURL != null && toSet != null) {
-            final Thread loader = new Thread() {
+            final Runnable loader = new Runnable() {
 
                 @Override
                 public void run() {
@@ -138,7 +139,7 @@ public class ObjectRendererUIUtils {
                     }
                 }
             };
-            loader.start();
+            CismetThreadPool.execute(loader);
         }
     }
 
@@ -156,7 +157,7 @@ public class ObjectRendererUIUtils {
      */
     public static void loadPictureAndSet(final String bildURL, final int maxPixelX, final int maxPixelY, final int shadowSize, final JButton toSet) {
         if (bildURL != null && toSet != null) {
-            final Thread loader = new Thread() {
+            final Runnable loader = new Runnable() {
 
                 @Override
                 public void run() {
@@ -176,7 +177,7 @@ public class ObjectRendererUIUtils {
                     }
                 }
             };
-            loader.start();
+            CismetThreadPool.execute(loader);
         }
     }
 

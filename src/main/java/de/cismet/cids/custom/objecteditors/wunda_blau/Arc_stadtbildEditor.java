@@ -19,10 +19,9 @@ import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
 import de.cismet.cids.utils.ClassCacheMultiple;
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
+import de.cismet.tools.CismetThreadPool;
 import java.util.Collection;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -40,7 +39,6 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private String domain = "";
     private static final String SUCHWORT_TABNAME = "ARC_SUCHWORT";
-    private static final ExecutorService WORKER_POOL = Executors.newCachedThreadPool();
     private final FastBindableReferenceCombo suchwortModelProvider = new FastBindableReferenceCombo("%1$2s", new String[]{"SUCHWORT"});
     private final AbstractAttributeRepresentationFormater strasseFormater = new AbstractAttributeRepresentationFormater() {
 
@@ -625,7 +623,7 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
     }//GEN-LAST:event_btnRemoveActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        WORKER_POOL.execute(new ComboBoxWorker());
+        CismetThreadPool.execute(new ComboBoxWorker());
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnMenOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOkActionPerformed

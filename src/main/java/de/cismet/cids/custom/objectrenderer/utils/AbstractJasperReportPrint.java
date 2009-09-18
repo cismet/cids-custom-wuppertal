@@ -5,13 +5,12 @@
 package de.cismet.cids.custom.objectrenderer.utils;
 
 import de.cismet.cids.dynamics.CidsBean;
+import de.cismet.tools.CismetThreadPool;
 import java.awt.EventQueue;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import javax.swing.JFrame;
 import javax.swing.SwingWorker;
 import net.sf.jasperreports.engine.JRPrintPage;
@@ -47,7 +46,6 @@ public abstract class AbstractJasperReportPrint {
         this.jpw = null;
     }
     protected static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AbstractJasperReportPrint.class);
-    private static final ExecutorService WORKER_POOL = Executors.newCachedThreadPool();
 //    private final PrintingWaitDialog printingWaitDialog;
     private final Collection<CidsBean> beans;
     private final String reportURL;
@@ -80,7 +78,7 @@ public abstract class AbstractJasperReportPrint {
             old.cancel(true);
         }
         jpw = new JasperPrintWorker();
-        WORKER_POOL.execute(jpw);
+        CismetThreadPool.execute(jpw);
     }
 
     /**

@@ -17,6 +17,7 @@ import de.cismet.cids.custom.objectrenderer.utils.XMLPropertyParser;
 import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
+import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.TitleComponentProvider;
 import java.awt.BorderLayout;
@@ -30,8 +31,6 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -46,7 +45,6 @@ import javax.swing.SwingWorker;
 public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer, TitleComponentProvider {
 
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Arc_stadtbildAggregationRenderer.class);
-    private static final ExecutorService WORKER_POOL = Executors.newCachedThreadPool();
     private static final XMLPropertyParser labelParser;
     private Collection<CidsBean> cidsBeans = null;
 //    private static final List<String> ATTRIBUTES;
@@ -226,7 +224,7 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
             worker = null;
         }
         worker = new PictureWorker(cidsBeans);
-        WORKER_POOL.execute(worker);
+        CismetThreadPool.execute(worker);
     }
 
     @Override
