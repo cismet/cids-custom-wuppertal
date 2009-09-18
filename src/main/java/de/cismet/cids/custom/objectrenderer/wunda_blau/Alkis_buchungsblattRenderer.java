@@ -191,9 +191,13 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
     private void btnRetrieveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetrieveActionPerformed
         final CidsBean bean = cidsBean;
         if (bean != null) {
-            final String buchungsblattCode = String.valueOf(bean.getProperty("buchungsblattcode"));
+            final StringBuffer buchungsblattCode = new StringBuffer(String.valueOf(bean.getProperty("buchungsblattcode")));
+            //Fix SICAD-SOAP-API-strangeness...
+            while(buchungsblattCode.length() < 14) {
+                buchungsblattCode.append(" ");
+            }
             if (buchungsblattCode != null) {
-                CismetThreadPool.execute(new RetrieveWorker(buchungsblattCode));
+                CismetThreadPool.execute(new RetrieveWorker(buchungsblattCode.toString()));
             }
         }
     }//GEN-LAST:event_btnRetrieveActionPerformed
