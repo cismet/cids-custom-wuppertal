@@ -56,7 +56,7 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="lblTxtBuchungsblattcode">
       <BindingProperties>
-        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.pointcode}" target="lblTxtBuchungsblattcode" targetPath="text" updateStrategy="1" immediately="false">
+        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.buchungsblattcode}" target="lblTxtBuchungsblattcode" targetPath="text" updateStrategy="1" immediately="false">
           <Property name="nullValue" type="java.lang.String" value="-"/>
           <Property name="incompletePathValue" type="java.lang.String" value="&lt;Error&gt;"/>
         </BindingProperty>

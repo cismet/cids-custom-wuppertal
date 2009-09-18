@@ -116,7 +116,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
 
         setLayout(new java.awt.GridBagLayout());
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.pointcode}"), lblTxtBuchungsblattcode, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.buchungsblattcode}"), lblTxtBuchungsblattcode, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
