@@ -12,6 +12,7 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import de.aedsicad.aaaweb.service.alkis.info.ALKISInfoServices;
 import de.aedsicad.aaaweb.service.util.Buchungsblatt;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUIUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.SOAPAccessProvider;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
@@ -57,7 +58,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         }
         initComponents();
         retrieveableLabels.add(lblTxtEigentuemerNachname);
-        retrieveableLabels.add(lblTxtFlurstueckcode);
+//        retrieveableLabels.add(lblTxtFlurstueckcode);
 //        retrieveableLabels.add(lblTxtAbmarkung);
 //        retrieveableLabels.add(lblTxtModellart);
 //        retrieveableLabels.add(lblTxtDienststelle);
@@ -80,6 +81,10 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
 
         panTitle = new javax.swing.JPanel();
         panFooter = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
         lblTxtBuchungsblattcode = new javax.swing.JLabel();
         btnRetrieve = new javax.swing.JButton();
         lblBuchungsblattcode = new javax.swing.JLabel();
@@ -102,17 +107,24 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         );
 
         panFooter.setOpaque(false);
+        panFooter.setLayout(new java.awt.GridBagLayout());
 
-        javax.swing.GroupLayout panFooterLayout = new javax.swing.GroupLayout(panFooter);
-        panFooter.setLayout(panFooterLayout);
-        panFooterLayout.setHorizontalGroup(
-            panFooterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-        panFooterLayout.setVerticalGroup(
-            panFooterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+        jButton1.setText("Grundstücksnachweis");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        panFooter.add(jButton1, new java.awt.GridBagConstraints());
+
+        jButton2.setText("Grundstücksnachweis");
+        panFooter.add(jButton2, new java.awt.GridBagConstraints());
+
+        jButton3.setText("jButton3");
+        panFooter.add(jButton3, new java.awt.GridBagConstraints());
+
+        jButton4.setText("jButton4");
+        panFooter.add(jButton4, new java.awt.GridBagConstraints());
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -128,7 +140,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(lblTxtBuchungsblattcode, gridBagConstraints);
 
-        btnRetrieve.setText(org.openide.util.NbBundle.getMessage(Alkis_buchungsblattRenderer.class, "Alkis_buchungsblattRenderer.btnRetrieve.text")); // NOI18N
+        btnRetrieve.setText("Retrieve");
         btnRetrieve.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRetrieveActionPerformed(evt);
@@ -141,7 +153,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(btnRetrieve, gridBagConstraints);
 
-        lblBuchungsblattcode.setText(org.openide.util.NbBundle.getMessage(Alkis_buchungsblattRenderer.class, "Alkis_buchungsblattRenderer.lblBuchungsblattcode.text")); // NOI18N
+        lblBuchungsblattcode.setText("Buchungsblattcode:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -149,7 +161,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(lblBuchungsblattcode, gridBagConstraints);
 
-        lblTxtEigentuemerNachname.setText(org.openide.util.NbBundle.getMessage(Alkis_buchungsblattRenderer.class, "Alkis_buchungsblattRenderer.lblTxtEigentuemerNachname.text")); // NOI18N
+        lblTxtEigentuemerNachname.setText("...");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -158,7 +170,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(lblTxtEigentuemerNachname, gridBagConstraints);
 
-        lblTxtFlurstueckcode.setText(org.openide.util.NbBundle.getMessage(Alkis_buchungsblattRenderer.class, "Alkis_buchungsblattRenderer.lblTxtFlurstueckcode.text")); // NOI18N
+        lblTxtFlurstueckcode.setText("...");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -167,7 +179,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(lblTxtFlurstueckcode, gridBagConstraints);
 
-        lblEigentuemernachname.setText(org.openide.util.NbBundle.getMessage(Alkis_buchungsblattRenderer.class, "Alkis_buchungsblattRenderer.lblEigentuemernachname.text")); // NOI18N
+        lblEigentuemernachname.setText("Eigentümer Nachname:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -176,7 +188,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(lblEigentuemernachname, gridBagConstraints);
 
-        lblFlurstueckcode.setText(org.openide.util.NbBundle.getMessage(Alkis_buchungsblattRenderer.class, "Alkis_buchungsblattRenderer.lblFlurstueckcode.text")); // NOI18N
+        lblFlurstueckcode.setText("Flurstückcodes:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -195,12 +207,17 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
             //Fix SICAD-SOAP-API-strangeness...
             while(buchungsblattCode.length() < 14) {
                 buchungsblattCode.append(" ");
-            }
+            }            
             if (buchungsblattCode != null) {
                 CismetThreadPool.execute(new RetrieveWorker(buchungsblattCode.toString()));
             }
         }
     }//GEN-LAST:event_btnRetrieveActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String url = "Grundstücksnachweis";
+        ObjectRendererUIUtils.openURL(url);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
@@ -211,6 +228,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
     public void setCidsBean(CidsBean cb) {
         if (cb != null) {
             this.cidsBean = cb;
+            lblTxtFlurstueckcode.setText(String.valueOf(cidsBean.getProperty("landparcels")));
             bindingGroup.unbind();
             bindingGroup.bind();
         }
@@ -227,6 +245,10 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRetrieve;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel lblBuchungsblattcode;
     private javax.swing.JLabel lblEigentuemernachname;
     private javax.swing.JLabel lblFlurstueckcode;
@@ -250,8 +272,8 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
 
     final class RetrieveWorker extends SwingWorker<Buchungsblatt, Void> {
 
-        public RetrieveWorker(String pointCode) {
-            this.buchungsBlattCode = pointCode;
+        public RetrieveWorker(String buchungsblattCode) {
+            this.buchungsBlattCode = buchungsblattCode;
             timer = new Timer(250, new ActionListener() {
 
                 @Override

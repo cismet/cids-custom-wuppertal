@@ -159,7 +159,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(lblTxtIdentifikator, gridBagConstraints);
 
-        btnRetrieve.setText(org.openide.util.NbBundle.getMessage(Alkis_pointRenderer.class, "Alkis_pointRenderer.btnRetrieve.text")); // NOI18N
+        btnRetrieve.setText("Retrieve");
         btnRetrieve.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRetrieveActionPerformed(evt);
@@ -172,7 +172,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(btnRetrieve, gridBagConstraints);
 
-        jLabel3.setText(org.openide.util.NbBundle.getMessage(Alkis_pointRenderer.class, "Alkis_pointRenderer.jLabel3.text")); // NOI18N
+        jLabel3.setText("Identifikator:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -180,7 +180,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(jLabel3, gridBagConstraints);
 
-        jLabel4.setText(org.openide.util.NbBundle.getMessage(Alkis_pointRenderer.class, "Alkis_pointRenderer.jLabel4.text")); // NOI18N
+        jLabel4.setText("Abmarkung (Marke):");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -188,7 +188,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(jLabel4, gridBagConstraints);
 
-        jLabel5.setText(org.openide.util.NbBundle.getMessage(Alkis_pointRenderer.class, "Alkis_pointRenderer.jLabel5.text")); // NOI18N
+        jLabel5.setText("Punktart:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -208,7 +208,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(lblTxtPunktart, gridBagConstraints);
 
-        jLabel7.setText(org.openide.util.NbBundle.getMessage(Alkis_pointRenderer.class, "Alkis_pointRenderer.jLabel7.text")); // NOI18N
+        jLabel7.setText("Punktkennung:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -228,7 +228,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(lblTxtAbmarkungMarke, gridBagConstraints);
 
-        lblTxtBeginn.setText(org.openide.util.NbBundle.getMessage(Alkis_pointRenderer.class, "Alkis_pointRenderer.lblTxtBeginn.text")); // NOI18N
+        lblTxtBeginn.setText("...");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 8;
@@ -236,7 +236,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(lblTxtBeginn, gridBagConstraints);
 
-        jLabel10.setText(org.openide.util.NbBundle.getMessage(Alkis_pointRenderer.class, "Alkis_pointRenderer.jLabel10.text")); // NOI18N
+        jLabel10.setText("Modellart:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
@@ -244,7 +244,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(jLabel10, gridBagConstraints);
 
-        jLabel11.setText(org.openide.util.NbBundle.getMessage(Alkis_pointRenderer.class, "Alkis_pointRenderer.jLabel11.text")); // NOI18N
+        jLabel11.setText("Land:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
@@ -252,7 +252,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(jLabel11, gridBagConstraints);
 
-        jLabel12.setText(org.openide.util.NbBundle.getMessage(Alkis_pointRenderer.class, "Alkis_pointRenderer.jLabel12.text")); // NOI18N
+        jLabel12.setText("Dienststelle:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
@@ -260,7 +260,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(jLabel12, gridBagConstraints);
 
-        jLabel13.setText(org.openide.util.NbBundle.getMessage(Alkis_pointRenderer.class, "Alkis_pointRenderer.jLabel13.text")); // NOI18N
+        jLabel13.setText("Beginn:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
@@ -268,7 +268,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(jLabel13, gridBagConstraints);
 
-        lblTxtModellart.setText(org.openide.util.NbBundle.getMessage(Alkis_pointRenderer.class, "Alkis_pointRenderer.lblTxtModellart.text")); // NOI18N
+        lblTxtModellart.setText("...");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
@@ -276,7 +276,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(lblTxtModellart, gridBagConstraints);
 
-        lblTxtLand.setText(org.openide.util.NbBundle.getMessage(Alkis_pointRenderer.class, "Alkis_pointRenderer.lblTxtLand.text")); // NOI18N
+        lblTxtLand.setText("...");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
@@ -284,7 +284,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(lblTxtLand, gridBagConstraints);
 
-        lblTxtDienststelle.setText(org.openide.util.NbBundle.getMessage(Alkis_pointRenderer.class, "Alkis_pointRenderer.lblTxtDienststelle.text")); // NOI18N
+        lblTxtDienststelle.setText("...");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 7;
@@ -292,7 +292,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(lblTxtDienststelle, gridBagConstraints);
 
-        jLabel17.setText(org.openide.util.NbBundle.getMessage(Alkis_pointRenderer.class, "Alkis_pointRenderer.jLabel17.text")); // NOI18N
+        jLabel17.setText("Ende:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 9;
@@ -300,7 +300,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(jLabel17, gridBagConstraints);
 
-        lblTxtEnde.setText(org.openide.util.NbBundle.getMessage(Alkis_pointRenderer.class, "Alkis_pointRenderer.lblTxtEnde.text")); // NOI18N
+        lblTxtEnde.setText("...");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 9;
@@ -308,7 +308,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(lblTxtEnde, gridBagConstraints);
 
-        jLabel2.setText(org.openide.util.NbBundle.getMessage(Alkis_pointRenderer.class, "Alkis_pointRenderer.jLabel2.text")); // NOI18N
+        jLabel2.setText("Anlass:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 10;
@@ -316,7 +316,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(jLabel2, gridBagConstraints);
 
-        jLabel6.setText(org.openide.util.NbBundle.getMessage(Alkis_pointRenderer.class, "Alkis_pointRenderer.jLabel6.text")); // NOI18N
+        jLabel6.setText("Abmarkung:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 11;
@@ -324,7 +324,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(jLabel6, gridBagConstraints);
 
-        jLabel8.setText(org.openide.util.NbBundle.getMessage(Alkis_pointRenderer.class, "Alkis_pointRenderer.jLabel8.text")); // NOI18N
+        jLabel8.setText("Bemerkung zur Abmarkung:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 12;
@@ -332,7 +332,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(jLabel8, gridBagConstraints);
 
-        lblTxtAnlass.setText(org.openide.util.NbBundle.getMessage(Alkis_pointRenderer.class, "Alkis_pointRenderer.lblTxtAnlass.text")); // NOI18N
+        lblTxtAnlass.setText("...");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 10;
@@ -340,7 +340,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(lblTxtAnlass, gridBagConstraints);
 
-        lblTxtAbmarkung.setText(org.openide.util.NbBundle.getMessage(Alkis_pointRenderer.class, "Alkis_pointRenderer.lblTxtAbmarkung.text")); // NOI18N
+        lblTxtAbmarkung.setText("...");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 11;
@@ -348,7 +348,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(lblTxtAbmarkung, gridBagConstraints);
 
-        lblTxtBemerkungAbmarkung.setText(org.openide.util.NbBundle.getMessage(Alkis_pointRenderer.class, "Alkis_pointRenderer.lblTxtBemerkungAbmarkung.text")); // NOI18N
+        lblTxtBemerkungAbmarkung.setText("...");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 12;
