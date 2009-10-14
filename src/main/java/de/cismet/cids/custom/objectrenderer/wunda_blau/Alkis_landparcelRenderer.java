@@ -23,7 +23,6 @@ import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import javax.swing.JComponent;
@@ -36,9 +35,9 @@ import org.jdesktop.swingx.error.ErrorInfo;
  *
  * @author srichter
  */
-public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements CidsBeanRenderer, TitleComponentProvider, FooterComponentProvider {
+public class Alkis_landparcelRenderer extends javax.swing.JPanel implements CidsBeanRenderer, TitleComponentProvider, FooterComponentProvider {
 
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alkis_buchungsblattRenderer.class);
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alkis_landparcelRenderer.class);
     private final List<JLabel> retrieveableLabels;
     private SOAPAccessProvider soapProvider;
 //    private ALKISSearchServices searchService;
@@ -48,7 +47,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
     private String title;
 
     /** Creates new form Alkis_pointRenderer */
-    public Alkis_buchungsblattRenderer() {
+    public Alkis_landparcelRenderer() {
         retrieveableLabels = TypeSafeCollections.newArrayList();
         try {
             soapProvider = new SOAPAccessProvider();
@@ -84,6 +83,8 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         panFooter = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
         lblTxtBuchungsblattcode = new javax.swing.JLabel();
         btnRetrieve = new javax.swing.JButton();
         lblBuchungsblattcode = new javax.swing.JLabel();
@@ -108,7 +109,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         panFooter.setOpaque(false);
         panFooter.setLayout(new java.awt.GridBagLayout());
 
-        jButton1.setText("Grundstücksnachweis PDF");
+        jButton1.setText("Grundstücksnachweis");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -116,13 +117,14 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         });
         panFooter.add(jButton1, new java.awt.GridBagConstraints());
 
-        jButton2.setText("Grundstücksnachweis HTML");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+        jButton2.setText("Grundstücksnachweis");
         panFooter.add(jButton2, new java.awt.GridBagConstraints());
+
+        jButton3.setText("jButton3");
+        panFooter.add(jButton3, new java.awt.GridBagConstraints());
+
+        jButton4.setText("jButton4");
+        panFooter.add(jButton4, new java.awt.GridBagConstraints());
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -203,49 +205,19 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         if (bean != null) {
             final StringBuffer buchungsblattCode = new StringBuffer(String.valueOf(bean.getProperty("buchungsblattcode")));
             //Fix SICAD-SOAP-API-strangeness...
-            while (buchungsblattCode.length() < 14) {
+            while(buchungsblattCode.length() < 14) {
                 buchungsblattCode.append(" ");
-            }
+            }            
             if (buchungsblattCode != null) {
                 CismetThreadPool.execute(new RetrieveWorker(buchungsblattCode.toString()));
             }
         }
     }//GEN-LAST:event_btnRetrieveActionPerformed
 
-    private String getFirstFlurstueck() {
-        Object o = cidsBean.getProperty("landparcels");
-        if (o instanceof Collection) {
-            Collection stellen = (Collection) o;
-            if (stellen != null && stellen.size() > 0) {
-                return stellen.iterator().next().toString();
-            }
-        }
-        return "";
-    }
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            String parcelCode = getFirstFlurstueck();
-            if (parcelCode.length() > 0) {
-                String url = "http://s102x083:8080/ASWeb34/ASA_AAAWeb/ALKISBuchNachweis?user=3atest&password=3atest&service=wuppertal&product=LB.NRW.FENW.G&id=" + parcelCode + "&contentType=PDF&certificationType=9511";
-                ObjectRendererUIUtils.openURL(url);
-            }
-        } catch (Exception ex) {
-            log.error(ex);
-        }
+        String url = "Grundstücksnachweis";
+        ObjectRendererUIUtils.openURL(url);
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        try {
-            String parcelCode = getFirstFlurstueck();
-            if (parcelCode.length() > 0) {
-                String url = "http://s102x083:8080/ASWeb34/ASA_AAAWeb/ALKISBuchNachweis?user=3atest&password=3atest&service=wuppertal&product=LB.NRW.FENW.G&id=" + parcelCode + "&contentType=HTML&certificationType=9511";
-                ObjectRendererUIUtils.openURL(url);
-            }
-        } catch (Exception ex) {
-            log.error(ex);
-        }
-    }//GEN-LAST:event_jButton2ActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
@@ -275,6 +247,8 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
     private javax.swing.JButton btnRetrieve;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel lblBuchungsblattcode;
     private javax.swing.JLabel lblEigentuemernachname;
     private javax.swing.JLabel lblFlurstueckcode;
@@ -340,13 +314,13 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
             try {
                 final Buchungsblatt buchungsblatt = get();
                 if (buchungsblatt != null) {
-                    Alkis_buchungsblattRenderer.this.buchungsblatt = buchungsblatt;
+                    Alkis_landparcelRenderer.this.buchungsblatt = buchungsblatt;
 //                    Alkis_buchungsblattRenderer.this.bindingGroup.unbind();
 //                    Alkis_buchungsblattRenderer.this.bindingGroup.bind();
 
                     //TODO this is quick and dirty for tesing only!
                     lblTxtEigentuemerNachname.setText(buchungsblatt.getOwners()[0].getSurName());
-
+                    
 //                    lblTxtModellart.setText(point.getModellArt());
 //                    lblTxtDienststelle.setText(point.getZustaendigeStelleStelle());
 //                    lblTxtLand.setText(point.getZustaendigeStelleLand());
@@ -362,7 +336,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
                 //TODO show error message to user?
                 restoreOnException();
                 org.jdesktop.swingx.error.ErrorInfo ei = new ErrorInfo("Fehler beim Retrieve", ex.getMessage(), null, null, ex, Level.ALL, null);
-                org.jdesktop.swingx.JXErrorPane.showDialog(StaticSwingTools.getParentFrame(Alkis_buchungsblattRenderer.this), ei);
+                org.jdesktop.swingx.JXErrorPane.showDialog(StaticSwingTools.getParentFrame(Alkis_landparcelRenderer.this), ei);
                 log.error(ex, ex);
             }
         }
