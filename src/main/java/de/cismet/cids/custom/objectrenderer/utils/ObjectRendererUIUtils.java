@@ -12,8 +12,10 @@ import Sirius.server.newuser.User;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.utils.ClassCacheMultiple;
 import de.cismet.tools.CismetThreadPool;
+import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.documents.DefaultDocument;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Graphics;
@@ -23,6 +25,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.util.logging.Level;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -30,6 +33,7 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import org.jdesktop.swingx.error.ErrorInfo;
 import org.jdesktop.swingx.graphics.ShadowRenderer;
 
 /**
@@ -43,6 +47,11 @@ public class ObjectRendererUIUtils {
         MILLISECOND, SECOND, MINUTE, HOUR, DAY, WEEK, MONTH, YEAR
     };
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ObjectRendererUIUtils.class);
+
+    public static final void showExceptionWindowToUser(String titleMessage, Exception ex, Component parent) {
+        org.jdesktop.swingx.error.ErrorInfo ei = new ErrorInfo(titleMessage, ex.getMessage(), null, null, ex, Level.ALL, null);
+        org.jdesktop.swingx.JXErrorPane.showDialog(StaticSwingTools.getParentFrame(parent), ei);
+    }
 
     public static final MetaObject[] getLightweightMetaObjectsForTable(String tabName, final String[] fields) {
         return getLightweightMetaObjectsForTable(tabName, fields, null);
@@ -222,14 +231,21 @@ public class ObjectRendererUIUtils {
     public static MouseListener decorateComponentWithMouseOverCursorChange(final JComponent toDecorate, final int mouseEntered, final int mouseExited) {
         final MouseListener toAdd = new MouseAdapter() {
 
+            private final Cursor entered = new Cursor(mouseEntered);
+            private final Cursor exited = new Cursor(mouseExited);
+
             @Override
             public void mouseEntered(MouseEvent e) {
-                toDecorate.setCursor(new Cursor(mouseEntered));
+                if (toDecorate.isEnabled()) {
+                    toDecorate.setCursor(entered);
+                }
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                toDecorate.setCursor(new Cursor(mouseExited));
+                if (toDecorate.isEnabled()) {
+                    toDecorate.setCursor(exited);
+                }
             }
         };
         toDecorate.addMouseListener(toAdd);

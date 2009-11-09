@@ -10,16 +10,21 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
+import Sirius.server.middleware.types.MetaClass;
 import com.vividsolutions.jts.geom.Geometry;
 import de.aedsicad.aaaweb.service.alkis.info.ALKISInfoServices;
+import de.aedsicad.aaaweb.service.util.Address;
 import de.aedsicad.aaaweb.service.util.Buchungsblatt;
 import de.aedsicad.aaaweb.service.util.LandParcel;
+import de.aedsicad.aaaweb.service.util.Owner;
+import de.cismet.cids.custom.objectrenderer.converter.CollectionToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUIUtils;
 import de.cismet.cids.custom.objectrenderer.utils.StyleListCellRenderer;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisCommons;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.SOAPAccessProvider;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+import de.cismet.cids.utils.ClassCacheMultiple;
 import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.features.DefaultStyledFeature;
@@ -34,6 +39,7 @@ import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.SemiRoundedPanel;
+import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
 import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
 import edu.umd.cs.piccolo.event.PInputEvent;
@@ -53,9 +59,9 @@ import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -72,22 +78,30 @@ import javax.swing.text.Caret;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
+import org.jdesktop.swingx.error.ErrorInfo;
 import org.jdesktop.swingx.graphics.ReflectionRenderer;
 
 /**
  * TODO!!!!
  * @author srichter
  */
-public class Alkis_landparcelRenderer extends javax.swing.JPanel implements BorderProvider, CidsBeanRenderer, TitleComponentProvider, FooterComponentProvider {
-    
-    private static final String BUCHUNGSBLATT_TABLENAME = "ALKIS_BUCHUNGSBLATT";
+public class Alkis_landparcelRenderer_backup extends javax.swing.JPanel implements BorderProvider, CidsBeanRenderer, TitleComponentProvider, FooterComponentProvider {
+
+    private static final double GEO_BUFFER = 5.0;
+    private static final String BUCHUNGSBLATT_TABLENAME = "BUCHUNGSBLAETTER";
+    private static final String LINK_SEPARATOR_TOKEN = "::";
     private static final String ICON_RES_PACKAGE = "/de/cismet/cids/custom/wunda_blau/res/";
     private static final String ALKIS_RES_PACKAGE = ICON_RES_PACKAGE + "alkis/";
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alkis_landparcelRenderer.class);
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alkis_landparcelRenderer_backup.class);
     private static final String CARD_1 = "CARD_1";
     private static final String CARD_2 = "CARD_2";
-
+    private static final String SRS = "EPSG:31466";
+    private static final String CALL_STRING = "http://s102x082.wuppertal-intra.de:8080/wmsconnector/com.esri.wms.Esrimap/web_navigation_lf?&VERSION=1.1.1&REQUEST=GetMap&SRS=" + SRS + "&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&LAYERS=26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0&STYLES=" +
+            "&BBOX=<cismap:boundingBox>" +
+            "&WIDTH=<cismap:width>" +
+            "&HEIGHT=<cismap:height>";
 //    private static final ImageIcon FORWARD_PLAIN;
+    private static final String NEWLINE = "<br>";
     private static final ImageIcon FORWARD_PRESSED;
     private static final ImageIcon FORWARD_SELECTED;
 //    private static final ImageIcon BACKWARD_PLAIN;
@@ -112,6 +126,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
     private PropertyChangeListener workerDoneListender;
     //volatie == changes to this variable by one thread are immediatly visible to
     //other accessing threads.
+    private static volatile MetaClass buchungsblattMC;
 
     static {
         final ReflectionRenderer reflectionRenderer = new ReflectionRenderer(0.5f, 0.15f, false);
@@ -136,8 +151,19 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
 
     }
 
+    private final MetaClass getBuchungsblattMetaClass() {
+        if (buchungsblattMC == null) {
+            final String domain = SessionManager.getSession().getUser().getDomain();
+            buchungsblattMC = ClassCacheMultiple.getMetaClass(domain, BUCHUNGSBLATT_TABLENAME);
+            if (buchungsblattMC == null) {
+                throw new IllegalStateException("Could not identify metaclass for table " + BUCHUNGSBLATT_TABLENAME);
+            }
+        }
+        return buchungsblattMC;
+    }
+
     /** Creates new form Alkis_pointRenderer */
-    public Alkis_landparcelRenderer() {
+    public Alkis_landparcelRenderer_backup() {
 //        retrieveableLabels = TypeSafeCollections.newArrayList();
         buchungsblaetter = TypeSafeCollections.newHashMap();
         productPreviewImages = TypeSafeCollections.newHashMap();
@@ -147,7 +173,9 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
 
         initProductPreview();
         scpInhaltBuchungsblatt.getViewport().setOpaque(false);
-        scpLage.getViewport().setOpaque(false);
+        map = new MappingComponent();
+        map.setOpaque(false);
+        panFlurstueckMap.add(map, BorderLayout.CENTER);
         blWait.setVisible(false);
         final LayoutManager layoutManager = getLayout();
         if (layoutManager instanceof CardLayout) {
@@ -165,15 +193,12 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
 
             @Override
             public void hyperlinkUpdate(HyperlinkEvent e) {
-                log.fatal("TODO " + e.getDescription() + " " + e.getURL());
+                log.fatal("TODO " + e.getURL());
             }
         });
-        map = new MappingComponent();
-        panFlurstueckMap.add(map, BorderLayout.CENTER);
-        initEditorPanes();
+
+        initBuchungsblattEditorPane();
     }
-
-
 
     private final void initProductPreview() {
         initProductPreviewImages();
@@ -186,23 +211,23 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                 maxY = ii.getIconHeight();
             }
         }
-        final Dimension previewDim = new Dimension(maxX + 20, maxY + 40);
-        setAllDimensions(panProductPreview, previewDim);
+        final Dimension previewDim = new Dimension(maxX, maxY);
+        panProductPreview.setMaximumSize(previewDim);
+        panProductPreview.setMinimumSize(previewDim);
+        panProductPreview.setPreferredSize(previewDim);
     }
 
-    private final void initEditorPanes() {
+    private final void initBuchungsblattEditorPane() {
         //Font and Layout
         final Font font = UIManager.getFont("Label.font");
         final String bodyRule = "body { font-family: " + font.getFamily() + "; " +
                 "font-size: " + font.getSize() + "pt; }";
         final String tableRule = "td { padding-right : 15px; }";
-        final String tableHeadRule = "th { padding-right : 15px; }";
+        final String tableHeadRule = "th { padding-right :15px; }";
         final StyleSheet css = ((HTMLEditorKit) epInhaltBuchungsblatt.getEditorKit()).getStyleSheet();
-        final StyleSheet css2 = ((HTMLEditorKit) epLage.getEditorKit()).getStyleSheet();
         css.addRule(bodyRule);
         css.addRule(tableRule);
         css.addRule(tableHeadRule);
-        css2.addRule(bodyRule);
         //Change scroll behaviour: avoid autoscrolls on setText(...)
         final Caret caret = epInhaltBuchungsblatt.getCaret();
         if (caret instanceof DefaultCaret) {
@@ -324,6 +349,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         lblDescGemarkung = new javax.swing.JLabel();
         lblGemarkung = new javax.swing.JLabel();
         lblDescLage = new javax.swing.JLabel();
+        lblLage = new javax.swing.JLabel();
         lblGroesse = new javax.swing.JLabel();
         lblDescGroesse = new javax.swing.JLabel();
         lblDescTatsNutzung = new javax.swing.JLabel();
@@ -332,8 +358,6 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         pan.setBackground(Color.DARK_GRAY);
         jPanel5 = pan;
         jLabel6 = new javax.swing.JLabel();
-        scpLage = new javax.swing.JScrollPane();
-        epLage = new javax.swing.JEditorPane();
         panFlurstueckMap = new javax.swing.JPanel();
         panProducts = new javax.swing.JPanel();
         panPdfProducts = new RoundedPanel();
@@ -374,7 +398,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panTitle.add(lblTitle, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 5);
         panTitle.add(blWait, gridBagConstraints);
@@ -667,6 +691,19 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panMainInfo.add(lblDescLage, gridBagConstraints);
 
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.adressen}"), lblLage, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("");
+        binding.setSourceUnreadableValue("<Error>");
+        binding.setConverter(CollectionToStringConverter.getHtmlTaggingCollectionConverter("${strasse} ${nummer}", "<br>"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        panMainInfo.add(lblLage, gridBagConstraints);
+
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.groesse} m²"), lblGroesse, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("<Error>");
@@ -720,25 +757,6 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         panMainInfo.add(jPanel5, gridBagConstraints);
-
-        scpLage.setBorder(null);
-        scpLage.setMaximumSize(new java.awt.Dimension(250, 20));
-        scpLage.setMinimumSize(new java.awt.Dimension(250, 20));
-        scpLage.setOpaque(false);
-        scpLage.setPreferredSize(new java.awt.Dimension(250, 20));
-
-        epLage.setBorder(null);
-        epLage.setContentType("text/html");
-        epLage.setEditable(false);
-        epLage.setOpaque(false);
-        scpLage.setViewportView(epLage);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panMainInfo.add(scpLage, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -949,7 +967,6 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                 ObjectRendererUIUtils.openURL(url);
             }
         } catch (Exception ex) {
-            ObjectRendererUIUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_landparcelRenderer.this);
             log.error(ex);
         }
     }//GEN-LAST:event_hlKarteActionPerformed
@@ -962,7 +979,6 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                 ObjectRendererUIUtils.openURL(url);
             }
         } catch (Exception ex) {
-            ObjectRendererUIUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_landparcelRenderer.this);
             log.error(ex);
         }
 }//GEN-LAST:event_hlFlurstuecksnachweisPdfActionPerformed
@@ -975,7 +991,6 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                 ObjectRendererUIUtils.openURL(url);
             }
         } catch (Exception ex) {
-            ObjectRendererUIUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_landparcelRenderer.this);
             log.error(ex);
         }
 }//GEN-LAST:event_hlFlurstuecksEigentumsnachweisHtmlActionPerformed
@@ -988,7 +1003,6 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                 ObjectRendererUIUtils.openURL(url);
             }
         } catch (Exception ex) {
-            ObjectRendererUIUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_landparcelRenderer.this);
             log.error(ex);
         }
 }//GEN-LAST:event_hlFlurstuecksnachweisHtmlActionPerformed
@@ -1064,10 +1078,178 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                 ObjectRendererUIUtils.openURL(url);
             }
         } catch (Exception ex) {
-            ObjectRendererUIUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_landparcelRenderer.this);
             log.error(ex);
         }
 }//GEN-LAST:event_hlFlurstuecksEigentumsnachweisPdfActionPerformed
+
+    private final String generateBuchungsblattLinkInfo(Buchungsblatt buchungsblatt) {
+        return new StringBuilder(getBuchungsblattMetaClass().getId()).append(LINK_SEPARATOR_TOKEN).append(buchungsblatt.getBlattartCode()).toString();
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="Buchungsblatt Pretty Print Methods">
+    private final String getBuchungsblattInfos(Buchungsblatt buchungsblatt) {
+        final Owner[] owners = buchungsblatt.getOwners();
+//        for (Buchungsstelle stelle : buchungsblatt.getBuchungsstellen()) {
+//            if (stelle != null) {
+//                log.fatal(stelle.getBuchungsart() + " " + stelle.getFraction() + " " + stelle.getId() + " " + stelle.getParentId() + " " + stelle.getSequentialNumber());
+//            }
+//        }
+        if (owners != null && owners.length > 0) {
+            final StringBuilder infoBuilder = new StringBuilder();
+            infoBuilder.append("<table border=\"0\" align=\"left\" valign=\"top\">");
+            infoBuilder.append("<tr><th><b><a href=\"").append(generateBuchungsblattLinkInfo(buchungsblatt)).append("\">").append(buchungsblatt.getBuchungsblattCode()).append("</a></b></th></tr>");
+//            final StringBuilder infoBuilder = new StringBuilder("<html>");
+            for (final Owner owner : owners) {
+//                infoBuilder.append("<tr>");
+                infoBuilder.append(ownerToString(owner));//.append(NEWLINE);
+//                infoBuilder.append("</tr>");
+//                infoBuilder.append(ownerToString(owner).replace("\n", "<br>")).append("<br>");
+            }
+            infoBuilder.append("</table>");
+            log.fatal(infoBuilder.toString());
+//            infoBuilder.append("</html>");
+            return infoBuilder.toString();
+//            lblBuchungsblattEigentuemer.setText(infoBuilder.toString());
+        } else {
+            return "";
+//            lblBuchungsblattEigentuemer.setText("-");
+        }
+    }
+
+    private final String normalizeNameNumber(String nameNumber) {
+        final String[] tokens = nameNumber.split("\\.");
+        final StringBuilder result = new StringBuilder();
+        for (String token : tokens) {
+            token = removeLeadingZeros(token);
+            if (token.length() > 0) {
+                result.append(token).append(".");
+            }
+        }
+        if (result.length() > 0) {
+            result.deleteCharAt(result.length() - 1);
+            return result.toString();
+        } else {
+            return "0";
+        }
+    }
+
+    private final String ownerToString(Owner owner) {
+        if (owner != null) {
+            final StringBuilder ownerStringBuilder = new StringBuilder();
+            ownerStringBuilder.append("<tr><td></td><td>");
+            if (owner.getNameNumber() != null) {
+                ownerStringBuilder.append(normalizeNameNumber(owner.getNameNumber()));
+            }
+            ownerStringBuilder.append("</td><td>");
+            if (owner.getForeName() != null) {
+                ownerStringBuilder.append(owner.getForeName()).append(" ");
+            }
+            if (owner.getSurName() != null) {
+                ownerStringBuilder.append(owner.getSurName());
+            }
+            if (owner.getSalutation() != null) {
+                ownerStringBuilder.append(", ").append(owner.getSalutation());
+            }
+            if (owner.getDateOfBirth() != null) {
+                ownerStringBuilder.append(", *").append(owner.getDateOfBirth());
+            }
+            if (owner.getNameOfBirth() != null) {
+                ownerStringBuilder.append(NEWLINE + "geb. ").append(owner.getNameOfBirth());
+            }
+            ownerStringBuilder.append("</td></tr>");
+            final Address[] addresses = owner.getAddresses();
+            if (addresses != null) {
+                for (final Address address : addresses) {
+                    if (address != null) {
+                        ownerStringBuilder.append("<tr><td></td><td></td><td>");
+                        ownerStringBuilder.append(addressToString(address));
+                        ownerStringBuilder.append("</td></tr>");
+                    }
+                }
+            }
+            return ownerStringBuilder.toString();
+        }
+        return "";
+    }
+
+    private final String addressToString(Address address) {
+        if (address != null) {
+            final StringBuilder addressStringBuilder = new StringBuilder();
+            if (address.getStreet() != null) {
+                addressStringBuilder.append(address.getStreet()).append(" ");
+            }
+            if (address.getHouseNumber() != null) {
+                addressStringBuilder.append(address.getHouseNumber());
+            }
+            if (addressStringBuilder.length() > 0) {
+                addressStringBuilder.append(NEWLINE);
+            }
+            if (address.getPostalCode() != null) {
+                addressStringBuilder.append(address.getPostalCode()).append(" ");
+            }
+            if (address.getCity() != null) {
+                addressStringBuilder.append(address.getCity());
+            }
+            if (addressStringBuilder.length() > 0) {
+                addressStringBuilder.append(NEWLINE);
+            }
+            return addressStringBuilder.toString();
+        } else {
+            return "";
+        }
+    }
+
+// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Pretty Print Title Methods">
+    private final String _prettyPrintLandparcelCode(String flurstueck, String flur, String gemarkung) {
+        return _prettyPrintLandparcelCode(flurstueck, flur) + " - Gemarkung " + gemarkung;
+    }
+
+    private final String _prettyPrintLandparcelCode(String flurstueck, String flur) {
+        return _prettyPrintLandparcelCode(flurstueck) + " - Flur " + removeLeadingZeros(flur);
+    }
+
+    private final String _prettyPrintLandparcelCode(String flurstueck) {
+        return "Flurstück " + prettyPrintFlurstueck(flurstueck);
+    }
+
+    private final String prettyPrintFlurstueck(String fsZahlerNenner) {
+        String[] tiles = fsZahlerNenner.split("/");
+        if (tiles.length == 2) {
+            return removeLeadingZeros(tiles[0]) + "/" + removeLeadingZeros(tiles[1]);
+        } else if (tiles.length == 1) {
+            return removeLeadingZeros(tiles[0]);
+        }
+        return fsZahlerNenner;
+    }
+
+    private final String removeLeadingZeros(String in) {
+        return in.replaceAll("^0*", "");
+    }
+
+    private final String prettyPrintLandparcelCode(String fullLandparcelCode) {
+        final String[] tiles = fullLandparcelCode.split("-");
+        if (tiles.length == 1) {
+            String flurstueck = tiles[0];
+            return _prettyPrintLandparcelCode(flurstueck);
+        } else if (tiles.length == 2) {
+            String flurstueck = tiles[1];
+            String flur = tiles[0];
+            String result = _prettyPrintLandparcelCode(flurstueck, flur);
+            if (cidsBean != null) {
+                result += " - Gemarkung " + cidsBean.getProperty("gemarkung");
+            }
+            return result;
+        } else if (tiles.length == 3) {
+            String flurstueck = tiles[2];
+            String flur = tiles[1];
+            String gemarkung = tiles[0];
+            return _prettyPrintLandparcelCode(flurstueck, flur, gemarkung);
+        } else {
+            return fullLandparcelCode;
+        }
+    }
+// </editor-fold>
 
     @Override
     public CidsBean getCidsBean() {
@@ -1079,7 +1261,6 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         if (cb != null) {
             this.cidsBean = cb;
             initMap(cb);
-            initLage(cb);
             bindingGroup.unbind();
             bindingGroup.bind();
             final int anzahlBuchungsblaetter = lstBuchungsblaetter.getModel().getSize();
@@ -1096,100 +1277,21 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         }
     }
 
-    private final void initLage(CidsBean cidsBean) {
-        final Map<String, List<CidsBean>> streetToBeans = TypeSafeCollections.newHashMap();
-        final Object adressenObj = cidsBean.getProperty("adressen");
-        if (adressenObj instanceof List) {
-            final List<CidsBean> adressenBeans = (List<CidsBean>) adressenObj;
-            for (final CidsBean adresse : adressenBeans) {
-                final Object strasseObj = adresse.getProperty("strasse");
-                List<CidsBean> beansWithThisStreet;
-                if (strasseObj != null) {
-                    final String strasse = strasseObj.toString();
-                    beansWithThisStreet = streetToBeans.get(strasse);
-                    if (beansWithThisStreet == null) {
-                        beansWithThisStreet = TypeSafeCollections.newArrayList();
-                        streetToBeans.put(strasse, beansWithThisStreet);
-                    }
-                    beansWithThisStreet.add(adresse);
-                }
-            }
-        }
-        final StringBuilder adressenContent = new StringBuilder("<html><table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"left\" valign=\"top\">");
-        //sort by street
-        final List<String> sortStrassen = TypeSafeCollections.newArrayList(streetToBeans.keySet());
-        Collections.sort(sortStrassen);
-        int entryCount = sortStrassen.size();
-        for (final String strasse : sortStrassen) {
-            final List<CidsBean> beansWithThisStreet = streetToBeans.get(strasse);
-            final Map<String, CidsBean> hausnummernToBeans = TypeSafeCollections.newHashMap();
-            for (final CidsBean adresse : beansWithThisStreet) {
-                final Object hausnummerObj = adresse.getProperty("nummer");
-                if (hausnummerObj != null) {
-                    hausnummernToBeans.put(hausnummerObj.toString(), adresse);
-                }
-            }
-            if (hausnummernToBeans.isEmpty()) {
-                for (final CidsBean bean : beansWithThisStreet) {
-                    adressenContent.append("<tr><td>");
-                    adressenContent.append(AlkisCommons.generateLinkFromCidsBean(bean, strasse));
-                    adressenContent.append("</td></tr>");
-                }
-            } else {
-                //allocate an extra line if number of housenumbers is big
-                entryCount += (hausnummernToBeans.size() / 7);
-                adressenContent.append("<tr><td>");
-                adressenContent.append(strasse).append("&nbsp;");
-                adressenContent.append("</td>");
-                final List<String> sortNummern = TypeSafeCollections.newArrayList(hausnummernToBeans.keySet());
-                adressenContent.append("<td>");
-                for (int i = 0; i < sortNummern.size(); ++i) {
-//                for (final String nummer : sortNummern) {
-                    final String nummer = sortNummern.get(i);
-                    final CidsBean numberBean = hausnummernToBeans.get(nummer);
-                    adressenContent.append(AlkisCommons.generateLinkFromCidsBean(numberBean, nummer));
-                    if (i != (sortNummern.size() - 1)) {
-                        adressenContent.append(", ");
-                    }
-                }
-                adressenContent.append("</td>");
-                adressenContent.append("</tr>");
-            }
-        }
-        adressenContent.append("</table></html>");
-        epLage.setText(adressenContent.toString());
-//        final Element element = epLage.getDocument().getDefaultRootElement();
-//        final int linecount = element.getElementCount();
-        final int linecount = entryCount;
-        if (linecount > 1) {
-            if (linecount < 5) {
-                setAllDimensions(scpLage, new Dimension(scpLage.getPreferredSize().width, 20 * linecount));
-            } else {
-                setAllDimensions(scpLage, new Dimension(scpLage.getPreferredSize().width, 100));
-            }
-        }
-    }
-
-    private final void setAllDimensions(JComponent comp, Dimension dim) {
-        comp.setMaximumSize(dim);
-        comp.setMinimumSize(dim);
-        comp.setPreferredSize(dim);
-    }
-
     private final void initMap(CidsBean cidsBean) {
         final Object geoObj = cidsBean.getProperty("geometrie.geo_field");
         if (geoObj instanceof Geometry) {
             final Geometry pureGeom = (Geometry) geoObj;
-            final BoundingBox box = new BoundingBox(pureGeom.getEnvelope().buffer(AlkisCommons.MAP_CONSTANTS.GEO_BUFFER));
+            final BoundingBox box = new BoundingBox(pureGeom.getEnvelope().buffer(GEO_BUFFER));
 
             final Runnable mapRunnable = new Runnable() {
 
                 @Override
                 public void run() {
                     final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                    mappingModel.addHome(new XBoundingBox(box.getX1(), box.getY1(), box.getX2(), box.getY2(), AlkisCommons.MAP_CONSTANTS.SRS, true));
-                    mappingModel.setSrs(AlkisCommons.MAP_CONSTANTS.SRS);
-                    SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisCommons.MAP_CONSTANTS.CALL_STRING));
+                    mappingModel.addHome(new XBoundingBox(box.getX1(), box.getY1(), box.getX2(), box.getY2(), SRS, true));
+                    mappingModel.setSrs(SRS);
+
+                    SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(CALL_STRING));
                     swms.setName("Flurstueck");
                     DefaultStyledFeature dsf = new DefaultFeatureServiceFeature();
                     dsf.setGeometry(pureGeom);
@@ -1238,7 +1340,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         if (title == null) {
             title = "<Error>";
         } else {
-            title = AlkisCommons.prettyPrintLandparcelCode(title);
+            title = prettyPrintLandparcelCode(title);
         }
         this.title = title;
         lblTitle.setText(this.title);
@@ -1248,7 +1350,6 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnForward;
     private javax.swing.JEditorPane epInhaltBuchungsblatt;
-    private javax.swing.JEditorPane epLage;
     private org.jdesktop.swingx.JXHyperlink hlFlurstuecksEigentumsnachweisHtml;
     private org.jdesktop.swingx.JXHyperlink hlFlurstuecksEigentumsnachweisPdf;
     private org.jdesktop.swingx.JXHyperlink hlFlurstuecksnachweisHtml;
@@ -1278,6 +1379,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
     private javax.swing.JLabel lblGemeinde;
     private javax.swing.JLabel lblGroesse;
     private javax.swing.JLabel lblInhalt;
+    private javax.swing.JLabel lblLage;
     private javax.swing.JLabel lblLandparcelCode;
     private javax.swing.JLabel lblPreviewHead;
     private javax.swing.JLabel lblProductPreview;
@@ -1304,7 +1406,6 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
     private javax.swing.JScrollPane scpBuchungsblaetter;
     private javax.swing.JScrollPane scpBuchungsblattFlurstuecke;
     private javax.swing.JScrollPane scpInhaltBuchungsblatt;
-    private javax.swing.JScrollPane scpLage;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -1348,25 +1449,33 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         private static final String LOAD_TEXT = "Weitere werden geladen...";
         private final Collection<CidsBean> buchungsblaetterBeans;
         private final StringBuilder currentInfoText;
-        private int current;
+        private int current = 1;
 
         public RetrieveBuchungsblaetterWorker(Collection<CidsBean> buchungsblatterBeans) {
             this.buchungsblaetterBeans = buchungsblatterBeans;
             this.currentInfoText = new StringBuilder();
             setWaiting(true);
             epInhaltBuchungsblatt.setText("Wird geladen... (" + buchungsblatterBeans.size() + ")");
-            current = 1;
         }
 
         @Override
         protected String doInBackground() throws Exception {
+//            log.info("count : "+infoService.getActiveConnectionCount());
+//            if (buchungsblaetterBeans.size() > 0 && infoService.getActiveConnectionCount() > 0) {
+//                try {
+//                    log.info("ClosedDB " + this);
+//                    infoService.closeAllDBConnections();
+//                } catch (RemoteException ex) {
+//                    log.error(ex, ex);
+//                }
+//            }
             for (final CidsBean buchungsblattBean : buchungsblaetterBeans) {
                 if (isCancelled()) {
                     return currentInfoText.toString();
                 }
                 if (buchungsblattBean != null) {
                     Buchungsblatt buchungsblatt = getBuchungsblatt(buchungsblattBean);
-                    currentInfoText.append(AlkisCommons.buchungsblattToString(buchungsblatt));
+                    currentInfoText.append(getBuchungsblattInfos(buchungsblatt));
                     publish(currentInfoText.toString());
                 }
             }
@@ -1376,7 +1485,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         @Override
         protected void process(List<String> chunks) {
             final StringBuilder infos = new StringBuilder(chunks.get(chunks.size() - 1));
-            infos.append(LOAD_TEXT).append(" (").append((current += chunks.size())).append(" / ").append(buchungsblaetterBeans.size()).append(")");
+            infos.append(LOAD_TEXT).append(" (").append(++current).append(" / ").append(buchungsblaetterBeans.size()).append(")");
             if (!isCancelled()) {
                 epInhaltBuchungsblatt.setText("<table>" + infos.toString() + "</table>");
 //                epInhaltBuchungsblatt.setText("<font face=\"" + FONT + "\" size=\"11\">" + "<table>" + infos.toString() + "</table>" + "</font>");
@@ -1397,8 +1506,9 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                 } catch (InterruptedException ex) {
                     log.warn(ex, ex);
                 } catch (Exception ex) {
-                    ObjectRendererUIUtils.showExceptionWindowToUser("Fehler beim Retrieve", ex, Alkis_landparcelRenderer.this);
-                    epInhaltBuchungsblatt.setText(epInhaltBuchungsblatt.getText() + "<br>" + "Aufgrund eines Ausnahmefehlers vermutlich unvollständig!");
+                    org.jdesktop.swingx.error.ErrorInfo ei = new ErrorInfo("Fehler beim Retrieve", ex.getMessage(), null, null, ex, Level.ALL, null);
+                    org.jdesktop.swingx.JXErrorPane.showDialog(StaticSwingTools.getParentFrame(Alkis_landparcelRenderer_backup.this), ei);
+                    epInhaltBuchungsblatt.setText(epInhaltBuchungsblatt.getText() + NEWLINE + "Aufgrund eines Ausnahmefehlers vermutlich unvollständig!");
                     log.error(ex, ex);
                 }
             }
