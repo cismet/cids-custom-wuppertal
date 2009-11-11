@@ -1027,6 +1027,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                         selectedBeans.add((CidsBean) selectedObj);
                     }
                 }
+
                 final RetrieveBuchungsblaetterWorker oldWorker = retrieveBuchungsblaetterWorker;
                 newWorker = new RetrieveBuchungsblaetterWorker(selectedBeans);
                 if (oldWorker != null) {
