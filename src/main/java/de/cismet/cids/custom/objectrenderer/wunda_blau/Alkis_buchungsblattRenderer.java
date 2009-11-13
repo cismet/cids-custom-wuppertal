@@ -10,6 +10,9 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.ui.ComponentRegistry;
+import Sirius.server.middleware.types.MetaClass;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -19,9 +22,11 @@ import de.aedsicad.aaaweb.service.util.Offices;
 import de.aedsicad.aaaweb.service.util.Owner;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUIUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisCommons;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisSOAPWorkerService;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.SOAPAccessProvider;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+import de.cismet.cids.utils.ClassCacheMultiple;
 import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.features.DefaultStyledFeature;
@@ -30,7 +35,6 @@ import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
-import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.collections.TypeSafeCollections;
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
@@ -43,11 +47,9 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Paint;
-import java.awt.Polygon;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -97,7 +99,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         }
         initComponents();
         jScrollPane1.getViewport().setOpaque(false);
-        jScrollPane2.getViewport().setOpaque(false);
+        scpLandparcels.getViewport().setOpaque(false);
         panKarte.add(map, BorderLayout.CENTER);
         initEditorPanes();
         lstLandparcels.setCellRenderer(new FancyListCellRenderer());
@@ -143,6 +145,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         lblTitle = new javax.swing.JLabel();
         blWait = new org.jdesktop.swingx.JXBusyLabel();
         panFooter = new javax.swing.JPanel();
+        jPanel9 = new javax.swing.JPanel();
         panContent = new RoundedPanel();
         jPanel1 = new javax.swing.JPanel();
         lblDescKatasteramt = new javax.swing.JLabel();
@@ -153,7 +156,9 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         lblKatasteramt = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
-        semiRoundedPanel2 = new de.cismet.tools.gui.SemiRoundedPanel();
+        lblDescBlattart = new javax.swing.JLabel();
+        lblBlattart = new javax.swing.JLabel();
+        srpHeadContent = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeadMainInfo = new javax.swing.JLabel();
         panProdukte = new RoundedPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -161,19 +166,19 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         hlBestandsnachweisHtml = new org.jdesktop.swingx.JXHyperlink();
         jPanel7 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
-        semiRoundedPanel3 = new de.cismet.tools.gui.SemiRoundedPanel();
+        srpHeadProdukte = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeadProdukte = new javax.swing.JLabel();
         panEigentuemer = new RoundedPanel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         epOwner = new javax.swing.JEditorPane();
-        semiRoundedPanel1 = new de.cismet.tools.gui.SemiRoundedPanel();
+        srpHeadEigentuemer = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeadEigentuemer = new javax.swing.JLabel();
         panGrundstuecke = new RoundedPanel();
         jPanel4 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        scpLandparcels = new javax.swing.JScrollPane();
         lstLandparcels = new javax.swing.JList();
-        semiRoundedPanel4 = new de.cismet.tools.gui.SemiRoundedPanel();
+        srpHeadGrundstuecke = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeadFlurstuecke = new javax.swing.JLabel();
         panKarte = new javax.swing.JPanel();
 
@@ -196,6 +201,12 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         panFooter.setOpaque(false);
         panFooter.setLayout(new java.awt.GridBagLayout());
 
+        jPanel9.setMaximumSize(new java.awt.Dimension(40, 40));
+        jPanel9.setMinimumSize(new java.awt.Dimension(40, 40));
+        jPanel9.setOpaque(false);
+        jPanel9.setPreferredSize(new java.awt.Dimension(40, 40));
+        panFooter.add(jPanel9, new java.awt.GridBagConstraints());
+
         setLayout(new java.awt.GridBagLayout());
 
         panContent.setLayout(new java.awt.BorderLayout());
@@ -203,7 +214,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        lblDescKatasteramt.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblDescKatasteramt.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblDescKatasteramt.setText("Katasteramt:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -221,7 +232,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 5);
         jPanel1.add(lblDescAmtsgericht, gridBagConstraints);
 
-        lblDescGrundbuchbezirk.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblDescGrundbuchbezirk.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblDescGrundbuchbezirk.setText("Grundbuchbezirk:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -256,30 +267,47 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
 
         jPanel5.setOpaque(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridheight = 4;
+        gridBagConstraints.gridheight = 5;
         gridBagConstraints.weighty = 1.0;
         jPanel1.add(jPanel5, gridBagConstraints);
 
         jPanel6.setOpaque(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.weightx = 1.0;
         jPanel1.add(jPanel6, gridBagConstraints);
 
+        lblDescBlattart.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblDescBlattart.setText("Blattart:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        jPanel1.add(lblDescBlattart, gridBagConstraints);
+
+        lblBlattart.setText("-");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(lblBlattart, gridBagConstraints);
+
         panContent.add(jPanel1, java.awt.BorderLayout.CENTER);
 
-        semiRoundedPanel2.setBackground(Color.DARK_GRAY);
-        semiRoundedPanel2.setLayout(new java.awt.GridBagLayout());
+        srpHeadContent.setBackground(Color.DARK_GRAY);
+        srpHeadContent.setLayout(new java.awt.GridBagLayout());
 
         lblHeadMainInfo.setForeground(new java.awt.Color(255, 255, 255));
         lblHeadMainInfo.setText("Buchungsblatt");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        semiRoundedPanel2.add(lblHeadMainInfo, gridBagConstraints);
+        srpHeadContent.add(lblHeadMainInfo, gridBagConstraints);
 
-        panContent.add(semiRoundedPanel2, java.awt.BorderLayout.NORTH);
+        panContent.add(srpHeadContent, java.awt.BorderLayout.NORTH);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -333,20 +361,20 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
 
         panProdukte.add(jPanel2, java.awt.BorderLayout.CENTER);
 
-        semiRoundedPanel3.setBackground(Color.DARK_GRAY);
-        semiRoundedPanel3.setLayout(new java.awt.GridBagLayout());
+        srpHeadProdukte.setBackground(Color.DARK_GRAY);
+        srpHeadProdukte.setLayout(new java.awt.GridBagLayout());
 
         lblHeadProdukte.setForeground(new java.awt.Color(255, 255, 255));
         lblHeadProdukte.setText("Produkte");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        semiRoundedPanel3.add(lblHeadProdukte, gridBagConstraints);
+        srpHeadProdukte.add(lblHeadProdukte, gridBagConstraints);
 
-        panProdukte.add(semiRoundedPanel3, java.awt.BorderLayout.NORTH);
+        panProdukte.add(srpHeadProdukte, java.awt.BorderLayout.NORTH);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(panProdukte, gridBagConstraints);
@@ -361,6 +389,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
 
         epOwner.setBorder(null);
         epOwner.setContentType("text/html");
+        epOwner.setEditable(false);
         epOwner.setOpaque(false);
         jScrollPane1.setViewportView(epOwner);
 
@@ -368,16 +397,16 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
 
         panEigentuemer.add(jPanel3, java.awt.BorderLayout.CENTER);
 
-        semiRoundedPanel1.setBackground(Color.DARK_GRAY);
-        semiRoundedPanel1.setLayout(new java.awt.GridBagLayout());
+        srpHeadEigentuemer.setBackground(Color.DARK_GRAY);
+        srpHeadEigentuemer.setLayout(new java.awt.GridBagLayout());
 
         lblHeadEigentuemer.setForeground(new java.awt.Color(255, 255, 255));
         lblHeadEigentuemer.setText("Eigentümer");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        semiRoundedPanel1.add(lblHeadEigentuemer, gridBagConstraints);
+        srpHeadEigentuemer.add(lblHeadEigentuemer, gridBagConstraints);
 
-        panEigentuemer.add(semiRoundedPanel1, java.awt.BorderLayout.NORTH);
+        panEigentuemer.add(srpHeadEigentuemer, java.awt.BorderLayout.NORTH);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -391,8 +420,8 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         jPanel4.setOpaque(false);
         jPanel4.setLayout(new java.awt.BorderLayout());
 
-        jScrollPane2.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        jScrollPane2.setOpaque(false);
+        scpLandparcels.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        scpLandparcels.setOpaque(false);
 
         lstLandparcels.setOpaque(false);
         lstLandparcels.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -405,22 +434,22 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
                 lstLandparcelsValueChanged(evt);
             }
         });
-        jScrollPane2.setViewportView(lstLandparcels);
+        scpLandparcels.setViewportView(lstLandparcels);
 
-        jPanel4.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+        jPanel4.add(scpLandparcels, java.awt.BorderLayout.CENTER);
 
         panGrundstuecke.add(jPanel4, java.awt.BorderLayout.CENTER);
 
-        semiRoundedPanel4.setBackground(Color.DARK_GRAY);
-        semiRoundedPanel4.setLayout(new java.awt.GridBagLayout());
+        srpHeadGrundstuecke.setBackground(Color.DARK_GRAY);
+        srpHeadGrundstuecke.setLayout(new java.awt.GridBagLayout());
 
         lblHeadFlurstuecke.setForeground(new java.awt.Color(255, 255, 255));
         lblHeadFlurstuecke.setText("Flurstücke");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        semiRoundedPanel4.add(lblHeadFlurstuecke, gridBagConstraints);
+        srpHeadGrundstuecke.add(lblHeadFlurstuecke, gridBagConstraints);
 
-        panGrundstuecke.add(semiRoundedPanel4, java.awt.BorderLayout.NORTH);
+        panGrundstuecke.add(srpHeadGrundstuecke, java.awt.BorderLayout.NORTH);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -433,6 +462,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         panKarte.setOpaque(false);
         panKarte.setLayout(new java.awt.BorderLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -469,29 +499,45 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
     }//GEN-LAST:event_hlBestandsnachweisPdfActionPerformed
 
     private void lstLandparcelsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstLandparcelsMouseClicked
+        if (evt.getClickCount() > 1) {
+            try {
+                final Object selection = lstLandparcels.getSelectedValue();
+                if (selection instanceof LightweightLandParcel) {
+                    final LightweightLandParcel lwParcel = (LightweightLandParcel) selection;
+                    final MetaClass mc = ClassCacheMultiple.getMetaClass(SessionManager.getSession().getUser().getDomain(), "ALKIS_LANDPARCEL");
+                    ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObject(mc, lwParcel.getFullObjectID(), "");
+                }
+            } catch (Exception ex) {
+                log.error(ex, ex);
+            }
+        }
     }//GEN-LAST:event_lstLandparcelsMouseClicked
 
     private void lstLandparcelsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstLandparcelsValueChanged
         if (!evt.getValueIsAdjusting()) {
-            final Object[] selObjs = lstLandparcels.getSelectedValues();
-            final List<Geometry> allSelectedGeoms = TypeSafeCollections.newArrayList();
-            for (final Object obj : selObjs) {
-                if (obj instanceof LightweightLandParcel) {
-                    final LightweightLandParcel lwlp = (LightweightLandParcel) obj;
-                    if (lwlp.getGeometry() != null) {
-                        allSelectedGeoms.add(lwlp.getGeometry());
-                    }
+            try {
+                final Object[] selObjs = lstLandparcels.getSelectedValues();
+                final List<Geometry> allSelectedGeoms = TypeSafeCollections.newArrayList();
+                for (final Object obj : selObjs) {
+                    if (obj instanceof LightweightLandParcel) {
+                        final LightweightLandParcel lwlp = (LightweightLandParcel) obj;
+                        if (lwlp.getGeometry() != null) {
+                            allSelectedGeoms.add(lwlp.getGeometry());
+                        }
 //                    final DefaultStyledFeature dsFeature = landParcelFeatureMap.get(lwlp);
 //                    if (dsFeature != null) {
 //                        if (lwlp.getColor().equals(dsFeature.getFillingPaint())) {
 //
 //                        }
 //                    }
+                    }
                 }
+                final GeometryCollection geoCollection = new GeometryCollection(allSelectedGeoms.toArray(new Geometry[allSelectedGeoms.size()]), new GeometryFactory());
+                map.gotoBoundingBox(new BoundingBox(geoCollection), true, true, 500);
+//                map.gotoBoundingBoxWithoutHistory(new BoundingBox(geoCollection));
+            } catch (Error t) {
+                log.fatal(t, t);
             }
-            final GeometryCollection geoCollection = new GeometryCollection((Geometry[]) allSelectedGeoms.toArray(), new GeometryFactory());
-            log.fatal(geoCollection);
-            map.gotoBoundingBoxWithoutHistory(new BoundingBox(geoCollection));
         }
     }//GEN-LAST:event_lstLandparcelsValueChanged
 
@@ -531,6 +577,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
     public void setCidsBean(CidsBean cb) {
         if (cb != null) {
             cidsBean = cb;
+            initGotoBeanMap();
             retrieveWorker = new RetrieveWorker(cidsBean);
             final Object buchungsblattLandparcelListObj = cidsBean.getProperty("landparcels");
             if (buchungsblattLandparcelListObj instanceof List) {
@@ -546,7 +593,8 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
                     if (landparcelListBinding.isBound()) {
                         landparcelListBinding.unbind();
                     }
-                    CismetThreadPool.execute(retrieveWorker);
+                    AlkisSOAPWorkerService.execute(retrieveWorker);
+//                    CismetThreadPool.execute(retrieveWorker);
                     landparcelListBinding.bind();
                     initMap();
                 }
@@ -567,14 +615,26 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         }
     }
 
+    private final void initGotoBeanMap() {
+        //todo
+    }
+
+    private final BoundingBox boundingBoxFromLandparcelList(List<LightweightLandParcel> lpList) {
+        final List<Geometry> allGeomList = TypeSafeCollections.newArrayList();
+        for (final LightweightLandParcel parcel : lpList) {
+            allGeomList.add(parcel.geometry);
+        }
+        final GeometryCollection geoCollection = new GeometryCollection(allGeomList.toArray(new Geometry[allGeomList.size()]), new GeometryFactory());
+        return new BoundingBox(geoCollection);
+    }
+
     private final void initMap() {
         if (landParcelList.size() > 0) {
-            final BoundingBox box = new BoundingBox(landParcelList.get(0).getGeometry().getEnvelope().buffer(AlkisCommons.MAP_CONSTANTS.GEO_BUFFER));
-
             try {
                 final ActiveLayerModel mappingModel = new ActiveLayerModel();
                 mappingModel.setSrs(AlkisCommons.MAP_CONSTANTS.SRS);
                 //TODO: do we need an swsw for every class?
+                final BoundingBox box = boundingBoxFromLandparcelList(landParcelList);
                 mappingModel.addHome(new XBoundingBox(box.getX1(), box.getY1(), box.getX2(), box.getY2(), AlkisCommons.MAP_CONSTANTS.SRS, true));
                 SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisCommons.MAP_CONSTANTS.CALL_STRING));
                 swms.setName("Buchungsblatt");
@@ -583,22 +643,23 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
                 for (final LightweightLandParcel lwLandparcel : landParcelList) {
                     final DefaultStyledFeature dsf = new DefaultFeatureServiceFeature();
                     dsf.setGeometry(lwLandparcel.getGeometry());
-                    dsf.setFillingPaint(lwLandparcel.getColor());
+                    final Color lpColor = lwLandparcel.getColor();
+                    final Color lpColorWithAlpha = new Color(lpColor.getRed(), lpColor.getGreen(), lpColor.getBlue(), 168);
+                    dsf.setFillingPaint(lpColorWithAlpha);
                     map.getFeatureCollection().addFeature(dsf);
 
                     landParcelFeatureMap.put(lwLandparcel, dsf);
                 }
+                map.gotoInitialBoundingBox();
                 map.unlock();
                 final int duration = map.getAnimationDuration();
                 map.setAnimationDuration(0);
-                map.gotoInitialBoundingBox();
-//                map.zoomToFeatureCollection();
                 map.setInteractionMode(MappingComponent.ZOOM);
                 //finally when all configurations are done ...
                 map.addCustomInputListener("MUTE", new PBasicInputEventHandler() {
 
                     @Override
-                    public void mouseClicked(PInputEvent arg0) {
+                    public void mouseClicked(PInputEvent evt) {
                         log.fatal("TODO!");
 
                     }
@@ -616,10 +677,12 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
     private final void displayBuchungsblattInfos(Buchungsblatt buchungsblatt) {
         if (buchungsblatt != null) {
             final Offices offices = buchungsblatt.getOffices();
+//            buchungsblatt.getBuchungsstellen()[0].getLandParcel()[0].getAdministrativeDistricts().get;
             if (offices != null) {
                 lblAmtgericht.setText(surroundWithHTMLTags(AlkisCommons.arrayToSeparatedString(offices.getDistrictCourtName(), "<br>")));
                 lblKatasteramt.setText(surroundWithHTMLTags(AlkisCommons.arrayToSeparatedString(offices.getLandRegistryOfficeName(), "<br>")));
             }
+            lblBlattart.setText(buchungsblatt.getBlattart());
         }
     }
 
@@ -658,10 +721,12 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblAmtgericht;
+    private javax.swing.JLabel lblBlattart;
     private javax.swing.JLabel lblDescAmtsgericht;
+    private javax.swing.JLabel lblDescBlattart;
     private javax.swing.JLabel lblDescGrundbuchbezirk;
     private javax.swing.JLabel lblDescKatasteramt;
     private javax.swing.JLabel lblGrundbuchbezirk;
@@ -679,10 +744,11 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
     private javax.swing.JPanel panKarte;
     private javax.swing.JPanel panProdukte;
     private javax.swing.JPanel panTitle;
-    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel1;
-    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel2;
-    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel3;
-    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel4;
+    private javax.swing.JScrollPane scpLandparcels;
+    private de.cismet.tools.gui.SemiRoundedPanel srpHeadContent;
+    private de.cismet.tools.gui.SemiRoundedPanel srpHeadEigentuemer;
+    private de.cismet.tools.gui.SemiRoundedPanel srpHeadGrundstuecke;
+    private de.cismet.tools.gui.SemiRoundedPanel srpHeadProdukte;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -725,6 +791,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         public RetrieveWorker(CidsBean bean) {
             this.bean = bean;
             setWaiting(true);
+            epOwner.setText("Wird geladen...");
         }
 
         @Override
@@ -753,6 +820,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
                 log.warn(ex, ex);
             } catch (ExecutionException ex) {
                 ObjectRendererUIUtils.showExceptionWindowToUser("Fehler beim Retrieve", ex, Alkis_buchungsblattRenderer.this);
+                epOwner.setText("Fehler beim Laden!");
                 log.error(ex, ex);
             } finally {
                 setWaiting(false);
@@ -900,6 +968,10 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
 
     private static final class LightweightLandParcel {
 
+        private static final Color[] COLORS = new Color[]{
+            new Color(41, 86, 178), new Color(101, 156, 239), new Color(125, 189, 0), new Color(220, 246, 0), new Color(255, 91, 0)
+        };
+
         public LightweightLandParcel(CidsBean buchungsBlattLandparcelBean) {
             this.landparcelCode = String.valueOf(buchungsBlattLandparcelBean.getProperty("landparcelcode"));
             final Object geoObj = buchungsBlattLandparcelBean.getProperty("geometrie.geo_field");
@@ -923,10 +995,10 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
 //            final Color baseColor = COLORS[nextColor];
 //            this.color = new Color(baseColor.get, baseColor.getGreen(), baseColor.getBlue(), 0.5f);
         }
-        private static final Color[] COLORS = new Color[]{
-            Color.BLUE, Color.CYAN, Color.GREEN, Color.MAGENTA, Color.ORANGE,
-            Color.PINK, Color.RED, Color.YELLOW
-        };
+//        private static final Color[] COLORS = new Color[]{
+//            Color.BLUE, Color.CYAN, Color.GREEN, Color.MAGENTA, Color.ORANGE,
+//            Color.PINK, Color.RED, Color.YELLOW
+//        };
         private final String landparcelCode;
         private final Color color;
         private final Geometry geometry;
@@ -969,16 +1041,14 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
 
     private static final class FancyListCellRenderer extends DefaultListCellRenderer {
 
-        private boolean drawMySelection = false;
-        private boolean drawMyFocus = false;
         private static final int SPACING = 5;
         private static final int MARKER_WIDTH = 4;
+        private boolean selected = false;
 
         @Override
         public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-            drawMySelection = isSelected;
-            drawMyFocus = cellHasFocus;
-            final Component comp = super.getListCellRendererComponent(list, value, index, false, false);
+            final Component comp = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            selected = isSelected;
             if (value instanceof LightweightLandParcel) {
                 final LightweightLandParcel lwlp = (LightweightLandParcel) value;
                 setBackground(lwlp.getColor());
@@ -997,19 +1067,15 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
             final Graphics2D g2d = (Graphics2D) g;
 //            final Color col = g2d.getColor();
             final Paint backup = g2d.getPaint();
-            if (drawMySelection) {
-                g2d.setColor(new Color(0, 0, 255, 25));
+            if (selected) {
+                g2d.setColor(javax.swing.UIManager.getDefaults().getColor("List.selectionBackground"));
                 g2d.fillRect(0, 0, getWidth(), getHeight());
             }
             g2d.setColor(getBackground());
-            g2d.fillRect(SPACING, 2, MARKER_WIDTH, getHeight() - 4);
-            g2d.setColor(Color.BLACK);
-            g2d.drawRect(SPACING, 2, MARKER_WIDTH, getHeight() - 4);
-
-            if (drawMyFocus) {
-                g2d.setColor(new Color(0, 0, 255, 75));
-                g2d.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
-            }
+            g2d.fillRect(SPACING, 0, MARKER_WIDTH, getHeight());
+//            g2d.fillRect(SPACING, 2, MARKER_WIDTH, getHeight() - 4);
+//            g2d.setColor(Color.BLACK);
+//            g2d.drawRect(SPACING, 2, MARKER_WIDTH, getHeight() - 4);
             g2d.setPaint(backup);
             super.paintComponent(g);
         }

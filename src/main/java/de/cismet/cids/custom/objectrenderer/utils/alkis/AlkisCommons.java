@@ -34,7 +34,7 @@ public class AlkisCommons {
             final int objectID = bean.getMetaObject().getId();
             final StringBuilder result = new StringBuilder("<a href=\"");
 //            result.append(bean.getMetaObject().getMetaClass().getID()).append(LINK_SEPARATOR_TOKEN).append(objectID);
-            result.append(bean.getMetaObject().getMetaClass().getTableName()).append(LINK_SEPARATOR_TOKEN).append(objectID);
+            result.append(bean.getMetaObject().getMetaClass().getID()).append(LINK_SEPARATOR_TOKEN).append(objectID);
             result.append("\">");
             result.append(description);
             result.append("</a>");
@@ -46,12 +46,13 @@ public class AlkisCommons {
     private static final String NEWLINE = "<br>";
     public static final String LINK_SEPARATOR_TOKEN = "::";
 
-    public static final String buchungsblattToString(Buchungsblatt buchungsblatt) {
+    public static final String buchungsblattToString(Buchungsblatt buchungsblatt, CidsBean buchungsblattBean) {
         List<Owner> owners = Arrays.asList(buchungsblatt.getOwners());
         if (owners != null && owners.size() > 0) {
             final StringBuilder infoBuilder = new StringBuilder();
             infoBuilder.append("<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"left\" valign=\"top\">");
-            infoBuilder.append("<tr><td width=\"200\"><b><a href=\"").append(generateBuchungsblattLinkInfo(buchungsblatt)).append("\">").append(buchungsblatt.getBuchungsblattCode()).append("</a></b></td><td>");
+//            infoBuilder.append("<tr><td width=\"200\"><b><a href=\"").append(generateBuchungsblattLinkInfo(buchungsblatt)).append("\">").append(buchungsblatt.getBuchungsblattCode()).append("</a></b></td><td>");
+            infoBuilder.append("<tr><td width=\"200\"><b>" + generateLinkFromCidsBean(buchungsblattBean, buchungsblatt.getBuchungsblattCode()) + "</b></td><td>");
             final Iterator<Owner> ownerIterator = owners.iterator();
 //            if (ownerIterator.hasNext()) {
 //                infoBuilder.append(ownerToString(ownerIterator.next(), ""));
@@ -64,7 +65,6 @@ public class AlkisCommons {
             infoBuilder.append("</table>");
             infoBuilder.append("</td></tr>");
             infoBuilder.append("</table>");
-            log.fatal(infoBuilder.toString());
 //            infoBuilder.append("</html>");
             return infoBuilder.toString();
 //            lblBuchungsblattEigentuemer.setText(infoBuilder.toString());

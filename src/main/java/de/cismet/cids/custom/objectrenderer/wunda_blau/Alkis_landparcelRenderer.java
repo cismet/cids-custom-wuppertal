@@ -10,13 +10,16 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.ui.ComponentRegistry;
 import com.vividsolutions.jts.geom.Geometry;
 import de.aedsicad.aaaweb.service.alkis.info.ALKISInfoServices;
 import de.aedsicad.aaaweb.service.util.Buchungsblatt;
+import de.aedsicad.aaaweb.service.util.Buchungsstelle;
 import de.aedsicad.aaaweb.service.util.LandParcel;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUIUtils;
 import de.cismet.cids.custom.objectrenderer.utils.StyleListCellRenderer;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisCommons;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisSOAPWorkerService;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.SOAPAccessProvider;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
@@ -28,7 +31,6 @@ import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
-import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.collections.TypeSafeCollections;
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
@@ -50,8 +52,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -75,31 +75,27 @@ import javax.swing.text.html.StyleSheet;
 import org.jdesktop.swingx.graphics.ReflectionRenderer;
 
 /**
- * TODO!!!!
+ * 
  * @author srichter
  */
 public class Alkis_landparcelRenderer extends javax.swing.JPanel implements BorderProvider, CidsBeanRenderer, TitleComponentProvider, FooterComponentProvider {
-    
-    private static final String BUCHUNGSBLATT_TABLENAME = "ALKIS_BUCHUNGSBLATT";
+
     private static final String ICON_RES_PACKAGE = "/de/cismet/cids/custom/wunda_blau/res/";
     private static final String ALKIS_RES_PACKAGE = ICON_RES_PACKAGE + "alkis/";
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alkis_landparcelRenderer.class);
     private static final String CARD_1 = "CARD_1";
     private static final String CARD_2 = "CARD_2";
-
-//    private static final ImageIcon FORWARD_PLAIN;
     private static final ImageIcon FORWARD_PRESSED;
     private static final ImageIcon FORWARD_SELECTED;
-//    private static final ImageIcon BACKWARD_PLAIN;
     private static final ImageIcon BACKWARD_PRESSED;
     private static final ImageIcon BACKWARD_SELECTED;
     private static final ImageIcon BUCH_PDF;
     private static final ImageIcon BUCH_HTML;
     private static final ImageIcon BUCH_EIG_PDF;
     private static final ImageIcon BUCH_EIG_HTML;
-//    private final Collection<JLabel> retrieveableLabels;
     private final Map<CidsBean, Buchungsblatt> buchungsblaetter;
     private final Map<Object, ImageIcon> productPreviewImages;
+    private final Map<String, CidsBean> gotoBeanMap;
     private final CardLayout cardLayout;
     private final MappingComponent map;
     private SOAPAccessProvider soapProvider;
@@ -108,10 +104,6 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
     private CidsBean cidsBean;
     private String title;
     private RetrieveBuchungsblaetterWorker retrieveBuchungsblaetterWorker;
-    private RetrieveBuchungsblaetterWorker newWorker;
-    private PropertyChangeListener workerDoneListender;
-    //volatie == changes to this variable by one thread are immediatly visible to
-    //other accessing threads.
 
     static {
         final ReflectionRenderer reflectionRenderer = new ReflectionRenderer(0.5f, 0.15f, false);
@@ -138,13 +130,12 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
 
     /** Creates new form Alkis_pointRenderer */
     public Alkis_landparcelRenderer() {
-//        retrieveableLabels = TypeSafeCollections.newArrayList();
-        buchungsblaetter = TypeSafeCollections.newHashMap();
+        buchungsblaetter = TypeSafeCollections.newConcurrentHashMap();
         productPreviewImages = TypeSafeCollections.newHashMap();
+        gotoBeanMap = TypeSafeCollections.newHashMap();
         initSoapServiceAccess();
         initComponents();
         initFooterElements();
-
         initProductPreview();
         scpInhaltBuchungsblatt.getViewport().setOpaque(false);
         scpLage.getViewport().setOpaque(false);
@@ -165,15 +156,20 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
 
             @Override
             public void hyperlinkUpdate(HyperlinkEvent e) {
-                log.fatal("TODO " + e.getDescription() + " " + e.getURL());
+                if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
+                    final CidsBean blatt = gotoBeanMap.get(e.getDescription());
+                    if (blatt != null) {
+                        ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObject(blatt.getMetaObject(), "");
+                    } else {
+                        log.warn("Could not find buchungsblatt bean in gotoMap");
+                    }
+                }
             }
         });
         map = new MappingComponent();
         panFlurstueckMap.add(map, BorderLayout.CENTER);
         initEditorPanes();
     }
-
-
 
     private final void initProductPreview() {
         initProductPreviewImages();
@@ -1029,31 +1025,14 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                 }
 
                 final RetrieveBuchungsblaetterWorker oldWorker = retrieveBuchungsblaetterWorker;
-                newWorker = new RetrieveBuchungsblaetterWorker(selectedBeans);
                 if (oldWorker != null) {
-                    oldWorker.removePropertyChangeListener(workerDoneListender);
-                    oldWorker.cancel(true);
-                    workerDoneListender = new PropertyChangeListener() {
-
-                        @Override
-                        public void propertyChange(PropertyChangeEvent evt) {
-                            if (SwingWorker.StateValue.DONE.equals(oldWorker.getState())) {
-                                if (newWorker != null && retrieveBuchungsblaetterWorker != newWorker) {
-                                    retrieveBuchungsblaetterWorker = newWorker;
-                                    newWorker = null;
-                                    CismetThreadPool.execute(retrieveBuchungsblaetterWorker);
-                                }
-                            }
-                        }
-                    };
-                    oldWorker.addPropertyChangeListener(workerDoneListender);
-                    workerDoneListender.propertyChange(null);
-                } else {
-                    retrieveBuchungsblaetterWorker = newWorker;
-                    newWorker = null;
-                    CismetThreadPool.execute(retrieveBuchungsblaetterWorker);
+                    AlkisSOAPWorkerService.cancel(oldWorker);
                 }
+                retrieveBuchungsblaetterWorker = new RetrieveBuchungsblaetterWorker(selectedBeans);
+                AlkisSOAPWorkerService.execute(retrieveBuchungsblaetterWorker);
+
             }
+
         }
     }//GEN-LAST:event_lstBuchungsblaetterValueChanged
 
@@ -1079,8 +1058,9 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
     public void setCidsBean(CidsBean cb) {
         if (cb != null) {
             this.cidsBean = cb;
-            initMap(cb);
-            initLage(cb);
+            initMap();
+            initLage();
+            initGotoBeanMap();
             bindingGroup.unbind();
             bindingGroup.bind();
             final int anzahlBuchungsblaetter = lstBuchungsblaetter.getModel().getSize();
@@ -1097,7 +1077,19 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         }
     }
 
-    private final void initLage(CidsBean cidsBean) {
+    private final void initGotoBeanMap() {
+        Object buchungsblaetterCollectionObj = cidsBean.getProperty("buchungsblaetter");
+        if (buchungsblaetterCollectionObj instanceof List) {
+            final List<CidsBean> blaetterList = (List<CidsBean>) buchungsblaetterCollectionObj;
+            for (final CidsBean blatt : blaetterList) {
+                gotoBeanMap.put(blatt.getMetaObject().getMetaClass().getID() + AlkisCommons.LINK_SEPARATOR_TOKEN + blatt.getMetaObject().getID(), blatt);
+            }
+        } else {
+            log.error("Fehler bei initGotoMap. buchungsbaetter = " + buchungsblaetterCollectionObj);
+        }
+    }
+
+    private final void initLage() {
         final Map<String, List<CidsBean>> streetToBeans = TypeSafeCollections.newHashMap();
         final Object adressenObj = cidsBean.getProperty("adressen");
         if (adressenObj instanceof List) {
@@ -1177,7 +1169,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         comp.setPreferredSize(dim);
     }
 
-    private final void initMap(CidsBean cidsBean) {
+    private final void initMap() {
         final Object geoObj = cidsBean.getProperty("geometrie.geo_field");
         if (geoObj instanceof Geometry) {
             final Geometry pureGeom = (Geometry) geoObj;
@@ -1203,7 +1195,6 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                     final int duration = map.getAnimationDuration();
                     map.setAnimationDuration(0);
                     map.gotoInitialBoundingBox();
-//                        map.gotoBoundingBox(box, false, true, 0);
                     //interaction mode
                     map.setInteractionMode(MappingComponent.ZOOM);
                     //finally when all configurations are done ...
@@ -1362,12 +1353,17 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         @Override
         protected String doInBackground() throws Exception {
             for (final CidsBean buchungsblattBean : buchungsblaetterBeans) {
-                if (isCancelled()) {
-                    return currentInfoText.toString();
-                }
                 if (buchungsblattBean != null) {
                     Buchungsblatt buchungsblatt = getBuchungsblatt(buchungsblattBean);
-                    currentInfoText.append(AlkisCommons.buchungsblattToString(buchungsblatt));
+                    if (buchungsblatt.getBuchungsstellen() != null) {
+                        for (Buchungsstelle stelle : buchungsblatt.getBuchungsstellen()) {
+                            log.fatal("Buchungsart: " + stelle.getBuchungsart());
+                        }
+                    }
+                    currentInfoText.append(AlkisCommons.buchungsblattToString(buchungsblatt, buchungsblattBean));
+                    if (isCancelled()) {
+                        return currentInfoText.toString();
+                    }
                     publish(currentInfoText.toString());
                 }
             }
@@ -1376,9 +1372,9 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
 
         @Override
         protected void process(List<String> chunks) {
-            final StringBuilder infos = new StringBuilder(chunks.get(chunks.size() - 1));
-            infos.append(LOAD_TEXT).append(" (").append((current += chunks.size())).append(" / ").append(buchungsblaetterBeans.size()).append(")");
             if (!isCancelled()) {
+                final StringBuilder infos = new StringBuilder(chunks.get(chunks.size() - 1));
+                infos.append(LOAD_TEXT).append(" (").append((current += chunks.size())).append(" / ").append(buchungsblaetterBeans.size()).append(")");
                 epInhaltBuchungsblatt.setText("<table>" + infos.toString() + "</table>");
 //                epInhaltBuchungsblatt.setText("<font face=\"" + FONT + "\" size=\"11\">" + "<table>" + infos.toString() + "</table>" + "</font>");
 //                epInhaltBuchungsblatt.setText("<pre>" + infos.toString() + "</pre>");
@@ -1386,20 +1382,22 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         }
 
         @Override
+        public String toString() {
+            return super.toString() + " " + buchungsblaetterBeans;
+        }
+
+        @Override
         protected void done() {
             if (!isCancelled()) {
-                if (retrieveBuchungsblaetterWorker == this) {
-                    retrieveBuchungsblaetterWorker = null;
-                    setWaiting(false);
-                }
                 try {
+                    setWaiting(false);
                     epInhaltBuchungsblatt.setText(get());
 //                    epInhaltBuchungsblatt.setText("<pre>" + get() + "</pre>");
                 } catch (InterruptedException ex) {
-                    log.warn(ex, ex);
+                    log.debug(ex, ex);
                 } catch (Exception ex) {
-                    ObjectRendererUIUtils.showExceptionWindowToUser("Fehler beim Retrieve", ex, Alkis_landparcelRenderer.this);
-                    epInhaltBuchungsblatt.setText(epInhaltBuchungsblatt.getText() + "<br>" + "Aufgrund eines Ausnahmefehlers vermutlich unvollständig!");
+                    epInhaltBuchungsblatt.setText("Fehler beim Empfangen.");
+                    ObjectRendererUIUtils.showExceptionWindowToUser("Fehler beim Empfangen", ex, Alkis_landparcelRenderer.this);
                     log.error(ex, ex);
                 }
             }
@@ -1526,5 +1524,14 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
             }
         }
     }
+
 // </editor-fold>
+    /**
+     * cancel worker if renderer is disposed.
+     */
+    @Override
+    public void removeNotify() {
+        AlkisSOAPWorkerService.cancel(retrieveBuchungsblaetterWorker);
+        setWaiting(false);
+    }
 }
