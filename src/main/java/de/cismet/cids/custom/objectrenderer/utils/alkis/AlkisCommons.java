@@ -6,6 +6,7 @@ package de.cismet.cids.custom.objectrenderer.utils.alkis;
 
 import de.aedsicad.aaaweb.service.util.Address;
 import de.aedsicad.aaaweb.service.util.Buchungsblatt;
+import de.aedsicad.aaaweb.service.util.Buchungsstelle;
 import de.aedsicad.aaaweb.service.util.Owner;
 import de.cismet.cids.dynamics.CidsBean;
 import java.util.Arrays;
@@ -47,7 +48,11 @@ public class AlkisCommons {
     public static final String LINK_SEPARATOR_TOKEN = "::";
 
     public static final String buchungsblattToString(Buchungsblatt buchungsblatt, CidsBean buchungsblattBean) {
-        List<Owner> owners = Arrays.asList(buchungsblatt.getOwners());
+        final List<Owner> owners = Arrays.asList(buchungsblatt.getOwners());
+//        final List<Buchungsstelle> stellen = Arrays.asList(buchungsblatt.getBuchungsstellen());
+
+//        log.fatal("owners: "+owners.size()+" stellen: "+stellen.size());
+
         if (owners != null && owners.size() > 0) {
             final StringBuilder infoBuilder = new StringBuilder();
             infoBuilder.append("<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"left\" valign=\"top\">");
@@ -235,5 +240,37 @@ public class AlkisCommons {
             return removeLeadingZeros(tiles[0]);
         }
         return fsZahlerNenner;
+    }
+
+    public static final String getBuchungsartFromBuchungsblatt(Buchungsblatt blatt) {
+        final Buchungsstelle[] buchungsstellen = blatt.getBuchungsstellen();
+        if (buchungsstellen != null && buchungsstellen.length > 0) {
+            final Buchungsstelle letzteBuchungsstelle = buchungsstellen[buchungsstellen.length - 1];
+            if (letzteBuchungsstelle != null) {
+                final StringBuilder result = new StringBuilder();
+                final String prettyFration = prettyPrintFration(letzteBuchungsstelle.getFraction());
+                result.append(prettyFration);
+                if (prettyFration.length() > 0) {
+                    result.append(" ");
+                }
+                result.append(letzteBuchungsstelle.getBuchungsart());
+                return result.toString();
+            }
+        }
+        return "";
+    }
+
+    public static final String prettyPrintFration(String fraction) {
+        if (fraction != null) {
+            final String[] elements = fraction.split("/");
+            if (elements != null && elements.length == 2) {
+                String zaehler = elements[0];
+                String nenner = elements[1];
+                zaehler = zaehler.substring(0, zaehler.lastIndexOf("."));
+                nenner = nenner.substring(0, nenner.lastIndexOf("."));
+                return zaehler + "/" + nenner;
+            }
+        }
+        return "";
     }
 }

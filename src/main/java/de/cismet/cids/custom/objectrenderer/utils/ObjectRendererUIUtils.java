@@ -38,7 +38,7 @@ import org.jdesktop.swingx.graphics.ShadowRenderer;
 
 /**
  *
- * @author flughafen
+ * @author stefan
  */
 public class ObjectRendererUIUtils {
 
@@ -48,9 +48,18 @@ public class ObjectRendererUIUtils {
     };
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ObjectRendererUIUtils.class);
 
+    /**
+     * shows an exception window to the user if the parent component is
+     * currently shown.
+     * @param titleMessage
+     * @param ex
+     * @param parent
+     */
     public static final void showExceptionWindowToUser(String titleMessage, Exception ex, Component parent) {
-        org.jdesktop.swingx.error.ErrorInfo ei = new ErrorInfo(titleMessage, ex.getMessage(), null, null, ex, Level.ALL, null);
-        org.jdesktop.swingx.JXErrorPane.showDialog(StaticSwingTools.getParentFrame(parent), ei);
+        if (ex != null && parent != null && parent.isShowing()) {
+            org.jdesktop.swingx.error.ErrorInfo ei = new ErrorInfo(titleMessage, ex.getMessage(), null, null, ex, Level.ALL, null);
+            org.jdesktop.swingx.JXErrorPane.showDialog(StaticSwingTools.getParentFrame(parent), ei);
+        }
     }
 
     public static final MetaObject[] getLightweightMetaObjectsForTable(String tabName, final String[] fields) {
