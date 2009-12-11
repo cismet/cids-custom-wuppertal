@@ -22,6 +22,9 @@ public final class StaticProperties {
     public static final String POI_SIGNATUR_DEFAULT_ICON;
     public static final String POI_LOCATIONTYPE_URL_PREFIX;
     public static final String POI_LOCATIONTYPE_URL_SUFFIX;
+    public static final String ALB_PLAN_URL_PREFIX;
+    public static final String ALB_TEXTBLATT_URL_PREFIX;
+
     //--------------
     static {
         propReader = new PropertyReader(PROPERTY_FILE_URL);
@@ -32,6 +35,8 @@ public final class StaticProperties {
         POI_SIGNATUR_DEFAULT_ICON = propReader.getProperty("poi_signatur_default_icon");
         POI_LOCATIONTYPE_URL_PREFIX = propReader.getProperty("poi_locationtype_url_prefix");
         POI_LOCATIONTYPE_URL_SUFFIX = propReader.getProperty("poi_locationtype_url_suffix");
+        ALB_PLAN_URL_PREFIX = propReader.getProperty("alb_plan_url_prefix");
+        ALB_TEXTBLATT_URL_PREFIX = propReader.getProperty("alb_textplan_prefix");
     }
 
     public static final String getProperty(String in) {

@@ -6,12 +6,17 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import de.cismet.cids.annotations.AggregationRenderer;
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUIUtils;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
-import de.cismet.tools.gui.DoNotWrap;
-import de.cismet.tools.gui.PureCoolPanel;
+import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
+import java.awt.CardLayout;
+import java.util.Collection;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  * de.cismet.cids.objectrenderer.CoolThemaRenderer
@@ -21,19 +26,26 @@ import javax.swing.JComponent;
  * @author srichter
  */
 @AggregationRenderer
-public class Alb_baulastblattEditor extends PureCoolPanel implements DoNotWrap, CidsBeanStore, TitleComponentProvider {
+public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, TitleComponentProvider, FooterComponentProvider {
 
     static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_baulastblattEditor.class);
     private final boolean editable;
     private CidsBean cidsBean;
-    public static final String TITLE_PREFIX = "Baulast";
-    public static final String TITLE_AGR_PREFIX = "Baulasten";
+    private final CardLayout cardLayout;
+    public static final String TITLE_PREFIX = "Baulastblatt";
+    public static final String TITLE_AGR_PREFIX = "Baulastblätter";
 
     /** Creates new form CoolThemaRenderer */
     public Alb_baulastblattEditor(final boolean editable) {
         this.editable = editable;
         initComponents();
-
+        cardLayout = (CardLayout) getLayout();
+        if (!editable) {
+            panControlsLaufendeNummern.setVisible(false);
+            txtBlattnummer.setEditable(false);
+            txtBlattnummer.setOpaque(false);
+            txtBlattnummer.setBorder(null);
+        }
     }
 
     @Override
@@ -47,6 +59,9 @@ public class Alb_baulastblattEditor extends PureCoolPanel implements DoNotWrap, 
             this.cidsBean = cidsBean;
             bindingGroup.unbind();
             bindingGroup.bind();
+            lstLaufendeNummern.setSelectedIndex(0);
+            final Object blattnummer = cidsBean.getProperty("blattnummer");
+            lblTitle.setText(TITLE_PREFIX + " " + blattnummer);
         }
     }
 
@@ -63,16 +78,6 @@ public class Alb_baulastblattEditor extends PureCoolPanel implements DoNotWrap, 
         return editable;
     }
 
-    /**
-     *
-     * @return a ThemaBean which encapsulates all the information for this theme
-     * from the GUI.
-     */
-//    public ThemaBean getContent() {
-//        final ThemaBean.Builder builder = ThemaBean.builder();
-//        builder.aenderungsdatum(new Date(System.currentTimeMillis())).aktAggregierenderObjektRenderer(chkAktAggObjektRenderer.isSelected()).aktAnsprechpartnerImplementierung(evalCB(cbAktImplementierung)).aktAnsprechpartnerSpezifizierung(evalCB(cbAktAnspSpezif)).aktEditoren(chkAktEditor.isSelected()).aktFeatureRenderer(chkAktFeatureRenderer.isSelected()).aktGeometrieModell(evalCB(cbAktGeometriemodell)).aktKategorie(evalCB(cbAktKategorie)).aktObjektRenderer(chkAktObjektRenderer.isSelected()).aktRealisierungsstand(evalCB(cbAktRealisierung)).aktReportTemplates(chkAktReportTemplates.isSelected()).aktSpezifischesSuchen(chkAktSpezSuchen.isSelected()).aktWartungsvertrag(evalCB(cbAktWartung)).ansprechpartner(txtAnsprechpartner.getText()).bemerkungen(txtBemerkung.getText()).bezeichnung(txtBezeichnung.getText()).fachthema(chkFachthema.isSelected()).fachverfahren(chkFachverfahren.isSelected()).gazDienst(evalCB(cbDienst)).gazGeoportalGUI(chkGeoPortal.isSelected()).gazLocationtypes(txtLocationtypes.getText()).gazWundaGUI(chkWundaGui.isSelected()).inhalt(txtInhalt.getText()).letzteAenderungDurch(evalCB(cbLetzteAktualisierung)).nutzerzahl(txtNutzerzahl.getText()).nutzungsart(evalCB(cbNutzungsart)).organisationseinheit(txtOrganisationseinheit.getText()).wmsDatenbereitstellung(evalCB(cbDatenbereitstellung)).wmsDatenquelle(evalCB(cbDatenquelle)).wmsKaskadiertAufSims(chkKaskadiert.isSelected()).wmsPubliziertImGeoportal(chkPubliziert.isSelected()).wmsWms(evalCB(cbWMS)).zukAggregierenderObjektRenderer(chkZukAggObjektRenderer.isSelected()).zukAnsprechpartnerImplementierung(evalCB(cbZukImplementierung)).zukAnsprechpartnerSpezifizierung(evalCB(cbZukAnspSpezif)).zukEditoren(chkZukEditor.isSelected()).zukFeatureRenderer(chkZukFeatureRenderer.isSelected()).zukGeometrieModell(evalCB(cbZukGeometriemodell)).zukKategorie(evalCB(cbZukKategorie)).zukObjektRenderer(chkZukObjektRenderer.isSelected()).zukRealisierungsstand(evalCB(cbZukRealisierung)).zukReportTemplates(chkZukReportTemplates.isSelected()).zukSpezifischesSuchen(chkZukSpezSuchen.isSelected()).zukWartungsvertrag(evalCB(cbZukWartung));
-//        return builder.build();
-//    }
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -87,10 +92,30 @@ public class Alb_baulastblattEditor extends PureCoolPanel implements DoNotWrap, 
         sqlDateToUtilDateConverter = new de.cismet.cids.editors.converters.SqlDateToUtilDateConverter();
         panTitle = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
+        panFooter = new javax.swing.JPanel();
+        panButtons = new javax.swing.JPanel();
+        panFooterLeft = new javax.swing.JPanel();
+        lblBack = new javax.swing.JLabel();
+        btnBack = new javax.swing.JButton();
+        panFooterRight = new javax.swing.JPanel();
+        btnForward = new javax.swing.JButton();
+        lblForw = new javax.swing.JLabel();
         panMain = new javax.swing.JPanel();
-        alb_baulastEditorPanel1 = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastEditorPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        panBaulastEditor = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastEditorPanel(editable);
+        rpLaufendeNummern = new de.cismet.tools.gui.RoundedPanel();
+        scpLaufendeNummern = new javax.swing.JScrollPane();
+        lstLaufendeNummern = new javax.swing.JList();
+        semiRoundedPanel1 = new de.cismet.tools.gui.SemiRoundedPanel();
+        jLabel1 = new javax.swing.JLabel();
+        panControlsLaufendeNummern = new javax.swing.JPanel();
+        btnAddLaufendeNummer = new javax.swing.JButton();
+        btnRemoveLaufendeNummer = new javax.swing.JButton();
+        panBlattNummer = new de.cismet.tools.gui.RoundedPanel();
+        lblBlattnummer = new javax.swing.JLabel();
+        txtBlattnummer = new javax.swing.JTextField();
+        semiRoundedPanel2 = new de.cismet.tools.gui.SemiRoundedPanel();
+        jLabel3 = new javax.swing.JLabel();
+        alb_picturePanel = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel();
 
         panTitle.setOpaque(false);
         panTitle.setLayout(new java.awt.GridBagLayout());
@@ -104,7 +129,90 @@ public class Alb_baulastblattEditor extends PureCoolPanel implements DoNotWrap, 
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panTitle.add(lblTitle, gridBagConstraints);
 
-        setLayout(new java.awt.BorderLayout());
+        panFooter.setOpaque(false);
+        panFooter.setLayout(new java.awt.BorderLayout());
+
+        panButtons.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 6, 0));
+        panButtons.setOpaque(false);
+        panButtons.setLayout(new java.awt.GridBagLayout());
+
+        panFooterLeft.setMaximumSize(new java.awt.Dimension(124, 40));
+        panFooterLeft.setMinimumSize(new java.awt.Dimension(124, 40));
+        panFooterLeft.setOpaque(false);
+        panFooterLeft.setPreferredSize(new java.awt.Dimension(124, 40));
+        panFooterLeft.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 10, 5));
+
+        lblBack.setFont(new java.awt.Font("Tahoma", 1, 14));
+        lblBack.setForeground(new java.awt.Color(255, 255, 255));
+        lblBack.setText("Info");
+        lblBack.setEnabled(false);
+        lblBack.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblBackMouseClicked(evt);
+            }
+        });
+        panFooterLeft.add(lblBack);
+
+        btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left.png"))); // NOI18N
+        btnBack.setBorder(null);
+        btnBack.setBorderPainted(false);
+        btnBack.setContentAreaFilled(false);
+        btnBack.setEnabled(false);
+        btnBack.setFocusPainted(false);
+        btnBack.setMaximumSize(new java.awt.Dimension(30, 30));
+        btnBack.setMinimumSize(new java.awt.Dimension(30, 30));
+        btnBack.setPreferredSize(new java.awt.Dimension(30, 30));
+        btnBack.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-pressed.png"))); // NOI18N
+        btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-sel.png"))); // NOI18N
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
+        panFooterLeft.add(btnBack);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panButtons.add(panFooterLeft, gridBagConstraints);
+
+        panFooterRight.setMaximumSize(new java.awt.Dimension(124, 40));
+        panFooterRight.setOpaque(false);
+        panFooterRight.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 5));
+
+        btnForward.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-right.png"))); // NOI18N
+        btnForward.setBorder(null);
+        btnForward.setBorderPainted(false);
+        btnForward.setContentAreaFilled(false);
+        btnForward.setFocusPainted(false);
+        btnForward.setMaximumSize(new java.awt.Dimension(30, 30));
+        btnForward.setMinimumSize(new java.awt.Dimension(30, 30));
+        btnForward.setPreferredSize(new java.awt.Dimension(30, 30));
+        btnForward.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-right-pressed.png"))); // NOI18N
+        btnForward.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-right-sel.png"))); // NOI18N
+        btnForward.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnForwardActionPerformed(evt);
+            }
+        });
+        panFooterRight.add(btnForward);
+
+        lblForw.setFont(new java.awt.Font("Tahoma", 1, 14));
+        lblForw.setForeground(new java.awt.Color(255, 255, 255));
+        lblForw.setText("Dokumente");
+        lblForw.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblForwMouseClicked(evt);
+            }
+        });
+        panFooterRight.add(lblForw);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panButtons.add(panFooterRight, gridBagConstraints);
+
+        panFooter.add(panButtons, java.awt.BorderLayout.CENTER);
+
+        setLayout(new java.awt.CardLayout());
 
         panMain.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panMain.setOpaque(false);
@@ -112,35 +220,242 @@ public class Alb_baulastblattEditor extends PureCoolPanel implements DoNotWrap, 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.9;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panMain.add(alb_baulastEditorPanel1, gridBagConstraints);
+        panMain.add(panBaulastEditor, gridBagConstraints);
+
+        rpLaufendeNummern.setLayout(new java.awt.GridBagLayout());
+
+        lstLaufendeNummern.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstLaufendeNummern.setFixedCellWidth(75);
 
         org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.baulasten}");
-        org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, jList1);
+        org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstLaufendeNummern);
         bindingGroup.addBinding(jListBinding);
 
-        jList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+        lstLaufendeNummern.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                jList1ValueChanged(evt);
+                lstLaufendeNummernValueChanged(evt);
             }
         });
-        jScrollPane1.setViewportView(jList1);
+        scpLaufendeNummern.setViewportView(lstLaufendeNummern);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        rpLaufendeNummern.add(scpLaufendeNummern, gridBagConstraints);
+
+        semiRoundedPanel1.setBackground(java.awt.Color.darkGray);
+        semiRoundedPanel1.setLayout(new java.awt.GridBagLayout());
+
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Laufende Nummern");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        semiRoundedPanel1.add(jLabel1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        rpLaufendeNummern.add(semiRoundedPanel1, gridBagConstraints);
+
+        panControlsLaufendeNummern.setOpaque(false);
+        panControlsLaufendeNummern.setLayout(new java.awt.GridBagLayout());
+
+        btnAddLaufendeNummer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddLaufendeNummer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddLaufendeNummerActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panControlsLaufendeNummern.add(btnAddLaufendeNummer, gridBagConstraints);
+
+        btnRemoveLaufendeNummer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveLaufendeNummer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveLaufendeNummerActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panControlsLaufendeNummern.add(btnRemoveLaufendeNummer, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        rpLaufendeNummern.add(panControlsLaufendeNummern, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panMain.add(rpLaufendeNummern, gridBagConstraints);
+
+        panBlattNummer.setLayout(new java.awt.GridBagLayout());
+
+        lblBlattnummer.setText("Blattnummer:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panBlattNummer.add(lblBlattnummer, gridBagConstraints);
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.blattnummer}"), txtBlattnummer, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("keine Angabe");
+        binding.setSourceUnreadableValue("<Error>");
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panBlattNummer.add(txtBlattnummer, gridBagConstraints);
+
+        semiRoundedPanel2.setBackground(java.awt.Color.darkGray);
+        semiRoundedPanel2.setLayout(new java.awt.GridBagLayout());
+
+        jLabel3.setText("Baulastblatt");
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        semiRoundedPanel2.add(jLabel3, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        panBlattNummer.add(semiRoundedPanel2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panMain.add(jScrollPane1, gridBagConstraints);
+        panMain.add(panBlattNummer, gridBagConstraints);
 
-        add(panMain, java.awt.BorderLayout.CENTER);
+        add(panMain, "card1");
+        add(alb_picturePanel, "card2");
 
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jList1ValueChanged
+    private void lstLaufendeNummernValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstLaufendeNummernValueChanged
+        final Object selectionObj = lstLaufendeNummern.getSelectedValue();
+        if (selectionObj instanceof CidsBean) {
+            CidsBean selectedBean = (CidsBean) selectionObj;
+            panBaulastEditor.setCidsBean(selectedBean);
+            alb_picturePanel.setCidsBean(selectedBean);
+        }
+    }//GEN-LAST:event_lstLaufendeNummernValueChanged
+
+    private void btnAddLaufendeNummerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddLaufendeNummerActionPerformed
+        try {
+            final Collection<CidsBean> baulasten = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "baulasten");
+            if (baulasten != null) {
+                final String userInput = (String) JOptionPane.showInputDialog(
+                        this,
+                        "Bitte die neue Laufende Nummer eingeben:",
+                        "Neue Laufende Nummer anlegen",
+                        JOptionPane.PLAIN_MESSAGE,
+                        null,
+                        null,
+                        getHighestCurrentLaufendeNummer(baulasten) + 1);
+                if (userInput != null) {
+                    final int laufendeNr = Integer.parseInt(userInput);
+                    final CidsBean newBean = CidsBeanSupport.createNewCidsBeanFromTableName("alb_baulast");
+                    newBean.setProperty("laufende_nummer", String.valueOf(laufendeNr));
+                    baulasten.add(newBean);
+                    final int newIndex = lstLaufendeNummern.getModel().getSize();
+                    lstLaufendeNummern.setSelectedIndex(newIndex - 1);
+                }
+            }
+        } catch (Exception ex) {
+            log.error(ex, ex);
+            ObjectRendererUIUtils.showExceptionWindowToUser("Fehler beim Hinzufügen einer neuen Laufenden Nummer", ex, this);
+        }
+}//GEN-LAST:event_btnAddLaufendeNummerActionPerformed
+
+    private final int getHighestCurrentLaufendeNummer(Collection<CidsBean> baulasten) {
+        int max = 0;
+        if (baulasten != null) {
+            for (final CidsBean baulastBean : baulasten) {
+                try {
+                    final Object laufendeNummerObj = baulastBean.getProperty("laufende_nummer");
+                    if (laufendeNummerObj != null) {
+                        int currentLN = Integer.valueOf(laufendeNummerObj.toString());
+                        if (currentLN > max) {
+                            max = currentLN;
+                        }
+                    }
+                } catch (Exception ex) {
+                    log.warn(ex, ex);
+                }
+            }
+        }
+        return max;
+    }
+
+    private void btnRemoveLaufendeNummerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveLaufendeNummerActionPerformed
+        final Object selection = lstLaufendeNummern.getSelectedValue();
+        if (selection instanceof CidsBean) {
+            try {
+                final CidsBean selectionBean = (CidsBean) selection;
+                final int answer = JOptionPane.showConfirmDialog(this, "Soll die Nummer wirklich gelöscht werden?", "Nummer entfernen", JOptionPane.YES_NO_OPTION);
+                if (answer == JOptionPane.YES_OPTION) {
+                    final Collection flurstueckCol = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "baulasten");
+                    if (flurstueckCol != null) {
+                        flurstueckCol.remove(selectionBean);
+                    }
+                    lstLaufendeNummern.setSelectedIndex(0);
+                    selectionBean.delete();
+                }
+            } catch (Exception e) {
+                log.error(e, e);
+                ObjectRendererUIUtils.showExceptionWindowToUser("Fehler beim Löschen", e, this);
+            }
+        }
+}//GEN-LAST:event_btnRemoveLaufendeNummerActionPerformed
+
+    private void lblBackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBackMouseClicked
+        btnBackActionPerformed(null);
+}//GEN-LAST:event_lblBackMouseClicked
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        cardLayout.show(this, "card1");
+        btnBack.setEnabled(false);
+        btnForward.setEnabled(true);
+        lblBack.setEnabled(false);
+        lblForw.setEnabled(true);
+}//GEN-LAST:event_btnBackActionPerformed
+
+    private void btnForwardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnForwardActionPerformed
+        cardLayout.show(this, "card2");
+        btnBack.setEnabled(true);
+        btnForward.setEnabled(false);
+        lblBack.setEnabled(true);
+        lblForw.setEnabled(false);
+}//GEN-LAST:event_btnForwardActionPerformed
+
+    private void lblForwMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblForwMouseClicked
+        btnForwardActionPerformed(null);
+}//GEN-LAST:event_lblForwMouseClicked
     /**
      * Move-backward button action
      *
@@ -151,18 +466,43 @@ public class Alb_baulastblattEditor extends PureCoolPanel implements DoNotWrap, 
      * @param evt
      */
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastEditorPanel alb_baulastEditorPanel1;
-    private javax.swing.JList jList1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel alb_picturePanel;
+    private javax.swing.JButton btnAddLaufendeNummer;
+    private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnForward;
+    private javax.swing.JButton btnRemoveLaufendeNummer;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel lblBack;
+    private javax.swing.JLabel lblBlattnummer;
+    private javax.swing.JLabel lblForw;
     private javax.swing.JLabel lblTitle;
+    private javax.swing.JList lstLaufendeNummern;
+    private de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastEditorPanel panBaulastEditor;
+    private de.cismet.tools.gui.RoundedPanel panBlattNummer;
+    private javax.swing.JPanel panButtons;
+    private javax.swing.JPanel panControlsLaufendeNummern;
+    private javax.swing.JPanel panFooter;
+    private javax.swing.JPanel panFooterLeft;
+    private javax.swing.JPanel panFooterRight;
     private javax.swing.JPanel panMain;
     private javax.swing.JPanel panTitle;
+    private de.cismet.tools.gui.RoundedPanel rpLaufendeNummern;
+    private javax.swing.JScrollPane scpLaufendeNummern;
+    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel1;
+    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel2;
     private de.cismet.cids.editors.converters.SqlDateToUtilDateConverter sqlDateToUtilDateConverter;
+    private javax.swing.JTextField txtBlattnummer;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     @Override
     public JComponent getTitleComponent() {
         return panTitle;
+    }
+
+    @Override
+    public JComponent getFooterComponent() {
+        return panFooter;
     }
 }

@@ -3,4 +3,5 @@
     <property description="Bildnummer: " font="Tahoma" size="11" it="false" bg="true">bildnummer</property>
     <property description="Aufnahmedat.: " font="Tahoma" size="11" it="false" bg="false">aufnahmedatum</property>
     <property description="Suchworte: " font="Tahoma" size="11" it="false" bg="false">suchworte</property>
+    <property description="Info: " font="Tahoma" size="11" it="false" bg="false">info</property>
 </properties>

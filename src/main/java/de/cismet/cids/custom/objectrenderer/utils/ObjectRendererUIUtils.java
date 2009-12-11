@@ -83,8 +83,32 @@ public class ObjectRendererUIUtils {
         }
         try {
             final User user = SessionManager.getSession().getUser();
-            final MetaClass mc = ClassCacheMultiple.getMetaClass(user.getDomain(), tabName);
+            final MetaClass mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, tabName);
             return SessionManager.getProxy().getAllLightweightMetaObjectsForClass(mc.getID(), user, fields, formatter);
+        } catch (Exception ex) {
+            log.error(ex, ex);
+        }
+        return new MetaObject[0];
+    }
+
+    public static final MetaObject[] getLightweightMetaObjectsForQuery(String tabName, String query, final String[] fields, AbstractAttributeRepresentationFormater formatter) {
+        if (formatter == null) {
+            formatter = new AbstractAttributeRepresentationFormater() {
+
+                @Override
+                public String getRepresentation() {
+                    final StringBuffer sb = new StringBuffer();
+                    for (final String attribute : fields) {
+                        sb.append(getAttribute(attribute.toLowerCase())).append(" ");
+                    }
+                    return sb.toString().trim();
+                }
+            };
+        }
+        try {
+            final User user = SessionManager.getSession().getUser();
+            final MetaClass mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, tabName);
+            return SessionManager.getProxy().getLightweightMetaObjectsByQuery(mc.getID(), user, query, fields, formatter);
         } catch (Exception ex) {
             log.error(ex, ex);
         }

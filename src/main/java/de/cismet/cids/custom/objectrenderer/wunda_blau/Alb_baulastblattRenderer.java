@@ -6,7 +6,6 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastblattEditor;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
-import javax.swing.JComponent;
 
 /**
  *
@@ -31,11 +30,5 @@ public class Alb_baulastblattRenderer extends Alb_baulastblattEditor implements 
         if (title != null) {
             this.title = title;
         }
-    }
-
-    @Override
-    public JComponent getTitleComponent() {
-        //TODO!
-        return null;
     }
 }

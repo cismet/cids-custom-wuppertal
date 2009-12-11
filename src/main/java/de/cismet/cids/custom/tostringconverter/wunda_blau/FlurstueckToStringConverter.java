@@ -4,6 +4,7 @@
  */
 package de.cismet.cids.custom.tostringconverter.wunda_blau;
 
+import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.tools.CustomToStringConverter;
 
 /**
@@ -14,8 +15,11 @@ public class FlurstueckToStringConverter extends CustomToStringConverter {
 
     @Override
     public String createString() {
-        StringBuilder result = new StringBuilder();
-        result.append(cidsBean.getProperty("gemarkungs_nr"));
+        final StringBuilder result = new StringBuilder();
+        final CidsBean gemarkungBean = (CidsBean) cidsBean.getProperty("gemarkungs_nr");
+        if (gemarkungBean != null) {
+            result.append(gemarkungBean.getProperty("gemarkungsnummer"));
+        }
         result.append("-");
         result.append(cidsBean.getProperty("flur"));
         result.append("-");
