@@ -13,7 +13,7 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
  * @author thorsten
  */
 public class ThemaRenderer extends ThemaEditor implements CidsBeanRenderer{
-    private org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
+//    private org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private String title="";
     public ThemaRenderer() {
         super(false);

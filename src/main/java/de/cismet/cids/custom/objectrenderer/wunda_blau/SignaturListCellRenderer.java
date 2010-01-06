@@ -42,7 +42,7 @@ public class SignaturListCellRenderer implements ListCellRenderer {
             final String filename = String.valueOf(bean.getProperty("filename"));
             theIcon = createIconFromFileName(filename);
         } else if (value instanceof LightweightMetaObject) {
-            final String filename = String.valueOf(((LightweightMetaObject) value).getAttribute("filename"));
+            final String filename = String.valueOf(((LightweightMetaObject) value).getLWAttribute("filename"));
             theIcon = createIconFromFileName(filename);
         }
         theFont = list.getFont();

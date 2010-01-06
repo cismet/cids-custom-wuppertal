@@ -38,8 +38,8 @@ import javax.swing.JComponent;
 public class Tester extends javax.swing.JFrame {
 
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
-    final String domain = "WUNDA_DEMO";
-    final int AAPERSON_CLASSID = 374;
+    final static String domain = "WUNDA_DEMO";
+    final static int AAPERSON_CLASSID = 374;
     java.rmi.registry.Registry rmiRegistry = LocateRegistry.getRegistry(1099);
 
     // lookup des callservers

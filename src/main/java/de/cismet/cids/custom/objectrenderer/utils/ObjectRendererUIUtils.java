@@ -163,21 +163,22 @@ public class ObjectRendererUIUtils {
                 public void run() {
                     try {
                         final ImageIcon finBild = loadPicture(bildURL, maxPixelX, maxPixelY, shadowSize);
-                        if (finBild != null) {
-                            EventQueue.invokeLater(new Runnable() {
+                        EventQueue.invokeLater(new Runnable() {
 
-                                @Override
-                                public void run() {
-                                    if (finBild != null) {
-                                        toSet.setIcon(finBild);
-                                    } else {
-                                        toSet.setVisible(false);
-                                    }
+                            @Override
+                            public void run() {
+                                if (finBild != null) {
+                                    toSet.setIcon(finBild);
+                                } else {
+                                    toSet.setIcon(null);
+//                                        toSet.setVisible(false);
                                 }
-                            });
-                        }
+                            }
+                        });
+
                     } catch (Exception e) {
                         log.error("Exeption when loading picture " + bildURL + " : " + e, e);
+                        toSet.setIcon(null);
                     }
                 }
             };

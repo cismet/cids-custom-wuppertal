@@ -8,6 +8,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -23,11 +24,20 @@ public class PropertyReader {
         }
         this.filename = filename;
         properties = new Properties();
+        InputStream is = null;
         try {
-            final InputStream is = new BufferedInputStream(PropertyReader.class.getResourceAsStream(filename));
+            is = new BufferedInputStream(PropertyReader.class.getResourceAsStream(filename));
             properties.load(is);
         } catch (IOException ex) {
             log.error(ex, ex);
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException ex) {
+                    log.warn(ex, ex);
+                }
+            }
         }
     }
     private final String filename;

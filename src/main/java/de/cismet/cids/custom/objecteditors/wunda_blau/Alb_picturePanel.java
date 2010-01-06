@@ -33,6 +33,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     public Alb_picturePanel() {
         initComponents();
         ((NavigableImagePanel) ipanDocument).setNavigationImageEnabled(tbtnNavigation.isSelected());
+        scpPictureList.setVisible(false);
     }
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_picturePanel.class);
     private MultiPagePictureReader pictureReader;
@@ -276,7 +277,6 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     }
 
     private void setControlsEnabled(boolean enabled) {
-        lstPictures.setEnabled(enabled);
         btnPlan.setEnabled(planFile != null && enabled && currentSelectedButton != btnPlan);
         btnTextblatt.setEnabled(textFile != null && enabled && currentSelectedButton != btnTextblatt);
     }
@@ -308,7 +308,19 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         @Override
         protected void done() {
             try {
-                lstPictures.setModel(get());
+                final ListModel model = get();
+                lstPictures.setModel(model);
+                if (model.getSize() > 0) {
+                    lstPictures.setSelectedIndex(0);
+                    if (model.getSize() > 1) {
+                        scpPictureList.setVisible(true);
+                    } else {
+                        scpPictureList.setVisible(false);
+                    }
+                } else {
+                    scpPictureList.setVisible(false);
+                }
+                panPicNavigation.repaint();
             } catch (InterruptedException ex) {
                 log.warn(ex, ex);
             } catch (ExecutionException ex) {

@@ -10,6 +10,7 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import com.lowagie.text.pdf.codec.Base64.InputStream;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.objectrenderer.CoolThemaRenderer;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
@@ -26,14 +27,16 @@ import javax.swing.JComponent;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.Highlighter;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
+import org.openide.util.Exceptions;
 
 /**
  *
  * @author thorsten
  */
 public class ThemaAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer, TitleComponentProvider {
-    
-    private static LinkedProperties aggregationColumns = null;
+
+    //should be static!
+    private LinkedProperties aggregationColumns = null;
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     public static final List<Integer> COLUMN_SIZES = new CopyOnWriteArrayList<Integer>();
     private Collection<CidsBean> cidsBeans = null;
@@ -41,10 +44,13 @@ public class ThemaAggregationRenderer extends javax.swing.JPanel implements Cids
     public static final Color COLOR_TBL_SECOND = new Color(210, 210, 210);
 
     public ThemaAggregationRenderer() {
+        //should be in a static block....
         if (aggregationColumns == null) {
             aggregationColumns = new LinkedProperties();
+            java.io.InputStream is = null;
             try {
-                aggregationColumns.load(CoolThemaRenderer.class.getResourceAsStream("/de/cismet/navigator/objectrenderer/thema/aggregation_renderer.properties"));
+                is = CoolThemaRenderer.class.getResourceAsStream("/de/cismet/navigator/objectrenderer/thema/aggregation_renderer.properties");
+                aggregationColumns.load(is);
             } catch (IOException ex) {
                 log.warn("Could not load properties for aggregation renderer: thema", ex);
                 aggregationColumns.put("bezeichnung", "Bezeichnung");
@@ -58,6 +64,15 @@ public class ThemaAggregationRenderer extends javax.swing.JPanel implements Cids
                 aggregationColumns.put("zuk_realisierungsstand.status", "Zuk. Status");
                 aggregationColumns.put("fachthema", "Fachthema");
                 aggregationColumns.put("fachverfahren", "Fachverfahren");
+
+            } finally {
+                if (is != null) {
+                    try {
+                        is.close();
+                    } catch (IOException ex) {
+                        log.warn(ex, ex);
+                    }
+                }
             }
         }
         initComponents();
@@ -137,15 +152,15 @@ public class ThemaAggregationRenderer extends javax.swing.JPanel implements Cids
             String beanProperty = (String) key;
 
             String bezeichnung = aggregationColumns.getProperty(beanProperty);
-            
+
             columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${" + beanProperty + "}"));
             columnBinding.setEditable(false);
             columnBinding.setColumnName(bezeichnung);
-            
+
             CidsBean first = (CidsBean) cidsBeans.toArray()[0];
             Object example = first.getProperty(beanProperty);
 
-            if (beanProperty!=null&&(beanProperty.equalsIgnoreCase("fachthema")||beanProperty.equalsIgnoreCase("fachverfahren"))){
+            if (beanProperty != null && (beanProperty.equalsIgnoreCase("fachthema") || beanProperty.equalsIgnoreCase("fachverfahren"))) {
                 columnBinding.setColumnClass(java.lang.Boolean.class);
 
             }

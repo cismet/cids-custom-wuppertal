@@ -16,6 +16,7 @@ import de.aedsicad.aaaweb.service.alkis.info.ALKISInfoServices;
 import de.aedsicad.aaaweb.service.util.Buchungsblatt;
 import de.aedsicad.aaaweb.service.util.Buchungsstelle;
 import de.aedsicad.aaaweb.service.util.LandParcel;
+import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUIUtils;
 import de.cismet.cids.custom.objectrenderer.utils.StyleListCellRenderer;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisCommons;
@@ -53,8 +54,10 @@ import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -92,6 +95,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
     private static ImageIcon BUCH_HTML;
     private static ImageIcon BUCH_EIG_PDF;
     private static ImageIcon BUCH_EIG_HTML;
+    private static ImageIcon KARTE_PDF;
 //    private static final ImageIcon FORWARD_PRESSED;
 //    private static final ImageIcon FORWARD_SELECTED;
 //    private static final ImageIcon BACKWARD_PRESSED;
@@ -174,7 +178,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                 }
             }
         });
-        
+
         epLage.addHyperlinkListener(new HyperlinkListener() {
 
             @Override
@@ -202,12 +206,13 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
 
         FORWARD_SELECTED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-right-sel.png"));
         FORWARD_PRESSED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-right-pressed.png"));
-        BufferedImage i1 = null, i2 = null, i3 = null, i4 = null;
+        BufferedImage i1 = null, i2 = null, i3 = null, i4 = null, i5 = null;
         try {
             i1 = reflectionRenderer.appendReflection(ImageIO.read(getClass().getResource(ALKIS_RES_PACKAGE + "buchnachweispdf.png")));
             i2 = reflectionRenderer.appendReflection(ImageIO.read(getClass().getResource(ALKIS_RES_PACKAGE + "buchnachweishtml.png")));
             i3 = reflectionRenderer.appendReflection(ImageIO.read(getClass().getResource(ALKIS_RES_PACKAGE + "bucheignachweispdf.png")));
             i4 = reflectionRenderer.appendReflection(ImageIO.read(getClass().getResource(ALKIS_RES_PACKAGE + "bucheignachweishtml.png")));
+            i5 = reflectionRenderer.appendReflection(ImageIO.read(getClass().getResource(ALKIS_RES_PACKAGE + "karte.png")));
         } catch (Exception ex) {
             log.error(ex, ex);
         }
@@ -215,6 +220,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         BUCH_HTML = new ImageIcon(i2);
         BUCH_EIG_PDF = new ImageIcon(i3);
         BUCH_EIG_HTML = new ImageIcon(i4);
+        KARTE_PDF = new ImageIcon(i5);
     }
 
     private final void initProductPreview() {
@@ -235,8 +241,8 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
     private final void initEditorPanes() {
         //Font and Layout
         final Font font = UIManager.getFont("Label.font");
-        final String bodyRule = "body { font-family: " + font.getFamily() + "; " +
-                "font-size: " + font.getSize() + "pt; }";
+        final String bodyRule = "body { font-family: " + font.getFamily() + "; "
+                + "font-size: " + font.getSize() + "pt; }";
         final String tableRule = "td { padding-right : 15px; }";
         final String tableHeadRule = "th { padding-right : 15px; }";
         final StyleSheet css = ((HTMLEditorKit) epInhaltBuchungsblatt.getEditorKit()).getStyleSheet();
@@ -258,11 +264,13 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         productPreviewImages.put(hlFlurstuecksEigentumsnachweisPdf, BUCH_EIG_PDF);
         productPreviewImages.put(hlFlurstuecksnachweisHtml, BUCH_HTML);
         productPreviewImages.put(hlFlurstuecksnachweisPdf, BUCH_PDF);
+        productPreviewImages.put(hlKarte, KARTE_PDF);
         final ProductLabelMouseAdaper productListener = new ProductLabelMouseAdaper();
         hlFlurstuecksEigentumsnachweisHtml.addMouseListener(productListener);
         hlFlurstuecksEigentumsnachweisPdf.addMouseListener(productListener);
         hlFlurstuecksnachweisHtml.addMouseListener(productListener);
         hlFlurstuecksnachweisPdf.addMouseListener(productListener);
+        hlKarte.addMouseListener(productListener);
     }
 
     /**
@@ -1174,7 +1182,19 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         int entryCount = sortStrassen.size();
         for (final String strasse : sortStrassen) {
             final List<CidsBean> beansWithThisStreet = streetToBeans.get(strasse);
-            final Map<String, CidsBean> hausnummernToBeans = TypeSafeCollections.newHashMap();
+            Collections.sort(beansWithThisStreet, new Comparator<CidsBean>() {
+
+                @Override
+                public int compare(CidsBean o1, CidsBean o2) {
+                    if (o1 != null && o2 != null) {
+                        Object n1 = o1.getProperty("nummer");
+                        Object n2 = o2.getProperty("nummer");
+                        return AlphanumComparator.getInstance().compare(String.valueOf(n1), String.valueOf(n2));
+                    }
+                    return 0;
+                }
+            });
+            final Map<String, CidsBean> hausnummernToBeans = TypeSafeCollections.newLinkedHashMap();
             for (final CidsBean adresse : beansWithThisStreet) {
                 final Object hausnummerObj = adresse.getProperty("nummer");
                 if (hausnummerObj != null) {
@@ -1193,17 +1213,17 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                 adressenContent.append("<tr><td>");
                 adressenContent.append(strasse).append("&nbsp;");
                 adressenContent.append("</td>");
-                final List<String> sortNummern = TypeSafeCollections.newArrayList(hausnummernToBeans.keySet());
+//                final List<String> sortNummern = TypeSafeCollections.newArrayList(hausnummernToBeans.keySet());
                 adressenContent.append("<td>");
-                for (int i = 0; i < sortNummern.size(); ++i) {
+                for (Entry<String, CidsBean> entry : hausnummernToBeans.entrySet()) {
+//                for (int i = 0; i < sortNummern.size(); ++i) {
 //                for (final String nummer : sortNummern) {
-                    final String nummer = sortNummern.get(i);
-                    final CidsBean numberBean = hausnummernToBeans.get(nummer);
+                    final String nummer = entry.getKey();
+                    final CidsBean numberBean = entry.getValue();
                     adressenContent.append(AlkisCommons.generateLinkFromCidsBean(numberBean, nummer));
-                    if (i != (sortNummern.size() - 1)) {
-                        adressenContent.append(", ");
-                    }
+                    adressenContent.append(", ");
                 }
+                adressenContent.delete(adressenContent.length()-2, adressenContent.length());
                 adressenContent.append("</td>");
                 adressenContent.append("</tr>");
             }

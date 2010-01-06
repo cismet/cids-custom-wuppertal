@@ -51,6 +51,22 @@ public class FlurstueckFinder {
         });
     }
 
+    public static final MetaObject[] getLWFurstuecksZaehlerNenner(String gemarkungsnummer, String flur) {
+        return ObjectRendererUIUtils.getLightweightMetaObjectsForQuery("flurstueck", "select min(id) as id, fstnr_z, fstnr_n from flurstueck where gemarkungs_nr = " + gemarkungsnummer + " and flur = '" + flur + "' group by fstnr_z, fstnr_n order by fstnr_z, fstnr_n", new String[]{"id", "fstnr_z", "fstnr_n"}, new AbstractAttributeRepresentationFormater() {
+
+            @Override
+            public String getRepresentation() {
+                final Object nenner = getAttribute("fstnr_n");
+                final StringBuilder result = new StringBuilder();
+                result.append(getAttribute("fstnr_z"));
+                if (nenner != null) {
+                    result.append("/").append(nenner);
+                }
+                return result.toString();
+            }
+        });
+    }
+
     public static final MetaObject[] getLWFurstuecksZaehler(String gemarkungsnummer, String flur) {
         return ObjectRendererUIUtils.getLightweightMetaObjectsForQuery("flurstueck", "select min(id) as id, fstnr_z from flurstueck where gemarkungs_nr = " + gemarkungsnummer + " and flur = '" + flur + "' group by fstnr_z order by fstnr_z", new String[]{"id", "fstnr_z"}, new AbstractAttributeRepresentationFormater() {
 

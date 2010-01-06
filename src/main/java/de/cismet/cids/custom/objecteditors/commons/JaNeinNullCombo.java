@@ -26,6 +26,7 @@ public class JaNeinNullCombo extends JComboBox{
         super(new DefaultComboBoxModel(new Vector(Arrays.asList("Ja","Nein",null))));
         setRenderer(new ListCellRenderer() {
 
+            @Override
             public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 if (value!=null) {
                     return dlcr.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);

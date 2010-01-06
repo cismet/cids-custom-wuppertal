@@ -22,7 +22,7 @@ public class Alb_baulastIconFactory implements CidsTreeObjectIconFactory {
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_baulastIconFactory.class);
 
     public Alb_baulastIconFactory() {
-        DELETED_ICON = new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/emptytrash.png"));
+        DELETED_ICON = new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit-delete.png"));
         CLOSED_ICON = new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/encrypted.png"));
         WARNING_ICON = new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/dialog-warning.png"));
     }
@@ -70,22 +70,27 @@ public class Alb_baulastIconFactory implements CidsTreeObjectIconFactory {
         if (node != null) {
             final CidsBean baulastBean = node.getMetaObject().getBean();
             result = node.getLeafIcon();
-            if (baulastBean.getProperty("loeschungsdatum") != null) {
-                result = Static2DTools.createOverlayIcon(DELETED_ICON, result.getIconWidth(), result.getIconHeight());
+            if (!checkIfBaulastBeansIsComplete(baulastBean)) {
+                Icon overlay = Static2DTools.createOverlayIcon(WARNING_ICON, result.getIconWidth(), result.getIconHeight());
+                result = Static2DTools.mergeIcons(result, overlay);
+//                result = overlay;
+//                result = Static2DTools.mergeIcons(result, Static2DTools.createOverlayIcon(WARNING_ICON, result.getIconWidth(), result.getIconHeight()));
+//                result = Static2DTools.mergeIcons(new Icon[]{result, WARNING_ICON});
+            } else {
+                if (baulastBean.getProperty("loeschungsdatum") != null) {
+                    Icon overlay = Static2DTools.createOverlayIcon(DELETED_ICON, result.getIconWidth(), result.getIconHeight());
+                    result = Static2DTools.mergeIcons(result, overlay);
+//                    result = overlay;
 //                result = Static2DTools.mergeIcons(result, Static2DTools.createOverlayIcon(DELETED_ICON, result.getIconWidth(), result.getIconHeight()));
 //                result = Static2DTools.mergeIcons(new Icon[]{result, DELETED_ICON});
-            } else if (baulastBean.getProperty("geschlossen_am") != null) {
-                result = Static2DTools.mergeIcons(result, CLOSED_ICON);
-                result = Static2DTools.mergeIcons(result, Static2DTools.createOverlayIcon(CLOSED_ICON, result.getIconWidth(), result.getIconHeight()));
+                } else if (baulastBean.getProperty("geschlossen_am") != null) {
+                    Icon overlay = Static2DTools.createOverlayIcon(CLOSED_ICON, result.getIconWidth(), result.getIconHeight());
+                    result = Static2DTools.mergeIcons(result, overlay);
+//                    result = overlay;
+//                result = Static2DTools.mergeIcons(result, Static2DTools.createOverlayIcon(CLOSED_ICON, result.getIconWidth(), result.getIconHeight()));
 //                result = Static2DTools.mergeIcons(new Icon[]{result, CLOSED_ICON});
+                }
             }
-
-            if (!checkIfBaulastBeansIsComplete(baulastBean)) {
-                result = Static2DTools.mergeIcons(result, WARNING_ICON);
-                result = Static2DTools.mergeIcons(result, Static2DTools.createOverlayIcon(WARNING_ICON, result.getIconWidth(), result.getIconHeight()));
-//                result = Static2DTools.mergeIcons(new Icon[]{result, WARNING_ICON});
-            }
-
         }
         return result;
     }

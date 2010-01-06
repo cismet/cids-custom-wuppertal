@@ -187,21 +187,21 @@ public class Wbf_gebaeudeFeatureRenderer extends CustomCidsFeatureRenderer {
             header = String.format(header, eigentuemer,art);
 
             Object o = cidsBean.getProperty("vorgaenge");
-            String vorgaenge = "";
+            StringBuilder vorgaenge = new StringBuilder();
             if (o instanceof Collection) {
                 Collection c = (Collection) o;
                 for (Object ob : c) {
                     String v = "Vorgang: %s (%s)<br>";
 
                     if (ob instanceof CidsBean) {
-                        CidsBean cidsBean = (CidsBean) ob;
-                        String nr = (String) cidsBean.getProperty("vergabenummer");
-                        String fnr = (String) cidsBean.getProperty("folgenummer");
+                        CidsBean cb = (CidsBean) ob;
+                        String nr = (String) cb.getProperty("vergabenummer");
+                        String fnr = (String) cb.getProperty("folgenummer");
                         if (fnr!=null&&!fnr.trim().equals("0")){
                             nr+="/"+fnr;
                         }
                         String massnahmenkategorisierung = null;
-                        Object massKatOb=cidsBean.getProperty("massnahmenkategorisierung");
+                        Object massKatOb=cb.getProperty("massnahmenkategorisierung");
 
                         if (massKatOb instanceof CidsBean) {
                             CidsBean mkCidsBean = (CidsBean) massKatOb;
@@ -215,7 +215,7 @@ public class Wbf_gebaeudeFeatureRenderer extends CustomCidsFeatureRenderer {
                             massnahmenkategorisierung = "keine Kategorie";
                         }
                         v = String.format(v, nr, massnahmenkategorisierung);
-                        vorgaenge += v;
+                        vorgaenge.append(v);
                     }
 
                 }

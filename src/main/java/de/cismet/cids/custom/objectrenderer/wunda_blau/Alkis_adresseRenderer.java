@@ -10,13 +10,24 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.ui.ComponentRegistry;
+import Sirius.server.middleware.types.AbstractAttributeRepresentationFormater;
+import Sirius.server.middleware.types.LightweightMetaObject;
+import Sirius.server.middleware.types.MetaClass;
+import Sirius.server.middleware.types.MetaObject;
 import de.aedsicad.aaaweb.service.util.Buchungsblatt;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUIUtils;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+import de.cismet.cids.utils.ClassCacheMultiple;
+import de.cismet.tools.collections.TypeSafeCollections;
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.TitleComponentProvider;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import javax.swing.JComponent;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
@@ -28,22 +39,44 @@ import javax.swing.border.EmptyBorder;
 public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBeanRenderer, BorderProvider, TitleComponentProvider, FooterComponentProvider {
 
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alkis_adresseRenderer.class);
-//    private SOAPAccessProvider soapProvider;
-//    private ALKISInfoServices infoService;
     private Buchungsblatt buchungsblatt;
     private CidsBean cidsBean;
     private String title;
+//    private final ListCellRenderer landparcelListCellRenderer = new DefaultListCellRenderer() {
+//
+//        @Override
+//        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+//            if(value instanceof CidsBean) {
+////                value = value.toString() + " "+;
+//            }
+//            return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+//        }
+//
+//    };
 
     /** Creates new form Alkis_pointRenderer */
     public Alkis_adresseRenderer() {
-//        try {
-//            soapProvider = new SOAPAccessProvider();
-//            infoService = soapProvider.getAlkisInfoService();
-//        } catch (Exception ex) {
-//            log.fatal(ex, ex);
-//        }
         initComponents();
         blWait.setVisible(false);
+    }
+
+    private final MetaObject[] getAllAdressesForSameBuilding(CidsBean gebaeudeBean) {
+        if (gebaeudeBean != null) {
+            Object idObj = gebaeudeBean.getProperty("id");
+            if (idObj instanceof Integer) {
+                final Integer searchID = (Integer) idObj;
+                return ObjectRendererUIUtils.getLightweightMetaObjectsForQuery("alkis_adresse", "select id,strasse,nummer from alkis_adresse where gebaeude = " + searchID + " order by strasse,nummer", new String[]{"id", "strasse", "nummer"}, new AbstractAttributeRepresentationFormater() {
+
+                    @Override
+                    public String getRepresentation() {
+                        StringBuilder result = new StringBuilder();
+                        result.append(getAttribute("strasse")).append(" ").append(getAttribute("nummer"));
+                        return result.toString();
+                    }
+                });
+            }
+        }
+        return new MetaObject[0];
     }
 
     /** This method is called from within the constructor to
@@ -75,11 +108,18 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
         jLabel2 = new javax.swing.JLabel();
         panGebaeudeContent = new javax.swing.JPanel();
         lblDescFunktion = new javax.swing.JLabel();
-        lblDescStockwerke = new javax.swing.JLabel();
+        lblDescStockwerkeOber = new javax.swing.JLabel();
         lblFunktion = new javax.swing.JLabel();
-        lblStockwerke = new javax.swing.JLabel();
+        lblStockwerkeOber = new javax.swing.JLabel();
         lblDescBauweise = new javax.swing.JLabel();
         lblBauweise = new javax.swing.JLabel();
+        lblDescStockwerkeUnter = new javax.swing.JLabel();
+        lblStockwerkeUnter = new javax.swing.JLabel();
+        scpLandparcels = new javax.swing.JScrollPane();
+        lstLandparcels = new javax.swing.JList();
+        lblDescFlurstuecke = new javax.swing.JLabel();
+        lblDescLage = new javax.swing.JLabel();
+        lblLage = new javax.swing.JLabel();
 
         panTitle.setOpaque(false);
         panTitle.setLayout(new java.awt.GridBagLayout());
@@ -126,14 +166,14 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
         panAdresseContent.setOpaque(false);
         panAdresseContent.setLayout(new java.awt.GridBagLayout());
 
-        lblDescStrasse.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblDescStrasse.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblDescStrasse.setText("Straße:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panAdresseContent.add(lblDescStrasse, gridBagConstraints);
 
-        lblDescHausnummer.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblDescHausnummer.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblDescHausnummer.setText("Hausnummer:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -198,14 +238,14 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panGebaeudeContent.add(lblDescFunktion, gridBagConstraints);
 
-        lblDescStockwerke.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblDescStockwerke.setText("Oberirdische Geschosse:");
+        lblDescStockwerkeOber.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblDescStockwerkeOber.setText("Oberirdische Geschosse:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
-        panGebaeudeContent.add(lblDescStockwerke, gridBagConstraints);
+        panGebaeudeContent.add(lblDescStockwerkeOber, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebaeude.funktion}"), lblFunktion, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
@@ -218,7 +258,7 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panGebaeudeContent.add(lblFunktion, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebaeude.geschosse_oberirdisch}"), lblStockwerke, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebaeude.geschosse_oberirdisch}"), lblStockwerkeOber, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -228,13 +268,13 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panGebaeudeContent.add(lblStockwerke, gridBagConstraints);
+        panGebaeudeContent.add(lblStockwerkeOber, gridBagConstraints);
 
-        lblDescBauweise.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblDescBauweise.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblDescBauweise.setText("Bauweise:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panGebaeudeContent.add(lblDescBauweise, gridBagConstraints);
@@ -246,10 +286,79 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panGebaeudeContent.add(lblBauweise, gridBagConstraints);
+
+        lblDescStockwerkeUnter.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblDescStockwerkeUnter.setText("Unterirdische Geschosse:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        panGebaeudeContent.add(lblDescStockwerkeUnter, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebaeude.geschosse_unterirdisch}"), lblStockwerkeUnter, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("keine Angabe");
+        binding.setSourceUnreadableValue("<Error>");
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panGebaeudeContent.add(lblStockwerkeUnter, gridBagConstraints);
+
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebaeude.landparcels}");
+        org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, eLProperty, lstLandparcels);
+        jListBinding.setSourceNullValue(null);
+        jListBinding.setSourceUnreadableValue(null);
+        bindingGroup.addBinding(jListBinding);
+
+        lstLandparcels.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lstLandparcelsMouseClicked(evt);
+            }
+        });
+        scpLandparcels.setViewportView(lstLandparcels);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        panGebaeudeContent.add(scpLandparcels, gridBagConstraints);
+
+        lblDescFlurstuecke.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblDescFlurstuecke.setText("Das Gebäude ist auf folgendem Flurstück errichtet:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        panGebaeudeContent.add(lblDescFlurstuecke, gridBagConstraints);
+
+        lblDescLage.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblDescLage.setText("Lage:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        panGebaeudeContent.add(lblDescLage, gridBagConstraints);
+
+        lblLage.setText("-");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panGebaeudeContent.add(lblLage, gridBagConstraints);
 
         panGebaeude.add(panGebaeudeContent, java.awt.BorderLayout.CENTER);
 
@@ -264,19 +373,82 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void lstLandparcelsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstLandparcelsMouseClicked
+        if (evt.getClickCount() > 1) {
+            final Object selection = lstLandparcels.getSelectedValue();
+            if (selection instanceof CidsBean) {
+                final CidsBean selBean = (CidsBean) selection;
+                Object jumpID = selBean.getProperty("fullobjectid");
+                if (jumpID instanceof Integer) {
+                    String tabname = "alkis_landparcel";
+                    MetaClass mc = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", tabname);
+                    if (mc != null) {
+                        ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObject(mc, (Integer) jumpID, "");
+                    } else {
+                        log.error("Could not find MetaClass for " + tabname);
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_lstLandparcelsMouseClicked
+
     @Override
     public void setCidsBean(CidsBean cb) {
         if (cb != null) {
             cidsBean = cb;
             final Object gebaeudeObj = cidsBean.getProperty("gebaeude");
-            if (!(gebaeudeObj instanceof CidsBean)) {
-                panGebaeude.setVisible(false);
-            } else {
+            if (gebaeudeObj instanceof CidsBean) {
                 panGebaeude.setVisible(true);
+                initLageLabel(getAllAdressesForSameBuilding((CidsBean) gebaeudeObj));
+
+            } else {
+                panGebaeude.setVisible(false);
             }
             bindingGroup.unbind();
             bindingGroup.bind();
         }
+    }
+
+    private void initLageLabel(MetaObject[] sameBuildingAdresses) {
+        final Map<String, List<String>> multiMap = TypeSafeCollections.newLinkedHashMap();
+        for (final MetaObject adressMO : sameBuildingAdresses) {
+            if (adressMO instanceof LightweightMetaObject) {
+                LightweightMetaObject lwmo = (LightweightMetaObject) adressMO;
+                Object strasse = lwmo.getLWAttribute("strasse");
+                Object nummer = lwmo.getLWAttribute("nummer");
+                if (strasse != null) {
+                    List<String> bucket = multiMap.get(strasse.toString());
+                    if (bucket == null) {
+                        bucket = TypeSafeCollections.newArrayList();
+                        multiMap.put(strasse.toString(), bucket);
+                    }
+                    if (nummer != null) {
+                        bucket.add(nummer.toString());
+                    }
+                }
+            }
+        }
+        final StringBuilder lageTxt = new StringBuilder("<html>");
+        int size = multiMap.size();
+        for (Entry<String, List<String>> entry : multiMap.entrySet()) {
+            String strasse = entry.getKey();
+            List<String> nummern = entry.getValue();
+            lageTxt.append(strasse);
+            if (nummern.size() > 0) {
+                lageTxt.append(" ");
+                for (int i = 0; i < nummern.size(); ++i) {
+                    lageTxt.append(nummern.get(i));
+                    if (i < nummern.size() - 1) {
+                        lageTxt.append(", ");
+                    }
+                }
+            }
+            if (--size > 0) {
+                lageTxt.append("<br>");
+            }
+        }
+        lageTxt.append("</html>");
+        lblLage.setText(lageTxt.toString());
     }
 
     @Override
@@ -301,21 +473,28 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
     private javax.swing.JPanel jPanel9;
     private javax.swing.JLabel lblBauweise;
     private javax.swing.JLabel lblDescBauweise;
+    private javax.swing.JLabel lblDescFlurstuecke;
     private javax.swing.JLabel lblDescFunktion;
     private javax.swing.JLabel lblDescHausnummer;
-    private javax.swing.JLabel lblDescStockwerke;
+    private javax.swing.JLabel lblDescLage;
+    private javax.swing.JLabel lblDescStockwerkeOber;
+    private javax.swing.JLabel lblDescStockwerkeUnter;
     private javax.swing.JLabel lblDescStrasse;
     private javax.swing.JLabel lblFunktion;
     private javax.swing.JLabel lblHausnummer;
-    private javax.swing.JLabel lblStockwerke;
+    private javax.swing.JLabel lblLage;
+    private javax.swing.JLabel lblStockwerkeOber;
+    private javax.swing.JLabel lblStockwerkeUnter;
     private javax.swing.JLabel lblStrasse;
     private javax.swing.JLabel lblTitle;
+    private javax.swing.JList lstLandparcels;
     private javax.swing.JPanel panAdresse;
     private javax.swing.JPanel panAdresseContent;
     private javax.swing.JPanel panFooter;
     private javax.swing.JPanel panGebaeude;
     private javax.swing.JPanel panGebaeudeContent;
     private javax.swing.JPanel panTitle;
+    private javax.swing.JScrollPane scpLandparcels;
     private de.cismet.tools.gui.SemiRoundedPanel srpHeadAdresse;
     private de.cismet.tools.gui.SemiRoundedPanel srpHeadGebaeude;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;

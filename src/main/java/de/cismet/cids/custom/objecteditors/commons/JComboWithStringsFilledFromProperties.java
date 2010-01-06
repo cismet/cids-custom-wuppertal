@@ -4,6 +4,8 @@
  */
 package de.cismet.cids.custom.objecteditors.commons;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
@@ -22,11 +24,13 @@ public class JComboWithStringsFilledFromProperties extends JComboBox {
     public JComboWithStringsFilledFromProperties() {
         this(null);
     }
-    public JComboWithStringsFilledFromProperties(String entryPropertyFile) {
 
+    public JComboWithStringsFilledFromProperties(String entryPropertyFile) {
+        InputStream is = null;
         try {
             SAXBuilder builder = new SAXBuilder(false);
-            Document doc = builder.build(JComboWithStringsFilledFromProperties.class.getResourceAsStream(entryPropertyFile));
+            is = JComboWithStringsFilledFromProperties.class.getResourceAsStream(entryPropertyFile);
+            Document doc = builder.build(is);
             List entries = doc.getRootElement().getChildren();
             Vector<String> v = new Vector<String>();
             for (Object o : entries) {
@@ -36,8 +40,13 @@ public class JComboWithStringsFilledFromProperties extends JComboBox {
             setModel(new DefaultComboBoxModel(v));
         } catch (Exception e) {
             setModel(new DefaultComboBoxModel(new Vector(Arrays.asList("keine User gefunden"))));
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException ex) {
+                }
+            }
         }
     }
-
-    
 }

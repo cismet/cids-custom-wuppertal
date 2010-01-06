@@ -293,29 +293,30 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
 
         @Override
         protected void process(List<ImageIcon> chunks) {
+            if (chunks != null) {
+                for (ImageIcon ii : chunks) {
+                    if (!isCancelled()) {
+                        if (++i < imgLabels.length) {
+                            final JLabel label = imgLabels[i];
+                            if (label != null) {
+                                label.setIcon(ii);
+                                ObjectRendererUIUtils.decorateComponentWithMouseOverCursorChange(label, Cursor.HAND_CURSOR, Cursor.DEFAULT_CURSOR);
+                                if (ii != ERROR_ICON) {
+                                    label.addMouseListener(new MouseAdapter() {
 
-            for (ImageIcon ii : chunks) {
-                if (!isCancelled()) {
-                    if (++i < imgLabels.length) {
-                        final JLabel label = imgLabels[i];
-                        if (label != null) {
-                            label.setIcon(ii);
-                        }
-                        ObjectRendererUIUtils.decorateComponentWithMouseOverCursorChange(label, Cursor.HAND_CURSOR, Cursor.DEFAULT_CURSOR);
-                        if (ii != ERROR_ICON) {
-                            label.addMouseListener(new MouseAdapter() {
+                                        private final String u = urls[i];
 
-                                private final String u = urls[i];
-
-                                @Override
-                                public void mouseClicked(MouseEvent e) {
-                                    if (!e.isPopupTrigger()) {
-                                        if (u != null) {
-                                            ObjectRendererUIUtils.openURL(u);
+                                        @Override
+                                        public void mouseClicked(MouseEvent e) {
+                                            if (!e.isPopupTrigger()) {
+                                                if (u != null) {
+                                                    ObjectRendererUIUtils.openURL(u);
+                                                }
+                                            }
                                         }
-                                    }
+                                    });
                                 }
-                            });
+                            }
                         }
                     }
                 }
