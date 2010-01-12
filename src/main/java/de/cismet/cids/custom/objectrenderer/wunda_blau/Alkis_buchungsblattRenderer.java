@@ -29,8 +29,8 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 import de.cismet.cids.utils.ClassCacheMultiple;
 import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.XBoundingBox;
-import de.cismet.cismap.commons.features.DefaultStyledFeature;
-import de.cismet.cismap.commons.featureservice.DefaultFeatureServiceFeature;
+import de.cismet.cismap.commons.features.DefaultFeatureServiceFeature;
+import de.cismet.cismap.commons.features.StyledFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
@@ -109,7 +109,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
     private String title;
     private final JListBinding landparcelListBinding;
     private final CardLayout cardLayout;
-    private Map<LightweightLandParcel, DefaultStyledFeature> landParcelFeatureMap;
+    private Map<LightweightLandParcel, StyledFeature> landParcelFeatureMap;
     private final Map<Object, ImageIcon> productPreviewImages;
     private boolean continueInBackground = false;
 
@@ -926,7 +926,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
                 mappingModel.addLayer(swms);
                 map.setMappingModel(mappingModel);
                 for (final LightweightLandParcel lwLandparcel : landParcelList) {
-                    final DefaultStyledFeature dsf = new DefaultFeatureServiceFeature();
+                    final DefaultFeatureServiceFeature dsf = new DefaultFeatureServiceFeature();
                     dsf.setGeometry(lwLandparcel.getGeometry());
                     final Color lpColor = lwLandparcel.getColor();
                     final Color lpColorWithAlpha = new Color(lpColor.getRed(), lpColor.getGreen(), lpColor.getBlue(), 168);

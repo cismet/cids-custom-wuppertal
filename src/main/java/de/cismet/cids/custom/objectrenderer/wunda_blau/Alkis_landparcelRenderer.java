@@ -26,8 +26,8 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.XBoundingBox;
-import de.cismet.cismap.commons.features.DefaultStyledFeature;
-import de.cismet.cismap.commons.featureservice.DefaultFeatureServiceFeature;
+import de.cismet.cismap.commons.features.DefaultFeatureServiceFeature;
+import de.cismet.cismap.commons.features.StyledFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
@@ -1263,7 +1263,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                     mappingModel.setSrs(AlkisCommons.MAP_CONSTANTS.SRS);
                     SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisCommons.MAP_CONSTANTS.CALL_STRING));
                     swms.setName("Flurstueck");
-                    DefaultStyledFeature dsf = new DefaultFeatureServiceFeature();
+                    StyledFeature dsf = new DefaultFeatureServiceFeature();
                     dsf.setGeometry(pureGeom);
                     dsf.setFillingPaint(new Color(1, 0, 0, 0.5f));
                     //add the raster layer to the model
