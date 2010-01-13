@@ -10,7 +10,11 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.docking.CustomView;
+import Sirius.navigator.plugin.PluginRegistry;
+import Sirius.navigator.plugin.interfaces.PluginSupport;
 import Sirius.navigator.ui.ComponentRegistry;
+import Sirius.navigator.ui.LayoutedContainer;
 import com.vividsolutions.jts.geom.Geometry;
 import de.aedsicad.aaaweb.service.alkis.info.ALKISInfoServices;
 import de.aedsicad.aaaweb.service.util.Buchungsblatt;
@@ -26,12 +30,14 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.XBoundingBox;
-import de.cismet.cismap.commons.features.DefaultFeatureServiceFeature;
+import de.cismet.cismap.commons.features.DefaultStyledFeature;
 import de.cismet.cismap.commons.features.StyledFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
+import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
+import de.cismet.cismap.navigatorplugin.CidsFeature;
 import de.cismet.tools.collections.TypeSafeCollections;
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
@@ -87,15 +93,15 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alkis_landparcelRenderer.class);
     private static final String CARD_1 = "CARD_1";
     private static final String CARD_2 = "CARD_2";
-    private static ImageIcon FORWARD_PRESSED;
-    private static ImageIcon FORWARD_SELECTED;
-    private static ImageIcon BACKWARD_PRESSED;
-    private static ImageIcon BACKWARD_SELECTED;
-    private static ImageIcon BUCH_PDF;
-    private static ImageIcon BUCH_HTML;
-    private static ImageIcon BUCH_EIG_PDF;
-    private static ImageIcon BUCH_EIG_HTML;
-    private static ImageIcon KARTE_PDF;
+    private ImageIcon FORWARD_PRESSED;
+    private ImageIcon FORWARD_SELECTED;
+    private ImageIcon BACKWARD_PRESSED;
+    private ImageIcon BACKWARD_SELECTED;
+    private ImageIcon BUCH_PDF;
+    private ImageIcon BUCH_HTML;
+    private ImageIcon BUCH_EIG_PDF;
+    private ImageIcon BUCH_EIG_HTML;
+    private ImageIcon KARTE_PDF;
 //    private static final ImageIcon FORWARD_PRESSED;
 //    private static final ImageIcon FORWARD_SELECTED;
 //    private static final ImageIcon BACKWARD_PRESSED;
@@ -235,7 +241,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
             }
         }
         final Dimension previewDim = new Dimension(maxX + 20, maxY + 40);
-        setAllDimensions(panProductPreview, previewDim);
+        ObjectRendererUIUtils.setAllDimensions(panProductPreview, previewDim);
     }
 
     private final void initEditorPanes() {
@@ -1223,7 +1229,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                     adressenContent.append(AlkisCommons.generateLinkFromCidsBean(numberBean, nummer));
                     adressenContent.append(", ");
                 }
-                adressenContent.delete(adressenContent.length()-2, adressenContent.length());
+                adressenContent.delete(adressenContent.length() - 2, adressenContent.length());
                 adressenContent.append("</td>");
                 adressenContent.append("</tr>");
             }
@@ -1235,17 +1241,11 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         final int linecount = entryCount;
         if (linecount > 1) {
             if (linecount < 5) {
-                setAllDimensions(scpLage, new Dimension(scpLage.getPreferredSize().width, 20 * linecount));
+                ObjectRendererUIUtils.setAllDimensions(scpLage, new Dimension(scpLage.getPreferredSize().width, 20 * linecount));
             } else {
-                setAllDimensions(scpLage, new Dimension(scpLage.getPreferredSize().width, 100));
+                ObjectRendererUIUtils.setAllDimensions(scpLage, new Dimension(scpLage.getPreferredSize().width, 100));
             }
         }
-    }
-
-    private final void setAllDimensions(JComponent comp, Dimension dim) {
-        comp.setMaximumSize(dim);
-        comp.setMinimumSize(dim);
-        comp.setPreferredSize(dim);
     }
 
     private final void initMap() {
@@ -1263,7 +1263,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                     mappingModel.setSrs(AlkisCommons.MAP_CONSTANTS.SRS);
                     SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisCommons.MAP_CONSTANTS.CALL_STRING));
                     swms.setName("Flurstueck");
-                    StyledFeature dsf = new DefaultFeatureServiceFeature();
+                    StyledFeature dsf = new DefaultStyledFeature();
                     dsf.setGeometry(pureGeom);
                     dsf.setFillingPaint(new Color(1, 0, 0, 0.5f));
                     //add the raster layer to the model
@@ -1282,8 +1282,21 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
 
                         @Override
                         public void mouseClicked(PInputEvent arg0) {
-                            log.fatal("TODO!");
-
+                            final CidsBean bean = cidsBean;
+                            if (bean != null) {
+                                final MappingComponent bigMap = CismapBroker.getInstance().getMappingComponent();
+                                final CidsFeature newGeomFeature = new CidsFeature(bean.getMetaObject());
+                                bigMap.getFeatureCollection().addFeature(newGeomFeature);
+                                final String pluginName = "cismap";
+                                final PluginSupport cismapPlugin = PluginRegistry.getRegistry().getPlugin(pluginName);
+                                log.fatal("CustomView: " + (cismapPlugin instanceof CustomView));
+                                log.fatal("LayoutedContainer: " + (cismapPlugin instanceof LayoutedContainer));
+                                if (cismapPlugin != null) {
+                                    cismapPlugin.setActive(true);
+                                } else {
+                                    log.error("Can not find Plugin: " + pluginName);
+                                }
+                            }
                         }
                     });
                     map.setInteractionMode("MUTE");

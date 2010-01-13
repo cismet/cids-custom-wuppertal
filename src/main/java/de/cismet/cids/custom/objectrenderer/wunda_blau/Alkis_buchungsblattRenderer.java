@@ -29,7 +29,7 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 import de.cismet.cids.utils.ClassCacheMultiple;
 import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.XBoundingBox;
-import de.cismet.cismap.commons.features.DefaultFeatureServiceFeature;
+import de.cismet.cismap.commons.features.DefaultStyledFeature;
 import de.cismet.cismap.commons.features.StyledFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
@@ -138,7 +138,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
             cardLayout = new CardLayout();
             log.error("Alkis_buchungsblattRenderer exspects CardLayout as major layout manager, but has " + getLayout() + "!");
         }
-        jScrollPane1.getViewport().setOpaque(false);
+        scpOwner.getViewport().setOpaque(false);
         scpLandparcels.getViewport().setOpaque(false);
         panKarte.add(map, BorderLayout.CENTER);
         initEditorPanes();
@@ -196,7 +196,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
             }
         }
         final Dimension previewDim = new Dimension(maxX + 20, maxY + 40);
-        setAllDimensions(panProductPreview, previewDim);
+        ObjectRendererUIUtils.setAllDimensions(panProductPreview, previewDim);
     }
 
     private final void initProductPreviewImages() {
@@ -205,12 +205,6 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         final ProductLabelMouseAdaper productListener = new ProductLabelMouseAdaper();
         hlBestandsnachweisHtml.addMouseListener(productListener);
         hlBestandsnachweisPdf.addMouseListener(productListener);
-    }
-
-    private final void setAllDimensions(JComponent comp, Dimension dim) {
-        comp.setMaximumSize(dim);
-        comp.setMinimumSize(dim);
-        comp.setPreferredSize(dim);
     }
 
     private final void initEditorPanes() {
@@ -274,7 +268,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         lblHeadMainInfo = new javax.swing.JLabel();
         panEigentuemer = new RoundedPanel();
         jPanel3 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        scpOwner = new javax.swing.JScrollPane();
         epOwner = new javax.swing.JEditorPane();
         srpHeadEigentuemer = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeadEigentuemer = new javax.swing.JLabel();
@@ -530,16 +524,19 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         jPanel3.setOpaque(false);
         jPanel3.setLayout(new java.awt.BorderLayout());
 
-        jScrollPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        jScrollPane1.setOpaque(false);
+        scpOwner.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        scpOwner.setMaximumSize(new java.awt.Dimension(200, 135));
+        scpOwner.setMinimumSize(new java.awt.Dimension(200, 135));
+        scpOwner.setOpaque(false);
+        scpOwner.setPreferredSize(new java.awt.Dimension(200, 135));
 
         epOwner.setBorder(null);
         epOwner.setContentType("text/html");
         epOwner.setEditable(false);
         epOwner.setOpaque(false);
-        jScrollPane1.setViewportView(epOwner);
+        scpOwner.setViewportView(epOwner);
 
-        jPanel3.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        jPanel3.add(scpOwner, java.awt.BorderLayout.CENTER);
 
         panEigentuemer.add(jPanel3, java.awt.BorderLayout.CENTER);
 
@@ -926,7 +923,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
                 mappingModel.addLayer(swms);
                 map.setMappingModel(mappingModel);
                 for (final LightweightLandParcel lwLandparcel : landParcelList) {
-                    final DefaultFeatureServiceFeature dsf = new DefaultFeatureServiceFeature();
+                    final StyledFeature dsf = new DefaultStyledFeature();
                     dsf.setGeometry(lwLandparcel.getGeometry());
                     final Color lpColor = lwLandparcel.getColor();
                     final Color lpColorWithAlpha = new Color(lpColor.getRed(), lpColor.getGreen(), lpColor.getBlue(), 168);
@@ -1009,7 +1006,6 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAmtgericht;
     private javax.swing.JLabel lblBack;
     private javax.swing.JLabel lblBlattart;
@@ -1044,6 +1040,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
     private javax.swing.JPanel panSubProdukte;
     private javax.swing.JPanel panTitle;
     private javax.swing.JScrollPane scpLandparcels;
+    private javax.swing.JScrollPane scpOwner;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel3;
     private de.cismet.tools.gui.SemiRoundedPanel srpHeadContent;
     private de.cismet.tools.gui.SemiRoundedPanel srpHeadEigentuemer;
