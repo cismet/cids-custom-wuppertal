@@ -5,18 +5,25 @@
 package de.cismet.cids.custom.objectrenderer.utils;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.plugin.PluginRegistry;
+import Sirius.navigator.plugin.interfaces.PluginSupport;
 import Sirius.server.middleware.types.AbstractAttributeRepresentationFormater;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.newuser.User;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.utils.ClassCacheMultiple;
+import de.cismet.cismap.commons.gui.MappingComponent;
+import de.cismet.cismap.commons.interaction.CismapBroker;
+import de.cismet.cismap.navigatorplugin.CidsFeature;
+import de.cismet.cismap.navigatorplugin.CismapPlugin;
 import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.documents.DefaultDocument;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -42,11 +49,37 @@ import org.jdesktop.swingx.graphics.ShadowRenderer;
  */
 public class ObjectRendererUIUtils {
 
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ObjectRendererUIUtils.class);
+    private static final String CISMAP_PLUGIN_NAME = "cismap";
+
     public enum DateDiff {
 
         MILLISECOND, SECOND, MINUTE, HOUR, DAY, WEEK, MONTH, YEAR
     };
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ObjectRendererUIUtils.class);
+
+    public static void setAllDimensions(JComponent comp, Dimension dim) {
+        comp.setMaximumSize(dim);
+        comp.setMinimumSize(dim);
+        comp.setPreferredSize(dim);
+    }
+
+    public static void switchToCismapMap() {
+        PluginRegistry.getRegistry().getPluginDescriptor(CISMAP_PLUGIN_NAME).getUIDescriptor(CISMAP_PLUGIN_NAME).getView().makeVisible();
+    }
+
+    public static final void addBeanGeomAsFeatureToCismapMap(CidsBean bean) {
+        if (bean != null) {
+            final MappingComponent bigMap = CismapBroker.getInstance().getMappingComponent();
+            final CidsFeature newGeomFeature = new CidsFeature(bean.getMetaObject());
+            bigMap.getFeatureCollection().addFeature(newGeomFeature);
+            final PluginSupport cismapPlugin = PluginRegistry.getRegistry().getPlugin(CISMAP_PLUGIN_NAME);
+            if (cismapPlugin instanceof  CismapPlugin) {
+//                ((CismapPlugin)cismapPlugin)......
+            } else {
+                log.error("Can not find Plugin: " + CISMAP_PLUGIN_NAME);
+            }
+        }
+    }
 
     /**
      * shows an exception window to the user if the parent component is

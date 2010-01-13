@@ -1282,20 +1282,10 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
 
                         @Override
                         public void mouseClicked(PInputEvent arg0) {
-                            final CidsBean bean = cidsBean;
-                            if (bean != null) {
-                                final MappingComponent bigMap = CismapBroker.getInstance().getMappingComponent();
-                                final CidsFeature newGeomFeature = new CidsFeature(bean.getMetaObject());
-                                bigMap.getFeatureCollection().addFeature(newGeomFeature);
-                                final String pluginName = "cismap";
-                                final PluginSupport cismapPlugin = PluginRegistry.getRegistry().getPlugin(pluginName);
-                                log.fatal("CustomView: " + (cismapPlugin instanceof CustomView));
-                                log.fatal("LayoutedContainer: " + (cismapPlugin instanceof LayoutedContainer));
-                                if (cismapPlugin != null) {
-                                    cismapPlugin.setActive(true);
-                                } else {
-                                    log.error("Can not find Plugin: " + pluginName);
-                                }
+                            if (arg0.getClickCount() > 1) {
+                                final CidsBean bean = cidsBean;
+                                ObjectRendererUIUtils.addBeanGeomAsFeatureToCismapMap(bean);
+                                ObjectRendererUIUtils.switchToCismapMap();
                             }
                         }
                     });
@@ -1450,7 +1440,6 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                     if (buchungsblatt.getBuchungsstellen() != null) {
                         for (Buchungsstelle stelle : buchungsblatt.getBuchungsstellen()) {
                             stelle.getFraction();
-                            log.fatal("Buchungsart: " + stelle.getBuchungsart());
                         }
                     }
                     currentInfoText.append(AlkisCommons.buchungsblattToString(buchungsblatt, buchungsblattBean));

@@ -13,6 +13,7 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.server.middleware.types.MetaClass;
+import Sirius.server.middleware.types.MetaObject;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -112,6 +113,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
     private Map<LightweightLandParcel, StyledFeature> landParcelFeatureMap;
     private final Map<Object, ImageIcon> productPreviewImages;
     private boolean continueInBackground = false;
+    private List<MetaObject> realLandParcelMetaObjectsCache = null;
 
     /** Creates new form Alkis_pointRenderer */
     public Alkis_buchungsblattRenderer() {
@@ -942,7 +944,14 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
 
                     @Override
                     public void mouseClicked(PInputEvent evt) {
-                        log.fatal("TODO!");
+                        if (evt.getClickCount() > 1) {
+                            //TODO add all Beans from landParcelList
+                            if (realLandParcelMetaObjectsCache == null) {
+                                realLandParcelMetaObjectsCache = TypeSafeCollections.newArrayList();
+                                //query absetzen, fuellen, MOs zur FeatureCollection der map hinzufuegen.
+                            }
+                            ObjectRendererUIUtils.switchToCismapMap();
+                        }
 
                     }
                 });
@@ -1300,13 +1309,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
             this.fullObjectID = tmpFullObjID;
             nextColor = (nextColor + 1) % COLORS.length;
             this.color = COLORS[nextColor];
-//            final Color baseColor = COLORS[nextColor];
-//            this.color = new Color(baseColor.get, baseColor.getGreen(), baseColor.getBlue(), 0.5f);
         }
-//        private static final Color[] COLORS = new Color[]{
-//            Color.BLUE, Color.CYAN, Color.GREEN, Color.MAGENTA, Color.ORANGE,
-//            Color.PINK, Color.RED, Color.YELLOW
-//        };
         private final String landparcelCode;
         private final Color color;
         private final Geometry geometry;
