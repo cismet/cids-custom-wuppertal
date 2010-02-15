@@ -25,24 +25,23 @@ import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.LayoutManager;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -60,14 +59,21 @@ import org.jdesktop.swingx.graphics.ReflectionRenderer;
  */
 public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanRenderer, TitleComponentProvider, FooterComponentProvider, BorderProvider {
 
+    private static final String PRODUKTID_PUNKTLISTE_PDF = "LN.NRW.PL.1";
+    private static final String PRODUKTID_PUNKTLISTE_HTML = "LN.NRW.PL.2";
+    private static final String PRODUKTID_PUNKTLISTE_TXT = "LN.NRW.PL.3";
+    private static final String PRODUKTURL_BASE = "http://s102x083:8080/ASWeb34/ASA_AAAWeb/ALKISListenNachweis?user=3atest&password=3atest&service=wuppertal&product=";
     private static final String ICON_RES_PACKAGE = "/de/cismet/cids/custom/wunda_blau/res/";
     private static final String ALKIS_RES_PACKAGE = ICON_RES_PACKAGE + "alkis/";
+    private static final Pattern ERHEBUNG_FILTER_PATTERN = Pattern.compile("<LI_Source><description>(.*)</description></LI_Source>");
     private static final String CARD_1 = "CARD_1";
     private static final String CARD_2 = "CARD_2";
-    private static ImageIcon FORWARD_PRESSED;
-    private static ImageIcon FORWARD_SELECTED;
-    private static ImageIcon BACKWARD_PRESSED;
-    private static ImageIcon BACKWARD_SELECTED;
+    private static final String ERHEBUNGS_PROPERTIES = "datenerhebung.properties";
+//    private ImageIcon FORWARD_PRESSED;
+//    private ImageIcon FORWARD_SELECTED;
+//    private ImageIcon BACKWARD_PRESSED;
+//    private ImageIcon BACKWARD_SELECTED;
+    private static final Color PUNKTORT_MIT_KARTENDARSTELLUNG = new Color(120, 255, 190);
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alkis_pointRenderer.class);
     private final Map<Object, ImageIcon> productPreviewImages;
     private final List<JLabel> retrieveableLabels;
@@ -82,7 +88,8 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
     //should be static!
     private ImageIcon PUNKT_PDF;
     private ImageIcon PUNKT_HTML;
-    private static final Converter<String, Boolean> ALKIS_BOOLEAN_CONVERTER = new Converter<String, Boolean>() {
+    private ImageIcon PUNKT_TXT;
+    private static final Converter<String, Boolean> ALKIS_BOOLEAN_CONVERTER_OLD = new Converter<String, Boolean>() {
 
         @Override
         public Boolean convertForward(String s) {
@@ -102,6 +109,71 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
             }
         }
     };
+    private static final Converter<String, String> ALKIS_BOOLEAN_CONVERTER = new Converter<String, String>() {
+
+        private static final String TRUE_REP = "Ja";
+        private static final String FALSE_REP = "Nein";
+
+        @Override
+        public String convertForward(String s) {
+            if (s != null && s.equals("1")) {
+                return TRUE_REP;
+            } else {
+                return FALSE_REP;
+            }
+        }
+
+        @Override
+        public String convertReverse(String t) {
+            if (TRUE_REP.equals(t)) {
+                return "1";
+            } else {
+                return "0";
+            }
+        }
+    };
+    private static final Converter<String, String> ALKIS_ERHEBUNG_CONVERTER = new Converter<String, String>() {
+        //anonymous constructor
+
+        {
+            this.datenerhebungWerte = new Properties();
+            try {
+                this.datenerhebungWerte.load(getClass().getResource(ALKIS_RES_PACKAGE + ERHEBUNGS_PROPERTIES).openStream());
+            } catch (Exception ex) {
+                log.error(ex, ex);
+            }
+        }
+        private final Properties datenerhebungWerte;
+
+        @Override
+        public String convertForward(String s) {
+            if (s != null) {
+                final Matcher matcher = ERHEBUNG_FILTER_PATTERN.matcher(s);
+                if (matcher.find()) {
+                    //take the 4 digit code
+                    final String matcherResultG1 = matcher.group(1);
+                    if (matcherResultG1 != null && matcherResultG1.length() > 3) {
+                        final String searchKey = matcherResultG1.substring(0, 4);
+                        //lookup description for code
+                        final String descr = datenerhebungWerte.getProperty(searchKey);
+                        if (descr != null) {
+                            //return result + format with html (max. column length)
+                            return "<html><table width=\"300\" border=\"0\"><tr><td>(" + searchKey + ") " + descr + "</tr></table></html>";
+                        } else {
+                            log.warn("No description found for Erhebung with key: " + searchKey);
+                        }
+                    }
+                }
+                log.warn("Could not translate response: " + s);
+            }
+            return "keine Angabe";
+        }
+
+        @Override
+        public String convertReverse(String t) {
+            throw new UnsupportedOperationException("Will not be supported!");
+        }
+    };
     private static final Converter<CidsBean, String> ALKIS_VERMARKUNG_CONVERTER = new Converter<CidsBean, String>() {
 
         @Override
@@ -116,6 +188,76 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         @Override
         public CidsBean convertReverse(String vermarkungText) {
             throw new UnsupportedOperationException("Will/Can not be supported!");
+        }
+    };
+    private static final Comparator<PointLocation> POINTLOCATION_COMPARATOR = new Comparator<PointLocation>() {
+
+        @Override
+        public int compare(PointLocation p1, PointLocation p2) {
+            int result = compareKartendarstellung(p1, p2);
+            if (result != 0) {
+                //descending order
+                return -result;
+            } else {
+                //descending order
+                return -compareDate(p1, p2);
+            }
+
+        }
+
+        private int compareKartendarstellung(PointLocation p1, PointLocation p2) {
+            String kd1 = p1.getKartendarstellung();
+            String kd2 = p2.getKartendarstellung();
+            if (kd1 != kd2) {
+                if (kd1 != null) {
+                    if (kd2 != null) {
+                        return kd1.compareTo(kd2);
+                    } else {
+                        return 1;
+                    }
+                } else {
+                    return -1;
+                }
+            } else {
+                return 0;
+            }
+        }
+
+        private int compareDate(PointLocation p1, PointLocation p2) {
+            String lz1 = p1.getLebenszeitIntervallBeginnt();
+            String lz2 = p2.getLebenszeitIntervallBeginnt();
+            if (lz1 != lz2) {
+                if (lz1 != null) {
+                    if (lz2 != null) {
+                        if (lz1.length() > 9 && lz2.length() > 9) {
+                            //10 = length of YYYY-MM-DD
+                            return compareDateStrings(lz1.substring(0, 11), lz2.substring(0, 11));
+                        } else {
+                            throw new IllegalStateException("Could not parse Dates: " + lz1 + " or " + lz2);
+                        }
+                    } else {
+                        return 1;
+                    }
+                } else {
+                    return -1;
+                }
+            } else {
+                return 0;
+            }
+        }
+
+        private int compareDateStrings(String ds1, String ds2) {
+            String[] ymd1 = ds1.split("-");
+            String[] ymd2 = ds2.split("-");
+            if (ymd1.length == 3 && ymd2.length == 3) {
+                int result = 0;
+                for (int i = 0; i < 3 && result == 0; ++i) {
+                    result = ymd1[i].compareTo(ymd2[i]);
+                }
+                return result;
+            } else {
+                throw new IllegalStateException("Could not parse Dates: " + ds1 + " or " + ds2);
+            }
         }
     };
 
@@ -158,9 +300,11 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
     private final void initProductPreviewImages() {
         productPreviewImages.put(hlPunktlistePdf, PUNKT_PDF);
         productPreviewImages.put(hlPunktlisteHtml, PUNKT_HTML);
+        productPreviewImages.put(hlPunktlisteTxt, PUNKT_TXT);
         final ProductLabelMouseAdaper productListener = new ProductLabelMouseAdaper();
         hlPunktlistePdf.addMouseListener(productListener);
         hlPunktlisteHtml.addMouseListener(productListener);
+        hlPunktlisteTxt.addMouseListener(productListener);
     }
 
     private final void initProductPreview() {
@@ -179,38 +323,31 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
     }
 
     private void initFooterElements() {
-        final MouseListener labelForwListener = new FooterLabelMouseAdapter(lblForw);
-        final MouseListener btnForwListener = new FooterButtonMouseAdapter(btnForward, FORWARD_SELECTED, FORWARD_PRESSED);
-        final MouseListener labelBackwListener = new FooterLabelMouseAdapter(lblBack);
-        final MouseListener btnBackwListener = new FooterButtonMouseAdapter(btnBack, BACKWARD_SELECTED, BACKWARD_PRESSED);
-
-        lblForw.addMouseListener(labelForwListener);
-        lblForw.addMouseListener(btnForwListener);
-        btnForward.addMouseListener(labelForwListener);
-        btnForward.addMouseListener(btnForwListener);
-        lblBack.addMouseListener(labelBackwListener);
-        lblBack.addMouseListener(btnBackwListener);
-        btnBack.addMouseListener(labelBackwListener);
-        btnBack.addMouseListener(btnBackwListener);
+        ObjectRendererUIUtils.decorateJLabelAndButtonSynced(lblForw, btnForward, ObjectRendererUIUtils.FORWARD_SELECTED, ObjectRendererUIUtils.FORWARD_PRESSED);
+        ObjectRendererUIUtils.decorateJLabelAndButtonSynced(lblBack, btnBack, ObjectRendererUIUtils.BACKWARD_SELECTED, ObjectRendererUIUtils.BACKWARD_PRESSED);
+//        ObjectRendererUIUtils.decorateJLabelAndButtonSynced(lblForw, btnForward, FORWARD_SELECTED, FORWARD_PRESSED);
+//        ObjectRendererUIUtils.decorateJLabelAndButtonSynced(lblBack, btnBack, BACKWARD_SELECTED, BACKWARD_PRESSED);
     }
 
     private void initIcons() {
-        BACKWARD_SELECTED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-left-sel.png"));
-        BACKWARD_PRESSED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-left-pressed.png"));
-
-        FORWARD_SELECTED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-right-sel.png"));
-        FORWARD_PRESSED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-right-pressed.png"));
+//        BACKWARD_SELECTED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-left-sel.png"));
+//        BACKWARD_PRESSED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-left-pressed.png"));
+//
+//        FORWARD_SELECTED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-right-sel.png"));
+//        FORWARD_PRESSED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-right-pressed.png"));
         final ReflectionRenderer reflectionRenderer = new ReflectionRenderer(0.5f, 0.15f, false);
-        BufferedImage i1 = null, i2 = null;
+        BufferedImage i1 = null, i2 = null, i3 = null;
         try {
             //TODO: own picture!
             i1 = reflectionRenderer.appendReflection(ImageIO.read(getClass().getResource(ALKIS_RES_PACKAGE + "punktlistepdf.png")));
             i2 = reflectionRenderer.appendReflection(ImageIO.read(getClass().getResource(ALKIS_RES_PACKAGE + "punktlistehtml.png")));
+            i3 = reflectionRenderer.appendReflection(ImageIO.read(getClass().getResource(ALKIS_RES_PACKAGE + "punktlistetxt.png")));
         } catch (Exception ex) {
             log.error(ex, ex);
         }
         PUNKT_PDF = new ImageIcon(i1);
         PUNKT_HTML = new ImageIcon(i2);
+        PUNKT_TXT = new ImageIcon(i3);
     }
 
     private void setWait(boolean waiting) {
@@ -271,11 +408,9 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         lblDescKartendarstellung = new javax.swing.JLabel();
         lblDescRechtswert = new javax.swing.JLabel();
         lblDescHochwert = new javax.swing.JLabel();
-        lblDescKoordRefSys = new javax.swing.JLabel();
         lblDescDatenerhebung = new javax.swing.JLabel();
         lblTxtRechtswert = new javax.swing.JLabel();
         lblTxtHochwert = new javax.swing.JLabel();
-        lblTxtKoordSysRef = new javax.swing.JLabel();
         lblTxtHinweise = new javax.swing.JLabel();
         lblDescKoordStatus = new javax.swing.JLabel();
         lblTxtKoordStatus = new javax.swing.JLabel();
@@ -283,7 +418,6 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         lblDescHinweise = new javax.swing.JLabel();
         lblTxtGenauigkeitsstufe = new javax.swing.JLabel();
         lblTxtDatenerhebung = new javax.swing.JLabel();
-        chkKartendarstellung = new javax.swing.JCheckBox();
         srpHeadLocInfo = new de.cismet.tools.gui.SemiRoundedPanel();
         lblLocHead = new javax.swing.JLabel();
         lblDescPunktorte = new javax.swing.JLabel();
@@ -296,6 +430,11 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         lblDescPOEnde = new javax.swing.JLabel();
         lblTxtPOEnde = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
+        lblDescPLIdentifikator = new javax.swing.JLabel();
+        lblTxtPLIdentifikator = new javax.swing.JLabel();
+        lblDescPLObjektart = new javax.swing.JLabel();
+        lblTxtPLObjektart = new javax.swing.JLabel();
+        lblTxtKartendarstellung = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         panProducts = new javax.swing.JPanel();
@@ -314,6 +453,11 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         lblProductPreview = new javax.swing.JLabel();
         semiRoundedPanel3 = new de.cismet.tools.gui.SemiRoundedPanel();
         lblPreviewHead = new javax.swing.JLabel();
+        panTxtProducts = new RoundedPanel();
+        hlPunktlisteTxt = new org.jdesktop.swingx.JXHyperlink();
+        jPanel7 = new javax.swing.JPanel();
+        semiRoundedPanel6 = new de.cismet.tools.gui.SemiRoundedPanel();
+        jLabel6 = new javax.swing.JLabel();
 
         panTitle.setMinimumSize(new java.awt.Dimension(101, 32));
         panTitle.setOpaque(false);
@@ -419,10 +563,10 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         panInfo.setOpaque(false);
         panInfo.setLayout(new java.awt.GridBagLayout());
 
-        panPointInfo.setMaximumSize(new java.awt.Dimension(350, 450));
-        panPointInfo.setMinimumSize(new java.awt.Dimension(350, 450));
+        panPointInfo.setMaximumSize(new java.awt.Dimension(350, 500));
+        panPointInfo.setMinimumSize(new java.awt.Dimension(350, 500));
         panPointInfo.setOpaque(false);
-        panPointInfo.setPreferredSize(new java.awt.Dimension(350, 450));
+        panPointInfo.setPreferredSize(new java.awt.Dimension(350, 500));
         panPointInfo.setLayout(new java.awt.GridBagLayout());
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.pointcode}"), lblTxtPunktkennung, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -433,7 +577,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(14, 7, 7, 7);
         panPointInfo.add(lblTxtPunktkennung, gridBagConstraints);
 
@@ -445,12 +589,12 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPointInfo.add(lblTxtIdentifikator, gridBagConstraints);
 
         btnRetrieve.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/network-wired.png"))); // NOI18N
-        btnRetrieve.setText("Punktorte empfangen");
+        btnRetrieve.setText("Punktorte laden");
         btnRetrieve.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRetrieveActionPerformed(evt);
@@ -468,7 +612,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPointInfo.add(lblDescIdentifikator, gridBagConstraints);
 
@@ -476,8 +620,8 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         lblDescMarke.setText("Vermarkung:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPointInfo.add(lblDescMarke, gridBagConstraints);
 
@@ -485,8 +629,8 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         lblDescPunktart.setText("Punktart:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPointInfo.add(lblDescPunktart, gridBagConstraints);
 
@@ -497,8 +641,8 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPointInfo.add(lblTxtPunktart, gridBagConstraints);
 
@@ -507,7 +651,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(14, 7, 7, 7);
         panPointInfo.add(lblDescPunktkennung, gridBagConstraints);
 
@@ -519,8 +663,8 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPointInfo.add(lblTxtAbmarkungMarke, gridBagConstraints);
 
@@ -531,8 +675,8 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPointInfo.add(lblTxtBeginn, gridBagConstraints);
 
@@ -540,8 +684,8 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         lblDescModellart.setText("Modellart:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPointInfo.add(lblDescModellart, gridBagConstraints);
 
@@ -549,8 +693,8 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         lblDescLand.setText("Land:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPointInfo.add(lblDescLand, gridBagConstraints);
 
@@ -558,17 +702,17 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         lblDescDienststelle.setText("Dienststelle:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPointInfo.add(lblDescDienststelle, gridBagConstraints);
 
         lblDescBeginn.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblDescBeginn.setText("Beginn:");
+        lblDescBeginn.setText("Lebenszeit-Beginn:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPointInfo.add(lblDescBeginn, gridBagConstraints);
 
@@ -579,8 +723,8 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPointInfo.add(lblTxtModellart, gridBagConstraints);
 
@@ -591,8 +735,8 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPointInfo.add(lblTxtLand, gridBagConstraints);
 
@@ -603,17 +747,17 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPointInfo.add(lblTxtDienststelle, gridBagConstraints);
 
         lblDescEnde.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblDescEnde.setText("Ende:");
+        lblDescEnde.setText("Lebenszeit-Ende:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPointInfo.add(lblDescEnde, gridBagConstraints);
 
@@ -624,8 +768,8 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPointInfo.add(lblTxtEnde, gridBagConstraints);
 
@@ -633,9 +777,9 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         lblDescAnlass.setText("Anlass:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(7, 7, 14, 7);
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPointInfo.add(lblDescAnlass, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.anlass}"), lblTxtAnlass, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -645,9 +789,9 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(7, 7, 14, 7);
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPointInfo.add(lblTxtAnlass, gridBagConstraints);
 
         srpPointInfo.setBackground(java.awt.Color.darkGray);
@@ -682,11 +826,15 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(15, 15, 15, 15);
         panInfo.add(panPointInfo, gridBagConstraints);
 
-        panLocationInfos.setMaximumSize(new java.awt.Dimension(500, 450));
-        panLocationInfos.setMinimumSize(new java.awt.Dimension(500, 450));
+        panLocationInfos.setMaximumSize(new java.awt.Dimension(500, 500));
+        panLocationInfos.setMinimumSize(new java.awt.Dimension(500, 500));
         panLocationInfos.setOpaque(false);
-        panLocationInfos.setPreferredSize(new java.awt.Dimension(500, 450));
+        panLocationInfos.setPreferredSize(new java.awt.Dimension(500, 500));
         panLocationInfos.setLayout(new java.awt.GridBagLayout());
+
+        cbPunktorte.setMaximumSize(new java.awt.Dimension(200, 20));
+        cbPunktorte.setMinimumSize(new java.awt.Dimension(200, 20));
+        cbPunktorte.setPreferredSize(new java.awt.Dimension(200, 20));
 
         org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${pointLocations}");
         org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, eLProperty, cbPunktorte);
@@ -694,10 +842,15 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         jComboBoxBinding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(jComboBoxBinding);
 
+        cbPunktorte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbPunktorteActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(14, 7, 7, 7);
         panLocationInfos.add(cbPunktorte, gridBagConstraints);
 
@@ -715,7 +868,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblDescRechtswert, gridBagConstraints);
 
@@ -724,25 +877,16 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblDescHochwert, gridBagConstraints);
-
-        lblDescKoordRefSys.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblDescKoordRefSys.setText("Koordinatenreferenzsystem:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
-        panLocationInfos.add(lblDescKoordRefSys, gridBagConstraints);
 
         lblDescDatenerhebung.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblDescDatenerhebung.setText("Datenerhebung:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblDescDatenerhebung, gridBagConstraints);
 
@@ -754,7 +898,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 7;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblTxtRechtswert, gridBagConstraints);
 
@@ -766,21 +910,9 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblTxtHochwert, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, cbPunktorte, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.koordinatenReferenzSystem}"), lblTxtKoordSysRef, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("keine Angabe");
-        binding.setSourceUnreadableValue("<Error>");
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
-        panLocationInfos.add(lblTxtKoordSysRef, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, cbPunktorte, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.hinweis}"), lblTxtHinweise, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
@@ -789,8 +921,8 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 11;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblTxtHinweise, gridBagConstraints);
 
@@ -798,8 +930,8 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         lblDescKoordStatus.setText("Koordinatenstatus:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblDescKoordStatus, gridBagConstraints);
 
@@ -810,8 +942,8 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblTxtKoordStatus, gridBagConstraints);
 
@@ -819,17 +951,17 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         lblDescGenauigkeitsstufe.setText("Genauigkeitsstufe:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(7, 7, 14, 7);
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblDescGenauigkeitsstufe, gridBagConstraints);
 
         lblDescHinweise.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblDescHinweise.setText("Hinweise:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblDescHinweise, gridBagConstraints);
 
@@ -840,38 +972,23 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 13;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(7, 7, 14, 7);
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblTxtGenauigkeitsstufe, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, cbPunktorte, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.qualitaetsangabenHerkunft}"), lblTxtDatenerhebung, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
+        binding.setConverter(ALKIS_ERHEBUNG_CONVERTER);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 12;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblTxtDatenerhebung, gridBagConstraints);
-
-        chkKartendarstellung.setEnabled(false);
-        chkKartendarstellung.setOpaque(false);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, cbPunktorte, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.kartendarstellung}"), chkKartendarstellung, org.jdesktop.beansbinding.BeanProperty.create("selected"));
-        binding.setSourceNullValue(false);
-        binding.setSourceUnreadableValue(false);
-        binding.setConverter(ALKIS_BOOLEAN_CONVERTER);
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
-        panLocationInfos.add(chkKartendarstellung, gridBagConstraints);
 
         srpHeadLocInfo.setBackground(java.awt.Color.darkGray);
         srpHeadLocInfo.setLayout(new java.awt.GridBagLayout());
@@ -890,8 +1007,8 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.weightx = 1.0;
         panLocationInfos.add(srpHeadLocInfo, gridBagConstraints);
 
-        lblDescPunktorte.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblDescPunktorte.setText("Punktorte:");
+        lblDescPunktorte.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblDescPunktorte.setText("Koordinatensystem:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -903,8 +1020,8 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         lblDescPOModellart.setText("Modellart:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblDescPOModellart, gridBagConstraints);
 
@@ -915,8 +1032,8 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblTxtPOModellart, gridBagConstraints);
 
@@ -924,8 +1041,8 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         lblDescPOAnlass.setText("Anlass:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblDescPOAnlass, gridBagConstraints);
 
@@ -936,17 +1053,17 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblTxtPOAnlass, gridBagConstraints);
 
         lblDescPOBeginn.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblDescPOBeginn.setText("Beginn:");
+        lblDescPOBeginn.setText("Lebenszeit-Beginn:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblDescPOBeginn, gridBagConstraints);
 
@@ -957,17 +1074,17 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblTxtPOBeginn, gridBagConstraints);
 
         lblDescPOEnde.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblDescPOEnde.setText("Ende:");
+        lblDescPOEnde.setText("Lebenszeit-Ende:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblDescPOEnde, gridBagConstraints);
 
@@ -978,18 +1095,73 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblTxtPOEnde, gridBagConstraints);
 
         jPanel4.setOpaque(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridy = 15;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.weighty = 1.0;
         panLocationInfos.add(jPanel4, gridBagConstraints);
+
+        lblDescPLIdentifikator.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblDescPLIdentifikator.setText("Identifikator:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
+        panLocationInfos.add(lblDescPLIdentifikator, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, cbPunktorte, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.UUId}"), lblTxtPLIdentifikator, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("keine Angabe");
+        binding.setSourceUnreadableValue("<Error>");
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
+        panLocationInfos.add(lblTxtPLIdentifikator, gridBagConstraints);
+
+        lblDescPLObjektart.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblDescPLObjektart.setText("Objektart:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
+        panLocationInfos.add(lblDescPLObjektart, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, cbPunktorte, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.pointLocationType}"), lblTxtPLObjektart, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("keine Angabe");
+        binding.setSourceUnreadableValue("<Error>");
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
+        panLocationInfos.add(lblTxtPLObjektart, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, cbPunktorte, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.kartendarstellung}"), lblTxtKartendarstellung, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("keine Angabe");
+        binding.setSourceUnreadableValue("<Error>");
+        binding.setConverter(ALKIS_BOOLEAN_CONVERTER);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
+        panLocationInfos.add(lblTxtKartendarstellung, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -1044,8 +1216,8 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         semiRoundedPanel4.setBackground(java.awt.Color.darkGray);
         semiRoundedPanel4.setLayout(new java.awt.GridBagLayout());
 
-        jLabel4.setText("PDF Produkte");
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("PDF-Produkte");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -1092,8 +1264,8 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         semiRoundedPanel5.setBackground(java.awt.Color.darkGray);
         semiRoundedPanel5.setLayout(new java.awt.GridBagLayout());
 
-        jLabel5.setText("HTML Produkte");
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("HTML-Produkte");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -1114,7 +1286,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         panSpacing.setOpaque(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         panProducts.add(panSpacing, gridBagConstraints);
 
         panProductPreview.setOpaque(false);
@@ -1136,13 +1308,63 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         panProductPreview.add(semiRoundedPanel3, java.awt.BorderLayout.NORTH);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.gridheight = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panProducts.add(panProductPreview, gridBagConstraints);
+
+        panTxtProducts.setMaximumSize(new java.awt.Dimension(175, 80));
+        panTxtProducts.setMinimumSize(new java.awt.Dimension(175, 80));
+        panTxtProducts.setOpaque(false);
+        panTxtProducts.setPreferredSize(new java.awt.Dimension(175, 80));
+        panTxtProducts.setLayout(new java.awt.GridBagLayout());
+
+        hlPunktlisteTxt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/text-plain.png"))); // NOI18N
+        hlPunktlisteTxt.setText("Punktliste");
+        hlPunktlisteTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hlPunktlisteTxtActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(17, 7, 7, 7);
+        panTxtProducts.add(hlPunktlisteTxt, gridBagConstraints);
+
+        jPanel7.setOpaque(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        panTxtProducts.add(jPanel7, gridBagConstraints);
+
+        semiRoundedPanel6.setBackground(java.awt.Color.darkGray);
+        semiRoundedPanel6.setLayout(new java.awt.GridBagLayout());
+
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("Textformat-Produkte");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        semiRoundedPanel6.add(jLabel6, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panTxtProducts.add(semiRoundedPanel6, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(9, 5, 5, 5);
+        panProducts.add(panTxtProducts, gridBagConstraints);
 
         add(panProducts, "CARD_2");
 
@@ -1184,30 +1406,52 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
 }//GEN-LAST:event_lblForwMouseClicked
 
     private void hlPunktlistePdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlPunktlistePdfActionPerformed
-//        try {
-//            String parcelCode = getLandparcelCode();
-//            if (parcelCode.length() > 0) {
-//                String url = "http://s102x083:8080/ASWeb34/ASA_AAAWeb/ALKISBuchNachweis?user=3atest&password=3atest&service=wuppertal&product=LB.NRW.FENW.G&id=" + parcelCode + "&contentType=PDF&certificationType=9511";
-//                ObjectRendererUIUtils.openURL(url);
-//            }
-//        } catch (Exception ex) {
-//            ObjectRendererUIUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_landparcelRenderer.this);
-//            log.error(ex);
-//        }
+        try {
+            final String pointID = lblTxtIdentifikator.getText();
+            final String pointArt = lblTxtPunktart.getText();
+            final String url = PRODUKTURL_BASE + PRODUKTID_PUNKTLISTE_PDF + "&ids=" + pointArt + ":" + pointID;
+            ObjectRendererUIUtils.openURL(url);
+        } catch (Exception ex) {
+            ObjectRendererUIUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_pointRenderer.this);
+            log.error(ex);
+        }
 }//GEN-LAST:event_hlPunktlistePdfActionPerformed
 
     private void hlPunktlisteHtmlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlPunktlisteHtmlActionPerformed
-//        try {
-//            String parcelCode = getLandparcelCode();
-//            if (parcelCode.length() > 0) {
-//                String url = "http://s102x083:8080/ASWeb34/ASA_AAAWeb/ALKISBuchNachweis?user=3atest&password=3atest&service=wuppertal&product=LB.NRW.FENW.G&id=" + parcelCode + "&contentType=HTML&certificationType=9511";
-//                ObjectRendererUIUtils.openURL(url);
-//            }
-//        } catch (Exception ex) {
-//            ObjectRendererUIUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_landparcelRenderer.this);
-//            log.error(ex);
-//        }
+        try {
+            final String pointID = lblTxtIdentifikator.getText();
+            final String pointArt = lblTxtPunktart.getText();
+            final String url = PRODUKTURL_BASE + PRODUKTID_PUNKTLISTE_HTML + "&ids=" + pointArt + ":" + pointID;
+            ObjectRendererUIUtils.openURL(url);
+        } catch (Exception ex) {
+            ObjectRendererUIUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_pointRenderer.this);
+            log.error(ex);
+        }
 }//GEN-LAST:event_hlPunktlisteHtmlActionPerformed
+
+    private void cbPunktorteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPunktorteActionPerformed
+        Object selection = cbPunktorte.getSelectedItem();
+        if (selection instanceof PointLocation) {
+            PointLocation pointLoc = (PointLocation) selection;
+            if (pointLoc.getKartendarstellung() != null && pointLoc.getKartendarstellung().equals("1")) {
+                cbPunktorte.setBackground(PUNKTORT_MIT_KARTENDARSTELLUNG);
+            } else {
+                cbPunktorte.setBackground(Color.WHITE);
+            }
+        }
+    }//GEN-LAST:event_cbPunktorteActionPerformed
+
+    private void hlPunktlisteTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlPunktlisteTxtActionPerformed
+        try {
+            final String pointID = lblTxtIdentifikator.getText();
+            final String pointArt = lblTxtPunktart.getText();
+            final String url = PRODUKTURL_BASE + PRODUKTID_PUNKTLISTE_TXT + "&ids=" + pointArt + ":" + pointID;
+            ObjectRendererUIUtils.openURL(url);
+        } catch (Exception ex) {
+            ObjectRendererUIUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_pointRenderer.this);
+            log.error(ex);
+        }
+    }//GEN-LAST:event_hlPunktlisteTxtActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
@@ -1259,17 +1503,19 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
     private javax.swing.JButton btnForward;
     private javax.swing.JButton btnRetrieve;
     private javax.swing.JComboBox cbPunktorte;
-    private javax.swing.JCheckBox chkKartendarstellung;
     private org.jdesktop.swingx.JXHyperlink hlPunktlisteHtml;
     private org.jdesktop.swingx.JXHyperlink hlPunktlistePdf;
+    private org.jdesktop.swingx.JXHyperlink hlPunktlisteTxt;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JLabel lblBack;
     private javax.swing.JLabel lblDescAnlass;
     private javax.swing.JLabel lblDescBeginn;
@@ -1281,11 +1527,12 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
     private javax.swing.JLabel lblDescHochwert;
     private javax.swing.JLabel lblDescIdentifikator;
     private javax.swing.JLabel lblDescKartendarstellung;
-    private javax.swing.JLabel lblDescKoordRefSys;
     private javax.swing.JLabel lblDescKoordStatus;
     private javax.swing.JLabel lblDescLand;
     private javax.swing.JLabel lblDescMarke;
     private javax.swing.JLabel lblDescModellart;
+    private javax.swing.JLabel lblDescPLIdentifikator;
+    private javax.swing.JLabel lblDescPLObjektart;
     private javax.swing.JLabel lblDescPOAnlass;
     private javax.swing.JLabel lblDescPOBeginn;
     private javax.swing.JLabel lblDescPOEnde;
@@ -1310,10 +1557,12 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
     private javax.swing.JLabel lblTxtHinweise;
     private javax.swing.JLabel lblTxtHochwert;
     private javax.swing.JLabel lblTxtIdentifikator;
+    private javax.swing.JLabel lblTxtKartendarstellung;
     private javax.swing.JLabel lblTxtKoordStatus;
-    private javax.swing.JLabel lblTxtKoordSysRef;
     private javax.swing.JLabel lblTxtLand;
     private javax.swing.JLabel lblTxtModellart;
+    private javax.swing.JLabel lblTxtPLIdentifikator;
+    private javax.swing.JLabel lblTxtPLObjektart;
     private javax.swing.JLabel lblTxtPOAnlass;
     private javax.swing.JLabel lblTxtPOBeginn;
     private javax.swing.JLabel lblTxtPOEnde;
@@ -1334,9 +1583,11 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
     private javax.swing.JPanel panProducts;
     private javax.swing.JPanel panSpacing;
     private javax.swing.JPanel panTitle;
+    private javax.swing.JPanel panTxtProducts;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel3;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel4;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel5;
+    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel6;
     private de.cismet.tools.gui.SemiRoundedPanel srpHeadLocInfo;
     private de.cismet.tools.gui.SemiRoundedPanel srpPointInfo;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
@@ -1409,6 +1660,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
                 if (point != null) {
                     Alkis_pointRenderer.this.setPoint(point);
                     final PointLocation[] pointlocArr = point.getPointLocations();
+                    Arrays.sort(pointlocArr, POINTLOCATION_COMPARATOR);
                     Alkis_pointRenderer.this.setPointLocations(Arrays.asList(pointlocArr));
                     Alkis_pointRenderer.this.bindingGroup.unbind();
                     Alkis_pointRenderer.this.bindingGroup.bind();
@@ -1423,108 +1675,6 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
                 org.jdesktop.swingx.error.ErrorInfo ei = new ErrorInfo("Fehler beim Retrieve", ex.getMessage(), null, null, ex, Level.ALL, null);
                 org.jdesktop.swingx.JXErrorPane.showDialog(StaticSwingTools.getParentFrame(Alkis_pointRenderer.this), ei);
                 log.error(ex, ex);
-            }
-        }
-    }
-
-    static class FooterLabelMouseAdapter extends MouseAdapter {
-
-        public FooterLabelMouseAdapter(JLabel label) {
-            this.label = label;
-            plain = label.getFont();
-            final Map<TextAttribute, Object> attributesMap = (Map<TextAttribute, Object>) plain.getAttributes();
-            attributesMap.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-            underlined = plain.deriveFont(attributesMap);
-
-        }
-        private final Cursor handCursor = new Cursor(Cursor.HAND_CURSOR);
-        private final Font underlined;
-        private final Font plain;
-        protected final JLabel label;
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-            label.setCursor(handCursor);
-            if (label.isEnabled() && label.getFont() != underlined) {
-                label.setFont(underlined);
-            }
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-            label.setCursor(Cursor.getDefaultCursor());
-            if (label.getFont() != plain) {
-                label.setFont(plain);
-            }
-        }
-    }
-
-    static class FooterButtonMouseAdapter extends MouseAdapter {
-
-        public FooterButtonMouseAdapter(JButton button, Icon plain, Icon highlight, Icon pressed) {
-            this.button = button;
-            this.plainIcon = plain;
-            this.highlightIcon = highlight;
-            this.pressedIcon = pressed;
-        }
-
-        public FooterButtonMouseAdapter(JButton button, Icon highlight, Icon pressed) {
-            this.button = button;
-            this.plainIcon = button.getIcon();
-            this.highlightIcon = highlight;
-            this.pressedIcon = pressed;
-        }
-        private final Cursor handCursor = new Cursor(Cursor.HAND_CURSOR);
-        private final Icon plainIcon;
-        private final Icon highlightIcon;
-        private final Icon pressedIcon;
-        protected final JButton button;
-        protected boolean over = false;
-        protected boolean pressed = false;
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-            over = true;
-            button.setCursor(handCursor);
-            handleEvent(e);
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-            over = false;
-            button.setCursor(Cursor.getDefaultCursor());
-            handleEvent(e);
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-            pressed = true;
-            handleEvent(e);
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-            pressed = false;
-            handleEvent(e);
-        }
-
-        private final void testAndSet(Icon icon) {
-            if (button.getIcon() != icon) {
-                button.setIcon(icon);
-            }
-        }
-
-        protected void handleEvent(MouseEvent e) {
-            if (button.isEnabled()) {
-                if (pressed && over) {
-                    testAndSet(pressedIcon);
-                } else if (over) {
-                    testAndSet(highlightIcon);
-                } else {
-                    testAndSet(plainIcon);
-                }
-            } else {
-                testAndSet(plainIcon);
             }
         }
     }
@@ -1548,13 +1698,19 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
                 setBackground(list.getSelectionBackground());
                 setForeground(list.getSelectionForeground());
             } else {
-                setBackground(list.getBackground());
+                setBackground(Color.WHITE);
+//                setBackground(list.getBackground());
                 setForeground(list.getForeground());
             }
 
             if (value instanceof PointLocation) {
                 final PointLocation loc = (PointLocation) value;
-                setText(loc.getUUId());
+                setText(loc.getKoordinatenReferenzSystem());
+                if (loc.getKartendarstellung() != null && loc.getKartendarstellung().equals("1")) {
+                    if (!isSelected) {
+                        setBackground(PUNKTORT_MIT_KARTENDARSTELLUNG);
+                    }
+                }
             } else {
                 setText(value == null ? "" : value.toString());
             }

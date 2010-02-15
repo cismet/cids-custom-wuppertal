@@ -14,6 +14,7 @@ import de.cismet.cids.custom.objectrenderer.utils.BaulastenPictureFinder;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.gui.MultiPagePictureReader;
+import de.cismet.tools.gui.NavigableImagePanel;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.concurrent.ExecutionException;
@@ -26,14 +27,15 @@ import javax.swing.SwingWorker;
  *
  * @author srichter
  */
-public class Alb_picturePanel extends javax.swing.JPanel {
+public class Alb_picturePanel_old extends javax.swing.JPanel {
 
     /** Creates new form Alb_picturePanel */
-    public Alb_picturePanel() {
+    public Alb_picturePanel_old() {
         initComponents();
-//        scpPictureList.setVisible(false);
+        ((NavigableImagePanel) ipanDocument).setNavigationImageEnabled(tbtnNavigation.isSelected());
+        scpPictureList.setVisible(false);
     }
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_picturePanel.class);
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_picturePanel_old.class);
     private MultiPagePictureReader pictureReader;
     private CidsBean cidsBean;
     private File planFile;
@@ -50,89 +52,26 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        btnGrpPlanText = new javax.swing.ButtonGroup();
         panPicNavigation = new javax.swing.JPanel();
-        spControl = new de.cismet.tools.gui.RoundedPanel();
-        btnPlan = new javax.swing.JButton();
-        btnTextblatt = new javax.swing.JButton();
-        semiRoundedPanel2 = new de.cismet.tools.gui.SemiRoundedPanel();
-        jLabel1 = new javax.swing.JLabel();
-        rpSeiten = new de.cismet.tools.gui.RoundedPanel();
         scpPictureList = new javax.swing.JScrollPane();
         lstPictures = new javax.swing.JList();
-        semiRoundedPanel3 = new de.cismet.tools.gui.SemiRoundedPanel();
-        jLabel2 = new javax.swing.JLabel();
-        panCenter = new javax.swing.JPanel();
-        measureComponent = new de.cismet.cismap.commons.gui.measuring.MeasuringComponent();
-        semiRoundedPanel1 = new de.cismet.tools.gui.SemiRoundedPanel();
+        panPicNavControl = new javax.swing.JPanel();
+        btnPlan = new javax.swing.JButton();
+        btnTextblatt = new javax.swing.JButton();
+        ipanDocument = new NavigableImagePanel();
+        panBtnMiniNavigation = new javax.swing.JPanel();
+        tbtnNavigation = new javax.swing.JToggleButton();
+        jPanel2 = new javax.swing.JPanel();
         lblCurrentViewTitle = new javax.swing.JLabel();
 
         setOpaque(false);
         setLayout(new java.awt.BorderLayout());
 
-        panPicNavigation.setMinimumSize(new java.awt.Dimension(130, 216));
         panPicNavigation.setOpaque(false);
-        panPicNavigation.setPreferredSize(new java.awt.Dimension(130, 216));
         panPicNavigation.setLayout(new java.awt.GridBagLayout());
 
-        spControl.setLayout(new java.awt.GridBagLayout());
+        scpPictureList.setPreferredSize(new java.awt.Dimension(100, 130));
 
-        btnPlan.setText("Plan");
-        btnGrpPlanText.add(btnPlan);
-        btnPlan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPlanActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        spControl.add(btnPlan, gridBagConstraints);
-
-        btnTextblatt.setText("Textblatt");
-        btnGrpPlanText.add(btnTextblatt);
-        btnTextblatt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTextblattActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        spControl.add(btnTextblatt, gridBagConstraints);
-
-        semiRoundedPanel2.setBackground(new java.awt.Color(51, 51, 51));
-        semiRoundedPanel2.setLayout(new java.awt.FlowLayout());
-
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Dokumente");
-        semiRoundedPanel2.add(jLabel1);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        spControl.add(semiRoundedPanel2, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panPicNavigation.add(spControl, gridBagConstraints);
-
-        scpPictureList.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        scpPictureList.setMinimumSize(new java.awt.Dimension(100, 150));
-        scpPictureList.setPreferredSize(new java.awt.Dimension(100, 150));
-
-        lstPictures.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        lstPictures.setEnabled(false);
         lstPictures.setFixedCellWidth(75);
         lstPictures.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
@@ -141,105 +80,140 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         });
         scpPictureList.setViewportView(lstPictures);
 
-        rpSeiten.add(scpPictureList, java.awt.BorderLayout.CENTER);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panPicNavigation.add(scpPictureList, gridBagConstraints);
 
-        semiRoundedPanel3.setBackground(new java.awt.Color(51, 51, 51));
-        semiRoundedPanel3.setLayout(new java.awt.FlowLayout());
+        panPicNavControl.setOpaque(false);
+        panPicNavControl.setLayout(new java.awt.GridBagLayout());
 
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Seiten");
-        semiRoundedPanel3.add(jLabel2);
+        btnPlan.setText("Plan");
+        btnPlan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPlanActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panPicNavControl.add(btnPlan, gridBagConstraints);
 
-        rpSeiten.add(semiRoundedPanel3, java.awt.BorderLayout.PAGE_START);
+        btnTextblatt.setText("Textblatt");
+        btnTextblatt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTextblattActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panPicNavControl.add(btnTextblatt, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panPicNavigation.add(rpSeiten, gridBagConstraints);
+        panPicNavigation.add(panPicNavControl, gridBagConstraints);
 
         add(panPicNavigation, java.awt.BorderLayout.WEST);
 
-        panCenter.setOpaque(false);
-        panCenter.setLayout(new java.awt.BorderLayout());
-        panCenter.add(measureComponent, java.awt.BorderLayout.CENTER);
+        javax.swing.GroupLayout ipanDocumentLayout = new javax.swing.GroupLayout(ipanDocument);
+        ipanDocument.setLayout(ipanDocumentLayout);
+        ipanDocumentLayout.setHorizontalGroup(
+            ipanDocumentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 290, Short.MAX_VALUE)
+        );
+        ipanDocumentLayout.setVerticalGroup(
+            ipanDocumentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 276, Short.MAX_VALUE)
+        );
 
-        semiRoundedPanel1.setBackground(new java.awt.Color(51, 51, 51));
-        semiRoundedPanel1.setLayout(new java.awt.FlowLayout());
+        add(ipanDocument, java.awt.BorderLayout.CENTER);
 
-        lblCurrentViewTitle.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        lblCurrentViewTitle.setForeground(new java.awt.Color(255, 255, 255));
+        panBtnMiniNavigation.setOpaque(false);
+        panBtnMiniNavigation.setLayout(new java.awt.GridBagLayout());
+
+        tbtnNavigation.setSelected(true);
+        tbtnNavigation.setText("Navigation");
+        tbtnNavigation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tbtnNavigationActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        panBtnMiniNavigation.add(tbtnNavigation, gridBagConstraints);
+
+        jPanel2.setOpaque(false);
+
+        lblCurrentViewTitle.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblCurrentViewTitle.setText("Keine Auswahl");
-        semiRoundedPanel1.add(lblCurrentViewTitle);
+        jPanel2.add(lblCurrentViewTitle);
 
-        panCenter.add(semiRoundedPanel1, java.awt.BorderLayout.NORTH);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        panBtnMiniNavigation.add(jPanel2, gridBagConstraints);
 
-        add(panCenter, java.awt.BorderLayout.CENTER);
+        add(panBtnMiniNavigation, java.awt.BorderLayout.NORTH);
     }// </editor-fold>//GEN-END:initComponents
 
     private void lstPicturesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstPicturesValueChanged
-        if (!evt.getValueIsAdjusting()) {
-            final Object selObj = lstPictures.getSelectedValue();
-            if (selObj instanceof Integer) {
-                int pageNo = (Integer) selObj;
-                //page -> offset
-                CismetThreadPool.execute(new PictureSelectWorker(pageNo - 1));
-            }
+
+        final Object selObj = lstPictures.getSelectedValue();
+        if (selObj instanceof Integer) {
+            CismetThreadPool.execute(new PictureSelectWorker((Integer) selObj));
         }
+
 }//GEN-LAST:event_lstPicturesValueChanged
 
-    private void loadPlan() {
+    private void btnPlanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlanActionPerformed
         currentSelectedButton = btnPlan;
         lblCurrentViewTitle.setText("Lageplan");
         CismetThreadPool.execute(new PictureReaderWorker(planFile));
-        lstPictures.setEnabled(true);
-    }
-
-    private void loadTextBlatt() {
-        currentSelectedButton = btnTextblatt;
-        lblCurrentViewTitle.setText("Textblatt");
-        CismetThreadPool.execute(new PictureReaderWorker(textFile));
-        lstPictures.setEnabled(true);
-    }
-
-    private void btnPlanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlanActionPerformed
-        loadPlan();
 
 }//GEN-LAST:event_btnPlanActionPerformed
 
     private void btnTextblattActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTextblattActionPerformed
-        loadTextBlatt();
+        currentSelectedButton = btnTextblatt;
+        lblCurrentViewTitle.setText("Textblatt");
+        CismetThreadPool.execute(new PictureReaderWorker(textFile));
 }//GEN-LAST:event_btnTextblattActionPerformed
-//    @Override
-//    public void removeNotify() {
-//        //TODO: BUG! wird durchs Fenstermanagement auch umschalten
-//        //auf Vollbild aufgerufen!
-//        super.removeNotify();
-//        closeReader();
-//    }
+
+    private void tbtnNavigationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnNavigationActionPerformed
+        ((NavigableImagePanel) ipanDocument).setNavigationImageEnabled(tbtnNavigation.isSelected());
+}//GEN-LAST:event_tbtnNavigationActionPerformed
+
+    @Override
+    public void removeNotify() {
+        super.removeNotify();
+        reset();
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup btnGrpPlanText;
     private javax.swing.JButton btnPlan;
     private javax.swing.JButton btnTextblatt;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel ipanDocument;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblCurrentViewTitle;
     private javax.swing.JList lstPictures;
-    private de.cismet.cismap.commons.gui.measuring.MeasuringComponent measureComponent;
-    private javax.swing.JPanel panCenter;
+    private javax.swing.JPanel panBtnMiniNavigation;
+    private javax.swing.JPanel panPicNavControl;
     private javax.swing.JPanel panPicNavigation;
-    private de.cismet.tools.gui.RoundedPanel rpSeiten;
     private javax.swing.JScrollPane scpPictureList;
-    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel1;
-    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel2;
-    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel3;
-    private de.cismet.tools.gui.RoundedPanel spControl;
+    private javax.swing.JToggleButton tbtnNavigation;
     // End of variables declaration//GEN-END:variables
-
-    public void zoomToFeatureCollection() {
-        measureComponent.zoomToFeatureCollection();
-    }
 
     /**
      * @return the cidsBean
@@ -257,7 +231,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 
     }
 
-    private void closeReader() {
+    private void reset() {
         if (pictureReader != null) {
             pictureReader.close();
             pictureReader = null;
@@ -275,15 +249,11 @@ public class Alb_picturePanel extends javax.swing.JPanel {
             final File[] result = new File[2];
             final Object blattObj = getCidsBean().getProperty("textblatt");
             final Object planObj = getCidsBean().getProperty("lageplan");
-            log.info("Found blatt " + blattObj);
-            log.info("Found plan " + planObj);
             if (blattObj != null) {
                 result[0] = BaulastenPictureFinder.findTextblattPicture(blattObj.toString());
-                log.info("Blatt picture " + result[0]);
             }
             if (planObj != null) {
                 result[1] = BaulastenPictureFinder.findPlanPicture(planObj.toString());
-                log.info("Plan picture " + result[1]);
             }
             return result;
         }
@@ -294,22 +264,14 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                 final File[] result = get();
                 textFile = result[0];
                 planFile = result[1];
+                btnPlan.setEnabled(planFile != null);
+                btnTextblatt.setEnabled(textFile != null);
             } catch (InterruptedException ex) {
                 log.warn(ex, ex);
             } catch (ExecutionException ex) {
                 log.error(ex, ex);
             } finally {
                 setControlsEnabled(true);
-                btnPlan.setEnabled(planFile != null);
-                btnTextblatt.setEnabled(textFile != null);
-                if (textFile != null) {
-                    loadTextBlatt();
-                } else if (planFile != null) {
-                    loadPlan();
-                } else {
-                    lstPictures.setModel(new DefaultListModel());
-                    measureComponent.removeAllFeatures();
-                }
             }
         }
     }
@@ -323,21 +285,22 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 
         public PictureReaderWorker(File pictureFile) {
             this.pictureFile = pictureFile;
-            log.debug("prepare picture reader for file " + this.pictureFile);
+            log.debug("prepare picture reader for file " + pictureFile);
             lstPictures.setModel(new DefaultListModel());
-            measureComponent.removeAllFeatures();
+            ((NavigableImagePanel) ipanDocument).setImage(null);
             setControlsEnabled(false);
+
         }
         private final File pictureFile;
 
         @Override
         protected ListModel doInBackground() throws Exception {
             final DefaultListModel model = new DefaultListModel();
-            closeReader();
+            reset();
             pictureReader = new MultiPagePictureReader(pictureFile);
             final int numberOfPages = pictureReader.getNumberOfPages();
             for (int i = 0; i < numberOfPages; ++i) {
-                model.addElement(i + 1);
+                model.addElement(i);
             }
             return model;
         }
@@ -349,15 +312,15 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                 lstPictures.setModel(model);
                 if (model.getSize() > 0) {
                     lstPictures.setSelectedIndex(0);
-//                    if (model.getSize() > 1) {
-//                        scpPictureList.setVisible(true);
-//                    } else {
-//                        scpPictureList.setVisible(false);
-//                    }
+                    if (model.getSize() > 1) {
+                        scpPictureList.setVisible(true);
+                    } else {
+                        scpPictureList.setVisible(false);
+                    }
                 } else {
-                    lstPictures.setModel(new DefaultListModel());
-//                    scpPictureList.setVisible(false);
+                    scpPictureList.setVisible(false);
                 }
+                panPicNavigation.repaint();
             } catch (InterruptedException ex) {
                 log.warn(ex, ex);
             } catch (ExecutionException ex) {
@@ -381,19 +344,16 @@ public class Alb_picturePanel extends javax.swing.JPanel {
             if (pictureReader != null) {
                 return pictureReader.loadPage(pageNumber);
             }
-            throw new IllegalStateException("PictureReader is null!");
+            return null;
         }
 
         @Override
         protected void done() {
             try {
-                measureComponent.reset();
-                measureComponent.addImage(get());
-                measureComponent.zoomToFeatureCollection();
-//                measureComponent.gotoInitialBoundingBox();
+                ((NavigableImagePanel) ipanDocument).setImage(get());
             } catch (InterruptedException ex) {
                 log.warn(ex, ex);
-            } catch (Exception ex) {
+            } catch (ExecutionException ex) {
                 log.error(ex, ex);
             } finally {
                 setControlsEnabled(true);

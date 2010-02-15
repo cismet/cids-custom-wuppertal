@@ -14,7 +14,7 @@ import de.cismet.cids.tools.CustomToStringConverter;
  */
 public class ThemaNutzungsartToStringConverter extends CustomToStringConverter {
 
-    final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
+    final transient org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     @CidsAttribute("nutzungsart")
     public String string = null;
 

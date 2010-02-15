@@ -6,18 +6,18 @@ package de.cismet.cids.custom.objectrenderer.utils;
 
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.plugin.PluginRegistry;
-import Sirius.navigator.plugin.interfaces.PluginSupport;
 import Sirius.server.middleware.types.AbstractAttributeRepresentationFormater;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.newuser.User;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.utils.ClassCacheMultiple;
+import de.cismet.cismap.commons.features.Feature;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.navigatorplugin.CidsFeature;
-import de.cismet.cismap.navigatorplugin.CismapPlugin;
 import de.cismet.tools.CismetThreadPool;
+import de.cismet.tools.collections.TypeSafeCollections;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.documents.DefaultDocument;
 import java.awt.Color;
@@ -25,14 +25,19 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -49,13 +54,38 @@ import org.jdesktop.swingx.graphics.ShadowRenderer;
  */
 public class ObjectRendererUIUtils {
 
+    private static final String ICON_RES_PACKAGE = "/de/cismet/cids/custom/wunda_blau/res/";
+    public static final ImageIcon FORWARD_PRESSED;
+    public static final ImageIcon FORWARD_SELECTED;
+    public static final ImageIcon BACKWARD_PRESSED;
+    public static final ImageIcon BACKWARD_SELECTED;
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ObjectRendererUIUtils.class);
     private static final String CISMAP_PLUGIN_NAME = "cismap";
+
+    static {
+        BACKWARD_SELECTED = new ImageIcon(ObjectRendererUIUtils.class.getResource(ICON_RES_PACKAGE + "arrow-left-sel.png"));
+        BACKWARD_PRESSED = new ImageIcon(ObjectRendererUIUtils.class.getResource(ICON_RES_PACKAGE + "arrow-left-pressed.png"));
+        FORWARD_SELECTED = new ImageIcon(ObjectRendererUIUtils.class.getResource(ICON_RES_PACKAGE + "arrow-right-sel.png"));
+        FORWARD_PRESSED = new ImageIcon(ObjectRendererUIUtils.class.getResource(ICON_RES_PACKAGE + "arrow-right-pressed.png"));
+    }
 
     public enum DateDiff {
 
         MILLISECOND, SECOND, MINUTE, HOUR, DAY, WEEK, MONTH, YEAR
     };
+
+    public static void addBeanGeomsAsFeaturesToCismapMap(List<MetaObject> metaObjectList) {
+        if (metaObjectList != null) {
+            final MappingComponent bigMap = CismapBroker.getInstance().getMappingComponent();
+            final List<Feature> addedFeatures = TypeSafeCollections.newArrayList(metaObjectList.size());
+            for (MetaObject mo : metaObjectList) {
+                final CidsFeature newGeomFeature = new CidsFeature(mo);
+                addedFeatures.add(newGeomFeature);
+                bigMap.getFeatureCollection().addFeature(newGeomFeature);
+            }
+            bigMap.zoomToAFeatureCollection(addedFeatures, false, false);
+        }
+    }
 
     public static void setAllDimensions(JComponent comp, Dimension dim) {
         comp.setMaximumSize(dim);
@@ -67,17 +97,12 @@ public class ObjectRendererUIUtils {
         PluginRegistry.getRegistry().getPluginDescriptor(CISMAP_PLUGIN_NAME).getUIDescriptor(CISMAP_PLUGIN_NAME).getView().makeVisible();
     }
 
-    public static final void addBeanGeomAsFeatureToCismapMap(CidsBean bean) {
+    public static void addBeanGeomAsFeatureToCismapMap(CidsBean bean) {
         if (bean != null) {
-            final MappingComponent bigMap = CismapBroker.getInstance().getMappingComponent();
-            final CidsFeature newGeomFeature = new CidsFeature(bean.getMetaObject());
-            bigMap.getFeatureCollection().addFeature(newGeomFeature);
-            final PluginSupport cismapPlugin = PluginRegistry.getRegistry().getPlugin(CISMAP_PLUGIN_NAME);
-            if (cismapPlugin instanceof  CismapPlugin) {
-//                ((CismapPlugin)cismapPlugin)......
-            } else {
-                log.error("Can not find Plugin: " + CISMAP_PLUGIN_NAME);
-            }
+            final MetaObject mo = bean.getMetaObject();
+            final List<MetaObject> mos = TypeSafeCollections.newArrayList(1);
+            mos.add(mo);
+            addBeanGeomsAsFeaturesToCismapMap(mos);
         }
     }
 
@@ -88,7 +113,7 @@ public class ObjectRendererUIUtils {
      * @param ex
      * @param parent
      */
-    public static final void showExceptionWindowToUser(String titleMessage, Exception ex, Component parent) {
+    public static void showExceptionWindowToUser(String titleMessage, Exception ex, Component parent) {
         if (ex != null && parent != null && parent.isShowing()) {
             org.jdesktop.swingx.error.ErrorInfo ei = new ErrorInfo(titleMessage, ex.getMessage(), null, null, ex, Level.ALL, null);
             org.jdesktop.swingx.JXErrorPane.showDialog(StaticSwingTools.getParentFrame(parent), ei);
@@ -124,7 +149,7 @@ public class ObjectRendererUIUtils {
         return new MetaObject[0];
     }
 
-    public static final MetaObject[] getLightweightMetaObjectsForQuery(String tabName, String query, final String[] fields, AbstractAttributeRepresentationFormater formatter) {
+    public static MetaObject[] getLightweightMetaObjectsForQuery(String tabName, String query, final String[] fields, AbstractAttributeRepresentationFormater formatter) {
         if (formatter == null) {
             formatter = new AbstractAttributeRepresentationFormater() {
 
@@ -338,23 +363,7 @@ public class ObjectRendererUIUtils {
         }
     }
 
-    /**
-     * Makes the parameter table alphanumerically sortable.
-     *
-     * @param tbl
-     */
-    public static final void decorateTableWithSorter(JTable tbl) {
-        final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tbl.getModel());
-//        sorter.setSortsOnUpdates(true);
-        for (int i = 0; i < tbl.getColumnCount(); ++i) {
-            sorter.setComparator(i, AlphanumComparator.getInstance());
-        }
-        tbl.setRowSorter(sorter);
-        tbl.getTableHeader().addMouseListener(new TableHeaderUnsortMouseAdapter(tbl));
-
-    }
-
-    public static final String getUrlFromBean(CidsBean bean, String suffix) {
+    public static String getUrlFromBean(CidsBean bean, String suffix) {
         final Object obj = bean.getProperty("url_base_id");
         if (obj instanceof CidsBean) {
             final CidsBean urlBase = (CidsBean) obj;
@@ -368,6 +377,48 @@ public class ObjectRendererUIUtils {
             return bildURL.toString();
         }
         return null;
+    }
+
+    /**
+     * Makes the parameter table alphanumerically sortable.
+     *
+     * @param tbl
+     */
+    public static TableRowSorter<TableModel> decorateTableWithSorter(JTable tbl) {
+        final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tbl.getModel());
+//        sorter.setSortsOnUpdates(true);
+        for (int i = 0; i < tbl.getColumnCount(); ++i) {
+            sorter.setComparator(i, AlphanumComparator.getInstance());
+        }
+        tbl.setRowSorter(sorter);
+        tbl.getTableHeader().addMouseListener(new TableHeaderUnsortMouseAdapter(tbl));
+        return sorter;
+
+    }
+
+    public static MouseAdapter decorateJLabelWithLinkBehaviour(JLabel label) {
+        LabelLinkBehaviourMouseAdapter llbma = new LabelLinkBehaviourMouseAdapter(label);
+        label.addMouseListener(llbma);
+        return llbma;
+    }
+
+    public static MouseAdapter decorateJLabelAndButtonSynced(JLabel label, JButton button, Icon highlight, Icon pressed) {
+        final MouseAdapter syncedAdapter = new SyncLabelButtonMouseAdapter(label, button, highlight, pressed);
+        label.addMouseListener(syncedAdapter);
+        button.addMouseListener(syncedAdapter);
+        return syncedAdapter;
+    }
+
+    public static MouseAdapter decorateButtonWithStatusImages(JButton button, Icon plain, Icon highlight, Icon pressed) {
+        final ImagedButtonMouseAdapter ibma = new ImagedButtonMouseAdapter(button, plain, highlight, pressed);
+        button.addMouseListener(ibma);
+        return ibma;
+    }
+
+    public static MouseAdapter decorateButtonWithStatusImages(JButton button, Icon highlight, Icon pressed) {
+        final ImagedButtonMouseAdapter ibma = new ImagedButtonMouseAdapter(button, highlight, pressed);
+        button.addMouseListener(ibma);
+        return ibma;
     }
 }
 
@@ -396,5 +447,140 @@ final class TableHeaderUnsortMouseAdapter extends MouseAdapter {
         if (e.isPopupTrigger()) {
             tbl.getRowSorter().setSortKeys(null);
         }
+    }
+}
+
+/**
+ *
+ * @author srichter
+ */
+final class LabelLinkBehaviourMouseAdapter extends MouseAdapter {
+
+    public LabelLinkBehaviourMouseAdapter(JLabel label) {
+        this.label = label;
+        plain = label.getFont();
+        final Map<TextAttribute, Object> attributesMap = (Map<TextAttribute, Object>) plain.getAttributes();
+        attributesMap.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+        underlined = plain.deriveFont(attributesMap);
+
+    }
+    private final Cursor handCursor = new Cursor(Cursor.HAND_CURSOR);
+    private final Font underlined;
+    private final Font plain;
+    protected final JLabel label;
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        label.setCursor(handCursor);
+        if (label.isEnabled() && label.getFont() != underlined) {
+            label.setFont(underlined);
+        }
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        label.setCursor(Cursor.getDefaultCursor());
+        if (label.getFont() != plain) {
+            label.setFont(plain);
+        }
+    }
+}
+
+final class ImagedButtonMouseAdapter extends MouseAdapter {
+
+    public ImagedButtonMouseAdapter(JButton button, Icon plain, Icon highlight, Icon pressed) {
+        this.button = button;
+        ObjectRendererUIUtils.decorateComponentWithMouseOverCursorChange(button, Cursor.HAND_CURSOR, Cursor.DEFAULT_CURSOR);
+        this.plainIcon = plain;
+        this.highlightIcon = highlight;
+        this.pressedIcon = pressed;
+    }
+
+    public ImagedButtonMouseAdapter(JButton button, Icon highlight, Icon pressed) {
+        this(button, button.getIcon(), highlight, pressed);
+    }
+    private final Icon plainIcon;
+    private final Icon highlightIcon;
+    private final Icon pressedIcon;
+    protected final JButton button;
+    protected boolean over = false;
+    protected boolean pressed = false;
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        over = true;
+        handleEvent(e);
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        over = false;
+        handleEvent(e);
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        pressed = true;
+        handleEvent(e);
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        pressed = false;
+        handleEvent(e);
+    }
+
+    private final void testAndSet(Icon icon) {
+        if (button.getIcon() != icon) {
+            button.setIcon(icon);
+        }
+    }
+
+    protected void handleEvent(MouseEvent e) {
+        if (button.isEnabled()) {
+            if (pressed && over) {
+                testAndSet(pressedIcon);
+            } else if (over) {
+                testAndSet(highlightIcon);
+            } else {
+                testAndSet(plainIcon);
+            }
+        } else {
+            testAndSet(plainIcon);
+        }
+    }
+}
+
+final class SyncLabelButtonMouseAdapter extends MouseAdapter {
+
+    public SyncLabelButtonMouseAdapter(JLabel label, JButton button, Icon highlight, Icon pressed) {
+        delegateButton = new ImagedButtonMouseAdapter(button, highlight, pressed);
+        delegateLabel = new LabelLinkBehaviourMouseAdapter(label);
+    }
+    private final MouseAdapter delegateButton;
+    private final MouseAdapter delegateLabel;
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        delegateButton.mouseEntered(e);
+        delegateLabel.mouseEntered(e);
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        delegateButton.mouseExited(e);
+        delegateLabel.mouseExited(e);
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        delegateButton.mousePressed(e);
+        delegateLabel.mousePressed(e);
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        delegateButton.mouseReleased(e);
+        delegateLabel.mouseReleased(e);
     }
 }

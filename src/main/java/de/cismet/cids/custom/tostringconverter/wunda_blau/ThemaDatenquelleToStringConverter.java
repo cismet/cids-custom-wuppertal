@@ -13,7 +13,7 @@ import de.cismet.cids.tools.CustomToStringConverter;
  */
 public class ThemaDatenquelleToStringConverter extends CustomToStringConverter {
 
-    final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
+    final transient org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     @CidsAttribute("datenquellenname")
     public String string = null;
 

@@ -5,18 +5,23 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.navigator.ui.RequestsFullSizeComponent;
 import de.cismet.cids.annotations.AggregationRenderer;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUIUtils;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
+import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
 import java.awt.CardLayout;
 import java.util.Collection;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 
 /**
  * de.cismet.cids.objectrenderer.CoolThemaRenderer
@@ -26,7 +31,7 @@ import javax.swing.JPanel;
  * @author srichter
  */
 @AggregationRenderer
-public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, TitleComponentProvider, FooterComponentProvider {
+public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, TitleComponentProvider, FooterComponentProvider, BorderProvider, RequestsFullSizeComponent {
 
     static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_baulastblattEditor.class);
     private final boolean editable;
@@ -39,6 +44,7 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
     public Alb_baulastblattEditor(final boolean editable) {
         this.editable = editable;
         initComponents();
+        initFooterElements();
         cardLayout = (CardLayout) getLayout();
         if (!editable) {
             panControlsLaufendeNummern.setVisible(false);
@@ -46,6 +52,11 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
             txtBlattnummer.setOpaque(false);
             txtBlattnummer.setBorder(null);
         }
+    }
+
+    private void initFooterElements() {
+        ObjectRendererUIUtils.decorateJLabelAndButtonSynced(lblForw, btnForward, ObjectRendererUIUtils.FORWARD_SELECTED, ObjectRendererUIUtils.FORWARD_PRESSED);
+        ObjectRendererUIUtils.decorateJLabelAndButtonSynced(lblBack, btnBack, ObjectRendererUIUtils.BACKWARD_SELECTED, ObjectRendererUIUtils.BACKWARD_PRESSED);
     }
 
     @Override
@@ -162,8 +173,6 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
         btnBack.setMaximumSize(new java.awt.Dimension(30, 30));
         btnBack.setMinimumSize(new java.awt.Dimension(30, 30));
         btnBack.setPreferredSize(new java.awt.Dimension(30, 30));
-        btnBack.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-pressed.png"))); // NOI18N
-        btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-sel.png"))); // NOI18N
         btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBackActionPerformed(evt);
@@ -187,8 +196,6 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
         btnForward.setMaximumSize(new java.awt.Dimension(30, 30));
         btnForward.setMinimumSize(new java.awt.Dimension(30, 30));
         btnForward.setPreferredSize(new java.awt.Dimension(30, 30));
-        btnForward.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-right-pressed.png"))); // NOI18N
-        btnForward.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-right-sel.png"))); // NOI18N
         btnForward.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnForwardActionPerformed(evt);
@@ -451,6 +458,7 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
         btnForward.setEnabled(false);
         lblBack.setEnabled(true);
         lblForw.setEnabled(false);
+        alb_picturePanel.zoomToFeatureCollection();
 }//GEN-LAST:event_btnForwardActionPerformed
 
     private void lblForwMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblForwMouseClicked
@@ -504,5 +512,20 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
     @Override
     public JComponent getFooterComponent() {
         return panFooter;
+    }
+
+    @Override
+    public Border getTitleBorder() {
+        return new EmptyBorder(10, 10, 10, 10);
+    }
+
+    @Override
+    public Border getFooterBorder() {
+        return new EmptyBorder(5, 5, 5, 5);
+    }
+
+    @Override
+    public Border getCenterrBorder() {
+        return new EmptyBorder(0, 5, 0, 5);
     }
 }

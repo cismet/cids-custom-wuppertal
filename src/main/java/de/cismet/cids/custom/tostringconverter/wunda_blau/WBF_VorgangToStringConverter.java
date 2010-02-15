@@ -13,7 +13,7 @@ import de.cismet.cids.tools.CustomToStringConverter;
  */
 public class WBF_VorgangToStringConverter extends CustomToStringConverter {
 
-    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
+    private transient final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
 
     @Override
     public String createString() {

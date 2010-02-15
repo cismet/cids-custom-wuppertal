@@ -10,11 +10,7 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import Sirius.navigator.docking.CustomView;
-import Sirius.navigator.plugin.PluginRegistry;
-import Sirius.navigator.plugin.interfaces.PluginSupport;
 import Sirius.navigator.ui.ComponentRegistry;
-import Sirius.navigator.ui.LayoutedContainer;
 import com.vividsolutions.jts.geom.Geometry;
 import de.aedsicad.aaaweb.service.alkis.info.ALKISInfoServices;
 import de.aedsicad.aaaweb.service.util.Buchungsblatt;
@@ -34,10 +30,8 @@ import de.cismet.cismap.commons.features.DefaultStyledFeature;
 import de.cismet.cismap.commons.features.StyledFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
-import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
-import de.cismet.cismap.navigatorplugin.CidsFeature;
 import de.cismet.tools.collections.TypeSafeCollections;
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
@@ -48,15 +42,12 @@ import edu.umd.cs.piccolo.event.PInputEvent;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.LayoutManager;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.util.Collection;
 import java.util.Collections;
@@ -65,11 +56,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
@@ -93,10 +81,10 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alkis_landparcelRenderer.class);
     private static final String CARD_1 = "CARD_1";
     private static final String CARD_2 = "CARD_2";
-    private ImageIcon FORWARD_PRESSED;
-    private ImageIcon FORWARD_SELECTED;
-    private ImageIcon BACKWARD_PRESSED;
-    private ImageIcon BACKWARD_SELECTED;
+//    private ImageIcon FORWARD_PRESSED;
+//    private ImageIcon FORWARD_SELECTED;
+//    private ImageIcon BACKWARD_PRESSED;
+//    private ImageIcon BACKWARD_SELECTED;
     private ImageIcon BUCH_PDF;
     private ImageIcon BUCH_HTML;
     private ImageIcon BUCH_EIG_PDF;
@@ -207,11 +195,11 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
 
     private final void initIcons() {
         final ReflectionRenderer reflectionRenderer = new ReflectionRenderer(0.5f, 0.15f, false);
-        BACKWARD_SELECTED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-left-sel.png"));
-        BACKWARD_PRESSED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-left-pressed.png"));
-
-        FORWARD_SELECTED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-right-sel.png"));
-        FORWARD_PRESSED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-right-pressed.png"));
+//        BACKWARD_SELECTED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-left-sel.png"));
+//        BACKWARD_PRESSED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-left-pressed.png"));
+//
+//        FORWARD_SELECTED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-right-sel.png"));
+//        FORWARD_PRESSED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-right-pressed.png"));
         BufferedImage i1 = null, i2 = null, i3 = null, i4 = null, i5 = null;
         try {
             i1 = reflectionRenderer.appendReflection(ImageIO.read(getClass().getResource(ALKIS_RES_PACKAGE + "buchnachweispdf.png")));
@@ -309,20 +297,11 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         return blWait.isBusy();
     }
 
-    private final void initFooterElements() {
-        final MouseListener labelForwListener = new FooterLabelMouseAdapter(lblForw);
-        final MouseListener btnForwListener = new FooterButtonMouseAdapter(btnForward, FORWARD_SELECTED, FORWARD_PRESSED);
-        final MouseListener labelBackwListener = new FooterLabelMouseAdapter(lblBack);
-        final MouseListener btnBackwListener = new FooterButtonMouseAdapter(btnBack, BACKWARD_SELECTED, BACKWARD_PRESSED);
-
-        lblForw.addMouseListener(labelForwListener);
-        lblForw.addMouseListener(btnForwListener);
-        btnForward.addMouseListener(labelForwListener);
-        btnForward.addMouseListener(btnForwListener);
-        lblBack.addMouseListener(labelBackwListener);
-        lblBack.addMouseListener(btnBackwListener);
-        btnBack.addMouseListener(labelBackwListener);
-        btnBack.addMouseListener(btnBackwListener);
+    private void initFooterElements() {
+        ObjectRendererUIUtils.decorateJLabelAndButtonSynced(lblForw, btnForward, ObjectRendererUIUtils.FORWARD_SELECTED, ObjectRendererUIUtils.FORWARD_PRESSED);
+        ObjectRendererUIUtils.decorateJLabelAndButtonSynced(lblBack, btnBack, ObjectRendererUIUtils.BACKWARD_SELECTED, ObjectRendererUIUtils.BACKWARD_PRESSED);
+//        ObjectRendererUIUtils.decorateJLabelAndButtonSynced(lblForw, btnForward, FORWARD_SELECTED, FORWARD_PRESSED);
+//        ObjectRendererUIUtils.decorateJLabelAndButtonSynced(lblBack, btnBack, BACKWARD_SELECTED, BACKWARD_PRESSED);
     }
 
     private final void initSoapServiceAccess() {
@@ -864,8 +843,8 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         semiRoundedPanel4.setBackground(java.awt.Color.darkGray);
         semiRoundedPanel4.setLayout(new java.awt.GridBagLayout());
 
-        jLabel4.setText("PDF Produkte");
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("PDF-Produkte");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -923,8 +902,8 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         semiRoundedPanel5.setBackground(java.awt.Color.darkGray);
         semiRoundedPanel5.setLayout(new java.awt.GridBagLayout());
 
-        jLabel5.setText("HTML Produkte");
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("HTML-Produkte");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -946,8 +925,6 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         panProducts.add(panSpacing, gridBagConstraints);
 
@@ -970,9 +947,10 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         panProductPreview.add(semiRoundedPanel3, java.awt.BorderLayout.NORTH);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panProducts.add(panProductPreview, gridBagConstraints);
 
@@ -1219,11 +1197,8 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                 adressenContent.append("<tr><td>");
                 adressenContent.append(strasse).append("&nbsp;");
                 adressenContent.append("</td>");
-//                final List<String> sortNummern = TypeSafeCollections.newArrayList(hausnummernToBeans.keySet());
                 adressenContent.append("<td>");
                 for (Entry<String, CidsBean> entry : hausnummernToBeans.entrySet()) {
-//                for (int i = 0; i < sortNummern.size(); ++i) {
-//                for (final String nummer : sortNummern) {
                     final String nummer = entry.getKey();
                     final CidsBean numberBean = entry.getValue();
                     adressenContent.append(AlkisCommons.generateLinkFromCidsBean(numberBean, nummer));
@@ -1236,8 +1211,6 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         }
         adressenContent.append("</table></html>");
         epLage.setText(adressenContent.toString());
-//        final Element element = epLage.getDocument().getDefaultRootElement();
-//        final int linecount = element.getElementCount();
         final int linecount = entryCount;
         if (linecount > 1) {
             if (linecount < 5) {
@@ -1281,8 +1254,8 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                     map.addCustomInputListener("MUTE", new PBasicInputEventHandler() {
 
                         @Override
-                        public void mouseClicked(PInputEvent arg0) {
-                            if (arg0.getClickCount() > 1) {
+                        public void mouseClicked(PInputEvent evt) {
+                            if (evt.getClickCount() > 1) {
                                 final CidsBean bean = cidsBean;
                                 ObjectRendererUIUtils.addBeanGeomAsFeatureToCismapMap(bean);
                                 ObjectRendererUIUtils.switchToCismapMap();
@@ -1505,114 +1478,13 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         }
     }
 
-    static class FooterLabelMouseAdapter extends MouseAdapter {
-
-        public FooterLabelMouseAdapter(JLabel label) {
-            this.label = label;
-            plain = label.getFont();
-            final Map<TextAttribute, Object> attributesMap = (Map<TextAttribute, Object>) plain.getAttributes();
-            attributesMap.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-            underlined = plain.deriveFont(attributesMap);
-
-        }
-        private final Cursor handCursor = new Cursor(Cursor.HAND_CURSOR);
-        private final Font underlined;
-        private final Font plain;
-        protected final JLabel label;
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-            label.setCursor(handCursor);
-            if (label.isEnabled() && label.getFont() != underlined) {
-                label.setFont(underlined);
-            }
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-            label.setCursor(Cursor.getDefaultCursor());
-            if (label.getFont() != plain) {
-                label.setFont(plain);
-            }
-        }
-    }
-
-    static class FooterButtonMouseAdapter extends MouseAdapter {
-
-        public FooterButtonMouseAdapter(JButton button, Icon plain, Icon highlight, Icon pressed) {
-            this.button = button;
-            this.plainIcon = plain;
-            this.highlightIcon = highlight;
-            this.pressedIcon = pressed;
-        }
-
-        public FooterButtonMouseAdapter(JButton button, Icon highlight, Icon pressed) {
-            this.button = button;
-            this.plainIcon = button.getIcon();
-            this.highlightIcon = highlight;
-            this.pressedIcon = pressed;
-        }
-        private final Cursor handCursor = new Cursor(Cursor.HAND_CURSOR);
-        private final Icon plainIcon;
-        private final Icon highlightIcon;
-        private final Icon pressedIcon;
-        protected final JButton button;
-        protected boolean over = false;
-        protected boolean pressed = false;
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-            over = true;
-            button.setCursor(handCursor);
-            handleEvent(e);
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-            over = false;
-            button.setCursor(Cursor.getDefaultCursor());
-            handleEvent(e);
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-            pressed = true;
-            handleEvent(e);
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-            pressed = false;
-            handleEvent(e);
-        }
-
-        private final void testAndSet(Icon icon) {
-            if (button.getIcon() != icon) {
-                button.setIcon(icon);
-            }
-        }
-
-        protected void handleEvent(MouseEvent e) {
-            if (button.isEnabled()) {
-                if (pressed && over) {
-                    testAndSet(pressedIcon);
-                } else if (over) {
-                    testAndSet(highlightIcon);
-                } else {
-                    testAndSet(plainIcon);
-                }
-            } else {
-                testAndSet(plainIcon);
-            }
-        }
-    }
-
 // </editor-fold>
     /**
      * cancel worker if renderer is disposed.
      */
     @Override
     public void removeNotify() {
+        super.removeNotify();
         if (!continueInBackground) {
             AlkisSOAPWorkerService.cancel(retrieveBuchungsblaetterWorker);
             setWaiting(false);

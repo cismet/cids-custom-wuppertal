@@ -61,7 +61,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private String domain = "";
-    ImageIcon warn = new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/warn.png"));
+//    ImageIcon warn = new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/warn.png"));
     private HashMap<String, Collection<String>> validationDependencies = new HashMap<String, Collection<String>>();
     private final DefaultListCellRenderer dlcr = new DefaultListCellRenderer();
     public static final Color COLOR_TXT_BACK = new Color(230, 230, 230);
