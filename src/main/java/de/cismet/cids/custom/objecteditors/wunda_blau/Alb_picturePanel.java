@@ -10,12 +10,19 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import com.vividsolutions.jts.geom.Geometry;
 import de.cismet.cids.custom.objectrenderer.utils.BaulastenPictureFinder;
 import de.cismet.cids.dynamics.CidsBean;
+import de.cismet.cismap.commons.features.Feature;
+import de.cismet.cismap.commons.features.FeatureCollectionEvent;
+import de.cismet.cismap.commons.features.PureNewFeature;
+import de.cismet.cismap.commons.gui.piccolo.eventlistener.MessenGeometryListener;
 import de.cismet.tools.CismetThreadPool;
+import de.cismet.tools.StaticDecimalTools;
 import de.cismet.tools.gui.MultiPagePictureReader;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -31,7 +38,8 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     /** Creates new form Alb_picturePanel */
     public Alb_picturePanel() {
         initComponents();
-//        scpPictureList.setVisible(false);
+        messenListener = new MessenFeatureCollectionListener();
+        measureComponent.getFeatureCollection().addFeatureCollectionListener(messenListener);
     }
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_picturePanel.class);
     private MultiPagePictureReader pictureReader;
@@ -39,6 +47,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     private File planFile;
     private File textFile;
     private JButton currentSelectedButton;
+    private final MessenFeatureCollectionListener messenListener;
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -50,9 +59,10 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        btnGrpPlanText = new javax.swing.ButtonGroup();
+        btnGrpDocs = new javax.swing.ButtonGroup();
+        buttonGrpMode = new javax.swing.ButtonGroup();
         panPicNavigation = new javax.swing.JPanel();
-        spControl = new de.cismet.tools.gui.RoundedPanel();
+        spDocuments = new de.cismet.tools.gui.RoundedPanel();
         btnPlan = new javax.swing.JButton();
         btnTextblatt = new javax.swing.JButton();
         semiRoundedPanel2 = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -62,6 +72,23 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         lstPictures = new javax.swing.JList();
         semiRoundedPanel3 = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel2 = new javax.swing.JLabel();
+        roundedPanel1 = new de.cismet.tools.gui.RoundedPanel();
+        lblArea = new javax.swing.JLabel();
+        lblDistance = new javax.swing.JLabel();
+        lblTxtDistance = new javax.swing.JLabel();
+        lblTxtArea = new javax.swing.JLabel();
+        semiRoundedPanel5 = new de.cismet.tools.gui.SemiRoundedPanel();
+        jLabel6 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        rpControls = new de.cismet.tools.gui.RoundedPanel();
+        togPan = new javax.swing.JToggleButton();
+        togZoom = new javax.swing.JToggleButton();
+        togMessenLine = new javax.swing.JToggleButton();
+        togMessenPoly = new javax.swing.JToggleButton();
+        togCalibrate = new javax.swing.JToggleButton();
+        btnHome = new javax.swing.JButton();
+        semiRoundedPanel4 = new de.cismet.tools.gui.SemiRoundedPanel();
+        jLabel3 = new javax.swing.JLabel();
         panCenter = new javax.swing.JPanel();
         measureComponent = new de.cismet.cismap.commons.gui.measuring.MeasuringComponent();
         semiRoundedPanel1 = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -70,15 +97,19 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         setOpaque(false);
         setLayout(new java.awt.BorderLayout());
 
-        panPicNavigation.setMinimumSize(new java.awt.Dimension(130, 216));
+        panPicNavigation.setMinimumSize(new java.awt.Dimension(140, 216));
         panPicNavigation.setOpaque(false);
-        panPicNavigation.setPreferredSize(new java.awt.Dimension(130, 216));
+        panPicNavigation.setPreferredSize(new java.awt.Dimension(140, 216));
         panPicNavigation.setLayout(new java.awt.GridBagLayout());
 
-        spControl.setLayout(new java.awt.GridBagLayout());
+        spDocuments.setLayout(new java.awt.GridBagLayout());
 
         btnPlan.setText("Plan");
-        btnGrpPlanText.add(btnPlan);
+        btnPlan.setToolTipText("Plan");
+        btnGrpDocs.add(btnPlan);
+        btnPlan.setMaximumSize(new java.awt.Dimension(53, 33));
+        btnPlan.setMinimumSize(new java.awt.Dimension(53, 33));
+        btnPlan.setPreferredSize(new java.awt.Dimension(53, 33));
         btnPlan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPlanActionPerformed(evt);
@@ -89,11 +120,15 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        spControl.add(btnPlan, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 3, 5);
+        spDocuments.add(btnPlan, gridBagConstraints);
 
         btnTextblatt.setText("Textblatt");
-        btnGrpPlanText.add(btnTextblatt);
+        btnTextblatt.setToolTipText("Textblatt");
+        btnGrpDocs.add(btnTextblatt);
+        btnTextblatt.setMaximumSize(new java.awt.Dimension(53, 33));
+        btnTextblatt.setMinimumSize(new java.awt.Dimension(53, 33));
+        btnTextblatt.setPreferredSize(new java.awt.Dimension(53, 33));
         btnTextblatt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTextblattActionPerformed(evt);
@@ -104,31 +139,32 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        spControl.add(btnTextblatt, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(2, 5, 5, 5);
+        spDocuments.add(btnTextblatt, gridBagConstraints);
 
         semiRoundedPanel2.setBackground(new java.awt.Color(51, 51, 51));
         semiRoundedPanel2.setLayout(new java.awt.FlowLayout());
 
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Dokumente");
+        jLabel1.setText("Dokumentauswahl");
         semiRoundedPanel2.add(jLabel1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        spControl.add(semiRoundedPanel2, gridBagConstraints);
+        spDocuments.add(semiRoundedPanel2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panPicNavigation.add(spControl, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 7);
+        panPicNavigation.add(spDocuments, gridBagConstraints);
 
         scpPictureList.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
         scpPictureList.setMinimumSize(new java.awt.Dimension(100, 150));
+        scpPictureList.setOpaque(false);
         scpPictureList.setPreferredSize(new java.awt.Dimension(100, 150));
 
         lstPictures.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -147,7 +183,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         semiRoundedPanel3.setLayout(new java.awt.FlowLayout());
 
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Seiten");
+        jLabel2.setText("Seitenauswahl");
         semiRoundedPanel3.add(jLabel2);
 
         rpSeiten.add(semiRoundedPanel3, java.awt.BorderLayout.PAGE_START);
@@ -156,8 +192,197 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 7);
         panPicNavigation.add(rpSeiten, gridBagConstraints);
+
+        roundedPanel1.setLayout(new java.awt.GridBagLayout());
+
+        lblArea.setText("-");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 5, 5, 5);
+        roundedPanel1.add(lblArea, gridBagConstraints);
+
+        lblDistance.setText("-");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 5, 5, 5);
+        roundedPanel1.add(lblDistance, gridBagConstraints);
+
+        lblTxtDistance.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblTxtDistance.setText("Länge/Umfang:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 3, 5);
+        roundedPanel1.add(lblTxtDistance, gridBagConstraints);
+
+        lblTxtArea.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblTxtArea.setText("Fläche:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 3, 5);
+        roundedPanel1.add(lblTxtArea, gridBagConstraints);
+
+        semiRoundedPanel5.setBackground(new java.awt.Color(51, 51, 51));
+        semiRoundedPanel5.setLayout(new java.awt.FlowLayout());
+
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("Messdaten");
+        semiRoundedPanel5.add(jLabel6);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        roundedPanel1.add(semiRoundedPanel5, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 7);
+        panPicNavigation.add(roundedPanel1, gridBagConstraints);
+
+        jPanel1.setOpaque(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.weighty = 1.0;
+        panPicNavigation.add(jPanel1, gridBagConstraints);
+
+        rpControls.setLayout(new java.awt.GridBagLayout());
+
+        buttonGrpMode.add(togPan);
+        togPan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/pan.gif"))); // NOI18N
+        togPan.setSelected(true);
+        togPan.setText("Verschieben");
+        togPan.setToolTipText("Verschieben");
+        togPan.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        togPan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                togPanActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 5, 3, 5);
+        rpControls.add(togPan, gridBagConstraints);
+
+        buttonGrpMode.add(togZoom);
+        togZoom.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom.gif"))); // NOI18N
+        togZoom.setText("Zoomen");
+        togZoom.setToolTipText("Zoomen");
+        togZoom.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        togZoom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                togZoomActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 5, 3, 5);
+        rpControls.add(togZoom, gridBagConstraints);
+
+        buttonGrpMode.add(togMessenLine);
+        togMessenLine.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/newLinestring.png"))); // NOI18N
+        togMessenLine.setText("Messlinie");
+        togMessenLine.setToolTipText("Messen (Linie)");
+        togMessenLine.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        togMessenLine.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                togMessenLineActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 5, 3, 5);
+        rpControls.add(togMessenLine, gridBagConstraints);
+
+        buttonGrpMode.add(togMessenPoly);
+        togMessenPoly.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/newPolygon.png"))); // NOI18N
+        togMessenPoly.setText("Messfläche");
+        togMessenPoly.setToolTipText("Messen (Polygon)");
+        togMessenPoly.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        togMessenPoly.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                togMessenPolyActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 5, 3, 5);
+        rpControls.add(togMessenPoly, gridBagConstraints);
+
+        buttonGrpMode.add(togCalibrate);
+        togCalibrate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/screen.gif"))); // NOI18N
+        togCalibrate.setText("Kalibrieren");
+        togCalibrate.setToolTipText("Kalibrieren");
+        togCalibrate.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        togCalibrate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                togCalibrateActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 5, 5, 5);
+        rpControls.add(togCalibrate, gridBagConstraints);
+
+        btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/home.gif"))); // NOI18N
+        btnHome.setText("Übersicht");
+        btnHome.setToolTipText("Übersicht");
+        btnHome.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnHome.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHomeActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 3, 5);
+        rpControls.add(btnHome, gridBagConstraints);
+
+        semiRoundedPanel4.setBackground(new java.awt.Color(51, 51, 51));
+        semiRoundedPanel4.setLayout(new java.awt.FlowLayout());
+
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Steuerung");
+        semiRoundedPanel4.add(jLabel3);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        rpControls.add(semiRoundedPanel4, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 7);
+        panPicNavigation.add(rpControls, gridBagConstraints);
 
         add(panPicNavigation, java.awt.BorderLayout.WEST);
 
@@ -168,7 +393,6 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         semiRoundedPanel1.setBackground(new java.awt.Color(51, 51, 51));
         semiRoundedPanel1.setLayout(new java.awt.FlowLayout());
 
-        lblCurrentViewTitle.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblCurrentViewTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblCurrentViewTitle.setText("Keine Auswahl");
         semiRoundedPanel1.add(lblCurrentViewTitle);
@@ -211,6 +435,31 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     private void btnTextblattActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTextblattActionPerformed
         loadTextBlatt();
 }//GEN-LAST:event_btnTextblattActionPerformed
+
+    private void togPanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togPanActionPerformed
+        measureComponent.actionPan();
+    }//GEN-LAST:event_togPanActionPerformed
+
+    private void togMessenPolyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togMessenPolyActionPerformed
+        measureComponent.actionMeasurePolygon();
+    }//GEN-LAST:event_togMessenPolyActionPerformed
+
+    private void togZoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togZoomActionPerformed
+        measureComponent.actionZoom();
+    }//GEN-LAST:event_togZoomActionPerformed
+
+    private void togMessenLineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togMessenLineActionPerformed
+        measureComponent.actionMeasureLine();
+    }//GEN-LAST:event_togMessenLineActionPerformed
+
+    private void togCalibrateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togCalibrateActionPerformed
+        measureComponent.actionCalibrate();
+        togPan.setSelected(true);
+    }//GEN-LAST:event_togCalibrateActionPerformed
+
+    private void btnHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
+        measureComponent.actionOverview();
+    }//GEN-LAST:event_btnHomeActionPerformed
 //    @Override
 //    public void removeNotify() {
 //        //TODO: BUG! wird durchs Fenstermanagement auch umschalten
@@ -219,22 +468,40 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 //        closeReader();
 //    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup btnGrpPlanText;
+    private javax.swing.ButtonGroup btnGrpDocs;
+    private javax.swing.JButton btnHome;
     private javax.swing.JButton btnPlan;
     private javax.swing.JButton btnTextblatt;
+    private javax.swing.ButtonGroup buttonGrpMode;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblArea;
     private javax.swing.JLabel lblCurrentViewTitle;
+    private javax.swing.JLabel lblDistance;
+    private javax.swing.JLabel lblTxtArea;
+    private javax.swing.JLabel lblTxtDistance;
     private javax.swing.JList lstPictures;
     private de.cismet.cismap.commons.gui.measuring.MeasuringComponent measureComponent;
     private javax.swing.JPanel panCenter;
     private javax.swing.JPanel panPicNavigation;
+    private de.cismet.tools.gui.RoundedPanel roundedPanel1;
+    private de.cismet.tools.gui.RoundedPanel rpControls;
     private de.cismet.tools.gui.RoundedPanel rpSeiten;
     private javax.swing.JScrollPane scpPictureList;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel1;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel2;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel3;
-    private de.cismet.tools.gui.RoundedPanel spControl;
+    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel4;
+    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel5;
+    private de.cismet.tools.gui.RoundedPanel spDocuments;
+    private javax.swing.JToggleButton togCalibrate;
+    private javax.swing.JToggleButton togMessenLine;
+    private javax.swing.JToggleButton togMessenPoly;
+    private javax.swing.JToggleButton togPan;
+    private javax.swing.JToggleButton togZoom;
     // End of variables declaration//GEN-END:variables
 
     public void zoomToFeatureCollection() {
@@ -400,4 +667,85 @@ public class Alb_picturePanel extends javax.swing.JPanel {
             }
         }
     }
+
+    final class MessenFeatureCollectionListener extends de.cismet.cismap.commons.features.FeatureCollectionAdapter {
+
+        @Override
+        public void featuresAdded(FeatureCollectionEvent fce) {
+            if (!togCalibrate.isEnabled()) {
+                for (Feature f : measureComponent.getFeatureCollection().getAllFeatures()) {
+                    if (f instanceof PureNewFeature) {
+                        togCalibrate.setEnabled(true);
+                    }
+                }
+            }
+            refreshMeasurementsInStatus(fce.getEventFeatures());
+        }
+
+        @Override
+        public void featuresRemoved(FeatureCollectionEvent fce) {
+            if (togCalibrate.isEnabled()) {
+                for (Feature f : measureComponent.getFeatureCollection().getAllFeatures()) {
+                    if (f instanceof PureNewFeature) {
+                        return;
+                    }
+                }
+                togCalibrate.setEnabled(false);
+            }
+        }
+
+        @Override
+        public void featuresChanged(FeatureCollectionEvent fce) {
+//            if (map.getInteractionMode().equals(MY_MESSEN_MODE)) {
+            refreshMeasurementsInStatus(fce.getEventFeatures());
+//            } else {
+//                refreshMeasurementsInStatus();
+//            }
+        }
+
+        @Override
+        public void featureSelectionChanged(FeatureCollectionEvent fce) {
+//            refreshMeasurementsInStatus();
+            refreshMeasurementsInStatus(fce.getEventFeatures());
+        }
+    }
+
+    private void refreshMeasurementsInStatus(Collection<Feature> cf) {
+        double umfang = 0.0;
+        double area = 0.0;
+        for (Feature f : cf) {
+            Geometry geom = f.getGeometry();
+            if (f instanceof PureNewFeature && geom != null) {
+                area += geom.getArea();
+                umfang += geom.getLength();
+                if (umfang != 0.0) {
+                    if (area != 0.0) {
+                        lblTxtDistance.setText("Umfang:");
+                        lblDistance.setText(StaticDecimalTools.round(umfang) + " m ");
+                        lblArea.setText(StaticDecimalTools.round(area) + " m²");
+                    } else {
+                        if (MessenGeometryListener.POLYGON.equals(measureComponent.getMessenInputListener().getMode())) {
+                            //reduce polygon line length to one way
+                            umfang *= 0.5;
+                        }
+                        lblTxtDistance.setText("Länge:");
+                        lblDistance.setText(StaticDecimalTools.round(umfang) + " m ");
+                        lblArea.setText("-");
+                    }
+                } else {
+                    lblTxtDistance.setText("Länge/Umfang:");
+                    lblDistance.setText("-");
+                    lblArea.setText("-");
+                }
+            }
+        }
+    }
+
+    private void refreshMeasurementsInStatus() {
+        Collection<Feature> cf = measureComponent.getFeatureCollection().getSelectedFeatures();
+        refreshMeasurementsInStatus(cf);
+    }
 }
+
+
+
