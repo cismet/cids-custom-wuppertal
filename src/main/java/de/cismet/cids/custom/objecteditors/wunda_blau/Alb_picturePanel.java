@@ -586,7 +586,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         btnTextblatt.setEnabled(textFile != null && enabled && currentSelectedButton != btnTextblatt);
     }
 
-    class PictureReaderWorker extends SwingWorker<ListModel, Void> {
+    final class PictureReaderWorker extends SwingWorker<ListModel, Void> {
 
         public PictureReaderWorker(File pictureFile) {
             this.pictureFile = pictureFile;
@@ -635,7 +635,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         }
     }
 
-    class PictureSelectWorker extends SwingWorker<BufferedImage, Void> {
+    final class PictureSelectWorker extends SwingWorker<BufferedImage, Void> {
 
         public PictureSelectWorker(int pageNumber) {
             this.pageNumber = pageNumber;
@@ -657,7 +657,6 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                 measureComponent.reset();
                 measureComponent.addImage(get());
                 measureComponent.zoomToFeatureCollection();
-//                measureComponent.gotoInitialBoundingBox();
             } catch (InterruptedException ex) {
                 log.warn(ex, ex);
             } catch (Exception ex) {
@@ -741,10 +740,6 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         }
     }
 
-    private void refreshMeasurementsInStatus() {
-        Collection<Feature> cf = measureComponent.getFeatureCollection().getSelectedFeatures();
-        refreshMeasurementsInStatus(cf);
-    }
 }
 
 

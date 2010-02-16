@@ -363,7 +363,7 @@
                 <BindingProperty name="text" source="Form" sourcePath="${cidsBean.blattnummer}" target="txtBlattnummer" targetPath="text" updateStrategy="0" immediately="false">
                   <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
                   <Property name="nullValue" type="java.lang.String" value="keine Angabe"/>
-                  <Property name="incompletePathValue" type="java.lang.String" value="&lt;Error&gt;"/>
+                  <Property name="incompletePathValue" type="java.lang.String" value=""/>
                 </BindingProperty>
               </BindingProperties>
               <Constraints>

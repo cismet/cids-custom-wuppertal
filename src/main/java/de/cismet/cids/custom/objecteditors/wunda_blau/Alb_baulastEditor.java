@@ -229,7 +229,7 @@ public class Alb_baulastEditor extends JPanel implements CidsBeanStore, TitleCom
         btnForward.setEnabled(false);
         lblBack.setEnabled(true);
         lblForw.setEnabled(false);
-        alb_picturePanel.zoomToFeatureCollection();
+//        alb_picturePanel.zoomToFeatureCollection();
 }//GEN-LAST:event_btnForwardActionPerformed
 
     private void lblForwMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblForwMouseClicked
