@@ -13,7 +13,7 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 import de.aedsicad.aaaweb.service.alkis.info.ALKISInfoServices;
 import de.aedsicad.aaaweb.service.util.Point;
 import de.aedsicad.aaaweb.service.util.PointLocation;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUIUtils;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.SOAPAccessProvider;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
@@ -319,14 +319,14 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
             }
         }
         final Dimension previewDim = new Dimension(maxX + 20, maxY + 40);
-        ObjectRendererUIUtils.setAllDimensions(panProductPreview, previewDim);
+        ObjectRendererUtils.setAllDimensions(panProductPreview, previewDim);
     }
 
     private void initFooterElements() {
-        ObjectRendererUIUtils.decorateJLabelAndButtonSynced(lblForw, btnForward, ObjectRendererUIUtils.FORWARD_SELECTED, ObjectRendererUIUtils.FORWARD_PRESSED);
-        ObjectRendererUIUtils.decorateJLabelAndButtonSynced(lblBack, btnBack, ObjectRendererUIUtils.BACKWARD_SELECTED, ObjectRendererUIUtils.BACKWARD_PRESSED);
-//        ObjectRendererUIUtils.decorateJLabelAndButtonSynced(lblForw, btnForward, FORWARD_SELECTED, FORWARD_PRESSED);
-//        ObjectRendererUIUtils.decorateJLabelAndButtonSynced(lblBack, btnBack, BACKWARD_SELECTED, BACKWARD_PRESSED);
+        ObjectRendererUtils.decorateJLabelAndButtonSynced(lblForw, btnForward, ObjectRendererUtils.FORWARD_SELECTED, ObjectRendererUtils.FORWARD_PRESSED);
+        ObjectRendererUtils.decorateJLabelAndButtonSynced(lblBack, btnBack, ObjectRendererUtils.BACKWARD_SELECTED, ObjectRendererUtils.BACKWARD_PRESSED);
+//        ObjectRendererUtils.decorateJLabelAndButtonSynced(lblForw, btnForward, FORWARD_SELECTED, FORWARD_PRESSED);
+//        ObjectRendererUtils.decorateJLabelAndButtonSynced(lblBack, btnBack, BACKWARD_SELECTED, BACKWARD_PRESSED);
     }
 
     private void initIcons() {
@@ -1410,9 +1410,9 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
             final String pointID = lblTxtIdentifikator.getText();
             final String pointArt = lblTxtPunktart.getText();
             final String url = PRODUKTURL_BASE + PRODUKTID_PUNKTLISTE_PDF + "&ids=" + pointArt + ":" + pointID;
-            ObjectRendererUIUtils.openURL(url);
+            ObjectRendererUtils.openURL(url);
         } catch (Exception ex) {
-            ObjectRendererUIUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_pointRenderer.this);
+            ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_pointRenderer.this);
             log.error(ex);
         }
 }//GEN-LAST:event_hlPunktlistePdfActionPerformed
@@ -1422,9 +1422,9 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
             final String pointID = lblTxtIdentifikator.getText();
             final String pointArt = lblTxtPunktart.getText();
             final String url = PRODUKTURL_BASE + PRODUKTID_PUNKTLISTE_HTML + "&ids=" + pointArt + ":" + pointID;
-            ObjectRendererUIUtils.openURL(url);
+            ObjectRendererUtils.openURL(url);
         } catch (Exception ex) {
-            ObjectRendererUIUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_pointRenderer.this);
+            ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_pointRenderer.this);
             log.error(ex);
         }
 }//GEN-LAST:event_hlPunktlisteHtmlActionPerformed
@@ -1446,9 +1446,9 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
             final String pointID = lblTxtIdentifikator.getText();
             final String pointArt = lblTxtPunktart.getText();
             final String url = PRODUKTURL_BASE + PRODUKTID_PUNKTLISTE_TXT + "&ids=" + pointArt + ":" + pointID;
-            ObjectRendererUIUtils.openURL(url);
+            ObjectRendererUtils.openURL(url);
         } catch (Exception ex) {
-            ObjectRendererUIUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_pointRenderer.this);
+            ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_pointRenderer.this);
             log.error(ex);
         }
     }//GEN-LAST:event_hlPunktlisteTxtActionPerformed

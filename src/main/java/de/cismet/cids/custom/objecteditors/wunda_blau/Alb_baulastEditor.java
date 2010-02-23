@@ -7,7 +7,7 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 import de.cismet.cids.annotations.AggregationRenderer;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUIUtils;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.tools.gui.BorderProvider;
@@ -45,8 +45,8 @@ public class Alb_baulastEditor extends JPanel implements CidsBeanStore, TitleCom
     }
 
     private void initFooterElements() {
-        ObjectRendererUIUtils.decorateJLabelAndButtonSynced(lblForw, btnForward, ObjectRendererUIUtils.FORWARD_SELECTED, ObjectRendererUIUtils.FORWARD_PRESSED);
-        ObjectRendererUIUtils.decorateJLabelAndButtonSynced(lblBack, btnBack, ObjectRendererUIUtils.BACKWARD_SELECTED, ObjectRendererUIUtils.BACKWARD_PRESSED);
+        ObjectRendererUtils.decorateJLabelAndButtonSynced(lblForw, btnForward, ObjectRendererUtils.FORWARD_SELECTED, ObjectRendererUtils.FORWARD_PRESSED);
+        ObjectRendererUtils.decorateJLabelAndButtonSynced(lblBack, btnBack, ObjectRendererUtils.BACKWARD_SELECTED, ObjectRendererUtils.BACKWARD_PRESSED);
     }
 
     @Override

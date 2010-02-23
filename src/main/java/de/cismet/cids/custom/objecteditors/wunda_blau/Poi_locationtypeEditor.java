@@ -11,7 +11,7 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.server.middleware.types.MetaObject;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUIUtils;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.SignaturListCellRenderer;
 import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 import de.cismet.cids.dynamics.CidsBean;
@@ -65,7 +65,7 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         dlgAddLocationType = new javax.swing.JDialog();
         panNewSuchwort = new javax.swing.JPanel();
         lblAuswaehlen = new javax.swing.JLabel();
-        final MetaObject[] lebenslagen = ObjectRendererUIUtils.getLightweightMetaObjectsForTable("poi_spatialreferencesystemusinggeographicidentifiers", new String[]{"theme"});
+        final MetaObject[] lebenslagen = ObjectRendererUtils.getLightweightMetaObjectsForTable("poi_spatialreferencesystemusinggeographicidentifiers", new String[]{"theme"});
         if(lebenslagen != null) {
             Arrays.sort(lebenslagen);
             cbTypes = new javax.swing.JComboBox(lebenslagen);

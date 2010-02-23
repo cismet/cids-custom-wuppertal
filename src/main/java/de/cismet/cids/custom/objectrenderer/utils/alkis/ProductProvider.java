@@ -4,7 +4,7 @@
  */
 package de.cismet.cids.custom.objectrenderer.utils.alkis;
 
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUIUtils;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 
 /**
  *
@@ -49,7 +49,7 @@ public final class ProductProvider {
 
     public final void getProduct(String productId, String objectString, String contentType) {
         final String urlString = buildURLString(productId, objectString, contentType);
-        ObjectRendererUIUtils.openURL(urlString);
+        ObjectRendererUtils.openURL(urlString);
     }
 
     private final String buildURLString(String productId, String objectString, String contentType) {

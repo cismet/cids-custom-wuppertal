@@ -52,21 +52,21 @@ import org.jdesktop.swingx.graphics.ShadowRenderer;
  *
  * @author stefan
  */
-public class ObjectRendererUIUtils {
+public class ObjectRendererUtils {
 
     private static final String ICON_RES_PACKAGE = "/de/cismet/cids/custom/wunda_blau/res/";
     public static final ImageIcon FORWARD_PRESSED;
     public static final ImageIcon FORWARD_SELECTED;
     public static final ImageIcon BACKWARD_PRESSED;
     public static final ImageIcon BACKWARD_SELECTED;
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ObjectRendererUIUtils.class);
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ObjectRendererUtils.class);
     private static final String CISMAP_PLUGIN_NAME = "cismap";
 
     static {
-        BACKWARD_SELECTED = new ImageIcon(ObjectRendererUIUtils.class.getResource(ICON_RES_PACKAGE + "arrow-left-sel.png"));
-        BACKWARD_PRESSED = new ImageIcon(ObjectRendererUIUtils.class.getResource(ICON_RES_PACKAGE + "arrow-left-pressed.png"));
-        FORWARD_SELECTED = new ImageIcon(ObjectRendererUIUtils.class.getResource(ICON_RES_PACKAGE + "arrow-right-sel.png"));
-        FORWARD_PRESSED = new ImageIcon(ObjectRendererUIUtils.class.getResource(ICON_RES_PACKAGE + "arrow-right-pressed.png"));
+        BACKWARD_SELECTED = new ImageIcon(ObjectRendererUtils.class.getResource(ICON_RES_PACKAGE + "arrow-left-sel.png"));
+        BACKWARD_PRESSED = new ImageIcon(ObjectRendererUtils.class.getResource(ICON_RES_PACKAGE + "arrow-left-pressed.png"));
+        FORWARD_SELECTED = new ImageIcon(ObjectRendererUtils.class.getResource(ICON_RES_PACKAGE + "arrow-right-sel.png"));
+        FORWARD_PRESSED = new ImageIcon(ObjectRendererUtils.class.getResource(ICON_RES_PACKAGE + "arrow-right-pressed.png"));
     }
 
     public enum DateDiff {
@@ -490,7 +490,7 @@ final class ImagedButtonMouseAdapter extends MouseAdapter {
 
     public ImagedButtonMouseAdapter(JButton button, Icon plain, Icon highlight, Icon pressed) {
         this.button = button;
-        ObjectRendererUIUtils.decorateComponentWithMouseOverCursorChange(button, Cursor.HAND_CURSOR, Cursor.DEFAULT_CURSOR);
+        ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(button, Cursor.HAND_CURSOR, Cursor.DEFAULT_CURSOR);
         this.plainIcon = plain;
         this.highlightIcon = highlight;
         this.pressedIcon = pressed;

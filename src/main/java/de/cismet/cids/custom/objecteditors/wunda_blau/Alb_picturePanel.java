@@ -11,7 +11,10 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.Point;
 import de.cismet.cids.custom.objectrenderer.utils.BaulastenPictureFinder;
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
+import de.cismet.cids.custom.objectrenderer.utils.MD5Calculator;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cismap.commons.features.Feature;
 import de.cismet.cismap.commons.features.FeatureCollectionEvent;
@@ -19,13 +22,19 @@ import de.cismet.cismap.commons.features.PureNewFeature;
 import de.cismet.cismap.commons.gui.piccolo.eventlistener.MessenGeometryListener;
 import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.StaticDecimalTools;
+import de.cismet.tools.collections.TypeSafeCollections;
 import de.cismet.tools.gui.MultiPagePictureReader;
+import java.awt.EventQueue;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.ListModel;
 import javax.swing.SwingWorker;
 
@@ -37,9 +46,11 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 
     /** Creates new form Alb_picturePanel */
     public Alb_picturePanel() {
+        this.pageGeometries = TypeSafeCollections.newHashMap();
         initComponents();
         messenListener = new MessenFeatureCollectionListener();
         measureComponent.getFeatureCollection().addFeatureCollectionListener(messenListener);
+        this.expectedMD5Values = new String[2];
     }
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_picturePanel.class);
     private MultiPagePictureReader pictureReader;
@@ -48,6 +59,19 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     private File textFile;
     private JButton currentSelectedButton;
     private final MessenFeatureCollectionListener messenListener;
+    //
+    private static final String[] MD5_PROPERTY_NAMES = new String[]{"lageplan_md5", "textblatt_md5"};
+    private static final int LAGEPLAN_DOCUMENT = 0;
+    private static final int TEXTBLATT_DOCUMENT = 1;
+    private static final int NO_SELECTION = -1;
+    //
+    private volatile int currentDocument = NO_SELECTION;
+    private volatile int currentPage = NO_SELECTION;
+    private final String[] expectedMD5Values;
+//    private String planFileMD5 = "";
+//    private String textFileMD5 = "";
+    private String currentActualDocumentMD5 = "";
+    private Map<Integer, Geometry> pageGeometries;
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -215,7 +239,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 5, 5, 5);
         roundedPanel1.add(lblDistance, gridBagConstraints);
 
-        lblTxtDistance.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblTxtDistance.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblTxtDistance.setText("Länge/Umfang:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -336,6 +360,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         togCalibrate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/screen.gif"))); // NOI18N
         togCalibrate.setText("Kalibrieren");
         togCalibrate.setToolTipText("Kalibrieren");
+        togCalibrate.setEnabled(false);
         togCalibrate.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         togCalibrate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -413,9 +438,37 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         }
 }//GEN-LAST:event_lstPicturesValueChanged
 
+    private Collection<CidsBean> getPages() {
+        if (cidsBean != null) {
+            Object o = null;
+            if (currentDocument == TEXTBLATT_DOCUMENT) {
+                o = cidsBean.getProperty("textblatt_pages");
+            } else if (currentDocument == LAGEPLAN_DOCUMENT) {
+                o = cidsBean.getProperty("lageplan_pages");
+
+            }
+            if (o instanceof Collection) {
+                return (Collection<CidsBean>) o;
+            }
+        }
+        return null;
+    }
+
+//    private void setPages(Collection<CidsBean> pages) throws Exception {
+//        if (cidsBean != null) {
+//            Object o = null;
+//            if (currentDocument == TEXTBLATT_DOCUMENT) {
+//                cidsBean.setProperty("lageplan_pages", pages);
+//            } else if (currentDocument == LAGEPLANPLAN_DOCUMENT) {
+//                cidsBean.setProperty("textblatt_pages", pages);
+//
+//            }
+//        }
+//    }
     private void loadPlan() {
         currentSelectedButton = btnPlan;
         lblCurrentViewTitle.setText("Lageplan");
+        currentDocument = LAGEPLAN_DOCUMENT;
         CismetThreadPool.execute(new PictureReaderWorker(planFile));
         lstPictures.setEnabled(true);
     }
@@ -423,13 +476,13 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     private void loadTextBlatt() {
         currentSelectedButton = btnTextblatt;
         lblCurrentViewTitle.setText("Textblatt");
+        currentDocument = TEXTBLATT_DOCUMENT;
         CismetThreadPool.execute(new PictureReaderWorker(textFile));
         lstPictures.setEnabled(true);
     }
 
     private void btnPlanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlanActionPerformed
         loadPlan();
-
 }//GEN-LAST:event_btnPlanActionPerformed
 
     private void btnTextblattActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTextblattActionPerformed
@@ -453,14 +506,61 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     }//GEN-LAST:event_togMessenLineActionPerformed
 
     private void togCalibrateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togCalibrateActionPerformed
-        measureComponent.actionCalibrate();
-        togPan.setSelected(true);
+        if (currentPage != NO_SELECTION) {
+            double distance = askForDistanceValue();
+            if (distance > 0d) {
+                measureComponent.actionCalibrate(distance);
+                final Geometry documentGeom = measureComponent.getMainDocumentGeometry();
+                try {
+                    registerGeometryForPage(documentGeom, currentDocument, currentPage);
+                } catch (Exception ex) {
+                    log.error(ex, ex);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Eingegebene(r) Distanz bzw. Umfang ist kein gültiger Wert oder gleich 0.", "Ungültige Eingabe", JOptionPane.WARNING_MESSAGE);
+            }
+            togPan.setSelected(true);
+        }
     }//GEN-LAST:event_togCalibrateActionPerformed
 
     private void btnHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
         measureComponent.actionOverview();
     }//GEN-LAST:event_btnHomeActionPerformed
-//    @Override
+
+    private void registerGeometryForPage(Geometry geometry, int documentNo, int pageNo) throws Exception {
+        //TODO: rechte checken!!!
+        if (geometry != null && documentNo > NO_SELECTION && pageNo > NO_SELECTION) {
+            Geometry oldVal = pageGeometries.get(pageNo);
+            if (oldVal == null || !oldVal.equals(geometry)) {
+                pageGeometries.put(pageNo, geometry);
+                Collection<CidsBean> pageGeoCollection = getPages();
+                if (pageGeoCollection != null) {
+                    boolean pageFound = false;
+                    for (CidsBean pageGeom : pageGeoCollection) {
+                        Object pageNumberObj = pageGeom.getProperty("page_number");
+                        if (pageNumberObj instanceof Integer) {
+                            if (pageNo == (Integer) pageNumberObj) {
+                                pageGeom.setProperty("geometry", geometry);
+                                pageFound = true;
+                                log.fatal("found: " + pageNo);
+                                break;
+                            }
+                        }
+                    }
+                    if (!pageFound) {
+                        final CidsBean newBean = CidsBeanSupport.createNewCidsBeanFromTableName("ALB_GEO_DOCUMENT_PAGE");
+                        pageGeoCollection.add(newBean);
+                        newBean.setProperty("page_number", pageNo);
+                        newBean.setProperty("geometry", geometry);
+                    }
+                    cidsBean.persist();
+                } else {
+                    log.error("Empty Page Collection!");
+                }
+            }
+        }
+    }
+    //    @Override
 //    public void removeNotify() {
 //        //TODO: BUG! wird durchs Fenstermanagement auch umschalten
 //        //auf Vollbild aufgerufen!
@@ -515,11 +615,34 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         return cidsBean;
     }
 
+    private double askForDistanceValue() {
+        try {
+            String laenge = JOptionPane.showInputDialog(this, "Bitte Länge bzw. Umfang in Metern eingeben:", "Kalibrierung", JOptionPane.QUESTION_MESSAGE);
+            if (laenge != null) {
+                return Math.abs(Double.parseDouble(laenge.replace(',', '.')));
+            }
+        } catch (Exception ex) {
+            log.warn(ex, ex);
+        }
+        return 0d;
+    }
+
     /**
      * @param cidsBean the cidsBean to set
      */
     public void setCidsBean(CidsBean cidsBean) {
         this.cidsBean = cidsBean;
+        if (cidsBean != null) {
+            for (int i = 0; i < MD5_PROPERTY_NAMES.length; ++i) {
+                Object propValObj = cidsBean.getProperty(MD5_PROPERTY_NAMES[i]);
+                if (propValObj instanceof String) {
+                    expectedMD5Values[i] = (String) propValObj;
+                } else {
+                    expectedMD5Values[i] = null;
+                }
+            }
+        }
+        setCurrentDocumentNull();
         CismetThreadPool.execute(new FileWorker());
 
     }
@@ -535,6 +658,9 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 
         public FileWorker() {
             setControlsEnabled(false);
+            measureComponent.reset();
+            togPan.setSelected(true);
+            resetMeasureDataLabels();
         }
 
         @Override
@@ -545,12 +671,14 @@ public class Alb_picturePanel extends javax.swing.JPanel {
             log.info("Found blatt " + blattObj);
             log.info("Found plan " + planObj);
             if (blattObj != null) {
-                result[0] = BaulastenPictureFinder.findTextblattPicture(blattObj.toString());
-                log.info("Blatt picture " + result[0]);
+                final File searchResult = BaulastenPictureFinder.findTextblattPicture(blattObj.toString());
+                result[TEXTBLATT_DOCUMENT] = searchResult;
+                log.info("Blatt picture " + result[TEXTBLATT_DOCUMENT]);
             }
             if (planObj != null) {
-                result[1] = BaulastenPictureFinder.findPlanPicture(planObj.toString());
-                log.info("Plan picture " + result[1]);
+                final File searchResult = BaulastenPictureFinder.findPlanPicture(planObj.toString());
+                result[LAGEPLAN_DOCUMENT] = searchResult;
+                log.info("Plan picture " + result[LAGEPLAN_DOCUMENT]);
             }
             return result;
         }
@@ -559,8 +687,8 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         protected void done() {
             try {
                 final File[] result = get();
-                textFile = result[0];
-                planFile = result[1];
+                textFile = result[TEXTBLATT_DOCUMENT];
+                planFile = result[LAGEPLAN_DOCUMENT];
             } catch (InterruptedException ex) {
                 log.warn(ex, ex);
             } catch (ExecutionException ex) {
@@ -585,21 +713,81 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         btnPlan.setEnabled(planFile != null && enabled && currentSelectedButton != btnPlan);
         btnTextblatt.setEnabled(textFile != null && enabled && currentSelectedButton != btnTextblatt);
     }
+    private static final ListModel LADEN_MODEL = new DefaultListModel() {
+
+        {
+            add(0, "Wird geladen...");
+        }
+    };
+    private static final ListModel FEHLER_MODEL = new DefaultListModel() {
+
+        {
+            add(0, "Lesefehler.");
+        }
+    };
 
     final class PictureReaderWorker extends SwingWorker<ListModel, Void> {
 
         public PictureReaderWorker(File pictureFile) {
             this.pictureFile = pictureFile;
             log.debug("prepare picture reader for file " + this.pictureFile);
-            lstPictures.setModel(new DefaultListModel());
+            lstPictures.setModel(LADEN_MODEL);
             measureComponent.removeAllFeatures();
             setControlsEnabled(false);
         }
         private final File pictureFile;
+        private boolean md5OK = false;
+
+        private void updateMD5() throws Exception {
+            expectedMD5Values[currentDocument] = currentActualDocumentMD5;
+            cidsBean.setProperty(MD5_PROPERTY_NAMES[currentDocument], currentActualDocumentMD5);
+            log.debug("saving md5 value " + currentActualDocumentMD5);
+            cidsBean.persist();
+        }
 
         @Override
         protected ListModel doInBackground() throws Exception {
             final DefaultListModel model = new DefaultListModel();
+            currentActualDocumentMD5 = MD5Calculator.generateMD5(pictureFile);
+            if (currentDocument != NO_SELECTION && currentDocument < expectedMD5Values.length) {
+                final String expectedMD5 = expectedMD5Values[currentDocument];
+                if (expectedMD5 != null && expectedMD5.length() > 0) {
+                    if (expectedMD5.equals(currentActualDocumentMD5)) {
+                        md5OK = true;
+                    } else {
+                        md5OK = false;
+                        log.warn("MD5 fail. Expected: " + expectedMD5 + ". Found: " + currentActualDocumentMD5);
+                    }
+                } else {
+                    md5OK = true;
+                    updateMD5();
+                }
+            }
+            if (md5OK) {
+                readPageGeometriesIntoMap(getPages());
+            } else {
+
+                FutureTask<Integer> userInput = new FutureTask<Integer>(new Callable<Integer>() {
+
+                    @Override
+                    public Integer call() throws Exception {
+                        return JOptionPane.showConfirmDialog(measureComponent, "Das Dokument wurde seit dem letzten Kalibrieren geändert. Sollen die Kalibrierungsdaten für das Dokument gelöscht werden?", "Dokument wurde verändert", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    }
+                });
+                EventQueue.invokeAndWait(userInput);
+                if (userInput.get().equals(JOptionPane.OK_OPTION)) {
+                    Collection<CidsBean> pageGeoData = getPages();
+                    if (pageGeoData != null) {
+                        for (CidsBean bean : pageGeoData) {
+                            bean.delete();
+                        }
+                    }
+                } else {
+                    updateMD5();
+                    readPageGeometriesIntoMap(getPages());
+                }
+            }
+
             closeReader();
             pictureReader = new MultiPagePictureReader(pictureFile);
             final int numberOfPages = pictureReader.getNumberOfPages();
@@ -609,6 +797,19 @@ public class Alb_picturePanel extends javax.swing.JPanel {
             return model;
         }
 
+        private void readPageGeometriesIntoMap(Collection<CidsBean> pageGeoms) {
+            pageGeometries.clear();
+            if (pageGeoms != null) {
+                for (CidsBean bean : pageGeoms) {
+                    Object pageNumberObj = bean.getProperty("page_number");
+                    Object geometryObj = bean.getProperty("geometry");
+                    if (pageNumberObj instanceof Integer && geometryObj instanceof Geometry) {
+                        pageGeometries.put((Integer) pageNumberObj, (Geometry) geometryObj);
+                    }
+                }
+            }
+        }
+
         @Override
         protected void done() {
             try {
@@ -616,18 +817,16 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                 lstPictures.setModel(model);
                 if (model.getSize() > 0) {
                     lstPictures.setSelectedIndex(0);
-//                    if (model.getSize() > 1) {
-//                        scpPictureList.setVisible(true);
-//                    } else {
-//                        scpPictureList.setVisible(false);
-//                    }
                 } else {
                     lstPictures.setModel(new DefaultListModel());
-//                    scpPictureList.setVisible(false);
                 }
             } catch (InterruptedException ex) {
+                setCurrentDocumentNull();
+                lstPictures.setModel(FEHLER_MODEL);
                 log.warn(ex, ex);
             } catch (ExecutionException ex) {
+                lstPictures.setModel(FEHLER_MODEL);
+                setCurrentDocumentNull();
                 log.error(ex, ex);
             } finally {
                 setControlsEnabled(true);
@@ -635,11 +834,24 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         }
     }
 
+    private void setCurrentDocumentNull() {
+        currentDocument = NO_SELECTION;
+        currentActualDocumentMD5 = "";
+        pageGeometries.clear();
+        setCurrentPageNull();
+    }
+
+    private void setCurrentPageNull() {
+        currentPage = NO_SELECTION;
+    }
+
     final class PictureSelectWorker extends SwingWorker<BufferedImage, Void> {
 
         public PictureSelectWorker(int pageNumber) {
             this.pageNumber = pageNumber;
+            setCurrentPageNull();
             setControlsEnabled(false);
+            measureComponent.reset();
         }
         private final int pageNumber;
 
@@ -654,12 +866,17 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         @Override
         protected void done() {
             try {
-                measureComponent.reset();
-                measureComponent.addImage(get());
+                final Geometry pageGeom = pageGeometries.get(pageNumber);
+                currentPage = pageNumber;
+                togPan.setSelected(true);
+                resetMeasureDataLabels();
+                measureComponent.addImage(get(), pageGeom);
                 measureComponent.zoomToFeatureCollection();
             } catch (InterruptedException ex) {
+                setCurrentPageNull();
                 log.warn(ex, ex);
             } catch (Exception ex) {
+                setCurrentPageNull();
                 log.error(ex, ex);
             } finally {
                 setControlsEnabled(true);
@@ -673,7 +890,8 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         public void featuresAdded(FeatureCollectionEvent fce) {
             if (!togCalibrate.isEnabled()) {
                 for (Feature f : measureComponent.getFeatureCollection().getAllFeatures()) {
-                    if (f instanceof PureNewFeature) {
+                    if (f instanceof PureNewFeature && !(f.getGeometry() instanceof Point)) {
+                        //messgeometrie gefunden
                         togCalibrate.setEnabled(true);
                     }
                 }
@@ -685,12 +903,18 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         public void featuresRemoved(FeatureCollectionEvent fce) {
             if (togCalibrate.isEnabled()) {
                 for (Feature f : measureComponent.getFeatureCollection().getAllFeatures()) {
-                    if (f instanceof PureNewFeature) {
+                    if (f instanceof PureNewFeature && !(f.getGeometry() instanceof Point)) {
+                        //messgeometrie gefunden.
                         return;
                     }
                 }
                 togCalibrate.setEnabled(false);
             }
+        }
+
+        @Override
+        public void allFeaturesRemoved(FeatureCollectionEvent fce) {
+            featuresRemoved(fce);
         }
 
         @Override
@@ -707,6 +931,12 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 //            refreshMeasurementsInStatus();
             refreshMeasurementsInStatus(fce.getEventFeatures());
         }
+    }
+
+    private void resetMeasureDataLabels() {
+        lblTxtDistance.setText("Länge/Umfang:");
+        lblDistance.setText("-");
+        lblArea.setText("-");
     }
 
     private void refreshMeasurementsInStatus(Collection<Feature> cf) {
@@ -732,14 +962,11 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                         lblArea.setText("-");
                     }
                 } else {
-                    lblTxtDistance.setText("Länge/Umfang:");
-                    lblDistance.setText("-");
-                    lblArea.setText("-");
+                    resetMeasureDataLabels();
                 }
             }
         }
     }
-
 }
 
 

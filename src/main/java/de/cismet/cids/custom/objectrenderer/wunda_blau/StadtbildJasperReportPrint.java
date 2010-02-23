@@ -5,7 +5,7 @@
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import de.cismet.cids.custom.objectrenderer.utils.AbstractJasperReportPrint;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUIUtils;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 import de.cismet.cids.dynamics.CidsBean;
 import java.util.Collection;
@@ -42,7 +42,7 @@ public class StadtbildJasperReportPrint extends AbstractJasperReportPrint {
                 try {
                     final String imageURL = StaticProperties.ARCHIVAR_URL_PREFIX + bnr + StaticProperties.ARCHIVAR_URL_SUFFIX;
                     log.fatal(imageURL);
-                    final ImageIcon ii = ObjectRendererUIUtils.loadPicture(imageURL, 300, 300, 0);
+                    final ImageIcon ii = ObjectRendererUtils.loadPicture(imageURL, 300, 300, 0);
                     log.fatal(ii);
                     if (ii != null) {
                         params.put("image", ii.getImage());

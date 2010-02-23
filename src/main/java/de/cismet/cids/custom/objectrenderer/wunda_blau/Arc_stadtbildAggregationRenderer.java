@@ -12,7 +12,7 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import de.cismet.cids.custom.objectrenderer.converter.SQLDateToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.AbstractJasperReportPrint;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUIUtils;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.XMLPropertyParser;
 import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 import de.cismet.cids.dynamics.CidsBean;
@@ -68,7 +68,7 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
 
     public Arc_stadtbildAggregationRenderer() {
         initComponents();
-        ObjectRendererUIUtils.decorateComponentWithMouseOverCursorChange(lblPrint, Cursor.HAND_CURSOR, Cursor.DEFAULT_CURSOR);
+        ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(lblPrint, Cursor.HAND_CURSOR, Cursor.DEFAULT_CURSOR);
     }
 
     @Override
@@ -270,7 +270,7 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
                 if (o != null) {
                     final String url = StaticProperties.ARCHIVAR_URL_PREFIX + o + StaticProperties.ARCHIVAR_URL_SUFFIX;
                     urls[++j] = url;
-                    ii = ObjectRendererUIUtils.loadPicture(url, 300, 300, 4);
+                    ii = ObjectRendererUtils.loadPicture(url, 300, 300, 4);
                 }
                 if (ii == null) {
                     ii = ERROR_ICON;
@@ -300,7 +300,7 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
                             final JLabel label = imgLabels[i];
                             if (label != null) {
                                 label.setIcon(ii);
-                                ObjectRendererUIUtils.decorateComponentWithMouseOverCursorChange(label, Cursor.HAND_CURSOR, Cursor.DEFAULT_CURSOR);
+                                ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(label, Cursor.HAND_CURSOR, Cursor.DEFAULT_CURSOR);
                                 if (ii != ERROR_ICON) {
                                     label.addMouseListener(new MouseAdapter() {
 
@@ -310,7 +310,7 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
                                         public void mouseClicked(MouseEvent e) {
                                             if (!e.isPopupTrigger()) {
                                                 if (u != null) {
-                                                    ObjectRendererUIUtils.openURL(u);
+                                                    ObjectRendererUtils.openURL(u);
                                                 }
                                             }
                                         }

@@ -10,12 +10,12 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-import Sirius.navigator.connection.SessionManager;
 import Sirius.server.middleware.types.AbstractAttributeRepresentationFormater;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import de.cismet.cids.custom.objectrenderer.converter.BooleanConverter;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUIUtils;
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
@@ -43,7 +43,6 @@ import org.jdesktop.swingx.error.ErrorInfo;
 public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
 
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
-    private String domain = "";
     private String latestPicture = "";
     private static final String SUCHWORT_TABNAME = "ARC_SUCHWORT";
     private final FastBindableReferenceCombo suchwortModelProvider = new FastBindableReferenceCombo("%1$2s", new String[]{"SUCHWORT"});
@@ -61,8 +60,7 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
     };
 
     /** Creates new form Arc_stadtbildEditor */
-    public Arc_stadtbildEditor() {
-        domain = SessionManager.getSession().getUser().getDomain();
+    public Arc_stadtbildEditor() {       
         initComponents();
 //        final MetaClass swClass = ClassCacheMultiple.getMetaClass(domain, "ARC_S");
         suchwortModelProvider.setSorted(true);
@@ -72,7 +70,7 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         AutoCompleteDecorator.decorate(bcbStrasse);
         AutoCompleteDecorator.decorate(bcbFilmart);
         AutoCompleteDecorator.decorate(cbSuchworte);
-        ObjectRendererUIUtils.decorateComponentWithMouseOverCursorChange(lblPicture, Cursor.HAND_CURSOR, Cursor.DEFAULT_CURSOR);
+        ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(lblPicture, Cursor.HAND_CURSOR, Cursor.DEFAULT_CURSOR);
 
 //        ComboCompleterFilter filter = ComboCompleterFilter.addCompletionMechanism(bcbFotograf);
 //        filter.setCaseSensitive(true);
@@ -694,9 +692,8 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         super.setCidsBean(cidsBean);
-        domain = cidsBean.getMetaObject().getDomain();
-        ClassCacheMultiple.addInstance(domain);
-        suchwortModelProvider.setMetaClassFromTableName(domain, SUCHWORT_TABNAME);
+        ClassCacheMultiple.addInstance(CidsBeanSupport.DOMAIN_NAME);
+        suchwortModelProvider.setMetaClassFromTableName(CidsBeanSupport.DOMAIN_NAME, SUCHWORT_TABNAME);
         setNewPicture();
     }
 
@@ -753,7 +750,7 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
     private void lblPictureMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPictureMouseClicked
         if (!evt.isPopupTrigger()) {
             if (lblPicture.getPictureURL() != null) {
-                ObjectRendererUIUtils.openURL(lblPicture.getPictureURL());
+                ObjectRendererUtils.openURL(lblPicture.getPictureURL());
             }
         }
 }//GEN-LAST:event_lblPictureMouseClicked
@@ -786,7 +783,7 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         if (suchwort != null && suchwort.trim().length() > 0) {
             MetaClass suchwortMC = suchwortModelProvider.getMetaClass();
             if (suchwortMC == null) {
-                suchwortMC = ClassCacheMultiple.getMetaClass(domain, SUCHWORT_TABNAME);
+                suchwortMC = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, SUCHWORT_TABNAME);
             }
             if (suchwortMC != null) {
                 final CidsBean newSuchwortBean = suchwortMC.getEmptyInstance().getBean();

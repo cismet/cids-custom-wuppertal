@@ -2,9 +2,7 @@ package de.cismet.cids.custom.objectrenderer.utils;
 
 import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
-import org.openide.util.Exceptions;
 
 /**
  *
@@ -28,7 +26,7 @@ public final class BaulastenPictureFinder {
     }
 
     private static File probeForRightSuffix(String fileWithoutSuffix) {
-        log.debug("Searching for picture: " + fileWithoutSuffix);
+        log.debug("Searching for picture: " + fileWithoutSuffix + "xxx");
         for (String suffix : SUFFIXE) {
             try {
                 URL fileURL = new URL(fileWithoutSuffix + suffix);

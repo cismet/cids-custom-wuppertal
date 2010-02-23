@@ -12,7 +12,7 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import Sirius.navigator.tools.BrowserLauncher;
 import de.cismet.cids.custom.objectrenderer.converter.CollectionToStringConverter;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUIUtils;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
@@ -43,8 +43,8 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
     /** Creates new form Poi_locationinstanceRenderer */
     public Poi_locationinstanceRenderer() {
         initComponents();
-        ObjectRendererUIUtils.decorateComponentWithMouseOverCursorChange(lblMail, Cursor.HAND_CURSOR, Cursor.DEFAULT_CURSOR);
-        ObjectRendererUIUtils.decorateComponentWithMouseOverCursorChange(lblUrl, Cursor.HAND_CURSOR, Cursor.DEFAULT_CURSOR);
+        ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(lblMail, Cursor.HAND_CURSOR, Cursor.DEFAULT_CURSOR);
+        ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(lblUrl, Cursor.HAND_CURSOR, Cursor.DEFAULT_CURSOR);
     }
     private CidsBean cidsBean;
     private String title;

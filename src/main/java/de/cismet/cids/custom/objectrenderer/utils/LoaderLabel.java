@@ -39,7 +39,7 @@ public class LoaderLabel extends JLabel {
     public void setPictureURL(String pictureURL) {
         this.pictureURL = pictureURL;
         if (pictureURL != null) {
-            ObjectRendererUIUtils.loadPictureAndSet(pictureURL, maxX, maxY, shadowSize, this);
+            ObjectRendererUtils.loadPictureAndSet(pictureURL, maxX, maxY, shadowSize, this);
         }
     }
 

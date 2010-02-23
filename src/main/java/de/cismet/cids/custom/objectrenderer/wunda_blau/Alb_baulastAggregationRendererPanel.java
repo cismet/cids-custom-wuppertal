@@ -11,7 +11,7 @@
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUIUtils;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.tools.collections.TypeSafeCollections;
 import java.util.Collection;
@@ -87,7 +87,7 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel {
             }
             final DefaultTableModel model = new DefaultTableModel(tableData.toArray(new Object[tableData.size()][]), AGR_COMLUMN_NAMES);
             tblAggregation.setModel(model);
-            ObjectRendererUIUtils.decorateTableWithSorter(tblAggregation);
+            ObjectRendererUtils.decorateTableWithSorter(tblAggregation);
         }
     }
 

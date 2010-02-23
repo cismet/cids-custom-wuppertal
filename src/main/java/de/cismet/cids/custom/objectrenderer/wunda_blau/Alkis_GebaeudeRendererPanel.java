@@ -27,7 +27,8 @@ import Sirius.server.middleware.types.AbstractAttributeRepresentationFormater;
 import Sirius.server.middleware.types.LightweightMetaObject;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUIUtils;
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.utils.ClassCacheMultiple;
 import de.cismet.tools.collections.TypeSafeCollections;
@@ -275,7 +276,7 @@ public class Alkis_GebaeudeRendererPanel extends javax.swing.JPanel {
             Object idObj = cidsBean.getProperty("id");
             if (idObj instanceof Integer) {
                 final Integer searchID = (Integer) idObj;
-                return ObjectRendererUIUtils.getLightweightMetaObjectsForQuery("alkis_adresse", "select id,strasse,nummer from alkis_adresse where gebaeude = " + searchID + " order by strasse,nummer", new String[]{"id", "strasse", "nummer"}, new AbstractAttributeRepresentationFormater() {
+                return ObjectRendererUtils.getLightweightMetaObjectsForQuery("alkis_adresse", "select id,strasse,nummer from alkis_adresse where gebaeude = " + searchID + " order by strasse,nummer", new String[]{"id", "strasse", "nummer"}, new AbstractAttributeRepresentationFormater() {
 
                     @Override
                     public String getRepresentation() {
@@ -297,7 +298,7 @@ public class Alkis_GebaeudeRendererPanel extends javax.swing.JPanel {
                 Object jumpID = selBean.getProperty("fullobjectid");
                 if (jumpID instanceof Integer) {
                     String tabname = "alkis_landparcel";
-                    MetaClass mc = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", tabname);
+                    MetaClass mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, tabname);
                     if (mc != null) {
                         ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObject(mc, (Integer) jumpID, "");
                     } else {

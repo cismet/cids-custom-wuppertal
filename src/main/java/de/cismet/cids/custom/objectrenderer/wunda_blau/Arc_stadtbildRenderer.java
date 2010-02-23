@@ -13,7 +13,7 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 import de.cismet.cids.custom.objectrenderer.converter.CollectionToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.AbstractJasperReportPrint;
 import de.cismet.cids.custom.objectrenderer.utils.FixedLabel;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUIUtils;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
@@ -38,8 +38,8 @@ public class Arc_stadtbildRenderer extends JPanel implements CidsBeanRenderer, T
     public Arc_stadtbildRenderer() {
         initComponents();
         title = "";
-        ObjectRendererUIUtils.decorateComponentWithMouseOverCursorChange(lblPicture, Cursor.HAND_CURSOR, Cursor.DEFAULT_CURSOR);
-        ObjectRendererUIUtils.decorateComponentWithMouseOverCursorChange(lblPrint, Cursor.HAND_CURSOR, Cursor.DEFAULT_CURSOR);
+        ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(lblPicture, Cursor.HAND_CURSOR, Cursor.DEFAULT_CURSOR);
+        ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(lblPrint, Cursor.HAND_CURSOR, Cursor.DEFAULT_CURSOR);
     }
 
     /** This method is called from within the constructor to
@@ -475,7 +475,7 @@ public class Arc_stadtbildRenderer extends JPanel implements CidsBeanRenderer, T
     private void lblPictureMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPictureMouseClicked
         if (!evt.isPopupTrigger()) {
             if (lblPicture.getPictureURL() != null) {
-                ObjectRendererUIUtils.openURL(lblPicture.getPictureURL());
+                ObjectRendererUtils.openURL(lblPicture.getPictureURL());
             }
         }
     }//GEN-LAST:event_lblPictureMouseClicked

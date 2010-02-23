@@ -4,7 +4,7 @@
  */
 package de.cismet.cids.custom.objectrenderer.converter;
 
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUIUtils;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.dynamics.CidsBean;
 import org.jdesktop.beansbinding.Converter;
 
@@ -30,7 +30,7 @@ public class BeanUrlToStringConverter extends Converter<CidsBean, String> {
 
     @Override
     public String convertForward(CidsBean bean) {
-        return ObjectRendererUIUtils.getUrlFromBean(bean, suffix);
+        return ObjectRendererUtils.getUrlFromBean(bean, suffix);
     }
 
     @Override

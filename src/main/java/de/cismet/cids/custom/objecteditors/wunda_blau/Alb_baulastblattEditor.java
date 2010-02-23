@@ -8,7 +8,7 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 import de.cismet.cids.annotations.AggregationRenderer;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUIUtils;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
 import de.cismet.tools.gui.BorderProvider;
@@ -54,8 +54,8 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
     }
 
     private void initFooterElements() {
-        ObjectRendererUIUtils.decorateJLabelAndButtonSynced(lblForw, btnForward, ObjectRendererUIUtils.FORWARD_SELECTED, ObjectRendererUIUtils.FORWARD_PRESSED);
-        ObjectRendererUIUtils.decorateJLabelAndButtonSynced(lblBack, btnBack, ObjectRendererUIUtils.BACKWARD_SELECTED, ObjectRendererUIUtils.BACKWARD_PRESSED);
+        ObjectRendererUtils.decorateJLabelAndButtonSynced(lblForw, btnForward, ObjectRendererUtils.FORWARD_SELECTED, ObjectRendererUtils.FORWARD_PRESSED);
+        ObjectRendererUtils.decorateJLabelAndButtonSynced(lblBack, btnBack, ObjectRendererUtils.BACKWARD_SELECTED, ObjectRendererUtils.BACKWARD_PRESSED);
     }
 
     @Override
@@ -394,7 +394,7 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
             }
         } catch (Exception ex) {
             log.error(ex, ex);
-            ObjectRendererUIUtils.showExceptionWindowToUser("Fehler beim Hinzufügen einer neuen Laufenden Nummer", ex, this);
+            ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Hinzufügen einer neuen Laufenden Nummer", ex, this);
         }
 }//GEN-LAST:event_btnAddLaufendeNummerActionPerformed
 
@@ -434,7 +434,7 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
                 }
             } catch (Exception e) {
                 log.error(e, e);
-                ObjectRendererUIUtils.showExceptionWindowToUser("Fehler beim Löschen", e, this);
+                ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Löschen", e, this);
             }
         }
 }//GEN-LAST:event_btnRemoveLaufendeNummerActionPerformed

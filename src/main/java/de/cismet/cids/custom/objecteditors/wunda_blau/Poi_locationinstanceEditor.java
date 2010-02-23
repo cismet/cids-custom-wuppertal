@@ -13,7 +13,7 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUIUtils;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.SignaturListCellRenderer;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
@@ -84,7 +84,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         dlgAddLocationType = new javax.swing.JDialog();
         panAddLocationType = new javax.swing.JPanel();
         lblAuswaehlen = new javax.swing.JLabel();
-        final MetaObject[] locationtypes = ObjectRendererUIUtils.getLightweightMetaObjectsForTable("poi_locationtype", new String[]{"identification"});
+        final MetaObject[] locationtypes = ObjectRendererUtils.getLightweightMetaObjectsForTable("poi_locationtype", new String[]{"identification"});
         if(locationtypes != null) {
             Arrays.sort(locationtypes);
             cbTypes = new javax.swing.JComboBox(locationtypes);
