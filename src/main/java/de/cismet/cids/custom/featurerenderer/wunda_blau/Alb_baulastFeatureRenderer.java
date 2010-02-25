@@ -17,7 +17,6 @@
 package de.cismet.cids.custom.featurerenderer.wunda_blau;
 
 import de.cismet.cids.featurerenderer.CustomCidsFeatureRenderer;
-import de.cismet.cids.featurerenderer.DefaultSubFeatureAwareFeatureRenderer;
 import de.cismet.cismap.commons.Refreshable;
 import de.cismet.cismap.commons.features.SubFeature;
 import de.cismet.cismap.commons.gui.piccolo.FeatureAnnotationSymbol;
