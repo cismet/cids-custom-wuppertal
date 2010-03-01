@@ -307,7 +307,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 5, 5, 5);
         rpMessdaten.add(lblDistance, gridBagConstraints);
 
-        lblTxtDistance.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblTxtDistance.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblTxtDistance.setText("Länge/Umfang:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -470,9 +470,9 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         rpControls.add(semiRoundedPanel4, gridBagConstraints);
 
-        btnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/frameprint.png"))); // NOI18N
-        btnPrint.setText("Drucken");
-        btnPrint.setToolTipText("Übersicht");
+        btnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/folder-image.png"))); // NOI18N
+        btnPrint.setText("Öffnen");
+        btnPrint.setToolTipText("Extern öffnen");
         btnPrint.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnPrint.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
