@@ -16,44 +16,64 @@
  */
 package de.cismet.cids.custom.featurerenderer.wunda_blau;
 
+import Sirius.navigator.exception.ConnectionException;
+import Sirius.server.middleware.types.MetaObject;
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
+import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.featurerenderer.CustomCidsFeatureRenderer;
 import de.cismet.cismap.commons.Refreshable;
-import de.cismet.cismap.commons.features.SubFeature;
 import de.cismet.cismap.commons.gui.piccolo.FeatureAnnotationSymbol;
 import de.cismet.cismap.commons.gui.piccolo.FixedWidthStroke;
 import de.cismet.cismap.navigatorplugin.CidsFeature;
+import de.cismet.tools.collections.TypeSafeCollections;
 import java.awt.Color;
 import java.awt.Paint;
 import java.awt.Stroke;
+import java.util.Collection;
+import java.util.Set;
 import javax.swing.JComponent;
 
 /**
  *
  * @author srichter
  */
-public class Alb_baulastFeatureRenderer extends  CustomCidsFeatureRenderer {
+public class Alb_baulastFeatureRenderer extends CustomCidsFeatureRenderer {
 
-    private static final Color BELASTET = new Color(0, 255, 0);
-    private static final Color BEGUENSTIGT = new Color(255, 255, 0);
+    private static final Color BELASTET_COLOR = new Color(0, 255, 0);
+    private static final Color BEGUENSTIGT_COLOR = new Color(255, 255, 0);
+    private static final Color BEIDES_COLOR = Color.RED;
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_baulastFeatureRenderer.class);
+    private final Set<Integer> belastetBeans = TypeSafeCollections.newHashSet();
+    private final Set<Integer> beguenstigtBeans = TypeSafeCollections.newHashSet();
 
     @Override
     public Paint getFillingStyle(CidsFeature subFeature) {
-        String attrString=subFeature.getMyAttributeStringInParentFeature();
-        if(attrString!=null){
-            if (attrString.contains("belastet")){
-                return BELASTET;
-            }
-            else if (attrString.contains("beguenstigt")){
-                return BEGUENSTIGT;
-            }
-            else {
-                return Color.red;
+        if (subFeature != null) {
+            final Integer id = subFeature.getMetaObject().getID();
+            if (belastetBeans.contains(id)) {
+                if (beguenstigtBeans.contains(id)) {
+                    return BEIDES_COLOR;
+                }
+                return BELASTET_COLOR;
+            } else if (beguenstigtBeans.contains(id)) {
+                return BEGUENSTIGT_COLOR;
+            } else {
+                return Color.RED;
             }
         }
-        else {
-            return new Color(0,0,0,0);
-        }
-
+        return null;
+//        String attrString = subFeature.getMyAttributeStringInParentFeature();
+//        if (attrString != null) {
+//            if (attrString.contains("belastet")) {
+//                return BELASTET;
+//            } else if (attrString.contains("beguenstigt")) {
+//                return BEGUENSTIGT;
+//            } else {
+//                return Color.RED;
+//            }
+//        } else {
+//            return new Color(0, 0, 0, 0);
+//        }
     }
 
     @Override
@@ -78,7 +98,7 @@ public class Alb_baulastFeatureRenderer extends  CustomCidsFeatureRenderer {
 
     @Override
     public float getTransparency(CidsFeature subFeature) {
-        return 0.8f;
+        return 0.6f;
     }
 
     @Override
@@ -88,7 +108,7 @@ public class Alb_baulastFeatureRenderer extends  CustomCidsFeatureRenderer {
 
     @Override
     public JComponent getInfoComponent(Refreshable refresh) {
-        return getInfoComponent(refresh,null);
+        return getInfoComponent(refresh, null);
     }
 
     @Override
@@ -112,8 +132,25 @@ public class Alb_baulastFeatureRenderer extends  CustomCidsFeatureRenderer {
     }
 
     @Override
-    public void assign() {
+    public void setMetaObject(MetaObject metaObject) throws ConnectionException {
+        super.setMetaObject(metaObject);
+        belastetBeans.clear();
+        beguenstigtBeans.clear();
+        if (cidsBean != null) {
+            Collection<CidsBean> beans;
+            beans = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "flurstuecke_belastet");
+            for (CidsBean bean : beans) {
+                belastetBeans.add(bean.getMetaObject().getID());
+            }
 
+            beans = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "flurstuecke_beguenstigt");
+            for (CidsBean bean : beans) {
+                beguenstigtBeans.add(bean.getMetaObject().getID());
+            }
+        }
     }
-   
+
+    @Override
+    public void assign() {
+    }
 }

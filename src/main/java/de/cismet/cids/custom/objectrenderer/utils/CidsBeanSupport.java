@@ -5,17 +5,13 @@
 package de.cismet.cids.custom.objectrenderer.utils;
 
 import Sirius.navigator.connection.SessionManager;
-import Sirius.navigator.resource.ResourceManager;
-import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.server.middleware.types.MetaClass;
-import Sirius.server.middleware.types.Node;
-import Sirius.server.newuser.permission.Permission;
+import Sirius.server.newuser.User;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.utils.ClassCacheMultiple;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -57,9 +53,8 @@ public final class CidsBeanSupport {
         return null;
     }
 
-    public static final boolean checkPermission(CidsBean bean) {
-        //TODO implement!!!
-        return true;
+    public static final boolean checkWritePermission(CidsBean bean) {
+        User user = SessionManager.getSession().getUser();
+        return bean.getHasWritePermission(user);
     }
-
 }

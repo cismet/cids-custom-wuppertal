@@ -88,6 +88,10 @@ import org.jdesktop.swingx.graphics.ReflectionRenderer;
  */
 public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements CidsBeanRenderer, BorderProvider, TitleComponentProvider, FooterComponentProvider {
 
+    private static final Color[] COLORS = new Color[]{
+        new Color(41, 86, 178), new Color(101, 156, 239), new Color(125, 189, 0), new Color(220, 246, 0), new Color(255, 91, 0)
+    };
+    public static final List<Color> LANDPARCEL_COLORS = Collections.unmodifiableList(Arrays.asList(COLORS));
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alkis_buchungsblattRenderer.class);
     private static final String ICON_RES_PACKAGE = "/de/cismet/cids/custom/wunda_blau/res/";
     private static final String ALKIS_RES_PACKAGE = ICON_RES_PACKAGE + "alkis/";
@@ -1269,10 +1273,6 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
     }
 
     private static final class LightweightLandParcel {
-
-        private static final Color[] COLORS = new Color[]{
-            new Color(41, 86, 178), new Color(101, 156, 239), new Color(125, 189, 0), new Color(220, 246, 0), new Color(255, 91, 0)
-        };
 
         public LightweightLandParcel(CidsBean buchungsBlattLandparcelBean) {
             this.landparcelCode = String.valueOf(buchungsBlattLandparcelBean.getProperty("landparcelcode"));

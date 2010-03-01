@@ -25,6 +25,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.Collection;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -49,7 +50,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
     private final boolean editable;
     private final Collection<JComponent> editableComponents;
     private Collection<CidsBean> currentListToAdd;
-    private boolean landParcelListInitialized = false;
+//    private boolean landParcelListInitialized = false;
     private boolean baulastArtenListInitialized = false;
 
     /** Creates new form Alb_baulastEditorPanel */
@@ -67,12 +68,6 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         dlgAddBaulastArt.setLocationRelativeTo(this);
         AutoCompleteDecorator.decorate(cbLandParcels);
         AutoCompleteDecorator.decorate(cbBaulastArt);
-
-        AutoCompleteDecorator.decorate(cbParcels1);
-        AutoCompleteDecorator.decorate(cbParcels2);
-        AutoCompleteDecorator.decorate(cbParcels3);
-//        cbParcels2.setEnabled(false);
-//        cbParcels3.setEnabled(false);
     }
 
     private final void initEditableComponents() {
@@ -148,12 +143,12 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         btnFlurstueckAddMenOk = new javax.swing.JButton();
         cbParcels2 = new javax.swing.JComboBox(NO_SELECTION_MODEL);
         cbParcels3 = new javax.swing.JComboBox(NO_SELECTION_MODEL);
+        lblGemarkung = new javax.swing.JLabel();
         lblFlur = new javax.swing.JLabel();
         lblFlurstueck = new javax.swing.JLabel();
-        lblZaehlerNenner = new javax.swing.JLabel();
         panMain = new javax.swing.JPanel();
         rpFSBeguenstigt = new de.cismet.tools.gui.RoundedPanel();
-        scpFlurstueckeBeguenstigt = new ColorJScrollpane(new Color(51, 102, 0));
+        scpFlurstueckeBeguenstigt = new ColorJScrollpane(new Color(255, 255, 0));
         lstFlurstueckeBeguenstigt = new javax.swing.JList();
         semiRoundedPanel1 = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeadBegFlurstuecke = new javax.swing.JLabel();
@@ -161,7 +156,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         btnAddBeguenstigt = new javax.swing.JButton();
         btnRemoveBeguenstigt = new javax.swing.JButton();
         rpFSBelastet = new de.cismet.tools.gui.RoundedPanel();
-        scpFlurstueckeBelastet = new ColorJScrollpane(new Color(153, 0, 0));
+        scpFlurstueckeBelastet = new ColorJScrollpane(new Color(0, 255, 0));
         lstFlurstueckeBelastet = new javax.swing.JList();
         semiRoundedPanel2 = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeadBelFlurstuecke = new javax.swing.JLabel();
@@ -311,6 +306,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
 
         dlgAddBaulastArt.getContentPane().add(panAddBaulastArt, java.awt.BorderLayout.CENTER);
 
+        dlgAddLandParcelDiv.setTitle("Flurstück hinzufügen");
         dlgAddLandParcelDiv.setMinimumSize(new java.awt.Dimension(380, 120));
         dlgAddLandParcelDiv.setModal(true);
 
@@ -319,12 +315,14 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         panAddLandParcel1.setPreferredSize(new java.awt.Dimension(180, 160));
         panAddLandParcel1.setLayout(new java.awt.GridBagLayout());
 
+        lblFlurstueckAuswaehlen.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblFlurstueckAuswaehlen.setText("Bitte Flurstück auswählen:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 20, 10);
         panAddLandParcel1.add(lblFlurstueckAuswaehlen, gridBagConstraints);
 
+        cbParcels1.setEditable(true);
         cbParcels1.setMaximumSize(new java.awt.Dimension(100, 18));
         cbParcels1.setMinimumSize(new java.awt.Dimension(100, 18));
         cbParcels1.setPreferredSize(new java.awt.Dimension(100, 18));
@@ -356,6 +354,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         panMenButtons2.add(btnFlurstueckAddMenCancel, gridBagConstraints);
 
         btnFlurstueckAddMenOk.setText("Ok");
+        btnFlurstueckAddMenOk.setMaximumSize(new java.awt.Dimension(85, 23));
+        btnFlurstueckAddMenOk.setMinimumSize(new java.awt.Dimension(85, 23));
+        btnFlurstueckAddMenOk.setPreferredSize(new java.awt.Dimension(85, 23));
         btnFlurstueckAddMenOk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFlurstueckAddMenOkActionPerformed(evt);
@@ -371,10 +372,11 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.insets = new java.awt.Insets(20, 5, 5, 5);
         panAddLandParcel1.add(panMenButtons2, gridBagConstraints);
 
+        cbParcels2.setEditable(true);
         cbParcels2.setEnabled(false);
         cbParcels2.setMaximumSize(new java.awt.Dimension(100, 18));
         cbParcels2.setMinimumSize(new java.awt.Dimension(100, 18));
@@ -391,6 +393,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panAddLandParcel1.add(cbParcels2, gridBagConstraints);
 
+        cbParcels3.setEditable(true);
         cbParcels3.setEnabled(false);
         cbParcels3.setMaximumSize(new java.awt.Dimension(100, 18));
         cbParcels3.setMinimumSize(new java.awt.Dimension(100, 18));
@@ -407,26 +410,26 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panAddLandParcel1.add(cbParcels3, gridBagConstraints);
 
-        lblFlur.setText("Flur");
+        lblGemarkung.setText("Gemarkung");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panAddLandParcel1.add(lblGemarkung, gridBagConstraints);
+
+        lblFlur.setText("Flur");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panAddLandParcel1.add(lblFlur, gridBagConstraints);
 
         lblFlurstueck.setText("Flurstück");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panAddLandParcel1.add(lblFlurstueck, gridBagConstraints);
-
-        lblZaehlerNenner.setText("Zähler/Nenner");
-        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panAddLandParcel1.add(lblZaehlerNenner, gridBagConstraints);
+        panAddLandParcel1.add(lblFlurstueck, gridBagConstraints);
 
         dlgAddLandParcelDiv.getContentPane().add(panAddLandParcel1, java.awt.BorderLayout.CENTER);
 
@@ -829,24 +832,6 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
-    private final MetaObject[] getLWLandparcels() {
-        return ObjectRendererUtils.getLightweightMetaObjectsForQuery("flurstueck", "select id,gemarkungs_nr, flur, fstnr_z, fstnr_n from flurstueck order by gemarkungs_nr, flur, fstnr_z, fstnr_n", new String[]{"gemarkungs_nr", "flur", "fstnr_z", "fstnr_n"}, new AbstractAttributeRepresentationFormater() {
-
-            @Override
-            public String getRepresentation() {
-                StringBuilder result = new StringBuilder(20);
-                result.append(getAttribute("gemarkungs_nr")).append("-");
-                result.append(getAttribute("flur")).append("-");
-                result.append(getAttribute("fstnr_z"));
-                final Object nenner = getAttribute("fstnr_n");
-                if (nenner != null) {
-                    result.append("/").append(nenner);
-                }
-                return result.toString();
-            }
-        });
-    }
-
     private final MetaObject[] getLWBaulastarten() {
         return ObjectRendererUtils.getLightweightMetaObjectsForQuery("alb_baulast_art", "select id,baulast_art from alb_baulast_art order by baulast_art", new String[]{"baulast_art"}, new AbstractAttributeRepresentationFormater() {
 
@@ -858,29 +843,18 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
     }
 
     private void btnAddBelastetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddBelastetActionPerformed
-//        if (!landParcelListInitialized) {
-//            CismetThreadPool.execute(new FlurstueckComboModelWorker());
-//        }
         currentListToAdd = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "flurstuecke_belastet");
-//        dlgAddLandParcel.setVisible(true);
         handleAddFlurstueck();
     }//GEN-LAST:event_btnAddBelastetActionPerformed
 
     private void btnAddBeguenstigtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddBeguenstigtActionPerformed
-//        if (!landParcelListInitialized) {
-//            CismetThreadPool.execute(new FlurstueckComboModelWorker());
-//        }
         currentListToAdd = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "flurstuecke_beguenstigt");
-//        dlgAddLandParcel.setVisible(true);
         handleAddFlurstueck();
     }//GEN-LAST:event_btnAddBeguenstigtActionPerformed
 
     private final void handleAddFlurstueck() {
         btnFlurstueckAddMenOk.setEnabled(false);
-//        cbParcels2.setVisible(false);
-//        cbParcels3.setVisible(false);
-//        cbParcels4.setVisible(false);
-        CismetThreadPool.execute(new AbstractFlurstueckComboModelWorker(cbParcels1) {
+        CismetThreadPool.execute(new AbstractFlurstueckComboModelWorker(cbParcels1, true) {
 
             @Override
             protected ComboBoxModel doInBackground() throws Exception {
@@ -981,7 +955,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         final Object selection = cbBaulastArt.getSelectedItem();
         if (selection instanceof LightweightMetaObject) {
             final CidsBean selectedBean = ((LightweightMetaObject) selection).getBean();
-            Collection<CidsBean> colToAdd = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "art");
+            final Collection<CidsBean> colToAdd = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "art");
             if (colToAdd != null) {
                 if (!colToAdd.contains(selectedBean)) {
                     colToAdd.add(selectedBean);
@@ -990,12 +964,6 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         }
         dlgAddBaulastArt.setVisible(false);
     }//GEN-LAST:event_btnMenOk1ActionPerformed
-
-    private void lstFlurstueckeBeguenstigtMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstFlurstueckeBeguenstigtMouseClicked
-        if (evt.getClickCount() > 1) {
-            handleJumpToListeSelectionBean(lstFlurstueckeBeguenstigt);
-        }
-    }//GEN-LAST:event_lstFlurstueckeBeguenstigtMouseClicked
 
     private void lstFlurstueckeBelastetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstFlurstueckeBelastetMouseClicked
         if (evt.getClickCount() > 1) {
@@ -1016,44 +984,125 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
                     currentListToAdd.add(selectedBean);
                 }
             }
+        } else if (selection instanceof String) {
+            int result = JOptionPane.showConfirmDialog(this, "Das Flurstück befindet sich noch nicht im Datenbestand. Soll das Flustück angelegt werden?", "Historisches Flurstück anlegen", JOptionPane.YES_NO_OPTION);
+            if (result == JOptionPane.YES_OPTION) {
+                currentListToAdd.add(newLandParcelBeanFromComboBoxes(selection.toString()));
+            }
+            currentListToAdd = null;
         }
-        currentListToAdd = null;
         dlgAddLandParcelDiv.setVisible(false);
     }//GEN-LAST:event_btnFlurstueckAddMenOkActionPerformed
 
+    private CidsBean newLandParcelBeanFromComboBoxes(String zaehlerNenner) {
+        int result = JOptionPane.YES_OPTION;
+        try {
+            final Map<String, Object> newLandParcelProperties = TypeSafeCollections.newHashMap();
+            final String gemarkung = String.valueOf(cbParcels1.getSelectedItem());
+            final String flur = String.valueOf(cbParcels2.getSelectedItem());
+            if (flur.length() != 3) {
+                result = JOptionPane.showConfirmDialog(this, "Das neue Flurstück entspricht nicht der Namenskonvention: Flur sollte dreistellig sein (mit führenden Nullen, z.B. 007). Datensatz trotzdem abspeichern?", "Warnung: Format", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            }
+            if (result == JOptionPane.YES_OPTION) {
+                final String[] zaehlerNennerTiles = zaehlerNenner.split("/");
+                newLandParcelProperties.put(FlurstueckFinder.FLURSTUECK_GEMARKUNG, Integer.valueOf(gemarkung));
+                newLandParcelProperties.put(FlurstueckFinder.FLURSTUECK_FLUR, flur);
+                newLandParcelProperties.put(FlurstueckFinder.FLURSTUECK_ZAEHLER, zaehlerNennerTiles[0]);
+                String nenner = "0";
+                if (zaehlerNennerTiles.length == 2) {
+                    nenner = zaehlerNennerTiles[1];
+                }
+                newLandParcelProperties.put(FlurstueckFinder.FLURSTUECK_NENNER, nenner);
+                return CidsBeanSupport.createNewCidsBeanFromTableName(FlurstueckFinder.FLURSTUECK_TABLE_NAME, newLandParcelProperties);
+            }
+        } catch (Exception ex) {
+            log.error(ex, ex);
+        }
+        return null;
+    }
+    private static final String CB_EDITED_ACTION_COMMAND = "comboBoxEdited";
+
     private void cbParcels1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbParcels1ActionPerformed
-//        if (!cbParcels1.isPopupVisible()) {
-        final String selGemarkungsNr = String.valueOf(cbParcels1.getSelectedItem());
+        Object selection = cbParcels1.getSelectedItem();
         cbParcels3.setEnabled(false);
         btnFlurstueckAddMenOk.setEnabled(false);
-        CismetThreadPool.execute(new AbstractFlurstueckComboModelWorker(cbParcels2) {
+        if (selection instanceof MetaObject) {
+            final String selGemarkungsNr = String.valueOf(selection);
+            CismetThreadPool.execute(new AbstractFlurstueckComboModelWorker(cbParcels2, CB_EDITED_ACTION_COMMAND.equals(evt.getActionCommand())) {
 
-            @Override
-            protected ComboBoxModel doInBackground() throws Exception {
-                return new DefaultComboBoxModel(FlurstueckFinder.getLWFlure(selGemarkungsNr));
+                @Override
+                protected ComboBoxModel doInBackground() throws Exception {
+                    return new DefaultComboBoxModel(FlurstueckFinder.getLWFlure(selGemarkungsNr));
+                }
+            });
+            cbParcels1.getEditor().getEditorComponent().setBackground(Color.WHITE);
+        } else {
+            cbParcels1.getEditor().getEditorComponent().setBackground(Color.YELLOW);
+            cbParcels2.setModel(new DefaultComboBoxModel());
+            cbParcels2.setEnabled(true);
+            if (CB_EDITED_ACTION_COMMAND.equals(evt.getActionCommand())) {
+                cbParcels2.requestFocus();
             }
-        });
-//        }
+        }
+        cbParcels2.getEditor().getEditorComponent().setBackground(Color.WHITE);
+        cbParcels3.getEditor().getEditorComponent().setBackground(Color.WHITE);
     }//GEN-LAST:event_cbParcels1ActionPerformed
 
     private void cbParcels2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbParcels2ActionPerformed
-//        if (!cbParcels2.isPopupVisible()) {
-        final String selGemarkungsNr = String.valueOf(cbParcels1.getSelectedItem());
-        final String selFlurNr = String.valueOf(cbParcels2.getSelectedItem());
-        btnFlurstueckAddMenOk.setEnabled(false);
-        CismetThreadPool.execute(new AbstractFlurstueckComboModelWorker(cbParcels3) {
+        Object selection = cbParcels2.getSelectedItem();
+        if (selection instanceof MetaObject) {
+            final String selGem = String.valueOf(cbParcels1.getSelectedItem());
+            final StringBuffer selFlurNr = new StringBuffer(String.valueOf(cbParcels2.getSelectedItem()));
+            btnFlurstueckAddMenOk.setEnabled(false);
+            CismetThreadPool.execute(new AbstractFlurstueckComboModelWorker(cbParcels3, CB_EDITED_ACTION_COMMAND.equals(evt.getActionCommand())) {
 
-            @Override
-            protected ComboBoxModel doInBackground() throws Exception {
-                return new DefaultComboBoxModel(FlurstueckFinder.getLWFurstuecksZaehlerNenner(selGemarkungsNr, selFlurNr));
+                @Override
+                protected ComboBoxModel doInBackground() throws Exception {
+                    return new DefaultComboBoxModel(FlurstueckFinder.getLWFurstuecksZaehlerNenner(selGem, selFlurNr.toString()));
+                }
+            });
+            cbParcels2.getEditor().getEditorComponent().setBackground(Color.WHITE);
+        } else {
+            cbParcels2.getEditor().getEditorComponent().setBackground(Color.YELLOW);
+            cbParcels3.setModel(new DefaultComboBoxModel());
+            cbParcels3.setEnabled(true);
+            if (CB_EDITED_ACTION_COMMAND.equals(evt.getActionCommand())) {
+                cbParcels3.requestFocus();
             }
-        });
-        btnFlurstueckAddMenOk.setEnabled(true);
-//        }
+        }
+        cbParcels3.getEditor().getEditorComponent().setBackground(Color.WHITE);
     }//GEN-LAST:event_cbParcels2ActionPerformed
 
+    private boolean checkFlurstueckSelectionComplete() {
+        if (cbParcels2.isEnabled() && cbParcels3.isEnabled()) {
+            Object sel2 = cbParcels2.getSelectedItem();
+            Object sel3 = cbParcels3.getSelectedItem();
+            if (sel2 != null && sel3 != null) {
+                if (sel2.toString().length() > 0 && sel3.toString().length() > 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private void cbParcels3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbParcels3ActionPerformed
+        btnFlurstueckAddMenOk.setEnabled(checkFlurstueckSelectionComplete());
+        if (CB_EDITED_ACTION_COMMAND.equals(evt.getActionCommand())) {
+            btnFlurstueckAddMenOk.requestFocus();
+        }
+        if (cbParcels3.getSelectedItem() instanceof MetaObject) {
+            cbParcels3.getEditor().getEditorComponent().setBackground(Color.WHITE);
+        } else {
+            cbParcels3.getEditor().getEditorComponent().setBackground(Color.YELLOW);
+        }
     }//GEN-LAST:event_cbParcels3ActionPerformed
+
+    private void lstFlurstueckeBeguenstigtMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstFlurstueckeBeguenstigtMouseClicked
+        if (evt.getClickCount() > 1) {
+            handleJumpToListeSelectionBean(lstFlurstueckeBeguenstigt);
+        }
+}//GEN-LAST:event_lstFlurstueckeBeguenstigtMouseClicked
 
     private final void handleJumpToListeSelectionBean(JList list) {
         final Object selectedObj = list.getSelectedValue();
@@ -1110,12 +1159,12 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblFlur;
     private javax.swing.JLabel lblFlurstueck;
     private javax.swing.JLabel lblFlurstueckAuswaehlen;
+    private javax.swing.JLabel lblGemarkung;
     private javax.swing.JLabel lblHeadBegFlurstuecke;
     private javax.swing.JLabel lblHeadBelFlurstuecke;
     private javax.swing.JLabel lblHeadInfo;
     private javax.swing.JLabel lblSuchwortEingeben;
     private javax.swing.JLabel lblSuchwortEingeben1;
-    private javax.swing.JLabel lblZaehlerNenner;
     private javax.swing.JList lstBaulastArt;
     private javax.swing.JList lstFlurstueckeBeguenstigt;
     private javax.swing.JList lstFlurstueckeBelastet;
@@ -1146,35 +1195,34 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
     private static final ComboBoxModel waitModel = new DefaultComboBoxModel(new String[]{"Wird geladen..."});
 
-    class FlurstueckComboModelWorker extends SwingWorker<ComboBoxModel, Void> {
-
-        public FlurstueckComboModelWorker() {
-            cbLandParcels.setModel(waitModel);
-            cbLandParcels.setEnabled(false);
-            btnMenOk.setEnabled(false);
-        }
-
-        @Override
-        protected ComboBoxModel doInBackground() throws Exception {
-            return new DefaultComboBoxModel(getLWLandparcels());
-        }
-
-        @Override
-        protected void done() {
-            try {
-                cbLandParcels.setModel(get());
-                landParcelListInitialized = true;
-            } catch (InterruptedException ex) {
-                log.debug(ex, ex);
-            } catch (ExecutionException ex) {
-                log.error(ex, ex);
-            } finally {
-                cbLandParcels.setEnabled(true);
-                btnMenOk.setEnabled(true);
-            }
-        }
-    }
-
+//    class FlurstueckComboModelWorker extends SwingWorker<ComboBoxModel, Void> {
+//
+//        public FlurstueckComboModelWorker() {
+//            cbLandParcels.setModel(waitModel);
+//            cbLandParcels.setEnabled(false);
+//            btnMenOk.setEnabled(false);
+//        }
+//
+//        @Override
+//        protected ComboBoxModel doInBackground() throws Exception {
+//            return new DefaultComboBoxModel(getLWLandparcels());
+//        }
+//
+//        @Override
+//        protected void done() {
+//            try {
+//                cbLandParcels.setModel(get());
+////                landParcelListInitialized = true;
+//            } catch (InterruptedException ex) {
+//                log.debug(ex, ex);
+//            } catch (ExecutionException ex) {
+//                log.error(ex, ex);
+//            } finally {
+//                cbLandParcels.setEnabled(true);
+//                btnMenOk.setEnabled(true);
+//            }
+//        }
+//    }
     class BaulastArtenComboModelWorker extends SwingWorker<ComboBoxModel, Void> {
 
         public BaulastArtenComboModelWorker() {
@@ -1207,9 +1255,11 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
     abstract class AbstractFlurstueckComboModelWorker extends SwingWorker<ComboBoxModel, Void> {
 
         private final JComboBox box;
+        private final boolean switchToBox;
 
-        public AbstractFlurstueckComboModelWorker(JComboBox box) {
+        public AbstractFlurstueckComboModelWorker(JComboBox box, boolean switchToBox) {
             this.box = box;
+            this.switchToBox = switchToBox;
             box.setVisible(true);
             box.setEnabled(false);
             box.setModel(waitModel);
@@ -1219,6 +1269,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         protected void done() {
             try {
                 box.setModel(get());
+                if (switchToBox) {
+                    box.requestFocus();
+                }
             } catch (InterruptedException ex) {
                 log.debug(ex, ex);
             } catch (ExecutionException ex) {

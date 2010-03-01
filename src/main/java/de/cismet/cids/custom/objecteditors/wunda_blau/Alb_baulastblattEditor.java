@@ -385,8 +385,12 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
                         getHighestCurrentLaufendeNummer(baulasten) + 1);
                 if (userInput != null) {
                     final int laufendeNr = Integer.parseInt(userInput);
+                    String blattNummer = txtBlattnummer.getText();
+                    final String folder = generateFolderNameFromBlattnummer(blattNummer);
                     final CidsBean newBean = CidsBeanSupport.createNewCidsBeanFromTableName("alb_baulast");
                     newBean.setProperty("laufende_nummer", String.valueOf(laufendeNr));
+                    newBean.setProperty("textblatt", folder);
+                    newBean.setProperty("lageplan", folder);
                     baulasten.add(newBean);
                     final int newIndex = lstLaufendeNummern.getModel().getSize();
                     lstLaufendeNummern.setSelectedIndex(newIndex - 1);
@@ -397,6 +401,24 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Hinzufügen einer neuen Laufenden Nummer", ex, this);
         }
 }//GEN-LAST:event_btnAddLaufendeNummerActionPerformed
+    private String generateFolderNameFromBlattnummer(String blattNummer) {
+        if (blattNummer.length() > 4) {
+            blattNummer = blattNummer.replaceAll("\\D", "");
+            int nummer = Integer.parseInt(blattNummer);
+            nummer /= 1000;
+            String nummStringStart = String.valueOf(nummer) + "000";
+            String nummStringEnd = String.valueOf(nummer + 1) + "000";
+            while (nummStringStart.length() < 6) {
+                nummStringStart = "0" + nummStringStart;
+            }
+            while (nummStringEnd.length() < 6) {
+                nummStringEnd = "0" + nummStringEnd;
+            }
+            return nummStringStart + "-" + nummStringEnd + "/";
+        } else {
+            return "XXXX00-XXXY00/";
+        }
+    }
 
     private final int getHighestCurrentLaufendeNummer(Collection<CidsBean> baulasten) {
         int max = 0;
