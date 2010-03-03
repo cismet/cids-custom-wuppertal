@@ -16,13 +16,13 @@ import de.aedsicad.aaaweb.service.alkis.info.ALKISInfoServices;
 import de.aedsicad.aaaweb.service.util.Buchungsblatt;
 import de.aedsicad.aaaweb.service.util.Buchungsstelle;
 import de.aedsicad.aaaweb.service.util.LandParcel;
-import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.StyleListCellRenderer;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisCommons;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisSOAPWorkerService;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.SOAPAccessProvider;
 import de.cismet.cids.dynamics.CidsBean;
+import de.cismet.cids.objectrenderer.AlphanumComparator;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.XBoundingBox;
@@ -973,8 +973,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         try {
             String parcelCode = getLandparcelCode();
             if (parcelCode.length() > 0) {
-                String url = "http://s102x083:8080/ASWeb34/ASA_AAAWeb/ALKISLiegenschaftskarte?user=3atest&password=3atest&service=wuppertal&landparcel=" + parcelCode;
-                ObjectRendererUtils.openURL(url);
+                AlkisCommons.PROCUCTS.productKarte(parcelCode);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_landparcelRenderer.this);
@@ -986,8 +985,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         try {
             String parcelCode = getLandparcelCode();
             if (parcelCode.length() > 0) {
-                String url = "http://s102x083:8080/ASWeb34/ASA_AAAWeb/ALKISBuchNachweis?user=3atest&password=3atest&service=wuppertal&product=LB.NRW.FENW.G&id=" + parcelCode + "&contentType=PDF&certificationType=9511";
-                ObjectRendererUtils.openURL(url);
+                AlkisCommons.PROCUCTS.productFlurstuecksnachweis(parcelCode, AlkisCommons.PRODUCT_FORMAT.PDF);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_landparcelRenderer.this);
@@ -999,8 +997,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         try {
             String parcelCode = getLandparcelCode();
             if (parcelCode.length() > 0) {
-                String url = "http://s102x083:8080/ASWeb34/ASA_AAAWeb/ALKISBuchNachweis?user=3atest&password=3atest&service=wuppertal&product=LB.A.FENW.G.NRW&id=" + parcelCode + "&contentType=HTML&certificationType=9551";
-                ObjectRendererUtils.openURL(url);
+                AlkisCommons.PROCUCTS.productFlurstuecksEigentumsnachweis(parcelCode, AlkisCommons.PRODUCT_FORMAT.HTML);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_landparcelRenderer.this);
@@ -1012,8 +1009,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         try {
             String parcelCode = getLandparcelCode();
             if (parcelCode.length() > 0) {
-                String url = "http://s102x083:8080/ASWeb34/ASA_AAAWeb/ALKISBuchNachweis?user=3atest&password=3atest&service=wuppertal&product=LB.NRW.FENW.G&id=" + parcelCode + "&contentType=HTML&certificationType=9511";
-                ObjectRendererUtils.openURL(url);
+                AlkisCommons.PROCUCTS.productFlurstuecksnachweis(parcelCode, AlkisCommons.PRODUCT_FORMAT.HTML);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_landparcelRenderer.this);
@@ -1072,8 +1068,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         try {
             String parcelCode = getLandparcelCode();
             if (parcelCode.length() > 0) {
-                String url = "http://s102x083:8080/ASWeb34/ASA_AAAWeb/ALKISBuchNachweis?user=3atest&password=3atest&service=wuppertal&product=LB.A.FENW.G.NRW&id=" + parcelCode + "&contentType=PDF&certificationType=9551";
-                ObjectRendererUtils.openURL(url);
+                AlkisCommons.PROCUCTS.productFlurstuecksEigentumsnachweis(parcelCode, AlkisCommons.PRODUCT_FORMAT.PDF);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_landparcelRenderer.this);

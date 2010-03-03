@@ -245,6 +245,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
 
         dlgAddLandParcel.getContentPane().add(panAddLandParcel, java.awt.BorderLayout.CENTER);
 
+        dlgAddBaulastArt.setTitle("Art hinzufügen");
         dlgAddBaulastArt.setMinimumSize(new java.awt.Dimension(300, 120));
         dlgAddBaulastArt.setModal(true);
 
@@ -253,6 +254,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         panAddBaulastArt.setPreferredSize(new java.awt.Dimension(300, 120));
         panAddBaulastArt.setLayout(new java.awt.GridBagLayout());
 
+        lblSuchwortEingeben1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblSuchwortEingeben1.setText("Bitte Art auswählen:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -286,6 +288,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         panMenButtons1.add(btnMenAbort1, gridBagConstraints);
 
         btnMenOk1.setText("Ok");
+        btnMenOk1.setMaximumSize(new java.awt.Dimension(85, 23));
+        btnMenOk1.setMinimumSize(new java.awt.Dimension(85, 23));
+        btnMenOk1.setPreferredSize(new java.awt.Dimension(85, 23));
         btnMenOk1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMenOk1ActionPerformed(evt);
@@ -319,7 +324,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         lblFlurstueckAuswaehlen.setText("Bitte Flurstück auswählen:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 20, 10);
+        gridBagConstraints.insets = new java.awt.Insets(15, 10, 20, 10);
         panAddLandParcel1.add(lblFlurstueckAuswaehlen, gridBagConstraints);
 
         cbParcels1.setEditable(true);

@@ -10,7 +10,6 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import com.lowagie.text.pdf.codec.Base64.InputStream;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.objectrenderer.CoolThemaRenderer;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
@@ -27,7 +26,6 @@ import javax.swing.JComponent;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.Highlighter;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
-import org.openide.util.Exceptions;
 
 /**
  *

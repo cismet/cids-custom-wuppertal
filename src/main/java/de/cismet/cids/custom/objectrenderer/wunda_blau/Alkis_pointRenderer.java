@@ -14,6 +14,7 @@ import de.aedsicad.aaaweb.service.alkis.info.ALKISInfoServices;
 import de.aedsicad.aaaweb.service.util.Point;
 import de.aedsicad.aaaweb.service.util.PointLocation;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisCommons;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.SOAPAccessProvider;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
@@ -59,10 +60,6 @@ import org.jdesktop.swingx.graphics.ReflectionRenderer;
  */
 public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanRenderer, TitleComponentProvider, FooterComponentProvider, BorderProvider {
 
-    private static final String PRODUKTID_PUNKTLISTE_PDF = "LN.NRW.PL.1";
-    private static final String PRODUKTID_PUNKTLISTE_HTML = "LN.NRW.PL.2";
-    private static final String PRODUKTID_PUNKTLISTE_TXT = "LN.NRW.PL.3";
-    private static final String PRODUKTURL_BASE = "http://s102x083:8080/ASWeb34/ASA_AAAWeb/ALKISListenNachweis?user=3atest&password=3atest&service=wuppertal&product=";
     private static final String ICON_RES_PACKAGE = "/de/cismet/cids/custom/wunda_blau/res/";
     private static final String ALKIS_RES_PACKAGE = ICON_RES_PACKAGE + "alkis/";
     private static final Pattern ERHEBUNG_FILTER_PATTERN = Pattern.compile("<LI_Source><description>(.*)</description></LI_Source>");
@@ -89,26 +86,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
     private ImageIcon PUNKT_PDF;
     private ImageIcon PUNKT_HTML;
     private ImageIcon PUNKT_TXT;
-    private static final Converter<String, Boolean> ALKIS_BOOLEAN_CONVERTER_OLD = new Converter<String, Boolean>() {
-
-        @Override
-        public Boolean convertForward(String s) {
-            if (s != null && s.equals("1")) {
-                return Boolean.TRUE;
-            } else {
-                return Boolean.FALSE;
-            }
-        }
-
-        @Override
-        public String convertReverse(Boolean t) {
-            if (t != null && t) {
-                return "1";
-            } else {
-                return "0";
-            }
-        }
-    };
+    
     private static final Converter<String, String> ALKIS_BOOLEAN_CONVERTER = new Converter<String, String>() {
 
         private static final String TRUE_REP = "Ja";
@@ -1007,7 +985,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.weightx = 1.0;
         panLocationInfos.add(srpHeadLocInfo, gridBagConstraints);
 
-        lblDescPunktorte.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblDescPunktorte.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblDescPunktorte.setText("Koordinatensystem:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1409,8 +1387,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         try {
             final String pointID = lblTxtIdentifikator.getText();
             final String pointArt = lblTxtPunktart.getText();
-            final String url = PRODUKTURL_BASE + PRODUKTID_PUNKTLISTE_PDF + "&ids=" + pointArt + ":" + pointID;
-            ObjectRendererUtils.openURL(url);
+            AlkisCommons.PROCUCTS.productPunktliste(pointID, pointArt, AlkisCommons.PRODUCT_FORMAT.PDF);
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_pointRenderer.this);
             log.error(ex);
@@ -1421,8 +1398,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         try {
             final String pointID = lblTxtIdentifikator.getText();
             final String pointArt = lblTxtPunktart.getText();
-            final String url = PRODUKTURL_BASE + PRODUKTID_PUNKTLISTE_HTML + "&ids=" + pointArt + ":" + pointID;
-            ObjectRendererUtils.openURL(url);
+            AlkisCommons.PROCUCTS.productPunktliste(pointID, pointArt, AlkisCommons.PRODUCT_FORMAT.HTML);
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_pointRenderer.this);
             log.error(ex);
@@ -1445,8 +1421,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         try {
             final String pointID = lblTxtIdentifikator.getText();
             final String pointArt = lblTxtPunktart.getText();
-            final String url = PRODUKTURL_BASE + PRODUKTID_PUNKTLISTE_TXT + "&ids=" + pointArt + ":" + pointID;
-            ObjectRendererUtils.openURL(url);
+            AlkisCommons.PROCUCTS.productPunktliste(pointID, pointArt, AlkisCommons.PRODUCT_FORMAT.TEXT);
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_pointRenderer.this);
             log.error(ex);

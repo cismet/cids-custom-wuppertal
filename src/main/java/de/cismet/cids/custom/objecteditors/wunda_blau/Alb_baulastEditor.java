@@ -229,6 +229,7 @@ public class Alb_baulastEditor extends JPanel implements CidsBeanStore, TitleCom
         btnForward.setEnabled(false);
         lblBack.setEnabled(true);
         lblForw.setEnabled(false);
+        alb_picturePanel.updateIfPicturePathsChanged();
 //        alb_picturePanel.zoomToFeatureCollection();
 }//GEN-LAST:event_btnForwardActionPerformed
 

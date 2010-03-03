@@ -8,6 +8,7 @@ import de.aedsicad.aaaweb.service.util.Address;
 import de.aedsicad.aaaweb.service.util.Buchungsblatt;
 import de.aedsicad.aaaweb.service.util.Buchungsstelle;
 import de.aedsicad.aaaweb.service.util.Owner;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.dynamics.CidsBean;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -18,16 +19,98 @@ import java.util.List;
  */
 public class AlkisCommons {
 
+    public static enum PRODUCT_FORMAT {
+
+        PDF("PDF"), HTML("HTML"), TEXT("TEXT");
+
+        private PRODUCT_FORMAT(String string) {
+            this.formatString = string;
+        }
+        private final String formatString;
+
+        @Override
+        public String toString() {
+            return formatString;
+        }
+
+        ;
+    }
+
     public static final class MAP_CONSTANTS {
 
         private MAP_CONSTANTS() {
         }
         public static final String SRS = "EPSG:31466";
-        public static final String CALL_STRING = "http://s102x082.wuppertal-intra.de:8080/wmsconnector/com.esri.wms.Esrimap/web_navigation_lf?&VERSION=1.1.1&REQUEST=GetMap&SRS=" + SRS + "&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&LAYERS=26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0&STYLES=" +
-                "&BBOX=<cismap:boundingBox>" +
-                "&WIDTH=<cismap:width>" +
-                "&HEIGHT=<cismap:height>";
+        public static final String CALL_STRING = "http://s102x082.wuppertal-intra.de:8080/wmsconnector/com.esri.wms.Esrimap/web_navigation_lf?&VERSION=1.1.1&REQUEST=GetMap&SRS=" + SRS + "&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&LAYERS=26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0&STYLES="
+                + "&BBOX=<cismap:boundingBox>"
+                + "&WIDTH=<cismap:width>"
+                + "&HEIGHT=<cismap:height>";
         public static final double GEO_BUFFER = 5.0;
+    }
+
+    public static final class PROCUCTS {
+
+        private static final String PRODUKTID_PUNKTLISTE_PDF = "LN.NRW.PL.1";
+        private static final String PRODUKTID_PUNKTLISTE_HTML = "LN.NRW.PL.2";
+        private static final String PRODUKTID_PUNKTLISTE_TXT = "LN.NRW.PL.3";
+        private static final String IDENTIFICATION = "user=" + SOAPAccessProvider.USER + "&password=" + SOAPAccessProvider.PASSWORD + "&service=" + SOAPAccessProvider.SERVICE;
+        //
+
+        private PROCUCTS() {
+        }
+
+        public static void productBestandsnachweisProduct(String buchungsblattCode, PRODUCT_FORMAT format) {
+            String url = "http://s102x083:8080/ASWeb34/ASA_AAAWeb/ALKISBuchNachweis?" + IDENTIFICATION + "&product=LB.A.B.G.NRW&id=" + buchungsblattCode + "&contentType=" + format + "&certificationType=9701";
+            ObjectRendererUtils.openURL(url);
+        }
+
+        public static void productFlurstuecksnachweis(String parcelCode, PRODUCT_FORMAT format) {
+            String url = "http://s102x083:8080/ASWeb34/ASA_AAAWeb/ALKISBuchNachweis?" + IDENTIFICATION + "&product=LB.NRW.FENW.G&id=" + parcelCode + "&contentType=" + format + "&certificationType=9511";
+            ObjectRendererUtils.openURL(url);
+        }
+
+        public static void productFlurstuecksEigentumsnachweis(String parcelCode, PRODUCT_FORMAT format) {
+            String url = "http://s102x083:8080/ASWeb34/ASA_AAAWeb/ALKISBuchNachweis?" + IDENTIFICATION + "&product=LB.A.FENW.G.NRW&id=" + parcelCode + "&contentType=" + format + "&certificationType=9551";
+            ObjectRendererUtils.openURL(url);
+        }
+
+        public static void productPunktliste(String pointID, String pointArt, PRODUCT_FORMAT format) {
+            productPunktliste(pointArt + ":" + pointID, format);
+        }
+        public static void productPunktliste(String punktliste, PRODUCT_FORMAT format) {
+            final String formatString;
+            switch (format) {
+                case PDF:
+                    formatString = PRODUKTID_PUNKTLISTE_PDF;
+                    break;
+                case HTML:
+                    formatString = PRODUKTID_PUNKTLISTE_HTML;
+                    break;
+                case TEXT:
+                    formatString = PRODUKTID_PUNKTLISTE_TXT;
+                    break;
+                default:
+                    return;
+            }
+            final String url = "http://s102x083:8080/ASWeb34/ASA_AAAWeb/ALKISListenNachweis?" + IDENTIFICATION + "&product=" + formatString + "&ids=" + punktliste;
+            ObjectRendererUtils.openURL(url);
+        }
+
+        public static void productPunktliste(String[] pointIDs, String[] pointArts, PRODUCT_FORMAT format) {
+            StringBuffer punktListe = new StringBuffer();
+            for (int i = 0; i < pointIDs.length; ++i) {
+                if (punktListe.length() > 0) {
+                    punktListe.append(",");
+                }
+                punktListe.append(pointArts[i]).append(":").append(pointIDs[i]);
+            }
+            productPunktliste(punktListe.toString(), format);
+        }
+
+        public static void productKarte(String parcelCode) {
+            String url = "http://s102x083:8080/ASWeb34/ASA_AAAWeb/ALKISLiegenschaftskarte?" + IDENTIFICATION + "&landparcel=" + parcelCode;
+            ObjectRendererUtils.openURL(url);
+        }
     }
 
     public static final String generateLinkFromCidsBean(CidsBean bean, String description) {

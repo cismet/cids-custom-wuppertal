@@ -71,6 +71,8 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
         ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(lblPrint, Cursor.HAND_CURSOR, Cursor.DEFAULT_CURSOR);
     }
 
+
+    //TODO: error prone: remove notify is called by the docking framework -> we need a remove-hook
     @Override
     public void removeNotify() {
         final PictureWorker w = worker;

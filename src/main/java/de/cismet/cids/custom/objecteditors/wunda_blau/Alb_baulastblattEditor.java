@@ -11,11 +11,15 @@ import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
+import de.cismet.cids.objectrenderer.AlphanumComparator;
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
 import java.awt.CardLayout;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -33,6 +37,13 @@ import javax.swing.border.EmptyBorder;
 public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, TitleComponentProvider, FooterComponentProvider, BorderProvider, RequestsFullSizeComponent {
 
     static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_baulastblattEditor.class);
+    private static final Comparator<Object> OBJECT_COMPARATOR = new Comparator<Object>() {
+
+        @Override
+        public int compare(Object o1, Object o2) {
+            return AlphanumComparator.getInstance().compare(String.valueOf(o1), String.valueOf(o2));
+        }
+    };
     private final boolean editable;
     private CidsBean cidsBean;
     private final CardLayout cardLayout;
@@ -67,6 +78,10 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
     public void setCidsBean(final CidsBean cidsBean) {
         if (cidsBean != null) {
             this.cidsBean = cidsBean;
+            final Object lastenObj = cidsBean.getProperty("baulasten");
+            if (lastenObj instanceof List) {
+                Collections.sort((List) lastenObj, OBJECT_COMPARATOR);
+            }
             bindingGroup.unbind();
             bindingGroup.bind();
             lstLaufendeNummern.setSelectedIndex(0);
@@ -479,6 +494,7 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
         btnForward.setEnabled(false);
         lblBack.setEnabled(true);
         lblForw.setEnabled(false);
+        alb_picturePanel.updateIfPicturePathsChanged();
 //        alb_picturePanel.zoomToFeatureCollection();
 }//GEN-LAST:event_btnForwardActionPerformed
 

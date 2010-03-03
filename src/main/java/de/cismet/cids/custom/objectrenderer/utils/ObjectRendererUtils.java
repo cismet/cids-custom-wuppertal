@@ -11,6 +11,7 @@ import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.newuser.User;
 import de.cismet.cids.dynamics.CidsBean;
+import de.cismet.cids.objectrenderer.AlphanumComparator;
 import de.cismet.cids.utils.ClassCacheMultiple;
 import de.cismet.cismap.commons.features.Feature;
 import de.cismet.cismap.commons.gui.MappingComponent;
@@ -34,6 +35,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -360,6 +362,24 @@ public class ObjectRendererUtils {
             } catch (Exception e3) {
                 log.error("Auch das 2te Mal ging schief.Fehler beim Oeffnen von:file://" + gotoUrl, e3);
             }
+        }
+    }
+
+    public static String propertyPrettyPrint(Object propertyValue) {
+        if (propertyValue instanceof Collection) {
+            final Collection beanCollection = (Collection) propertyValue;
+            final StringBuilder resultSB = new StringBuilder();
+            for (Object bean : beanCollection) {
+                if (resultSB.length() != 0) {
+                    resultSB.append(", ");
+                }
+                resultSB.append(String.valueOf(bean));
+            }
+            return resultSB.toString();
+        } else if (propertyValue != null) {
+            return propertyValue.toString();
+        } else {
+            return "-";
         }
     }
 

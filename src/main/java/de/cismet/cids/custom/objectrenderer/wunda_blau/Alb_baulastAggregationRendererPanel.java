@@ -13,6 +13,7 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.dynamics.CidsBean;
+import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 import de.cismet.tools.collections.TypeSafeCollections;
 import java.util.Collection;
 import java.util.List;
@@ -22,13 +23,14 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author srichter
  */
-public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel {
+public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel implements CidsBeanAggregationRenderer {
 
     //Spaltenueberschriften
     private static final String[] AGR_COMLUMN_NAMES = new String[]{"Blattnummer", "Laufende Nummer", "Eintragungsdatum", "Befristungsdatum", "Geschlossen am", "Löschungsdatum", "Textblatt", "Lageplan", "Art"};
     //Namen der Properties -> Spalten
     private static final String[] AGR_PROPERTY_NAMES = new String[]{"laufende_nummer", "eintragungsdatum", "befristungsdatum", "geschlossen_am", "loeschungsdatum", "textblatt", "lageplan", "art"};
     private Collection<CidsBean> cidsBeans;
+    private String title = "";
 
     /** Creates new form Alb_baulastAggregationRendererPanel */
     public Alb_baulastAggregationRendererPanel() {
@@ -50,31 +52,14 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel {
             result[0] = blBlattnummer;
 
             for (int i = 0; i < AGR_PROPERTY_NAMES.length; ++i) {
-                result[i + 1] = propertyPrettyPrint(baulastBean.getProperty(AGR_PROPERTY_NAMES[i]));
+                result[i + 1] = ObjectRendererUtils.propertyPrettyPrint(baulastBean.getProperty(AGR_PROPERTY_NAMES[i]));
             }
             return result;
         }
         return new Object[0];
     }
 
-    private final String propertyPrettyPrint(Object propertyValue) {
-        if (propertyValue instanceof Collection) {
-            final Collection beanCollection = (Collection) propertyValue;
-            final StringBuilder resultSB = new StringBuilder();
-            for (Object bean : beanCollection) {
-                if (resultSB.length() != 0) {
-                    resultSB.append(", ");
-                }
-                resultSB.append(String.valueOf(bean));
-            }
-            return resultSB.toString();
-        } else if (propertyValue != null) {
-            return propertyValue.toString();
-        } else {
-            return "-";
-        }
-    }
-
+    @Override
     public void setCidsBeans(Collection<CidsBean> blattBeans) {
         if (blattBeans != null) {
             this.cidsBeans = blattBeans;
@@ -89,8 +74,10 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel {
             tblAggregation.setModel(model);
             ObjectRendererUtils.decorateTableWithSorter(tblAggregation);
         }
+        setTitle(null);
     }
 
+    @Override
     public Collection<CidsBean> getCidsBeans() {
         return cidsBeans;
     }
@@ -137,4 +124,19 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane scpAggregationTable;
     private javax.swing.JTable tblAggregation;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
+    public void setTitle(String title) {
+        String desc = "Punktliste";
+        final Collection<CidsBean> beans = cidsBeans;
+        if (beans != null && beans.size() > 0) {
+            desc += " - " + beans.size() + " Punkte ausgewählt";
+        }
+        this.title = desc;
+    }
 }

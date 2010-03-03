@@ -772,8 +772,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
             String buchungsblattCode = getCompleteBuchungsblattCode();
             if (buchungsblattCode.length() > 0) {
                 buchungsblattCode = AlkisCommons.escapeHtmlSpaces(buchungsblattCode);
-                String url = "http://s102x083:8080/ASWeb34/ASA_AAAWeb/ALKISBuchNachweis?user=3atest&password=3atest&service=wuppertal&product=LB.A.B.G.NRW&id=" + buchungsblattCode + "&contentType=HTML&certificationType=9701";
-                ObjectRendererUtils.openURL(url);
+                AlkisCommons.PROCUCTS.productBestandsnachweisProduct(buchungsblattCode, AlkisCommons.PRODUCT_FORMAT.HTML);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_buchungsblattRenderer.this);
@@ -786,8 +785,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
             String buchungsblattCode = getCompleteBuchungsblattCode();
             if (buchungsblattCode.length() > 0) {
                 buchungsblattCode = AlkisCommons.escapeHtmlSpaces(buchungsblattCode);
-                String url = "http://s102x083:8080/ASWeb34/ASA_AAAWeb/ALKISBuchNachweis?user=3atest&password=3atest&service=wuppertal&product=LB.A.B.G.NRW&id=" + buchungsblattCode + "&contentType=PDF&certificationType=9701";
-                ObjectRendererUtils.openURL(url);
+                AlkisCommons.PROCUCTS.productBestandsnachweisProduct(buchungsblattCode, AlkisCommons.PRODUCT_FORMAT.PDF);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_buchungsblattRenderer.this);

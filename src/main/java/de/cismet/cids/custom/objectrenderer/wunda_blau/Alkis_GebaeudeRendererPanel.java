@@ -16,7 +16,7 @@
  */
 
 /*
- * Alkis_GebaeudeRendererPanel.java
+ * Alkis_gebaeudeRendererPanel.java
  *
  * Created on 06.01.2010, 16:32:30
  */
@@ -45,7 +45,7 @@ public class Alkis_GebaeudeRendererPanel extends javax.swing.JPanel {
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alkis_GebaeudeRendererPanel.class);
     private CidsBean cidsBean;
 
-    /** Creates new form Alkis_GebaeudeRendererPanel */
+    /** Creates new form Alkis_gebaeudeRendererPanel */
     public Alkis_GebaeudeRendererPanel() {
         initComponents();
     }

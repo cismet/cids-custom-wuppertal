@@ -18,6 +18,14 @@ import java.net.URL;
  */
 public final class SOAPAccessProvider {
 
+    public static final String USER = "3atest";
+    public static final String PASSWORD = "3atest";
+    public static final String SERVICE = "wuppertal";
+
+    public SOAPAccessProvider(String user, String password, String service, String catalogService, String infoService, String searchService) {
+        this(user + "," + password, service, catalogService, infoService, searchService);
+    }
+
     public SOAPAccessProvider(String identityCard, String service, String catalogService, String infoService, String searchService) {
         this.identityCard = identityCard;
         this.service = service;
@@ -30,14 +38,17 @@ public final class SOAPAccessProvider {
         }
     }
 
+    public SOAPAccessProvider(String user, String password, String service) {
+        this(user + "," + password, service);
+    }
+
     public SOAPAccessProvider(String identityCard, String service) {
         this(identityCard, service, "http://s102x083:8080/AAAWebService/services/ALKISCatalogServices", "http://s102x083:8080/AAAWebService/services/ALKISInfoServices", "http://s102x083:8080/AAAWebService/services/ALKISSearchServices");
     }
 
     public SOAPAccessProvider() {
-        this("3atest,3atest", "wuppertal");
+        this(USER, PASSWORD, SERVICE);
     }
-
     private final String identityCard;
     private final String service;
     private final ALKISCatalogServices alkisCatalogServices;
@@ -78,6 +89,4 @@ public final class SOAPAccessProvider {
     public ALKISSearchServices getAlkisSearchService() {
         return alkisSearchService;
     }
-
-   
 }
