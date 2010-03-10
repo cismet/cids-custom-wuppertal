@@ -980,7 +980,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
             if (CB_EDITED_ACTION_COMMAND.equals(evt.getActionCommand())) {
                 cbParcels2.requestFocus();
             }
-            lblGemarkungsname.setText("");
+            lblGemarkungsname.setText(" ");
         }
         cbParcels2.getEditor().getEditorComponent().setBackground(Color.WHITE);
         cbParcels3.getEditor().getEditorComponent().setBackground(Color.WHITE);
