@@ -439,16 +439,16 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
         int max = 0;
         if (baulasten != null) {
             for (final CidsBean baulastBean : baulasten) {
-                try {
-                    final Object laufendeNummerObj = baulastBean.getProperty("laufende_nummer");
-                    if (laufendeNummerObj != null) {
+                final Object laufendeNummerObj = baulastBean.getProperty("laufende_nummer");
+                if (laufendeNummerObj != null) {
+                    try {
                         int currentLN = Integer.valueOf(laufendeNummerObj.toString());
                         if (currentLN > max) {
                             max = currentLN;
                         }
+                    } catch (Exception ex) {
+                        //Number format exception expected
                     }
-                } catch (Exception ex) {
-                    log.warn(ex, ex);
                 }
             }
         }

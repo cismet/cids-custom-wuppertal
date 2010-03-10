@@ -18,6 +18,9 @@ import java.util.Comparator;
 public class FlurstueckFinder {
 
     public static final String FLURSTUECK_TABLE_NAME = "alb_flurstueck_kicker";
+    public static final String GEMARKUNG_TABLE_NAME = "gemarkung";
+    public static final String GEMARKUNG_ID = "gemarkungsnummer";
+    public static final String GEMARKUNG_NAME = "name";
     public static final String FLURSTUECK_GEMARKUNG = "gemarkung";
     public static final String FLURSTUECK_FLUR = "flur";
     public static final String FLURSTUECK_ZAEHLER = "zaehler";
@@ -46,7 +49,7 @@ public class FlurstueckFinder {
 
     public static final MetaObject[] getLWGemarkungen() {
         return ObjectRendererUtils.getLightweightMetaObjectsForQuery(
-                FLURSTUECK_TABLE_NAME, "select min(id) as id, " + FLURSTUECK_GEMARKUNG + " from " + FLURSTUECK_TABLE_NAME + " group by " + FLURSTUECK_GEMARKUNG + " order by " + FLURSTUECK_GEMARKUNG, new String[]{"id", FLURSTUECK_GEMARKUNG}, new AbstractAttributeRepresentationFormater() {
+                FLURSTUECK_TABLE_NAME, "select min(id) as id, " + FLURSTUECK_GEMARKUNG + ", min(" + GEMARKUNG_NAME + ") as " + GEMARKUNG_NAME + " from " + FLURSTUECK_TABLE_NAME + " join " + GEMARKUNG_TABLE_NAME + " on " + FLURSTUECK_GEMARKUNG + " = " + GEMARKUNG_ID + " group by " + FLURSTUECK_GEMARKUNG + " order by " + FLURSTUECK_GEMARKUNG, new String[]{"id", FLURSTUECK_GEMARKUNG, GEMARKUNG_NAME}, new AbstractAttributeRepresentationFormater() {
 
             @Override
             public String getRepresentation() {

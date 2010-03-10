@@ -36,11 +36,15 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
+import java.util.logging.Level;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.ListModel;
 import javax.swing.SwingWorker;
+import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.error.ErrorInfo;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -577,6 +581,9 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                     registerGeometryForPage(documentGeom, currentDocument, currentPage);
                 } catch (Exception ex) {
                     log.error(ex, ex);
+                    final ErrorInfo ei = new ErrorInfo("Fehler beim Speichern der Kalibrierung", "Beim Speichern der Kalibrierung ist ein Fehler aufgetreten", null,
+                            null, ex, Level.SEVERE, null);
+                    JXErrorPane.showDialog(this, ei);
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "Eingegebene(r) Distanz bzw. Umfang ist kein gültiger Wert oder gleich 0.", "Ungültige Eingabe", JOptionPane.WARNING_MESSAGE);
@@ -629,7 +636,6 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                             if (pageNo == (Integer) pageNumberObj) {
                                 pageGeom.setProperty("geometry", geometry);
                                 pageFound = true;
-                                log.fatal("found: " + pageNo);
                                 break;
                             }
                         }
@@ -642,6 +648,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                     }
                     persistBean();
                     rpMessdaten.setBackground(KALIBRIERUNG_VORHANDEN);
+                    rpMessdaten.setAlpha(120);
                 } else {
                     log.error("Empty Page Collection!");
                 }
@@ -709,7 +716,27 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     private void persistBean() throws Exception {
         if (CidsBeanSupport.checkWritePermission(cidsBean)) {
             alreadyWarnedAboutPermissionProblem = false;
-            cidsBean.persist();
+            final SwingWorker<Void, Void> persistWorker = new SwingWorker<Void, Void>() {
+
+                @Override
+                protected Void doInBackground() throws Exception {
+                    cidsBean.persist();
+                    return null;
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        get();
+                    } catch (Exception ex) {
+                        log.error(ex, ex);
+                        final ErrorInfo ei = new ErrorInfo("Fehler beim Speichern der Kalibrierung", "Beim Speichern der Kalibrierung ist ein Fehler aufgetreten", null,
+                                null, ex, Level.SEVERE, null);
+                        JXErrorPane.showDialog(Alb_picturePanel.this, ei);
+                    }
+                }
+            };
+            CismetThreadPool.execute(persistWorker);
         } else {
             showPermissionWarning();
         }
