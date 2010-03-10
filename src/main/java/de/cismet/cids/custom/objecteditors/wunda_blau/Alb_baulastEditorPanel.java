@@ -971,7 +971,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
                 }
             });
             String gemarkungsname = String.valueOf(lwmo.getLWAttribute(FlurstueckFinder.GEMARKUNG_NAME));
-            lblGemarkungsname.setText(gemarkungsname);
+            lblGemarkungsname.setText("(" + gemarkungsname + ")");
             cbParcels1.getEditor().getEditorComponent().setBackground(Color.WHITE);
         } else {
             cbParcels1.getEditor().getEditorComponent().setBackground(Color.YELLOW);
@@ -980,6 +980,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
             if (CB_EDITED_ACTION_COMMAND.equals(evt.getActionCommand())) {
                 cbParcels2.requestFocus();
             }
+            lblGemarkungsname.setText("");
         }
         cbParcels2.getEditor().getEditorComponent().setBackground(Color.WHITE);
         cbParcels3.getEditor().getEditorComponent().setBackground(Color.WHITE);
