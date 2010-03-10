@@ -128,7 +128,7 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
         gridBagConstraints.insets = new java.awt.Insets(15, 10, 5, 10);
         panProdukte.add(cbProducts, gridBagConstraints);
 
-        btnCreate.setText(org.openide.util.NbBundle.getMessage(Alkis_pointAggregationRenderer.class, "Alkis_pointAggregationRenderer.btnCreate.text")); // NOI18N
+        btnCreate.setText("Erzeugen");
         btnCreate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCreateActionPerformed(evt);
@@ -140,14 +140,14 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
         gridBagConstraints.insets = new java.awt.Insets(15, 10, 5, 5);
         panProdukte.add(btnCreate, gridBagConstraints);
 
-        lblProductDescr.setText(org.openide.util.NbBundle.getMessage(Alkis_pointAggregationRenderer.class, "Alkis_pointAggregationRenderer.lblProductDescr.text")); // NOI18N
+        lblProductDescr.setText("Listendokument für markierte Punkte:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(15, 10, 5, 10);
         panProdukte.add(lblProductDescr, gridBagConstraints);
 
-        btnRemember.setText(org.openide.util.NbBundle.getMessage(Alkis_pointAggregationRenderer.class, "Alkis_pointAggregationRenderer.btnRemember.text")); // NOI18N
+        btnRemember.setText("Merken");
         btnRemember.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRememberActionPerformed(evt);
@@ -159,7 +159,7 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
         gridBagConstraints.insets = new java.awt.Insets(15, 5, 5, 5);
         panProdukte.add(btnRemember, gridBagConstraints);
 
-        btnRelease.setText(org.openide.util.NbBundle.getMessage(Alkis_pointAggregationRenderer.class, "Alkis_pointAggregationRenderer.btnRelease.text")); // NOI18N
+        btnRelease.setText("Vergessen");
         btnRelease.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnReleaseActionPerformed(evt);

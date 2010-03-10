@@ -66,7 +66,7 @@ public class Poi_locationtypeRenderer extends javax.swing.JPanel implements Cids
 
         lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18));
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
-        lblTitle.setText(org.openide.util.NbBundle.getMessage(Poi_locationtypeRenderer.class, "Poi_locationtypeRenderer.lblTitle.text")); // NOI18N
+        lblTitle.setText("TITLE");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -80,7 +80,7 @@ public class Poi_locationtypeRenderer extends javax.swing.JPanel implements Cids
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         lblName.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblName.setText(org.openide.util.NbBundle.getMessage(Poi_locationtypeRenderer.class, "Poi_locationtypeRenderer.lblName.text")); // NOI18N
+        lblName.setText("Name:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -98,7 +98,7 @@ public class Poi_locationtypeRenderer extends javax.swing.JPanel implements Cids
         jPanel1.add(lblTxtName, gridBagConstraints);
 
         lblDefinition.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblDefinition.setText(org.openide.util.NbBundle.getMessage(Poi_locationtypeRenderer.class, "Poi_locationtypeRenderer.lblDefinition.text")); // NOI18N
+        lblDefinition.setText("Definition:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -119,7 +119,7 @@ public class Poi_locationtypeRenderer extends javax.swing.JPanel implements Cids
         jPanel1.add(lblTxtDefinition, gridBagConstraints);
 
         lblIcon.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblIcon.setText(org.openide.util.NbBundle.getMessage(Poi_locationtypeRenderer.class, "Poi_locationtypeRenderer.lblIcon.text")); // NOI18N
+        lblIcon.setText("Icon:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -140,7 +140,7 @@ public class Poi_locationtypeRenderer extends javax.swing.JPanel implements Cids
         jPanel1.add(lblTxtIcon, gridBagConstraints);
 
         lblVeroeffentlicht.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblVeroeffentlicht.setText(org.openide.util.NbBundle.getMessage(Poi_locationtypeRenderer.class, "Poi_locationtypeRenderer.lblVeroeffentlicht.text")); // NOI18N
+        lblVeroeffentlicht.setText("Veröffentlicht:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -149,7 +149,7 @@ public class Poi_locationtypeRenderer extends javax.swing.JPanel implements Cids
         jPanel1.add(lblVeroeffentlicht, gridBagConstraints);
 
         lblSignatur.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblSignatur.setText(org.openide.util.NbBundle.getMessage(Poi_locationtypeRenderer.class, "Poi_locationtypeRenderer.lblSignatur.text")); // NOI18N
+        lblSignatur.setText("Signatur:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -171,7 +171,7 @@ public class Poi_locationtypeRenderer extends javax.swing.JPanel implements Cids
         jPanel1.add(jLabel10, gridBagConstraints);
 
         lblThemen.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblThemen.setText(org.openide.util.NbBundle.getMessage(Poi_locationtypeRenderer.class, "Poi_locationtypeRenderer.lblThemen.text")); // NOI18N
+        lblThemen.setText("Lebenslage:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
@@ -192,7 +192,6 @@ public class Poi_locationtypeRenderer extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel12, gridBagConstraints);
 
-        jCheckBox1.setText(org.openide.util.NbBundle.getMessage(Poi_locationtypeRenderer.class, "Poi_locationtypeRenderer.jCheckBox1.text")); // NOI18N
         jCheckBox1.setEnabled(false);
         jCheckBox1.setOpaque(false);
 

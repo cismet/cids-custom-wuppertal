@@ -1112,8 +1112,11 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
     private final void handleJumpToListeSelectionBean(JList list) {
         final Object selectedObj = list.getSelectedValue();
         if (selectedObj instanceof CidsBean) {
-            final MetaObject selMO = ((CidsBean) selectedObj).getMetaObject();
-            ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObject(selMO, "");
+            Object realFSBean = ((CidsBean) selectedObj).getProperty("fs_referenz");
+            if (realFSBean instanceof CidsBean) {
+                final MetaObject selMO = ((CidsBean) realFSBean).getMetaObject();
+                ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObject(selMO, "");
+            }
         }
     }
 

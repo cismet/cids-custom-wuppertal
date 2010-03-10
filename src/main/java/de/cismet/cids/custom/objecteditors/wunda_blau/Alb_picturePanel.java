@@ -641,6 +641,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                         newBean.setProperty("geometry", geometry);
                     }
                     persistBean();
+                    rpMessdaten.setBackground(KALIBRIERUNG_VORHANDEN);
                 } else {
                     log.error("Empty Page Collection!");
                 }

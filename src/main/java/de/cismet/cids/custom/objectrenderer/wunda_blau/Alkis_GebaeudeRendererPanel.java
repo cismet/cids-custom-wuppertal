@@ -82,15 +82,15 @@ public class Alkis_GebaeudeRendererPanel extends javax.swing.JPanel {
         panGebaeudeContent.setOpaque(false);
         panGebaeudeContent.setLayout(new java.awt.GridBagLayout());
 
-        lblDescFunktion.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblDescFunktion.setText(org.openide.util.NbBundle.getMessage(Alkis_GebaeudeRendererPanel.class, "Alkis_GebaeudeRendererPanel.lblDescFunktion.text")); // NOI18N
+        lblDescFunktion.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblDescFunktion.setText("Funktion:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panGebaeudeContent.add(lblDescFunktion, gridBagConstraints);
 
-        lblDescStockwerkeOber.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblDescStockwerkeOber.setText(org.openide.util.NbBundle.getMessage(Alkis_GebaeudeRendererPanel.class, "Alkis_GebaeudeRendererPanel.lblDescStockwerkeOber.text")); // NOI18N
+        lblDescStockwerkeOber.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblDescStockwerkeOber.setText("Oberirdische Geschosse:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -121,8 +121,8 @@ public class Alkis_GebaeudeRendererPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panGebaeudeContent.add(lblStockwerkeOber, gridBagConstraints);
 
-        lblDescBauweise.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblDescBauweise.setText(org.openide.util.NbBundle.getMessage(Alkis_GebaeudeRendererPanel.class, "Alkis_GebaeudeRendererPanel.lblDescBauweise.text")); // NOI18N
+        lblDescBauweise.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblDescBauweise.setText("Bauweise:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -142,8 +142,8 @@ public class Alkis_GebaeudeRendererPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panGebaeudeContent.add(lblBauweise, gridBagConstraints);
 
-        lblDescStockwerkeUnter.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblDescStockwerkeUnter.setText(org.openide.util.NbBundle.getMessage(Alkis_GebaeudeRendererPanel.class, "Alkis_GebaeudeRendererPanel.lblDescStockwerkeUnter.text")); // NOI18N
+        lblDescStockwerkeUnter.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblDescStockwerkeUnter.setText("Unterirdische Geschosse:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -184,8 +184,8 @@ public class Alkis_GebaeudeRendererPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panGebaeudeContent.add(scpLandparcels, gridBagConstraints);
 
-        lblDescFlurstuecke.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblDescFlurstuecke.setText(org.openide.util.NbBundle.getMessage(Alkis_GebaeudeRendererPanel.class, "Alkis_GebaeudeRendererPanel.lblDescFlurstuecke.text")); // NOI18N
+        lblDescFlurstuecke.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblDescFlurstuecke.setText("Das Gebäude ist auf folgendem Flurstück errichtet:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
@@ -194,8 +194,8 @@ public class Alkis_GebaeudeRendererPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panGebaeudeContent.add(lblDescFlurstuecke, gridBagConstraints);
 
-        lblDescLage.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblDescLage.setText(org.openide.util.NbBundle.getMessage(Alkis_GebaeudeRendererPanel.class, "Alkis_GebaeudeRendererPanel.lblDescLage.text")); // NOI18N
+        lblDescLage.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblDescLage.setText("Lage:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -203,7 +203,7 @@ public class Alkis_GebaeudeRendererPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panGebaeudeContent.add(lblDescLage, gridBagConstraints);
 
-        lblLage.setText(org.openide.util.NbBundle.getMessage(Alkis_GebaeudeRendererPanel.class, "Alkis_GebaeudeRendererPanel.lblLage.text")); // NOI18N
+        lblLage.setText("-");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
