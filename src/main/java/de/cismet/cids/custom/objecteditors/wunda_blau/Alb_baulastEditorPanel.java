@@ -65,6 +65,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         dlgAddBaulastArt.pack();
         dlgAddBaulastArt.setLocationRelativeTo(this);
         AutoCompleteDecorator.decorate(cbBaulastArt);
+        cbParcels1.getEditor();
     }
 
     private final void initEditableComponents() {
@@ -974,13 +975,26 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
             lblGemarkungsname.setText("(" + gemarkungsname + ")");
             cbParcels1.getEditor().getEditorComponent().setBackground(Color.WHITE);
         } else {
-            cbParcels1.getEditor().getEditorComponent().setBackground(Color.YELLOW);
-            cbParcels2.setModel(new DefaultComboBoxModel());
-            cbParcels2.setEnabled(true);
-            if (CB_EDITED_ACTION_COMMAND.equals(evt.getActionCommand())) {
-                cbParcels2.requestFocus();
+            final int foundBeanIndex = ObjectRendererUtils.findComboBoxItemForString(cbParcels1, String.valueOf(selection));
+            if (foundBeanIndex < 0) {
+                cbParcels2.setModel(new DefaultComboBoxModel());
+                try {
+                    Integer.parseInt(String.valueOf(selection));
+                    cbParcels1.getEditor().getEditorComponent().setBackground(Color.YELLOW);
+                    cbParcels2.setEnabled(true);
+                    if (CB_EDITED_ACTION_COMMAND.equals(evt.getActionCommand())) {
+                        cbParcels2.requestFocus();
+                    }
+                } catch (Exception notANumberEx) {
+                    log.debug(selection + " is not a number!", notANumberEx);
+                    cbParcels2.setEnabled(false);
+                    cbParcels1.getEditor().getEditorComponent().setBackground(Color.RED);
+                    lblGemarkungsname.setText("(Ist keine Zahl)");
+                }
+                lblGemarkungsname.setText(" ");
+            } else {
+                cbParcels1.setSelectedIndex(foundBeanIndex);
             }
-            lblGemarkungsname.setText(" ");
         }
         cbParcels2.getEditor().getEditorComponent().setBackground(Color.WHITE);
         cbParcels3.getEditor().getEditorComponent().setBackground(Color.WHITE);
@@ -1001,11 +1015,17 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
             });
             cbParcels2.getEditor().getEditorComponent().setBackground(Color.WHITE);
         } else {
-            cbParcels2.getEditor().getEditorComponent().setBackground(Color.YELLOW);
-            cbParcels3.setModel(new DefaultComboBoxModel());
-            cbParcels3.setEnabled(true);
-            if (CB_EDITED_ACTION_COMMAND.equals(evt.getActionCommand())) {
-                cbParcels3.requestFocus();
+            final int foundBeanIndex = ObjectRendererUtils.findComboBoxItemForString(cbParcels2, String.valueOf(selection));
+            if (foundBeanIndex < 0) {
+
+                cbParcels2.getEditor().getEditorComponent().setBackground(Color.YELLOW);
+                cbParcels3.setModel(new DefaultComboBoxModel());
+                cbParcels3.setEnabled(true);
+                if (CB_EDITED_ACTION_COMMAND.equals(evt.getActionCommand())) {
+                    cbParcels3.requestFocus();
+                }
+            } else {
+                cbParcels2.setSelectedIndex(foundBeanIndex);
             }
         }
         cbParcels3.getEditor().getEditorComponent().setBackground(Color.WHITE);
@@ -1032,7 +1052,12 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         if (cbParcels3.getSelectedItem() instanceof MetaObject) {
             cbParcels3.getEditor().getEditorComponent().setBackground(Color.WHITE);
         } else {
-            cbParcels3.getEditor().getEditorComponent().setBackground(Color.YELLOW);
+            final int foundBeanIndex = ObjectRendererUtils.findComboBoxItemForString(cbParcels3, String.valueOf(cbParcels3.getSelectedItem()));
+            if (foundBeanIndex < 0) {
+                cbParcels3.getEditor().getEditorComponent().setBackground(Color.YELLOW);
+            } else {
+                cbParcels3.setSelectedIndex(foundBeanIndex);
+            }
         }
     }//GEN-LAST:event_cbParcels3ActionPerformed
 

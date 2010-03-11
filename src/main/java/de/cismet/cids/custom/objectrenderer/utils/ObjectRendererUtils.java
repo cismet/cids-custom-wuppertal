@@ -39,9 +39,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+import javax.swing.ComboBoxModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -381,6 +383,20 @@ public class ObjectRendererUtils {
         } else {
             return "-";
         }
+    }
+
+    public static final int findComboBoxItemForString(JComboBox box, String searchString) {
+        if (box != null && searchString != null) {
+            ComboBoxModel model = box.getModel();
+            if (model != null) {
+                for (int i = model.getSize(); --i >= 0;) {
+                    if (searchString.equals(String.valueOf(model.getElementAt(i)))) {
+                        return i;
+                    }
+                }
+            }
+        }
+        return -1;
     }
 
     public static String getUrlFromBean(CidsBean bean, String suffix) {
