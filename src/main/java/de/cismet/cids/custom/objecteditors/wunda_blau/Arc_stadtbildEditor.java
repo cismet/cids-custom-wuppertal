@@ -357,7 +357,7 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         panContent.add(lblStrasse, gridBagConstraints);
 
         txtAInfo.setColumns(7);
-        txtAInfo.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        txtAInfo.setFont(new java.awt.Font("Tahoma", 0, 11));
         txtAInfo.setRows(5);
         txtAInfo.setMaximumSize(new java.awt.Dimension(150, 20));
         txtAInfo.setMinimumSize(new java.awt.Dimension(150, 20));
@@ -655,6 +655,11 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.objekt}"), cbHauptsuchwort, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
+        cbHauptsuchwort.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbHauptsuchwortActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 7;
@@ -772,6 +777,10 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
             setNewPicture();
         }
     }//GEN-LAST:event_txtBildnummerKeyPressed
+
+    private void cbHauptsuchwortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbHauptsuchwortActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbHauptsuchwortActionPerformed
 
     private final void showExceptionToUser(Exception ex) {
         final ErrorInfo ei = new ErrorInfo("Fehler beim Hinzufügen", "Beim Hinzufügen des Suchworts ist ein Fehler aufgetreten", null,

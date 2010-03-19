@@ -16,6 +16,7 @@ import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -87,6 +88,30 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
             lstLaufendeNummern.setSelectedIndex(0);
             final Object blattnummer = cidsBean.getProperty("blattnummer");
             lblTitle.setText(TITLE_PREFIX + " " + blattnummer);
+            checkLaufendeNummern();
+        }
+    }
+
+    private void checkLaufendeNummern() {
+        if (lstLaufendeNummern.getModel().getSize() > 0) {
+            if (!panBaulastEditor.isEnabled()) {
+                setAllSubComponentsEnabled(panBaulastEditor, true);
+            }
+        } else {
+            if (panBaulastEditor.isEnabled()) {
+                setAllSubComponentsEnabled(panBaulastEditor, false);
+            }
+        }
+    }
+
+    private void setAllSubComponentsEnabled(JComponent component, boolean enabled) {
+        component.setEnabled(enabled);
+        for (Component subComponent : component.getComponents()) {
+            if (subComponent != null) {
+                if (subComponent instanceof JComponent) {
+                    setAllSubComponentsEnabled((JComponent) subComponent, enabled);
+                }
+            }
         }
     }
 
@@ -411,28 +436,34 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
                     lstLaufendeNummern.setSelectedIndex(newIndex - 1);
                 }
             }
+            checkLaufendeNummern();
         } catch (Exception ex) {
             log.error(ex, ex);
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Hinzufügen einer neuen Laufenden Nummer", ex, this);
         }
 }//GEN-LAST:event_btnAddLaufendeNummerActionPerformed
     private String generateFolderNameFromBlattnummer(String blattNummer) {
-        if (blattNummer.length() > 4) {
-            blattNummer = blattNummer.replaceAll("\\D", "");
-            int nummer = Integer.parseInt(blattNummer);
-            nummer /= 1000;
-            String nummStringStart = String.valueOf(nummer) + "000";
-            String nummStringEnd = String.valueOf(nummer + 1) + "000";
-            while (nummStringStart.length() < 6) {
-                nummStringStart = "0" + nummStringStart;
+        if (blattNummer != null) {
+            try {
+                blattNummer = blattNummer.replaceAll("\\D", "");
+                if (blattNummer.length() > 0) {
+                    int nummer = Integer.parseInt(blattNummer);
+                    nummer /= 1000;
+                    String nummStringStart = String.valueOf(nummer) + "000";
+                    String nummStringEnd = String.valueOf(nummer + 1) + "000";
+                    while (nummStringStart.length() < 6) {
+                        nummStringStart = "0" + nummStringStart;
+                    }
+                    while (nummStringEnd.length() < 6) {
+                        nummStringEnd = "0" + nummStringEnd;
+                    }
+                    return nummStringStart + "-" + nummStringEnd + "/";
+                }
+            } catch (Exception ex) {
+                log.warn(ex, ex);
             }
-            while (nummStringEnd.length() < 6) {
-                nummStringEnd = "0" + nummStringEnd;
-            }
-            return nummStringStart + "-" + nummStringEnd + "/";
-        } else {
-            return "XXXX00-XXXY00/";
         }
+        return "XXXX00-XXXY00/";
     }
 
     private final int getHighestCurrentLaufendeNummer(Collection<CidsBean> baulasten) {
@@ -469,6 +500,7 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
                     lstLaufendeNummern.setSelectedIndex(0);
                     selectionBean.delete();
                 }
+                checkLaufendeNummern();
             } catch (Exception e) {
                 log.error(e, e);
                 ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Löschen", e, this);

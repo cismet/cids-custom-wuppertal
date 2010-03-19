@@ -44,7 +44,6 @@ import javax.swing.ListModel;
 import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
-import org.openide.util.Exceptions;
 
 /**
  *
@@ -211,7 +210,9 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         semiRoundedPanel1 = new de.cismet.tools.gui.SemiRoundedPanel();
         lblCurrentViewTitle = new javax.swing.JLabel();
 
+        setMinimumSize(new java.awt.Dimension(800, 700));
         setOpaque(false);
+        setPreferredSize(new java.awt.Dimension(800, 700));
         setLayout(new java.awt.BorderLayout());
 
         panPicNavigation.setMinimumSize(new java.awt.Dimension(140, 216));
@@ -279,10 +280,15 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 7);
         panPicNavigation.add(spDocuments, gridBagConstraints);
 
+        rpSeiten.setMaximumSize(new java.awt.Dimension(75, 140));
+        rpSeiten.setMinimumSize(new java.awt.Dimension(75, 140));
+        rpSeiten.setPreferredSize(new java.awt.Dimension(75, 140));
+
         scpPictureList.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        scpPictureList.setMinimumSize(new java.awt.Dimension(100, 150));
+        scpPictureList.setMaximumSize(new java.awt.Dimension(75, 125));
+        scpPictureList.setMinimumSize(new java.awt.Dimension(75, 125));
         scpPictureList.setOpaque(false);
-        scpPictureList.setPreferredSize(new java.awt.Dimension(100, 150));
+        scpPictureList.setPreferredSize(new java.awt.Dimension(75, 125));
 
         lstPictures.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstPictures.setEnabled(false);
@@ -599,7 +605,8 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
         File current = documentFiles[currentDocument];
         try {
-            BrowserLauncher.openURL(current.toURI().toURL().toString());
+            log.fatal("opening: "+current.toURL().toString());
+            BrowserLauncher.openURL(current.toURL().toString());
         } catch (Exception ex) {
             log.error(ex, ex);
         }
