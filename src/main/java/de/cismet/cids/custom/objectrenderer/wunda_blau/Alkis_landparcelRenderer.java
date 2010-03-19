@@ -959,21 +959,11 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
-    private final String getLandparcelCode() {
-        if (cidsBean != null) {
-            final Object parcelCodeObj = cidsBean.getProperty("alkis_id");
-            if (parcelCodeObj != null) {
-                return parcelCodeObj.toString();
-            }
-        }
-        return "";
-    }
-
     private void hlKarteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlKarteActionPerformed
         try {
-            String parcelCode = getLandparcelCode();
+            String parcelCode = AlkisCommons.getLandparcelCodeFromParcelBeanObject(cidsBean);
             if (parcelCode.length() > 0) {
-                AlkisCommons.PROCUCTS.productKarte(parcelCode);
+                AlkisCommons.Produkte.productKarte(parcelCode);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_landparcelRenderer.this);
@@ -983,9 +973,9 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
 
     private void hlFlurstuecksnachweisPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlFlurstuecksnachweisPdfActionPerformed
         try {
-            String parcelCode = getLandparcelCode();
+            String parcelCode = AlkisCommons.getLandparcelCodeFromParcelBeanObject(cidsBean);
             if (parcelCode.length() > 0) {
-                AlkisCommons.PROCUCTS.productFlurstuecksnachweis(parcelCode, AlkisCommons.PRODUCT_FORMAT.PDF);
+                AlkisCommons.Produkte.productFlurstuecksnachweis(parcelCode, AlkisCommons.ProduktFormat.PDF);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_landparcelRenderer.this);
@@ -995,9 +985,9 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
 
     private void hlFlurstuecksEigentumsnachweisHtmlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlFlurstuecksEigentumsnachweisHtmlActionPerformed
         try {
-            String parcelCode = getLandparcelCode();
+            String parcelCode = AlkisCommons.getLandparcelCodeFromParcelBeanObject(cidsBean);
             if (parcelCode.length() > 0) {
-                AlkisCommons.PROCUCTS.productFlurstuecksEigentumsnachweis(parcelCode, AlkisCommons.PRODUCT_FORMAT.HTML);
+                AlkisCommons.Produkte.productFlurstuecksEigentumsnachweis(parcelCode, AlkisCommons.ProduktFormat.HTML);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_landparcelRenderer.this);
@@ -1007,9 +997,9 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
 
     private void hlFlurstuecksnachweisHtmlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlFlurstuecksnachweisHtmlActionPerformed
         try {
-            String parcelCode = getLandparcelCode();
+            String parcelCode = AlkisCommons.getLandparcelCodeFromParcelBeanObject(cidsBean);
             if (parcelCode.length() > 0) {
-                AlkisCommons.PROCUCTS.productFlurstuecksnachweis(parcelCode, AlkisCommons.PRODUCT_FORMAT.HTML);
+                AlkisCommons.Produkte.productFlurstuecksnachweis(parcelCode, AlkisCommons.ProduktFormat.HTML);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_landparcelRenderer.this);
@@ -1066,9 +1056,9 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
 
     private void hlFlurstuecksEigentumsnachweisPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlFlurstuecksEigentumsnachweisPdfActionPerformed
         try {
-            String parcelCode = getLandparcelCode();
+            String parcelCode = AlkisCommons.getLandparcelCodeFromParcelBeanObject(cidsBean);
             if (parcelCode.length() > 0) {
-                AlkisCommons.PROCUCTS.productFlurstuecksEigentumsnachweis(parcelCode, AlkisCommons.PRODUCT_FORMAT.PDF);
+                AlkisCommons.Produkte.productFlurstuecksEigentumsnachweis(parcelCode, AlkisCommons.ProduktFormat.PDF);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_landparcelRenderer.this);
@@ -1220,16 +1210,16 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         final Object geoObj = cidsBean.getProperty("geometrie.geo_field");
         if (geoObj instanceof Geometry) {
             final Geometry pureGeom = (Geometry) geoObj;
-            final BoundingBox box = new BoundingBox(pureGeom.getEnvelope().buffer(AlkisCommons.MAP_CONSTANTS.GEO_BUFFER));
+            final BoundingBox box = new BoundingBox(pureGeom.getEnvelope().buffer(AlkisCommons.MapKonstanten.GEO_BUFFER));
 
             final Runnable mapRunnable = new Runnable() {
 
                 @Override
                 public void run() {
                     final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                    mappingModel.addHome(new XBoundingBox(box.getX1(), box.getY1(), box.getX2(), box.getY2(), AlkisCommons.MAP_CONSTANTS.SRS, true));
-                    mappingModel.setSrs(AlkisCommons.MAP_CONSTANTS.SRS);
-                    SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisCommons.MAP_CONSTANTS.CALL_STRING));
+                    mappingModel.addHome(new XBoundingBox(box.getX1(), box.getY1(), box.getX2(), box.getY2(), AlkisCommons.MapKonstanten.SRS, true));
+                    mappingModel.setSrs(AlkisCommons.MapKonstanten.SRS);
+                    SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisCommons.MapKonstanten.CALL_STRING));
                     swms.setName("Flurstueck");
                     StyledFeature dsf = new DefaultStyledFeature();
                     dsf.setGeometry(pureGeom);

@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- *
+ * Class for SOAP call scheduling and load balancing
  * @author srichter
  */
 public final class AlkisSOAPWorkerService {
@@ -20,7 +20,9 @@ public final class AlkisSOAPWorkerService {
     }
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisSOAPWorkerService.class);
     private static final int AVAILABLE_PROCESSORS = Runtime.getRuntime().availableProcessors();
-    private static final ThreadPoolExecutor SOAP_EXEC_SERVICE = new ThreadPoolExecutor(AVAILABLE_PROCESSORS, AVAILABLE_PROCESSORS,
+    //leave one processor for other things on a multicore machine
+    private static final int USED_PROCESSORS = Math.max(AVAILABLE_PROCESSORS - 1, 1);
+    private static final ThreadPoolExecutor SOAP_EXEC_SERVICE = new ThreadPoolExecutor(USED_PROCESSORS, USED_PROCESSORS,
             0L, TimeUnit.MILLISECONDS,
             new LinkedBlockingQueue<Runnable>());
 

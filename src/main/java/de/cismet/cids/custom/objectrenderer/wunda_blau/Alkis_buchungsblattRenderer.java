@@ -772,7 +772,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
             String buchungsblattCode = getCompleteBuchungsblattCode();
             if (buchungsblattCode.length() > 0) {
                 buchungsblattCode = AlkisCommons.escapeHtmlSpaces(buchungsblattCode);
-                AlkisCommons.PROCUCTS.productBestandsnachweisProduct(buchungsblattCode, AlkisCommons.PRODUCT_FORMAT.HTML);
+                AlkisCommons.Produkte.productBestandsnachweisProduct(buchungsblattCode, AlkisCommons.ProduktFormat.HTML);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_buchungsblattRenderer.this);
@@ -785,7 +785,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
             String buchungsblattCode = getCompleteBuchungsblattCode();
             if (buchungsblattCode.length() > 0) {
                 buchungsblattCode = AlkisCommons.escapeHtmlSpaces(buchungsblattCode);
-                AlkisCommons.PROCUCTS.productBestandsnachweisProduct(buchungsblattCode, AlkisCommons.PRODUCT_FORMAT.PDF);
+                AlkisCommons.Produkte.productBestandsnachweisProduct(buchungsblattCode, AlkisCommons.ProduktFormat.PDF);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_buchungsblattRenderer.this);
@@ -941,11 +941,11 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         if (landParcelList.size() > 0) {
             try {
                 final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                mappingModel.setSrs(AlkisCommons.MAP_CONSTANTS.SRS);
+                mappingModel.setSrs(AlkisCommons.MapKonstanten.SRS);
                 //TODO: do we need an swsw for every class?
                 final BoundingBox box = boundingBoxFromLandparcelList(landParcelList);
-                mappingModel.addHome(new XBoundingBox(box.getX1(), box.getY1(), box.getX2(), box.getY2(), AlkisCommons.MAP_CONSTANTS.SRS, true));
-                SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisCommons.MAP_CONSTANTS.CALL_STRING));
+                mappingModel.addHome(new XBoundingBox(box.getX1(), box.getY1(), box.getX2(), box.getY2(), AlkisCommons.MapKonstanten.SRS, true));
+                SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisCommons.MapKonstanten.CALL_STRING));
                 swms.setName("Buchungsblatt");
                 mappingModel.addLayer(swms);
                 map.setMappingModel(mappingModel);

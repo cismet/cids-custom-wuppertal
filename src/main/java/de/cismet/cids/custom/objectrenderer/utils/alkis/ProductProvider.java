@@ -20,7 +20,6 @@ public final class ProductProvider {
         this.serviceValue = serviceValue;
         this.certificationTypeValue = certificationTypeValue;
     }
-
     private static final String USERNAME_KEY = "user=";
     private static final String PASSWORD_KEY = "password=";
     private static final String SERVICE_KEY = "service=";

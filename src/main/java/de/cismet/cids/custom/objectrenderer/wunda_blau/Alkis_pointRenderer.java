@@ -1387,7 +1387,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         try {
             final String pointID = lblTxtIdentifikator.getText();
             final String pointArt = lblTxtPunktart.getText();
-            AlkisCommons.PROCUCTS.productPunktliste(pointID, pointArt, AlkisCommons.PRODUCT_FORMAT.PDF);
+            AlkisCommons.Produkte.productPunktliste(pointID, pointArt, AlkisCommons.ProduktFormat.PDF);
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_pointRenderer.this);
             log.error(ex);
@@ -1398,7 +1398,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         try {
             final String pointID = lblTxtIdentifikator.getText();
             final String pointArt = lblTxtPunktart.getText();
-            AlkisCommons.PROCUCTS.productPunktliste(pointID, pointArt, AlkisCommons.PRODUCT_FORMAT.HTML);
+            AlkisCommons.Produkte.productPunktliste(pointID, pointArt, AlkisCommons.ProduktFormat.HTML);
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_pointRenderer.this);
             log.error(ex);
@@ -1421,7 +1421,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         try {
             final String pointID = lblTxtIdentifikator.getText();
             final String pointArt = lblTxtPunktart.getText();
-            AlkisCommons.PROCUCTS.productPunktliste(pointID, pointArt, AlkisCommons.PRODUCT_FORMAT.TEXT);
+            AlkisCommons.Produkte.productPunktliste(pointID, pointArt, AlkisCommons.ProduktFormat.TEXT);
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_pointRenderer.this);
             log.error(ex);

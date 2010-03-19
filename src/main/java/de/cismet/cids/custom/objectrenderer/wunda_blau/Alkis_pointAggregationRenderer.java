@@ -28,7 +28,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisCommons;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisCommons.PRODUCT_FORMAT;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisCommons.ProduktFormat;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 import de.cismet.cismap.commons.BoundingBox;
@@ -69,7 +69,7 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
     //Formater fuer Hochwert/Rechtswert
     private static final DecimalFormat HW_RW_NUMBER_FORMAT = new DecimalFormat("0000000.000");
     //Modell fuer die Auswahlbox des produktformats
-    private static final ComboBoxModel PRODUCT_FORMATS_MODEL = new DefaultComboBoxModel(AlkisCommons.PRODUCT_FORMAT.values());
+    private static final ComboBoxModel PRODUCT_FORMATS_MODEL = new DefaultComboBoxModel(AlkisCommons.ProduktFormat.values());
     //Speichert Punkte ueber die Lebzeit eines Renderers hinaus
     private static final Set<CidsBean> gehaltenePunkte = TypeSafeCollections.newLinkedHashSet();
     private List<CidsBean> cidsBeans = null;
@@ -193,10 +193,10 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
-        AlkisCommons.PRODUCT_FORMAT format = (PRODUCT_FORMAT) cbProducts.getSelectedItem();
+        AlkisCommons.ProduktFormat format = (ProduktFormat) cbProducts.getSelectedItem();
         String punktListenString = getPunktlistenStringForChosenPoints();
         if (punktListenString.length() > 3) {
-            AlkisCommons.PROCUCTS.productPunktliste(punktListenString, format);
+            AlkisCommons.Produkte.productPunktliste(punktListenString, format);
         }
     }//GEN-LAST:event_btnCreateActionPerformed
 
@@ -320,10 +320,10 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
     private final void initMap() {
         try {
             final ActiveLayerModel mappingModel = new ActiveLayerModel();
-            mappingModel.setSrs(AlkisCommons.MAP_CONSTANTS.SRS);
+            mappingModel.setSrs(AlkisCommons.MapKonstanten.SRS);
             final BoundingBox box = boundingBoxFromPointList(cidsBeans);
-            mappingModel.addHome(new XBoundingBox(box.getX1(), box.getY1(), box.getX2(), box.getY2(), AlkisCommons.MAP_CONSTANTS.SRS, true));
-            SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisCommons.MAP_CONSTANTS.CALL_STRING));
+            mappingModel.addHome(new XBoundingBox(box.getX1(), box.getY1(), box.getX2(), box.getY2(), AlkisCommons.MapKonstanten.SRS, true));
+            SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisCommons.MapKonstanten.CALL_STRING));
             swms.setName("Alkis_Points");
             mappingModel.addLayer(swms);
             mappingComponent.setMappingModel(mappingModel);

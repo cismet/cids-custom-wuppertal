@@ -8,7 +8,9 @@ import de.aedsicad.aaaweb.service.util.Address;
 import de.aedsicad.aaaweb.service.util.Buchungsblatt;
 import de.aedsicad.aaaweb.service.util.Buchungsstelle;
 import de.aedsicad.aaaweb.service.util.Owner;
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.PropertyReader;
 import de.cismet.cids.dynamics.CidsBean;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -17,13 +19,34 @@ import java.util.List;
 /**
  * @author srichter
  */
-public class AlkisCommons {
+public final class AlkisCommons {
 
-    public static enum PRODUCT_FORMAT {
+    public static enum LiegenschaftskarteProdukt {
+
+        FARBIG("LK, farbig", "F"), SCHWARZWEISS("LK, sw", "SW"), FARBIG_MIT_BODENSCH("LK mit Bodensch., farbig", "BF"), SCHWARZWEISS_MIT_BODENSCH("LK mit Bodensch., sw", "BSW");
+
+        private LiegenschaftskarteProdukt(String description, String code) {
+            this.descriptionString = description;
+            this.codeString = code;
+        }
+        private final String descriptionString;
+        private final String codeString;
+
+        @Override
+        public String toString() {
+            return descriptionString;
+        }
+
+        public String getCode() {
+            return codeString;
+        }
+    }
+
+    public static enum ProduktFormat {
 
         PDF("PDF"), HTML("HTML"), TEXT("TEXT");
 
-        private PRODUCT_FORMAT(String string) {
+        private ProduktFormat(String string) {
             this.formatString = string;
         }
         private final String formatString;
@@ -36,9 +59,36 @@ public class AlkisCommons {
         ;
     }
 
-    public static final class MAP_CONSTANTS {
+    public static enum ProduktLayout {
 
-        private MAP_CONSTANTS() {
+        A4Hoch("DINA4 Hochformat", "A4H", 508, 699), A4Quer("DINA4 Querformat", "A4Q", 699, 508), A3Hoch("DINA3 Hochformat", "A3H", 1016, 1398), A3Quer("DINA3 Querformat", "A3Q", 1398, 1016);
+
+        private ProduktLayout(String description, String code, int width, int heigth) {
+            this.description = description;
+            this.code = code;
+            this.width = width;
+            this.height = heigth;
+        }
+        public final int width, height;
+        private final String description;
+        private final String code;
+
+        @Override
+        public String toString() {
+            return description;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        ;
+    }
+
+    public static final class MapKonstanten {
+
+        private MapKonstanten() {
+            throw new AssertionError();
         }
         public static final String SRS = "EPSG:31466";
         public static final String CALL_STRING = "http://s102x082.wuppertal-intra.de:8080/wmsconnector/com.esri.wms.Esrimap/web_navigation_lf?&VERSION=1.1.1&REQUEST=GetMap&SRS=" + SRS + "&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&LAYERS=26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0&STYLES="
@@ -48,55 +98,49 @@ public class AlkisCommons {
         public static final double GEO_BUFFER = 5.0;
     }
 
-    public static final class PROCUCTS {
+    public static final class Produkte {
 
-        private static final String PRODUKTID_PUNKTLISTE_PDF = "LN.NRW.PL.1";
-        private static final String PRODUKTID_PUNKTLISTE_HTML = "LN.NRW.PL.2";
-        private static final String PRODUKTID_PUNKTLISTE_TXT = "LN.NRW.PL.3";
+        private static final String PRODUCT_BESTANDSNACHWEIS = "BESTANDSNACHWEIS";
+        private static final String PRODUCT_FLURSTUECKSNACHWEIS = "FLURSTUECKSNACHWEIS";
+        private static final String PRODUCT_EIGENTUMSNACHWEIS = "EIGENTUMSNACHWEIS";
+        private static final String PRODUCT_PUNKTLISTE = "PUNKTLISTE";
+        private static final String PRODUCT_LIEGENSCHAFTSKARTE = "LIEGENSCHAFTSKARTE";
+        //
+        private static final String PRODUCT_CODES_FILE = "/de/cismet/cids/custom/wunda_blau/res/alkis/produkte.properties";
+        private static final PropertyReader PRODUCT_CODES = new PropertyReader(PRODUCT_CODES_FILE);
+        //
         private static final String IDENTIFICATION = "user=" + SOAPAccessProvider.USER + "&password=" + SOAPAccessProvider.PASSWORD + "&service=" + SOAPAccessProvider.SERVICE;
         //
 
-        private PROCUCTS() {
+        private Produkte() {
+            throw new AssertionError();
         }
 
-        public static void productBestandsnachweisProduct(String buchungsblattCode, PRODUCT_FORMAT format) {
-            String url = "http://s102x083:8080/ASWeb34/ASA_AAAWeb/ALKISBuchNachweis?" + IDENTIFICATION + "&product=LB.A.B.G.NRW&id=" + buchungsblattCode + "&contentType=" + format + "&certificationType=9701";
+        public static void productBestandsnachweisProduct(String buchungsblattCode, ProduktFormat format) {
+            String url = "http://s102x083:8080/ASWeb34/ASA_AAAWeb/ALKISBuchNachweis?" + IDENTIFICATION + "&product=" + PRODUCT_CODES.getProperty(PRODUCT_BESTANDSNACHWEIS) + "&id=" + buchungsblattCode + "&contentType=" + format + "&certificationType=9701";
             ObjectRendererUtils.openURL(url);
         }
 
-        public static void productFlurstuecksnachweis(String parcelCode, PRODUCT_FORMAT format) {
-            String url = "http://s102x083:8080/ASWeb34/ASA_AAAWeb/ALKISBuchNachweis?" + IDENTIFICATION + "&product=LB.NRW.FENW.G&id=" + parcelCode + "&contentType=" + format + "&certificationType=9511";
+        public static void productFlurstuecksnachweis(String parcelCode, ProduktFormat format) {
+            String url = "http://s102x083:8080/ASWeb34/ASA_AAAWeb/ALKISBuchNachweis?" + IDENTIFICATION + "&product=" + PRODUCT_CODES.getProperty(PRODUCT_FLURSTUECKSNACHWEIS) + "&id=" + parcelCode + "&contentType=" + format + "&certificationType=9511";
             ObjectRendererUtils.openURL(url);
         }
 
-        public static void productFlurstuecksEigentumsnachweis(String parcelCode, PRODUCT_FORMAT format) {
-            String url = "http://s102x083:8080/ASWeb34/ASA_AAAWeb/ALKISBuchNachweis?" + IDENTIFICATION + "&product=LB.A.FENW.G.NRW&id=" + parcelCode + "&contentType=" + format + "&certificationType=9551";
+        public static void productFlurstuecksEigentumsnachweis(String parcelCode, ProduktFormat format) {
+            String url = "http://s102x083:8080/ASWeb34/ASA_AAAWeb/ALKISBuchNachweis?" + IDENTIFICATION + "&product=" + PRODUCT_CODES.getProperty(PRODUCT_EIGENTUMSNACHWEIS) + "&id=" + parcelCode + "&contentType=" + format + "&certificationType=9551";
             ObjectRendererUtils.openURL(url);
         }
 
-        public static void productPunktliste(String pointID, String pointArt, PRODUCT_FORMAT format) {
+        public static void productPunktliste(String pointID, String pointArt, ProduktFormat format) {
             productPunktliste(pointArt + ":" + pointID, format);
         }
-        public static void productPunktliste(String punktliste, PRODUCT_FORMAT format) {
-            final String formatString;
-            switch (format) {
-                case PDF:
-                    formatString = PRODUKTID_PUNKTLISTE_PDF;
-                    break;
-                case HTML:
-                    formatString = PRODUKTID_PUNKTLISTE_HTML;
-                    break;
-                case TEXT:
-                    formatString = PRODUKTID_PUNKTLISTE_TXT;
-                    break;
-                default:
-                    return;
-            }
-            final String url = "http://s102x083:8080/ASWeb34/ASA_AAAWeb/ALKISListenNachweis?" + IDENTIFICATION + "&product=" + formatString + "&ids=" + punktliste;
+
+        public static void productPunktliste(String punktliste, ProduktFormat format) {
+            final String url = "http://s102x083:8080/ASWeb34/ASA_AAAWeb/ALKISListenNachweis?" + IDENTIFICATION + "&product=" + PRODUCT_CODES.getProperty(PRODUCT_PUNKTLISTE + "_" + format) + "&ids=" + punktliste;
             ObjectRendererUtils.openURL(url);
         }
 
-        public static void productPunktliste(String[] pointIDs, String[] pointArts, PRODUCT_FORMAT format) {
+        public static void productPunktliste(String[] pointIDs, String[] pointArts, ProduktFormat format) {
             StringBuffer punktListe = new StringBuffer();
             for (int i = 0; i < pointIDs.length; ++i) {
                 if (punktListe.length() > 0) {
@@ -109,6 +153,21 @@ public class AlkisCommons {
 
         public static void productKarte(String parcelCode) {
             String url = "http://s102x083:8080/ASWeb34/ASA_AAAWeb/ALKISLiegenschaftskarte?" + IDENTIFICATION + "&landparcel=" + parcelCode;
+            ObjectRendererUtils.openURL(url);
+        }
+
+        public static void productKarte(String parcelCode, LiegenschaftskarteProdukt produkt, ProduktLayout layout, int massstab, int winkel, int centerX, int centerY, String zusText, boolean moreThanOneParcel) {
+            String url = "http://s102x083:8080/ASWeb34/ASA_AAAWeb/ALKISLiegenschaftskarte?" + IDENTIFICATION + "&landparcel=" + parcelCode
+                    + "&angle=" + winkel
+                    + "&product=" + PRODUCT_CODES.getProperty(PRODUCT_LIEGENSCHAFTSKARTE + "_" + produkt.getCode() + "_PDF_" + layout.getCode() + "_" + massstab)
+                    + "&centerx=" + centerX + "&centery=" + centerY;
+            if (zusText != null && zusText.length() > 0) {
+                url += "&text=" + zusText;
+            }
+            if (moreThanOneParcel) {
+                url += "&additionalLandparcel=true";
+            }
+            url += "&";
             ObjectRendererUtils.openURL(url);
         }
     }
@@ -132,10 +191,6 @@ public class AlkisCommons {
 
     public static final String buchungsblattToString(Buchungsblatt buchungsblatt, CidsBean buchungsblattBean) {
         final List<Owner> owners = Arrays.asList(buchungsblatt.getOwners());
-//        final List<Buchungsstelle> stellen = Arrays.asList(buchungsblatt.getBuchungsstellen());
-
-//        log.fatal("owners: "+owners.size()+" stellen: "+stellen.size());
-
         if (owners != null && owners.size() > 0) {
             final StringBuilder infoBuilder = new StringBuilder();
             infoBuilder.append("<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"left\" valign=\"top\">");
@@ -189,7 +244,18 @@ public class AlkisCommons {
         }
     }
 
-    public static final String prettyPrintLandparcelCode(String fullLandparcelCode) {
+    public static String getLandparcelCodeFromParcelBeanObject(Object landParcel) {
+        if (landParcel instanceof CidsBean) {
+            CidsBean cidsBean = (CidsBean) landParcel;
+            final Object parcelCodeObj = cidsBean.getProperty("alkis_id");
+            if (parcelCodeObj != null) {
+                return parcelCodeObj.toString();
+            }
+        }
+        return "";
+    }
+
+    public static String prettyPrintLandparcelCode(String fullLandparcelCode) {
         final String[] tiles = fullLandparcelCode.split("-");
         if (tiles.length == 1) {
             String flurstueck = tiles[0];
@@ -209,7 +275,7 @@ public class AlkisCommons {
         }
     }
 
-    public static final String arrayToSeparatedString(String[] strings, String separator) {
+    public static String arrayToSeparatedString(String[] strings, String separator) {
         if (strings != null) {
             final StringBuilder result = new StringBuilder();
             for (int i = 0; i < strings.length;/**incremented in loop**/
@@ -224,7 +290,7 @@ public class AlkisCommons {
         return "";
     }
 
-    public static final String escapeHtmlSpaces(String toEscape) {
+    public static String escapeHtmlSpaces(String toEscape) {
         if (toEscape != null) {
             toEscape = toEscape.replace(" ", "%20");
         }
@@ -237,7 +303,7 @@ public class AlkisCommons {
      * @param spacing Einrückung
      * @return
      */
-    public static final String ownerToString(Owner owner, String spacing) {
+    public static String ownerToString(Owner owner, String spacing) {
         if (owner != null) {
             final StringBuilder ownerStringBuilder = new StringBuilder();
             ownerStringBuilder.append("<tr><td width=\"75\">").append(spacing);
@@ -281,7 +347,7 @@ public class AlkisCommons {
         return in.replaceAll("^0*", "");
     }
 
-    private static final String normalizeNameNumber(String nameNumber) {
+    private static String normalizeNameNumber(String nameNumber) {
         final String[] tokens = nameNumber.split("\\.");
         final StringBuilder result = new StringBuilder();
         for (String token : tokens) {
@@ -298,24 +364,24 @@ public class AlkisCommons {
         }
     }
 
-    private static final String generateBuchungsblattLinkInfo(Buchungsblatt buchungsblatt) {
+    private static String generateBuchungsblattLinkInfo(Buchungsblatt buchungsblatt) {
         //TODO: Should return metaclassID::objectID instead of metaclassID::BuchungsblattCode...
         return new StringBuilder("ALKIS_BUCHUNGSBLATT").append(LINK_SEPARATOR_TOKEN).append(buchungsblatt.getBuchungsblattCode()).toString();
     }
 
-    private static final String _prettyPrintLandparcelCode(String flurstueck, String flur, String gemarkung) {
+    private static String _prettyPrintLandparcelCode(String flurstueck, String flur, String gemarkung) {
         return _prettyPrintLandparcelCode(flurstueck, flur) + " - Gemarkung " + gemarkung;
     }
 
-    private static final String _prettyPrintLandparcelCode(String flurstueck, String flur) {
+    private static String _prettyPrintLandparcelCode(String flurstueck, String flur) {
         return _prettyPrintLandparcelCode(flurstueck) + " - Flur " + removeLeadingZeros(flur);
     }
 
-    private static final String _prettyPrintLandparcelCode(String flurstueck) {
+    private static String _prettyPrintLandparcelCode(String flurstueck) {
         return "Flurstück " + prettyPrintFlurstueck(flurstueck);
     }
 
-    private static final String prettyPrintFlurstueck(String fsZahlerNenner) {
+    private static String prettyPrintFlurstueck(String fsZahlerNenner) {
         String[] tiles = fsZahlerNenner.split("/");
         if (tiles.length == 2) {
             return removeLeadingZeros(tiles[0]) + "/" + removeLeadingZeros(tiles[1]);
@@ -325,7 +391,7 @@ public class AlkisCommons {
         return fsZahlerNenner;
     }
 
-    public static final String getBuchungsartFromBuchungsblatt(Buchungsblatt blatt) {
+    public static String getBuchungsartFromBuchungsblatt(Buchungsblatt blatt) {
         final Buchungsstelle[] buchungsstellen = blatt.getBuchungsstellen();
         if (buchungsstellen != null && buchungsstellen.length > 0) {
             final Buchungsstelle letzteBuchungsstelle = buchungsstellen[buchungsstellen.length - 1];
@@ -343,7 +409,7 @@ public class AlkisCommons {
         return "";
     }
 
-    public static final String prettyPrintFration(String fraction) {
+    public static String prettyPrintFration(String fraction) {
         if (fraction != null) {
             final String[] elements = fraction.split("/");
             if (elements != null && elements.length == 2) {
