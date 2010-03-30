@@ -8,7 +8,7 @@ import Sirius.navigator.connection.SessionManager;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.newuser.User;
 import de.cismet.cids.dynamics.CidsBean;
-import de.cismet.cids.utils.ClassCacheMultiple;
+import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;

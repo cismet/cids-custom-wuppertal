@@ -30,7 +30,7 @@ import Sirius.server.middleware.types.MetaObject;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.dynamics.CidsBean;
-import de.cismet.cids.utils.ClassCacheMultiple;
+import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.tools.collections.TypeSafeCollections;
 import java.util.List;
 import java.util.Map;

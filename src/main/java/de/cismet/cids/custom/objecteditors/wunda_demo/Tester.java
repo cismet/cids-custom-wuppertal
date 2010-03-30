@@ -23,7 +23,7 @@ import Sirius.server.middleware.interfaces.proxy.UserService;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.newuser.User;
 import de.cismet.cids.editors.CidsObjectEditorFactory;
-import de.cismet.cids.utils.ClassCacheMultiple;
+import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 import java.awt.BorderLayout;
 import java.rmi.Naming;
