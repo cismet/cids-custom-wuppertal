@@ -11,7 +11,6 @@
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import de.cismet.cids.dynamics.CidsBean;
-import de.cismet.cids.objectrenderer.CoolThemaRenderer;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 import de.cismet.tools.LinkedProperties;
 import de.cismet.tools.gui.TitleComponentProvider;
@@ -47,7 +46,7 @@ public class ThemaAggregationRenderer extends javax.swing.JPanel implements Cids
             aggregationColumns = new LinkedProperties();
             java.io.InputStream is = null;
             try {
-                is = CoolThemaRenderer.class.getResourceAsStream("/de/cismet/navigator/objectrenderer/thema/aggregation_renderer.properties");
+                is = ThemaAggregationRenderer.class.getResourceAsStream("/de/cismet/navigator/objectrenderer/thema/aggregation_renderer.properties");
                 aggregationColumns.load(is);
             } catch (IOException ex) {
                 log.warn("Could not load properties for aggregation renderer: thema", ex);

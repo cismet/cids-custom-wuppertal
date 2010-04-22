@@ -53,7 +53,7 @@ public class AlkisToobarPluginComponentProvider implements ToolbarComponentsProv
 
 final class AlkisPrintJButton extends JButton {
 
-    private AlkisPrintingSettingsWidget printWidget;
+    private final AlkisPrintingSettingsWidget printWidget;
 
     public AlkisPrintJButton() {
         this.printWidget = new AlkisPrintingSettingsWidget(false, CismapBroker.getInstance().getMappingComponent());

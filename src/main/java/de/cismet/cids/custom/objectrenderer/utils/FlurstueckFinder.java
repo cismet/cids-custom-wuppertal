@@ -7,7 +7,6 @@ package de.cismet.cids.custom.objectrenderer.utils;
 import Sirius.server.middleware.types.AbstractAttributeRepresentationFormater;
 import Sirius.server.middleware.types.LightweightMetaObject;
 import Sirius.server.middleware.types.MetaObject;
-import de.cismet.cids.objectrenderer.AlphanumComparator;
 import java.util.Arrays;
 import java.util.Comparator;
 

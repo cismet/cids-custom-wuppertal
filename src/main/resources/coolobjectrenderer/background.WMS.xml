@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simpleWms layerPosition="2" skip="false" enabled="true" name="Luftbild" translucency="0.5">
+    <![CDATA[
+                http://geoportal.wuppertal.de/deegree/wms?&VERSION=1.1.1&REQUEST=GetMap&BBOX=<cismap:boundingBox>&WIDTH=<cismap:width>&HEIGHT=<cismap:height>&SRS=EPSG:31466&FORMAT=image/png&TRANSPARENT=true&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_inimage&LAYERS=R102:stadtplan2007&STYLES=default
+                ]]>
+</simpleWms>

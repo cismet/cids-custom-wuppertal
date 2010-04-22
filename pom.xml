@@ -36,11 +36,13 @@
             <artifactId>jxlayer</artifactId>
             <version>3.0.3</version>
         </dependency>
+        <!--
         <dependency>
             <groupId>de.cismet.cids.custom.wupp</groupId>
             <artifactId>wuppertal-renderer</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        -->
         <dependency>
             <groupId>de.cismet.todo</groupId>
             <artifactId>3aweb</artifactId>

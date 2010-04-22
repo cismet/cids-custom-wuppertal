@@ -579,20 +579,22 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 
     private void togCalibrateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togCalibrateActionPerformed
         if (currentPage != NO_SELECTION) {
-            double distance = askForDistanceValue();
-            if (distance > 0d) {
-                measureComponent.actionCalibrate(distance);
-                final Geometry documentGeom = measureComponent.getMainDocumentGeometry();
-                try {
-                    registerGeometryForPage(documentGeom, currentDocument, currentPage);
-                } catch (Exception ex) {
-                    log.error(ex, ex);
-                    final ErrorInfo ei = new ErrorInfo("Fehler beim Speichern der Kalibrierung", "Beim Speichern der Kalibrierung ist ein Fehler aufgetreten", null,
-                            null, ex, Level.SEVERE, null);
-                    JXErrorPane.showDialog(this, ei);
+            Double distance = askForDistanceValue();
+            if (distance != null) {
+                if (distance > 0d) {
+                    measureComponent.actionCalibrate(distance);
+                    final Geometry documentGeom = measureComponent.getMainDocumentGeometry();
+                    try {
+                        registerGeometryForPage(documentGeom, currentDocument, currentPage);
+                    } catch (Exception ex) {
+                        log.error(ex, ex);
+                        final ErrorInfo ei = new ErrorInfo("Fehler beim Speichern der Kalibrierung", "Beim Speichern der Kalibrierung ist ein Fehler aufgetreten", null,
+                                null, ex, Level.SEVERE, null);
+                        JXErrorPane.showDialog(this, ei);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Eingegebene(r) Distanz bzw. Umfang ist kein gültiger Wert oder gleich 0.", "Ungültige Eingabe", JOptionPane.WARNING_MESSAGE);
                 }
-            } else {
-                JOptionPane.showMessageDialog(this, "Eingegebene(r) Distanz bzw. Umfang ist kein gültiger Wert oder gleich 0.", "Ungültige Eingabe", JOptionPane.WARNING_MESSAGE);
             }
             togPan.setSelected(true);
         }
@@ -605,7 +607,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
         File current = documentFiles[currentDocument];
         try {
-            log.fatal("opening: "+current.toURL().toString());
+            log.fatal("opening: " + current.toURL().toString());
             BrowserLauncher.openURL(current.toURL().toString());
         } catch (Exception ex) {
             log.error(ex, ex);
@@ -682,7 +684,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     private void setControlsEnabled(boolean enabled) {
         for (int i = 0; i < documentFiles.length; ++i) {
             JButton current = documentButtons[i];
-            current.setEnabled(documentFiles[LAGEPLAN_DOCUMENT] != null && enabled && currentSelectedButton != current);
+            current.setEnabled(documentFiles[i] != null && enabled && currentSelectedButton != current);
         }
 //        btnHome.setEnabled(enabled);
 //        btnOpen.setEnabled(enabled);
@@ -749,11 +751,13 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         }
     }
 
-    private double askForDistanceValue() {
+    private Double askForDistanceValue() {
         try {
             String laenge = JOptionPane.showInputDialog(this, "Bitte Länge bzw. Umfang in Metern eingeben:", "Kalibrierung", JOptionPane.QUESTION_MESSAGE);
             if (laenge != null) {
                 return Math.abs(Double.parseDouble(laenge.replace(',', '.')));
+            } else {
+                return null;
             }
         } catch (Exception ex) {
             log.warn(ex, ex);
@@ -814,8 +818,8 @@ public class Alb_picturePanel extends javax.swing.JPanel {
             final File[] result = new File[documentFiles.length];
             final Object blattObj = getCidsBean().getProperty(TEXTBLATT_PROPERTY);
             final Object planObj = getCidsBean().getProperty(LAGEPLAN_PROPERTY);
-            log.info("Found blatt " + blattObj);
-            log.info("Found plan " + planObj);
+            log.info("Found blatt property " + blattObj);
+            log.info("Found plan property " + planObj);
             if (blattObj != null) {
                 final File searchResult = BaulastenPictureFinder.findTextblattPicture(blattObj.toString());
                 result[TEXTBLATT_DOCUMENT] = searchResult;
