@@ -8,6 +8,7 @@ package de.cismet.cids.custom.objectrenderer.utils.alkis.print;
 import Sirius.navigator.types.treenode.ObjectTreeNode;
 import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.server.middleware.types.MetaClass;
+import Sirius.server.middleware.types.MetaObject;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisCommons;
@@ -17,16 +18,18 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 import de.cismet.cismap.commons.BoundingBox;
+import de.cismet.cismap.commons.features.Feature;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.util.FormatToRealWordCalculator;
+import de.cismet.cismap.navigatorplugin.CidsFeature;
+import de.cismet.tools.collections.TypeSafeCollections;
 import de.cismet.tools.gui.StaticSwingTools;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -38,14 +41,13 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
     private static final ProduktLayout[] LAYOUTS = ProduktLayout.values();
     private static final LiegenschaftskarteProdukt[] PRODUCTS = LiegenschaftskarteProdukt.values();
     private static final Integer[] MASSSTAEBE = new Integer[]{500, 1000, 2000, 5000};
-//    private static final String[] DATEI_FORMATE = new String[]{"PDF"};
     //
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private final MappingComponent mappingComponent;
     private final DefaultListModel flurstueckListModel;
     private final AlkisPrintListener mapPrintListener;
     private Geometry allLandparcelGeometryUnion;
-    private String oldInteractionMode;
+//    private String oldInteractionMode;
 
     /**
      * Creates new form PrintingSettingsWidget
@@ -57,8 +59,8 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         getRootPane().setDefaultButton(cmdOk);
         this.panDesc.setBackground(new Color(216, 228, 248));
         this.mappingComponent = mappingComponent;
-        this.flurstueckListModel.addListDataListener(new FormatProposalListListener());
-        this.oldInteractionMode = "PAN";
+//        this.flurstueckListModel.addListDataListener(new FormatProposalListListener());
+//        this.oldInteractionMode = "PAN";
         //enable D&D
         new CidsBeanDropTarget(this);
         //init PrintListener
@@ -69,7 +71,43 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
     @Override
     public void setVisible(boolean b) {
         flurstueckListModel.clear();
-        Collection<?> nodes = ComponentRegistry.getRegistry().getActiveCatalogue().getSelectedNodes();
+        Collection<CidsBean> beansToPrint = getAlkisFlurstueckBeansInMap();
+        if (beansToPrint.isEmpty()) {
+            beansToPrint = getAlkisFlurstueckBeansFromTreeSelection();
+        } else if (beansToPrint.size() > 1) {
+            int dialogResult = JOptionPane.showConfirmDialog(this, "Sollen alle Flurstückeobjekte der Karte gedruckt werden?", "Flurstücke in Druckauswahl übernehmen", JOptionPane.YES_NO_OPTION);
+            if (JOptionPane.NO_OPTION == dialogResult) {
+                beansToPrint.clear();
+            }
+        }
+
+        for (CidsBean currentBean : beansToPrint) {
+            flurstueckListModel.addElement(currentBean);
+        }
+
+        updateFormatProposal();
+        syncOkButtonWithListStatus();
+        super.setVisible(b);
+    }
+
+    private Collection<CidsBean> getAlkisFlurstueckBeansInMap() {
+        final Collection<CidsBean> result = TypeSafeCollections.newArrayList();
+        for (Feature feature : mappingComponent.getPFeatureHM().keySet()) {
+            if (feature instanceof CidsFeature) {
+                CidsFeature cidsFeature = (CidsFeature) feature;
+                MetaObject metaObj = cidsFeature.getMetaObject();
+                MetaClass mc = metaObj.getMetaClass();
+                if (ALKIS_LANDPARCEL_TABLE.equalsIgnoreCase(mc.getTableName())) {
+                    result.add(metaObj.getBean());
+                }
+            }
+        }
+        return result;
+    }
+
+    private Collection<CidsBean> getAlkisFlurstueckBeansFromTreeSelection() {
+        final Collection<CidsBean> result = TypeSafeCollections.newArrayList();
+        final Collection<?> nodes = ComponentRegistry.getRegistry().getActiveCatalogue().getSelectedNodes();
         if (nodes != null) {
             for (Object nodeObj : nodes) {
                 if (nodeObj instanceof ObjectTreeNode) {
@@ -77,7 +115,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                         ObjectTreeNode metaTreeNode = (ObjectTreeNode) nodeObj;
                         MetaClass mc = metaTreeNode.getMetaClass();
                         if (ALKIS_LANDPARCEL_TABLE.equalsIgnoreCase(mc.getTableName())) {
-                            flurstueckListModel.addElement(metaTreeNode.getMetaObject().getBean());
+                            result.add(metaTreeNode.getMetaObject().getBean());
                         }
                     } catch (Exception ex) {
                         log.error(ex, ex);
@@ -85,7 +123,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                 }
             }
         }
-        super.setVisible(b);
+        return result;
     }
 
     /** This method is called from within the constructor to
@@ -434,6 +472,8 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         for (int i = sel.length; --i >= 0;) {
             flurstueckListModel.removeElementAt(sel[i]);
         }
+        updateFormatProposal();
+        syncOkButtonWithListStatus();
     }//GEN-LAST:event_btnRemoveActionPerformed
 
     private void chkRotationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkRotationActionPerformed
@@ -480,14 +520,15 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                     }
                 }
             }
+            updateFormatProposal();
+            syncOkButtonWithListStatus();
         }
     }
 
-    private boolean doCurrentLandparcelsFitNordedToSelectedFormatAndScale() {
-        BoundingBox allGeomBB = new BoundingBox(allLandparcelGeometryUnion);
-        return doesBoundingBoxFitIntoLayout(allGeomBB, (ProduktLayout) cbFormat.getSelectedItem(), (Integer) cbScales.getSelectedItem());
-    }
-
+//    private boolean doCurrentLandparcelsFitNordedToSelectedFormatAndScale() {
+//        BoundingBox allGeomBB = new BoundingBox(allLandparcelGeometryUnion);
+//        return doesBoundingBoxFitIntoLayout(allGeomBB, (ProduktLayout) cbFormat.getSelectedItem(), (Integer) cbScales.getSelectedItem());
+//    }
     private void updateFormatProposal() {
         this.allLandparcelGeometryUnion = unionAllLandparcelGeometries();
         if (allLandparcelGeometryUnion != null) {
@@ -566,25 +607,24 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
     private final void syncOkButtonWithListStatus() {
         cmdOk.setEnabled(flurstueckListModel.size() > 0);
     }
-
-    final class FormatProposalListListener implements ListDataListener {
-
-        @Override
-        public void intervalAdded(ListDataEvent e) {
-            updateFormatProposal();
-            syncOkButtonWithListStatus();
-        }
-
-        @Override
-        public void intervalRemoved(ListDataEvent e) {
-            intervalAdded(e);
-        }
-
-        @Override
-        public void contentsChanged(ListDataEvent e) {
-            //NOP
-        }
-    }
+//    final class FormatProposalListListener implements ListDataListener {
+//
+//        @Override
+//        public void intervalAdded(ListDataEvent e) {
+//            updateFormatProposal();
+//            syncOkButtonWithListStatus();
+//        }
+//
+//        @Override
+//        public void intervalRemoved(ListDataEvent e) {
+//            intervalAdded(e);
+//        }
+//
+//        @Override
+//        public void contentsChanged(ListDataEvent e) {
+//            //NOP
+//        }
+//    }
 //    static final class ProductDescription {
 //
 //        public ProductDescription(String dinFormat, String dateiFormat, String massstab) {

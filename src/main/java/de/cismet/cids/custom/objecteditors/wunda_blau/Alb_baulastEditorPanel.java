@@ -19,6 +19,7 @@ import de.cismet.cids.custom.objectrenderer.utils.FlurstueckFinder;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.DefaultBindableDateChooser;
+import de.cismet.cids.editors.NewBean;
 import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.collections.TypeSafeCollections;
 import java.awt.Color;
@@ -65,7 +66,13 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         dlgAddBaulastArt.pack();
         dlgAddBaulastArt.setLocationRelativeTo(this);
         AutoCompleteDecorator.decorate(cbBaulastArt);
-        cbParcels1.getEditor();
+        CismetThreadPool.execute(new AbstractFlurstueckComboModelWorker(cbParcels1, true) {
+
+            @Override
+            protected ComboBoxModel doInBackground() throws Exception {
+                return new DefaultComboBoxModel(FlurstueckFinder.getLWGemarkungen());
+            }
+        });
     }
 
     private final void initEditableComponents() {
@@ -808,13 +815,6 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
 
     private final void handleAddFlurstueck() {
         btnFlurstueckAddMenOk.setEnabled(false);
-        CismetThreadPool.execute(new AbstractFlurstueckComboModelWorker(cbParcels1, true) {
-
-            @Override
-            protected ComboBoxModel doInBackground() throws Exception {
-                return new DefaultComboBoxModel(FlurstueckFinder.getLWGemarkungen());
-            }
-        });
         dlgAddLandParcelDiv.setVisible(true);
     }
 
@@ -920,16 +920,37 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
                 }
             }
         } else if (selection instanceof String) {
-            int result = JOptionPane.showConfirmDialog(this, "Das Flurstück befindet sich noch nicht im Datenbestand. Soll das Flustück angelegt werden?", "Historisches Flurstück anlegen", JOptionPane.YES_NO_OPTION);
+            int result = JOptionPane.showConfirmDialog(this, "Das Flurstück befindet sich nicht im Datenbestand der aktuellen Flurstücke. Soll es als historisch angelegt werden?", "Historisches Flurstück anlegen", JOptionPane.YES_NO_OPTION);
             if (result == JOptionPane.YES_OPTION) {
-                currentListToAdd.add(newLandParcelBeanFromComboBoxes(selection.toString()));
+                CidsBean beanToAdd = landParcelBeanFromComboBoxes(selection.toString());
+                if (beanToAdd != null) {
+                    boolean alreadyContained = false;
+                    for (CidsBean currentChk : currentListToAdd) {
+                        //use toString equals because unsaved Bean != saved Bean with same data
+                        if (String.valueOf(currentChk).equals(String.valueOf(beanToAdd))) {
+                            alreadyContained = true;
+                            break;
+                        }
+                    }
+                    if (!alreadyContained) {
+                        try {
+                            if (MetaObject.NEW == beanToAdd.getMetaObject().getStatus()) {
+                                beanToAdd = beanToAdd.persist();
+                            }
+                            currentListToAdd.add(beanToAdd);
+                        } catch (Exception ex) {
+                            log.error(ex, ex);
+                        }
+                    }
+                }
             }
             currentListToAdd = null;
         }
         dlgAddLandParcelDiv.setVisible(false);
     }//GEN-LAST:event_btnFlurstueckAddMenOkActionPerformed
+//    private final Map<String, CidsBean> unpersistedHistoricLandparcels = TypeSafeCollections.newHashMap();
 
-    private CidsBean newLandParcelBeanFromComboBoxes(String zaehlerNenner) {
+    private CidsBean landParcelBeanFromComboBoxes(String zaehlerNenner) {
         int result = JOptionPane.YES_OPTION;
         try {
             final Map<String, Object> newLandParcelProperties = TypeSafeCollections.newHashMap();
@@ -940,15 +961,30 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
             }
             if (result == JOptionPane.YES_OPTION) {
                 final String[] zaehlerNennerTiles = zaehlerNenner.split("/");
+                final String zaehler = zaehlerNennerTiles[0];
                 newLandParcelProperties.put(FlurstueckFinder.FLURSTUECK_GEMARKUNG, Integer.valueOf(gemarkung));
                 newLandParcelProperties.put(FlurstueckFinder.FLURSTUECK_FLUR, flur);
-                newLandParcelProperties.put(FlurstueckFinder.FLURSTUECK_ZAEHLER, zaehlerNennerTiles[0]);
+                newLandParcelProperties.put(FlurstueckFinder.FLURSTUECK_ZAEHLER, zaehler);
                 String nenner = "0";
                 if (zaehlerNennerTiles.length == 2) {
                     nenner = zaehlerNennerTiles[1];
                 }
                 newLandParcelProperties.put(FlurstueckFinder.FLURSTUECK_NENNER, nenner);
-                return CidsBeanSupport.createNewCidsBeanFromTableName(FlurstueckFinder.FLURSTUECK_TABLE_NAME, newLandParcelProperties);
+                //the following code tries to avoid the creation of multiple entries for the same landparcel.
+                //however, there *might* be a chance that a historic landparcel is created multiple times when more then
+                //one client creates the same parcel at the "same time".
+                MetaObject[] searchResult = FlurstueckFinder.getLWLandparcel(gemarkung, flur, zaehler, nenner);
+                if (searchResult != null && searchResult.length > 0) {
+                    return searchResult[0].getBean();
+                } else {
+//                    final String compountParcelData = gemarkung + "-" + flur + "-" + zaehler + "/" + nenner;
+//                    CidsBean newBean = unpersistedHistoricLandparcels.get(compountParcelData);
+//                    if (newBean == null) {
+                    CidsBean newBean = CidsBeanSupport.createNewCidsBeanFromTableName(FlurstueckFinder.FLURSTUECK_TABLE_NAME, newLandParcelProperties);
+//                        unpersistedHistoricLandparcels.put(compountParcelData, newBean);
+//                    }
+                    return newBean;
+                }
             }
         } catch (Exception ex) {
             log.error(ex, ex);
@@ -983,7 +1019,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
                     cbParcels1.getEditor().getEditorComponent().setBackground(Color.YELLOW);
                     cbParcels2.setEnabled(true);
                     if (CB_EDITED_ACTION_COMMAND.equals(evt.getActionCommand())) {
-                        cbParcels2.requestFocus();
+                        cbParcels2.requestFocusInWindow();
                     }
                 } catch (Exception notANumberEx) {
                     log.debug(selection + " is not a number!", notANumberEx);
@@ -994,10 +1030,10 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
                 lblGemarkungsname.setText(" ");
             } else {
                 cbParcels1.setSelectedIndex(foundBeanIndex);
+                cbParcels2.getEditor().getEditorComponent().setBackground(Color.WHITE);
+                cbParcels3.getEditor().getEditorComponent().setBackground(Color.WHITE);
             }
         }
-        cbParcels2.getEditor().getEditorComponent().setBackground(Color.WHITE);
-        cbParcels3.getEditor().getEditorComponent().setBackground(Color.WHITE);
     }//GEN-LAST:event_cbParcels1ActionPerformed
 
     private void cbParcels2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbParcels2ActionPerformed
@@ -1017,18 +1053,17 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         } else {
             final int foundBeanIndex = ObjectRendererUtils.findComboBoxItemForString(cbParcels2, String.valueOf(selection));
             if (foundBeanIndex < 0) {
-
                 cbParcels2.getEditor().getEditorComponent().setBackground(Color.YELLOW);
                 cbParcels3.setModel(new DefaultComboBoxModel());
                 cbParcels3.setEnabled(true);
                 if (CB_EDITED_ACTION_COMMAND.equals(evt.getActionCommand())) {
-                    cbParcels3.requestFocus();
+                    cbParcels3.requestFocusInWindow();
                 }
             } else {
                 cbParcels2.setSelectedIndex(foundBeanIndex);
+                cbParcels3.getEditor().getEditorComponent().setBackground(Color.WHITE);
             }
         }
-        cbParcels3.getEditor().getEditorComponent().setBackground(Color.WHITE);
     }//GEN-LAST:event_cbParcels2ActionPerformed
 
     private boolean checkFlurstueckSelectionComplete() {
@@ -1047,7 +1082,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
     private void cbParcels3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbParcels3ActionPerformed
         btnFlurstueckAddMenOk.setEnabled(checkFlurstueckSelectionComplete());
         if (CB_EDITED_ACTION_COMMAND.equals(evt.getActionCommand())) {
-            btnFlurstueckAddMenOk.requestFocus();
+            btnFlurstueckAddMenOk.requestFocusInWindow();
         }
         if (cbParcels3.getSelectedItem() instanceof MetaObject) {
             cbParcels3.getEditor().getEditorComponent().setBackground(Color.WHITE);

@@ -430,7 +430,8 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
                     final CidsBean newBean = CidsBeanSupport.createNewCidsBeanFromTableName("alb_baulast");
                     newBean.setProperty("laufende_nummer", String.valueOf(laufendeNr));
                     newBean.setProperty("textblatt", folder);
-                    newBean.setProperty("lageplan", folder);
+                    newBean.setProperty("lageplan", "");
+//                    newBean.setProperty("lageplan", folder);
                     baulasten.add(newBean);
                     final int newIndex = lstLaufendeNummern.getModel().getSize();
                     lstLaufendeNummern.setSelectedIndex(newIndex - 1);
@@ -442,14 +443,15 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Hinzufügen einer neuen Laufenden Nummer", ex, this);
         }
 }//GEN-LAST:event_btnAddLaufendeNummerActionPerformed
+
     private String generateFolderNameFromBlattnummer(String blattNummer) {
         if (blattNummer != null) {
             try {
                 blattNummer = blattNummer.replaceAll("\\D", "");
                 if (blattNummer.length() > 0) {
-                    int nummer = Integer.parseInt(blattNummer);
+                    int nummer = Integer.parseInt(blattNummer) - 1;
                     nummer /= 1000;
-                    String nummStringStart = String.valueOf(nummer) + "000";
+                    String nummStringStart = String.valueOf(nummer) + "001";
                     String nummStringEnd = String.valueOf(nummer + 1) + "000";
                     while (nummStringStart.length() < 6) {
                         nummStringStart = "0" + nummStringStart;
@@ -463,8 +465,31 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
                 log.warn(ex, ex);
             }
         }
-        return "XXXX00-XXXY00/";
+        return "XXXW01-XXXX00/";
     }
+//    private String generateFolderNameFromBlattnummer(String blattNummer) {
+//        if (blattNummer != null) {
+//            try {
+//                blattNummer = blattNummer.replaceAll("\\D", "");
+//                if (blattNummer.length() > 0) {
+//                    int nummer = Integer.parseInt(blattNummer);
+//                    nummer /= 1000;
+//                    String nummStringStart = String.valueOf(nummer) + "000";
+//                    String nummStringEnd = String.valueOf(nummer + 1) + "000";
+//                    while (nummStringStart.length() < 6) {
+//                        nummStringStart = "0" + nummStringStart;
+//                    }
+//                    while (nummStringEnd.length() < 6) {
+//                        nummStringEnd = "0" + nummStringEnd;
+//                    }
+//                    return nummStringStart + "-" + nummStringEnd + "/";
+//                }
+//            } catch (Exception ex) {
+//                log.warn(ex, ex);
+//            }
+//        }
+//        return "XXXX00-XXXY00/";
+//    }
 
     private final int getHighestCurrentLaufendeNummer(Collection<CidsBean> baulasten) {
         int max = 0;

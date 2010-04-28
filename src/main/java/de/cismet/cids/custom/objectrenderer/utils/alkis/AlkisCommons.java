@@ -8,7 +8,6 @@ import de.aedsicad.aaaweb.service.util.Address;
 import de.aedsicad.aaaweb.service.util.Buchungsblatt;
 import de.aedsicad.aaaweb.service.util.Buchungsstelle;
 import de.aedsicad.aaaweb.service.util.Owner;
-import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.PropertyReader;
 import de.cismet.cids.dynamics.CidsBean;
@@ -58,16 +57,20 @@ public final class AlkisCommons {
 
         ;
     }
+    private static final String FORMAT_FILE = "/de/cismet/cids/custom/wunda_blau/res/alkis/formats.properties";
+    private static final PropertyReader FORMATS = new PropertyReader(FORMAT_FILE);
 
     public static enum ProduktLayout {
 
-        A4Hoch("DINA4 Hochformat", "A4H", 508, 699), A4Quer("DINA4 Querformat", "A4Q", 699, 508), A3Hoch("DINA3 Hochformat", "A3H", 1016, 1398), A3Quer("DINA3 Querformat", "A3Q", 1398, 1016);
+        A4Hoch("DINA4 Hochformat", "A4H"), A4Quer("DINA4 Querformat", "A4Q"), A3Hoch("DINA3 Hochformat", "A3H"), A3Quer("DINA3 Querformat", "A3Q");
 
-        private ProduktLayout(String description, String code, int width, int heigth) {
+        private ProduktLayout(String description, String code) {
             this.description = description;
             this.code = code;
-            this.width = width;
-            this.height = heigth;
+            final String compoundFormatString = FORMATS.getProperty(code);
+            final String[] dimensions = compoundFormatString.split("x|X");
+            this.width = Integer.parseInt(dimensions[0]);
+            this.height = Integer.parseInt(dimensions[1]);
         }
         public final int width, height;
         private final String description;

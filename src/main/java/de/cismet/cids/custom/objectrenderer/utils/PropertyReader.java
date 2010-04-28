@@ -8,7 +8,6 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import org.openide.util.Exceptions;
 
 /**
  *
@@ -26,7 +25,7 @@ public class PropertyReader {
         properties = new Properties();
         InputStream is = null;
         try {
-            is = new BufferedInputStream(PropertyReader.class.getResourceAsStream(filename));
+            is = new BufferedInputStream(getClass().getResourceAsStream(filename));
             properties.load(is);
         } catch (IOException ex) {
             log.error(ex, ex);
@@ -57,5 +56,13 @@ public class PropertyReader {
      */
     public String getFilename() {
         return filename;
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public Properties getInternalProperties() {
+        return properties;
     }
 }

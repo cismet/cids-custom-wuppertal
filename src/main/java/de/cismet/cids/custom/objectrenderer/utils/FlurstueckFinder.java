@@ -119,11 +119,30 @@ public class FlurstueckFinder {
 
     public static final MetaObject[] getLWFurstuecksNenner(String gemarkungsnummer, String flur, String zaehler) {
         return ObjectRendererUtils.getLightweightMetaObjectsForQuery(
-                FLURSTUECK_TABLE_NAME, "select id, " + FLURSTUECK_NENNER + " from " + FLURSTUECK_TABLE_NAME + " where " + FLURSTUECK_GEMARKUNG + " = " + gemarkungsnummer + " and " + FLURSTUECK_FLUR + " = '" + flur + "' and " + FLURSTUECK_ZAEHLER + " = " + zaehler + " order by " + FLURSTUECK_NENNER, new String[]{"id", FLURSTUECK_NENNER}, new AbstractAttributeRepresentationFormater() {
+                FLURSTUECK_TABLE_NAME, "select id, " + FLURSTUECK_NENNER + " from " + FLURSTUECK_TABLE_NAME + " where " + FLURSTUECK_GEMARKUNG + " = " + gemarkungsnummer + " and " + FLURSTUECK_FLUR + " = '" + flur + "' and " + FLURSTUECK_ZAEHLER + " = '" + zaehler + "' order by " + FLURSTUECK_NENNER, new String[]{"id", FLURSTUECK_NENNER}, new AbstractAttributeRepresentationFormater() {
 
             @Override
             public String getRepresentation() {
                 return String.valueOf(getAttribute(FLURSTUECK_NENNER));
+            }
+        });
+    }
+
+    public static final MetaObject[] getLWLandparcel(String gemarkungsnummer, String flur, String zaehler, String nenner) {
+        return ObjectRendererUtils.getLightweightMetaObjectsForQuery(
+                FLURSTUECK_TABLE_NAME, "select id, " + FLURSTUECK_GEMARKUNG + "," + FLURSTUECK_FLUR + "," + FLURSTUECK_ZAEHLER + "," + FLURSTUECK_NENNER + " from " + FLURSTUECK_TABLE_NAME + " where " + FLURSTUECK_GEMARKUNG + " = " + gemarkungsnummer + " and " + FLURSTUECK_FLUR + " = '" + flur + "' and " + FLURSTUECK_ZAEHLER + " = '" + zaehler + "' and " + FLURSTUECK_NENNER + " = '" + nenner + "'", new String[]{"id", FLURSTUECK_GEMARKUNG, FLURSTUECK_FLUR, FLURSTUECK_ZAEHLER, FLURSTUECK_NENNER}, new AbstractAttributeRepresentationFormater() {
+
+            @Override
+            public String getRepresentation() {
+                StringBuilder result = new StringBuilder(30);
+                result.append(getAttribute(FLURSTUECK_GEMARKUNG)).append("-");
+                result.append(getAttribute(FLURSTUECK_FLUR)).append("-");
+                result.append(getAttribute(FLURSTUECK_ZAEHLER));
+                final Object nenner = getAttribute(FLURSTUECK_NENNER);
+                if (nenner != null) {
+                    result.append("/").append(nenner);
+                }
+                return result.toString();
             }
         });
     }
