@@ -6,12 +6,16 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.ui.RequestsFullSizeComponent;
+import Sirius.server.middleware.types.MetaObject;
 import de.cismet.cids.annotations.AggregationRenderer;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
+import de.cismet.cids.editors.DefaultBeanInitializer;
+import de.cismet.cids.editors.EditorBeanInitializerStore;
+import de.cismet.tools.collections.TypeSafeCollections;
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
@@ -21,6 +25,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -160,6 +165,8 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
         panControlsLaufendeNummern = new javax.swing.JPanel();
         btnAddLaufendeNummer = new javax.swing.JButton();
         btnRemoveLaufendeNummer = new javax.swing.JButton();
+        btnCopyBaulast = new javax.swing.JButton();
+        btnPasteBaulast = new javax.swing.JButton();
         panBlattNummer = new de.cismet.tools.gui.RoundedPanel();
         lblBlattnummer = new javax.swing.JLabel();
         txtBlattnummer = new javax.swing.JTextField();
@@ -315,16 +322,24 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
         panControlsLaufendeNummern.setLayout(new java.awt.GridBagLayout());
 
         btnAddLaufendeNummer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddLaufendeNummer.setMaximumSize(new java.awt.Dimension(43, 25));
+        btnAddLaufendeNummer.setMinimumSize(new java.awt.Dimension(43, 25));
+        btnAddLaufendeNummer.setPreferredSize(new java.awt.Dimension(43, 25));
         btnAddLaufendeNummer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddLaufendeNummerActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panControlsLaufendeNummern.add(btnAddLaufendeNummer, gridBagConstraints);
 
         btnRemoveLaufendeNummer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveLaufendeNummer.setMaximumSize(new java.awt.Dimension(43, 25));
+        btnRemoveLaufendeNummer.setMinimumSize(new java.awt.Dimension(43, 25));
+        btnRemoveLaufendeNummer.setPreferredSize(new java.awt.Dimension(43, 25));
         btnRemoveLaufendeNummer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRemoveLaufendeNummerActionPerformed(evt);
@@ -332,9 +347,39 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panControlsLaufendeNummern.add(btnRemoveLaufendeNummer, gridBagConstraints);
+
+        btnCopyBaulast.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/16/document-copy.png"))); // NOI18N
+        btnCopyBaulast.setMaximumSize(new java.awt.Dimension(43, 25));
+        btnCopyBaulast.setMinimumSize(new java.awt.Dimension(43, 25));
+        btnCopyBaulast.setPreferredSize(new java.awt.Dimension(43, 25));
+        btnCopyBaulast.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCopyBaulastActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panControlsLaufendeNummern.add(btnCopyBaulast, gridBagConstraints);
+
+        btnPasteBaulast.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/16/clipboard-paste.png"))); // NOI18N
+        btnPasteBaulast.setMaximumSize(new java.awt.Dimension(43, 25));
+        btnPasteBaulast.setMinimumSize(new java.awt.Dimension(43, 25));
+        btnPasteBaulast.setPreferredSize(new java.awt.Dimension(43, 25));
+        btnPasteBaulast.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPasteBaulastActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panControlsLaufendeNummern.add(btnPasteBaulast, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -408,6 +453,7 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
             CidsBean selectedBean = (CidsBean) selectionObj;
             panBaulastEditor.setCidsBean(selectedBean);
             alb_picturePanel.setCidsBean(selectedBean);
+            btnPasteBaulast.setEnabled(isPastePossible());
         }
     }//GEN-LAST:event_lstLaufendeNummernValueChanged
 
@@ -510,20 +556,45 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
         }
         return max;
     }
+    private static final String FLURSTUECKE_BELASTET = "flurstuecke_belastet";
+    private static final String FLURSTUECKE_BEGUENSTIGT = "flurstuecke_beguenstigt";
 
     private void btnRemoveLaufendeNummerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveLaufendeNummerActionPerformed
         final Object selection = lstLaufendeNummern.getSelectedValue();
         if (selection instanceof CidsBean) {
             try {
                 final CidsBean selectionBean = (CidsBean) selection;
-                final int answer = JOptionPane.showConfirmDialog(this, "Soll die Nummer wirklich gelöscht werden?", "Nummer entfernen", JOptionPane.YES_NO_OPTION);
-                if (answer == JOptionPane.YES_OPTION) {
-                    final Collection flurstueckCol = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "baulasten");
-                    if (flurstueckCol != null) {
-                        flurstueckCol.remove(selectionBean);
+                Object laufendeNummer = selectionBean.getProperty("laufende_nummer");
+                final Collection<CidsBean> baulastenCol = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "baulasten");
+                if (baulastenCol != null) {
+                    boolean checkOK = true;
+                    if (laufendeNummer == null || String.valueOf(laufendeNummer).length() < 1) {
+                        Set<CidsBean> checkBelastet = TypeSafeCollections.newHashSet();
+                        Set<CidsBean> checkBeguenstigt = TypeSafeCollections.newHashSet();
+                        for (CidsBean otherBaulastenBean : baulastenCol) {
+                            if (otherBaulastenBean != selectionBean) {
+                                checkBelastet.addAll(CidsBeanSupport.getBeanCollectionFromProperty(otherBaulastenBean, FLURSTUECKE_BELASTET));
+                                checkBeguenstigt.addAll(CidsBeanSupport.getBeanCollectionFromProperty(otherBaulastenBean, FLURSTUECKE_BEGUENSTIGT));
+                            }
+                        }
+                        if (checkBelastet.containsAll(CidsBeanSupport.getBeanCollectionFromProperty(selectionBean, FLURSTUECKE_BELASTET))
+                                && checkBeguenstigt.containsAll(CidsBeanSupport.getBeanCollectionFromProperty(selectionBean, FLURSTUECKE_BEGUENSTIGT))) {
+                            checkOK = true;
+                        } else {
+                            checkOK = false;
+                        }
                     }
-                    lstLaufendeNummern.setSelectedIndex(0);
-                    selectionBean.delete();
+                    final int answer;
+                    if (checkOK) {
+                        answer = JOptionPane.showConfirmDialog(this, "Soll die Nummer wirklich gelöscht werden?", "Nummer entfernen", JOptionPane.YES_NO_OPTION);
+                    } else {
+                        answer = JOptionPane.showConfirmDialog(this, "Plausibilitätsprüfung fehlgeschlagen. Nicht alle Flurstücke des Platzhalters wurden realen Baulasten zugeordnet. Soll dennoch gelöscht werden?", "Platzhalter entfernen", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                    }
+                    if (answer == JOptionPane.YES_OPTION) {
+                        baulastenCol.remove(selectionBean);
+                        lstLaufendeNummern.setSelectedIndex(0);
+                        selectionBean.delete();
+                    }
                 }
                 checkLaufendeNummern();
             } catch (Exception e) {
@@ -558,20 +629,51 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
     private void lblForwMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblForwMouseClicked
         btnForwardActionPerformed(null);
 }//GEN-LAST:event_lblForwMouseClicked
-    /**
-     * Move-backward button action
-     *
-     * @param evt
-     */
-    /**
-     * Move forward button action
-     * @param evt
-     */
+
+    private void btnPasteBaulastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPasteBaulastActionPerformed
+        CidsBean currentBaulastBean = panBaulastEditor.getCidsBean();
+        try {
+            EditorBeanInitializerStore.getInstance().initialize(currentBaulastBean);
+        } catch (Exception ex) {
+            log.error(ex, ex);
+        }
+
+    }//GEN-LAST:event_btnPasteBaulastActionPerformed
+
+    private void btnCopyBaulastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopyBaulastActionPerformed
+        CidsBean currentBaulastBean = panBaulastEditor.getCidsBean();
+        EditorBeanInitializerStore.getInstance().registerInitializer(currentBaulastBean.getMetaObject().getMetaClass(), new DefaultBeanInitializer(currentBaulastBean) {
+
+            @Override
+            protected void processSimpleProperty(CidsBean beanToInit, String propertyName, Object simpleValueToProcess) throws Exception {
+                if (!propertyName.startsWith("laufen")) {
+                    super.processSimpleProperty(beanToInit, propertyName, simpleValueToProcess);
+                }
+            }
+
+            @Override
+            protected void processArrayProperty(CidsBean beanToInit, String propertyName, Collection<CidsBean> arrayValueToProcess) throws Exception {
+                if (!propertyName.endsWith("pages")) {
+                    Collection<CidsBean> collectionToFill = CidsBeanSupport.getBeanCollectionFromProperty(beanToInit, propertyName);
+                    collectionToFill.clear();
+                    collectionToFill.addAll(arrayValueToProcess);
+                }
+            }
+        });
+        btnPasteBaulast.setEnabled(isPastePossible());
+    }//GEN-LAST:event_btnCopyBaulastActionPerformed
+    private boolean isPastePossible() {
+        CidsBean blBean = panBaulastEditor.getCidsBean();
+        boolean isNewBean = blBean != null && blBean.getMetaObject().getStatus() == MetaObject.NEW;
+        return isNewBean && EditorBeanInitializerStore.getInstance().getInitializer(blBean.getMetaObject().getMetaClass()) != null;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel alb_picturePanel;
     private javax.swing.JButton btnAddLaufendeNummer;
     private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnCopyBaulast;
     private javax.swing.JButton btnForward;
+    private javax.swing.JButton btnPasteBaulast;
     private javax.swing.JButton btnRemoveLaufendeNummer;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;

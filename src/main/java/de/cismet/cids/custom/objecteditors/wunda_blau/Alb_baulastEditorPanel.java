@@ -19,7 +19,6 @@ import de.cismet.cids.custom.objectrenderer.utils.FlurstueckFinder;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.DefaultBindableDateChooser;
-import de.cismet.cids.editors.NewBean;
 import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.collections.TypeSafeCollections;
 import java.awt.Color;
@@ -437,6 +436,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         panControlsFSBeg.setLayout(new java.awt.GridBagLayout());
 
         btnAddBeguenstigt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddBeguenstigt.setMaximumSize(new java.awt.Dimension(43, 25));
+        btnAddBeguenstigt.setMinimumSize(new java.awt.Dimension(43, 25));
+        btnAddBeguenstigt.setPreferredSize(new java.awt.Dimension(43, 25));
         btnAddBeguenstigt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddBeguenstigtActionPerformed(evt);
@@ -447,6 +449,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         panControlsFSBeg.add(btnAddBeguenstigt, gridBagConstraints);
 
         btnRemoveBeguenstigt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveBeguenstigt.setMaximumSize(new java.awt.Dimension(43, 25));
+        btnRemoveBeguenstigt.setMinimumSize(new java.awt.Dimension(43, 25));
+        btnRemoveBeguenstigt.setPreferredSize(new java.awt.Dimension(43, 25));
         btnRemoveBeguenstigt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRemoveBeguenstigtActionPerformed(evt);
@@ -506,6 +511,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         panControlsFSBel.setLayout(new java.awt.GridBagLayout());
 
         btnAddBelastet.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddBelastet.setMaximumSize(new java.awt.Dimension(43, 25));
+        btnAddBelastet.setMinimumSize(new java.awt.Dimension(43, 25));
+        btnAddBelastet.setPreferredSize(new java.awt.Dimension(43, 25));
         btnAddBelastet.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddBelastetActionPerformed(evt);
@@ -516,6 +524,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         panControlsFSBel.add(btnAddBelastet, gridBagConstraints);
 
         btnRemoveBelastet.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveBelastet.setMaximumSize(new java.awt.Dimension(43, 25));
+        btnRemoveBelastet.setMinimumSize(new java.awt.Dimension(43, 25));
+        btnRemoveBelastet.setPreferredSize(new java.awt.Dimension(43, 25));
         btnRemoveBelastet.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRemoveBelastetActionPerformed(evt);
@@ -749,6 +760,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         panArtControls.setLayout(new java.awt.GridBagLayout());
 
         btnAddArt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddArt.setMaximumSize(new java.awt.Dimension(43, 25));
+        btnAddArt.setMinimumSize(new java.awt.Dimension(43, 25));
+        btnAddArt.setPreferredSize(new java.awt.Dimension(43, 25));
         btnAddArt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddArtActionPerformed(evt);
@@ -762,6 +776,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         panArtControls.add(btnAddArt, gridBagConstraints);
 
         btnRemoveArt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveArt.setMaximumSize(new java.awt.Dimension(43, 25));
+        btnRemoveArt.setMinimumSize(new java.awt.Dimension(43, 25));
+        btnRemoveArt.setPreferredSize(new java.awt.Dimension(43, 25));
         btnRemoveArt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRemoveArtActionPerformed(evt);
