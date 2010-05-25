@@ -54,8 +54,12 @@
             <artifactId>axis</artifactId>
             <version>1.4</version>
         </dependency>
+        <dependency>
+            <groupId>de.cismet.todo</groupId>
+            <artifactId>quicktime</artifactId>
+            <version>unknown</version>
+        </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <!-- overwritten because the artifact has to be renamed du to

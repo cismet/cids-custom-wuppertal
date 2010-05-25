@@ -47,7 +47,6 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
     private final DefaultListModel flurstueckListModel;
     private final AlkisPrintListener mapPrintListener;
     private Geometry allLandparcelGeometryUnion;
-//    private String oldInteractionMode;
 
     /**
      * Creates new form PrintingSettingsWidget
@@ -59,8 +58,6 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         getRootPane().setDefaultButton(cmdOk);
         this.panDesc.setBackground(new Color(216, 228, 248));
         this.mappingComponent = mappingComponent;
-//        this.flurstueckListModel.addListDataListener(new FormatProposalListListener());
-//        this.oldInteractionMode = "PAN";
         //enable D&D
         new CidsBeanDropTarget(this);
         //init PrintListener
