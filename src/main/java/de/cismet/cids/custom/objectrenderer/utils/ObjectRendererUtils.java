@@ -46,6 +46,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import org.jdesktop.swingx.error.ErrorInfo;
@@ -106,6 +107,16 @@ public class ObjectRendererUtils {
             final List<MetaObject> mos = TypeSafeCollections.newArrayList(1);
             mos.add(mo);
             addBeanGeomsAsFeaturesToCismapMap(mos);
+        }
+    }
+
+    public static void selectAllTextInEditableCombobox(JComboBox box) {
+        Component editor = box.getEditor().getEditorComponent();
+        if (editor instanceof JTextField) {
+            JTextField textEditor = (JTextField) editor;
+            textEditor.selectAll();
+        } else {
+            log.warn("Editor of Combobox " + box + " is not instanceof JTextField - can not select the text : " + editor);
         }
     }
 

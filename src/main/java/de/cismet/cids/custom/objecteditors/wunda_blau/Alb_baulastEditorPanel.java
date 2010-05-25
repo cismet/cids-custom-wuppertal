@@ -71,6 +71,15 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
             protected ComboBoxModel doInBackground() throws Exception {
                 return new DefaultComboBoxModel(FlurstueckFinder.getLWGemarkungen());
             }
+
+            @Override
+            protected void done() {
+                super.done();
+//                cbParcels1.actionPerformed(null);
+                cbParcels1.setSelectedIndex(0);
+                cbParcels1.requestFocusInWindow();
+                ObjectRendererUtils.selectAllTextInEditableCombobox(cbParcels1);
+            }
         });
     }
 
@@ -1060,6 +1069,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
             final String selGem = String.valueOf(cbParcels1.getSelectedItem());
             final StringBuffer selFlurNr = new StringBuffer(String.valueOf(cbParcels2.getSelectedItem()));
             btnFlurstueckAddMenOk.setEnabled(false);
+            cbParcels2.getEditor().getEditorComponent().setBackground(Color.WHITE);
             CismetThreadPool.execute(new AbstractFlurstueckComboModelWorker(cbParcels3, CB_EDITED_ACTION_COMMAND.equals(evt.getActionCommand())) {
 
                 @Override
@@ -1067,7 +1077,6 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
                     return new DefaultComboBoxModel(FlurstueckFinder.getLWFurstuecksZaehlerNenner(selGem, selFlurNr.toString()));
                 }
             });
-            cbParcels2.getEditor().getEditorComponent().setBackground(Color.WHITE);
         } else {
             final int foundBeanIndex = ObjectRendererUtils.findComboBoxItemForString(cbParcels2, String.valueOf(selection));
             if (foundBeanIndex < 0) {
@@ -1284,7 +1293,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
             try {
                 box.setModel(get());
                 if (switchToBox) {
-                    box.requestFocus();
+                    box.requestFocus();                    
                 }
             } catch (InterruptedException ex) {
                 log.debug(ex, ex);
@@ -1292,6 +1301,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
                 log.error(ex, ex);
             } finally {
                 box.setEnabled(true);
+                ObjectRendererUtils.selectAllTextInEditableCombobox(box);
             }
         }
     }
