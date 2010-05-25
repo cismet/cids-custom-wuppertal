@@ -105,7 +105,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
                     ((JTextField) editableComponent).setEditable(false);
                 } else if (editableComponent instanceof DefaultBindableDateChooser) {
                     final DefaultBindableDateChooser dateChooser = (DefaultBindableDateChooser) editableComponent;
-                    dateChooser.setEditable(false);
+//                    dateChooser.setEditable(false);
+                    dateChooser.setEnabled(false);
+                    dateChooser.getEditor().setDisabledTextColor(Color.BLACK);
                     dateChooser.getEditor().setOpaque(false);
                     dateChooser.getEditor().setBorder(null);
                 }
