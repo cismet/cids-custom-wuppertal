@@ -25,7 +25,7 @@ package de.cismet.cids.custom.objectrenderer.utils;
  */
 import java.util.Comparator;
 //TODO make it generic!
-public final class AlphanumComparator implements Comparator<Comparable<?>> {
+public final class AlphanumComparator implements Comparator {
 
     private static final Comparator INSTANCE = new AlphanumComparator();
 
@@ -69,13 +69,17 @@ public final class AlphanumComparator implements Comparator<Comparable<?>> {
     }
 
     @Override
-    public int compare(final Comparable o1, final Comparable o2) {
-        if (!(o1 instanceof String) || !(o2 instanceof String)) {
-            return o1.compareTo(o2);
+    public int compare(final Object o1, final Object o2) {
+        if (o1 == o2) {
+            return 0;
+        } else if (o1 == null) {
+            return -1;
+        } else if (o2 == null) {
+            return 1;
         }
 
-        final String s1 = (String) o1;
-        final String s2 = (String) o2;
+        final String s1 = o1.toString();
+        final String s2 = o2.toString();
 
         int thisMarker = 0;
         int thatMarker = 0;

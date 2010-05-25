@@ -14,6 +14,7 @@ import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.server.middleware.types.AbstractAttributeRepresentationFormater;
 import Sirius.server.middleware.types.LightweightMetaObject;
 import Sirius.server.middleware.types.MetaObject;
+import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.FlurstueckFinder;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
@@ -25,6 +26,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import javax.swing.ComboBoxModel;
@@ -49,7 +52,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
     private final DefaultComboBoxModel NO_SELECTION_MODEL = new DefaultComboBoxModel(new Object[]{});
     private final boolean editable;
     private final Collection<JComponent> editableComponents;
-    private Collection<CidsBean> currentListToAdd;
+    private List<CidsBean> currentListToAdd;
 //    private boolean landParcelListInitialized = false;
     private boolean baulastArtenListInitialized = false;
 
@@ -944,6 +947,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
             if (currentListToAdd != null) {
                 if (!currentListToAdd.contains(selectedBean)) {
                     currentListToAdd.add(selectedBean);
+                    Collections.sort(currentListToAdd, AlphanumComparator.getInstance());
                 }
             }
         } else if (selection instanceof String) {
@@ -965,6 +969,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
                                 beanToAdd = beanToAdd.persist();
                             }
                             currentListToAdd.add(beanToAdd);
+                            Collections.sort(currentListToAdd, AlphanumComparator.getInstance());
                         } catch (Exception ex) {
                             log.error(ex, ex);
                         }
@@ -1147,6 +1152,10 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
     public void setCidsBean(CidsBean cidsBean) {
         if (cidsBean != null) {
             this.cidsBean = cidsBean;
+            List<CidsBean> landParcelCol = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "flurstuecke_belastet");
+            Collections.sort(landParcelCol, AlphanumComparator.getInstance());
+            landParcelCol = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "flurstuecke_beguenstigt");
+            Collections.sort(landParcelCol, AlphanumComparator.getInstance());
             bindingGroup.unbind();
             bindingGroup.bind();
         }
@@ -1293,7 +1302,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
             try {
                 box.setModel(get());
                 if (switchToBox) {
-                    box.requestFocus();                    
+                    box.requestFocus();
                 }
             } catch (InterruptedException ex) {
                 log.debug(ex, ex);

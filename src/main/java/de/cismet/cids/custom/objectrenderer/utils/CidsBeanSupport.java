@@ -10,6 +10,7 @@ import Sirius.server.newuser.User;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -43,11 +44,11 @@ public final class CidsBeanSupport {
         throw new Exception("Could not find MetaClass for table " + tableName);
     }
 
-    public static final Collection<CidsBean> getBeanCollectionFromProperty(CidsBean bean, String collectionProperty) {
+    public static final List<CidsBean> getBeanCollectionFromProperty(CidsBean bean, String collectionProperty) {
         if (bean != null && collectionProperty != null) {
             final Object colObj = bean.getProperty(collectionProperty);
             if (colObj instanceof Collection) {
-                return (Collection<CidsBean>) colObj;
+                return (List<CidsBean>) colObj;
             }
         }
         return null;
