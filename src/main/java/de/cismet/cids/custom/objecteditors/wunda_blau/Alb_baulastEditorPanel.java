@@ -23,6 +23,7 @@ import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.collections.TypeSafeCollections;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.Collection;
@@ -945,9 +946,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         if (selection instanceof LightweightMetaObject) {
             final CidsBean selectedBean = ((LightweightMetaObject) selection).getBean();
             if (currentListToAdd != null) {
-                if (!currentListToAdd.contains(selectedBean)) {
-                    currentListToAdd.add(selectedBean);
-                    Collections.sort(currentListToAdd, AlphanumComparator.getInstance());
+                int position = Collections.binarySearch(currentListToAdd, selectedBean, AlphanumComparator.getInstance());
+                if (position < 0) {
+                    currentListToAdd.add(-position - 1, selectedBean);
                 }
             }
         } else if (selection instanceof String) {
@@ -955,21 +956,13 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
             if (result == JOptionPane.YES_OPTION) {
                 CidsBean beanToAdd = landParcelBeanFromComboBoxes(selection.toString());
                 if (beanToAdd != null) {
-                    boolean alreadyContained = false;
-                    for (CidsBean currentChk : currentListToAdd) {
-                        //use toString equals because unsaved Bean != saved Bean with same data
-                        if (String.valueOf(currentChk).equals(String.valueOf(beanToAdd))) {
-                            alreadyContained = true;
-                            break;
-                        }
-                    }
-                    if (!alreadyContained) {
+                    int position = Collections.binarySearch(currentListToAdd, beanToAdd, AlphanumComparator.getInstance());
+                    if (position < 0) {
                         try {
                             if (MetaObject.NEW == beanToAdd.getMetaObject().getStatus()) {
                                 beanToAdd = beanToAdd.persist();
                             }
-                            currentListToAdd.add(beanToAdd);
-                            Collections.sort(currentListToAdd, AlphanumComparator.getInstance());
+                            currentListToAdd.add(-position - 1, beanToAdd);
                         } catch (Exception ex) {
                             log.error(ex, ex);
                         }
@@ -1116,10 +1109,19 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         if (CB_EDITED_ACTION_COMMAND.equals(evt.getActionCommand())) {
             btnFlurstueckAddMenOk.requestFocusInWindow();
         }
+        Component editor = cbParcels3.getEditor().getEditorComponent();
         if (cbParcels3.getSelectedItem() instanceof MetaObject) {
-            cbParcels3.getEditor().getEditorComponent().setBackground(Color.WHITE);
+            editor.setBackground(Color.WHITE);
         } else {
-            final int foundBeanIndex = ObjectRendererUtils.findComboBoxItemForString(cbParcels3, String.valueOf(cbParcels3.getSelectedItem()));
+            String parcelNo = String.valueOf(cbParcels3.getSelectedItem());
+            if (!parcelNo.contains("/")) {
+                parcelNo += "/0";
+                if (editor instanceof JTextField) {
+                    JTextField textEditor = (JTextField) editor;
+                    textEditor.setText(parcelNo);
+                }
+            }
+            final int foundBeanIndex = ObjectRendererUtils.findComboBoxItemForString(cbParcels3, parcelNo);
             if (foundBeanIndex < 0) {
                 cbParcels3.getEditor().getEditorComponent().setBackground(Color.YELLOW);
             } else {
