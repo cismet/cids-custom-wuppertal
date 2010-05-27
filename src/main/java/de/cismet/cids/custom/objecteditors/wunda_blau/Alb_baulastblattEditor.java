@@ -172,6 +172,7 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
         txtBlattnummer = new javax.swing.JTextField();
         semiRoundedPanel2 = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel3 = new javax.swing.JLabel();
+        lblBlattInMap = new javax.swing.JLabel();
         alb_picturePanel = new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel();
 
         panTitle.setOpaque(false);
@@ -422,11 +423,29 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
         semiRoundedPanel2.setBackground(java.awt.Color.darkGray);
         semiRoundedPanel2.setLayout(new java.awt.GridBagLayout());
 
-        jLabel3.setText("Baulastblatt");
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Baulastblatt");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 26, 5, 0);
         semiRoundedPanel2.add(jLabel3, gridBagConstraints);
+
+        lblBlattInMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom-best-fit.png"))); // NOI18N
+        lblBlattInMap.setToolTipText("Blatt in der Karte anzeigen");
+        lblBlattInMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblBlattInMap.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblBlattInMapMouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        semiRoundedPanel2.add(lblBlattInMap, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridwidth = 2;
@@ -504,6 +523,10 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
                     }
                     while (nummStringEnd.length() < 6) {
                         nummStringEnd = "0" + nummStringEnd;
+                    }
+                    //patch fuer fehler in wuppertaler ordnernummerierung (erster startet bei 000000 statt 000001)
+                    if ("000001".equals(nummStringStart)) {
+                        nummStringStart = "000000";
                     }
                     return nummStringStart + "-" + nummStringEnd + "/";
                 }
@@ -662,6 +685,11 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
         });
         btnPasteBaulast.setEnabled(isPastePossible());
     }//GEN-LAST:event_btnCopyBaulastActionPerformed
+
+    private void lblBlattInMapMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBlattInMapMouseClicked
+        ObjectRendererUtils.addBeanGeomAsFeatureToCismapMap(cidsBean);
+        ObjectRendererUtils.switchToCismapMap();
+}//GEN-LAST:event_lblBlattInMapMouseClicked
     private boolean isPastePossible() {
         CidsBean blBean = panBaulastEditor.getCidsBean();
         boolean isNewBean = blBean != null && blBean.getMetaObject().getStatus() == MetaObject.NEW;
@@ -678,6 +706,7 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel lblBack;
+    private javax.swing.JLabel lblBlattInMap;
     private javax.swing.JLabel lblBlattnummer;
     private javax.swing.JLabel lblForw;
     private javax.swing.JLabel lblTitle;

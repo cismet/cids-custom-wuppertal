@@ -194,6 +194,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         defaultBindableDateChooser3 = new de.cismet.cids.editors.DefaultBindableDateChooser();
         rpHeadInfo = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeadInfo = new javax.swing.JLabel();
+        lblLastInMap = new javax.swing.JLabel();
         lblDescBaulastart = new javax.swing.JLabel();
         scpBaulastart = new javax.swing.JScrollPane();
         lstBaulastArt = new javax.swing.JList();
@@ -734,8 +735,26 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         lblHeadInfo.setForeground(new java.awt.Color(255, 255, 255));
         lblHeadInfo.setText("Info");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 26, 5, 0);
         rpHeadInfo.add(lblHeadInfo, gridBagConstraints);
+
+        lblLastInMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom-best-fit.png"))); // NOI18N
+        lblLastInMap.setToolTipText("Baulast in der Karte anzeigen");
+        lblLastInMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblLastInMap.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblLastInMapMouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        rpHeadInfo.add(lblLastInMap, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1138,6 +1157,11 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         }
 }//GEN-LAST:event_lstFlurstueckeBeguenstigtMouseClicked
 
+    private void lblLastInMapMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLastInMapMouseClicked
+        ObjectRendererUtils.addBeanGeomAsFeatureToCismapMap(cidsBean);
+        ObjectRendererUtils.switchToCismapMap();
+    }//GEN-LAST:event_lblLastInMapMouseClicked
+
     private final void handleJumpToListeSelectionBean(JList list) {
         final Object selectedObj = list.getSelectedValue();
         if (selectedObj instanceof CidsBean) {
@@ -1202,6 +1226,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblHeadBegFlurstuecke;
     private javax.swing.JLabel lblHeadBelFlurstuecke;
     private javax.swing.JLabel lblHeadInfo;
+    private javax.swing.JLabel lblLastInMap;
     private javax.swing.JLabel lblSuchwortEingeben1;
     private javax.swing.JList lstBaulastArt;
     private javax.swing.JList lstFlurstueckeBeguenstigt;
