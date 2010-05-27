@@ -32,6 +32,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -802,9 +803,18 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     private javax.swing.JToggleButton togPan;
     private javax.swing.JToggleButton togZoom;
     // End of variables declaration//GEN-END:variables
+    private String collisionWarning = "";
+
+    public String getCollisionWarning() {
+        return collisionWarning;
+    }
+
+    public void clearCollisionWarning() {
+        this.collisionWarning = "";
+    }
 
     // <editor-fold defaultstate="collapsed" desc="FileSearchWorker">
-    final class FileSearchWorker extends SwingWorker<File[], Void> {
+    final class FileSearchWorker extends SwingWorker<List<File>[], Void> {
 
         public FileSearchWorker() {
             setControlsEnabled(false);
@@ -814,20 +824,18 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         }
 
         @Override
-        protected File[] doInBackground() throws Exception {
-            final File[] result = new File[documentFiles.length];
+        protected List<File>[] doInBackground() throws Exception {
+            final List<File>[] result = new List[documentFiles.length];
             final Object blattObj = getCidsBean().getProperty(TEXTBLATT_PROPERTY);
             final Object planObj = getCidsBean().getProperty(LAGEPLAN_PROPERTY);
             log.info("Found blatt property " + blattObj);
             log.info("Found plan property " + planObj);
             if (blattObj != null) {
-                final File searchResult = BaulastenPictureFinder.findTextblattPicture(blattObj.toString());
-                result[TEXTBLATT_DOCUMENT] = searchResult;
+                result[TEXTBLATT_DOCUMENT] = BaulastenPictureFinder.findTextblattPicture(blattObj.toString());
                 log.info("Blatt picture " + result[TEXTBLATT_DOCUMENT]);
             }
             if (planObj != null) {
-                final File searchResult = BaulastenPictureFinder.findPlanPicture(planObj.toString());
-                result[LAGEPLAN_DOCUMENT] = searchResult;
+                result[LAGEPLAN_DOCUMENT] = BaulastenPictureFinder.findPlanPicture(planObj.toString());
                 log.info("Plan picture " + result[LAGEPLAN_DOCUMENT]);
             }
             return result;
@@ -836,9 +844,23 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         @Override
         protected void done() {
             try {
-                final File[] result = get();
+                final List<File>[] result = get();
+                StringBuffer collisionLists = new StringBuffer();
                 for (int i = 0; i < result.length; ++i) {
-                    documentFiles[i] = result[i];
+                    List<File> current = result[i];
+                    if (current.size() == 1) {
+                        documentFiles[i] = current.get(0);
+                    } else if (current.size() > 1) {
+                        if (collisionLists.length() > 0) {
+                            collisionLists.append(",\n");
+                        }
+                        collisionLists.append(current);
+                    }
+
+                }
+                if (collisionLists.length() > 0) {
+                    collisionWarning = "Achtung: im Zielverzeichnis sind mehrere Dateien mit demselben Namen in unterschiedlichen Dateiformaten vorhanden.\n\nBitte löschen Sie die ungültigen Formate und setzen Sie die Bearbeitung in WuNDa anschließend fort.\n\nDateien:\n" + collisionLists + "\n";
+                    log.info(collisionWarning);
                 }
             } catch (InterruptedException ex) {
                 log.warn(ex, ex);

@@ -250,7 +250,7 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
         });
         panFooterRight.add(btnForward);
 
-        lblForw.setFont(new java.awt.Font("Tahoma", 1, 14));
+        lblForw.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblForw.setForeground(new java.awt.Color(255, 255, 255));
         lblForw.setText("Dokumente");
         lblForw.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -646,6 +646,11 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
         lblBack.setEnabled(true);
         lblForw.setEnabled(false);
         alb_picturePanel.updateIfPicturePathsChanged();
+        final String fileCollisionWarning = alb_picturePanel.getCollisionWarning();
+        if (fileCollisionWarning.length() > 0) {
+            JOptionPane.showMessageDialog(this, fileCollisionWarning, "Unterschiedliche Dateiformate", JOptionPane.WARNING_MESSAGE);
+        }
+        alb_picturePanel.clearCollisionWarning();
 //        alb_picturePanel.zoomToFeatureCollection();
 }//GEN-LAST:event_btnForwardActionPerformed
 

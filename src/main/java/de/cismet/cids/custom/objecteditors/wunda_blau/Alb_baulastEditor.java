@@ -15,6 +15,7 @@ import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
 import java.awt.CardLayout;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
@@ -230,6 +231,11 @@ public class Alb_baulastEditor extends JPanel implements CidsBeanStore, TitleCom
         lblBack.setEnabled(true);
         lblForw.setEnabled(false);
         alb_picturePanel.updateIfPicturePathsChanged();
+        final String fileCollisionWarning = alb_picturePanel.getCollisionWarning();
+        if (fileCollisionWarning.length() > 0) {
+            JOptionPane.showMessageDialog(this, fileCollisionWarning, "Unterschiedliche Dateiformate", JOptionPane.WARNING_MESSAGE);
+        }
+        alb_picturePanel.clearCollisionWarning();
 //        alb_picturePanel.zoomToFeatureCollection();
 }//GEN-LAST:event_btnForwardActionPerformed
 

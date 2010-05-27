@@ -1,8 +1,10 @@
 package de.cismet.cids.custom.objectrenderer.utils;
 
 import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
+import de.cismet.tools.collections.TypeSafeCollections;
 import java.io.File;
 import java.net.URL;
+import java.util.List;
 
 /**
  *
@@ -14,32 +16,33 @@ public final class BaulastenPictureFinder {
     private static final String[] SUFFIXE = new String[]{"tif", "jpg", "tiff", "jpeg"};
 //    "TIF", "JPG", "TIFF", "JPEG"};
 
-    public static File findPlanPicture(String picture) {
+    public static List<File> findPlanPicture(String picture) {
         final String picturePath = StaticProperties.ALB_PLAN_URL_PREFIX + picture + ".";
         return probeForRightSuffix(picturePath);
 
     }
 
-    public static File findTextblattPicture(String picture) {
+    public static List<File> findTextblattPicture(String picture) {
         final String picturePath = StaticProperties.ALB_TEXTBLATT_URL_PREFIX + picture + ".";
         return probeForRightSuffix(picturePath);
     }
 
-    private static File probeForRightSuffix(String fileWithoutSuffix) {
+    private static List<File> probeForRightSuffix(String fileWithoutSuffix) {
         log.debug("Searching for picture: " + fileWithoutSuffix + "xxx");
+        List<File> results = TypeSafeCollections.newArrayList();
         for (String suffix : SUFFIXE) {
             try {
                 URL fileURL = new URL(fileWithoutSuffix + suffix);
                 File testFile = new File(fileURL.toURI());
                 if (testFile.isFile()) {
                     log.debug("Found picture in file: " + testFile.getAbsolutePath());
-                    return testFile;
+                    results.add(testFile);
                 }
             } catch (Exception ex) {
                 log.error(ex, ex);
             }
         }
         log.debug("No picture file found.");
-        return null;
+        return results;
     }
 }
