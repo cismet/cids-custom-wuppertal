@@ -83,6 +83,7 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         if (cidsBean != null) {
+            int nrIdx = lstLaufendeNummern.getSelectedIndex();
             this.cidsBean = cidsBean;
             final Object lastenObj = cidsBean.getProperty("baulasten");
             if (lastenObj instanceof List) {
@@ -90,7 +91,15 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
             }
             bindingGroup.unbind();
             bindingGroup.bind();
-            lstLaufendeNummern.setSelectedIndex(0);
+            if (nrIdx <= 0) {
+                lstLaufendeNummern.setSelectedIndex(0);
+            } else {
+                try {
+                    lstLaufendeNummern.setSelectedIndex(nrIdx);
+                } catch (Exception x) {
+                    lstLaufendeNummern.setSelectedIndex(0);
+                }
+            }
             final Object blattnummer = cidsBean.getProperty("blattnummer");
             lblTitle.setText(TITLE_PREFIX + " " + blattnummer);
             checkLaufendeNummern();

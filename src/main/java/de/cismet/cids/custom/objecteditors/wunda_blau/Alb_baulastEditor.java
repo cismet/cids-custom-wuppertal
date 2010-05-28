@@ -34,7 +34,7 @@ public class Alb_baulastEditor extends JPanel implements CidsBeanStore, TitleCom
     private final boolean editable;
     private CidsBean cidsBean;
     private final CardLayout cardLayout;
-    public static final String TITLE_PREFIX = "Baulast";
+//    public static final String TITLE_PREFIX = "Baulast";
     public static final String TITLE_AGR_PREFIX = "Baulasten";
 
     /** Creates new form CoolThemaRenderer */
@@ -62,7 +62,9 @@ public class Alb_baulastEditor extends JPanel implements CidsBeanStore, TitleCom
             this.panMain.setCidsBean(cidsBean);
             this.alb_picturePanel.setCidsBean(cidsBean);
             final Object laufendeNr = cidsBean.getProperty("laufende_nummer");
-            lblTitle.setText(TITLE_PREFIX + " " + laufendeNr);
+            final Object blattNummer = cidsBean.getProperty("blattnummer");
+            lblTitle.setText("Baulastblatt " + blattNummer + ": lfd. Nummer " + laufendeNr);
+//            lblTitle.setText(TITLE_PREFIX + " " + laufendeNr);
         }
     }
 

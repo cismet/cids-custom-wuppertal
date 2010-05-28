@@ -1179,6 +1179,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
 
     public void setCidsBean(CidsBean cidsBean) {
         if (cidsBean != null) {
+            int[] belIdx = lstFlurstueckeBelastet.getSelectedIndices();
+            int[] begIdx = lstFlurstueckeBeguenstigt.getSelectedIndices();
+            int[] artenIdx = lstBaulastArt.getSelectedIndices();
             this.cidsBean = cidsBean;
             List<CidsBean> landParcelCol = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "flurstuecke_belastet");
             Collections.sort(landParcelCol, AlphanumComparator.getInstance());
@@ -1186,6 +1189,13 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
             Collections.sort(landParcelCol, AlphanumComparator.getInstance());
             bindingGroup.unbind();
             bindingGroup.bind();
+            try {
+                lstFlurstueckeBelastet.setSelectedIndices(belIdx);
+                lstFlurstueckeBeguenstigt.setSelectedIndices(begIdx);
+                lstBaulastArt.setSelectedIndices(artenIdx);
+            } catch (Exception x) {
+                //egal
+            }
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
