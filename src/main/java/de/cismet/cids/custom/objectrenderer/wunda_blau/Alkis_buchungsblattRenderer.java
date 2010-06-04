@@ -117,7 +117,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
     private final CardLayout cardLayout;
     private final Map<Object, ImageIcon> productPreviewImages;
     private boolean continueInBackground = false;
-    private List<MetaObject> realLandParcelMetaObjectsCache = null;
+//    private List<MetaObject> realLandParcelMetaObjectsCache = null;
 
     /** Creates new form Alkis_pointRenderer */
     public Alkis_buchungsblattRenderer() {
@@ -813,7 +813,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         if (!evt.getValueIsAdjusting()) {
             try {
                 //release cache
-                realLandParcelMetaObjectsCache = null;
+//                realLandParcelMetaObjectsCache = null;
                 final Object[] selObjs = lstLandparcels.getSelectedValues();
                 final List<Geometry> allSelectedGeoms = TypeSafeCollections.newArrayList();
                 for (final Object obj : selObjs) {
@@ -969,11 +969,11 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
                     public void mouseClicked(PInputEvent evt) {
                         try {
                             if (evt.getClickCount() > 1) {
-                                if (realLandParcelMetaObjectsCache == null) {
-                                    CismetThreadPool.execute(new GeomQueryWorker());
-                                } else {
+//                                if (realLandParcelMetaObjectsCache == null) {
+//                                    CismetThreadPool.execute(new GeomQueryWorker());
+//                                } else {
                                     switchToMapAndShowGeometries();
-                                }
+//                                }
                             }
                         } catch (Exception ex) {
                             log.error(ex, ex);
@@ -991,8 +991,9 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
     }
 
     private void switchToMapAndShowGeometries() {
-        ObjectRendererUtils.addBeanGeomsAsFeaturesToCismapMap(realLandParcelMetaObjectsCache);
         ObjectRendererUtils.switchToCismapMap();
+        ObjectRendererUtils.addBeanGeomAsFeatureToCismapMap(cidsBean, false);
+//        ObjectRendererUtils.addBeanGeomsAsFeaturesToCismapMap(realLandParcelMetaObjectsCache, false);
     }
 
     private List<MetaObject> queryForRealLandParcels() throws ConnectionException {
@@ -1210,32 +1211,32 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         }
     }
 
-    final class GeomQueryWorker extends SwingWorker<List<MetaObject>, Void> {
-
-        @Override
-        protected List<MetaObject> doInBackground() throws Exception {
-            //set dummy to avoid multiple worker calls
-            realLandParcelMetaObjectsCache = Collections.EMPTY_LIST;
-            return queryForRealLandParcels();
-        }
-
-        @Override
-        protected void done() {
-            try {
-                if (!isCancelled()) {
-                    realLandParcelMetaObjectsCache = get();
-                    switchToMapAndShowGeometries();
-                }
-            } catch (InterruptedException ex) {
-                log.warn(ex, ex);
-                realLandParcelMetaObjectsCache = null;
-            } catch (Exception ex) {
-                ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Abrufen der Geometrien", ex, Alkis_buchungsblattRenderer.this);
-                log.error(ex, ex);
-                realLandParcelMetaObjectsCache = null;
-            }
-        }
-    }
+//    final class GeomQueryWorker extends SwingWorker<List<MetaObject>, Void> {
+//
+//        @Override
+//        protected List<MetaObject> doInBackground() throws Exception {
+//            //set dummy to avoid multiple worker calls
+//            realLandParcelMetaObjectsCache = Collections.EMPTY_LIST;
+//            return queryForRealLandParcels();
+//        }
+//
+//        @Override
+//        protected void done() {
+//            try {
+//                if (!isCancelled()) {
+//                    realLandParcelMetaObjectsCache = get();
+//                    switchToMapAndShowGeometries();
+//                }
+//            } catch (InterruptedException ex) {
+//                log.warn(ex, ex);
+//                realLandParcelMetaObjectsCache = null;
+//            } catch (Exception ex) {
+//                ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Abrufen der Geometrien", ex, Alkis_buchungsblattRenderer.this);
+//                log.error(ex, ex);
+//                realLandParcelMetaObjectsCache = null;
+//            }
+//        }
+//    }
 
     @Override
     public Border getTitleBorder() {

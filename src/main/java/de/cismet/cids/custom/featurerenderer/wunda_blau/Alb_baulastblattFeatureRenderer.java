@@ -37,27 +37,29 @@ import javax.swing.JComponent;
  *
  * @author srichter
  */
-public class Alb_baulastFeatureRenderer extends CustomCidsFeatureRenderer {
+public class Alb_baulastblattFeatureRenderer extends CustomCidsFeatureRenderer {
 
-    public Alb_baulastFeatureRenderer() {
+    public Alb_baulastblattFeatureRenderer() {
     }
-
     private static final Color BELASTET_COLOR = new Color(0, 255, 0);
     private static final Color BEGUENSTIGT_COLOR = new Color(255, 255, 0);
     private static final Color BEIDES_COLOR = Color.RED;
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_baulastFeatureRenderer.class);
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_baulastblattFeatureRenderer.class);
     private final Set<Integer> belastetBeans = TypeSafeCollections.newHashSet();
     private final Set<Integer> beguenstigtBeans = TypeSafeCollections.newHashSet();
 
     @Override
     public Paint getFillingStyle(CidsFeature subFeature) {
-        if (subFeature != null) {
+        log.fatal(""+subFeature);
+        if (subFeature != null && subFeature.getMyAttributeStringInParentFeature().contains("flurstueck")) {
+            log.fatal(subFeature + "\n" + beguenstigtBeans + "\n" + belastetBeans);
             final Integer id = subFeature.getMetaObject().getID();
             if (belastetBeans.contains(id)) {
                 if (beguenstigtBeans.contains(id)) {
                     return BEIDES_COLOR;
+                } else {
+                    return BELASTET_COLOR;
                 }
-                return BELASTET_COLOR;
             } else if (beguenstigtBeans.contains(id)) {
                 return BEGUENSTIGT_COLOR;
             } else {
@@ -65,18 +67,6 @@ public class Alb_baulastFeatureRenderer extends CustomCidsFeatureRenderer {
             }
         }
         return null;
-//        String attrString = subFeature.getMyAttributeStringInParentFeature();
-//        if (attrString != null) {
-//            if (attrString.contains("belastet")) {
-//                return BELASTET;
-//            } else if (attrString.contains("beguenstigt")) {
-//                return BEGUENSTIGT;
-//            } else {
-//                return Color.RED;
-//            }
-//        } else {
-//            return new Color(0, 0, 0, 0);
-//        }
     }
 
     @Override
@@ -140,15 +130,17 @@ public class Alb_baulastFeatureRenderer extends CustomCidsFeatureRenderer {
         belastetBeans.clear();
         beguenstigtBeans.clear();
         if (cidsBean != null) {
-            Collection<CidsBean> beans;
-            beans = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "flurstuecke_belastet");
-            for (CidsBean bean : beans) {
-                belastetBeans.add(bean.getMetaObject().getID());
-            }
+            final Collection<CidsBean> beans = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "baulasten");
+            for (CidsBean baulast : beans) {
+                Collection<CidsBean> flurstueckBeans = CidsBeanSupport.getBeanCollectionFromProperty(baulast, "flurstuecke_belastet");
+                for (CidsBean bean : flurstueckBeans) {
+                    belastetBeans.add(bean.getMetaObject().getID());
+                }
 
-            beans = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "flurstuecke_beguenstigt");
-            for (CidsBean bean : beans) {
-                beguenstigtBeans.add(bean.getMetaObject().getID());
+                flurstueckBeans = CidsBeanSupport.getBeanCollectionFromProperty(baulast, "flurstuecke_beguenstigt");
+                for (CidsBean bean : flurstueckBeans) {
+                    beguenstigtBeans.add(bean.getMetaObject().getID());
+                }
             }
         }
     }

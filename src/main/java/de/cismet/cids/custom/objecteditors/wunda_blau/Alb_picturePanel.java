@@ -848,15 +848,16 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                 StringBuffer collisionLists = new StringBuffer();
                 for (int i = 0; i < result.length; ++i) {
                     List<File> current = result[i];
-                    if (current.size() == 1) {
-                        documentFiles[i] = current.get(0);
-                    } else if (current.size() > 1) {
-                        if (collisionLists.length() > 0) {
-                            collisionLists.append(",\n");
+                    if (current != null) {
+                        if (current.size() == 1) {
+                            documentFiles[i] = current.get(0);
+                        } else if (current.size() > 1) {
+                            if (collisionLists.length() > 0) {
+                                collisionLists.append(",\n");
+                            }
+                            collisionLists.append(current);
                         }
-                        collisionLists.append(current);
                     }
-
                 }
                 if (collisionLists.length() > 0) {
                     collisionWarning = "Achtung: im Zielverzeichnis sind mehrere Dateien mit demselben Namen in unterschiedlichen Dateiformaten vorhanden.\n\nBitte löschen Sie die ungültigen Formate und setzen Sie die Bearbeitung in WuNDa anschließend fort.\n\nDateien:\n" + collisionLists + "\n";
@@ -864,7 +865,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                 }
             } catch (InterruptedException ex) {
                 log.warn(ex, ex);
-            } catch (ExecutionException ex) {
+            } catch (Exception ex) {
                 log.error(ex, ex);
             } finally {
                 setControlsEnabled(true);

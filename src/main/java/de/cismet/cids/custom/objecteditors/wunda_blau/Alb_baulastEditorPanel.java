@@ -50,6 +50,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
 
     static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_baulastEditorPanel.class);
     private CidsBean cidsBean;
+    private Collection<MetaObject> allSelectedObjects;
     private final DefaultComboBoxModel NO_SELECTION_MODEL = new DefaultComboBoxModel(new Object[]{});
     private final boolean editable;
     private final Collection<JComponent> editableComponents;
@@ -755,6 +756,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
         rpHeadInfo.add(lblLastInMap, gridBagConstraints);
+        lblLastInMap.getAccessibleContext().setAccessibleDescription("Flurstücke der laufenden Nummer in Karte anzeigen");
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1158,8 +1160,8 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
 }//GEN-LAST:event_lstFlurstueckeBeguenstigtMouseClicked
 
     private void lblLastInMapMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLastInMapMouseClicked
-        ObjectRendererUtils.addBeanGeomAsFeatureToCismapMap(cidsBean);
         ObjectRendererUtils.switchToCismapMap();
+        ObjectRendererUtils.addBeanGeomsAsFeaturesToCismapMap(allSelectedObjects, editable);
     }//GEN-LAST:event_lblLastInMapMouseClicked
 
     private final void handleJumpToListeSelectionBean(JList list) {
@@ -1177,25 +1179,29 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         return cidsBean;
     }
 
+    public void setAllSelectedMetaObjects(Collection<MetaObject> selection) {
+        this.allSelectedObjects = selection;
+    }
+
     public void setCidsBean(CidsBean cidsBean) {
-        if (cidsBean != null) {
-            int[] belIdx = lstFlurstueckeBelastet.getSelectedIndices();
-            int[] begIdx = lstFlurstueckeBeguenstigt.getSelectedIndices();
-            int[] artenIdx = lstBaulastArt.getSelectedIndices();
-            this.cidsBean = cidsBean;
-            List<CidsBean> landParcelCol = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "flurstuecke_belastet");
-            Collections.sort(landParcelCol, AlphanumComparator.getInstance());
-            landParcelCol = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "flurstuecke_beguenstigt");
-            Collections.sort(landParcelCol, AlphanumComparator.getInstance());
-            bindingGroup.unbind();
-            bindingGroup.bind();
-            try {
+        try {
+            if (cidsBean != null) {
+                int[] belIdx = lstFlurstueckeBelastet.getSelectedIndices();
+                int[] begIdx = lstFlurstueckeBeguenstigt.getSelectedIndices();
+                int[] artenIdx = lstBaulastArt.getSelectedIndices();
+                this.cidsBean = cidsBean;
+                List<CidsBean> landParcelCol = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "flurstuecke_belastet");
+                Collections.sort(landParcelCol, AlphanumComparator.getInstance());
+                landParcelCol = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "flurstuecke_beguenstigt");
+                Collections.sort(landParcelCol, AlphanumComparator.getInstance());
+                bindingGroup.unbind();
+                bindingGroup.bind();
                 lstFlurstueckeBelastet.setSelectedIndices(belIdx);
                 lstFlurstueckeBeguenstigt.setSelectedIndices(begIdx);
                 lstBaulastArt.setSelectedIndices(artenIdx);
-            } catch (Exception x) {
-                //egal
             }
+        } catch (Exception x) {
+            log.error(x, x);
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables

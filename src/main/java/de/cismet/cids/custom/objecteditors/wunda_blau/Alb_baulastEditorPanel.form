@@ -892,6 +892,9 @@
                       <Color id="Handcursor"/>
                     </Property>
                   </Properties>
+                  <AccessibilityProperties>
+                    <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="Flurst&#xfc;cke der laufenden Nummer in Karte anzeigen"/>
+                  </AccessibilityProperties>
                   <Events>
                     <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblLastInMapMouseClicked"/>
                   </Events>

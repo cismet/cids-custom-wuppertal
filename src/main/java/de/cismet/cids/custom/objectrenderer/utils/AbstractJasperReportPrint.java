@@ -18,6 +18,7 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.swing.JRViewer;
 
@@ -59,12 +60,20 @@ public abstract class AbstractJasperReportPrint {
      */
     public abstract Map generateReportParam(CidsBean current);
 
+    /**
+     *
+     * @param beans
+     * @return
+     */
+    public abstract Map generateReportParam(Collection<CidsBean> beans);
+
     public void print() {
         if (EventQueue.isDispatchThread()) {
             executePrint();
         } else {
             EventQueue.invokeLater(new Runnable() {
 
+                @Override
                 public void run() {
                     executePrint();
                 }
@@ -106,7 +115,12 @@ public abstract class AbstractJasperReportPrint {
         protected JasperPrint doInBackground() throws Exception {
             final JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream(reportURL));
             JasperPrint jasperPrint = null;
-            if (!isBeansCollection()) {
+            if (isBeansCollection()) {
+                final Map params = generateReportParam(beans);
+                final JRBeanCollectionDataSource beanArray = new JRBeanCollectionDataSource(beans);
+//                final JRBeanArrayDataSource beanArray = new JRBeanArrayDataSource(beans.toArray());
+                jasperPrint = JasperFillManager.fillReport(jasperReport, params, beanArray);
+            } else {
                 for (final CidsBean current : beans) {
                     if (isCancelled()) {
                         return null;
@@ -118,12 +132,7 @@ public abstract class AbstractJasperReportPrint {
                     } else {
                         jasperPrint.addPage((JRPrintPage) JasperFillManager.fillReport(jasperReport, params, beanArray).getPages().get(0));
                     }
-
                 }
-            } else {
-                final Map params = generateReportParam(null);
-                final JRBeanArrayDataSource beanArray = new JRBeanArrayDataSource(beans.toArray());
-                jasperPrint = JasperFillManager.fillReport(jasperReport, params, beanArray);
             }
             return jasperPrint;
         }

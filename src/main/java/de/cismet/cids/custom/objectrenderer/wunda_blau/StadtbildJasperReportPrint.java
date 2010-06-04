@@ -9,6 +9,7 @@ import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 import de.cismet.cids.dynamics.CidsBean;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.ImageIcon;
@@ -53,5 +54,10 @@ public class StadtbildJasperReportPrint extends AbstractJasperReportPrint {
             }
         }
         return params;
+    }
+
+    @Override
+    public Map generateReportParam(Collection<CidsBean> beans) {
+        return Collections.EMPTY_MAP;
     }
 }

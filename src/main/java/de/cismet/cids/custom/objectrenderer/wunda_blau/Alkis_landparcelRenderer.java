@@ -1242,8 +1242,8 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                         public void mouseClicked(PInputEvent evt) {
                             if (evt.getClickCount() > 1) {
                                 final CidsBean bean = cidsBean;
-                                ObjectRendererUtils.addBeanGeomAsFeatureToCismapMap(bean);
                                 ObjectRendererUtils.switchToCismapMap();
+                                ObjectRendererUtils.addBeanGeomAsFeatureToCismapMap(bean, false);
                             }
                         }
                     });

@@ -6,6 +6,7 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.ui.RequestsFullSizeComponent;
+import Sirius.server.middleware.types.MetaObject;
 import de.cismet.cids.annotations.AggregationRenderer;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.dynamics.CidsBean;
@@ -14,6 +15,7 @@ import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
 import java.awt.CardLayout;
+import java.util.Collection;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -53,6 +55,10 @@ public class Alb_baulastEditor extends JPanel implements CidsBeanStore, TitleCom
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
+    }
+
+    public void setAllSelectedMetaObjects(Collection<MetaObject> selection) {
+        this.panMain.setAllSelectedMetaObjects(selection);
     }
 
     @Override

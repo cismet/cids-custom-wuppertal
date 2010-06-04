@@ -13,6 +13,7 @@ import Sirius.server.newuser.User;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.cismap.commons.features.Feature;
+import de.cismet.cismap.commons.features.FeatureGroups;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.navigatorplugin.CidsFeature;
@@ -78,16 +79,20 @@ public class ObjectRendererUtils {
         MILLISECOND, SECOND, MINUTE, HOUR, DAY, WEEK, MONTH, YEAR
     };
 
-    public static void addBeanGeomsAsFeaturesToCismapMap(List<MetaObject> metaObjectList) {
+    public static void addBeanGeomsAsFeaturesToCismapMap(Collection<MetaObject> metaObjectList, boolean clear) {
         if (metaObjectList != null) {
             final MappingComponent bigMap = CismapBroker.getInstance().getMappingComponent();
+            if (clear) {
+                bigMap.getFeatureCollection().removeAllFeatures();
+            }
             final List<Feature> addedFeatures = TypeSafeCollections.newArrayList(metaObjectList.size());
             for (MetaObject mo : metaObjectList) {
                 final CidsFeature newGeomFeature = new CidsFeature(mo);
-                addedFeatures.add(newGeomFeature);
-                bigMap.getFeatureCollection().addFeature(newGeomFeature);
+                addedFeatures.addAll(FeatureGroups.expandAll(newGeomFeature));
             }
-            bigMap.zoomToAFeatureCollection(addedFeatures, false, false);
+            bigMap.getFeatureCollection().addFeatures(addedFeatures);
+            bigMap.zoomToFeatureCollection();
+//            bigMap.zoomToAFeatureCollection(addedFeatures, false, false);
         }
     }
 
@@ -101,12 +106,12 @@ public class ObjectRendererUtils {
         PluginRegistry.getRegistry().getPluginDescriptor(CISMAP_PLUGIN_NAME).getUIDescriptor(CISMAP_PLUGIN_NAME).getView().makeVisible();
     }
 
-    public static void addBeanGeomAsFeatureToCismapMap(CidsBean bean) {
+    public static void addBeanGeomAsFeatureToCismapMap(CidsBean bean, boolean clear) {
         if (bean != null) {
             final MetaObject mo = bean.getMetaObject();
             final List<MetaObject> mos = TypeSafeCollections.newArrayList(1);
             mos.add(mo);
-            addBeanGeomsAsFeaturesToCismapMap(mos);
+            addBeanGeomsAsFeaturesToCismapMap(mos, clear);
         }
     }
 

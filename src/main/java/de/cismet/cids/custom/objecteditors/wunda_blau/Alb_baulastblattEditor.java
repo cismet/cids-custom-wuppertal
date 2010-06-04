@@ -21,6 +21,10 @@ import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
 import java.awt.CardLayout;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -29,8 +33,11 @@ import java.util.Set;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  * de.cismet.cids.objectrenderer.CoolThemaRenderer
@@ -55,6 +62,7 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
     private final CardLayout cardLayout;
     public static final String TITLE_PREFIX = "Baulastblatt";
     public static final String TITLE_AGR_PREFIX = "Baulastblätter";
+    private Collection<CidsBean> baulastenBeans = null;
 
     /** Creates new form CoolThemaRenderer */
     public Alb_baulastblattEditor(final boolean editable) {
@@ -82,27 +90,47 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
-        if (cidsBean != null) {
-            int nrIdx = lstLaufendeNummern.getSelectedIndex();
-            this.cidsBean = cidsBean;
-            final Object lastenObj = cidsBean.getProperty("baulasten");
-            if (lastenObj instanceof List) {
-                Collections.sort((List) lastenObj, OBJECT_COMPARATOR);
-            }
-            bindingGroup.unbind();
-            bindingGroup.bind();
-            if (nrIdx <= 0) {
-                lstLaufendeNummern.setSelectedIndex(0);
-            } else {
-                try {
-                    lstLaufendeNummern.setSelectedIndex(nrIdx);
-                } catch (Exception x) {
-                    lstLaufendeNummern.setSelectedIndex(0);
+        try {
+            if (cidsBean != null) {
+                int nrIdx = lstLaufendeNummern.getSelectedIndex();
+                this.cidsBean = cidsBean;
+                this.baulastenBeans = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "baulasten");
+                if (baulastenBeans != null) {
+                    Collections.sort((List) baulastenBeans, OBJECT_COMPARATOR);
                 }
+                bindingGroup.unbind();
+                bindingGroup.bind();
+                if (nrIdx <= 0) {
+                    lstLaufendeNummern.setSelectedIndex(0);
+                } else {
+                    try {
+                        lstLaufendeNummern.setSelectedIndex(nrIdx);
+                    } catch (Exception x) {
+                        lstLaufendeNummern.setSelectedIndex(0);
+                        log.error(x, x);
+                    }
+                }
+                final Object blattnummer = cidsBean.getProperty("blattnummer");
+                lblTitle.setText(TITLE_PREFIX + " " + blattnummer);
+                checkLaufendeNummern();
+                cidsBean.addPropertyChangeListener(new PropertyChangeListener() {
+
+                    @Override
+                    public void propertyChange(PropertyChangeEvent evt) {
+                        if ("blattnummer".equals(evt.getPropertyName())) {
+                            for (CidsBean bean : baulastenBeans) {
+                                try {
+                                    bean.setProperty("blattnummer", evt.getNewValue());
+                                } catch (Exception ex) {
+                                    log.warn(ex, ex);
+                                }
+                            }
+                        }
+                    }
+                });
             }
-            final Object blattnummer = cidsBean.getProperty("blattnummer");
-            lblTitle.setText(TITLE_PREFIX + " " + blattnummer);
-            checkLaufendeNummern();
+        } catch (Exception x) {
+            log.error(x, x);
         }
     }
 
@@ -259,7 +287,7 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
         });
         panFooterRight.add(btnForward);
 
-        lblForw.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblForw.setFont(new java.awt.Font("Tahoma", 1, 14));
         lblForw.setForeground(new java.awt.Color(255, 255, 255));
         lblForw.setText("Dokumente");
         lblForw.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -292,7 +320,6 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
 
         rpLaufendeNummern.setLayout(new java.awt.GridBagLayout());
 
-        lstLaufendeNummern.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstLaufendeNummern.setFixedCellWidth(75);
 
         org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.baulasten}");
@@ -455,6 +482,7 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
         semiRoundedPanel2.add(lblBlattInMap, gridBagConstraints);
+        lblBlattInMap.getAccessibleContext().setAccessibleDescription("Flurstücke des Baulastblattes in Karte anzeigen");
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridwidth = 2;
@@ -483,6 +511,15 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
             alb_picturePanel.setCidsBean(selectedBean);
             btnPasteBaulast.setEnabled(isPastePossible());
         }
+        Object[] selectedValues = lstLaufendeNummern.getSelectedValues();
+        Collection<MetaObject> selectedObjects = TypeSafeCollections.newArrayList();
+        for (Object obj : selectedValues) {
+            if (obj instanceof CidsBean) {
+                selectedObjects.add(((CidsBean) obj).getMetaObject());
+            }
+
+        }
+        panBaulastEditor.setAllSelectedMetaObjects(selectedObjects);
     }//GEN-LAST:event_lstLaufendeNummernValueChanged
 
     private void btnAddLaufendeNummerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddLaufendeNummerActionPerformed
@@ -505,6 +542,7 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
                     newBean.setProperty("laufende_nummer", String.valueOf(laufendeNr));
                     newBean.setProperty("textblatt", folder);
                     newBean.setProperty("lageplan", "");
+                    newBean.setProperty("blattnummer", txtBlattnummer.getText());
 //                    newBean.setProperty("lageplan", folder);
                     baulasten.add(newBean);
                     final int newIndex = lstLaufendeNummern.getModel().getSize();
@@ -701,8 +739,8 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
     }//GEN-LAST:event_btnCopyBaulastActionPerformed
 
     private void lblBlattInMapMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBlattInMapMouseClicked
-        ObjectRendererUtils.addBeanGeomAsFeatureToCismapMap(cidsBean);
         ObjectRendererUtils.switchToCismapMap();
+        ObjectRendererUtils.addBeanGeomAsFeatureToCismapMap(cidsBean, true);
 }//GEN-LAST:event_lblBlattInMapMouseClicked
     private boolean isPastePossible() {
         CidsBean blBean = panBaulastEditor.getCidsBean();

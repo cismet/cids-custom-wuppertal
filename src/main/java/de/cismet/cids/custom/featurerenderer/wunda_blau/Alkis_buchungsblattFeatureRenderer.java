@@ -34,6 +34,7 @@ import javax.swing.JComponent;
 public class Alkis_buchungsblattFeatureRenderer extends CustomCidsFeatureRenderer {
 
     private static int COLOR_INDEX = 0;
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alkis_buchungsblattRenderer.class);
 
     @Override
     public synchronized Paint getFillingStyle(CidsFeature subFeature) {
