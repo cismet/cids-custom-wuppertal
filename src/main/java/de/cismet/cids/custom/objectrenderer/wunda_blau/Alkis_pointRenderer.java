@@ -86,7 +86,6 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
     private ImageIcon PUNKT_PDF;
     private ImageIcon PUNKT_HTML;
     private ImageIcon PUNKT_TXT;
-    
     private static final Converter<String, String> ALKIS_BOOLEAN_CONVERTER = new Converter<String, String>() {
 
         private static final String TRUE_REP = "Ja";
@@ -1435,9 +1434,9 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
 
     @Override
     public void setCidsBean(CidsBean cb) {
+        bindingGroup.unbind();
         if (cb != null) {
             this.cidsBean = cb;
-            bindingGroup.unbind();
             bindingGroup.bind();
         }
     }
@@ -1604,6 +1603,11 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
      */
     public void setPointLocations(List<PointLocation> pointLocations) {
         this.pointLocations = pointLocations;
+    }
+
+    @Override
+    public void dispose() {
+        bindingGroup.unbind();
     }
 
     final class RetrieveWorker extends SwingWorker<Point, Void> {

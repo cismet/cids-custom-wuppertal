@@ -469,13 +469,13 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/de/cismet/cids/custom/wunda_blau/res/zoom-best-fit.png"/>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="Blatt in der Karte anzeigen"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Flurst&#xfc;cke des Baulastblattes in Karte anzeigen"/>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Handcursor"/>
                     </Property>
                   </Properties>
                   <AccessibilityProperties>
-                    <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="Flurst&#xfc;cke des Baulastblattes in Karte anzeigen"/>
+                    <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value=""/>
                   </AccessibilityProperties>
                   <Events>
                     <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblBlattInMapMouseClicked"/>

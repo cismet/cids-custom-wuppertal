@@ -465,6 +465,11 @@ public class Alkis_pointRenderer_BU extends javax.swing.JPanel implements CidsBe
         return panFooter;
     }
 
+    @Override
+    public void dispose() {
+        bindingGroup.unbind();
+    }
+
     final class RetrieveWorker extends SwingWorker<Point, Void> {
 
         public RetrieveWorker(String pointCode) {

@@ -18,6 +18,7 @@ import de.cismet.cids.custom.objectrenderer.utils.MD5Calculator;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cismap.commons.features.Feature;
 import de.cismet.cismap.commons.features.FeatureCollectionEvent;
+import de.cismet.cismap.commons.features.FeatureCollectionListener;
 import de.cismet.cismap.commons.features.PureNewFeature;
 import de.cismet.cismap.commons.gui.piccolo.eventlistener.MessenGeometryListener;
 import de.cismet.tools.BrowserLauncher;
@@ -26,7 +27,6 @@ import de.cismet.tools.StaticDecimalTools;
 import de.cismet.tools.collections.TypeSafeCollections;
 import de.cismet.tools.gui.MultiPagePictureReader;
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -34,9 +34,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
 import java.util.logging.Level;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -45,6 +43,7 @@ import javax.swing.ListModel;
 import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
+import org.openide.util.WeakListeners;
 
 /**
  *
@@ -54,7 +53,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 
     // <editor-fold defaultstate="collapsed" desc="Static Variables">
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_picturePanel.class);
-    private static final String[] MD5_PROPERTY_NAMES = new String[]{"lageplan_md5", "textblatt_md5"};
+//    private static final String[] MD5_PROPERTY_NAMES = new String[]{"lageplan_md5", "textblatt_md5"};
     private static final String TEXTBLATT_PROPERTY = "textblatt";
     private static final String LAGEPLAN_PROPERTY = "lageplan";
     private static final int LAGEPLAN_DOCUMENT = 0;
@@ -81,25 +80,16 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     private CidsBean cidsBean;
     private File[] documentFiles;
     private JButton[] documentButtons;
-    private final transient PropertyChangeListener updatePicturePathListener = new PropertyChangeListener() {
-
-        @Override
-        public void propertyChange(PropertyChangeEvent evt) {
-            String evtProp = evt.getPropertyName();
-            if (TEXTBLATT_PROPERTY.equals(evtProp) || LAGEPLAN_PROPERTY.equals(evtProp)) {
-                pathsChanged = true;
-            }
-        }
-    };
+    private transient PropertyChangeListener updatePicturePathListener = null;
     private JButton currentSelectedButton;
     private final MessenFeatureCollectionListener messenListener;
     //
     private volatile int currentDocument = NO_SELECTION;
     private volatile int currentPage = NO_SELECTION;
     private boolean pathsChanged = false;
-    private final String[] expectedMD5Values;
+//    private final String[] expectedMD5Values;
     private final Map<Integer, Geometry> pageGeometries;
-    private String currentActualDocumentMD5 = "";
+//    private String currentActualDocumentMD5 = "";
 
 // </editor-fold>
     /** Creates new form Alb_picturePanel */
@@ -112,7 +102,13 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         documentButtons[TEXTBLATT_DOCUMENT] = btnTextblatt;
         messenListener = new MessenFeatureCollectionListener();
         measureComponent.getFeatureCollection().addFeatureCollectionListener(messenListener);
-        expectedMD5Values = new String[2];
+//        expectedMD5Values = new String[2];
+    }
+
+    public void dispose() {
+        measureComponent.getFeatureCollection().removeFeatureCollectionListener(messenListener);
+        measureComponent.dispose();
+        updatePicturePathListener = null;
     }
 
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
@@ -138,20 +134,30 @@ public class Alb_picturePanel extends javax.swing.JPanel {
      * @param cidsBean the cidsBean to set
      */
     public void setCidsBean(CidsBean cidsBean) {
-        if (this.cidsBean != null) {
-            cidsBean.removePropertyChangeListener(updatePicturePathListener);
-        }
+//        if (this.cidsBean != null) {
+//            cidsBean.removePropertyChangeListener(updatePicturePathListener);
+//        }
         this.cidsBean = cidsBean;
         if (cidsBean != null) {
-            cidsBean.addPropertyChangeListener(updatePicturePathListener);
-            for (int i = 0; i < MD5_PROPERTY_NAMES.length; ++i) {
-                Object propValObj = cidsBean.getProperty(MD5_PROPERTY_NAMES[i]);
-                if (propValObj instanceof String) {
-                    expectedMD5Values[i] = (String) propValObj;
-                } else {
-                    expectedMD5Values[i] = null;
+            updatePicturePathListener = new PropertyChangeListener() {
+
+                @Override
+                public void propertyChange(PropertyChangeEvent evt) {
+                    String evtProp = evt.getPropertyName();
+                    if (TEXTBLATT_PROPERTY.equals(evtProp) || LAGEPLAN_PROPERTY.equals(evtProp)) {
+                        pathsChanged = true;
+                    }
                 }
-            }
+            };
+            cidsBean.addPropertyChangeListener(WeakListeners.propertyChange(updatePicturePathListener, cidsBean));
+//            for (int i = 0; i < MD5_PROPERTY_NAMES.length; ++i) {
+//                Object propValObj = cidsBean.getProperty(MD5_PROPERTY_NAMES[i]);
+//                if (propValObj instanceof String) {
+//                    expectedMD5Values[i] = (String) propValObj;
+//                } else {
+//                    expectedMD5Values[i] = null;
+//                }
+//            }
         }
         setCurrentDocumentNull();
         CismetThreadPool.execute(new FileSearchWorker());
@@ -542,14 +548,20 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 
         add(panCenter, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
+    private PictureSelectWorker currentPictureSelectWorker = null;
 
     private void lstPicturesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstPicturesValueChanged
         if (!evt.getValueIsAdjusting()) {
             final Object selObj = lstPictures.getSelectedValue();
             if (selObj instanceof Integer) {
                 int pageNo = (Integer) selObj;
+                PictureSelectWorker oldWorkerTest = currentPictureSelectWorker;
+                if (oldWorkerTest != null) {
+                    oldWorkerTest.cancel(true);
+                }
+                currentPictureSelectWorker = new PictureSelectWorker(pageNo - 1);
                 //page -> offset
-                CismetThreadPool.execute(new PictureSelectWorker(pageNo - 1));
+                CismetThreadPool.execute(currentPictureSelectWorker);
             }
         }
 }//GEN-LAST:event_lstPicturesValueChanged
@@ -698,7 +710,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 
     private void setCurrentDocumentNull() {
         currentDocument = NO_SELECTION;
-        currentActualDocumentMD5 = "";
+//        currentActualDocumentMD5 = "";
         pageGeometries.clear();
         setCurrentPageNull();
     }
@@ -849,13 +861,14 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                 for (int i = 0; i < result.length; ++i) {
                     List<File> current = result[i];
                     if (current != null) {
-                        if (current.size() == 1) {
-                            documentFiles[i] = current.get(0);
-                        } else if (current.size() > 1) {
-                            if (collisionLists.length() > 0) {
-                                collisionLists.append(",\n");
+                        if (current.size() > 0) {
+                            if (current.size() > 1) {
+                                if (collisionLists.length() > 0) {
+                                    collisionLists.append(",\n");
+                                }
+                                collisionLists.append(current);
                             }
-                            collisionLists.append(current);
+                            documentFiles[i] = current.get(0);
                         }
                     }
                 }
@@ -899,60 +912,60 @@ public class Alb_picturePanel extends javax.swing.JPanel {
             setControlsEnabled(false);
         }
         private final File pictureFile;
-        private boolean md5OK = false;
+//        private boolean md5OK = false;
 
-        private void updateMD5() throws Exception {
-            expectedMD5Values[currentDocument] = currentActualDocumentMD5;
-            cidsBean.setProperty(MD5_PROPERTY_NAMES[currentDocument], currentActualDocumentMD5);
-            log.debug("saving md5 value " + currentActualDocumentMD5);
-            persistBean();
-        }
-
+//        private void updateMD5() throws Exception {
+//            expectedMD5Values[currentDocument] = currentActualDocumentMD5;
+//            cidsBean.setProperty(MD5_PROPERTY_NAMES[currentDocument], currentActualDocumentMD5);
+//            log.debug("saving md5 value " + currentActualDocumentMD5);
+//            persistBean();
+//        }
         @Override
         protected ListModel doInBackground() throws Exception {
             final DefaultListModel model = new DefaultListModel();
-            currentActualDocumentMD5 = MD5Calculator.generateMD5(pictureFile);
-            if (currentDocument != NO_SELECTION && currentDocument < expectedMD5Values.length) {
-                final String expectedMD5 = expectedMD5Values[currentDocument];
-                if (expectedMD5 != null && expectedMD5.length() > 0) {
-                    if (expectedMD5.equals(currentActualDocumentMD5)) {
-                        md5OK = true;
-                    } else {
-                        md5OK = false;
-                        log.warn("MD5 fail. Expected: " + expectedMD5 + ". Found: " + currentActualDocumentMD5);
-                    }
-                } else {
-                    md5OK = true;
-                    updateMD5();
-                }
-            }
-            if (md5OK) {
-                readPageGeometriesIntoMap(getPages());
-            } else {
-
-                FutureTask<Integer> userInput = new FutureTask<Integer>(new Callable<Integer>() {
-
-                    @Override
-                    public Integer call() throws Exception {
-                        return JOptionPane.showConfirmDialog(measureComponent, "Das Dokument wurde seit dem letzten Kalibrieren geändert. Sollen die Kalibrierungsdaten für das Dokument gelöscht werden?", "Dokument wurde verändert", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                    }
-                });
-                EventQueue.invokeAndWait(userInput);
-                if (userInput.get().equals(JOptionPane.OK_OPTION)) {
-                    Collection<CidsBean> pageGeoData = getPages();
-                    if (pageGeoData != null) {
-                        for (CidsBean bean : pageGeoData) {
-                            bean.delete();
-                        }
-                    }
-                } else {
-                    updateMD5();
-                    readPageGeometriesIntoMap(getPages());
-                }
-            }
+//            currentActualDocumentMD5 = MD5Calculator.generateMD5(pictureFile);
+//            if (currentDocument != NO_SELECTION && currentDocument < expectedMD5Values.length) {
+//                final String expectedMD5 = expectedMD5Values[currentDocument];
+//                if (expectedMD5 != null && expectedMD5.length() > 0) {
+//                    if (expectedMD5.equals(currentActualDocumentMD5)) {
+//                        md5OK = true;
+//                    } else {
+//                        md5OK = false;
+//                        log.warn("MD5 fail. Expected: " + expectedMD5 + ". Found: " + currentActualDocumentMD5);
+//                    }
+//                } else {
+//                    md5OK = true;
+//                    updateMD5();
+//                }
+//            }
+//            if (md5OK) {
+            readPageGeometriesIntoMap(getPages());
+//            } else {
+//
+//                FutureTask<Integer> userInput = new FutureTask<Integer>(new Callable<Integer>() {
+//
+//                    @Override
+//                    public Integer call() throws Exception {
+//                        return JOptionPane.showConfirmDialog(measureComponent, "Das Dokument wurde seit dem letzten Kalibrieren geändert. Sollen die Kalibrierungsdaten für das Dokument gelöscht werden?", "Dokument wurde verändert", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+//                    }
+//                });
+//                EventQueue.invokeAndWait(userInput);
+//                if (userInput.get().equals(JOptionPane.OK_OPTION)) {
+//                    Collection<CidsBean> pageGeoData = getPages();
+//                    if (pageGeoData != null) {
+//                        for (CidsBean bean : pageGeoData) {
+//                            bean.delete();
+//                        }
+//                    }
+//                } else {
+//                    updateMD5();
+//                    readPageGeometriesIntoMap(getPages());
+//                }
+//            }
 
             closeReader();
             pictureReader = new MultiPagePictureReader(pictureFile);
+//            pictureReader.setCaching(false);
             final int numberOfPages = pictureReader.getNumberOfPages();
             for (int i = 0; i < numberOfPages; ++i) {
                 model.addElement(i + 1);
@@ -1020,18 +1033,20 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         @Override
         protected void done() {
             try {
-                final Geometry pageGeom = pageGeometries.get(pageNumber);
-                currentPage = pageNumber;
-                togPan.setSelected(true);
-                resetMeasureDataLabels();
-                measureComponent.addImage(get(), pageGeom);
-                measureComponent.zoomToFeatureCollection();
-                if (pageGeom != null) {
-                    rpMessdaten.setBackground(KALIBRIERUNG_VORHANDEN);
-                    rpMessdaten.setAlpha(120);
-                } else {
-                    rpMessdaten.setBackground(Color.WHITE);
-                    rpMessdaten.setAlpha(60);
+                if (!isCancelled()) {
+                    final Geometry pageGeom = pageGeometries.get(pageNumber);
+                    currentPage = pageNumber;
+                    measureComponent.addImage(get(), pageGeom);
+                    togPan.setSelected(true);
+                    resetMeasureDataLabels();
+                    if (pageGeom != null) {
+                        rpMessdaten.setBackground(KALIBRIERUNG_VORHANDEN);
+                        rpMessdaten.setAlpha(120);
+                    } else {
+                        rpMessdaten.setBackground(Color.WHITE);
+                        rpMessdaten.setAlpha(60);
+                    }
+                    measureComponent.zoomToFeatureCollection();
                 }
             } catch (InterruptedException ex) {
                 setCurrentPageNull();
@@ -1041,6 +1056,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                 log.error(ex, ex);
             } finally {
                 setControlsEnabled(true);
+                currentPictureSelectWorker = null;
             }
         }
     }

@@ -372,6 +372,11 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
         return new BoundingBox(geoCollection);
     }
 
+    @Override
+    public void dispose() {
+        
+    }
+
     final class TableSelectionListener implements ListSelectionListener {
 
         @Override

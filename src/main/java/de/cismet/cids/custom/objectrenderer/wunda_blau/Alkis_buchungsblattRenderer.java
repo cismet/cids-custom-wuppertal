@@ -897,6 +897,9 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
 
     @Override
     public void setCidsBean(CidsBean cb) {
+        if (landparcelListBinding.isBound()) {
+            landparcelListBinding.unbind();
+        }
         if (cb != null) {
             cidsBean = cb;
             retrieveWorker = new RetrieveWorker(cidsBean);
@@ -911,9 +914,6 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
 
                 @Override
                 public void run() {
-                    if (landparcelListBinding.isBound()) {
-                        landparcelListBinding.unbind();
-                    }
                     AlkisSOAPWorkerService.execute(retrieveWorker);
 //                    CismetThreadPool.execute(retrieveWorker);
                     landparcelListBinding.bind();
@@ -1165,6 +1165,11 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
 
     private final boolean isWaiting() {
         return blWait.isBusy();
+    }
+
+    @Override
+    public void dispose() {
+        landparcelListBinding.unbind();
     }
 
     final class RetrieveWorker extends SwingWorker<Buchungsblatt, Void> {

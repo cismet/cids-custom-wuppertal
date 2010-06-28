@@ -219,9 +219,9 @@ public class Poi_locationtypeRenderer extends javax.swing.JPanel implements Cids
 
     @Override
     public void setCidsBean(CidsBean cidsBean) {
+        bindingGroup.unbind();
         if (cidsBean != null) {
             this.cidsBean = cidsBean;
-            bindingGroup.unbind();
             bindingGroup.bind();
         }
     }
@@ -258,5 +258,10 @@ public class Poi_locationtypeRenderer extends javax.swing.JPanel implements Cids
     public void setTitle(String title) {
         this.title = title;
         lblTitle.setText(title);
+    }
+
+    @Override
+    public void dispose() {
+        bindingGroup.unbind();
     }
 }

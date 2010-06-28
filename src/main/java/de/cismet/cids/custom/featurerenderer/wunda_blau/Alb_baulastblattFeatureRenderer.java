@@ -50,9 +50,7 @@ public class Alb_baulastblattFeatureRenderer extends CustomCidsFeatureRenderer {
 
     @Override
     public Paint getFillingStyle(CidsFeature subFeature) {
-        log.fatal(""+subFeature);
         if (subFeature != null && subFeature.getMyAttributeStringInParentFeature().contains("flurstueck")) {
-            log.fatal(subFeature + "\n" + beguenstigtBeans + "\n" + belastetBeans);
             final Integer id = subFeature.getMetaObject().getID();
             if (belastetBeans.contains(id)) {
                 if (beguenstigtBeans.contains(id)) {

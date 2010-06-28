@@ -30,6 +30,7 @@ import Sirius.server.middleware.types.MetaObject;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.dynamics.CidsBean;
+import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.tools.collections.TypeSafeCollections;
 import java.util.List;
@@ -40,7 +41,7 @@ import java.util.Map.Entry;
  *
  * @author srichter
  */
-public class Alkis_GebaeudeRendererPanel extends javax.swing.JPanel {
+public class Alkis_GebaeudeRendererPanel extends javax.swing.JPanel implements DisposableCidsBeanStore {
 
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alkis_GebaeudeRendererPanel.class);
     private CidsBean cidsBean;
@@ -221,10 +222,10 @@ public class Alkis_GebaeudeRendererPanel extends javax.swing.JPanel {
     }
 
     public void setCidsBean(CidsBean cb) {
+        bindingGroup.unbind();
         if (cb != null) {
             cidsBean = cb;
             initLageLabel(getAllAdressesForSameBuilding());
-            bindingGroup.unbind();
             bindingGroup.bind();
         }
     }
@@ -325,4 +326,9 @@ public class Alkis_GebaeudeRendererPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane scpLandparcels;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void dispose() {
+        bindingGroup.unbind();
+    }
 }

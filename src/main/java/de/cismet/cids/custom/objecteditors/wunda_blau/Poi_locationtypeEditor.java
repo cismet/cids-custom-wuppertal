@@ -51,6 +51,14 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         txtIconFocusLost(null);
     }
 
+    @Override
+    public void dispose() {
+        super.dispose();
+        dlgAddLocationType.dispose();
+    }
+
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is

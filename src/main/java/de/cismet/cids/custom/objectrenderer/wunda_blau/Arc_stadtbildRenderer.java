@@ -485,9 +485,9 @@ public class Arc_stadtbildRenderer extends JPanel implements CidsBeanRenderer, T
     }
 
     public void setCidsBean(final CidsBean cidsBean) {
+        bindingGroup.unbind();
         if (cidsBean != null) {
             this.cidsBean = cidsBean;
-            bindingGroup.unbind();
             bindingGroup.bind();
             final String obj = String.valueOf(cidsBean.getProperty("bildnummer"));
             lblPicture.setPictureURL(StaticProperties.ARCHIVAR_URL_PREFIX + obj + StaticProperties.ARCHIVAR_URL_SUFFIX);
@@ -548,5 +548,10 @@ public class Arc_stadtbildRenderer extends JPanel implements CidsBeanRenderer, T
 
     public JComponent getTitleComponent() {
         return panTitle;
+    }
+
+    @Override
+    public void dispose() {
+        bindingGroup.unbind();
     }
 }

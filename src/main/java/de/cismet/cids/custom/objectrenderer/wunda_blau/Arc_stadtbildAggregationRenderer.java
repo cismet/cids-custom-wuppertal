@@ -249,6 +249,11 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
         return panTitle;
     }
 
+    @Override
+    public void dispose() {
+        
+    }
+
     final class PictureWorker extends SwingWorker<Void, ImageIcon> {
 
         private int i = -1;

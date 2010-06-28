@@ -12,7 +12,7 @@
 package de.cismet.cids.custom.objecteditors.wunda_demo;
 
 import de.cismet.cids.dynamics.CidsBean;
-import de.cismet.cids.dynamics.CidsBeanStore;
+import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 
 /**

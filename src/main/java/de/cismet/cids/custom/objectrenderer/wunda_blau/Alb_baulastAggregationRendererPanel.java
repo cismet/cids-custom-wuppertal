@@ -139,4 +139,9 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
         }
         this.title = desc;
     }
+
+    @Override
+    public void dispose() {
+
+    }
 }

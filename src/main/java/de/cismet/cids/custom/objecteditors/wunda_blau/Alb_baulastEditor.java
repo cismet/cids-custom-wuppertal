@@ -10,7 +10,7 @@ import Sirius.server.middleware.types.MetaObject;
 import de.cismet.cids.annotations.AggregationRenderer;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.dynamics.CidsBean;
-import de.cismet.cids.dynamics.CidsBeanStore;
+import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
@@ -21,6 +21,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import org.jdesktop.beansbinding.BindingGroup;
 
 /**
  * de.cismet.cids.objectrenderer.CoolThemaRenderer
@@ -30,7 +31,7 @@ import javax.swing.border.EmptyBorder;
  * @author srichter
  */
 @AggregationRenderer
-public class Alb_baulastEditor extends JPanel implements CidsBeanStore, TitleComponentProvider, FooterComponentProvider, BorderProvider, RequestsFullSizeComponent {
+public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore, TitleComponentProvider, FooterComponentProvider, BorderProvider, RequestsFullSizeComponent {
 
     static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_baulastEditor.class);
     private final boolean editable;
@@ -56,7 +57,7 @@ public class Alb_baulastEditor extends JPanel implements CidsBeanStore, TitleCom
     public CidsBean getCidsBean() {
         return cidsBean;
     }
-
+    
     public void setAllSelectedMetaObjects(Collection<MetaObject> selection) {
         this.panMain.setAllSelectedMetaObjects(selection);
     }
@@ -289,5 +290,12 @@ public class Alb_baulastEditor extends JPanel implements CidsBeanStore, TitleCom
     @Override
     public Border getCenterrBorder() {
         return new EmptyBorder(0, 5, 0, 5);
+    }
+
+    @Override
+    public void dispose() {
+        log.fatal("baulast editor disposed");
+        panMain.dispose();
+        alb_picturePanel.dispose();
     }
 }

@@ -69,6 +69,11 @@ public class Alkis_gebaeudeRenderer extends javax.swing.JPanel implements CidsBe
     public void setTitle(String title) {
         this.title = title;
     }
+
+    @Override
+    public void dispose() {
+        
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }

@@ -47,6 +47,13 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         dlgAddZusNamen.getRootPane().setDefaultButton(btnNamesMenOk);
     }
 
+    @Override
+    public void dispose() {
+        super.dispose();
+        dlgAddLocationType.dispose();
+        dlgAddZusNamen.dispose();
+    }
+
     private final void deleteItemFromList(String propertyName, Object value, boolean andDeleteObjectFromDB) {
         if (value instanceof CidsBean && propertyName != null) {
             final CidsBean bean = (CidsBean) value;

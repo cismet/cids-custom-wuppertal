@@ -19,6 +19,7 @@ import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.FlurstueckFinder;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.dynamics.CidsBean;
+import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.collections.TypeSafeCollections;
@@ -46,7 +47,7 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
  *
  * @author srichter
  */
-public class Alb_baulastEditorPanel extends javax.swing.JPanel {
+public class Alb_baulastEditorPanel extends javax.swing.JPanel implements DisposableCidsBeanStore {
 
     static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_baulastEditorPanel.class);
     private CidsBean cidsBean;
@@ -743,7 +744,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         rpHeadInfo.add(lblHeadInfo, gridBagConstraints);
 
         lblLastInMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom-best-fit.png"))); // NOI18N
-        lblLastInMap.setToolTipText("Baulast in der Karte anzeigen");
+        lblLastInMap.setToolTipText("Flurstücke der laufenden Nummer in Karte anzeigen");
         lblLastInMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblLastInMap.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -756,7 +757,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
         rpHeadInfo.add(lblLastInMap, gridBagConstraints);
-        lblLastInMap.getAccessibleContext().setAccessibleDescription("Flurstücke der laufenden Nummer in Karte anzeigen");
+        lblLastInMap.getAccessibleContext().setAccessibleDescription("");
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1185,6 +1186,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
 
     public void setCidsBean(CidsBean cidsBean) {
         try {
+            bindingGroup.unbind();
             if (cidsBean != null) {
                 int[] belIdx = lstFlurstueckeBelastet.getSelectedIndices();
                 int[] begIdx = lstFlurstueckeBeguenstigt.getSelectedIndices();
@@ -1194,7 +1196,6 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
                 Collections.sort(landParcelCol, AlphanumComparator.getInstance());
                 landParcelCol = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "flurstuecke_beguenstigt");
                 Collections.sort(landParcelCol, AlphanumComparator.getInstance());
-                bindingGroup.unbind();
                 bindingGroup.bind();
                 lstFlurstueckeBelastet.setSelectedIndices(belIdx);
                 lstFlurstueckeBeguenstigt.setSelectedIndices(begIdx);
@@ -1271,6 +1272,13 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel {
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
     private static final ComboBoxModel waitModel = new DefaultComboBoxModel(new String[]{"Wird geladen..."});
+
+    @Override
+    public void dispose() {
+        dlgAddBaulastArt.dispose();
+        dlgAddLandParcelDiv.dispose();
+        bindingGroup.unbind();
+    }
 
 //    class FlurstueckComboModelWorker extends SwingWorker<ComboBoxModel, Void> {
 //

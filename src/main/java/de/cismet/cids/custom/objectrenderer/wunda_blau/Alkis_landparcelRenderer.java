@@ -1083,12 +1083,12 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
 
     @Override
     public void setCidsBean(CidsBean cb) {
+        bindingGroup.unbind();
         if (cb != null) {
             this.cidsBean = cb;
             initMap();
             initLage();
             initGotoBeanMap();
-            bindingGroup.unbind();
             bindingGroup.bind();
             final int anzahlBuchungsblaetter = lstBuchungsblaetter.getModel().getSize();
             if (anzahlBuchungsblaetter < 5) {
@@ -1371,6 +1371,11 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
     @Override
     public Border getCenterrBorder() {
         return new EmptyBorder(5, 5, 5, 5);
+    }
+
+    @Override
+    public void dispose() {
+        bindingGroup.unbind();
     }
 
 // </editor-fold>

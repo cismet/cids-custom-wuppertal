@@ -367,9 +367,9 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
 
     @Override
     public void setCidsBean(CidsBean cidsBean) {
+        bindingGroup.unbind();
         if (cidsBean != null) {
             this.cidsBean = cidsBean;
-            bindingGroup.unbind();
             bindingGroup.bind();
             initLocationTypeImages();
             if (lblMail.getText().length() < 3) {
@@ -444,5 +444,10 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
     @Override
     public Border getCenterrBorder() {
         return BorderFactory.createEmptyBorder();
+    }
+
+    @Override
+    public void dispose() {
+        bindingGroup.unbind();
     }
 }

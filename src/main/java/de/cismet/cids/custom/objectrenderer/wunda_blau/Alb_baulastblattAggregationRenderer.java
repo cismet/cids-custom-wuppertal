@@ -107,4 +107,9 @@ public class Alb_baulastblattAggregationRenderer extends javax.swing.JPanel impl
     public JComponent getTitleComponent() {
         return panTitle;
     }
+
+    @Override
+    public void dispose() {
+       
+    }
 }

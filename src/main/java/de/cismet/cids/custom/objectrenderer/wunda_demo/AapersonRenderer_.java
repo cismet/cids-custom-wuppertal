@@ -8,7 +8,6 @@
  *
  * Created on 26.02.2009, 22:16:53
  */
-
 package de.cismet.cids.custom.objectrenderer.wunda_demo;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -19,8 +18,9 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRendererPanel;
  * @author thorsten
  */
 public class AapersonRenderer_ extends CidsBeanRendererPanel {
-    private String title=null;
-    private CidsBean cidsBean=null;
+
+    private String title = null;
+    private CidsBean cidsBean = null;
 
     /** Creates new form AapersonRenderer_ */
     public AapersonRenderer_() {
@@ -89,8 +89,8 @@ public class AapersonRenderer_ extends CidsBeanRendererPanel {
     }
 
     public void setCidsBean(CidsBean cidsBean) {
-        this.cidsBean=cidsBean;
         bindingGroup.unbind();
+        this.cidsBean = cidsBean;
         bindingGroup.bind();
     }
 
@@ -99,11 +99,8 @@ public class AapersonRenderer_ extends CidsBeanRendererPanel {
     }
 
     public void setTitle(String title) {
-        this.title=title;
+        this.title = title;
     }
-
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -112,5 +109,8 @@ public class AapersonRenderer_ extends CidsBeanRendererPanel {
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
-
+    @Override
+    public void dispose() {
+        bindingGroup.unbind();
+    }
 }

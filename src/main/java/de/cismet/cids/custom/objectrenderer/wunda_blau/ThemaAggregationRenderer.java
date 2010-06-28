@@ -203,4 +203,9 @@ public class ThemaAggregationRenderer extends javax.swing.JPanel implements Cids
     public JComponent getTitleComponent() {
         return lblAgrTitle;
     }
+
+    @Override
+    public void dispose() {
+        
+    }
 }

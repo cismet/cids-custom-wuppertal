@@ -395,6 +395,7 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
 
     @Override
     public void setCidsBean(CidsBean cb) {
+        bindingGroup.unbind();
         if (cb != null) {
             cidsBean = cb;
             final Object gebaeudeObj = cidsBean.getProperty("gebaeude");
@@ -405,7 +406,6 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
             } else {
                 panGebaeude.setVisible(false);
             }
-            bindingGroup.unbind();
             bindingGroup.bind();
         }
     }
@@ -552,5 +552,10 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
+    }
+
+    @Override
+    public void dispose() {
+        bindingGroup.unbind();
     }
 }

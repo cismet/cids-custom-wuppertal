@@ -7,7 +7,7 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import de.cismet.cids.annotations.AggregationRenderer;
 import de.cismet.cids.dynamics.CidsBean;
-import de.cismet.cids.dynamics.CidsBeanStore;
+import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.tools.gui.DoNotWrap;
@@ -36,7 +36,7 @@ import org.jdesktop.jxlayer.plaf.ext.LockableUI;
  * @author srichter
  */
 @AggregationRenderer
-public class ThemaEditor extends PureCoolPanel implements DoNotWrap, CidsBeanStore {
+public class ThemaEditor extends PureCoolPanel implements DoNotWrap, DisposableCidsBeanStore {
 
     static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ThemaEditor.class);
     public static final String TITLE_PREFIX = "Thema:";
@@ -47,12 +47,12 @@ public class ThemaEditor extends PureCoolPanel implements DoNotWrap, CidsBeanSto
     public static final Color COLOR_TBL_SECOND = new Color(210, 210, 210);
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
     public static final List<Integer> COLUMN_SIZES = new CopyOnWriteArrayList<Integer>();
-    private LockableUI lockLayer1,  lockLayer2;
+    private LockableUI lockLayer1, lockLayer2;
     private final List<JComponent> inputFields;
     private final CardLayout cardLayout;
     private volatile boolean editable;
     private CidsBean cidsBean;
-    private JXLayer<JComponent> layer1,  layer2;
+    private JXLayer<JComponent> layer1, layer2;
 
     public CidsBean getCidsBean() {
         return cidsBean;
@@ -61,6 +61,7 @@ public class ThemaEditor extends PureCoolPanel implements DoNotWrap, CidsBeanSto
     public void setCidsBean(final CidsBean cidsBean) {
 
 
+        bindingGroup.unbind();
         this.cidsBean = cidsBean;
 
         //initImagesAndMore();
@@ -75,7 +76,6 @@ public class ThemaEditor extends PureCoolPanel implements DoNotWrap, CidsBeanSto
 
                     DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(bindingGroup, cidsBean);
 
-                    bindingGroup.unbind();
                     bindingGroup.bind();
                 } catch (Exception e) {
                     throw new RuntimeException("Error occured during binding", e);
@@ -1641,7 +1641,7 @@ public class ThemaEditor extends PureCoolPanel implements DoNotWrap, CidsBeanSto
         btnForwrd.setEnabled(true);
         lblDescriptionFor.setEnabled(true);
         lblDescriptionBack.setEnabled(false);
-    //lblPages.setText("1 / 2");
+        //lblPages.setText("1 / 2");
 }//GEN-LAST:event_btnBackActionPerformed
 
     /**
@@ -1654,9 +1654,8 @@ public class ThemaEditor extends PureCoolPanel implements DoNotWrap, CidsBeanSto
         btnForwrd.setEnabled(false);
         lblDescriptionFor.setEnabled(false);
         lblDescriptionBack.setEnabled(true);
-    //lblPages.setText("2 / 2");
+        //lblPages.setText("2 / 2");
 }//GEN-LAST:event_btnForwrdActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnForwrd;
@@ -1769,4 +1768,9 @@ public class ThemaEditor extends PureCoolPanel implements DoNotWrap, CidsBeanSto
     private javax.swing.JTextArea txtZukAngebFachverfahren;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void dispose() {
+        bindingGroup.unbind();
+    }
 }

@@ -12,7 +12,7 @@ import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.dynamics.CidsBean;
-import de.cismet.cids.dynamics.CidsBeanStore;
+import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 import de.cismet.cids.editors.DefaultBeanInitializer;
 import de.cismet.cids.editors.EditorBeanInitializerStore;
 import de.cismet.tools.collections.TypeSafeCollections;
@@ -38,6 +38,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import org.openide.util.WeakListeners;
 
 /**
  * de.cismet.cids.objectrenderer.CoolThemaRenderer
@@ -47,7 +48,7 @@ import javax.swing.event.DocumentListener;
  * @author srichter
  */
 @AggregationRenderer
-public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, TitleComponentProvider, FooterComponentProvider, BorderProvider, RequestsFullSizeComponent {
+public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBeanStore, TitleComponentProvider, FooterComponentProvider, BorderProvider, RequestsFullSizeComponent {
 
     static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_baulastblattEditor.class);
     private static final Comparator<Object> OBJECT_COMPARATOR = new Comparator<Object>() {
@@ -63,6 +64,7 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
     public static final String TITLE_PREFIX = "Baulastblatt";
     public static final String TITLE_AGR_PREFIX = "Baulastblätter";
     private Collection<CidsBean> baulastenBeans = null;
+    private PropertyChangeListener strongReferenceToWeakListener = null;
 
     /** Creates new form CoolThemaRenderer */
     public Alb_baulastblattEditor(final boolean editable) {
@@ -91,6 +93,7 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         try {
+            bindingGroup.unbind();
             if (cidsBean != null) {
                 int nrIdx = lstLaufendeNummern.getSelectedIndex();
                 this.cidsBean = cidsBean;
@@ -98,7 +101,6 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
                 if (baulastenBeans != null) {
                     Collections.sort((List) baulastenBeans, OBJECT_COMPARATOR);
                 }
-                bindingGroup.unbind();
                 bindingGroup.bind();
                 if (nrIdx <= 0) {
                     lstLaufendeNummern.setSelectedIndex(0);
@@ -113,7 +115,7 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
                 final Object blattnummer = cidsBean.getProperty("blattnummer");
                 lblTitle.setText(TITLE_PREFIX + " " + blattnummer);
                 checkLaufendeNummern();
-                cidsBean.addPropertyChangeListener(new PropertyChangeListener() {
+                strongReferenceToWeakListener = new PropertyChangeListener() {
 
                     @Override
                     public void propertyChange(PropertyChangeEvent evt) {
@@ -127,7 +129,8 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
                             }
                         }
                     }
-                });
+                };
+                cidsBean.addPropertyChangeListener(WeakListeners.propertyChange(strongReferenceToWeakListener, cidsBean));
             }
         } catch (Exception x) {
             log.error(x, x);
@@ -469,7 +472,7 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
         semiRoundedPanel2.add(jLabel3, gridBagConstraints);
 
         lblBlattInMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom-best-fit.png"))); // NOI18N
-        lblBlattInMap.setToolTipText("Blatt in der Karte anzeigen");
+        lblBlattInMap.setToolTipText("Flurstücke des Baulastblattes in Karte anzeigen");
         lblBlattInMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblBlattInMap.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -482,7 +485,7 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
         semiRoundedPanel2.add(lblBlattInMap, gridBagConstraints);
-        lblBlattInMap.getAccessibleContext().setAccessibleDescription("Flurstücke des Baulastblattes in Karte anzeigen");
+        lblBlattInMap.getAccessibleContext().setAccessibleDescription("");
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridwidth = 2;
@@ -804,5 +807,13 @@ public class Alb_baulastblattEditor extends JPanel implements CidsBeanStore, Tit
     @Override
     public Border getCenterrBorder() {
         return new EmptyBorder(0, 5, 0, 5);
+    }
+
+    @Override
+    public void dispose() {
+        bindingGroup.unbind();
+        alb_picturePanel.dispose();
+        panBaulastEditor.dispose();
+        strongReferenceToWeakListener = null;
     }
 }
