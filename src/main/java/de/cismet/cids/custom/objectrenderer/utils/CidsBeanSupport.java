@@ -26,7 +26,7 @@ public final class CidsBeanSupport {
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(CidsBeanSupport.class);
     public static final String DOMAIN_NAME = "WUNDA_BLAU";
 
-    public static final CidsBean createNewCidsBeanFromTableName(final String tableName, final Map<String, Object> initialProperties) throws Exception {
+    public static CidsBean createNewCidsBeanFromTableName(final String tableName, final Map<String, Object> initialProperties) throws Exception {
         final CidsBean newBean = createNewCidsBeanFromTableName(tableName);
         for (Entry<String, Object> property : initialProperties.entrySet()) {
             newBean.setProperty(property.getKey(), property.getValue());
@@ -34,7 +34,7 @@ public final class CidsBeanSupport {
         return newBean;
     }
 
-    public static final CidsBean createNewCidsBeanFromTableName(final String tableName) throws Exception {
+    public static CidsBean createNewCidsBeanFromTableName(final String tableName) throws Exception {
         if (tableName != null) {
             final MetaClass metaClass = ClassCacheMultiple.getMetaClass(DOMAIN_NAME, tableName);
             if (metaClass != null) {
@@ -44,7 +44,7 @@ public final class CidsBeanSupport {
         throw new Exception("Could not find MetaClass for table " + tableName);
     }
 
-    public static final List<CidsBean> getBeanCollectionFromProperty(CidsBean bean, String collectionProperty) {
+    public static List<CidsBean> getBeanCollectionFromProperty(CidsBean bean, String collectionProperty) {
         if (bean != null && collectionProperty != null) {
             final Object colObj = bean.getProperty(collectionProperty);
             if (colObj instanceof Collection) {
@@ -54,7 +54,7 @@ public final class CidsBeanSupport {
         return null;
     }
 
-    public static final boolean checkWritePermission(CidsBean bean) {
+    public static boolean checkWritePermission(CidsBean bean) {
         User user = SessionManager.getSession().getUser();
         return bean.getHasWritePermission(user);
     }

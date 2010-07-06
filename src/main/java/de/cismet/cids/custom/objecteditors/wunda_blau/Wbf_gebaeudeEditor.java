@@ -26,14 +26,15 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -51,7 +52,7 @@ import org.jdesktop.jxlayer.plaf.ext.LockableUI;
 import org.jdesktop.observablecollections.ObservableList;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
-
+import org.openide.util.WeakListeners;
 
 /**
  *
@@ -69,6 +70,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
     private String title = "";
     MyLockableUI luiGeb, luiVorg;
     JXLayer lVorg;
+    private final List<PropertyChangeListener> strongReferencesToWeakListeners = new ArrayList<PropertyChangeListener>();
 
     public Wbf_gebaeudeEditor() {
         this(true);
@@ -133,7 +135,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 //                    ((JComponent) inputField).setBackground(COLOR_TXT_BACK);
 //                }
 //            } else
-                if (inputField instanceof DefaultBindableReferenceCombo) {
+            if (inputField instanceof DefaultBindableReferenceCombo) {
                 ((DefaultBindableReferenceCombo) inputField).setFakeModel(!editable);
                 //((DefaultBindableReferenceCombo) inputField).setFakeModel(true);
             }
@@ -169,7 +171,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         });
 
 
-       cbNutzungsart.setNullValueRepresentation("Bitte Nutzungsart auswählen");
+        cbNutzungsart.setNullValueRepresentation("Bitte Nutzungsart auswählen");
 
         validationDependencies.put("art", Arrays.asList("anzahl_wohneinheiten", "massnahmenkategorisierung", "hoehe_mietpreisbindung", "bindungsdauer"));
         bindingGroup.addBindingListener(new BindingListener() {
@@ -271,7 +273,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
 
         cbNutzungsart.setSelectedItem(null);
-        Vector einkommensgruppen=new Vector();
+        Vector einkommensgruppen = new Vector();
         einkommensgruppen.add("A");
         einkommensgruppen.add("B");
         einkommensgruppen.add(null);
@@ -1021,12 +1023,14 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         if (vorgangMC != null) {
             MetaObject mo = vorgangMC.getEmptyInstance();
             CidsBean vorgangBean = mo.getBean();
-            vorgangBean.addPropertyChangeListener(new PropertyChangeListener() {
+            PropertyChangeListener pcl = new PropertyChangeListener() {
 
                 public void propertyChange(PropertyChangeEvent evt) {
                     lstVorgaenge.repaint();
                 }
-            });
+            };
+            strongReferencesToWeakListeners.add(pcl);
+            vorgangBean.addPropertyChangeListener(WeakListeners.propertyChange(pcl, vorgangBean));
 
             ((ObservableList) cidsBean.getProperty("vorgaenge")).add(vorgangBean);
         } else {
@@ -1063,7 +1067,6 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
     private void txtFolgenummerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFolgenummerActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFolgenummerActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cbEinkommensgruppe;
     private javax.swing.JComboBox cbMassnahmenkategorisierung;
@@ -1135,24 +1138,26 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         ObservableList ol = (ObservableList) cidsBean.getProperty("vorgaenge");
         for (Object o : ol) {
             CidsBean vorgBean = (CidsBean) o;
-            vorgBean.addPropertyChangeListener(new PropertyChangeListener() {
+            PropertyChangeListener pcl = new PropertyChangeListener() {
 
                 public void propertyChange(PropertyChangeEvent evt) {
                     lstVorgaenge.repaint();
                 }
-            });
+            };
+            strongReferencesToWeakListeners.add(pcl);
+            vorgBean.addPropertyChangeListener(WeakListeners.propertyChange(pcl, vorgBean));
         }
 
         ClassCacheMultiple.addInstance(domain);
         try {
 
             final MetaClass massnahmenClass = ClassCacheMultiple.getMetaClass(domain, "wbf_massnahme");
-              DefaultComboBoxModel result = DefaultBindableReferenceCombo.getModelByMetaClass(massnahmenClass, true);
+            DefaultComboBoxModel result = DefaultBindableReferenceCombo.getModelByMetaClass(massnahmenClass, true);
             cbMassnahmenkategorisierung.setModel(result);
 
 
 //            ((DefaultBindableReferenceCombo)cbMassnahmenkategorisierung).setMetaClass(massnahmenClass);
-            
+
         } catch (Exception e) {
             log.error("Fehler beim fuellen der MassnahmenComboBox", e);
         }
@@ -1253,11 +1258,10 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         return bindingGroup;
     }
 }
+
 class MyLockableUI extends LockableUI {
 
     public void setDirty(boolean dirty) {
         super.setDirty(dirty);
     }
 }
-
-

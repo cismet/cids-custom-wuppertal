@@ -89,7 +89,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         });
     }
 
-    private final void initEditableComponents() {
+    private void initEditableComponents() {
         editableComponents.add(txtLageplan);
         editableComponents.add(txtLaufendeNr);
         editableComponents.add(txtTextblatt);
@@ -848,7 +848,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
-    private final MetaObject[] getLWBaulastarten() {
+    private MetaObject[] getLWBaulastarten() {
         return ObjectRendererUtils.getLightweightMetaObjectsForQuery("alb_baulast_art", "select id,baulast_art from alb_baulast_art order by baulast_art", new String[]{"baulast_art"}, new AbstractAttributeRepresentationFormater() {
 
             @Override
@@ -1165,7 +1165,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         ObjectRendererUtils.addBeanGeomsAsFeaturesToCismapMap(allSelectedObjects, editable);
     }//GEN-LAST:event_lblLastInMapMouseClicked
 
-    private final void handleJumpToListeSelectionBean(JList list) {
+    private void handleJumpToListeSelectionBean(JList list) {
         final Object selectedObj = list.getSelectedValue();
         if (selectedObj instanceof CidsBean) {
             Object realFSBean = ((CidsBean) selectedObj).getProperty("fs_referenz");
@@ -1176,6 +1176,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         }
     }
 
+    @Override
     public CidsBean getCidsBean() {
         return cidsBean;
     }
@@ -1184,6 +1185,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         this.allSelectedObjects = selection;
     }
 
+    @Override
     public void setCidsBean(CidsBean cidsBean) {
         try {
             bindingGroup.unbind();
