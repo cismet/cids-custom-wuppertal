@@ -156,7 +156,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
 
     }
 
-    private final void initIcons() {
+    private void initIcons() {
         final ReflectionRenderer reflectionRenderer = new ReflectionRenderer(0.5f, 0.15f, false);
 //        BACKWARD_SELECTED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-left-sel.png"));
 //        BACKWARD_PRESSED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-left-pressed.png"));
@@ -181,7 +181,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
 //        ObjectRendererUtils.decorateJLabelAndButtonSynced(lblBack, btnBack, BACKWARD_SELECTED, BACKWARD_PRESSED);
     }
 
-    private final void initProductPreview() {
+    private void initProductPreview() {
         initProductPreviewImages();
         int maxX = 0, maxY = 0;
         for (ImageIcon ii : productPreviewImages.values()) {
@@ -196,7 +196,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         ObjectRendererUtils.setAllDimensions(panProductPreview, previewDim);
     }
 
-    private final void initProductPreviewImages() {
+    private void initProductPreviewImages() {
         productPreviewImages.put(hlBestandsnachweisPdf, BESTAND_PDF);
         productPreviewImages.put(hlBestandsnachweisHtml, BESTAND_HTML);
         final ProductLabelMouseAdaper productListener = new ProductLabelMouseAdaper();
@@ -204,7 +204,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         hlBestandsnachweisPdf.addMouseListener(productListener);
     }
 
-    private final void initEditorPanes() {
+    private void initEditorPanes() {
         //Font and Layout
         final Font font = UIManager.getFont("Label.font");
         final String bodyRule = "body { font-family: " + font.getFamily() + "; "
@@ -772,7 +772,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
             String buchungsblattCode = getCompleteBuchungsblattCode();
             if (buchungsblattCode.length() > 0) {
                 buchungsblattCode = AlkisCommons.escapeHtmlSpaces(buchungsblattCode);
-                AlkisCommons.Produkte.productBestandsnachweisProduct(buchungsblattCode, AlkisCommons.ProduktFormat.HTML);
+                AlkisCommons.Products.productBestandsnachweisProduct(buchungsblattCode, AlkisCommons.ProductFormat.HTML);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_buchungsblattRenderer.this);
@@ -785,7 +785,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
             String buchungsblattCode = getCompleteBuchungsblattCode();
             if (buchungsblattCode.length() > 0) {
                 buchungsblattCode = AlkisCommons.escapeHtmlSpaces(buchungsblattCode);
-                AlkisCommons.Produkte.productBestandsnachweisProduct(buchungsblattCode, AlkisCommons.ProduktFormat.PDF);
+                AlkisCommons.Products.productBestandsnachweisProduct(buchungsblattCode, AlkisCommons.ProductFormat.PDF);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_buchungsblattRenderer.this);
@@ -863,7 +863,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         btnForwardActionPerformed(null);
 }//GEN-LAST:event_lblForwMouseClicked
 
-    public static final String fixBuchungslattCode(String buchungsblattCode) {
+    public static String fixBuchungslattCode(String buchungsblattCode) {
         if (buchungsblattCode != null) {
             final StringBuffer buchungsblattCodeSB = new StringBuffer(buchungsblattCode);
             //Fix SICAD-API-strangeness...
@@ -876,7 +876,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         }
     }
 
-    private final String getCompleteBuchungsblattCode() {
+    private String getCompleteBuchungsblattCode() {
         if (cidsBean != null) {
             final Object buchungsblattCodeObj = cidsBean.getProperty("buchungsblattcode");
             if (buchungsblattCodeObj != null) {
@@ -941,11 +941,11 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         if (landParcelList.size() > 0) {
             try {
                 final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                mappingModel.setSrs(AlkisCommons.MapKonstanten.SRS);
+                mappingModel.setSrs(AlkisCommons.Maps.SRS);
                 //TODO: do we need an swsw for every class?
                 final BoundingBox box = boundingBoxFromLandparcelList(landParcelList);
-                mappingModel.addHome(new XBoundingBox(box.getX1(), box.getY1(), box.getX2(), box.getY2(), AlkisCommons.MapKonstanten.SRS, true));
-                SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisCommons.MapKonstanten.CALL_STRING));
+                mappingModel.addHome(new XBoundingBox(box.getX1(), box.getY1(), box.getX2(), box.getY2(), AlkisCommons.Maps.SRS, true));
+                SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisCommons.Maps.MAP_CALL_STRING));
                 swms.setName("Buchungsblatt");
                 mappingModel.addLayer(swms);
                 map.setMappingModel(mappingModel);
@@ -972,7 +972,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
 //                                if (realLandParcelMetaObjectsCache == null) {
 //                                    CismetThreadPool.execute(new GeomQueryWorker());
 //                                } else {
-                                    switchToMapAndShowGeometries();
+                                switchToMapAndShowGeometries();
 //                                }
                             }
                         } catch (Exception ex) {
@@ -1021,7 +1021,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         return Collections.EMPTY_LIST;
     }
 
-    private final void displayBuchungsblattInfos(Buchungsblatt buchungsblatt) {
+    private void displayBuchungsblattInfos(Buchungsblatt buchungsblatt) {
         if (buchungsblatt != null) {
             final Offices offices = buchungsblatt.getOffices();
 //            buchungsblatt.getBuchungsstellen()[0].getLandParcel()[0].getAdministrativeDistricts().get;
@@ -1034,7 +1034,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         }
     }
 
-    private final String surroundWithHTMLTags(String in) {
+    private String surroundWithHTMLTags(String in) {
         final StringBuilder result = new StringBuilder("<html>");
         result.append(in);
         result.append("</html>");
@@ -1158,18 +1158,22 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
 
     }
 
-    private final void setWaiting(boolean waiting) {
+    private void setWaiting(boolean waiting) {
         blWait.setVisible(waiting);
         blWait.setBusy(waiting);
     }
 
-    private final boolean isWaiting() {
+    private boolean isWaiting() {
         return blWait.isBusy();
     }
 
     @Override
     public void dispose() {
         landparcelListBinding.unbind();
+        if (!continueInBackground) {
+            AlkisSOAPWorkerService.cancel(retrieveWorker);
+            setWaiting(false);
+        }
     }
 
     final class RetrieveWorker extends SwingWorker<Buchungsblatt, Void> {
@@ -1242,7 +1246,6 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
 //            }
 //        }
 //    }
-
     @Override
     public Border getTitleBorder() {
         return new EmptyBorder(10, 10, 10, 10);
@@ -1264,17 +1267,17 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
 
     }
 
-    /**
-     * cancel worker if renderer is disposed.
-     */
-    @Override
-    public void removeNotify() {
-        super.removeNotify();
-        if (!continueInBackground) {
-            AlkisSOAPWorkerService.cancel(retrieveWorker);
-            setWaiting(false);
-        }
-    }
+//    /**
+//     * cancel worker if renderer is disposed.
+//     */
+//    @Override
+//    public void removeNotify() {
+//        super.removeNotify();
+//        if (!continueInBackground) {
+//            AlkisSOAPWorkerService.cancel(retrieveWorker);
+//            setWaiting(false);
+//        }
+//    }
 
     private static final class LightweightLandParcel {
 

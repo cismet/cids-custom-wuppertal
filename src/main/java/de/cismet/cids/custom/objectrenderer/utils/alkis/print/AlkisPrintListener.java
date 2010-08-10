@@ -8,7 +8,7 @@ import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.LinearRing;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.util.AffineTransformation;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisCommons.ProduktLayout;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProduct;
 import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.features.DefaultFeatureCollection;
 import de.cismet.cismap.commons.features.DefaultStyledFeature;
@@ -82,13 +82,13 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
         };
     }
 
-    public void init(double massstab,
-            ProduktLayout layout,
+    public void init(AlkisProduct product,
             Geometry geom,
             boolean findOptimalRotation) {
         String currentInteractionMode = mappingComponent.getInteractionMode();
-        double realWorldWidth = FormatToRealWordCalculator.toRealWorldValue(layout.width, massstab);
-        double realWorldHeight = FormatToRealWordCalculator.toRealWorldValue(layout.height, massstab);
+        double massstab = Double.parseDouble(product.getMassstab());
+        double realWorldWidth = FormatToRealWordCalculator.toRealWorldValue(product.getWidth(), massstab);
+        double realWorldHeight = FormatToRealWordCalculator.toRealWorldValue(product.getHeight(), massstab);
         if (massstab != 0 && !mappingComponent.isFixedMapScale()) {
             mappingComponent.queryServices();
         }

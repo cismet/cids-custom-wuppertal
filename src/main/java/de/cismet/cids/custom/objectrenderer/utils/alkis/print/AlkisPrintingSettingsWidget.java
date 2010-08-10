@@ -11,9 +11,9 @@ import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
+import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisCommons;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisCommons.LiegenschaftskarteProdukt;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisCommons.ProduktLayout;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProduct;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
@@ -27,6 +27,11 @@ import de.cismet.tools.gui.StaticSwingTools;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -38,9 +43,10 @@ import javax.swing.JOptionPane;
 public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements CidsBeanDropListener {
 
     private static final String ALKIS_LANDPARCEL_TABLE = "ALKIS_LANDPARCEL";
-    private static final ProduktLayout[] LAYOUTS = ProduktLayout.values();
-    private static final LiegenschaftskarteProdukt[] PRODUCTS = LiegenschaftskarteProdukt.values();
-    private static final Integer[] MASSSTAEBE = new Integer[]{500, 1000, 2000, 5000};
+//    private static final ProductLayout[] LAYOUTS = ProductLayout.values();
+//    private static final ProductTyp[] TYPES = ProductTyp.values();
+//    private static final LiegenschaftskarteProduct[] PRODUCTS = LiegenschaftskarteProduct.values();
+//    private static final Integer[] MASSSTAEBE = new Integer[]{500, 1000, 2000, 5000};
     //
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private final MappingComponent mappingComponent;
@@ -56,6 +62,9 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         this.flurstueckListModel = new DefaultListModel();
         initComponents();
         getRootPane().setDefaultButton(cmdOk);
+        cbClazz.setModel(getProductClassModel());
+        cbClazz.setSelectedIndex(0);
+        cbProduct.setSelectedIndex(0);
         this.panDesc.setBackground(new Color(216, 228, 248));
         this.mappingComponent = mappingComponent;
         //enable D&D
@@ -63,6 +72,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         //init PrintListener
         this.mapPrintListener = new AlkisPrintListener(mappingComponent, this);
         this.mappingComponent.addInputListener(MappingComponent.ALKIS_PRINT, mapPrintListener);
+//        updateFormatProposal();
     }
 
     @Override
@@ -85,6 +95,80 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         updateFormatProposal();
         syncOkButtonWithListStatus();
         super.setVisible(b);
+    }
+    private static final List<AlkisProduct> kartenProducts = AlkisCommons.ALKIS_PRODUCTS.get(AlkisCommons.Products.PRODUCT_GROUP_KARTE);
+
+    private ComboBoxModel getProductClassModel() {
+        Set<String> classes = new HashSet<String>();
+        for (AlkisProduct product : kartenProducts) {
+            classes.add(product.getClazz());
+        }
+        return new DefaultComboBoxModel(classes.toArray());
+    }
+
+    private ComboBoxModel getProductTypeModel() {
+        String clazz = String.valueOf(cbClazz.getSelectedItem());
+        Set<String> prodSet = new HashSet<String>();
+        List<String> typesOrdered = new ArrayList<String>();
+        for (AlkisProduct product : kartenProducts) {
+            if (clazz.equals(product.getClazz())) {
+                if (prodSet.add(product.getType())) {
+                    typesOrdered.add(product.getType());
+                }
+            }
+        }
+        return new DefaultComboBoxModel(typesOrdered.toArray());
+    }
+
+    static final class LayoutMetaInfo {
+
+        public LayoutMetaInfo(String layoutDesc, int width, int heigth) {
+            this.layoutDesc = layoutDesc;
+            this.width = width;
+            this.heigth = heigth;
+        }
+        String layoutDesc;
+        String layoutCode;
+        int width;
+        int heigth;
+
+        @Override
+        public String toString() {
+            return layoutDesc;
+        }
+    }
+
+    private ComboBoxModel[] getProductDetailModels() {
+        String clazz = String.valueOf(cbClazz.getSelectedItem());
+        String type = String.valueOf(cbProduct.getSelectedItem());
+        ComboBoxModel[] result = new ComboBoxModel[2];
+        Set<String> prodScale = new TreeSet<String>(AlphanumComparator.getInstance());
+        Set<String> prodLayout = new HashSet<String>();
+        List<LayoutMetaInfo> prodLayoutOrdered = new ArrayList<LayoutMetaInfo>();
+        for (AlkisProduct product : kartenProducts) {
+            if (clazz.equals(product.getClazz()) && type.equals(product.getType())) {
+                prodScale.add(product.getMassstab());
+                if (prodLayout.add(product.getDinFormat())) {
+                    prodLayoutOrdered.add(new LayoutMetaInfo(product.getDinFormat(), product.getWidth(), product.getHeight()));
+                }
+            }
+        }
+        result[0] = new DefaultComboBoxModel(prodLayoutOrdered.toArray());
+        result[1] = new DefaultComboBoxModel(prodScale.toArray());
+        return result;
+    }
+
+    private AlkisProduct getSelectedProduct() {
+        String clazz = String.valueOf(cbClazz.getSelectedItem());
+        String type = String.valueOf(cbProduct.getSelectedItem());
+        String scale = String.valueOf(cbScales.getSelectedItem());
+        String layout = String.valueOf(cbFormat.getSelectedItem());
+        for (AlkisProduct product : kartenProducts) {
+            if (clazz.equals(product.getClazz()) && type.equals(product.getType()) && scale.equals(product.getMassstab()) && layout.equals(product.getDinFormat())) {
+                return product;
+            }
+        }
+        return null;
     }
 
     private Collection<CidsBean> getAlkisFlurstueckBeansInMap() {
@@ -137,7 +221,6 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         jSeparator2 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JSeparator();
         panSettings = new javax.swing.JPanel();
@@ -158,13 +241,15 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         chkRotation = new javax.swing.JCheckBox();
         cbProduct = new javax.swing.JComboBox();
         jLabel9 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        cbClazz = new javax.swing.JComboBox();
         jPanel1 = new javax.swing.JPanel();
         cmdCancel = new javax.swing.JButton();
         cmdOk = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setAlwaysOnTop(true);
-        setMinimumSize(new java.awt.Dimension(750, 450));
+        setMinimumSize(new java.awt.Dimension(750, 500));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         panDesc.setBackground(java.awt.SystemColor.inactiveCaptionText);
@@ -210,15 +295,6 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 10, 0, 0);
         panDesc.add(jLabel3, gridBagConstraints);
-
-        jLabel4.setText("3. Laden und Beschriften");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 10, 0, 0);
-        panDesc.add(jLabel4, gridBagConstraints);
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cismap/commons/gui/res/frameprint.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -284,7 +360,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         jSeparator4.setPreferredSize(new java.awt.Dimension(0, 0));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 421;
@@ -301,7 +377,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSettings.add(btnRemove, gridBagConstraints);
 
@@ -313,16 +389,16 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSettings.add(scpFlurstuecke, gridBagConstraints);
 
-        jLabel11.setText("Flurstücke");
+        jLabel11.setText("Flurstücke:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSettings.add(jLabel11, gridBagConstraints);
@@ -336,29 +412,25 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSettings.add(scpAdditionalText, gridBagConstraints);
 
-        jLabel10.setText("Zusätzlicher Text");
+        jLabel10.setText("Zusätzlicher Text:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSettings.add(jLabel10, gridBagConstraints);
-
-        cbScales.setModel(new DefaultComboBoxModel(MASSSTAEBE));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSettings.add(cbScales, gridBagConstraints);
-
-        cbFormat.setModel(new DefaultComboBoxModel(LAYOUTS));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -366,52 +438,71 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSettings.add(cbFormat, gridBagConstraints);
 
-        jLabel8.setText("Maßstab");
+        jLabel8.setText("Maßstab:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panSettings.add(jLabel8, gridBagConstraints);
+
+        jLabel7.setText("Format:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panSettings.add(jLabel8, gridBagConstraints);
-
-        jLabel7.setText("Format");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSettings.add(jLabel7, gridBagConstraints);
 
-        chkRotation.setText("Drehwinkel vorschlagen");
+        chkRotation.setText("Drehwinkel vorschlagen:");
         chkRotation.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        chkRotation.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chkRotationActionPerformed(evt);
-            }
-        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSettings.add(chkRotation, gridBagConstraints);
 
-        cbProduct.setModel(new DefaultComboBoxModel(PRODUCTS));
+        cbProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbProductActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSettings.add(cbProduct, gridBagConstraints);
 
-        jLabel9.setText("Produkt");
+        jLabel9.setText("Produkt:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panSettings.add(jLabel9, gridBagConstraints);
+
+        jLabel12.setText("Produktklasse:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panSettings.add(jLabel9, gridBagConstraints);
+        panSettings.add(jLabel12, gridBagConstraints);
+
+        cbClazz.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbClazzActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panSettings.add(cbClazz, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -452,9 +543,8 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
     }// </editor-fold>//GEN-END:initComponents
     private void cmdOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdOkActionPerformed
         try {
-            final double scale = (Integer) cbScales.getSelectedItem();
-            final ProduktLayout layout = (ProduktLayout) cbFormat.getSelectedItem();
-            mapPrintListener.init(scale, layout, allLandparcelGeometryUnion, chkRotation.isSelected());
+            final AlkisProduct selectedProduct = getSelectedProduct();
+            mapPrintListener.init(selectedProduct, allLandparcelGeometryUnion, chkRotation.isSelected());
             dispose();
         } catch (Exception e) {
             log.error("Fehler beim Verarbeiten der Druckeinstellungen", e);
@@ -473,10 +563,19 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         syncOkButtonWithListStatus();
     }//GEN-LAST:event_btnRemoveActionPerformed
 
-    private void chkRotationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkRotationActionPerformed
-    }//GEN-LAST:event_chkRotationActionPerformed
+    private void cbClazzActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbClazzActionPerformed
+        cbProduct.setModel(getProductTypeModel());
+        cbProductActionPerformed(null);
+    }//GEN-LAST:event_cbClazzActionPerformed
+
+    private void cbProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbProductActionPerformed
+        ComboBoxModel[] models = getProductDetailModels();
+        cbFormat.setModel(models[0]);
+        cbScales.setModel(models[1]);
+    }//GEN-LAST:event_cbProductActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRemove;
+    private javax.swing.JComboBox cbClazz;
     private javax.swing.JComboBox cbFormat;
     private javax.swing.JComboBox cbProduct;
     private javax.swing.JComboBox cbScales;
@@ -486,9 +585,9 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -531,11 +630,13 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         if (allLandparcelGeometryUnion != null) {
             BoundingBox allGeomBB = new BoundingBox(allLandparcelGeometryUnion);
             //current: erst auf passendes format durchtesten, dann massstaebe
-            for (int j = 0; j < MASSSTAEBE.length; ++j) {
-                for (int i = 0; i < LAYOUTS.length; ++i) {
-                    ProduktLayout currentLayout = LAYOUTS[i];
-                    Integer currentMassstab = MASSSTAEBE[j];
-                    if (doesBoundingBoxFitIntoLayout(allGeomBB, currentLayout, currentMassstab)) {
+//            String clazz = String.valueOf(cbClazz.getSelectedItem());
+//            String type = String.valueOf(cbProduct.getSelectedItem());
+            for (int j = 0; j < cbScales.getModel().getSize(); ++j) {
+                for (int i = 0; i < cbFormat.getModel().getSize(); ++i) {
+                    LayoutMetaInfo currentLayout = (LayoutMetaInfo) cbFormat.getItemAt(i);
+                    Integer currentMassstab = Integer.parseInt(String.valueOf(cbScales.getItemAt(j)));
+                    if (doesBoundingBoxFitIntoLayout(allGeomBB, currentLayout.width, currentLayout.heigth, currentMassstab)) {
                         cbFormat.setSelectedIndex(i);
                         cbScales.setSelectedIndex(j);
                         chkRotation.setSelected(false);
@@ -544,11 +645,22 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                 }
             }
             chkRotation.setSelected(true);
+            String formatHint;
             if (allGeomBB.getWidth() >= allGeomBB.getHeight()) {
-                cbFormat.setSelectedItem(ProduktLayout.A3Hoch);
+                formatHint = "Hoch";
+                cbFormat.setSelectedIndex(cbFormat.getModel().getSize() - 1);
             } else {
-                cbFormat.setSelectedItem(ProduktLayout.A3Quer);
+                cbFormat.setSelectedIndex(cbFormat.getModel().getSize() - 2);
+                formatHint = "Quer";
             }
+
+            for (int i = cbFormat.getModel().getSize(); --i >= 0;) {
+                if (String.valueOf(cbFormat.getItemAt(i)).equals(formatHint)) {
+                    cbFormat.setSelectedIndex(i);
+                    break;
+                }
+            }
+
             cbScales.setSelectedIndex(cbScales.getModel().getSize() - 1);
         } else {
             chkRotation.setSelected(false);
@@ -560,10 +672,8 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
     public void createProduct(Point center, double rotationAngle) {
         if (flurstueckListModel.size() > 0) {
             final String landParcelCode = AlkisCommons.getLandparcelCodeFromParcelBeanObject(flurstueckListModel.get(0));
-            final int massstab = (Integer) cbScales.getSelectedItem();
-            final ProduktLayout layout = (ProduktLayout) cbFormat.getSelectedItem();
-            final LiegenschaftskarteProdukt product = (LiegenschaftskarteProdukt) cbProduct.getSelectedItem();
-            AlkisCommons.Produkte.productKarte(landParcelCode, product, layout, massstab, toInt(rotationAngle), toInt(center.getX()), toInt(center.getY()), taAdditionalText.getText(), false);
+            AlkisProduct selectedProduct = getSelectedProduct();
+            AlkisCommons.Products.productKarte(landParcelCode, selectedProduct, toInt(rotationAngle), toInt(center.getX()), toInt(center.getY()), taAdditionalText.getText(), false);
         }
     }
 
@@ -595,62 +705,13 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         return allGeomUnion;
     }
 
-    private boolean doesBoundingBoxFitIntoLayout(BoundingBox box, ProduktLayout layout, double massstab) {
-        double realWorldLayoutWidth = FormatToRealWordCalculator.toRealWorldValue(layout.width, massstab);
-        double realWorldLayoutHeigth = FormatToRealWordCalculator.toRealWorldValue(layout.height, massstab);
+    private boolean doesBoundingBoxFitIntoLayout(BoundingBox box, int width, int height, double scale) {
+        double realWorldLayoutWidth = FormatToRealWordCalculator.toRealWorldValue(width, scale);
+        double realWorldLayoutHeigth = FormatToRealWordCalculator.toRealWorldValue(height, scale);
         return realWorldLayoutWidth >= box.getWidth() && realWorldLayoutHeigth >= box.getHeight();
     }
 
-    private final void syncOkButtonWithListStatus() {
+    private void syncOkButtonWithListStatus() {
         cmdOk.setEnabled(flurstueckListModel.size() > 0);
     }
-//    final class FormatProposalListListener implements ListDataListener {
-//
-//        @Override
-//        public void intervalAdded(ListDataEvent e) {
-//            updateFormatProposal();
-//            syncOkButtonWithListStatus();
-//        }
-//
-//        @Override
-//        public void intervalRemoved(ListDataEvent e) {
-//            intervalAdded(e);
-//        }
-//
-//        @Override
-//        public void contentsChanged(ListDataEvent e) {
-//            //NOP
-//        }
-//    }
-//    static final class ProductDescription {
-//
-//        public ProductDescription(String dinFormat, String dateiFormat, String massstab) {
-//            this.dinFormat = dinFormat;
-//            this.dateiFormat = dateiFormat;
-//            this.massstab = massstab;
-//        }
-//        final String dinFormat;
-//        final String dateiFormat;
-//        final String massstab;
-//
-//        @Override
-//        public boolean equals(Object obj) {
-//            if (obj instanceof ProductDescription) {
-//                ProductDescription other = (ProductDescription) obj;
-//                return dinFormat.equals(other.dinFormat)
-//                        && dateiFormat.equals(other.dateiFormat)
-//                        && massstab.equals(other.massstab);
-//            }
-//            return false;
-//        }
-//
-//        @Override
-//        public int hashCode() {
-//            int hash = 3;
-//            hash = 59 * hash + (this.dinFormat != null ? this.dinFormat.hashCode() : 0);
-//            hash = 59 * hash + (this.dateiFormat != null ? this.dateiFormat.hashCode() : 0);
-//            hash = 59 * hash + (this.massstab != null ? this.massstab.hashCode() : 0);
-//            return hash;
-//        }
-//    }
 }

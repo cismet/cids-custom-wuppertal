@@ -26,7 +26,7 @@ public final class AlkisSOAPWorkerService {
             0L, TimeUnit.MILLISECONDS,
             new LinkedBlockingQueue<Runnable>());
 
-    public static final void cancel(Runnable worker) {
+    public static void cancel(Runnable worker) {
         if (worker != null) {
             if (worker instanceof RunnableFuture) {
                 ((RunnableFuture<?>) worker).cancel(true);
@@ -35,7 +35,7 @@ public final class AlkisSOAPWorkerService {
         }
     }
 
-    public static final void execute(Runnable worker) {
+    public static void execute(Runnable worker) {
         if (worker != null) {
             SOAP_EXEC_SERVICE.execute(worker);
         }

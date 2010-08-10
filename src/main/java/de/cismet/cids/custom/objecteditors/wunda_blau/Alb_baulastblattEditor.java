@@ -21,8 +21,6 @@ import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
 import java.awt.CardLayout;
 import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Collection;
@@ -33,11 +31,10 @@ import java.util.Set;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.Timer;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import org.jdesktop.beansbinding.Validator;
+import org.jdesktop.beansbinding.Validator.Result;
 import org.openide.util.WeakListeners;
 
 /**
@@ -50,12 +47,25 @@ import org.openide.util.WeakListeners;
 @AggregationRenderer
 public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBeanStore, TitleComponentProvider, FooterComponentProvider, BorderProvider, RequestsFullSizeComponent {
 
+    private static final int BLATT_NUMMER_ANZAHL_ZIFFERN = 6;
     static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_baulastblattEditor.class);
     private static final Comparator<Object> OBJECT_COMPARATOR = new Comparator<Object>() {
 
         @Override
         public int compare(Object o1, Object o2) {
             return AlphanumComparator.getInstance().compare(String.valueOf(o1), String.valueOf(o2));
+        }
+    };
+    private static final Validator<String> NUMBER_VALIDATOR = new Validator<String>() {
+
+        @Override
+        public Result validate(String t) {
+            if (t.length() < BLATT_NUMMER_ANZAHL_ZIFFERN) {
+                return new Result(Result.ERROR, "Blattnummer ist nicht " + BLATT_NUMMER_ANZAHL_ZIFFERN + "-stellig!");
+            } else if (!t.matches("^\\d+[a-zA-Z]*$")) {
+                return new Result(Result.ERROR, "Blattnummer darf nur aus Ziffern [0-9] bestehen!");
+            }
+            return null;
         }
     };
     private final boolean editable;
@@ -448,6 +458,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.blattnummer}"), txtBlattnummer, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("");
+        binding.setValidator(NUMBER_VALIDATOR);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -568,10 +579,10 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                     nummer /= 1000;
                     String nummStringStart = String.valueOf(nummer) + "001";
                     String nummStringEnd = String.valueOf(nummer + 1) + "000";
-                    while (nummStringStart.length() < 6) {
+                    while (nummStringStart.length() < BLATT_NUMMER_ANZAHL_ZIFFERN) {
                         nummStringStart = "0" + nummStringStart;
                     }
-                    while (nummStringEnd.length() < 6) {
+                    while (nummStringEnd.length() < BLATT_NUMMER_ANZAHL_ZIFFERN) {
                         nummStringEnd = "0" + nummStringEnd;
                     }
                     //patch fuer fehler in wuppertaler ordnernummerierung (erster startet bei 000000 statt 000001)
@@ -745,6 +756,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         ObjectRendererUtils.switchToCismapMap();
         ObjectRendererUtils.addBeanGeomAsFeatureToCismapMap(cidsBean, true);
 }//GEN-LAST:event_lblBlattInMapMouseClicked
+
     private boolean isPastePossible() {
         CidsBean blBean = panBaulastEditor.getCidsBean();
         boolean isNewBean = blBean != null && blBean.getMetaObject().getStatus() == MetaObject.NEW;

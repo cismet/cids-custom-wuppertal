@@ -30,7 +30,6 @@ import javax.swing.JButton;
  */
 @org.openide.util.lookup.ServiceProvider(service = ToolbarComponentsProvider.class)
 public class AlkisToobarPluginComponentProvider implements ToolbarComponentsProvider {
-
     private final List<ToolbarComponentDescription> toolbarComponents;
 
     public AlkisToobarPluginComponentProvider() {
@@ -54,9 +53,14 @@ public class AlkisToobarPluginComponentProvider implements ToolbarComponentsProv
 final class AlkisPrintJButton extends JButton {
 
     private final AlkisPrintingSettingsWidget printWidget;
-
+    static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisToobarPluginComponentProvider.class);
     public AlkisPrintJButton() {
-        this.printWidget = new AlkisPrintingSettingsWidget(false, CismapBroker.getInstance().getMappingComponent());
+        try {
+            this.printWidget = new AlkisPrintingSettingsWidget(false, CismapBroker.getInstance().getMappingComponent());
+        } catch (Exception ex) {
+            log.fatal(ex,ex);
+            throw new RuntimeException(ex);
+        }
 //        setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/frameprint.png"))); // NOI18N
         setText("Alkis-Drucken");
         setToolTipText("Alkis Drucken");
@@ -74,4 +78,3 @@ final class AlkisPrintJButton extends JButton {
         });
     }
 }
-

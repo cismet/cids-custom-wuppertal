@@ -15,10 +15,10 @@ import de.aedsicad.aaaweb.service.util.Point;
 import de.aedsicad.aaaweb.service.util.PointLocation;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisCommons;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisSOAPWorkerService;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.SOAPAccessProvider;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
-import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.collections.TypeSafeCollections;
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
@@ -274,7 +274,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
 
     }
 
-    private final void initProductPreviewImages() {
+    private void initProductPreviewImages() {
         productPreviewImages.put(hlPunktlistePdf, PUNKT_PDF);
         productPreviewImages.put(hlPunktlisteHtml, PUNKT_HTML);
         productPreviewImages.put(hlPunktlisteTxt, PUNKT_TXT);
@@ -284,7 +284,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         hlPunktlisteTxt.addMouseListener(productListener);
     }
 
-    private final void initProductPreview() {
+    private void initProductPreview() {
         initProductPreviewImages();
         int maxX = 0, maxY = 0;
         for (ImageIcon ii : productPreviewImages.values()) {
@@ -1353,7 +1353,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         if (bean != null) {
             final String pointCode = String.valueOf(bean.getProperty("pointcode"));
             if (pointCode != null) {
-                CismetThreadPool.execute(new RetrieveWorker(pointCode));
+                AlkisSOAPWorkerService.execute(new RetrieveWorker(pointCode));
             }
         }
     }//GEN-LAST:event_btnRetrieveActionPerformed
@@ -1386,7 +1386,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         try {
             final String pointID = lblTxtIdentifikator.getText();
             final String pointArt = lblTxtPunktart.getText();
-            AlkisCommons.Produkte.productPunktliste(pointID, pointArt, AlkisCommons.ProduktFormat.PDF);
+            AlkisCommons.Products.productPunktliste(pointID, pointArt, AlkisCommons.ProductFormat.PDF);
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_pointRenderer.this);
             log.error(ex);
@@ -1397,7 +1397,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         try {
             final String pointID = lblTxtIdentifikator.getText();
             final String pointArt = lblTxtPunktart.getText();
-            AlkisCommons.Produkte.productPunktliste(pointID, pointArt, AlkisCommons.ProduktFormat.HTML);
+            AlkisCommons.Products.productPunktliste(pointID, pointArt, AlkisCommons.ProductFormat.HTML);
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_pointRenderer.this);
             log.error(ex);
@@ -1420,7 +1420,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         try {
             final String pointID = lblTxtIdentifikator.getText();
             final String pointArt = lblTxtPunktart.getText();
-            AlkisCommons.Produkte.productPunktliste(pointID, pointArt, AlkisCommons.ProduktFormat.TEXT);
+            AlkisCommons.Products.productPunktliste(pointID, pointArt, AlkisCommons.ProductFormat.TEXT);
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_pointRenderer.this);
             log.error(ex);
@@ -1624,36 +1624,35 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
             return infoService.getPoint(soapProvider.getIdentityCard(), soapProvider.getService(), pointCode);
         }
 
-        private final void restoreOnException() {
+        private void restoreOnException() {
             btnRetrieve.setEnabled(true);
-//            for (JLabel label : retrieveableLabels) {
-//                label.setText("...");
-//            }
         }
 
         @Override
         protected void done() {
             setWait(false);
-            try {
-                final Point point = get();
-                if (point != null) {
-                    Alkis_pointRenderer.this.setPoint(point);
-                    final PointLocation[] pointlocArr = point.getPointLocations();
-                    Arrays.sort(pointlocArr, POINTLOCATION_COMPARATOR);
-                    Alkis_pointRenderer.this.setPointLocations(Arrays.asList(pointlocArr));
-                    Alkis_pointRenderer.this.bindingGroup.unbind();
-                    Alkis_pointRenderer.this.bindingGroup.bind();
-                    panLocationInfos.setVisible(true);
+            if (!isCancelled()) {
+                try {
+                    final Point point = get();
+                    if (point != null) {
+                        Alkis_pointRenderer.this.setPoint(point);
+                        final PointLocation[] pointlocArr = point.getPointLocations();
+                        Arrays.sort(pointlocArr, POINTLOCATION_COMPARATOR);
+                        Alkis_pointRenderer.this.setPointLocations(Arrays.asList(pointlocArr));
+                        Alkis_pointRenderer.this.bindingGroup.unbind();
+                        Alkis_pointRenderer.this.bindingGroup.bind();
+                        panLocationInfos.setVisible(true);
+                    }
+                } catch (InterruptedException ex) {
+                    restoreOnException();
+                    log.warn(ex, ex);
+                } catch (Exception ex) {
+                    //TODO show error message to user?
+                    restoreOnException();
+                    org.jdesktop.swingx.error.ErrorInfo ei = new ErrorInfo("Fehler beim Retrieve", ex.getMessage(), null, null, ex, Level.ALL, null);
+                    org.jdesktop.swingx.JXErrorPane.showDialog(StaticSwingTools.getParentFrame(Alkis_pointRenderer.this), ei);
+                    log.error(ex, ex);
                 }
-            } catch (InterruptedException ex) {
-                restoreOnException();
-                log.warn(ex, ex);
-            } catch (Exception ex) {
-                //TODO show error message to user?
-                restoreOnException();
-                org.jdesktop.swingx.error.ErrorInfo ei = new ErrorInfo("Fehler beim Retrieve", ex.getMessage(), null, null, ex, Level.ALL, null);
-                org.jdesktop.swingx.JXErrorPane.showDialog(StaticSwingTools.getParentFrame(Alkis_pointRenderer.this), ei);
-                log.error(ex, ex);
             }
         }
     }

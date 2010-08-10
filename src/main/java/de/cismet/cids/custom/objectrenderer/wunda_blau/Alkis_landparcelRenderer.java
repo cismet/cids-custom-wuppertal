@@ -193,7 +193,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         initEditorPanes();
     }
 
-    private final void initIcons() {
+    private void initIcons() {
         final ReflectionRenderer reflectionRenderer = new ReflectionRenderer(0.5f, 0.15f, false);
 //        BACKWARD_SELECTED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-left-sel.png"));
 //        BACKWARD_PRESSED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-left-pressed.png"));
@@ -217,7 +217,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         KARTE_PDF = new ImageIcon(i5);
     }
 
-    private final void initProductPreview() {
+    private void initProductPreview() {
         initProductPreviewImages();
         int maxX = 0, maxY = 0;
         for (ImageIcon ii : productPreviewImages.values()) {
@@ -232,7 +232,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         ObjectRendererUtils.setAllDimensions(panProductPreview, previewDim);
     }
 
-    private final void initEditorPanes() {
+    private void initEditorPanes() {
         //Font and Layout
         final Font font = UIManager.getFont("Label.font");
         final String bodyRule = "body { font-family: " + font.getFamily() + "; "
@@ -253,7 +253,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         }
     }
 
-    private final void initProductPreviewImages() {
+    private void initProductPreviewImages() {
         productPreviewImages.put(hlFlurstuecksEigentumsnachweisHtml, BUCH_EIG_HTML);
         productPreviewImages.put(hlFlurstuecksEigentumsnachweisPdf, BUCH_EIG_PDF);
         productPreviewImages.put(hlFlurstuecksnachweisHtml, BUCH_HTML);
@@ -273,7 +273,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
      * @return
      * @throws Exception
      */
-    private final Buchungsblatt getBuchungsblatt(CidsBean buchungsblattBean) throws Exception {
+    private Buchungsblatt getBuchungsblatt(CidsBean buchungsblattBean) throws Exception {
         Buchungsblatt buchungsblatt = null;
         if (buchungsblattBean != null) {
             buchungsblatt = buchungsblaetter.get(buchungsblattBean);
@@ -288,12 +288,12 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         return buchungsblatt;
     }
 
-    private final void setWaiting(boolean waiting) {
+    private void setWaiting(boolean waiting) {
         blWait.setVisible(waiting);
         blWait.setBusy(waiting);
     }
 
-    private final boolean isWaiting() {
+    private boolean isWaiting() {
         return blWait.isBusy();
     }
 
@@ -304,7 +304,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
 //        ObjectRendererUtils.decorateJLabelAndButtonSynced(lblBack, btnBack, BACKWARD_SELECTED, BACKWARD_PRESSED);
     }
 
-    private final void initSoapServiceAccess() {
+    private void initSoapServiceAccess() {
         try {
             soapProvider = new SOAPAccessProvider();
             infoService = soapProvider.getAlkisInfoService();
@@ -963,7 +963,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         try {
             String parcelCode = AlkisCommons.getLandparcelCodeFromParcelBeanObject(cidsBean);
             if (parcelCode.length() > 0) {
-                AlkisCommons.Produkte.productKarte(parcelCode);
+                AlkisCommons.Products.productKarte(parcelCode);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_landparcelRenderer.this);
@@ -975,7 +975,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         try {
             String parcelCode = AlkisCommons.getLandparcelCodeFromParcelBeanObject(cidsBean);
             if (parcelCode.length() > 0) {
-                AlkisCommons.Produkte.productFlurstuecksnachweis(parcelCode, AlkisCommons.ProduktFormat.PDF);
+                AlkisCommons.Products.productFlurstuecksnachweis(parcelCode, AlkisCommons.ProductFormat.PDF);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_landparcelRenderer.this);
@@ -987,7 +987,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         try {
             String parcelCode = AlkisCommons.getLandparcelCodeFromParcelBeanObject(cidsBean);
             if (parcelCode.length() > 0) {
-                AlkisCommons.Produkte.productFlurstuecksEigentumsnachweis(parcelCode, AlkisCommons.ProduktFormat.HTML);
+                AlkisCommons.Products.productFlurstuecksEigentumsnachweis(parcelCode, AlkisCommons.ProductFormat.HTML);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_landparcelRenderer.this);
@@ -999,7 +999,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         try {
             String parcelCode = AlkisCommons.getLandparcelCodeFromParcelBeanObject(cidsBean);
             if (parcelCode.length() > 0) {
-                AlkisCommons.Produkte.productFlurstuecksnachweis(parcelCode, AlkisCommons.ProduktFormat.HTML);
+                AlkisCommons.Products.productFlurstuecksnachweis(parcelCode, AlkisCommons.ProductFormat.HTML);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_landparcelRenderer.this);
@@ -1058,7 +1058,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         try {
             String parcelCode = AlkisCommons.getLandparcelCodeFromParcelBeanObject(cidsBean);
             if (parcelCode.length() > 0) {
-                AlkisCommons.Produkte.productFlurstuecksEigentumsnachweis(parcelCode, AlkisCommons.ProduktFormat.PDF);
+                AlkisCommons.Products.productFlurstuecksEigentumsnachweis(parcelCode, AlkisCommons.ProductFormat.PDF);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_landparcelRenderer.this);
@@ -1104,7 +1104,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         }
     }
 
-    private final void initGotoBeanMap() {
+    private void initGotoBeanMap() {
         final Object buchungsblaetterCollectionObj = cidsBean.getProperty("buchungsblaetter");
         if (buchungsblaetterCollectionObj instanceof List) {
             final List<CidsBean> blaetterList = (List<CidsBean>) buchungsblaetterCollectionObj;
@@ -1125,7 +1125,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         }
     }
 
-    private final void initLage() {
+    private void initLage() {
         final Map<String, List<CidsBean>> streetToBeans = TypeSafeCollections.newHashMap();
         final Object adressenObj = cidsBean.getProperty("adressen");
         if (adressenObj instanceof List) {
@@ -1206,20 +1206,20 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         }
     }
 
-    private final void initMap() {
+    private void initMap() {
         final Object geoObj = cidsBean.getProperty("geometrie.geo_field");
         if (geoObj instanceof Geometry) {
             final Geometry pureGeom = (Geometry) geoObj;
-            final BoundingBox box = new BoundingBox(pureGeom.getEnvelope().buffer(AlkisCommons.MapKonstanten.GEO_BUFFER));
+            final BoundingBox box = new BoundingBox(pureGeom.getEnvelope().buffer(AlkisCommons.Maps.GEO_BUFFER));
 
             final Runnable mapRunnable = new Runnable() {
 
                 @Override
                 public void run() {
                     final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                    mappingModel.addHome(new XBoundingBox(box.getX1(), box.getY1(), box.getX2(), box.getY2(), AlkisCommons.MapKonstanten.SRS, true));
-                    mappingModel.setSrs(AlkisCommons.MapKonstanten.SRS);
-                    SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisCommons.MapKonstanten.CALL_STRING));
+                    mappingModel.addHome(new XBoundingBox(box.getX1(), box.getY1(), box.getX2(), box.getY2(), AlkisCommons.Maps.SRS, true));
+                    mappingModel.setSrs(AlkisCommons.Maps.SRS);
+                    SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisCommons.Maps.MAP_CALL_STRING));
                     swms.setName("Flurstueck");
                     StyledFeature dsf = new DefaultStyledFeature();
                     dsf.setGeometry(pureGeom);
@@ -1376,6 +1376,10 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
     @Override
     public void dispose() {
         bindingGroup.unbind();
+        if (!continueInBackground) {
+            AlkisSOAPWorkerService.cancel(retrieveBuchungsblaetterWorker);
+            setWaiting(false);
+        }
     }
 
 // </editor-fold>
@@ -1467,17 +1471,16 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
             lblProductPreview.setIcon(null);
         }
     }
-
 // </editor-fold>
     /**
      * cancel worker if renderer is disposed.
      */
-    @Override
-    public void removeNotify() {
-        super.removeNotify();
-        if (!continueInBackground) {
-            AlkisSOAPWorkerService.cancel(retrieveBuchungsblaetterWorker);
-            setWaiting(false);
-        }
-    }
+//    @Override
+//    public void removeNotify() {
+//        super.removeNotify();
+//        if (!continueInBackground) {
+//            AlkisSOAPWorkerService.cancel(retrieveBuchungsblaetterWorker);
+//            setWaiting(false);
+//        }
+//    }
 }
