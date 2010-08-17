@@ -32,19 +32,36 @@ public final class AlkisCommons {
 
     static {
         try {
+            PropertyReader serviceProperties = new PropertyReader("/de/cismet/cids/custom/wunda_blau/res/alkis/alkis_conf.properties");
+            final String server = serviceProperties.getProperty("SERVER");
+            SERVER = server;
+            SERVICE = serviceProperties.getProperty("SERVICE");
+            USER = serviceProperties.getProperty("USER");
+            PASSWORD = serviceProperties.getProperty("PASSWORD");
+            //
+            CATALOG_SERVICE = serviceProperties.getProperty("CATALOG_SERVICE");
+            INFO_SERVICE = serviceProperties.getProperty("INFO_SERVICE");
+            SEARCH_SERVICE = serviceProperties.getProperty("SEARCH_SERVICE");
+            //
+            BUCH_NACHWEIS_SERVICE = server + serviceProperties.getProperty("BUCH_NACHWEIS_SERVICE");
+            LISTEN_NACHWEIS_SERVICE = server + serviceProperties.getProperty("LISTEN_NACHWEIS_SERVICE");
+            LIEGENSCHAFTSKARTE_SERVICE = server + serviceProperties.getProperty("LIEGENSCHAFTSKARTE_SERVICE");
+            //
+            MAP_CALL_STRING = serviceProperties.getProperty("MAP_CALL_STRING");
+            SRS = serviceProperties.getProperty("SRS");
+            GEO_BUFFER = Double.parseDouble(serviceProperties.getProperty("GEO_BUFFER"));
+            //
             Map<String, List<AlkisProduct>> productsMap = new HashMap<String, List<AlkisProduct>>();
             Map<String, Point> formatMap = new HashMap<String, Point>();
             PropertyReader formats = new PropertyReader("/de/cismet/cids/custom/wunda_blau/res/alkis/formats.properties");
             InputStream is = AlkisCommons.class.getClassLoader().getResourceAsStream("de/cismet/cids/custom/wunda_blau/res/alkis/Produktbeschreibung_ALKIS.xml");
             Document document = new SAXBuilder().build(is);
-//            Namespace nameSpace = document.getRootElement().getNamespace();
             //---------Kartenprodukte----------
             for (Object o0 : document.getRootElement().getChildren()) {
                 Element category = (Element) o0;
                 String catName = category.getName();
                 if (!"Layernamen".equals(category.getName())) {
                     List<AlkisProduct> productList = new ArrayList<AlkisProduct>();
-//                Element karte = document.getRootElement().getChild("Karte", nameSpace);
                     for (Object o1 : category.getChildren()) {
                         Element productClass = (Element) o1;
                         String clazz = productClass.getAttribute("Name").getValue();
@@ -85,7 +102,6 @@ public final class AlkisCommons {
             }
             ALKIS_FORMATS = Collections.unmodifiableMap(formatMap);
             ALKIS_PRODUCTS = Collections.unmodifiableMap(productsMap);
-//            ALKIS_MAP_PRODUCTS = Collections.unmodifiableList(productList);
         } catch (Exception ex) {
             org.apache.log4j.Logger.getLogger(AlkisCommons.class).error(ex, ex);
             throw new RuntimeException(ex);
@@ -109,21 +125,23 @@ public final class AlkisCommons {
         ;
     }
     public static final Map<String, List<AlkisProduct>> ALKIS_PRODUCTS;
-//    public static final List<AlkisProduct> ALKIS_MAP_PRODUCTS;
+    public static final String USER;
+    public static final String PASSWORD;
+    public static final String SERVICE;
+    public static final String SERVER;
+    public static final String CATALOG_SERVICE;
+    public static final String INFO_SERVICE;
+    public static final String SEARCH_SERVICE;
     public static final Map<String, Point> ALKIS_FORMATS;
-
-    public static final class Maps {
-
-        private Maps() {
-            throw new AssertionError();
-        }
-        public static final String SRS = "EPSG:31466";
-        public static final String MAP_CALL_STRING = "http://s102x082.wuppertal-intra.de:8080/wmsconnector/com.esri.wms.Esrimap/web_navigation_lf?&VERSION=1.1.1&REQUEST=GetMap&SRS=" + SRS + "&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&LAYERS=26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0&STYLES="
-                + "&BBOX=<cismap:boundingBox>"
-                + "&WIDTH=<cismap:width>"
-                + "&HEIGHT=<cismap:height>";
-        public static final double GEO_BUFFER = 5.0;
-    }
+    public static final String SRS;// = "EPSG:31466";
+    public static final String MAP_CALL_STRING;// = "http://s102x082.wuppertal-intra.de:8080/wmsconnector/com.esri.wms.Esrimap/web_navigation_lf?&VERSION=1.1.1&REQUEST=GetMap&SRS=" + SRS + "&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&LAYERS=26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0&STYLES="
+//                + "&BBOX=<cismap:boundingBox>"
+//                + "&WIDTH=<cismap:width>"
+//                + "&HEIGHT=<cismap:height>";
+    public static final double GEO_BUFFER;// = 5.0;
+    public static final String BUCH_NACHWEIS_SERVICE;
+    public static final String LISTEN_NACHWEIS_SERVICE;
+    public static final String LIEGENSCHAFTSKARTE_SERVICE;
 
     public static final class Products {
 
@@ -136,23 +154,18 @@ public final class AlkisCommons {
         public static final String PRODUCT_EIGENTUMSNACHWEIS = "Flurstücks- und Eigentumsnachweis";
         public static final String PRODUCT_PUNKTLISTE = "Punktliste";
         //
-        //
-//        private static final String PRODUCT_CODES_FILE = "/de/cismet/cids/custom/wunda_blau/res/alkis/produkte.properties";
-//        private static final PropertyReader PRODUCT_CODES = new PropertyReader(PRODUCT_CODES_FILE);
-        //
-        private static final String IDENTIFICATION = "user=" + SOAPAccessProvider.USER + "&password=" + SOAPAccessProvider.PASSWORD + "&service=" + SOAPAccessProvider.SERVICE;
+        private static final String IDENTIFICATION = "user=" + USER + "&password=" + PASSWORD + "&service=" + SERVICE;
         //
 
         private Products() {
             throw new AssertionError();
         }
-        private static final String SERVICE = SOAPAccessProvider.SERVER + "/ASWeb/ASA_AAAWeb";
 
         public static void productBestandsnachweisProduct(String buchungsblattCode, ProductFormat format) {
             List<AlkisProduct> einzelnachweise = ALKIS_PRODUCTS.get(PRODUCT_GROUP_EINZELNACHWEIS);
             for (AlkisProduct product : einzelnachweise) {
                 if (PRODUCT_BESTANDSNACHWEIS.equals(product.getType()) && format.formatString.equals(product.getFileFormat()) && product.getCode().contains("GDBNRW.A")) {
-                    String url = SERVICE + "/ALKISBuchNachweis?" + IDENTIFICATION + "&product=" + product.getCode() + "&id=" + buchungsblattCode;
+                    String url = BUCH_NACHWEIS_SERVICE + "?" + IDENTIFICATION + "&product=" + product.getCode() + "&id=" + buchungsblattCode;
                     ObjectRendererUtils.openURL(url);
                 }
             }
@@ -162,7 +175,7 @@ public final class AlkisCommons {
             List<AlkisProduct> einzelnachweise = ALKIS_PRODUCTS.get(PRODUCT_GROUP_EINZELNACHWEIS);
             for (AlkisProduct product : einzelnachweise) {
                 if (PRODUCT_FLURSTUECKSNACHWEIS.equals(product.getType()) && format.formatString.equals(product.getFileFormat()) && product.getCode().contains("GDBNRW.A")) {
-                    String url = SERVICE + "/ALKISBuchNachweis?" + IDENTIFICATION + "&product=" + product.getCode() + "&id=" + parcelCode;
+                    String url = BUCH_NACHWEIS_SERVICE + "?" + IDENTIFICATION + "&product=" + product.getCode() + "&id=" + parcelCode;
                     ObjectRendererUtils.openURL(url);
                 }
             }
@@ -172,7 +185,7 @@ public final class AlkisCommons {
             List<AlkisProduct> einzelnachweise = ALKIS_PRODUCTS.get(PRODUCT_GROUP_EINZELNACHWEIS);
             for (AlkisProduct product : einzelnachweise) {
                 if (PRODUCT_EIGENTUMSNACHWEIS.equals(product.getType()) && format.formatString.equals(product.getFileFormat()) && product.getCode().contains("GDBNRW.A")) {
-                    String url = SERVICE + "/ALKISBuchNachweis?" + IDENTIFICATION + "&product=" + product.getCode() + "&id=" + parcelCode;
+                    String url = BUCH_NACHWEIS_SERVICE + "?" + IDENTIFICATION + "&product=" + product.getCode() + "&id=" + parcelCode;
                     ObjectRendererUtils.openURL(url);
                 }
             }
@@ -186,7 +199,7 @@ public final class AlkisCommons {
             List<AlkisProduct> listennachweise = ALKIS_PRODUCTS.get(PRODUCT_GROUP_LISTENNACHWEIS);
             for (AlkisProduct product : listennachweise) {
                 if (PRODUCT_PUNKTLISTE.equals(product.getType()) && format.formatString.equals(product.getFileFormat()) && product.getCode().contains("GDBNRW.A")) {
-                    final String url = SERVICE + "/ALKISListenNachweis?" + IDENTIFICATION + "&product=" + product.getCode() + "&ids=" + punktliste;
+                    final String url = LISTEN_NACHWEIS_SERVICE + "?" + IDENTIFICATION + "&product=" + product.getCode() + "&ids=" + punktliste;
                     ObjectRendererUtils.openURL(url);
                 }
             }
@@ -204,12 +217,12 @@ public final class AlkisCommons {
         }
 
         public static void productKarte(String parcelCode) {
-            String url = SERVICE + "/ALKISLiegenschaftskarte?" + IDENTIFICATION + "&landparcel=" + parcelCode;
+            String url = LIEGENSCHAFTSKARTE_SERVICE + "?" + IDENTIFICATION + "&landparcel=" + parcelCode;
             ObjectRendererUtils.openURL(url);
         }
 
         public static void productKarte(String parcelCode, AlkisProduct produkt, int winkel, int centerX, int centerY, String zusText, boolean moreThanOneParcel) {
-            String url = SERVICE + "/ALKISLiegenschaftskarte?" + IDENTIFICATION + "&landparcel=" + parcelCode
+            String url = LIEGENSCHAFTSKARTE_SERVICE + "?" + IDENTIFICATION + "&landparcel=" + parcelCode
                     + "&angle=" + winkel
                     + "&product=" + produkt.getCode()
                     + "&centerx=" + centerX + "&centery=" + centerY;
@@ -220,7 +233,6 @@ public final class AlkisCommons {
                 url += "&additionalLandparcel=true";
             }
             url += "&";
-//            log.fatal("Opening Product: " + url);
             ObjectRendererUtils.openURL(url);
         }
     }

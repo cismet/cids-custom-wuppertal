@@ -1210,16 +1210,16 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         final Object geoObj = cidsBean.getProperty("geometrie.geo_field");
         if (geoObj instanceof Geometry) {
             final Geometry pureGeom = (Geometry) geoObj;
-            final BoundingBox box = new BoundingBox(pureGeom.getEnvelope().buffer(AlkisCommons.Maps.GEO_BUFFER));
+            final BoundingBox box = new BoundingBox(pureGeom.getEnvelope().buffer(AlkisCommons.GEO_BUFFER));
 
             final Runnable mapRunnable = new Runnable() {
 
                 @Override
                 public void run() {
                     final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                    mappingModel.addHome(new XBoundingBox(box.getX1(), box.getY1(), box.getX2(), box.getY2(), AlkisCommons.Maps.SRS, true));
-                    mappingModel.setSrs(AlkisCommons.Maps.SRS);
-                    SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisCommons.Maps.MAP_CALL_STRING));
+                    mappingModel.addHome(new XBoundingBox(box.getX1(), box.getY1(), box.getX2(), box.getY2(), AlkisCommons.SRS, true));
+                    mappingModel.setSrs(AlkisCommons.SRS);
+                    SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisCommons.MAP_CALL_STRING));
                     swms.setName("Flurstueck");
                     StyledFeature dsf = new DefaultStyledFeature();
                     dsf.setGeometry(pureGeom);

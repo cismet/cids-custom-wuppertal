@@ -790,13 +790,13 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         // TODO add your handling code here:
     }//GEN-LAST:event_cbHauptsuchwortActionPerformed
 
-    private final void showExceptionToUser(Exception ex) {
-        final ErrorInfo ei = new ErrorInfo("Fehler beim Hinzufügen", "Beim Hinzufügen des Suchworts ist ein Fehler aufgetreten", null,
+    private void showExceptionToUser(Exception ex) {
+        final ErrorInfo ei = new ErrorInfo("Fehler", "Beim Vorgang ist ein Fehler aufgetreten", null,
                 null, ex, Level.SEVERE, null);
         JXErrorPane.showDialog(this, ei);
     }
 
-    private final CidsBean createNewSuchwortBeanFromString(final String suchwort) throws Exception {
+    private CidsBean createNewSuchwortBeanFromString(final String suchwort) throws Exception {
         if (suchwort != null && suchwort.trim().length() > 0) {
             MetaClass suchwortMC = suchwortModelProvider.getMetaClass();
             if (suchwortMC == null) {

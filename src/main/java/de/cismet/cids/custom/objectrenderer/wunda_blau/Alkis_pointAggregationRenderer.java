@@ -297,7 +297,7 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
      * @param blBlattnummer
      * @return
      */
-    private final Object[] cidsBean2Row(CidsBean baulastBean) {
+    private Object[] cidsBean2Row(CidsBean baulastBean) {
         if (baulastBean != null) {
             final Object[] result = new Object[AGR_COMLUMN_NAMES.length];
             result[0] = Boolean.TRUE;
@@ -317,13 +317,13 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
         return new Object[0];
     }
 
-    private final void initMap() {
+    private void initMap() {
         try {
             final ActiveLayerModel mappingModel = new ActiveLayerModel();
-            mappingModel.setSrs(AlkisCommons.Maps.SRS);
+            mappingModel.setSrs(AlkisCommons.SRS);
             final BoundingBox box = boundingBoxFromPointList(cidsBeans);
-            mappingModel.addHome(new XBoundingBox(box.getX1(), box.getY1(), box.getX2(), box.getY2(), AlkisCommons.Maps.SRS, true));
-            SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisCommons.Maps.MAP_CALL_STRING));
+            mappingModel.addHome(new XBoundingBox(box.getX1(), box.getY1(), box.getX2(), box.getY2(), AlkisCommons.SRS, true));
+            SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisCommons.MAP_CALL_STRING));
             swms.setName("Alkis_Points");
             mappingModel.addLayer(swms);
             mappingComponent.setMappingModel(mappingModel);
@@ -359,7 +359,7 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
 
     }
 
-    private final BoundingBox boundingBoxFromPointList(Collection<CidsBean> lpList) {
+    private BoundingBox boundingBoxFromPointList(Collection<CidsBean> lpList) {
         final List<Geometry> allGeomList = TypeSafeCollections.newArrayList();
         for (final CidsBean parcel : lpList) {
             try {

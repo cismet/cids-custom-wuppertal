@@ -18,11 +18,6 @@ import java.net.URL;
  */
 public final class SOAPAccessProvider {
 
-    public static final String USER = "3awup";
-    public static final String PASSWORD = "3awup";
-    public static final String SERVICE = "Wuppertal";
-    public static final String SERVER = "http://s102x083:8080";
-
     public SOAPAccessProvider(String user, String password, String service, String catalogService, String infoService, String searchService) {
         this(user + "," + password, service, catalogService, infoService, searchService);
     }
@@ -44,11 +39,11 @@ public final class SOAPAccessProvider {
     }
 
     public SOAPAccessProvider(String identityCard, String service) {
-        this(identityCard, service, SERVER + "/AAAWebService/services/ALKISCatalogServices", SERVER + "/AAAWebService/services/ALKISInfoServices", SERVER + "/AAAWebService/services/ALKISSearchServices");
+        this(identityCard, service, AlkisCommons.SERVER + AlkisCommons.CATALOG_SERVICE, AlkisCommons.SERVER + AlkisCommons.INFO_SERVICE, AlkisCommons.SERVER + AlkisCommons.SEARCH_SERVICE);
     }
 
     public SOAPAccessProvider() {
-        this(USER, PASSWORD, SERVICE);
+        this(AlkisCommons.USER, AlkisCommons.PASSWORD, AlkisCommons.SERVICE);
     }
     private final String identityCard;
     private final String service;

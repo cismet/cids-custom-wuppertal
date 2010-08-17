@@ -39,7 +39,6 @@ import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
-import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.collections.TypeSafeCollections;
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
@@ -928,7 +927,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         }
     }
 
-    private final BoundingBox boundingBoxFromLandparcelList(List<LightweightLandParcel> lpList) {
+    private BoundingBox boundingBoxFromLandparcelList(List<LightweightLandParcel> lpList) {
         final List<Geometry> allGeomList = TypeSafeCollections.newArrayList();
         for (final LightweightLandParcel parcel : lpList) {
             allGeomList.add(parcel.geometry);
@@ -937,15 +936,15 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         return new BoundingBox(geoCollection);
     }
 
-    private final void initMap() {
+    private void initMap() {
         if (landParcelList.size() > 0) {
             try {
                 final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                mappingModel.setSrs(AlkisCommons.Maps.SRS);
+                mappingModel.setSrs(AlkisCommons.SRS);
                 //TODO: do we need an swsw for every class?
                 final BoundingBox box = boundingBoxFromLandparcelList(landParcelList);
-                mappingModel.addHome(new XBoundingBox(box.getX1(), box.getY1(), box.getX2(), box.getY2(), AlkisCommons.Maps.SRS, true));
-                SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisCommons.Maps.MAP_CALL_STRING));
+                mappingModel.addHome(new XBoundingBox(box.getX1(), box.getY1(), box.getX2(), box.getY2(), AlkisCommons.SRS, true));
+                SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisCommons.MAP_CALL_STRING));
                 swms.setName("Buchungsblatt");
                 mappingModel.addLayer(swms);
                 map.setMappingModel(mappingModel);
