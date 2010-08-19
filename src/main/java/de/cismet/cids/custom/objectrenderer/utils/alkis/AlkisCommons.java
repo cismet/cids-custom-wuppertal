@@ -47,8 +47,9 @@ public final class AlkisCommons {
             LISTEN_NACHWEIS_SERVICE = server + serviceProperties.getProperty("LISTEN_NACHWEIS_SERVICE");
             LIEGENSCHAFTSKARTE_SERVICE = server + serviceProperties.getProperty("LIEGENSCHAFTSKARTE_SERVICE");
             //
-            MAP_CALL_STRING = serviceProperties.getProperty("MAP_CALL_STRING");
-            SRS = serviceProperties.getProperty("SRS");
+            String srs = serviceProperties.getProperty("SRS");
+            SRS = srs;
+            MAP_CALL_STRING = serviceProperties.getProperty("MAP_CALL_STRING") + srs;
             GEO_BUFFER = Double.parseDouble(serviceProperties.getProperty("GEO_BUFFER"));
             //
             Map<String, List<AlkisProduct>> productsMap = new HashMap<String, List<AlkisProduct>>();
