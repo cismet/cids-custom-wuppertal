@@ -98,6 +98,7 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
     public void dispose() {
         super.dispose();
         dlgAddSuchwort.dispose();
+        ((DefaultCismapGeometryComboBoxEditor)cbGeometrie).dispose();
     }
 
 

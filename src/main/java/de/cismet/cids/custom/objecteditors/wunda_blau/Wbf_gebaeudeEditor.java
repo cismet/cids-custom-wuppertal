@@ -1164,6 +1164,14 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         super.setCidsBean(cidsBean);
     }
 
+    @Override
+    public void dispose() {
+        super.dispose();
+        ((DefaultCismapGeometryComboBoxEditor)cboGeom).dispose();
+    }
+
+
+
 //    class NutzungsartValidator extends Validator<CidsBean> {
 //
 //        @Override

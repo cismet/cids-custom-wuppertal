@@ -52,6 +52,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         super.dispose();
         dlgAddLocationType.dispose();
         dlgAddZusNamen.dispose();
+        ((DefaultCismapGeometryComboBoxEditor)cbGeomPoint).dispose();
     }
 
     private final void deleteItemFromList(String propertyName, Object value, boolean andDeleteObjectFromDB) {

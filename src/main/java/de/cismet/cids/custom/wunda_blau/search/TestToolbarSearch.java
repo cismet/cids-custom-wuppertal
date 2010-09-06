@@ -8,6 +8,7 @@ import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import javax.swing.ImageIcon;
@@ -63,7 +64,7 @@ public class TestToolbarSearch implements CidsToolbarSearch {
             return res;
         } catch (Exception ex) {
             log.error(ex, ex);
-            return null;
+            return Collections.EMPTY_LIST;
         }
     }
 }

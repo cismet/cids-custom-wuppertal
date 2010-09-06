@@ -2195,7 +2195,6 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
     private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
         txtFreizeit_ueb_beab.setText(getCurrentUser());
     }//GEN-LAST:event_jButton15ActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cboGeom;
     private javax.swing.JButton cmdAddKart;
@@ -2386,5 +2385,11 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
     }
 
     public void setTitle(String title) {
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        ((DefaultCismapGeometryComboBoxEditor) cboGeom).dispose();
     }
 }
