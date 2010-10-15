@@ -1,7 +1,8 @@
 package de.cismet.cids.custom.wunda_blau.search;
 
-import Sirius.navigator.search.CidsWindowSearch;
+import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
 import Sirius.server.middleware.types.MetaClass;
+import Sirius.server.search.CidsServerSearch;
 import Sirius.server.search.SearchOption;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
@@ -54,7 +55,9 @@ public class TestWindowSearch implements CidsWindowSearch {
     }
 
     @Override
-    public Collection<SearchOption> generateSearchStatement() {
+    public CidsServerSearch getServerSearch() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    
 }
