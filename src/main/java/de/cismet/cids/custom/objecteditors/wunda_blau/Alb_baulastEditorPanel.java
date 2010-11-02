@@ -270,7 +270,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
 
         dlgAddBaulastArt.getContentPane().add(panAddBaulastArt, java.awt.BorderLayout.CENTER);
 
-        dlgAddLandParcelDiv.setTitle("Flurstück hinzufügen");
+        dlgAddLandParcelDiv.setTitle("");
         dlgAddLandParcelDiv.setMinimumSize(new java.awt.Dimension(380, 120));
         dlgAddLandParcelDiv.setModal(true);
 
@@ -860,15 +860,20 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
 
     private void btnAddBelastetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddBelastetActionPerformed
         currentListToAdd = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "flurstuecke_belastet");
-        handleAddFlurstueck();
+        handleAddFlurstueck(true);
     }//GEN-LAST:event_btnAddBelastetActionPerformed
 
     private void btnAddBeguenstigtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddBeguenstigtActionPerformed
         currentListToAdd = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "flurstuecke_beguenstigt");
-        handleAddFlurstueck();
+        handleAddFlurstueck(false);
     }//GEN-LAST:event_btnAddBeguenstigtActionPerformed
 
-    private final void handleAddFlurstueck() {
+    private void handleAddFlurstueck(boolean belastet) {
+        if (belastet) {
+            dlgAddLandParcelDiv.setTitle("Belastetes Flurstück hinzufügen");
+        } else {
+            dlgAddLandParcelDiv.setTitle("Begünstigtes Flurstück hinzufügen");
+        }
         btnFlurstueckAddMenOk.setEnabled(false);
         dlgAddLandParcelDiv.setVisible(true);
     }
@@ -1090,6 +1095,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         if (selection instanceof MetaObject) {
             final String selGem = String.valueOf(cbParcels1.getSelectedItem());
             final StringBuffer selFlurNr = new StringBuffer(String.valueOf(cbParcels2.getSelectedItem()));
+            while (selFlurNr.length() < 3) {
+                selFlurNr.insert(0, 0);
+            }
             btnFlurstueckAddMenOk.setEnabled(false);
             cbParcels2.getEditor().getEditorComponent().setBackground(Color.WHITE);
             CismetThreadPool.execute(new AbstractFlurstueckComboModelWorker(cbParcels3, CB_EDITED_ACTION_COMMAND.equals(evt.getActionCommand())) {
