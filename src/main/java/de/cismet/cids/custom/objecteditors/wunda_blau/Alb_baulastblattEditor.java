@@ -5,16 +5,21 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 import Sirius.server.middleware.types.MetaObject;
+import Sirius.server.search.CidsServerSearch;
 import de.cismet.cids.annotations.AggregationRenderer;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.wunda_blau.search.Alb_BaulastblattChecker;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 import de.cismet.cids.editors.DefaultBeanInitializer;
 import de.cismet.cids.editors.EditorBeanInitializerStore;
+import de.cismet.cids.editors.EditorSaveListener;
 import de.cismet.tools.collections.TypeSafeCollections;
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
@@ -33,8 +38,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import org.jdesktop.beansbinding.Validator;
-import org.jdesktop.beansbinding.Validator.Result;
 import org.openide.util.WeakListeners;
 
 /**
@@ -45,7 +48,7 @@ import org.openide.util.WeakListeners;
  * @author srichter
  */
 @AggregationRenderer
-public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBeanStore, TitleComponentProvider, FooterComponentProvider, BorderProvider, RequestsFullSizeComponent {
+public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBeanStore, TitleComponentProvider, FooterComponentProvider, BorderProvider, RequestsFullSizeComponent, EditorSaveListener {
 
     private static final int BLATT_NUMMER_ANZAHL_ZIFFERN = 6;
     static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_baulastblattEditor.class);
@@ -56,18 +59,18 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
             return AlphanumComparator.getInstance().compare(String.valueOf(o1), String.valueOf(o2));
         }
     };
-    private static final Validator<String> NUMBER_VALIDATOR = new Validator<String>() {
-
-        @Override
-        public Result validate(String t) {
-            if (t.length() < BLATT_NUMMER_ANZAHL_ZIFFERN) {
-                return new Result(Result.ERROR, "Blattnummer ist nicht " + BLATT_NUMMER_ANZAHL_ZIFFERN + "-stellig!");
-            } else if (!t.matches("^\\d+[a-zA-Z]*$")) {
-                return new Result(Result.ERROR, "Blattnummer darf nur aus Ziffern [0-9] bestehen!");
-            }
-            return null;
-        }
-    };
+//    private static final Validator<String> NUMBER_VALIDATOR = new Validator<String>() {
+//
+//        @Override
+//        public Result validate(String t) {
+//            if (t.length() < BLATT_NUMMER_ANZAHL_ZIFFERN) {
+//                return new Result(Result.ERROR, "Blattnummer ist nicht " + BLATT_NUMMER_ANZAHL_ZIFFERN + "-stellig!");
+//            } else if (!t.matches("^\\d$")) {
+//                return new Result(Result.ERROR, "Blattnummer darf nur aus Ziffern [0-9] bestehen!");
+//            }
+//            return null;
+//        }
+//    };
     private final boolean editable;
     private CidsBean cidsBean;
     private final CardLayout cardLayout;
@@ -87,6 +90,17 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
             txtBlattnummer.setEditable(false);
             txtBlattnummer.setOpaque(false);
             txtBlattnummer.setBorder(null);
+        }
+    }
+
+    private static String correctBlattnummer(String blattnummer) {
+        if (blattnummer.matches("^\\d*$")) {
+            while (blattnummer.length() < BLATT_NUMMER_ANZAHL_ZIFFERN) {
+                blattnummer = "0" + blattnummer;
+            }
+            return blattnummer;
+        } else {
+            return null;
         }
     }
 
@@ -458,9 +472,13 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.blattnummer}"), txtBlattnummer, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("");
-        binding.setValidator(NUMBER_VALIDATOR);
         bindingGroup.addBinding(binding);
 
+        txtBlattnummer.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtBlattnummerFocusLost(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -735,9 +753,12 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
 
             @Override
             protected void processSimpleProperty(CidsBean beanToInit, String propertyName, Object simpleValueToProcess) throws Exception {
-                if (!propertyName.startsWith("laufen")) {
+//                if (!propertyName.startsWith("laufen")) {
+                Object curVal = beanToInit.getProperty(propertyName);
+                if (curVal == null || "".equals(curVal.toString())) {
                     super.processSimpleProperty(beanToInit, propertyName, simpleValueToProcess);
                 }
+//                }
             }
 
             @Override
@@ -756,6 +777,17 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         ObjectRendererUtils.switchToCismapMap();
         ObjectRendererUtils.addBeanGeomAsFeatureToCismapMap(cidsBean, true);
 }//GEN-LAST:event_lblBlattInMapMouseClicked
+
+    private void correctBlattnummer() {
+        String bnn = correctBlattnummer(txtBlattnummer.getText());
+        if (bnn != null && !bnn.equals(txtBlattnummer.getText())) {
+            txtBlattnummer.setText(bnn);
+        }
+    }
+
+    private void txtBlattnummerFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBlattnummerFocusLost
+        correctBlattnummer();
+    }//GEN-LAST:event_txtBlattnummerFocusLost
 
     private boolean isPastePossible() {
         CidsBean blBean = panBaulastEditor.getCidsBean();
@@ -827,5 +859,41 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         alb_picturePanel.dispose();
         panBaulastEditor.dispose();
         strongReferenceToWeakListener = null;
+    }
+
+    @Override
+    public void editorClosed(EditorSaveStatus status) {
+    }
+
+    @Override
+    public boolean prepareForSave() {
+        correctBlattnummer();
+        try {
+            CidsServerSearch search = new Alb_BaulastblattChecker(txtBlattnummer.getText(), getCidsBean().getMetaObject().getID());
+            log.fatal(search);
+            Collection result = SessionManager.getConnection().customServerSearch(SessionManager.getSession().getUser(), search);
+            if (result != null && result.size() > 0) {
+                Object o = result.iterator().next();
+                if (o instanceof List) {
+                    List<?> innerList = (List<?>) o;
+                    if (innerList.size() > 0) {
+                        Object countObj = innerList.get(0);
+                        if (countObj instanceof Long) {
+                            long count = (Long) countObj;
+                            if (count < 1) {
+                                log.debug("blattnummer is unique");
+                                return true;
+                            } else {
+                                log.debug("blattnummer is not unique");
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (ConnectionException ex) {
+            throw new RuntimeException(ex);
+        }
+        throw new RuntimeException();
     }
 }

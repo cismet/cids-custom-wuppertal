@@ -1,20 +1,13 @@
 package de.cismet.cids.custom.wunda_blau.search;
 
 import de.cismet.cids.tools.search.clientstuff.CidsToolbarSearch;
-import Sirius.server.middleware.interfaces.domainserver.MetaService;
 import Sirius.server.middleware.types.MetaClass;
-import Sirius.server.middleware.types.MetaObjectNode;
-import Sirius.server.middleware.types.Node;
-import Sirius.server.newuser.permission.Policy;
 import Sirius.server.search.CidsServerSearch;
-import com.explodingpixels.macwidgets.HudWindow;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 
 /**
  *

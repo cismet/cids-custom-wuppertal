@@ -11,6 +11,7 @@ import de.cismet.cids.annotations.AggregationRenderer;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
+import de.cismet.cids.editors.EditorSaveListener;
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
@@ -21,7 +22,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import org.jdesktop.beansbinding.BindingGroup;
 
 /**
  * de.cismet.cids.objectrenderer.CoolThemaRenderer
@@ -31,7 +31,7 @@ import org.jdesktop.beansbinding.BindingGroup;
  * @author srichter
  */
 @AggregationRenderer
-public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore, TitleComponentProvider, FooterComponentProvider, BorderProvider, RequestsFullSizeComponent {
+public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore, TitleComponentProvider, FooterComponentProvider, BorderProvider, RequestsFullSizeComponent, EditorSaveListener {
 
     static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_baulastEditor.class);
     private final boolean editable;
@@ -296,5 +296,15 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
     public void dispose() {
         panMain.dispose();
         alb_picturePanel.dispose();
+    }
+
+    @Override
+    public void editorClosed(EditorSaveStatus status) {
+        
+    }
+
+    @Override
+    public boolean prepareForSave() {
+        return true;
     }
 }
