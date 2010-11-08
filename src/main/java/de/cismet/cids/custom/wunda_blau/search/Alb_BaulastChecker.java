@@ -16,7 +16,8 @@ public class Alb_BaulastChecker extends CidsServerSearch {
 
     public Alb_BaulastChecker(String blattnummer, String lastnummer, int id) {
         blattnummer = blattnummer.replaceAll("'", "");
-        this.searchQuery = "select count(*) from alb_baulast, alb_baulastblatt_baulasten where blattnummer = '" + blattnummer + "' and id <> " + id;
+        lastnummer = lastnummer.replaceAll("'", "");
+        this.searchQuery = "select count(*) from alb_baulast where blattnummer = '" + blattnummer + "' and laufende_nummer = '" + lastnummer + "' and id <> " + id;
     }
 
     @Override

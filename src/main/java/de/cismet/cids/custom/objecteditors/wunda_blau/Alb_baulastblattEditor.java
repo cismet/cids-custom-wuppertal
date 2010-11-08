@@ -567,18 +567,22 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                         null,
                         getHighestCurrentLaufendeNummer(baulasten) + 1);
                 if (userInput != null) {
-                    final int laufendeNr = Integer.parseInt(userInput);
-                    String blattNummer = txtBlattnummer.getText();
-                    final String folder = generateFolderNameFromBlattnummer(blattNummer);
-                    final CidsBean newBean = CidsBeanSupport.createNewCidsBeanFromTableName("alb_baulast");
-                    newBean.setProperty("laufende_nummer", String.valueOf(laufendeNr));
-                    newBean.setProperty("textblatt", folder);
-                    newBean.setProperty("lageplan", "");
-                    newBean.setProperty("blattnummer", txtBlattnummer.getText());
+                    if (isNewLaufendeNummer(userInput)) {
+                        final int laufendeNr = Integer.parseInt(userInput);
+                        String blattNummer = txtBlattnummer.getText();
+                        final String folder = generateFolderNameFromBlattnummer(blattNummer);
+                        final CidsBean newBean = CidsBeanSupport.createNewCidsBeanFromTableName("alb_baulast");
+                        newBean.setProperty("laufende_nummer", String.valueOf(laufendeNr));
+                        newBean.setProperty("textblatt", folder);
+                        newBean.setProperty("lageplan", "");
+                        newBean.setProperty("blattnummer", txtBlattnummer.getText());
 //                    newBean.setProperty("lageplan", folder);
-                    baulasten.add(newBean);
-                    final int newIndex = lstLaufendeNummern.getModel().getSize();
-                    lstLaufendeNummern.setSelectedIndex(newIndex - 1);
+                        baulasten.add(newBean);
+                        final int newIndex = lstLaufendeNummern.getModel().getSize();
+                        lstLaufendeNummern.setSelectedIndex(newIndex - 1);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Die Nummer " + userInput + " kann nicht angelegt werden, weil diese Nummer bereits existiert!");
+                    }
                 }
             }
             checkLaufendeNummern();
@@ -587,6 +591,17 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Hinzufügen einer neuen Laufenden Nummer", ex, this);
         }
 }//GEN-LAST:event_btnAddLaufendeNummerActionPerformed
+
+    private boolean isNewLaufendeNummer(String input) {
+        List<CidsBean> lasten = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "baulasten");
+        for (CidsBean baulast : lasten) {
+            Object laufendeNr = baulast.getProperty("laufende_nummer");
+            if (input.equals(laufendeNr)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     private String generateFolderNameFromBlattnummer(String blattNummer) {
         if (blattNummer != null) {
@@ -639,7 +654,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
 //        return "XXXX00-XXXY00/";
 //    }
 
-    private final int getHighestCurrentLaufendeNummer(Collection<CidsBean> baulasten) {
+    private int getHighestCurrentLaufendeNummer(Collection<CidsBean> baulasten) {
         int max = 0;
         if (baulasten != null) {
             for (final CidsBean baulastBean : baulasten) {
@@ -869,8 +884,8 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
     public boolean prepareForSave() {
         correctBlattnummer();
         try {
-            CidsServerSearch search = new Alb_BaulastblattChecker(txtBlattnummer.getText(), getCidsBean().getMetaObject().getID());
-            log.fatal(search);
+            String blattnummer = txtBlattnummer.getText();
+            CidsServerSearch search = new Alb_BaulastblattChecker(blattnummer, getCidsBean().getMetaObject().getID());
             Collection result = SessionManager.getConnection().customServerSearch(SessionManager.getSession().getUser(), search);
             if (result != null && result.size() > 0) {
                 Object o = result.iterator().next();
@@ -885,15 +900,17 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                                 return true;
                             } else {
                                 log.debug("blattnummer is not unique");
+                                JOptionPane.showMessageDialog(this, "Die Blattnummer " + blattnummer + " existiert bereits! Bitte geben Sie eine andere Blattnummer ein.");
                                 return false;
                             }
                         }
                     }
                 }
             }
-        } catch (ConnectionException ex) {
+        } catch (Exception ex) {
+            ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Speichern", ex, this);
             throw new RuntimeException(ex);
         }
-        throw new RuntimeException();
+        throw new RuntimeException("Unbekannter Fehler beim Speichern!");
     }
 }

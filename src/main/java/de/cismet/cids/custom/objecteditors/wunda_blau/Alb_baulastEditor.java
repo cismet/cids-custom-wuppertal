@@ -5,10 +5,14 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 import Sirius.server.middleware.types.MetaObject;
+import Sirius.server.search.CidsServerSearch;
 import de.cismet.cids.annotations.AggregationRenderer;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.wunda_blau.search.Alb_BaulastChecker;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 import de.cismet.cids.editors.EditorSaveListener;
@@ -17,6 +21,7 @@ import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
 import java.awt.CardLayout;
 import java.util.Collection;
+import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -57,7 +62,7 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
     public CidsBean getCidsBean() {
         return cidsBean;
     }
-    
+
     public void setAllSelectedMetaObjects(Collection<MetaObject> selection) {
         this.panMain.setAllSelectedMetaObjects(selection);
     }
@@ -300,11 +305,39 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
 
     @Override
     public void editorClosed(EditorSaveStatus status) {
-        
     }
 
     @Override
     public boolean prepareForSave() {
-        return true;
+        try {
+            Object laufendeNrObj = cidsBean.getProperty("laufende_nummer");
+            Object blattNrObj = cidsBean.getProperty("blattnummer");
+            CidsServerSearch search = new Alb_BaulastChecker(String.valueOf(blattNrObj), String.valueOf(laufendeNrObj), getCidsBean().getMetaObject().getID());
+            Collection result = SessionManager.getConnection().customServerSearch(SessionManager.getSession().getUser(), search);
+            if (result != null && result.size() > 0) {
+                Object o = result.iterator().next();
+                if (o instanceof List) {
+                    List<?> innerList = (List<?>) o;
+                    if (innerList.size() > 0) {
+                        Object countObj = innerList.get(0);
+                        if (countObj instanceof Long) {
+                            long count = (Long) countObj;
+                            if (count < 1) {
+                                log.debug("blattnummer+laufende_nummer is unique");
+                                return true;
+                            } else {
+                                log.debug("blattnummer+laufende_nummer is not unique");
+                                JOptionPane.showMessageDialog(this, "Die Laufende Nummer " + laufendeNrObj + " existiert bereits unter Baulastblatt " + blattNrObj + "! Bitte geben Sie eine andere Nummer ein.");
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Speichern", ex, this);
+            throw new RuntimeException(ex);
+        }
+        throw new RuntimeException("Unbekannter Fehler beim Speichern!");
     }
 }
