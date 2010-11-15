@@ -312,32 +312,24 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         try {
             Object laufendeNrObj = cidsBean.getProperty("laufende_nummer");
             Object blattNrObj = cidsBean.getProperty("blattnummer");
-            CidsServerSearch search = new Alb_BaulastChecker(String.valueOf(blattNrObj), String.valueOf(laufendeNrObj), getCidsBean().getMetaObject().getID());
-            Collection result = SessionManager.getConnection().customServerSearch(SessionManager.getSession().getUser(), search);
-            if (result != null && result.size() > 0) {
-                Object o = result.iterator().next();
-                if (o instanceof List) {
-                    List<?> innerList = (List<?>) o;
-                    if (innerList.size() > 0) {
-                        Object countObj = innerList.get(0);
-                        if (countObj instanceof Long) {
-                            long count = (Long) countObj;
-                            if (count < 1) {
-                                log.debug("blattnummer+laufende_nummer is unique");
-                                return true;
-                            } else {
-                                log.debug("blattnummer+laufende_nummer is not unique");
-                                JOptionPane.showMessageDialog(this, "Die Laufende Nummer " + laufendeNrObj + " existiert bereits unter Baulastblatt " + blattNrObj + "! Bitte geben Sie eine andere Nummer ein.");
-                                return false;
-                            }
-                        }
-                    }
-                }
+            boolean unique = Alb_Constraints.checkUniqueBaulastNummer(String.valueOf(blattNrObj), String.valueOf(laufendeNrObj), cidsBean.getMetaObject().getID());
+            if (!unique) {
+                JOptionPane.showMessageDialog(this, "Die Laufende Nummer " + laufendeNrObj + " existiert bereits unter Baulastblatt " + blattNrObj + "! Bitte geben Sie eine andere Nummer ein.");
+                return false;
             }
+            if (!Alb_Constraints.checkBaulastHasBelastetesFlurstueck(cidsBean)) {
+                JOptionPane.showMessageDialog(this, "Der Baulast ist noch kein belastetes Flurstück zugeordnet!\nBitte ordnen Sie mind. ein belastetes Flurstück zu, erst dann kann der Datensatz gespeichert werden.");
+                return false;
+            }
+            if (!Alb_Constraints.checkBaulastDates(cidsBean)) {
+                JOptionPane.showMessageDialog(this, "Sie haben unplausible Datumsangaben vorgenommen (Eingabedatum fehlt oder liegt nach dem Lösch- Schließ oder Befristungsdatum).\nBitte korrigieren Sie die fehlerhaften Datumsangaben, erst dann kann der Datensatz gespeichert werden.");
+                return false;
+            }
+            return true;
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Speichern", ex, this);
             throw new RuntimeException(ex);
         }
-        throw new RuntimeException("Unbekannter Fehler beim Speichern!");
+
     }
 }

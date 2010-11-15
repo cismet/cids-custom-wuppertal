@@ -14,12 +14,14 @@ public class Alb_baulastToStringConverter extends CustomToStringConverter {
 
     @Override
     public String createString() {
-        final Object laufendeNummerObj = cidsBean.getProperty("laufende_nummer");
-        if (laufendeNummerObj != null) {
-            return String.valueOf(laufendeNummerObj);
-        } else {
-            return "Keine laufende Nummer";
+        Object laufendeNummerObj = cidsBean.getProperty("laufende_nummer");
+        Object blattObj = cidsBean.getProperty("blattnummer");
+        if (blattObj == null) {
+            blattObj = "kein Baulastbatt";
         }
+        if (laufendeNummerObj == null) {
+            laufendeNummerObj = "keine laufende Nummer";
+        }
+        return blattObj + " / " + laufendeNummerObj;
     }
 }
-

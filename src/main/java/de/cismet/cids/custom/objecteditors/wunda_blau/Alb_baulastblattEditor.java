@@ -885,32 +885,25 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         correctBlattnummer();
         try {
             String blattnummer = txtBlattnummer.getText();
-            CidsServerSearch search = new Alb_BaulastblattChecker(blattnummer, getCidsBean().getMetaObject().getID());
-            Collection result = SessionManager.getConnection().customServerSearch(SessionManager.getSession().getUser(), search);
-            if (result != null && result.size() > 0) {
-                Object o = result.iterator().next();
-                if (o instanceof List) {
-                    List<?> innerList = (List<?>) o;
-                    if (innerList.size() > 0) {
-                        Object countObj = innerList.get(0);
-                        if (countObj instanceof Long) {
-                            long count = (Long) countObj;
-                            if (count < 1) {
-                                log.debug("blattnummer is unique");
-                                return true;
-                            } else {
-                                log.debug("blattnummer is not unique");
-                                JOptionPane.showMessageDialog(this, "Die Blattnummer " + blattnummer + " existiert bereits! Bitte geben Sie eine andere Blattnummer ein.");
-                                return false;
-                            }
-                        }
-                    }
-                }
+            final boolean unique = Alb_Constraints.checkUniqueBlattNummer(blattnummer, getCidsBean().getMetaObject().getID());
+            if (!unique) {
+                JOptionPane.showMessageDialog(this, "Die Blattnummer " + blattnummer + " existiert bereits! Bitte geben Sie eine andere Blattnummer ein.");
+                return false;
             }
+            final List<String> alleLastenOhneBelastetesFS = Alb_Constraints.getBaulastenOhneBelastestesFlurstueckFromBlatt(cidsBean);
+            if (alleLastenOhneBelastetesFS.size() > 0) {
+                JOptionPane.showMessageDialog(this, "Folgende Baulasten haben kein belastetes Flurstück:\n" + alleLastenOhneBelastetesFS + "\nBitte ordnen Sie diesen laufenden Nummern belastete Flurstücke zu, erst dann kann der Datensatz gespeichert werden.");
+                return false;
+            }
+            final List<String> incorrectBaulasteDates = Alb_Constraints.getIncorrectBaulastDates(cidsBean);
+            if (incorrectBaulasteDates.size() > 0) {
+                JOptionPane.showMessageDialog(this, "Sie haben bei den folgenden laufenden Nummern des aktuell bearbeiteten Baulastblattes unplausible Datumsangaben vorgenommen (Eingabedatum fehlt oder liegt nach dem Lösch- Schließ oder Befristungsdatum):\n" + incorrectBaulasteDates + "\nBitte korrigieren Sie die fehlerhaften Datumsangaben, erst dann kann der Datensatz gespeichert werden.");
+                return false;
+            }
+            return true;
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Speichern", ex, this);
             throw new RuntimeException(ex);
         }
-        throw new RuntimeException("Unbekannter Fehler beim Speichern!");
     }
 }
