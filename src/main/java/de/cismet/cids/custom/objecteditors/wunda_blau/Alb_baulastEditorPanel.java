@@ -1108,7 +1108,11 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                 }
             });
         } else {
-            final int foundBeanIndex = ObjectRendererUtils.findComboBoxItemForString(cbParcels2, String.valueOf(selection));
+            String selString = String.valueOf(selection);
+            while (selString.length() < 3) {
+                selString = "0" + selString;
+            }
+            final int foundBeanIndex = ObjectRendererUtils.findComboBoxItemForString(cbParcels2, selString);
             if (foundBeanIndex < 0) {
                 cbParcels2.getEditor().getEditorComponent().setBackground(Color.YELLOW);
                 cbParcels3.setModel(new DefaultComboBoxModel());
