@@ -37,11 +37,6 @@ public class TestWindowSearch implements CidsWindowSearch {
     }
 
     @Override
-    public Collection<MetaClass> getPossibleResultClasses() {
-        return classCol;
-    }
-
-    @Override
     public String getName() {
         return "Testsuche 3";
     }

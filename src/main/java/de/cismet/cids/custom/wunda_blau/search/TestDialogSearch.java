@@ -35,10 +35,7 @@ public class TestDialogSearch implements CidsDialogSearch {
         return icon;
     }
 
-    @Override
-    public Collection<MetaClass> getPossibleResultClasses() {
-        return classCol;
-    }
+   
 
     @Override
     public String getName() {
