@@ -31,6 +31,7 @@ import java.beans.PropertyChangeListener;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.swing.JComponent;
@@ -899,6 +900,14 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
             if (incorrectBaulasteDates.size() > 0) {
                 JOptionPane.showMessageDialog(this, "Sie haben bei den folgenden laufenden Nummern des aktuell bearbeiteten Baulastblattes unplausible Datumsangaben vorgenommen (Eingabedatum fehlt oder liegt nach dem Lösch- Schließ oder Befristungsdatum):\n" + incorrectBaulasteDates + "\nBitte korrigieren Sie die fehlerhaften Datumsangaben, erst dann kann der Datensatz gespeichert werden.");
                 return false;
+            }
+            Set<String> laufendeNummerCheck = new HashSet<String>();
+            for (CidsBean last : baulastenBeans) {
+                String lastString = String.valueOf(last);
+                if (!laufendeNummerCheck.add(lastString)) {
+                    JOptionPane.showMessageDialog(this, "Die laufende Nummer " + lastString + " ist mehrfach vergeben. Bitte ordnen Sie jeder Baulaste eine eindeutige laufende Nummer zu.");
+                    return false;
+                }
             }
             return true;
         } catch (Exception ex) {
