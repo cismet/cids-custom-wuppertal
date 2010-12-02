@@ -1637,8 +1637,10 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
                     if (point != null) {
                         Alkis_pointRenderer.this.setPoint(point);
                         final PointLocation[] pointlocArr = point.getPointLocations();
-                        Arrays.sort(pointlocArr, POINTLOCATION_COMPARATOR);
-                        Alkis_pointRenderer.this.setPointLocations(Arrays.asList(pointlocArr));
+                        if (pointlocArr != null) {
+                            Arrays.sort(pointlocArr, POINTLOCATION_COMPARATOR);
+                            Alkis_pointRenderer.this.setPointLocations(Arrays.asList(pointlocArr));
+                        }
                         Alkis_pointRenderer.this.bindingGroup.unbind();
                         Alkis_pointRenderer.this.bindingGroup.bind();
                         panLocationInfos.setVisible(true);
