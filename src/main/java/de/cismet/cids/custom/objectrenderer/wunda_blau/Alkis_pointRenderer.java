@@ -271,7 +271,11 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         retrieveableLabels.add(lblTxtLand);
         retrieveableLabels.add(lblTxtDienststelle);
         retrieveableLabels.add(lblTxtAnlass);
-
+        if (!AlkisCommons.validateUserHasAlkisProductAccess()) {
+            //disable Product page if user does not have the right to see it.
+            btnForward.setEnabled(false);
+            lblForw.setEnabled(false);
+        }
     }
 
     private void initProductPreviewImages() {

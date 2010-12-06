@@ -153,7 +153,11 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         landparcelListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, eLProperty, lstLandparcels);
         landparcelListBinding.setSourceNullValue(null);
         landparcelListBinding.setSourceUnreadableValue(null);
-
+        if (!AlkisCommons.validateUserHasAlkisProductAccess()) {
+            //disable Product page if user does not have the right to see it.
+            btnForward.setEnabled(false);
+            lblForw.setEnabled(false);
+        }
     }
 
     private void initIcons() {
@@ -1278,7 +1282,6 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
 //            setWaiting(false);
 //        }
 //    }
-
     private static final class LightweightLandParcel {
 
         public LightweightLandParcel(CidsBean buchungsBlattLandparcelBean) {

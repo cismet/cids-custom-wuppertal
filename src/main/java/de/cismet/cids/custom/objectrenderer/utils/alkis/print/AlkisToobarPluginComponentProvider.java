@@ -16,6 +16,9 @@
  */
 package de.cismet.cids.custom.objectrenderer.utils.alkis.print;
 
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisCommons;
 import de.cismet.cismap.commons.gui.ToolbarComponentDescription;
 import de.cismet.cismap.commons.gui.ToolbarComponentsProvider;
 import de.cismet.cismap.commons.interaction.CismapBroker;
@@ -30,7 +33,9 @@ import javax.swing.JButton;
  */
 @org.openide.util.lookup.ServiceProvider(service = ToolbarComponentsProvider.class)
 public class AlkisToobarPluginComponentProvider implements ToolbarComponentsProvider {
+
     private final List<ToolbarComponentDescription> toolbarComponents;
+    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
 
     public AlkisToobarPluginComponentProvider() {
         final List<ToolbarComponentDescription> preparationList = TypeSafeCollections.newArrayList();
@@ -41,7 +46,11 @@ public class AlkisToobarPluginComponentProvider implements ToolbarComponentsProv
 
     @Override
     public List<ToolbarComponentDescription> getToolbarComponents() {
-        return toolbarComponents;
+        if (AlkisCommons.validateUserHasAlkisPrintAccess()) {
+            return toolbarComponents;
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     @Override
@@ -54,11 +63,12 @@ final class AlkisPrintJButton extends JButton {
 
     private final AlkisPrintingSettingsWidget printWidget;
     static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisToobarPluginComponentProvider.class);
+
     public AlkisPrintJButton() {
         try {
             this.printWidget = new AlkisPrintingSettingsWidget(false, CismapBroker.getInstance().getMappingComponent());
         } catch (Exception ex) {
-            log.fatal(ex,ex);
+            log.fatal(ex, ex);
             throw new RuntimeException(ex);
         }
 //        setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/frameprint.png"))); // NOI18N

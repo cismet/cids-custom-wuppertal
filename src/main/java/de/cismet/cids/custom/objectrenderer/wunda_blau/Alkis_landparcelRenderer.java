@@ -191,6 +191,11 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         map = new MappingComponent();
         panFlurstueckMap.add(map, BorderLayout.CENTER);
         initEditorPanes();
+        if (!AlkisCommons.validateUserHasAlkisProductAccess()) {
+            //disable Product page if user does not have the right to see it.
+            btnForward.setEnabled(false);
+            lblForw.setEnabled(false);
+        }
     }
 
     private void initIcons() {

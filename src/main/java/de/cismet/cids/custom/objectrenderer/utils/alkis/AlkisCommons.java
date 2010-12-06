@@ -4,6 +4,8 @@
  */
 package de.cismet.cids.custom.objectrenderer.utils.alkis;
 
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 import de.aedsicad.aaaweb.service.util.Address;
 import de.aedsicad.aaaweb.service.util.Buchungsblatt;
 import de.aedsicad.aaaweb.service.util.Buchungsstelle;
@@ -487,5 +489,23 @@ public final class AlkisCommons {
             }
         }
         return "";
+    }
+
+    public static boolean validateUserHasAlkisPrintAccess() {
+        try {
+            return SessionManager.getConnection().getConfigAttr(SessionManager.getSession().getUser(), "navigator.alkis.print") != null;
+        } catch (ConnectionException ex) {
+            log.error("Could not validate action tag for Alkis Print Dialoge!", ex);
+        }
+        return false;
+    }
+
+    public static boolean validateUserHasAlkisProductAccess() {
+        try {
+            return SessionManager.getConnection().getConfigAttr(SessionManager.getSession().getUser(), "navigator.alkis.products") != null;
+        } catch (ConnectionException ex) {
+            log.error("Could not validate action tag for Alkis Products!", ex);
+        }
+        return false;
     }
 }
