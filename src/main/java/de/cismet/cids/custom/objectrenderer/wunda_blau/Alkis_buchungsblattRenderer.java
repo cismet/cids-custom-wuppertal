@@ -1178,6 +1178,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
             AlkisSOAPWorkerService.cancel(retrieveWorker);
             setWaiting(false);
         }
+        map.dispose();
     }
 
     final class RetrieveWorker extends SwingWorker<Buchungsblatt, Void> {

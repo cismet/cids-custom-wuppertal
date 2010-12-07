@@ -374,7 +374,7 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
 
     @Override
     public void dispose() {
-        
+        mappingComponent.dispose();
     }
 
     final class TableSelectionListener implements ListSelectionListener {

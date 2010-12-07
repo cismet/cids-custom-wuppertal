@@ -1385,6 +1385,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
             AlkisSOAPWorkerService.cancel(retrieveBuchungsblaetterWorker);
             setWaiting(false);
         }
+        map.dispose();
     }
 
 // </editor-fold>
