@@ -17,10 +17,8 @@
 
 package de.cismet.cids.custom.wunda_blau.search;
 
-import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.search.CidsServerSearch;
 import de.cismet.cids.tools.search.clientstuff.CidsToolbarSearch;
-import java.util.Collection;
 import javax.swing.ImageIcon;
 
 /**

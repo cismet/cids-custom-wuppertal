@@ -185,7 +185,11 @@ public class ObjectRendererUtils {
         try {
             final User user = SessionManager.getSession().getUser();
             final MetaClass mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, tabName);
-            return SessionManager.getProxy().getLightweightMetaObjectsByQuery(mc.getID(), user, query, fields, formatter);
+            if (mc != null) {
+                return SessionManager.getProxy().getLightweightMetaObjectsByQuery(mc.getID(), user, query, fields, formatter);
+            } else {
+                log.error("Can not find MetaClass for Tablename: " + tabName);
+            }
         } catch (Exception ex) {
             log.error(ex, ex);
         }
