@@ -7,6 +7,7 @@
 package de.cismet.cids.custom.wunda_blau.search;
 
 import Sirius.navigator.actiontag.ActionTagProtected;
+import Sirius.navigator.exception.ConnectionException;
 import de.cismet.cids.custom.objecteditors.wunda_blau.FlurstueckSelectionDialoge;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.method.MethodManager;
@@ -36,6 +37,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.SwingWorker;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -504,7 +506,11 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
 
     @Override
     public boolean checkActionTag() {
-       //TODO: check for "navigator.baulasten.search"
-        return true;
+        try {
+            return SessionManager.getConnection().getConfigAttr(SessionManager.getSession().getUser(), "navigator.baulasten.search") != null;
+        } catch (ConnectionException ex) {
+            log.error("Can not validate ActionTag for Baulasten Suche!", ex);
+            return false;
+        }
     }
 }
