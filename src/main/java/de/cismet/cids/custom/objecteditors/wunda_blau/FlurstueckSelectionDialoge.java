@@ -4,7 +4,7 @@
  *
  * Created on 13.12.2010, 11:02:41
  */
-package de.cismet.cids.custom.wunda_blau.search;
+package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.server.middleware.types.LightweightMetaObject;
 import Sirius.server.middleware.types.MetaObject;
@@ -105,11 +105,9 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
         lblGemarkungsname = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
 
-        setLayout(new java.awt.BorderLayout());
-
-        panAddLandParcel1.setMaximumSize(new java.awt.Dimension(180, 180));
-        panAddLandParcel1.setMinimumSize(new java.awt.Dimension(180, 180));
-        panAddLandParcel1.setPreferredSize(new java.awt.Dimension(180, 180));
+        panAddLandParcel1.setMaximumSize(new java.awt.Dimension(250, 180));
+        panAddLandParcel1.setMinimumSize(new java.awt.Dimension(250, 180));
+        panAddLandParcel1.setPreferredSize(new java.awt.Dimension(250, 180));
         panAddLandParcel1.setLayout(new java.awt.GridBagLayout());
 
         lblFlurstueckAuswaehlen.setFont(new java.awt.Font("Tahoma", 1, 11));
@@ -242,7 +240,7 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
         panAddLandParcel1.add(jSeparator1, gridBagConstraints);
 
-        add(panAddLandParcel1, java.awt.BorderLayout.CENTER);
+        getContentPane().add(panAddLandParcel1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
     private void cbParcels1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbParcels1ActionPerformed

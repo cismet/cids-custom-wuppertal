@@ -6,6 +6,7 @@
  */
 package de.cismet.cids.custom.wunda_blau.search;
 
+import de.cismet.cids.custom.objecteditors.wunda_blau.FlurstueckSelectionDialoge;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.method.MethodManager;
 import Sirius.server.middleware.types.MetaClass;
@@ -360,9 +361,8 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
                 CidsFeature cf = (CidsFeature) feature;
                 MetaObject mo = cf.getMetaObject();
                 String tableName = mo.getMetaClass().getTableName();
-                if ("FLURSTUECK".equalsIgnoreCase(tableName)) {
-                    model.addElement(mo.getBean());
-                } else if ("ALB_FLURSTUECK_KICKER".equalsIgnoreCase(tableName)) {
+                if ("FLURSTUECK".equalsIgnoreCase(tableName) || "ALB_FLURSTUECK_KICKER".equalsIgnoreCase(tableName)) {
+//                if ("FLURSTUECK".equalsIgnoreCase(tableName) || "ALB_FLURSTUECK_KICKER".equalsIgnoreCase(tableName) || "ALKIS_LANDPARCEL".equalsIgnoreCase(tableName)) {
                     model.addElement(mo.getBean());
                 }
             }
@@ -441,13 +441,22 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         final BaulastSearchInfo bsi = getBaulastInfoFromGUI();
         for (int i = 0; i < model.size(); ++i) {
             CidsBean fsBean = (CidsBean) model.getElementAt(i);
-            if ("ALB_FLURSTUECK_KICKER".equalsIgnoreCase(fsBean.getMetaObject().getMetaClass().getTableName())) {
-                FlurstueckInfo fi = new FlurstueckInfo((Integer) fsBean.getProperty("gemarkung"), (String) fsBean.getProperty("flur"), (String) fsBean.getProperty("zaehler"), (String) fsBean.getProperty("nenner"));
-                bsi.getFlurstuecke().add(fi);
-            } else if ("FLURSTUECK".equalsIgnoreCase(fsBean.getMetaObject().getMetaClass().getTableName())) {
-                CidsBean gemarkung = (CidsBean) fsBean.getProperty("gemarkungs_nr");
-                FlurstueckInfo fi = new FlurstueckInfo((Integer) gemarkung.getProperty("gemarkungsnummer"), (String) fsBean.getProperty("flur"), String.valueOf(fsBean.getProperty("fstnr_z")), String.valueOf(fsBean.getProperty("fstnr_n")));
-                bsi.getFlurstuecke().add(fi);
+            try {
+                if ("ALB_FLURSTUECK_KICKER".equalsIgnoreCase(fsBean.getMetaObject().getMetaClass().getTableName())) {
+                    FlurstueckInfo fi = new FlurstueckInfo((Integer) fsBean.getProperty("gemarkung"), (String) fsBean.getProperty("flur"), (String) fsBean.getProperty("zaehler"), (String) fsBean.getProperty("nenner"));
+                    bsi.getFlurstuecke().add(fi);
+                } else if ("FLURSTUECK".equalsIgnoreCase(fsBean.getMetaObject().getMetaClass().getTableName())) {
+                    CidsBean gemarkung = (CidsBean) fsBean.getProperty("gemarkungs_nr");
+                    FlurstueckInfo fi = new FlurstueckInfo((Integer) gemarkung.getProperty("gemarkungsnummer"), (String) fsBean.getProperty("flur"), String.valueOf(fsBean.getProperty("fstnr_z")), String.valueOf(fsBean.getProperty("fstnr_n")));
+                    bsi.getFlurstuecke().add(fi);
+                }
+//                else if ("ALKIS_LANDPARCEL".equalsIgnoreCase(fsBean.getMetaObject().getMetaClass().getTableName())) {
+//                //TODO: merke
+//                    FlurstueckInfo fi = new FlurstueckInfo(Integer.parseInt(String.valueOf(fsBean.getProperty("gemarkung"))), (String) fsBean.getProperty("flur"), String.valueOf(fsBean.getProperty("fstck_zaehler")), String.valueOf(fsBean.getProperty("fstck_nenner")));
+//                    bsi.getFlurstuecke().add(fi);
+//                }
+            } catch (Exception ex) {
+                log.error("Can not parse information from Flurstueck bean: " + fsBean, ex);
             }
         }
         return new CidsBaulastSearchStatement(bsi);
@@ -485,6 +494,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     public void beansDropped(ArrayList<CidsBean> beans) {
         for (CidsBean bean : beans) {
             if ("FLURSTUECK".equalsIgnoreCase(bean.getMetaObject().getMetaClass().getTableName())) {
+//            if ("FLURSTUECK".equalsIgnoreCase(bean.getMetaObject().getMetaClass().getTableName()) || "ALKIS_LANDPARCEL".equalsIgnoreCase(bean.getMetaObject().getMetaClass().getTableName())) {
                 model.addElement(bean);
             }
             lstFlurstueck.repaint();
