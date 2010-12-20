@@ -7,6 +7,7 @@ import Sirius.server.search.CidsServerSearch;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import org.apache.commons.lang.StringEscapeUtils;
 
 //select distinct 666 as class_id, l.id, l.blattnummer, l.laufende_nummer as object_id from alb_baulast l
 //, alb_baulast_baulastarten la, alb_baulast_art a
@@ -35,12 +36,21 @@ public class CidsBaulastSearchStatement extends CidsServerSearch {
     public CidsBaulastSearchStatement(BaulastSearchInfo searchInfo) {
         this.result = searchInfo.getResult();
         this.blattnummer = searchInfo.getBlattnummer();
+        if (blattnummer != null) {
+            blattnummer = StringEscapeUtils.escapeSql(blattnummer);
+        }
         this.gueltig = searchInfo.isGueltig();
         this.ungueltig = searchInfo.isUngueltig();
         this.beguenstigt = searchInfo.isBeguenstigt();
         this.belastet = searchInfo.isBelastet();
         this.art = searchInfo.getArt();
+        if (art != null) {
+            art = StringEscapeUtils.escapeSql(art);
+        }
         this.bounds = searchInfo.getBounds();
+        if (bounds != null) {
+            bounds = StringEscapeUtils.escapeSql(bounds);
+        }
         this.flurstuecke = searchInfo.getFlurstuecke();
     }
 
@@ -126,7 +136,7 @@ public class CidsBaulastSearchStatement extends CidsServerSearch {
                 }
                 if (fsSearch) {
                     FlurstueckInfo fi = flurstuecke.get(i);
-                    query += " and k.gemarkung = '" + fi.gemarkung + "' and k.flur = '" + fi.flur + "' and k.zaehler = '" + fi.zaehler + "' and k.nenner = '" + fi.nenner + "'";
+                    query += " and k.gemarkung = '" + fi.gemarkung + "' and k.flur = '" + StringEscapeUtils.escapeSql(fi.flur) + "' and k.zaehler = '" + StringEscapeUtils.escapeSql(fi.zaehler) + "' and k.nenner = '" + StringEscapeUtils.escapeSql(fi.nenner) + "'";
                 }
                 if (art != null && art.length() > 0) {
                     query += " and l.id = la.baulast_reference and la.baulast_art = a.id and a.baulast_art = '" + art + "'";
@@ -142,11 +152,9 @@ public class CidsBaulastSearchStatement extends CidsServerSearch {
             }
 
             getLog().info("Search:\n" + query);
-            getLog().fatal(getActiveLoaclServers());
             MetaService ms = (MetaService) getActiveLoaclServers().get("WUNDA_BLAU");
-            ArrayList<ArrayList> resultList = ms.performCustomSearch(query);
-
-            ArrayList<Node> aln = new ArrayList<Node>();
+            List<ArrayList> resultList = ms.performCustomSearch(query);
+            List<Node> aln = new ArrayList<Node>();
             for (ArrayList al : resultList) {
                 int cid = (Integer) al.get(0);
                 int oid = (Integer) al.get(1);
