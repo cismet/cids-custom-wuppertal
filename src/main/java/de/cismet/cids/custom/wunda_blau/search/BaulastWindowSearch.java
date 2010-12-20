@@ -6,6 +6,7 @@
  */
 package de.cismet.cids.custom.wunda_blau.search;
 
+import Sirius.navigator.actiontag.ActionTagProtected;
 import de.cismet.cids.custom.objecteditors.wunda_blau.FlurstueckSelectionDialoge;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.method.MethodManager;
@@ -41,7 +42,7 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
  * @author stefan
  */
 @org.openide.util.lookup.ServiceProvider(service = CidsWindowSearch.class)
-public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindowSearch, CidsBeanDropListener {
+public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindowSearch, CidsBeanDropListener, ActionTagProtected {
 
     static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(BaulastWindowSearch.class);
 
@@ -303,6 +304,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
         buttonGroup1.add(rbBaulastBlaetter);
+        rbBaulastBlaetter.setSelected(true);
         rbBaulastBlaetter.setText("Baulastblätter");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -312,7 +314,6 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         jPanel4.add(rbBaulastBlaetter, gridBagConstraints);
 
         buttonGroup1.add(rbBaulasten);
-        rbBaulasten.setSelected(true);
         rbBaulasten.setText("Baulasten");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -499,5 +500,11 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
             }
             lstFlurstueck.repaint();
         }
+    }
+
+    @Override
+    public boolean checkActionTag() {
+       //TODO: check for "navigator.baulasten.search"
+        return true;
     }
 }
