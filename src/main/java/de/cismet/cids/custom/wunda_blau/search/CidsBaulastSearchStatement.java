@@ -126,10 +126,10 @@ public class CidsBaulastSearchStatement extends CidsServerSearch {
                 if (gueltig && ungueltig) {
                 } else {
                     if (gueltig) {
-                        query += " and loeschungsdatum is null";
+                        query += " and loeschungsdatum is null and geschlossen_am is null";
 
                     } else if (ungueltig) {
-                        query += " and loeschungsdatum is not null";
+                        query += " and (loeschungsdatum is not null or geschlossen_am is not null)";
                     }
                 }
                 if (fsSearch || bounds != null) {

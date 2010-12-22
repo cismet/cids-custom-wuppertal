@@ -110,7 +110,7 @@
             <Component class="javax.swing.JCheckBox" name="chkGeloescht">
               <Properties>
                 <Property name="selected" type="boolean" value="true"/>
-                <Property name="text" type="java.lang.String" value="gel&#xf6;scht"/>
+                <Property name="text" type="java.lang.String" value="gel&#xf6;scht / geschlossen"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

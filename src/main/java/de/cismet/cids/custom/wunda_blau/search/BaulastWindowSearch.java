@@ -153,7 +153,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
         chkGeloescht.setSelected(true);
-        chkGeloescht.setText("gelöscht");
+        chkGeloescht.setText("gelöscht / geschlossen");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
