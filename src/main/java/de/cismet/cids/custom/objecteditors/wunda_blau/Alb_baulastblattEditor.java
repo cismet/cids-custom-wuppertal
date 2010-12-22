@@ -5,16 +5,12 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-import Sirius.navigator.connection.SessionManager;
-import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 import Sirius.server.middleware.types.MetaObject;
-import Sirius.server.search.CidsServerSearch;
 import de.cismet.cids.annotations.AggregationRenderer;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.wunda_blau.search.Alb_BaulastblattChecker;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 import de.cismet.cids.editors.DefaultBeanInitializer;
@@ -78,6 +74,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
     public static final String TITLE_PREFIX = "Baulastblatt";
     public static final String TITLE_AGR_PREFIX = "Baulastblätter";
     private Collection<CidsBean> baulastenBeans = null;
+//    private Collection<CidsBean> baulastenBeansToDelete = new ArrayList<CidsBean>();
     private PropertyChangeListener strongReferenceToWeakListener = null;
 
     /** Creates new form CoolThemaRenderer */
@@ -709,9 +706,10 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                         answer = JOptionPane.showConfirmDialog(this, "Plausibilitätsprüfung fehlgeschlagen. Nicht alle Flurstücke des Platzhalters wurden realen Baulasten zugeordnet. Soll dennoch gelöscht werden?", "Platzhalter entfernen", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
                     }
                     if (answer == JOptionPane.YES_OPTION) {
-                        baulastenCol.remove(selectionBean);
-                        lstLaufendeNummern.setSelectedIndex(0);
                         selectionBean.delete();
+//                        baulastenCol.remove(selectionBean);
+//                        baulastenBeansToDelete.add(selectionBean);
+                        lstLaufendeNummern.setSelectedIndex(lstLaufendeNummern.getMinSelectionIndex());
                     }
                 }
                 checkLaufendeNummern();
@@ -879,6 +877,18 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
 
     @Override
     public void editorClosed(EditorSaveStatus status) {
+//            log.fatal(status);
+//        if (EditorSaveStatus.SAVE_SUCCESS == status) {
+//            for (CidsBean toDelete : baulastenBeansToDelete) {
+//                log.fatal(toDelete);
+//                try {
+//                    toDelete.delete();
+//                    log.fatal("deleted!");
+//                } catch (Exception ex) {
+//                    log.error("Can not delete Baulast Bean!", ex);
+//                }
+//            }
+//        }
     }
 
     @Override
