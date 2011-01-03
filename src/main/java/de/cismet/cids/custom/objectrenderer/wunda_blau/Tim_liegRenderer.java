@@ -1,195 +1,330 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
 import com.vividsolutions.jts.geom.Geometry;
+
+import org.apache.log4j.Logger;
+
+import java.sql.Timestamp;
+
+import java.text.DateFormat;
+
+import java.util.Date;
+import java.util.Locale;
+
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import de.cismet.cids.annotations.CidsAttribute;
 import de.cismet.cids.annotations.CidsRendererTitle;
+
 import de.cismet.cids.custom.deprecated.CoolTabPanel;
 import de.cismet.cids.custom.deprecated.JBreakLabel;
 import de.cismet.cids.custom.deprecated.JLoadDots;
 import de.cismet.cids.custom.deprecated.TabbedPaneUITransparent;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.Locale;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import org.apache.log4j.Logger;
+
+import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
 
 /**
- * de.cismet.cids.objectrenderer.CoolTIMRenderer
- * @author  nh
+ * de.cismet.cids.objectrenderer.CoolTIMRenderer.
+ *
+ * @author   nh
+ * @version  $Revision$, $Date$
  */
 public class Tim_liegRenderer extends CoolPanel implements ChangeListener {
-    
-    private final Logger log = Logger.getLogger(this.getClass());
-    
-    @CidsAttribute("Hinweise")
-    public String hinweise = "";
-    
-    @CidsAttribute("angelegt von")
-    public String angelegtVon = "";
-    
-    @CidsAttribute("angelegt am")
-    public Timestamp angelegtAm;
-    
-    @CidsAttribute("gel\u00F6scht von")
-    public String geloeschtVon = "";
-    
-    @CidsAttribute("gel\u00F6scht am")
-    public Timestamp geloeschtAm;
-    
-    @CidsAttribute("Grund der L\u00F6schung")
-    public String grund = "";
 
-    // ALKIS
-        @CidsAttribute("ALKIS")
-        public Object alkis = null;
-        
-        @CidsAttribute("ALKIS.ALKIS relevant")
-        public String alkRelevant = "";
-        
-        @CidsAttribute("ALKIS.ALKIS entschieden von")
-        public String alkEntschiedenVon = "";
-        
-        @CidsAttribute("ALKIS.ALKIS entschieden am")
-        public Timestamp alkEntschiedenAm = null;
-        
-        @CidsAttribute("ALKIS.Priorit\u00E4t")
-        public String alkPrio = "";
-        
-        @CidsAttribute("ALKIS.Bemerkungen")
-        public String alkBemerk = "";
-        
-        @CidsAttribute("ALKIS.Topographie")
-        public String alkTopo = "";
-        
-        @CidsAttribute("ALKIS.Geb\u00E4ude")
-        public String alkGeb = "";
-        
-        @CidsAttribute("ALKIS.Nutzungsarten")
-        public String alkNutz = "";
-        
-        @CidsAttribute("ALKIS.Bodensch\u00E4tzung")
-        public String alkBoden = "";
-        
-        @CidsAttribute("ALKIS.sonstiges")
-        public String alkSonstiges = "";
-        
-        @CidsAttribute("ALKIS.Vermessung")
-        public String alkVermessung = "";
-        
-        @CidsAttribute("ALKIS.Feldvergleich")
-        public String alkFeldvergleich = "";
-        
-        @CidsAttribute("ALKIS.Luftbildauswertung")
-        public String alkLuftbild = "";
-        
-        @CidsAttribute("ALKIS.Bachverlauf")
-        public String alkBach = "";
-        
-        @CidsAttribute("ALKIS.sonstige")
-        public String alkSonstige = "";
-        
-        @CidsAttribute("ALKIS.ALK relevant")
-        public String alkALKRel = "";
-        
-        @CidsAttribute("ALKIS.ALK \u00FCbernommen von")
-        public String alkALKUeberVon = "";
-        
-        @CidsAttribute("ALKIS.ALK \u00FCbernommen am")
-        public Timestamp alkALKUeberAm = null;
-        
-        @CidsAttribute("ALKIS.ALB relevant")
-        public String alkALBRel = "";
-        
-        @CidsAttribute("ALKIS.ALB \u00FCbernommen von")
-        public String alkALBUeberVon = "";
-        
-        @CidsAttribute("ALKIS.ALB \u00FCbernommen am")
-        public Timestamp alkALBUeberAm = null;
-        
-        @CidsAttribute("ALKIS.DGK relevant")
-        public String alkDGKRel = "";
-        
-        @CidsAttribute("ALKIS.DGK abgeleitet von")
-        public String alkDGKAbgelVon = "";
-        
-        @CidsAttribute("ALKIS.DGK abgeleitet am")
-        public Timestamp alkDGKAbgelAm = null;
-        
-    // Kartographie
-        @CidsAttribute("Katographie")
-        public Object kartographie = null;
-        
-        @CidsAttribute("Katographie.Stadtkarte relevant")
-        public String kartStadtRel = "";
-        
-        @CidsAttribute("Katographie.Stadtkarte entschieden von")
-        public String kartStadtEntVon= "";
-        
-        @CidsAttribute("Katographie.Stadtkarte entschieden am")
-        public Timestamp kartStadtEntAm = null;
-        
-        @CidsAttribute("Katographie.Stadtkarte Bemerkungen")
-        public String kartStadtBem = "";
-        
-        @CidsAttribute("Katographie.Stadtkarte \u00FCbernommen von")
-        public String kartStadtUeberVon = "";
-        
-        @CidsAttribute("Katographie.Stadtkarte \u00FCbernommen am")
-        public Timestamp kartStadtUeberAm = null;
-        
-        @CidsAttribute("Katographie.Citypl\u00E4ne relevant")
-        public String kartCityRel = "";
-        
-        @CidsAttribute("Katographie.Citypl\u00E4ne Bemerkungen")
-        public String kartCityBem = "";
-        
-        @CidsAttribute("Katographie.Citypl\u00E4ne \u00FCbernommen von")
-        public String kartCityUeberVon = "";
-        
-        @CidsAttribute("Katographie.Citypl\u00E4ne \u00FCbernommen am")
-        public Timestamp kartCityUeberAm = null;
-        
-        @CidsAttribute("Katographie.\u00DCbersichtspl\u00E4ne relevant")
-        public String kartUebersichtRel = "";
-        
-        @CidsAttribute("Katographie.\u00DCbersichtspl\u00E4ne Bemerkungen")
-        public String kartUebersichtBem = "";
-        
-        @CidsAttribute("Katographie.\u00DCbersichtspl\u00E4ne \u00FCbernommen von")
-        public String kartUebersichtUeberVon = "";
-        
-        @CidsAttribute("Katographie.\u00DCbersichtspl\u00E4ne \u00FCbernommen am")
-        public Timestamp kartUebersichtUeberAm = null;
-        
-        @CidsAttribute("Katographie.Freizeitkarte relevant")
-        public String kartFreizeitRel = "";
-        
-        @CidsAttribute("Katographie.Freizeitkarte Bemerkungen")
-        public String kartFreizeitBem = "";
-        
-        @CidsAttribute("Katographie.Freizeitkarte \u00FCbernommen von")
-        public String kartFreizeitUeberVon = "";
-        
-        @CidsAttribute("Katographie.Freizeitkarte \u00FCbernommen am")
-        public Timestamp kartFreizeitUeberAm = null;
-        
-    @CidsAttribute("Georeferenz.GEO_STRING")
-    public Geometry geometry = null;
-    
-    @CidsRendererTitle
-    public String title = "";
-    
+    //~ Static fields/initializers ---------------------------------------------
+
     private static final String TITLE = "TIM";
     private static final int ALKIS_INDEX = 1;
     private static final int KARTO_INDEX = 2;
     private static int lastSelected = 0;
     private static Date timer = new Date();
-    
-    /** 
-     * Creates new form CoolTIMRenderer
+
+    //~ Instance fields --------------------------------------------------------
+
+    @CidsAttribute("Hinweise")
+    public String hinweise = "";
+
+    @CidsAttribute("angelegt von")
+    public String angelegtVon = "";
+
+    @CidsAttribute("angelegt am")
+    public Timestamp angelegtAm;
+
+    @CidsAttribute("gel\u00F6scht von")
+    public String geloeschtVon = "";
+
+    @CidsAttribute("gel\u00F6scht am")
+    public Timestamp geloeschtAm;
+
+    @CidsAttribute("Grund der L\u00F6schung")
+    public String grund = "";
+
+    // ALKIS
+    @CidsAttribute("ALKIS")
+    public Object alkis = null;
+
+    @CidsAttribute("ALKIS.ALKIS relevant")
+    public String alkRelevant = "";
+
+    @CidsAttribute("ALKIS.ALKIS entschieden von")
+    public String alkEntschiedenVon = "";
+
+    @CidsAttribute("ALKIS.ALKIS entschieden am")
+    public Timestamp alkEntschiedenAm = null;
+
+    @CidsAttribute("ALKIS.Priorit\u00E4t")
+    public String alkPrio = "";
+
+    @CidsAttribute("ALKIS.Bemerkungen")
+    public String alkBemerk = "";
+
+    @CidsAttribute("ALKIS.Topographie")
+    public String alkTopo = "";
+
+    @CidsAttribute("ALKIS.Geb\u00E4ude")
+    public String alkGeb = "";
+
+    @CidsAttribute("ALKIS.Nutzungsarten")
+    public String alkNutz = "";
+
+    @CidsAttribute("ALKIS.Bodensch\u00E4tzung")
+    public String alkBoden = "";
+
+    @CidsAttribute("ALKIS.sonstiges")
+    public String alkSonstiges = "";
+
+    @CidsAttribute("ALKIS.Vermessung")
+    public String alkVermessung = "";
+
+    @CidsAttribute("ALKIS.Feldvergleich")
+    public String alkFeldvergleich = "";
+
+    @CidsAttribute("ALKIS.Luftbildauswertung")
+    public String alkLuftbild = "";
+
+    @CidsAttribute("ALKIS.Bachverlauf")
+    public String alkBach = "";
+
+    @CidsAttribute("ALKIS.sonstige")
+    public String alkSonstige = "";
+
+    @CidsAttribute("ALKIS.ALK relevant")
+    public String alkALKRel = "";
+
+    @CidsAttribute("ALKIS.ALK \u00FCbernommen von")
+    public String alkALKUeberVon = "";
+
+    @CidsAttribute("ALKIS.ALK \u00FCbernommen am")
+    public Timestamp alkALKUeberAm = null;
+
+    @CidsAttribute("ALKIS.ALB relevant")
+    public String alkALBRel = "";
+
+    @CidsAttribute("ALKIS.ALB \u00FCbernommen von")
+    public String alkALBUeberVon = "";
+
+    @CidsAttribute("ALKIS.ALB \u00FCbernommen am")
+    public Timestamp alkALBUeberAm = null;
+
+    @CidsAttribute("ALKIS.DGK relevant")
+    public String alkDGKRel = "";
+
+    @CidsAttribute("ALKIS.DGK abgeleitet von")
+    public String alkDGKAbgelVon = "";
+
+    @CidsAttribute("ALKIS.DGK abgeleitet am")
+    public Timestamp alkDGKAbgelAm = null;
+
+    // Kartographie
+    @CidsAttribute("Katographie")
+    public Object kartographie = null;
+
+    @CidsAttribute("Katographie.Stadtkarte relevant")
+    public String kartStadtRel = "";
+
+    @CidsAttribute("Katographie.Stadtkarte entschieden von")
+    public String kartStadtEntVon = "";
+
+    @CidsAttribute("Katographie.Stadtkarte entschieden am")
+    public Timestamp kartStadtEntAm = null;
+
+    @CidsAttribute("Katographie.Stadtkarte Bemerkungen")
+    public String kartStadtBem = "";
+
+    @CidsAttribute("Katographie.Stadtkarte \u00FCbernommen von")
+    public String kartStadtUeberVon = "";
+
+    @CidsAttribute("Katographie.Stadtkarte \u00FCbernommen am")
+    public Timestamp kartStadtUeberAm = null;
+
+    @CidsAttribute("Katographie.Citypl\u00E4ne relevant")
+    public String kartCityRel = "";
+
+    @CidsAttribute("Katographie.Citypl\u00E4ne Bemerkungen")
+    public String kartCityBem = "";
+
+    @CidsAttribute("Katographie.Citypl\u00E4ne \u00FCbernommen von")
+    public String kartCityUeberVon = "";
+
+    @CidsAttribute("Katographie.Citypl\u00E4ne \u00FCbernommen am")
+    public Timestamp kartCityUeberAm = null;
+
+    @CidsAttribute("Katographie.\u00DCbersichtspl\u00E4ne relevant")
+    public String kartUebersichtRel = "";
+
+    @CidsAttribute("Katographie.\u00DCbersichtspl\u00E4ne Bemerkungen")
+    public String kartUebersichtBem = "";
+
+    @CidsAttribute("Katographie.\u00DCbersichtspl\u00E4ne \u00FCbernommen von")
+    public String kartUebersichtUeberVon = "";
+
+    @CidsAttribute("Katographie.\u00DCbersichtspl\u00E4ne \u00FCbernommen am")
+    public Timestamp kartUebersichtUeberAm = null;
+
+    @CidsAttribute("Katographie.Freizeitkarte relevant")
+    public String kartFreizeitRel = "";
+
+    @CidsAttribute("Katographie.Freizeitkarte Bemerkungen")
+    public String kartFreizeitBem = "";
+
+    @CidsAttribute("Katographie.Freizeitkarte \u00FCbernommen von")
+    public String kartFreizeitUeberVon = "";
+
+    @CidsAttribute("Katographie.Freizeitkarte \u00FCbernommen am")
+    public Timestamp kartFreizeitUeberAm = null;
+
+    @CidsAttribute("Georeferenz.GEO_STRING")
+    public Geometry geometry = null;
+
+    @CidsRendererTitle
+    public String title = "";
+
+    private final Logger log = Logger.getLogger(this.getClass());
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
+    private javax.swing.JLabel jLabel38;
+    private javax.swing.JLabel jLabel39;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
+    private javax.swing.JLabel jLabel41;
+    private javax.swing.JLabel jLabel42;
+    private javax.swing.JLabel jLabel43;
+    private javax.swing.JLabel jLabel44;
+    private javax.swing.JLabel jLabel45;
+    private javax.swing.JLabel jLabel46;
+    private javax.swing.JLabel jLabel47;
+    private javax.swing.JLabel jLabel48;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel lblAlkALBRel;
+    private javax.swing.JLabel lblAlkALBUeberAm;
+    private javax.swing.JLabel lblAlkALBUeberVon;
+    private javax.swing.JLabel lblAlkALKRel;
+    private javax.swing.JLabel lblAlkALKUeberAm;
+    private javax.swing.JLabel lblAlkALKUeberVon;
+    private javax.swing.JLabel lblAlkBach;
+    private javax.swing.JLabel lblAlkBemerk;
+    private javax.swing.JLabel lblAlkBoden;
+    private javax.swing.JLabel lblAlkDGKAbgelAm;
+    private javax.swing.JLabel lblAlkDGKAbgelVon;
+    private javax.swing.JLabel lblAlkDGKRel;
+    private javax.swing.JLabel lblAlkEntschiedenAm;
+    private javax.swing.JLabel lblAlkEntschiedenVon;
+    private javax.swing.JLabel lblAlkFeldvergleich;
+    private javax.swing.JLabel lblAlkGeb;
+    private javax.swing.JLabel lblAlkLuftbild;
+    private javax.swing.JLabel lblAlkNutz;
+    private javax.swing.JLabel lblAlkPrio;
+    private javax.swing.JLabel lblAlkRelevant;
+    private javax.swing.JLabel lblAlkSonstige;
+    private javax.swing.JLabel lblAlkSonstiges;
+    private javax.swing.JLabel lblAlkTopo;
+    private javax.swing.JLabel lblAlkVermessung;
+    private javax.swing.JLabel lblAngelAm;
+    private javax.swing.JLabel lblAngelVon;
+    private javax.swing.JLabel lblGelAm;
+    private javax.swing.JLabel lblGelVon;
+    private javax.swing.JLabel lblGrund;
+    private javax.swing.JLabel lblHinweise;
+    private javax.swing.JLabel lblKartCityBem;
+    private javax.swing.JLabel lblKartCityRel;
+    private javax.swing.JLabel lblKartCityUeberAm;
+    private javax.swing.JLabel lblKartCityUeberVon;
+    private javax.swing.JLabel lblKartFreiBem;
+    private javax.swing.JLabel lblKartFreiRel;
+    private javax.swing.JLabel lblKartFreiUeberAm;
+    private javax.swing.JLabel lblKartFreiUeberVon;
+    private javax.swing.JLabel lblKartStadtBem;
+    private javax.swing.JLabel lblKartStadtEntschAm;
+    private javax.swing.JLabel lblKartStadtEntschVon;
+    private javax.swing.JLabel lblKartStadtRel;
+    private javax.swing.JLabel lblKartStadtUeberAm;
+    private javax.swing.JLabel lblKartStadtUeberVon;
+    private javax.swing.JLabel lblKartUebersichtBem;
+    private javax.swing.JLabel lblKartUebersichtRel;
+    private javax.swing.JLabel lblKartUebersichtUeberAm;
+    private javax.swing.JLabel lblKartUebersichtUeberVon;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JPanel panAlkis;
+    private javax.swing.JPanel panAllgemein;
+    private javax.swing.JPanel panContent;
+    private javax.swing.JPanel panInter;
+    private javax.swing.JPanel panKarto;
+    private javax.swing.JPanel panMap;
+    private javax.swing.JPanel panSpinner;
+    private javax.swing.JPanel panTabAlkis;
+    private javax.swing.JPanel panTabAllgemein;
+    private javax.swing.JPanel panTabKarto;
+    private javax.swing.JPanel panTitle;
+    private javax.swing.JTabbedPane tabbedPane;
+    // End of variables declaration//GEN-END:variables
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates new form CoolTIMRenderer.
      */
     public Tim_liegRenderer() {
         initComponents();
@@ -199,68 +334,71 @@ public class Tim_liegRenderer extends CoolPanel implements ChangeListener {
         setPanTitle(panTitle);
         setSpinner(panSpinner);
         tabbedPane.addChangeListener(this);
-        if((new Date().getTime() - timer.getTime()) < (60 * 1000L)) {
+        if ((new Date().getTime() - timer.getTime()) < (60 * 1000L)) {
             tabbedPane.setSelectedIndex(lastSelected);
         }
     }
-    
+
+    //~ Methods ----------------------------------------------------------------
+
     @Override
     public void assignSingle() {
-        if (geometry != null)
+        if (geometry != null) {
             setGeometry(geometry);
-        
+        }
+
         if (title != null) {
             if (title.length() > 50) {
-                title = title.substring(0,50);
+                title = title.substring(0, 50);
                 title = title + "...";
             }
             lblTitle.setText(TITLE + " - " + title);
         } else {
             lblTitle.setText(TITLE);
         }
-        
+
         if (hinweise != null) {
             lblHinweise.setText(hinweise);
         } else {
             lblHinweise.setVisible(false);
             jLabel1.setVisible(false);
         }
-        
+
         if (angelegtVon != null) {
             lblAngelVon.setText(angelegtVon);
         } else {
             jLabel2.setVisible(false);
             lblAngelVon.setVisible(false);
         }
-        
+
         if (angelegtAm != null) {
             lblAngelAm.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY).format(angelegtAm));
         } else {
             jLabel3.setVisible(false);
             lblAngelAm.setVisible(false);
         }
-        
+
         if (geloeschtVon != null) {
             lblGelVon.setText(geloeschtVon);
         } else {
             jLabel4.setVisible(false);
             lblGelVon.setVisible(false);
         }
-        
+
         if (geloeschtAm != null) {
             lblGelAm.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY).format(geloeschtAm));
         } else {
             jLabel5.setVisible(false);
             lblGelAm.setVisible(false);
         }
-        
+
         if (grund != null) {
             lblGrund.setText(grund);
         } else {
             jLabel6.setVisible(false);
             lblGrund.setVisible(false);
         }
-        
+
         // ALKIS-Assign
         if (alkis != null) {
             if (alkRelevant != null) {
@@ -276,7 +414,8 @@ public class Tim_liegRenderer extends CoolPanel implements ChangeListener {
                 jLabel10.setVisible(false);
             }
             if (alkEntschiedenAm != null) {
-                lblAlkEntschiedenAm.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY).format(alkEntschiedenAm));
+                lblAlkEntschiedenAm.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY).format(
+                        alkEntschiedenAm));
             } else {
                 lblAlkEntschiedenAm.setVisible(false);
                 jLabel11.setVisible(false);
@@ -366,7 +505,8 @@ public class Tim_liegRenderer extends CoolPanel implements ChangeListener {
                 jLabel25.setVisible(false);
             }
             if (alkALKUeberAm != null) {
-                lblAlkALKUeberAm.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY).format(alkALKUeberAm));
+                lblAlkALKUeberAm.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY).format(
+                        alkALKUeberAm));
             } else {
                 lblAlkALKUeberAm.setVisible(false);
                 jLabel26.setVisible(false);
@@ -384,7 +524,8 @@ public class Tim_liegRenderer extends CoolPanel implements ChangeListener {
                 jLabel28.setVisible(false);
             }
             if (alkALBUeberAm != null) {
-                lblAlkALBUeberAm.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY).format(alkALBUeberAm));
+                lblAlkALBUeberAm.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY).format(
+                        alkALBUeberAm));
             } else {
                 lblAlkALBUeberAm.setVisible(false);
                 jLabel29.setVisible(false);
@@ -402,7 +543,8 @@ public class Tim_liegRenderer extends CoolPanel implements ChangeListener {
                 jLabel31.setVisible(false);
             }
             if (alkDGKAbgelAm != null) {
-                lblAlkDGKAbgelAm.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY).format(alkDGKAbgelAm));
+                lblAlkDGKAbgelAm.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY).format(
+                        alkDGKAbgelAm));
             } else {
                 lblAlkDGKAbgelAm.setVisible(false);
                 jLabel32.setVisible(false);
@@ -410,7 +552,7 @@ public class Tim_liegRenderer extends CoolPanel implements ChangeListener {
         } else {
             tabbedPane.removeTabAt(ALKIS_INDEX);
         }
-        
+
         // Kartographie-Assign
         if (kartographie != null) {
             if (kartStadtRel != null) {
@@ -426,7 +568,8 @@ public class Tim_liegRenderer extends CoolPanel implements ChangeListener {
                 jLabel8.setVisible(false);
             }
             if (kartStadtEntAm != null) {
-                lblKartStadtEntschAm.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY).format(kartStadtEntAm));
+                lblKartStadtEntschAm.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY).format(
+                        kartStadtEntAm));
             } else {
                 lblKartStadtEntschAm.setVisible(false);
                 jLabel33.setVisible(false);
@@ -444,7 +587,8 @@ public class Tim_liegRenderer extends CoolPanel implements ChangeListener {
                 jLabel35.setVisible(false);
             }
             if (kartStadtUeberAm != null) {
-                lblKartStadtUeberAm.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY).format(kartStadtUeberAm));
+                lblKartStadtUeberAm.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY).format(
+                        kartStadtUeberAm));
             } else {
                 lblKartStadtUeberAm.setVisible(false);
                 jLabel36.setVisible(false);
@@ -468,7 +612,8 @@ public class Tim_liegRenderer extends CoolPanel implements ChangeListener {
                 jLabel39.setVisible(false);
             }
             if (kartCityUeberAm != null) {
-                lblKartCityUeberAm.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY).format(kartCityUeberAm));
+                lblKartCityUeberAm.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY).format(
+                        kartCityUeberAm));
             } else {
                 lblKartCityUeberAm.setVisible(false);
                 jLabel40.setVisible(false);
@@ -492,7 +637,8 @@ public class Tim_liegRenderer extends CoolPanel implements ChangeListener {
                 jLabel43.setVisible(false);
             }
             if (kartUebersichtUeberAm != null) {
-                lblKartUebersichtUeberAm.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY).format(kartUebersichtUeberAm));
+                lblKartUebersichtUeberAm.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY).format(
+                        kartUebersichtUeberAm));
             } else {
                 lblKartUebersichtUeberAm.setVisible(false);
                 jLabel44.setVisible(false);
@@ -516,7 +662,8 @@ public class Tim_liegRenderer extends CoolPanel implements ChangeListener {
                 jLabel47.setVisible(false);
             }
             if (kartFreizeitUeberAm != null) {
-                lblKartFreiUeberAm.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY).format(kartFreizeitUeberAm));
+                lblKartFreiUeberAm.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY).format(
+                        kartFreizeitUeberAm));
             } else {
                 lblKartFreiUeberAm.setVisible(false);
                 jLabel48.setVisible(false);
@@ -524,14 +671,13 @@ public class Tim_liegRenderer extends CoolPanel implements ChangeListener {
         } else if (alkis != null) {
             tabbedPane.removeTabAt(KARTO_INDEX);
         } else {
-            tabbedPane.removeTabAt(KARTO_INDEX-1);
+            tabbedPane.removeTabAt(KARTO_INDEX - 1);
         }
     }
-    
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -657,22 +803,18 @@ public class Tim_liegRenderer extends CoolPanel implements ChangeListener {
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblTitle.setText("Tim Liegenschaftskarte");
 
-        javax.swing.GroupLayout panTitleLayout = new javax.swing.GroupLayout(panTitle);
+        final javax.swing.GroupLayout panTitleLayout = new javax.swing.GroupLayout(panTitle);
         panTitle.setLayout(panTitleLayout);
         panTitleLayout.setHorizontalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panTitleLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblTitle)
-                .addContainerGap(235, Short.MAX_VALUE))
-        );
+            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addContainerGap(
+                    235,
+                    Short.MAX_VALUE)));
         panTitleLayout.setVerticalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panTitleLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblTitle)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addContainerGap(
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    Short.MAX_VALUE)));
 
         add(panTitle, java.awt.BorderLayout.NORTH);
 
@@ -1513,137 +1655,27 @@ public class Tim_liegRenderer extends CoolPanel implements ChangeListener {
         panSpinner.setMinimumSize(new java.awt.Dimension(100, 100));
         panSpinner.setOpaque(false);
 
-        javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
+        final javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
         panSpinner.setLayout(panSpinnerLayout);
         panSpinnerLayout.setHorizontalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                100,
+                Short.MAX_VALUE));
         panSpinnerLayout.setVerticalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                100,
+                Short.MAX_VALUE));
 
         panMap.add(panSpinner, new java.awt.GridBagConstraints());
 
         add(panMap, java.awt.BorderLayout.CENTER);
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
-    public void stateChanged(ChangeEvent e) {
+    @Override
+    public void stateChanged(final ChangeEvent e) {
         lastSelected = tabbedPane.getSelectedIndex();
         timer = new Date();
     }
-    
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
-    private javax.swing.JLabel jLabel24;
-    private javax.swing.JLabel jLabel25;
-    private javax.swing.JLabel jLabel26;
-    private javax.swing.JLabel jLabel27;
-    private javax.swing.JLabel jLabel28;
-    private javax.swing.JLabel jLabel29;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel30;
-    private javax.swing.JLabel jLabel31;
-    private javax.swing.JLabel jLabel32;
-    private javax.swing.JLabel jLabel33;
-    private javax.swing.JLabel jLabel34;
-    private javax.swing.JLabel jLabel35;
-    private javax.swing.JLabel jLabel36;
-    private javax.swing.JLabel jLabel37;
-    private javax.swing.JLabel jLabel38;
-    private javax.swing.JLabel jLabel39;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel40;
-    private javax.swing.JLabel jLabel41;
-    private javax.swing.JLabel jLabel42;
-    private javax.swing.JLabel jLabel43;
-    private javax.swing.JLabel jLabel44;
-    private javax.swing.JLabel jLabel45;
-    private javax.swing.JLabel jLabel46;
-    private javax.swing.JLabel jLabel47;
-    private javax.swing.JLabel jLabel48;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JLabel lblAlkALBRel;
-    private javax.swing.JLabel lblAlkALBUeberAm;
-    private javax.swing.JLabel lblAlkALBUeberVon;
-    private javax.swing.JLabel lblAlkALKRel;
-    private javax.swing.JLabel lblAlkALKUeberAm;
-    private javax.swing.JLabel lblAlkALKUeberVon;
-    private javax.swing.JLabel lblAlkBach;
-    private javax.swing.JLabel lblAlkBemerk;
-    private javax.swing.JLabel lblAlkBoden;
-    private javax.swing.JLabel lblAlkDGKAbgelAm;
-    private javax.swing.JLabel lblAlkDGKAbgelVon;
-    private javax.swing.JLabel lblAlkDGKRel;
-    private javax.swing.JLabel lblAlkEntschiedenAm;
-    private javax.swing.JLabel lblAlkEntschiedenVon;
-    private javax.swing.JLabel lblAlkFeldvergleich;
-    private javax.swing.JLabel lblAlkGeb;
-    private javax.swing.JLabel lblAlkLuftbild;
-    private javax.swing.JLabel lblAlkNutz;
-    private javax.swing.JLabel lblAlkPrio;
-    private javax.swing.JLabel lblAlkRelevant;
-    private javax.swing.JLabel lblAlkSonstige;
-    private javax.swing.JLabel lblAlkSonstiges;
-    private javax.swing.JLabel lblAlkTopo;
-    private javax.swing.JLabel lblAlkVermessung;
-    private javax.swing.JLabel lblAngelAm;
-    private javax.swing.JLabel lblAngelVon;
-    private javax.swing.JLabel lblGelAm;
-    private javax.swing.JLabel lblGelVon;
-    private javax.swing.JLabel lblGrund;
-    private javax.swing.JLabel lblHinweise;
-    private javax.swing.JLabel lblKartCityBem;
-    private javax.swing.JLabel lblKartCityRel;
-    private javax.swing.JLabel lblKartCityUeberAm;
-    private javax.swing.JLabel lblKartCityUeberVon;
-    private javax.swing.JLabel lblKartFreiBem;
-    private javax.swing.JLabel lblKartFreiRel;
-    private javax.swing.JLabel lblKartFreiUeberAm;
-    private javax.swing.JLabel lblKartFreiUeberVon;
-    private javax.swing.JLabel lblKartStadtBem;
-    private javax.swing.JLabel lblKartStadtEntschAm;
-    private javax.swing.JLabel lblKartStadtEntschVon;
-    private javax.swing.JLabel lblKartStadtRel;
-    private javax.swing.JLabel lblKartStadtUeberAm;
-    private javax.swing.JLabel lblKartStadtUeberVon;
-    private javax.swing.JLabel lblKartUebersichtBem;
-    private javax.swing.JLabel lblKartUebersichtRel;
-    private javax.swing.JLabel lblKartUebersichtUeberAm;
-    private javax.swing.JLabel lblKartUebersichtUeberVon;
-    private javax.swing.JLabel lblTitle;
-    private javax.swing.JPanel panAlkis;
-    private javax.swing.JPanel panAllgemein;
-    private javax.swing.JPanel panContent;
-    private javax.swing.JPanel panInter;
-    private javax.swing.JPanel panKarto;
-    private javax.swing.JPanel panMap;
-    private javax.swing.JPanel panSpinner;
-    private javax.swing.JPanel panTabAlkis;
-    private javax.swing.JPanel panTabAllgemein;
-    private javax.swing.JPanel panTabKarto;
-    private javax.swing.JPanel panTitle;
-    private javax.swing.JTabbedPane tabbedPane;
-    // End of variables declaration//GEN-END:variables
-    
 }

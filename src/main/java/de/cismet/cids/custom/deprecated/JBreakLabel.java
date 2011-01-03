@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * JBreakLabel.java
  *
@@ -11,43 +18,79 @@ package de.cismet.cids.custom.deprecated;
 import javax.swing.JLabel;
 
 /**
+ * DOCUMENT ME!
  *
- * @author srichter
+ * @author   srichter
+ * @version  $Revision$, $Date$
  */
 public class JBreakLabel extends JLabel {
+
+    //~ Static fields/initializers ---------------------------------------------
+
     public static final String OPEN_TAG = "<html>";
     public static final String END_TAG = "</html>";
     public static final String BREAK = "<br>";
     public static final String DIV = "-";
+
+    //~ Instance fields --------------------------------------------------------
+
     private boolean strict;
     private int lim;
 
-    /** Creates a new instance of JBreakLabel */
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new instance of JBreakLabel.
+     */
     public JBreakLabel() {
         this("", 50, true);
     }
 
-    public JBreakLabel(int lim, boolean strict) {
+    /**
+     * Creates a new JBreakLabel object.
+     *
+     * @param  lim     DOCUMENT ME!
+     * @param  strict  DOCUMENT ME!
+     */
+    public JBreakLabel(final int lim, final boolean strict) {
         this("", lim, strict);
     }
 
-    public JBreakLabel(String text, int lim, boolean strict) {
+    /**
+     * Creates a new JBreakLabel object.
+     *
+     * @param  text    DOCUMENT ME!
+     * @param  lim     DOCUMENT ME!
+     * @param  strict  DOCUMENT ME!
+     */
+    public JBreakLabel(final String text, final int lim, final boolean strict) {
         super();
         super.setText(process(text, lim, strict));
         this.lim = lim;
         this.strict = strict;
     }
 
-    private String process(String s, int lim, boolean strict) {
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   s       DOCUMENT ME!
+     * @param   lim     DOCUMENT ME!
+     * @param   strict  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private String process(final String s, final int lim, final boolean strict) {
         if (s.length() > lim) {
-            String[] subs = s.split("\\s");
-            StringBuffer sb = new StringBuffer();
+            final String[] subs = s.split("\\s");
+            final StringBuffer sb = new StringBuffer();
             int lastbreak = 0;
             for (String act : subs) {
-                if (((sb.length() - lastbreak + act.length()) <= lim) || sb.length() == 0) {
+                if (((sb.length() - lastbreak + act.length()) <= lim) || (sb.length() == 0)) {
                     sb.append(" ");
                     sb.append(act);
-                } else if (act.length() <= lim || !strict) {
+                } else if ((act.length() <= lim) || !strict) {
                     sb.append(BREAK);
                     lastbreak = sb.length();
                     if (act.substring(1, 1).matches("\\s")) {
@@ -56,7 +99,7 @@ public class JBreakLabel extends JLabel {
                     sb.append(act);
                 } else {
                     int part = 0;
-                    while (act.length() >= part + lim - 1) {
+                    while (act.length() >= (part + lim - 1)) {
                         sb.append(BREAK);
                         sb.append(act.substring(part, part = part + lim - 1));
                         sb.append(DIV);
@@ -74,21 +117,38 @@ public class JBreakLabel extends JLabel {
         return s;
     }
 
-    private String process(String s) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   s  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private String process(final String s) {
         return process(s, this.lim, this.strict);
     }
 
     @Override
-    public void setText(String text) {
+    public void setText(final String text) {
         super.setText(process(text, lim, strict));
     }
 
-    public void setLim(int lim) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  lim  DOCUMENT ME!
+     */
+    public void setLim(final int lim) {
         this.lim = lim;
         super.setText(process(super.getText()));
     }
 
-    public void setStrict(boolean strict) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  strict  DOCUMENT ME!
+     */
+    public void setStrict(final boolean strict) {
         this.strict = strict;
         super.setText(process(super.getText()));
     }

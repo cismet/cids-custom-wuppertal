@@ -1,71 +1,73 @@
-/*
- * PrintingToolTip.java
- * Copyright (C) 2005 by:
- *
- *----------------------------
- * cismet GmbH
- * Goebenstrasse 40
- * 66117 Saarbruecken
- * http://www.cismet.de
- *----------------------------
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
- *
- * You should have received a copy of the GNU General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
- *----------------------------
- * Author:
- * thorsten.hell@cismet.de
- *----------------------------
- *
- * Created on 17. November 2006, 11:09
- *
- */
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.cids.custom.objectrenderer.utils.alkis.print;
 
 import edu.umd.cs.piccolo.PNode;
 import edu.umd.cs.piccolo.nodes.PImage;
 import edu.umd.cs.piccolo.nodes.PPath;
 import edu.umd.cs.piccolo.nodes.PText;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.geom.RoundRectangle2D;
 
 /**
+ * DOCUMENT ME!
  *
- * @author thorsten.hell@cismet.de
+ * @author   thorsten.hell@cismet.de
+ * @version  $Revision$, $Date$
  */
 public class AlkisPrintingToolTip extends PNode {
 
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new AlkisPrintingToolTip object.
+     */
     public AlkisPrintingToolTip() {
         this(new Color(255, 255, 222, 200));
     }
 
-    /** Creates a new instance of PrintingToolTip */
-    public AlkisPrintingToolTip(Color backgroundColor) {
-        PImage image = new PImage(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/alkis/frameprint64.png")).getImage());
+    /**
+     * Creates a new instance of PrintingToolTip.
+     *
+     * @param  backgroundColor  DOCUMENT ME!
+     */
+    public AlkisPrintingToolTip(final Color backgroundColor) {
+        final PImage image = new PImage(new javax.swing.ImageIcon(
+                    getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/alkis/frameprint64.png")).getImage());
         image.setOffset(10, 10);
-        PText t1 = new PText("Heading");
-        Font defaultFont = t1.getFont();
-        Font boldDefaultFont = new Font(defaultFont.getName(), defaultFont.getStyle() + Font.BOLD, defaultFont.getSize());
+        final PText t1 = new PText("Heading");
+        final Font defaultFont = t1.getFont();
+        final Font boldDefaultFont = new Font(defaultFont.getName(),
+                defaultFont.getStyle()
+                        + Font.BOLD,
+                defaultFont.getSize());
         t1.setFont(boldDefaultFont);
-        PText t2 = new PText("-Anweisung 1");
-        PText t3 = new PText("-Anweisung 2");
-        PText t4 = new PText("-Anweisung 3");
-        double textHeight = t1.getHeight() + 5 + t2.getHeight() + 5 + t3.getHeight() + 5 + t4.getHeight();
-        double textWidth = Math.max(Math.max(t1.getWidth(), t2.getWidth()), Math.max(t3.getWidth(), t4.getWidth()));
-        double backgroundHeight = Math.max(textHeight, image.getHeight());
-        PPath background = new PPath(new RoundRectangle2D.Double(0, 0, 10 + image.getWidth() + textWidth + 10, 5 + backgroundHeight + 5, 10, 10));
+        final PText t2 = new PText("-Anweisung 1");
+        final PText t3 = new PText("-Anweisung 2");
+        final PText t4 = new PText("-Anweisung 3");
+        final double textHeight = t1.getHeight() + 5 + t2.getHeight() + 5 + t3.getHeight() + 5 + t4.getHeight();
+        final double textWidth = Math.max(Math.max(t1.getWidth(), t2.getWidth()),
+                Math.max(t3.getWidth(), t4.getWidth()));
+        final double backgroundHeight = Math.max(textHeight, image.getHeight());
+        final PPath background = new PPath(new RoundRectangle2D.Double(
+                    0,
+                    0,
+                    10
+                            + image.getWidth()
+                            + textWidth
+                            + 10,
+                    5
+                            + backgroundHeight
+                            + 5,
+                    10,
+                    10));
         background.setPaint(backgroundColor);
         background.addChild(image);
         background.addChild(t1);

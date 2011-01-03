@@ -1,27 +1,42 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package de.cismet.cids.custom.featurerenderer.wunda_blau;
 
-import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
-import de.cismet.cids.dynamics.CidsBean;
-import de.cismet.cids.featurerenderer.CustomCidsFeatureRenderer;
-import de.cismet.cismap.commons.Refreshable;
-import de.cismet.cismap.commons.gui.piccolo.FeatureAnnotationSymbol;
 import java.net.URL;
+
 import javax.swing.JComponent;
 
+import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
+
+import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.featurerenderer.CustomCidsFeatureRenderer;
+
+import de.cismet.cismap.commons.Refreshable;
+import de.cismet.cismap.commons.gui.piccolo.FeatureAnnotationSymbol;
+
 /**
+ * DOCUMENT ME!
  *
- * @author srichter
+ * @author   srichter
+ * @version  $Revision$, $Date$
  */
 public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRenderer {
 
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Poi_locationinstanceFeatureRenderer.class);
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(
+            Poi_locationinstanceFeatureRenderer.class);
     private static final FeatureAnnotationSymbol DEFAULT_SYMBOL;
-    private FeatureAnnotationSymbol symbol;
-    private boolean assigned = false;
 
     static {
         DEFAULT_SYMBOL = getSymbolFromResourceString(StaticProperties.POI_SIGNATUR_DEFAULT_ICON);
@@ -31,23 +46,36 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
         }
     }
 
-    private static final FeatureAnnotationSymbol getSymbolFromResourceString(String in) {
-        if (in != null && in.length() > 0) {
+    //~ Instance fields --------------------------------------------------------
+
+    private FeatureAnnotationSymbol symbol;
+    private boolean assigned = false;
+
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   in  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static FeatureAnnotationSymbol getSymbolFromResourceString(final String in) {
+        if ((in != null) && (in.length() > 0)) {
             try {
-                //first try to load from jar
+                // first try to load from jar
                 URL symbolURL = Object.class.getResource(in);
 
                 if (symbolURL == null) {
-                    //otherwise try to resolve directly
+                    // otherwise try to resolve directly
                     symbolURL = new URL(in);
                 }
                 if (symbolURL != null) {
-                    FeatureAnnotationSymbol ret = new FeatureAnnotationSymbol(symbolURL);
+                    final FeatureAnnotationSymbol ret = new FeatureAnnotationSymbol(symbolURL);
                     if (ret == null) {
                         log.error("konnte kein FAS aus:" + symbolURL + "erzeugen");
                     }
                     return ret;
-
                 } else {
                     log.error("FAS: konnte URL nicht erzeugen:" + symbolURL);
                 }
@@ -76,7 +104,7 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
                 if (symbol == null) {
                     o = cidsBean.getProperty("mainlocationtype");
                     if (o instanceof CidsBean) {
-                        iconUrl = getUrlStringFromSignature(((CidsBean) o).getProperty("signatur"));
+                        iconUrl = getUrlStringFromSignature(((CidsBean)o).getProperty("signatur"));
                         if (iconUrl != null) {
                             symbol = getSymbolFromResourceString(iconUrl);
                         }
@@ -84,7 +112,7 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
                     if (symbol == null) {
                         o = cidsBean.getProperty("mainlocationtype");
                         if (o instanceof CidsBean) {
-                            final CidsBean mainLocationType = (CidsBean) o;
+                            final CidsBean mainLocationType = (CidsBean)o;
                             o = mainLocationType.getProperty("signatur");
                             iconUrl = getUrlStringFromSignature(o);
                             if (iconUrl != null) {
@@ -106,13 +134,21 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
         }
     }
 
-    private final String getUrlStringFromSignature(Object signature) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   signature  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private String getUrlStringFromSignature(final Object signature) {
         if (signature instanceof CidsBean) {
-            final CidsBean signatur = (CidsBean) signature;
+            final CidsBean signatur = (CidsBean)signature;
             try {
                 final Object fileName = signatur.getProperty("filename");
                 if (fileName != null) {
-                    String ret = StaticProperties.POI_SIGNATUR_URL_PREFIX + fileName + StaticProperties.POI_SIGNATUR_URL_SUFFIX;
+                    final String ret = StaticProperties.POI_SIGNATUR_URL_PREFIX + fileName
+                                + StaticProperties.POI_SIGNATUR_URL_SUFFIX;
                     log.info("Signatur Url: " + ret);
                     return ret;
                 }
@@ -125,7 +161,7 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
 
     @Override
     public FeatureAnnotationSymbol getPointSymbol() {
-        //BUGFIX - ugly but necessary
+        // BUGFIX - ugly but necessary
         if (!assigned) {
             assign();
         }
@@ -145,7 +181,7 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
     }
 
     @Override
-    public JComponent getInfoComponent(Refreshable refresh) {
+    public JComponent getInfoComponent(final Refreshable refresh) {
         return null;
     }
 }

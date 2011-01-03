@@ -1,8 +1,14 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /*
  * Alb_baulastEditorPanel.java
  *
@@ -11,27 +17,22 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.ui.ComponentRegistry;
+
 import Sirius.server.middleware.types.AbstractAttributeRepresentationFormater;
 import Sirius.server.middleware.types.LightweightMetaObject;
 import Sirius.server.middleware.types.MetaObject;
-import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
-import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
-import de.cismet.cids.custom.objectrenderer.utils.FlurstueckFinder;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.dynamics.CidsBean;
-import de.cismet.cids.dynamics.DisposableCidsBeanStore;
-import de.cismet.cids.editors.DefaultBindableDateChooser;
-import de.cismet.tools.CismetThreadPool;
-import de.cismet.tools.collections.TypeSafeCollections;
+
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
+
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -41,24 +42,98 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
-import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+
+import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+
+import de.cismet.cids.dynamics.CidsBean;
+import de.cismet.cids.dynamics.DisposableCidsBeanStore;
+
+import de.cismet.cids.editors.DefaultBindableDateChooser;
+
+import de.cismet.tools.CismetThreadPool;
+
+import de.cismet.tools.collections.TypeSafeCollections;
 
 /**
+ * DOCUMENT ME!
  *
- * @author srichter
+ * @author   srichter
+ * @version  $Revision$, $Date$
  */
 public class Alb_baulastEditorPanel extends javax.swing.JPanel implements DisposableCidsBeanStore {
 
-    static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_baulastEditorPanel.class);
-    private CidsBean cidsBean;
-    private Collection<MetaObject> allSelectedObjects;
-    private final boolean editable;
-    private final Collection<JComponent> editableComponents;
-//    private boolean landParcelListInitialized = false;
-    private boolean baulastArtenListInitialized = false;
+    //~ Static fields/initializers ---------------------------------------------
 
-    /** Creates new form Alb_baulastEditorPanel */
-    public Alb_baulastEditorPanel(boolean editable) {
+    static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_baulastEditorPanel.class);
+    // End of variables declaration//GEN-END:variables
+    private static final ComboBoxModel waitModel = new DefaultComboBoxModel(new String[] { "Wird geladen..." });
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddArt;
+    private javax.swing.JButton btnAddBeguenstigt;
+    private javax.swing.JButton btnAddBelastet;
+    private javax.swing.JButton btnMenAbort1;
+    private javax.swing.JButton btnMenOk1;
+    private javax.swing.JButton btnRemoveArt;
+    private javax.swing.JButton btnRemoveBeguenstigt;
+    private javax.swing.JButton btnRemoveBelastet;
+    private javax.swing.JComboBox cbBaulastArt;
+    private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooser1;
+    private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooser2;
+    private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooser3;
+    private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooser4;
+    private javax.swing.JDialog dlgAddBaulastArt;
+    private javax.swing.JLabel lblDescBaulastart;
+    private javax.swing.JLabel lblDescBefristungsdatum;
+    private javax.swing.JLabel lblDescEintragungsdatum;
+    private javax.swing.JLabel lblDescGeschlossenAm;
+    private javax.swing.JLabel lblDescLageplan;
+    private javax.swing.JLabel lblDescLaufendeNr;
+    private javax.swing.JLabel lblDescLoeschungsdatum;
+    private javax.swing.JLabel lblDescTextblatt;
+    private javax.swing.JLabel lblHeadBegFlurstuecke;
+    private javax.swing.JLabel lblHeadBelFlurstuecke;
+    private javax.swing.JLabel lblHeadInfo;
+    private javax.swing.JLabel lblLastInMap;
+    private javax.swing.JLabel lblSuchwortEingeben1;
+    private javax.swing.JList lstBaulastArt;
+    private javax.swing.JList lstFlurstueckeBeguenstigt;
+    private javax.swing.JList lstFlurstueckeBelastet;
+    private javax.swing.JPanel panAddBaulastArt;
+    private javax.swing.JPanel panArtControls;
+    private javax.swing.JPanel panControlsFSBeg;
+    private javax.swing.JPanel panControlsFSBel;
+    private javax.swing.JPanel panMain;
+    private javax.swing.JPanel panMenButtons1;
+    private de.cismet.tools.gui.RoundedPanel rpFSBeguenstigt;
+    private de.cismet.tools.gui.RoundedPanel rpFSBelastet;
+    private de.cismet.tools.gui.SemiRoundedPanel rpHeadInfo;
+    private de.cismet.tools.gui.RoundedPanel rpInfo;
+    private javax.swing.JScrollPane scpBaulastart;
+    private javax.swing.JScrollPane scpFlurstueckeBeguenstigt;
+    private javax.swing.JScrollPane scpFlurstueckeBelastet;
+    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel1;
+    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel2;
+    private de.cismet.cids.editors.converters.SqlDateToUtilDateConverter sqlDateToUtilDateConverter;
+    private javax.swing.JTextField txtLageplan;
+    private javax.swing.JTextField txtLaufendeNr;
+    private javax.swing.JTextField txtTextblatt;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
+
+    /**
+     * Creates new form Alb_baulastEditorPanel.
+     */
+    public Alb_baulastEditorPanel() {
+        this(true);
+    }
+
+    /**
+     * Creates new form Alb_baulastEditorPanel.
+     *
+     * @param  editable  DOCUMENT ME!
+     */
+    public Alb_baulastEditorPanel(final boolean editable) {
         this.editable = editable;
         this.editableComponents = TypeSafeCollections.newArrayList();
         initComponents();
@@ -69,9 +144,11 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         dlgAddBaulastArt.pack();
         dlgAddBaulastArt.setLocationRelativeTo(this);
         AutoCompleteDecorator.decorate(cbBaulastArt);
-        
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     private void initEditableComponents() {
         editableComponents.add(txtLageplan);
         editableComponents.add(txtLaufendeNr);
@@ -87,9 +164,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
             if (!editable) {
                 editableComponent.setBorder(null);
                 if (editableComponent instanceof JTextField) {
-                    ((JTextField) editableComponent).setEditable(false);
+                    ((JTextField)editableComponent).setEditable(false);
                 } else if (editableComponent instanceof DefaultBindableDateChooser) {
-                    final DefaultBindableDateChooser dateChooser = (DefaultBindableDateChooser) editableComponent;
+                    final DefaultBindableDateChooser dateChooser = (DefaultBindableDateChooser)editableComponent;
 //                    dateChooser.setEditable(false);
                     dateChooser.setEnabled(false);
                     dateChooser.getEditor().setDisabledTextColor(Color.BLACK);
@@ -107,15 +184,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         }
     }
 
-    /** Creates new form Alb_baulastEditorPanel */
-    public Alb_baulastEditorPanel() {
-        this(true);
-    }
-
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -204,10 +275,12 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
 
         btnMenAbort1.setText("Abbrechen");
         btnMenAbort1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenAbort1ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnMenAbort1ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -220,10 +293,12 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         btnMenOk1.setMinimumSize(new java.awt.Dimension(85, 23));
         btnMenOk1.setPreferredSize(new java.awt.Dimension(85, 23));
         btnMenOk1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenOk1ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnMenOk1ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -247,22 +322,32 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
 
         rpFSBeguenstigt.setMaximumSize(new java.awt.Dimension(270, 195));
 
-        scpFlurstueckeBeguenstigt.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5), javax.swing.BorderFactory.createEtchedBorder()));
+        scpFlurstueckeBeguenstigt.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+                javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5),
+                javax.swing.BorderFactory.createEtchedBorder()));
         scpFlurstueckeBeguenstigt.setMaximumSize(new java.awt.Dimension(270, 142));
         scpFlurstueckeBeguenstigt.setMinimumSize(new java.awt.Dimension(270, 142));
         scpFlurstueckeBeguenstigt.setOpaque(false);
 
         lstFlurstueckeBeguenstigt.setFixedCellWidth(270);
 
-        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.flurstuecke_beguenstigt}");
-        org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstFlurstueckeBeguenstigt);
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
+                "${cidsBean.flurstuecke_beguenstigt}");
+        org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings
+                    .createJListBinding(
+                        org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                        this,
+                        eLProperty,
+                        lstFlurstueckeBeguenstigt);
         bindingGroup.addBinding(jListBinding);
 
         lstFlurstueckeBeguenstigt.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lstFlurstueckeBeguenstigtMouseClicked(evt);
-            }
-        });
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lstFlurstueckeBeguenstigtMouseClicked(evt);
+                }
+            });
         scpFlurstueckeBeguenstigt.setViewportView(lstFlurstueckeBeguenstigt);
 
         rpFSBeguenstigt.add(scpFlurstueckeBeguenstigt, java.awt.BorderLayout.CENTER);
@@ -281,28 +366,34 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         panControlsFSBeg.setOpaque(false);
         panControlsFSBeg.setLayout(new java.awt.GridBagLayout());
 
-        btnAddBeguenstigt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddBeguenstigt.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddBeguenstigt.setMaximumSize(new java.awt.Dimension(43, 25));
         btnAddBeguenstigt.setMinimumSize(new java.awt.Dimension(43, 25));
         btnAddBeguenstigt.setPreferredSize(new java.awt.Dimension(43, 25));
         btnAddBeguenstigt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddBeguenstigtActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnAddBeguenstigtActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panControlsFSBeg.add(btnAddBeguenstigt, gridBagConstraints);
 
-        btnRemoveBeguenstigt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveBeguenstigt.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemoveBeguenstigt.setMaximumSize(new java.awt.Dimension(43, 25));
         btnRemoveBeguenstigt.setMinimumSize(new java.awt.Dimension(43, 25));
         btnRemoveBeguenstigt.setPreferredSize(new java.awt.Dimension(43, 25));
         btnRemoveBeguenstigt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemoveBeguenstigtActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnRemoveBeguenstigtActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -322,7 +413,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
 
         rpFSBelastet.setMaximumSize(new java.awt.Dimension(270, 195));
 
-        scpFlurstueckeBelastet.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5), javax.swing.BorderFactory.createEtchedBorder()));
+        scpFlurstueckeBelastet.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+                javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5),
+                javax.swing.BorderFactory.createEtchedBorder()));
         scpFlurstueckeBelastet.setMaximumSize(new java.awt.Dimension(270, 142));
         scpFlurstueckeBelastet.setMinimumSize(new java.awt.Dimension(270, 142));
         scpFlurstueckeBelastet.setOpaque(false);
@@ -330,14 +423,20 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         lstFlurstueckeBelastet.setFixedCellWidth(270);
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.flurstuecke_belastet}");
-        jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstFlurstueckeBelastet);
+        jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                eLProperty,
+                lstFlurstueckeBelastet);
         bindingGroup.addBinding(jListBinding);
 
         lstFlurstueckeBelastet.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lstFlurstueckeBelastetMouseClicked(evt);
-            }
-        });
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lstFlurstueckeBelastetMouseClicked(evt);
+                }
+            });
         scpFlurstueckeBelastet.setViewportView(lstFlurstueckeBelastet);
 
         rpFSBelastet.add(scpFlurstueckeBelastet, java.awt.BorderLayout.CENTER);
@@ -356,28 +455,34 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         panControlsFSBel.setOpaque(false);
         panControlsFSBel.setLayout(new java.awt.GridBagLayout());
 
-        btnAddBelastet.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddBelastet.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddBelastet.setMaximumSize(new java.awt.Dimension(43, 25));
         btnAddBelastet.setMinimumSize(new java.awt.Dimension(43, 25));
         btnAddBelastet.setPreferredSize(new java.awt.Dimension(43, 25));
         btnAddBelastet.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddBelastetActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnAddBelastetActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panControlsFSBel.add(btnAddBelastet, gridBagConstraints);
 
-        btnRemoveBelastet.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveBelastet.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemoveBelastet.setMaximumSize(new java.awt.Dimension(43, 25));
         btnRemoveBelastet.setMinimumSize(new java.awt.Dimension(43, 25));
         btnRemoveBelastet.setPreferredSize(new java.awt.Dimension(43, 25));
         btnRemoveBelastet.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemoveBelastetActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnRemoveBelastetActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -445,7 +550,12 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         rpInfo.add(lblDescTextblatt, gridBagConstraints);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.textblatt}"), txtTextblatt, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.textblatt}"),
+                txtTextblatt,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("nicht verfügbar");
         binding.setSourceUnreadableValue("");
         bindingGroup.addBinding(binding);
@@ -460,7 +570,12 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
         rpInfo.add(txtTextblatt, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.laufende_nummer}"), txtLaufendeNr, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.laufende_nummer}"),
+                txtLaufendeNr,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("nicht verfügbar");
         binding.setSourceUnreadableValue("");
         bindingGroup.addBinding(binding);
@@ -483,7 +598,12 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         rpInfo.add(lblDescLageplan, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.lageplan}"), txtLageplan, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.lageplan}"),
+                txtLageplan,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("nicht verfügbar");
         binding.setSourceUnreadableValue("");
         bindingGroup.addBinding(binding);
@@ -498,7 +618,12 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         rpInfo.add(txtLageplan, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.loeschungsdatum}"), defaultBindableDateChooser4, org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.loeschungsdatum}"),
+                defaultBindableDateChooser4,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
         binding.setSourceNullValue(null);
         binding.setSourceUnreadableValue(null);
         binding.setConverter(sqlDateToUtilDateConverter);
@@ -514,7 +639,12 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         rpInfo.add(defaultBindableDateChooser4, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.eintragungsdatum}"), defaultBindableDateChooser1, org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.eintragungsdatum}"),
+                defaultBindableDateChooser1,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
         binding.setSourceNullValue(null);
         binding.setSourceUnreadableValue(null);
         binding.setConverter(sqlDateToUtilDateConverter);
@@ -529,7 +659,12 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         rpInfo.add(defaultBindableDateChooser1, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.befristungsdatum}"), defaultBindableDateChooser2, org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.befristungsdatum}"),
+                defaultBindableDateChooser2,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
         binding.setSourceNullValue(null);
         binding.setSourceUnreadableValue(null);
         binding.setConverter(sqlDateToUtilDateConverter);
@@ -544,7 +679,12 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         rpInfo.add(defaultBindableDateChooser2, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geschlossen_am}"), defaultBindableDateChooser3, org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geschlossen_am}"),
+                defaultBindableDateChooser3,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
         binding.setSourceNullValue(null);
         binding.setSourceUnreadableValue(null);
         binding.setConverter(sqlDateToUtilDateConverter);
@@ -571,14 +711,17 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(5, 26, 5, 0);
         rpHeadInfo.add(lblHeadInfo, gridBagConstraints);
 
-        lblLastInMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom-best-fit.png"))); // NOI18N
+        lblLastInMap.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom-best-fit.png"))); // NOI18N
         lblLastInMap.setToolTipText("Flurstücke der laufenden Nummer in Karte anzeigen");
         lblLastInMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblLastInMap.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblLastInMapMouseClicked(evt);
-            }
-        });
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblLastInMapMouseClicked(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -608,7 +751,11 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         scpBaulastart.setPreferredSize(new java.awt.Dimension(150, 75));
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.art}");
-        jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstBaulastArt);
+        jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                eLProperty,
+                lstBaulastArt);
         bindingGroup.addBinding(jListBinding);
 
         scpBaulastart.setViewportView(lstBaulastArt);
@@ -625,15 +772,18 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         panArtControls.setOpaque(false);
         panArtControls.setLayout(new java.awt.GridBagLayout());
 
-        btnAddArt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddArt.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddArt.setMaximumSize(new java.awt.Dimension(43, 25));
         btnAddArt.setMinimumSize(new java.awt.Dimension(43, 25));
         btnAddArt.setPreferredSize(new java.awt.Dimension(43, 25));
         btnAddArt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddArtActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnAddArtActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 8;
@@ -641,15 +791,18 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panArtControls.add(btnAddArt, gridBagConstraints);
 
-        btnRemoveArt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveArt.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemoveArt.setMaximumSize(new java.awt.Dimension(43, 25));
         btnRemoveArt.setMinimumSize(new java.awt.Dimension(43, 25));
         btnRemoveArt.setPreferredSize(new java.awt.Dimension(43, 25));
         btnRemoveArt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemoveArtActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnRemoveArtActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 9;
@@ -674,45 +827,95 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         add(panMain, java.awt.BorderLayout.CENTER);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
+    //~ Instance fields --------------------------------------------------------
+
+    private CidsBean cidsBean;
+    private Collection<MetaObject> allSelectedObjects;
+    private final boolean editable;
+    private final Collection<JComponent> editableComponents;
+//    private boolean landParcelListInitialized = false;
+    private boolean baulastArtenListInitialized = false;
+
+    private final FlurstueckSelectionDialoge fsDialoge;
+
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     private MetaObject[] getLWBaulastarten() {
-        return ObjectRendererUtils.getLightweightMetaObjectsForQuery("alb_baulast_art", "select id,baulast_art from alb_baulast_art order by baulast_art", new String[]{"baulast_art"}, new AbstractAttributeRepresentationFormater() {
+        return ObjectRendererUtils.getLightweightMetaObjectsForQuery(
+                "alb_baulast_art",
+                "select id,baulast_art from alb_baulast_art order by baulast_art",
+                new String[] { "baulast_art" },
+                new AbstractAttributeRepresentationFormater() {
 
-            @Override
-            public String getRepresentation() {
-                return String.valueOf(getAttribute("baulast_art"));
-            }
-        });
+                    @Override
+                    public String getRepresentation() {
+                        return String.valueOf(getAttribute("baulast_art"));
+                    }
+                });
     }
 
-    private void btnAddBelastetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddBelastetActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnAddBelastetActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddBelastetActionPerformed
         fsDialoge.setCurrentListToAdd(CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "flurstuecke_belastet"));
         handleAddFlurstueck(true);
-    }//GEN-LAST:event_btnAddBelastetActionPerformed
+    }                                                                                  //GEN-LAST:event_btnAddBelastetActionPerformed
 
-    private void btnAddBeguenstigtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddBeguenstigtActionPerformed
-        fsDialoge.setCurrentListToAdd(CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "flurstuecke_beguenstigt"));
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnAddBeguenstigtActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddBeguenstigtActionPerformed
+        fsDialoge.setCurrentListToAdd(CidsBeanSupport.getBeanCollectionFromProperty(
+                cidsBean,
+                "flurstuecke_beguenstigt"));
         handleAddFlurstueck(false);
-    }//GEN-LAST:event_btnAddBeguenstigtActionPerformed
+    }                                                                                     //GEN-LAST:event_btnAddBeguenstigtActionPerformed
 
-    private void handleAddFlurstueck(boolean belastet) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  belastet  DOCUMENT ME!
+     */
+    private void handleAddFlurstueck(final boolean belastet) {
         if (belastet) {
             fsDialoge.setTitle("Belastetes Flurstück hinzufügen");
         } else {
             fsDialoge.setTitle("Begünstigtes Flurstück hinzufügen");
-        }        
+        }
         fsDialoge.setVisible(true);
     }
 
-    private void btnRemoveBeguenstigtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveBeguenstigtActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnRemoveBeguenstigtActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveBeguenstigtActionPerformed
         final Object[] selection = lstFlurstueckeBeguenstigt.getSelectedValues();
-        if (selection != null && selection.length > 0) {
-            final int answer = JOptionPane.showConfirmDialog(this, "Soll das Flurstück wirklich gelöscht werden?", "Begünstigtes Flurstück entfernen", JOptionPane.YES_NO_OPTION);
+        if ((selection != null) && (selection.length > 0)) {
+            final int answer = JOptionPane.showConfirmDialog(
+                    this,
+                    "Soll das Flurstück wirklich gelöscht werden?",
+                    "Begünstigtes Flurstück entfernen",
+                    JOptionPane.YES_NO_OPTION);
             if (answer == JOptionPane.YES_OPTION) {
-                final Collection flurstueckCol = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "flurstuecke_beguenstigt");
+                final Collection flurstueckCol = CidsBeanSupport.getBeanCollectionFromProperty(
+                        cidsBean,
+                        "flurstuecke_beguenstigt");
                 if (flurstueckCol != null) {
-                    for (Object cur : selection) {
+                    for (final Object cur : selection) {
                         try {
                             flurstueckCol.remove(cur);
                         } catch (Exception e) {
@@ -722,16 +925,27 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveBeguenstigtActionPerformed
+    }                                                                                        //GEN-LAST:event_btnRemoveBeguenstigtActionPerformed
 
-    private void btnRemoveBelastetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveBelastetActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnRemoveBelastetActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveBelastetActionPerformed
         final Object[] selection = lstFlurstueckeBelastet.getSelectedValues();
-        if (selection != null && selection.length > 0) {
-            final int answer = JOptionPane.showConfirmDialog(this, "Soll das Flurstück wirklich gelöscht werden?", "Belastetes Flurstück entfernen", JOptionPane.YES_NO_OPTION);
+        if ((selection != null) && (selection.length > 0)) {
+            final int answer = JOptionPane.showConfirmDialog(
+                    this,
+                    "Soll das Flurstück wirklich gelöscht werden?",
+                    "Belastetes Flurstück entfernen",
+                    JOptionPane.YES_NO_OPTION);
             if (answer == JOptionPane.YES_OPTION) {
-                final Collection flurstueckCol = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "flurstuecke_belastet");
+                final Collection flurstueckCol = CidsBeanSupport.getBeanCollectionFromProperty(
+                        cidsBean,
+                        "flurstuecke_belastet");
                 if (flurstueckCol != null) {
-                    for (Object cur : selection) {
+                    for (final Object cur : selection) {
                         try {
                             flurstueckCol.remove(cur);
                         } catch (Exception e) {
@@ -741,23 +955,37 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveBelastetActionPerformed
+    }                                                                                     //GEN-LAST:event_btnRemoveBelastetActionPerformed
 
-    private void btnAddArtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddArtActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnAddArtActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddArtActionPerformed
         if (!baulastArtenListInitialized) {
             CismetThreadPool.execute(new BaulastArtenComboModelWorker());
         }
         dlgAddBaulastArt.setVisible(true);
-    }//GEN-LAST:event_btnAddArtActionPerformed
+    }                                                                             //GEN-LAST:event_btnAddArtActionPerformed
 
-    private void btnRemoveArtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveArtActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnRemoveArtActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveArtActionPerformed
         final Object[] selection = lstBaulastArt.getSelectedValues();
-        if (selection != null && selection.length > 0) {
-            final int answer = JOptionPane.showConfirmDialog(this, "Soll die Art wirklich gelöscht werden?", "Art entfernen", JOptionPane.YES_NO_OPTION);
+        if ((selection != null) && (selection.length > 0)) {
+            final int answer = JOptionPane.showConfirmDialog(
+                    this,
+                    "Soll die Art wirklich gelöscht werden?",
+                    "Art entfernen",
+                    JOptionPane.YES_NO_OPTION);
             if (answer == JOptionPane.YES_OPTION) {
                 final Collection artCol = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "art");
                 if (artCol != null) {
-                    for (Object cur : selection) {
+                    for (final Object cur : selection) {
                         try {
                             artCol.remove(cur);
                         } catch (Exception e) {
@@ -767,16 +995,26 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveArtActionPerformed
+    }                                                                                //GEN-LAST:event_btnRemoveArtActionPerformed
 
-    private void btnMenAbort1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbort1ActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenAbort1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbort1ActionPerformed
         dlgAddBaulastArt.setVisible(false);
-    }//GEN-LAST:event_btnMenAbort1ActionPerformed
+    }                                                                                //GEN-LAST:event_btnMenAbort1ActionPerformed
 
-    private void btnMenOk1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOk1ActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenOk1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOk1ActionPerformed
         final Object selection = cbBaulastArt.getSelectedItem();
         if (selection instanceof LightweightMetaObject) {
-            final CidsBean selectedBean = ((LightweightMetaObject) selection).getBean();
+            final CidsBean selectedBean = ((LightweightMetaObject)selection).getBean();
             final Collection<CidsBean> colToAdd = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "art");
             if (colToAdd != null) {
                 if (!colToAdd.contains(selectedBean)) {
@@ -785,31 +1023,51 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
             }
         }
         dlgAddBaulastArt.setVisible(false);
-    }//GEN-LAST:event_btnMenOk1ActionPerformed
+    }                                                                             //GEN-LAST:event_btnMenOk1ActionPerformed
 
-    private void lstFlurstueckeBelastetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstFlurstueckeBelastetMouseClicked
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lstFlurstueckeBelastetMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstFlurstueckeBelastetMouseClicked
         if (evt.getClickCount() > 1) {
             handleJumpToListeSelectionBean(lstFlurstueckeBelastet);
         }
-    }//GEN-LAST:event_lstFlurstueckeBelastetMouseClicked
+    }                                                                                      //GEN-LAST:event_lstFlurstueckeBelastetMouseClicked
 
-    private void lstFlurstueckeBeguenstigtMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstFlurstueckeBeguenstigtMouseClicked
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lstFlurstueckeBeguenstigtMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstFlurstueckeBeguenstigtMouseClicked
         if (evt.getClickCount() > 1) {
             handleJumpToListeSelectionBean(lstFlurstueckeBeguenstigt);
         }
-}//GEN-LAST:event_lstFlurstueckeBeguenstigtMouseClicked
+    }                                                                                         //GEN-LAST:event_lstFlurstueckeBeguenstigtMouseClicked
 
-    private void lblLastInMapMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLastInMapMouseClicked
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lblLastInMapMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblLastInMapMouseClicked
         ObjectRendererUtils.switchToCismapMap();
         ObjectRendererUtils.addBeanGeomsAsFeaturesToCismapMap(allSelectedObjects, editable);
-    }//GEN-LAST:event_lblLastInMapMouseClicked
+    }                                                                            //GEN-LAST:event_lblLastInMapMouseClicked
 
-    private void handleJumpToListeSelectionBean(JList list) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  list  DOCUMENT ME!
+     */
+    private void handleJumpToListeSelectionBean(final JList list) {
         final Object selectedObj = list.getSelectedValue();
         if (selectedObj instanceof CidsBean) {
-            Object realFSBean = ((CidsBean) selectedObj).getProperty("fs_referenz");
+            final Object realFSBean = ((CidsBean)selectedObj).getProperty("fs_referenz");
             if (realFSBean instanceof CidsBean) {
-                final MetaObject selMO = ((CidsBean) realFSBean).getMetaObject();
+                final MetaObject selMO = ((CidsBean)realFSBean).getMetaObject();
                 ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObject(selMO, "");
             }
         }
@@ -820,20 +1078,27 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         return cidsBean;
     }
 
-    public void setAllSelectedMetaObjects(Collection<MetaObject> selection) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  selection  DOCUMENT ME!
+     */
+    public void setAllSelectedMetaObjects(final Collection<MetaObject> selection) {
         this.allSelectedObjects = selection;
     }
 
     @Override
-    public void setCidsBean(CidsBean cidsBean) {
+    public void setCidsBean(final CidsBean cidsBean) {
         try {
             bindingGroup.unbind();
             if (cidsBean != null) {
-                int[] belIdx = lstFlurstueckeBelastet.getSelectedIndices();
-                int[] begIdx = lstFlurstueckeBeguenstigt.getSelectedIndices();
-                int[] artenIdx = lstBaulastArt.getSelectedIndices();
+                final int[] belIdx = lstFlurstueckeBelastet.getSelectedIndices();
+                final int[] begIdx = lstFlurstueckeBeguenstigt.getSelectedIndices();
+                final int[] artenIdx = lstBaulastArt.getSelectedIndices();
                 this.cidsBean = cidsBean;
-                List<CidsBean> landParcelCol = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "flurstuecke_belastet");
+                List<CidsBean> landParcelCol = CidsBeanSupport.getBeanCollectionFromProperty(
+                        cidsBean,
+                        "flurstuecke_belastet");
                 Collections.sort(landParcelCol, AlphanumComparator.getInstance());
                 landParcelCol = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "flurstuecke_beguenstigt");
                 Collections.sort(landParcelCol, AlphanumComparator.getInstance());
@@ -846,61 +1111,6 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
             log.error(x, x);
         }
     }
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAddArt;
-    private javax.swing.JButton btnAddBeguenstigt;
-    private javax.swing.JButton btnAddBelastet;
-    private javax.swing.JButton btnMenAbort1;
-    private javax.swing.JButton btnMenOk1;
-    private javax.swing.JButton btnRemoveArt;
-    private javax.swing.JButton btnRemoveBeguenstigt;
-    private javax.swing.JButton btnRemoveBelastet;
-    private javax.swing.JComboBox cbBaulastArt;
-    private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooser1;
-    private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooser2;
-    private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooser3;
-    private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooser4;
-    private javax.swing.JDialog dlgAddBaulastArt;
-    private javax.swing.JLabel lblDescBaulastart;
-    private javax.swing.JLabel lblDescBefristungsdatum;
-    private javax.swing.JLabel lblDescEintragungsdatum;
-    private javax.swing.JLabel lblDescGeschlossenAm;
-    private javax.swing.JLabel lblDescLageplan;
-    private javax.swing.JLabel lblDescLaufendeNr;
-    private javax.swing.JLabel lblDescLoeschungsdatum;
-    private javax.swing.JLabel lblDescTextblatt;
-    private javax.swing.JLabel lblHeadBegFlurstuecke;
-    private javax.swing.JLabel lblHeadBelFlurstuecke;
-    private javax.swing.JLabel lblHeadInfo;
-    private javax.swing.JLabel lblLastInMap;
-    private javax.swing.JLabel lblSuchwortEingeben1;
-    private javax.swing.JList lstBaulastArt;
-    private javax.swing.JList lstFlurstueckeBeguenstigt;
-    private javax.swing.JList lstFlurstueckeBelastet;
-    private javax.swing.JPanel panAddBaulastArt;
-    private javax.swing.JPanel panArtControls;
-    private javax.swing.JPanel panControlsFSBeg;
-    private javax.swing.JPanel panControlsFSBel;
-    private javax.swing.JPanel panMain;
-    private javax.swing.JPanel panMenButtons1;
-    private de.cismet.tools.gui.RoundedPanel rpFSBeguenstigt;
-    private de.cismet.tools.gui.RoundedPanel rpFSBelastet;
-    private de.cismet.tools.gui.SemiRoundedPanel rpHeadInfo;
-    private de.cismet.tools.gui.RoundedPanel rpInfo;
-    private javax.swing.JScrollPane scpBaulastart;
-    private javax.swing.JScrollPane scpFlurstueckeBeguenstigt;
-    private javax.swing.JScrollPane scpFlurstueckeBelastet;
-    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel1;
-    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel2;
-    private de.cismet.cids.editors.converters.SqlDateToUtilDateConverter sqlDateToUtilDateConverter;
-    private javax.swing.JTextField txtLageplan;
-    private javax.swing.JTextField txtLaufendeNr;
-    private javax.swing.JTextField txtTextblatt;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
-    // End of variables declaration//GEN-END:variables
-    private static final ComboBoxModel waitModel = new DefaultComboBoxModel(new String[]{"Wird geladen..."});
-
-    private final FlurstueckSelectionDialoge fsDialoge;
 
     @Override
     public void dispose() {
@@ -909,41 +1119,27 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         bindingGroup.unbind();
     }
 
-//    class FlurstueckComboModelWorker extends SwingWorker<ComboBoxModel, Void> {
-//
-//        public FlurstueckComboModelWorker() {
-//            cbLandParcels.setModel(waitModel);
-//            cbLandParcels.setEnabled(false);
-//            btnMenOk.setEnabled(false);
-//        }
-//
-//        @Override
-//        protected ComboBoxModel doInBackground() throws Exception {
-//            return new DefaultComboBoxModel(getLWLandparcels());
-//        }
-//
-//        @Override
-//        protected void done() {
-//            try {
-//                cbLandParcels.setModel(get());
-////                landParcelListInitialized = true;
-//            } catch (InterruptedException ex) {
-//                log.debug(ex, ex);
-//            } catch (ExecutionException ex) {
-//                log.error(ex, ex);
-//            } finally {
-//                cbLandParcels.setEnabled(true);
-//                btnMenOk.setEnabled(true);
-//            }
-//        }
-//    }
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     class BaulastArtenComboModelWorker extends SwingWorker<ComboBoxModel, Void> {
 
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new BaulastArtenComboModelWorker object.
+         */
         public BaulastArtenComboModelWorker() {
             cbBaulastArt.setModel(waitModel);
             cbBaulastArt.setEnabled(false);
             btnMenOk1.setEnabled(false);
         }
+
+        //~ Methods ------------------------------------------------------------
 
         @Override
         protected ComboBoxModel doInBackground() throws Exception {
@@ -956,7 +1152,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                 cbBaulastArt.setModel(get());
                 baulastArtenListInitialized = true;
             } catch (InterruptedException ex) {
-                log.debug(ex, ex);
+                if (log.isDebugEnabled()) {
+                    log.debug(ex, ex);
+                }
             } catch (ExecutionException ex) {
                 log.error(ex, ex);
             } finally {
@@ -966,18 +1164,35 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     abstract class AbstractFlurstueckComboModelWorker extends SwingWorker<ComboBoxModel, Void> {
+
+        //~ Instance fields ----------------------------------------------------
 
         private final JComboBox box;
         private final boolean switchToBox;
 
-        public AbstractFlurstueckComboModelWorker(JComboBox box, boolean switchToBox) {
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new AbstractFlurstueckComboModelWorker object.
+         *
+         * @param  box          DOCUMENT ME!
+         * @param  switchToBox  DOCUMENT ME!
+         */
+        public AbstractFlurstueckComboModelWorker(final JComboBox box, final boolean switchToBox) {
             this.box = box;
             this.switchToBox = switchToBox;
             box.setVisible(true);
             box.setEnabled(false);
             box.setModel(waitModel);
         }
+
+        //~ Methods ------------------------------------------------------------
 
         @Override
         protected void done() {
@@ -987,7 +1202,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                     box.requestFocus();
                 }
             } catch (InterruptedException ex) {
-                log.debug(ex, ex);
+                if (log.isDebugEnabled()) {
+                    log.debug(ex, ex);
+                }
             } catch (ExecutionException ex) {
                 log.error(ex, ex);
             } finally {
@@ -997,25 +1214,47 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     static final class ColorJScrollpane extends JScrollPane {
+
+        //~ Static fields/initializers -----------------------------------------
 
         private static final int STRIPE_THICKNESS = 5;
 
+        //~ Instance fields ----------------------------------------------------
+
+        private final Color stripeColor;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new ColorJScrollpane object.
+         */
         public ColorJScrollpane() {
             this.stripeColor = Color.LIGHT_GRAY;
         }
 
-        public ColorJScrollpane(Color stripeColor) {
+        /**
+         * Creates a new ColorJScrollpane object.
+         *
+         * @param  stripeColor  DOCUMENT ME!
+         */
+        public ColorJScrollpane(final Color stripeColor) {
             this.stripeColor = stripeColor;
         }
-        private final Color stripeColor;
+
+        //~ Methods ------------------------------------------------------------
 
         @Override
-        public void paint(Graphics g) {
-            final Graphics2D g2d = (Graphics2D) g;
+        public void paint(final Graphics g) {
+            final Graphics2D g2d = (Graphics2D)g;
             final Color backupCol = g2d.getColor();
             g2d.setColor(stripeColor);
-            g2d.fillRect(0, STRIPE_THICKNESS, STRIPE_THICKNESS, getHeight() - 2 * STRIPE_THICKNESS);
+            g2d.fillRect(0, STRIPE_THICKNESS, STRIPE_THICKNESS, getHeight() - (2 * STRIPE_THICKNESS));
             g2d.setColor(backupCol);
             super.paint(g);
         }

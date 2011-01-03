@@ -1,23 +1,26 @@
-
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.cids.custom.wunda_blau.search;
 
-import de.cismet.cids.custom.wunda_blau.search.CidsBaulastSearchStatement.Result;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.cismet.cids.custom.wunda_blau.search.CidsBaulastSearchStatement.Result;
+
 /**
+ * DOCUMENT ME!
  *
- * @author stefan
+ * @author   stefan
+ * @version  $Revision$, $Date$
  */
 public class BaulastSearchInfo {
 
-    public BaulastSearchInfo() {
-        gueltig = true;
-        ungueltig = true;
-        belastet = true;
-        beguenstigt = true;
-        flurstuecke = new ArrayList<FlurstueckInfo>();
-    }
+    //~ Instance fields --------------------------------------------------------
 
     private List<FlurstueckInfo> flurstuecke;
 
@@ -35,123 +38,180 @@ public class BaulastSearchInfo {
     //
     private String art;
 
+    //~ Constructors -----------------------------------------------------------
+
     /**
-     * @return the blattnummer
+     * Creates a new BaulastSearchInfo object.
+     */
+    public BaulastSearchInfo() {
+        gueltig = true;
+        ungueltig = true;
+        belastet = true;
+        beguenstigt = true;
+        flurstuecke = new ArrayList<FlurstueckInfo>();
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  the blattnummer
      */
     public String getBlattnummer() {
         return blattnummer;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public List<FlurstueckInfo> getFlurstuecke() {
         return flurstuecke;
     }
 
     /**
-     * @param blattnummer the blattnummer to set
+     * DOCUMENT ME!
+     *
+     * @param  blattnummer  the blattnummer to set
      */
-    public void setBlattnummer(String blattnummer) {
+    public void setBlattnummer(final String blattnummer) {
         this.blattnummer = blattnummer;
     }
 
     /**
-     * @return the result
+     * DOCUMENT ME!
+     *
+     * @return  the result
      */
     public Result getResult() {
         return result;
     }
 
     /**
-     * @param result the result to set
+     * DOCUMENT ME!
+     *
+     * @param  result  the result to set
      */
-    public void setResult(Result result) {
+    public void setResult(final Result result) {
         this.result = result;
     }
 
     /**
-     * @return the gueltig
+     * DOCUMENT ME!
+     *
+     * @return  the gueltig
      */
     public boolean isGueltig() {
         return gueltig;
     }
 
     /**
-     * @param gueltig the gueltig to set
+     * DOCUMENT ME!
+     *
+     * @param  gueltig  the gueltig to set
      */
-    public void setGueltig(boolean gueltig) {
+    public void setGueltig(final boolean gueltig) {
         this.gueltig = gueltig;
     }
 
-    public void setFlurstuecke(List<FlurstueckInfo> flurstuecke) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  flurstuecke  DOCUMENT ME!
+     */
+    public void setFlurstuecke(final List<FlurstueckInfo> flurstuecke) {
         this.flurstuecke = flurstuecke;
     }
 
     /**
-     * @return the ungueltig
+     * DOCUMENT ME!
+     *
+     * @return  the ungueltig
      */
     public boolean isUngueltig() {
         return ungueltig;
     }
 
     /**
-     * @param ungueltig the ungueltig to set
+     * DOCUMENT ME!
+     *
+     * @param  ungueltig  the ungueltig to set
      */
-    public void setUngueltig(boolean ungueltig) {
+    public void setUngueltig(final boolean ungueltig) {
         this.ungueltig = ungueltig;
     }
 
     /**
-     * @return the belastet
+     * DOCUMENT ME!
+     *
+     * @return  the belastet
      */
     public boolean isBelastet() {
         return belastet;
     }
 
     /**
-     * @param belastet the belastet to set
+     * DOCUMENT ME!
+     *
+     * @param  belastet  the belastet to set
      */
-    public void setBelastet(boolean belastet) {
+    public void setBelastet(final boolean belastet) {
         this.belastet = belastet;
     }
 
     /**
-     * @return the beguenstigt
+     * DOCUMENT ME!
+     *
+     * @return  the beguenstigt
      */
     public boolean isBeguenstigt() {
         return beguenstigt;
     }
 
     /**
-     * @param beguenstigt the beguenstigt to set
+     * DOCUMENT ME!
+     *
+     * @param  beguenstigt  the beguenstigt to set
      */
-    public void setBeguenstigt(boolean beguenstigt) {
+    public void setBeguenstigt(final boolean beguenstigt) {
         this.beguenstigt = beguenstigt;
     }
 
     /**
-     * @return the bounds
+     * DOCUMENT ME!
+     *
+     * @return  the bounds
      */
     public String getBounds() {
         return bounds;
     }
 
     /**
-     * @param bounds the bounds to set
+     * DOCUMENT ME!
+     *
+     * @param  bounds  the bounds to set
      */
-    public void setBounds(String bounds) {
+    public void setBounds(final String bounds) {
         this.bounds = bounds;
     }
 
     /**
-     * @return the art
+     * DOCUMENT ME!
+     *
+     * @return  the art
      */
     public String getArt() {
         return art;
     }
 
     /**
-     * @param art the art to set
+     * DOCUMENT ME!
+     *
+     * @param  art  the art to set
      */
-    public void setArt(String art) {
+    public void setArt(final String art) {
         this.art = art;
     }
 }

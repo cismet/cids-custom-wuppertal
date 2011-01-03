@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * LSAFeatureRenderer.java
  *
@@ -5,18 +12,8 @@
  */
 package de.cismet.cids.featurerenderer;
 
-import de.cismet.cids.annotations.CidsAttribute;
 import edu.umd.cs.piccolo.PNode;
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.Paint;
-import java.awt.image.BufferedImage;
-import java.net.URL;
-import java.util.Properties;
-import java.util.Random;
-import javax.swing.ImageIcon;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
@@ -28,13 +25,40 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.Layer;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.Paint;
+import java.awt.image.BufferedImage;
+
+import java.net.URL;
+
+import java.util.Properties;
+import java.util.Random;
+
+import javax.swing.ImageIcon;
+
+import de.cismet.cids.annotations.CidsAttribute;
+
 /**
- *de.cismet.cids.featurerenderer.UmweltstationFeatureRenderer
- * @author  hell
+ * de.cismet.cids.featurerenderer.UmweltstationFeatureRenderer.
+ *
+ * @author   hell
+ * @version  $Revision$, $Date$
  */
 public class UmweltstationFeatureRenderer extends CustomCidsFeatureRenderer {
 
-    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
+    //~ Instance fields --------------------------------------------------------
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JProgressBar jProgressBar1;
+    private javax.swing.JLabel lblChart;
+    private javax.swing.JLabel lblImagePreview;
+
+    @CidsAttribute("Typ")
+    public String typ;
     Random random = new Random();
     @CidsAttribute("noise")
     Float noise = 0.5f;
@@ -56,78 +80,89 @@ public class UmweltstationFeatureRenderer extends CustomCidsFeatureRenderer {
     Float pmVar = 0.5f;
     @CidsAttribute("noxVar")
     Float noxVar = 0.3f;
-    @CidsAttribute("Typ")
-    public String typ;
-    ImageIcon errorimage = new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/tools/metaobjectrenderer/examples/error.png"));
-    /**
-     * Creates new form LSAFeatureRenderer
-     */
+    ImageIcon errorimage = new javax.swing.ImageIcon(getClass().getResource(
+                "/de/cismet/cids/tools/metaobjectrenderer/examples/error.png"));
+    /** Creates new form LSAFeatureRenderer. */
     Properties properties = new Properties();
 
+    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
+
+    /**
+     * Creates a new UmweltstationFeatureRenderer object.
+     */
     public UmweltstationFeatureRenderer() {
         initComponents();
         setOpaque(false);
         setPreferredSize(new Dimension(350, 150));
         final Thread t = new Thread(new Runnable() {
 
-            public void run() {
-                while (true) {// && refreshable != null && refreshable instanceof PNode && ((PNode) refreshable).getVisible()) {
-                    //if (isVisible()){
-                    refreshDiagram();
-                    if (refreshable instanceof PNode) {
-                        ((PNode) refreshable).repaint();
+                    @Override
+                    public void run() {
+                        while (true) { // && refreshable != null && refreshable instanceof PNode && ((PNode)
+                                       // refreshable).getVisible()) {
+                            // if (isVisible()){
+                            refreshDiagram();
+                            if (refreshable instanceof PNode) {
+                                ((PNode)refreshable).repaint();
+                            }
+                            // }
+                            try {
+                                Thread.sleep(200);
+                            } catch (InterruptedException ex) {
+                                log.error("Fehler beim Darstellen des Diagrams", ex);
+                            }
+                        }
                     }
-                    //}
-                    try {
-                        Thread.sleep(200);
-                    } catch (InterruptedException ex) {
-                        log.error("Fehler beim Darstellen des Diagrams",ex);
-                    }
-                }
-            }
-        });
+                });
 
         t.start();
-
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     private void refreshDiagram() {
-        JFreeChart chart = createChart(createDataset(noiseVar, soxVar, ozVar, pmVar, noxVar));
+        final JFreeChart chart = createChart(createDataset(noiseVar, soxVar, ozVar, pmVar, noxVar));
         chart.setBackgroundPaint(new Color(210, 210, 210));
 
-        BufferedImage image = chart.createBufferedImage(250, 150);
+        final BufferedImage image = chart.createBufferedImage(250, 150);
         lblChart.setIcon(new ImageIcon(image));
     }
 
+    @Override
     public void assign() {
         final Thread t = new Thread(new Runnable() {
 
-            public void run() {
-                try {
-                    final ImageIcon icon = new ImageIcon(new URL("http://s10221/cismet/res/luftmessung/" + typ + ".jpg"));
-                    EventQueue.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            final ImageIcon icon = new ImageIcon(
+                                    new URL("http://s10221/cismet/res/luftmessung/" + typ + ".jpg"));
+                            EventQueue.invokeLater(new Runnable() {
 
-                        public void run() {
-                            lblImagePreview.setIcon(icon);
-                        }
-                    });
-                } catch (Throwable ex) {
-                   log.warn("Fehler beim suchen des Bildes auf s10221. Versuche es auf kif.",ex);
-                    try {
-                        final ImageIcon icon = new ImageIcon(new URL("http://kif/web/luftmessung/" + typ + ".jpg"));
-                        EventQueue.invokeLater(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        lblImagePreview.setIcon(icon);
+                                    }
+                                });
+                        } catch (Throwable ex) {
+                            log.warn("Fehler beim suchen des Bildes auf s10221. Versuche es auf kif.", ex);
+                            try {
+                                final ImageIcon icon = new ImageIcon(
+                                        new URL("http://kif/web/luftmessung/" + typ + ".jpg"));
+                                EventQueue.invokeLater(new Runnable() {
 
-                            public void run() {
-                                lblImagePreview.setIcon(icon);
+                                        @Override
+                                        public void run() {
+                                            lblImagePreview.setIcon(icon);
+                                        }
+                                    });
+                            } catch (Throwable ex2) {
+                                log.error("Auch auf kif nix gefunden", ex);
                             }
-                        });
-                    } catch (Throwable ex2) {
-                        log.error("Auch auf kif nix gefunden",ex);
+                        }
                     }
-                }
-
-            }
-        });
+                });
 
         t.start();
     }
@@ -142,10 +177,9 @@ public class UmweltstationFeatureRenderer extends CustomCidsFeatureRenderer {
         return new Color(100, 100, 100, 50);
     }
 
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
      */
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -163,18 +197,23 @@ public class UmweltstationFeatureRenderer extends CustomCidsFeatureRenderer {
         setBorder(javax.swing.BorderFactory.createEmptyBorder(4, 4, 4, 4));
         setPreferredSize(new java.awt.Dimension(100, 100));
         lblImagePreview.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblImagePreview.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/tools/metaobjectrenderer/examples/load.png")));
+        lblImagePreview.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/tools/metaobjectrenderer/examples/load.png")));
         lblImagePreview.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblImagePreviewMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                lblImagePreviewMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                lblImagePreviewMouseExited(evt);
-            }
-        });
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblImagePreviewMouseClicked(evt);
+                }
+                @Override
+                public void mouseEntered(final java.awt.event.MouseEvent evt) {
+                    lblImagePreviewMouseEntered(evt);
+                }
+                @Override
+                public void mouseExited(final java.awt.event.MouseEvent evt) {
+                    lblImagePreviewMouseExited(evt);
+                }
+            });
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -189,17 +228,34 @@ public class UmweltstationFeatureRenderer extends CustomCidsFeatureRenderer {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         add(lblChart, gridBagConstraints);
+    } // </editor-fold>//GEN-END:initComponents
 
-    }// </editor-fold>//GEN-END:initComponents
-    private void lblImagePreviewMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImagePreviewMouseExited
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lblImagePreviewMouseExited(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblImagePreviewMouseExited
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-    }//GEN-LAST:event_lblImagePreviewMouseExited
+    }                                                                              //GEN-LAST:event_lblImagePreviewMouseExited
 
-    private void lblImagePreviewMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImagePreviewMouseEntered
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lblImagePreviewMouseEntered(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblImagePreviewMouseEntered
         setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-    }//GEN-LAST:event_lblImagePreviewMouseEntered
+    }                                                                               //GEN-LAST:event_lblImagePreviewMouseEntered
 
-    private void lblImagePreviewMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImagePreviewMouseClicked
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lblImagePreviewMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblImagePreviewMouseClicked
 //        try {
 //            String url=properties.getProperty("luftbildschraegaufnahmenservicefull");
 //            String newUrl=null;
@@ -213,15 +269,24 @@ public class UmweltstationFeatureRenderer extends CustomCidsFeatureRenderer {
 //        } catch (Exception e) {
 //
 //        }
-    }//GEN-LAST:event_lblImagePreviewMouseClicked
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JProgressBar jProgressBar1;
-    private javax.swing.JLabel lblChart;
-    private javax.swing.JLabel lblImagePreview;
-    // End of variables declaration//GEN-END:variables
-    CategoryDataset createDataset(float noiseVar, float soxVar, float ozVar, float pmVar, float noxVar) {
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+    } //GEN-LAST:event_lblImagePreviewMouseClicked
+    /**
+     * End of variables declaration//GEN-END:variables.
+     *
+     * @param   noiseVar  DOCUMENT ME!
+     * @param   soxVar    DOCUMENT ME!
+     * @param   ozVar     DOCUMENT ME!
+     * @param   pmVar     DOCUMENT ME!
+     * @param   noxVar    DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    CategoryDataset createDataset(final float noiseVar,
+            final float soxVar,
+            final float ozVar,
+            final float pmVar,
+            final float noxVar) {
+        final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         oz = oz + (ozVar * (random.nextFloat() - 0.5f));
         noise = noise + (noiseVar * (random.nextFloat() - 0.5f));
         sox = sox + (soxVar * (random.nextFloat() - 0.5f));
@@ -267,28 +332,42 @@ public class UmweltstationFeatureRenderer extends CustomCidsFeatureRenderer {
         return dataset;
     }
 
-    static JFreeChart createChart(CategoryDataset dataset) {
-
-        JFreeChart chart = ChartFactory.createBarChart3D(
-                "", // chart title
-                "", // domain axis label
-                "", // range axis label
-                dataset, // data
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   dataset  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    static JFreeChart createChart(final CategoryDataset dataset) {
+        final JFreeChart chart = ChartFactory.createBarChart3D(
+                "",                       // chart title
+                "",                       // domain axis label
+                "",                       // range axis label
+                dataset,                  // data
                 PlotOrientation.VERTICAL, // orientation
-                false, // include legend
-                true, // tooltips
-                false // urls
+                false,                    // include legend
+                true,                     // tooltips
+                false                     // urls
                 );
 
-        CategoryPlot plot = (CategoryPlot) chart.getPlot();
-        CustomBarRenderer3D renderer = new CustomBarRenderer3D();
+        final CategoryPlot plot = (CategoryPlot)chart.getPlot();
+        final CustomBarRenderer3D renderer = new CustomBarRenderer3D();
         plot.setRenderer(renderer);
-        ValueMarker marker = new ValueMarker(0.70, new Color(255, 0, 0, 100),
-                new BasicStroke(1.0f), new Color(200, 200, 255),
-                new BasicStroke(1.0f), 1.0f);
-        ValueMarker marker2 = new ValueMarker(0.30, new Color(255, 255, 0, 100),
-                new BasicStroke(1.0f), new Color(200, 200, 255),
-                new BasicStroke(1.0f), 1.0f);
+        final ValueMarker marker = new ValueMarker(
+                0.70,
+                new Color(255, 0, 0, 100),
+                new BasicStroke(1.0f),
+                new Color(200, 200, 255),
+                new BasicStroke(1.0f),
+                1.0f);
+        final ValueMarker marker2 = new ValueMarker(
+                0.30,
+                new Color(255, 255, 0, 100),
+                new BasicStroke(1.0f),
+                new Color(200, 200, 255),
+                new BasicStroke(1.0f),
+                1.0f);
 //        marker.setLabel("Minimum grade to pass");
 //        marker.setLabelPaint(Color.red);
 //        marker.setLabelAnchor(RectangleAnchor.BOTTOM_LEFT);
@@ -300,29 +379,37 @@ public class UmweltstationFeatureRenderer extends CustomCidsFeatureRenderer {
 
         // couldn't get the label above to appear in front, so using an
         // annotation instead...
-//        CategoryTextAnnotation a = new CategoryTextAnnotation("", "SOx", 0.70);
-//        a.setCategoryAnchor(CategoryAnchor.START);
-//        a.setFont(new Font("SansSerif", Font.PLAIN, 12));
-//        a.setTextAnchor(TextAnchor.BOTTOM_LEFT);
-//        plot.addAnnotation(a);
+// CategoryTextAnnotation a = new CategoryTextAnnotation("", "SOx", 0.70);
+// a.setCategoryAnchor(CategoryAnchor.START);
+// a.setFont(new Font("SansSerif", Font.PLAIN, 12));
+// a.setTextAnchor(TextAnchor.BOTTOM_LEFT);
+// plot.addAnnotation(a);
 //
-//         CategoryTextAnnotation b = new CategoryTextAnnotation("2", "SOx", 0.40);
-//        b.setCategoryAnchor(CategoryAnchor.START);
-//        b.setFont(new Font("SansSerif", Font.PLAIN, 12));
-//        b.setTextAnchor(TextAnchor.BOTTOM_LEFT);
-//        plot.addAnnotation(b);
+// CategoryTextAnnotation b = new CategoryTextAnnotation("2", "SOx", 0.40);
+// b.setCategoryAnchor(CategoryAnchor.START);
+// b.setFont(new Font("SansSerif", Font.PLAIN, 12));
+// b.setTextAnchor(TextAnchor.BOTTOM_LEFT);
+// plot.addAnnotation(b);
 
-        NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+        final NumberAxis rangeAxis = (NumberAxis)plot.getRangeAxis();
         rangeAxis.setVisible(false);
-        //rangeAxis.setNumberFormatOverride(NumberFormat.getPercentInstance());
+        // rangeAxis.setNumberFormatOverride(NumberFormat.getPercentInstance());
         rangeAxis.setAutoRange(false);
         rangeAxis.setRange(0, 1.2);
-        //rangeAxis.setAutoRangeMinimumSize(1);
+        // rangeAxis.setAutoRangeMinimumSize(1);
         return chart;
-
     }
 
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     static class CustomBarRenderer3D extends BarRenderer3D {
+
+        //~ Constructors -------------------------------------------------------
 
         /**
          * Creates a new renderer.
@@ -330,19 +417,20 @@ public class UmweltstationFeatureRenderer extends CustomCidsFeatureRenderer {
         public CustomBarRenderer3D() {
         }
 
+        //~ Methods ------------------------------------------------------------
+
         /**
-         * Returns the paint for an item.  Overrides the default behaviour
-         * inherited from AbstractSeriesRenderer.
+         * Returns the paint for an item. Overrides the default behaviour inherited from AbstractSeriesRenderer.
          *
-         * @param row  the series.
-         * @param column  the category.
+         * @param   row     the series.
+         * @param   column  the category.
          *
-         * @return The item color.
+         * @return  The item color.
          */
         @Override
-        public Paint getItemPaint(int row, int column) {
-            CategoryDataset dataset = getPlot().getDataset();
-            double value = dataset.getValue(row, column).doubleValue();
+        public Paint getItemPaint(final int row, final int column) {
+            final CategoryDataset dataset = getPlot().getDataset();
+            final double value = dataset.getValue(row, column).doubleValue();
             if (value <= 0.30) {
                 return Color.green;
             } else if (value <= 0.70) {

@@ -1,8 +1,14 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /*
  * Arc_stadtbildEditor.java
  *
@@ -13,54 +19,129 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.server.middleware.types.AbstractAttributeRepresentationFormater;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
-import de.cismet.cids.custom.objectrenderer.converter.BooleanConverter;
-import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
-import de.cismet.cids.dynamics.CidsBean;
-import de.cismet.cids.editors.DefaultCustomObjectEditor;
-import de.cismet.cids.editors.FastBindableReferenceCombo;
-import de.cismet.cids.navigator.utils.ClassCacheMultiple;
-import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
-import de.cismet.tools.CismetThreadPool;
-import de.cismet.tools.gui.RoundedPanel;
-import java.awt.Cursor;
-import java.awt.event.KeyEvent;
-import java.util.Collection;
-import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JOptionPane;
-import javax.swing.SwingWorker;
+
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.error.ErrorInfo;
 
+import java.awt.Cursor;
+import java.awt.event.KeyEvent;
+
+import java.util.Collection;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
+
+import de.cismet.cids.custom.objectrenderer.converter.BooleanConverter;
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
+
+import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.editors.DefaultCustomObjectEditor;
+import de.cismet.cids.editors.FastBindableReferenceCombo;
+
+import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+
+import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
+
+import de.cismet.tools.CismetThreadPool;
+
+import de.cismet.tools.gui.RoundedPanel;
+
 /**
+ * DOCUMENT ME!
  *
- * @author srichter
+ * @author   srichter
+ * @version  $Revision$, $Date$
  */
 public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
 
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final String SUCHWORT_TABNAME = "ARC_SUCHWORT";
+
+    //~ Instance fields --------------------------------------------------------
+
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private String latestPicture = "";
-    private static final String SUCHWORT_TABNAME = "ARC_SUCHWORT";
-    private final FastBindableReferenceCombo suchwortModelProvider = new FastBindableReferenceCombo("%1$2s", new String[]{"SUCHWORT"});
-    private final AbstractAttributeRepresentationFormater strasseFormater = new AbstractAttributeRepresentationFormater() {
+    private final FastBindableReferenceCombo suchwortModelProvider = new FastBindableReferenceCombo(
+            "%1$2s",
+            new String[] { "SUCHWORT" });
+    private final AbstractAttributeRepresentationFormater strasseFormater =
+        new AbstractAttributeRepresentationFormater() {
 
-        @Override
-        public final String getRepresentation() {
-            final Object stadtteil = getAttribute("stadtteil");
-            if (stadtteil == null) {
-                return String.valueOf(getAttribute("name"));
-            } else {
-                return getAttribute("name") + " (" + stadtteil + ")";
+            @Override
+            public final String getRepresentation() {
+                final Object stadtteil = getAttribute("stadtteil");
+                if (stadtteil == null) {
+                    return String.valueOf(getAttribute("name"));
+                } else {
+                    return getAttribute("name") + " (" + stadtteil + ")";
+                }
             }
-        }
-    };
+        };
 
-    /** Creates new form Arc_stadtbildEditor */
-    public Arc_stadtbildEditor() {       
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox bcbAuftraggeber;
+    private javax.swing.JComboBox bcbFilmart;
+    private javax.swing.JComboBox bcbFotograf;
+    private javax.swing.JComboBox bcbStrasse;
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnMenAbort;
+    private javax.swing.JButton btnMenOk;
+    private javax.swing.JButton btnRemove;
+    private javax.swing.JComboBox cbGeometrie;
+    private javax.swing.JComboBox cbHauptsuchwort;
+    private javax.swing.JComboBox cbSuchworte;
+    private javax.swing.JCheckBox chkAuswahl;
+    private javax.swing.JCheckBox chkLager;
+    private javax.swing.JCheckBox chkPruefen;
+    private de.cismet.cids.editors.DefaultBindableDateChooser dcAufnahmeDate;
+    private de.cismet.cids.editors.DefaultBindableDateChooser dcEingabeDate;
+    private javax.swing.JDialog dlgAddSuchwort;
+    private javax.swing.JLabel lblAufnahmeDatum;
+    private javax.swing.JLabel lblAuftraggeber;
+    private javax.swing.JLabel lblBildnummer;
+    private javax.swing.JLabel lblBildnummern;
+    private javax.swing.JLabel lblContentStadtteil;
+    private javax.swing.JLabel lblEingabeDatum;
+    private javax.swing.JLabel lblFilmart;
+    private javax.swing.JLabel lblFotograf;
+    private javax.swing.JLabel lblGeometrie;
+    private javax.swing.JLabel lblHauptsuchwort;
+    private javax.swing.JLabel lblHausnummer;
+    private javax.swing.JLabel lblInfo;
+    private de.cismet.cids.custom.objectrenderer.utils.LoaderLabel lblPicture;
+    private javax.swing.JLabel lblStadtteil;
+    private javax.swing.JLabel lblStrasse;
+    private javax.swing.JLabel lblSuchwortEingeben;
+    private javax.swing.JLabel lblSuchworte;
+    private javax.swing.JList lstSuchworte;
+    private javax.swing.JPanel panButtons;
+    private javax.swing.JPanel panContent;
+    private javax.swing.JPanel panMenButtons;
+    private javax.swing.JPanel panNewSuchwort;
+    private javax.swing.JPanel panPicture;
+    private javax.swing.JScrollPane scpInfo;
+    private javax.swing.JScrollPane scpSuchworte;
+    private javax.swing.JTextArea txtAInfo;
+    private javax.swing.JTextField txtBildnummer;
+    private javax.swing.JTextField txtBildnummern;
+    private javax.swing.JTextField txtHausnummer;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
+    // End of variables declaration//GEN-END:variables
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates new form Arc_stadtbildEditor.
+     */
+    public Arc_stadtbildEditor() {
         initComponents();
 //        final MetaClass swClass = ClassCacheMultiple.getMetaClass(domain, "ARC_S");
         suchwortModelProvider.setSorted(true);
@@ -70,7 +151,10 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         AutoCompleteDecorator.decorate(bcbStrasse);
         AutoCompleteDecorator.decorate(bcbFilmart);
         AutoCompleteDecorator.decorate(cbSuchworte);
-        ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(lblPicture, Cursor.HAND_CURSOR, Cursor.DEFAULT_CURSOR);
+        ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(
+            lblPicture,
+            Cursor.HAND_CURSOR,
+            Cursor.DEFAULT_CURSOR);
 
 //        ComboCompleterFilter filter = ComboCompleterFilter.addCompletionMechanism(bcbFotograf);
 //        filter.setCaseSensitive(true);
@@ -94,6 +178,8 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         dlgAddSuchwort.pack();
     }
 
+    //~ Methods ----------------------------------------------------------------
+
     @Override
     public void dispose() {
         super.dispose();
@@ -101,12 +187,9 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         ((DefaultCismapGeometryComboBoxEditor)cbGeometrie).dispose();
     }
 
-
-
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -132,12 +215,15 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         lblFotograf = new javax.swing.JLabel();
         lblAuftraggeber = new javax.swing.JLabel();
         lblStadtteil = new javax.swing.JLabel();
-        bcbFotograf = new FastBindableReferenceCombo("%1$2s", new String[]{"FOTOGRAF"})  ;
+        bcbFotograf = new FastBindableReferenceCombo("%1$2s", new String[] { "FOTOGRAF" });
         lblStrasse = new javax.swing.JLabel();
         scpInfo = new javax.swing.JScrollPane();
         txtAInfo = new javax.swing.JTextArea();
-        bcbStrasse = new FastBindableReferenceCombo("select s.id,s.name,o.stadtteil from arc_strasse s left outer join arc_stadtteil o on s.stadtteil = o.id", strasseFormater, new String[]{"NAME","STADTTEIL"}) ;
-        bcbAuftraggeber = new FastBindableReferenceCombo("%1$2s", new String[]{"AUFTRAGGEBER"}) ;
+        bcbStrasse = new FastBindableReferenceCombo(
+                "select s.id,s.name,o.stadtteil from arc_strasse s left outer join arc_stadtteil o on s.stadtteil = o.id",
+                strasseFormater,
+                new String[] { "NAME", "STADTTEIL" });
+        bcbAuftraggeber = new FastBindableReferenceCombo("%1$2s", new String[] { "AUFTRAGGEBER" });
         lblSuchworte = new javax.swing.JLabel();
         lblHauptsuchwort = new javax.swing.JLabel();
         lblContentStadtteil = new javax.swing.JLabel();
@@ -147,7 +233,7 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         chkAuswahl = new javax.swing.JCheckBox();
         chkLager = new javax.swing.JCheckBox();
         chkPruefen = new javax.swing.JCheckBox();
-        bcbFilmart = new FastBindableReferenceCombo("%1$2s", new String[]{"FILMART"});
+        bcbFilmart = new FastBindableReferenceCombo("%1$2s", new String[] { "FILMART" });
         dcEingabeDate = new de.cismet.cids.editors.DefaultBindableDateChooser();
         dcAufnahmeDate = new de.cismet.cids.editors.DefaultBindableDateChooser();
         lblGeometrie = new javax.swing.JLabel();
@@ -188,10 +274,12 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
 
         btnMenAbort.setText("Abbrechen");
         btnMenAbort.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenAbortActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnMenAbortActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -201,10 +289,12 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
 
         btnMenOk.setText("Ok");
         btnMenOk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenOkActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnMenOkActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -235,21 +325,31 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         txtBildnummer.setMinimumSize(new java.awt.Dimension(300, 20));
         txtBildnummer.setPreferredSize(new java.awt.Dimension(300, 20));
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bildnummer}"), txtBildnummer, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndBildnummer");
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bildnummer}"),
+                txtBildnummer,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndBildnummer");
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
 
         txtBildnummer.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtBildnummerFocusLost(evt);
-            }
-        });
+
+                @Override
+                public void focusLost(final java.awt.event.FocusEvent evt) {
+                    txtBildnummerFocusLost(evt);
+                }
+            });
         txtBildnummer.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtBildnummerKeyPressed(evt);
-            }
-        });
+
+                @Override
+                public void keyPressed(final java.awt.event.KeyEvent evt) {
+                    txtBildnummerKeyPressed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -269,7 +369,13 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         txtBildnummern.setMinimumSize(new java.awt.Dimension(300, 20));
         txtBildnummern.setPreferredSize(new java.awt.Dimension(300, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bildnummern}"), txtBildnummern, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndBildnummern");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bildnummern}"),
+                txtBildnummern,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndBildnummern");
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
@@ -295,7 +401,13 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         txtHausnummer.setMinimumSize(new java.awt.Dimension(300, 20));
         txtHausnummer.setPreferredSize(new java.awt.Dimension(300, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hausnummer}"), txtHausnummer, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndHausnummer");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hausnummer}"),
+                txtHausnummer,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndHausnummer");
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
@@ -346,7 +458,12 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         bcbFotograf.setMinimumSize(new java.awt.Dimension(300, 20));
         bcbFotograf.setPreferredSize(new java.awt.Dimension(300, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fotograf}"), bcbFotograf, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fotograf}"),
+                bcbFotograf,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -372,7 +489,12 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         txtAInfo.setMinimumSize(new java.awt.Dimension(150, 20));
         txtAInfo.setPreferredSize(new java.awt.Dimension(150, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.info}"), txtAInfo, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.info}"),
+                txtAInfo,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
@@ -394,7 +516,12 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         bcbStrasse.setMinimumSize(new java.awt.Dimension(300, 20));
         bcbStrasse.setPreferredSize(new java.awt.Dimension(300, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ort}"), bcbStrasse, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ort}"),
+                bcbStrasse,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -411,7 +538,12 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         bcbAuftraggeber.setMinimumSize(new java.awt.Dimension(300, 20));
         bcbAuftraggeber.setPreferredSize(new java.awt.Dimension(300, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.auftraggeber}"), bcbAuftraggeber, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.auftraggeber}"),
+                bcbAuftraggeber,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -442,7 +574,12 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         lblContentStadtteil.setMinimumSize(new java.awt.Dimension(300, 20));
         lblContentStadtteil.setPreferredSize(new java.awt.Dimension(300, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, bcbStrasse, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.stadtteil.stadtteil}"), lblContentStadtteil, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                bcbStrasse,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedItem.stadtteil.stadtteil}"),
+                lblContentStadtteil,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("-");
         binding.setSourceUnreadableValue("-");
         bindingGroup.addBinding(binding);
@@ -482,7 +619,12 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         chkAuswahl.setText("Auswahl");
         chkAuswahl.setOpaque(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.auswahl}"), chkAuswahl, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.auswahl}"),
+                chkAuswahl,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         binding.setConverter(new BooleanConverter());
@@ -499,7 +641,12 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         chkLager.setText("Lager");
         chkLager.setOpaque(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.lager}"), chkLager, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.lager}"),
+                chkLager,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         binding.setConverter(new BooleanConverter());
@@ -516,7 +663,12 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         chkPruefen.setText("Prüfen");
         chkPruefen.setOpaque(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.pruefen}"), chkPruefen, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.pruefen}"),
+                chkPruefen,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         binding.setConverter(new BooleanConverter());
@@ -535,7 +687,12 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         bcbFilmart.setMinimumSize(new java.awt.Dimension(300, 20));
         bcbFilmart.setPreferredSize(new java.awt.Dimension(300, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.filmart}"), bcbFilmart, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.filmart}"),
+                bcbFilmart,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -550,7 +707,12 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         dcEingabeDate.setMinimumSize(new java.awt.Dimension(300, 20));
         dcEingabeDate.setPreferredSize(new java.awt.Dimension(300, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.eingabedatum}"), dcEingabeDate, org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.eingabedatum}"),
+                dcEingabeDate,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
         binding.setConverter(dcEingabeDate.getConverter());
         bindingGroup.addBinding(binding);
 
@@ -566,7 +728,12 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         dcAufnahmeDate.setMinimumSize(new java.awt.Dimension(300, 20));
         dcAufnahmeDate.setPreferredSize(new java.awt.Dimension(300, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.aufnahmedatum}"), dcAufnahmeDate, org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.aufnahmedatum}"),
+                dcAufnahmeDate,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
         binding.setConverter(dcAufnahmeDate.getConverter());
         bindingGroup.addBinding(binding);
 
@@ -590,7 +757,12 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         cbGeometrie.setMinimumSize(new java.awt.Dimension(300, 20));
         cbGeometrie.setPreferredSize(new java.awt.Dimension(300, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.georeferenz}"), cbGeometrie, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.georeferenz}"),
+                cbGeometrie,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeometrie).getConverter());
         bindingGroup.addBinding(binding);
 
@@ -608,8 +780,14 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
 
         lstSuchworte.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.suchworte}");
-        org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstSuchworte);
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
+                "${cidsBean.suchworte}");
+        final org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings
+                    .createJListBinding(
+                        org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                        this,
+                        eLProperty,
+                        lstSuchworte);
         bindingGroup.addBinding(jListBinding);
 
         scpSuchworte.setViewportView(lstSuchworte);
@@ -624,23 +802,29 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         panButtons.setOpaque(false);
         panButtons.setLayout(new java.awt.GridBagLayout());
 
-        btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAdd.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnAddActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 3, 5);
         panButtons.add(btnAdd, gridBagConstraints);
 
-        btnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemove.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemove.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemoveActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnRemoveActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -659,16 +843,28 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         cbHauptsuchwort.setPreferredSize(new java.awt.Dimension(300, 20));
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.suchworte}");
-        org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, cbHauptsuchwort);
+        final org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings
+                    .createJComboBoxBinding(
+                        org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                        this,
+                        eLProperty,
+                        cbHauptsuchwort);
         bindingGroup.addBinding(jComboBoxBinding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.objekt}"), cbHauptsuchwort, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.objekt}"),
+                cbHauptsuchwort,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         cbHauptsuchwort.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbHauptsuchwortActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cbHauptsuchwortActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 7;
@@ -682,10 +878,12 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
 
         lblPicture.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
         lblPicture.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblPictureMouseClicked(evt);
-            }
-        });
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblPictureMouseClicked(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panPicture.add(lblPicture, gridBagConstraints);
@@ -701,7 +899,7 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         add(panContent, java.awt.BorderLayout.CENTER);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
@@ -711,29 +909,48 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         setNewPicture();
     }
 
-    private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnRemoveActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveActionPerformed
         final Object selection = lstSuchworte.getSelectedValue();
         if (selection != null) {
-            final int answer = JOptionPane.showConfirmDialog(this, "Soll das Suchwort wirklich gelöscht werden?", "Suchwort entfernen", JOptionPane.YES_NO_OPTION);
+            final int answer = JOptionPane.showConfirmDialog(
+                    this,
+                    "Soll das Suchwort wirklich gelöscht werden?",
+                    "Suchwort entfernen",
+                    JOptionPane.YES_NO_OPTION);
             if (answer == JOptionPane.YES_OPTION) {
                 try {
-                    final CidsBean sw = (CidsBean) selection;
+                    final CidsBean sw = (CidsBean)selection;
                     final Object suchworteColl = cidsBean.getProperty("suchworte");
                     if (suchworteColl instanceof Collection) {
-                        ((Collection) suchworteColl).remove(sw);
+                        ((Collection)suchworteColl).remove(sw);
                     }
                 } catch (Exception e) {
                     showExceptionToUser(e);
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveActionPerformed
+    }                                                                             //GEN-LAST:event_btnRemoveActionPerformed
 
-    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnAddActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddActionPerformed
         CismetThreadPool.execute(new ComboBoxWorker());
-    }//GEN-LAST:event_btnAddActionPerformed
+    }                                                                          //GEN-LAST:event_btnAddActionPerformed
 
-    private void btnMenOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOkActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOkActionPerformed
         final String suchwort = lookForNewSuchwort();
         if (suchwort != null) {
             if (suchwort.trim().length() > 0) {
@@ -748,57 +965,106 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
             final Object selItem = cbSuchworte.getSelectedItem();
             if (selItem instanceof MetaObject) {
                 try {
-                    addSuchwortBeanToSuchworte(((MetaObject) selItem).getBean());
+                    addSuchwortBeanToSuchworte(((MetaObject)selItem).getBean());
                 } catch (Exception ex) {
                     log.error(ex, ex);
                 }
             }
         }
         dlgAddSuchwort.setVisible(false);
-}//GEN-LAST:event_btnMenOkActionPerformed
+    }                                                                            //GEN-LAST:event_btnMenOkActionPerformed
 
-    private void btnMenAbortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbortActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenAbortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbortActionPerformed
         dlgAddSuchwort.setVisible(false);
-    }//GEN-LAST:event_btnMenAbortActionPerformed
+    }                                                                               //GEN-LAST:event_btnMenAbortActionPerformed
 
-    private void lblPictureMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPictureMouseClicked
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lblPictureMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblPictureMouseClicked
         if (!evt.isPopupTrigger()) {
             if (lblPicture.getPictureURL() != null) {
                 ObjectRendererUtils.openURL(lblPicture.getPictureURL());
             }
         }
-}//GEN-LAST:event_lblPictureMouseClicked
+    }                                                                          //GEN-LAST:event_lblPictureMouseClicked
 
+    /**
+     * DOCUMENT ME!
+     */
     private void setNewPicture() {
-        if (latestPicture == null || !latestPicture.equals(txtBildnummer.getText())) {
-            final String pictureURL = StaticProperties.ARCHIVAR_URL_PREFIX + txtBildnummer.getText() + StaticProperties.ARCHIVAR_URL_SUFFIX;
+        if ((latestPicture == null) || !latestPicture.equals(txtBildnummer.getText())) {
+            final String pictureURL = StaticProperties.ARCHIVAR_URL_PREFIX + txtBildnummer.getText()
+                        + StaticProperties.ARCHIVAR_URL_SUFFIX;
             lblPicture.setPictureURL(pictureURL);
         }
     }
 
-    private void txtBildnummerFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBildnummerFocusLost
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void txtBildnummerFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtBildnummerFocusLost
         setNewPicture();
-    }//GEN-LAST:event_txtBildnummerFocusLost
+    }                                                                          //GEN-LAST:event_txtBildnummerFocusLost
 
-    private void txtBildnummerKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBildnummerKeyPressed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void txtBildnummerKeyPressed(final java.awt.event.KeyEvent evt) { //GEN-FIRST:event_txtBildnummerKeyPressed
         final int key = evt.getKeyCode();
         if (key == KeyEvent.VK_ENTER) {
             setNewPicture();
         }
-    }//GEN-LAST:event_txtBildnummerKeyPressed
+    }                                                                         //GEN-LAST:event_txtBildnummerKeyPressed
 
-    private void cbHauptsuchwortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbHauptsuchwortActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cbHauptsuchwortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbHauptsuchwortActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbHauptsuchwortActionPerformed
+    } //GEN-LAST:event_cbHauptsuchwortActionPerformed
 
-    private void showExceptionToUser(Exception ex) {
-        final ErrorInfo ei = new ErrorInfo("Fehler", "Beim Vorgang ist ein Fehler aufgetreten", null,
-                null, ex, Level.SEVERE, null);
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  ex  DOCUMENT ME!
+     */
+    private void showExceptionToUser(final Exception ex) {
+        final ErrorInfo ei = new ErrorInfo(
+                "Fehler",
+                "Beim Vorgang ist ein Fehler aufgetreten",
+                null,
+                null,
+                ex,
+                Level.SEVERE,
+                null);
         JXErrorPane.showDialog(this, ei);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   suchwort  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
     private CidsBean createNewSuchwortBeanFromString(final String suchwort) throws Exception {
-        if (suchwort != null && suchwort.trim().length() > 0) {
+        if ((suchwort != null) && (suchwort.trim().length() > 0)) {
             MetaClass suchwortMC = suchwortModelProvider.getMetaClass();
             if (suchwortMC == null) {
                 suchwortMC = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, SUCHWORT_TABNAME);
@@ -814,12 +1080,17 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         return null;
     }
 
-    private final void addSuchwortBeanToSuchworte(final CidsBean newSuchwortBean) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  newSuchwortBean  DOCUMENT ME!
+     */
+    private void addSuchwortBeanToSuchworte(final CidsBean newSuchwortBean) {
         if (newSuchwortBean != null) {
             final Object o = cidsBean.getProperty("suchworte");
             if (o instanceof Collection) {
                 try {
-                    final Collection<CidsBean> col = (Collection) o;
+                    final Collection<CidsBean> col = (Collection)o;
                     for (final CidsBean bean : col) {
                         if (newSuchwortBean.getProperty("suchwort").equals(bean.getProperty("suchwort"))) {
                             log.info("Suchwort " + newSuchwortBean.getProperty("suchwort") + " already present!");
@@ -834,7 +1105,12 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         }
     }
 
-    private final String lookForNewSuchwort() {
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private String lookForNewSuchwort() {
         final Object o = cbSuchworte.getSelectedItem();
         if (o instanceof String) {
             return o.toString();
@@ -842,20 +1118,41 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         return null;
     }
 
-    private final DefaultComboBoxModel initDialogeSuchwortCombobox() throws Exception {
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    private DefaultComboBoxModel initDialogeSuchwortCombobox() throws Exception {
         final MetaObject[] mos = suchwortModelProvider.receiveLightweightMetaObjects();
         final DefaultComboBoxModel model = new DefaultComboBoxModel(mos);
         return model;
     }
 
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     final class ComboBoxWorker extends SwingWorker<DefaultComboBoxModel, Void> {
 
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new ComboBoxWorker object.
+         */
         public ComboBoxWorker() {
             btnAdd.setEnabled(false);
             btnRemove.setEnabled(false);
 //            dlgWait.setLocationRelativeTo(Arc_stadtbildEditor.this);
 //            dlgWait.setVisible(true);
         }
+
+        //~ Methods ------------------------------------------------------------
 
         @Override
         protected DefaultComboBoxModel doInBackground() throws Exception {
@@ -879,53 +1176,4 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
             }
         }
     }
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox bcbAuftraggeber;
-    private javax.swing.JComboBox bcbFilmart;
-    private javax.swing.JComboBox bcbFotograf;
-    private javax.swing.JComboBox bcbStrasse;
-    private javax.swing.JButton btnAdd;
-    private javax.swing.JButton btnMenAbort;
-    private javax.swing.JButton btnMenOk;
-    private javax.swing.JButton btnRemove;
-    private javax.swing.JComboBox cbGeometrie;
-    private javax.swing.JComboBox cbHauptsuchwort;
-    private javax.swing.JComboBox cbSuchworte;
-    private javax.swing.JCheckBox chkAuswahl;
-    private javax.swing.JCheckBox chkLager;
-    private javax.swing.JCheckBox chkPruefen;
-    private de.cismet.cids.editors.DefaultBindableDateChooser dcAufnahmeDate;
-    private de.cismet.cids.editors.DefaultBindableDateChooser dcEingabeDate;
-    private javax.swing.JDialog dlgAddSuchwort;
-    private javax.swing.JLabel lblAufnahmeDatum;
-    private javax.swing.JLabel lblAuftraggeber;
-    private javax.swing.JLabel lblBildnummer;
-    private javax.swing.JLabel lblBildnummern;
-    private javax.swing.JLabel lblContentStadtteil;
-    private javax.swing.JLabel lblEingabeDatum;
-    private javax.swing.JLabel lblFilmart;
-    private javax.swing.JLabel lblFotograf;
-    private javax.swing.JLabel lblGeometrie;
-    private javax.swing.JLabel lblHauptsuchwort;
-    private javax.swing.JLabel lblHausnummer;
-    private javax.swing.JLabel lblInfo;
-    private de.cismet.cids.custom.objectrenderer.utils.LoaderLabel lblPicture;
-    private javax.swing.JLabel lblStadtteil;
-    private javax.swing.JLabel lblStrasse;
-    private javax.swing.JLabel lblSuchwortEingeben;
-    private javax.swing.JLabel lblSuchworte;
-    private javax.swing.JList lstSuchworte;
-    private javax.swing.JPanel panButtons;
-    private javax.swing.JPanel panContent;
-    private javax.swing.JPanel panMenButtons;
-    private javax.swing.JPanel panNewSuchwort;
-    private javax.swing.JPanel panPicture;
-    private javax.swing.JScrollPane scpInfo;
-    private javax.swing.JScrollPane scpSuchworte;
-    private javax.swing.JTextArea txtAInfo;
-    private javax.swing.JTextField txtBildnummer;
-    private javax.swing.JTextField txtBildnummern;
-    private javax.swing.JTextField txtHausnummer;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
-    // End of variables declaration//GEN-END:variables
 }

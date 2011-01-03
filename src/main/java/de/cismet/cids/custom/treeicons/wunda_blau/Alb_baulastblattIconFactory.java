@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -8,46 +15,51 @@ import Sirius.navigator.types.treenode.ClassTreeNode;
 import Sirius.navigator.types.treenode.ObjectTreeNode;
 import Sirius.navigator.types.treenode.PureTreeNode;
 import Sirius.navigator.ui.tree.CidsTreeObjectIconFactory;
+
 import javax.swing.Icon;
 
 /**
+ * DOCUMENT ME!
  *
- * @author srichter
+ * @author   srichter
+ * @version  $Revision$, $Date$
  */
 public class Alb_baulastblattIconFactory implements CidsTreeObjectIconFactory {
 
+    //~ Methods ----------------------------------------------------------------
+
     @Override
-    public Icon getClosedPureNodeIcon(PureTreeNode ptn) {
+    public Icon getClosedPureNodeIcon(final PureTreeNode ptn) {
         return null;
     }
 
     @Override
-    public Icon getOpenPureNodeIcon(PureTreeNode ptn) {
+    public Icon getOpenPureNodeIcon(final PureTreeNode ptn) {
         return null;
     }
 
     @Override
-    public Icon getLeafPureNodeIcon(PureTreeNode ptn) {
+    public Icon getLeafPureNodeIcon(final PureTreeNode ptn) {
         return null;
     }
 
     @Override
-    public Icon getOpenObjectNodeIcon(ObjectTreeNode otn) {
+    public Icon getOpenObjectNodeIcon(final ObjectTreeNode otn) {
         return null;
     }
 
     @Override
-    public Icon getClosedObjectNodeIcon(ObjectTreeNode otn) {
+    public Icon getClosedObjectNodeIcon(final ObjectTreeNode otn) {
         return null;
     }
 
     @Override
-    public Icon getLeafObjectNodeIcon(ObjectTreeNode otn) {
+    public Icon getLeafObjectNodeIcon(final ObjectTreeNode otn) {
         return null;
     }
 
     @Override
-    public Icon getClassNodeIcon(ClassTreeNode dmtn) {
+    public Icon getClassNodeIcon(final ClassTreeNode dmtn) {
         return null;
     }
 }

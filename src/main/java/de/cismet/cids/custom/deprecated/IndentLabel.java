@@ -1,4 +1,14 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.cids.custom.deprecated;
+
+import org.jdesktop.fuse.InjectedResource;
+import org.jdesktop.fuse.ResourceInjector;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -10,67 +20,89 @@ import java.awt.RenderingHints;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-import org.jdesktop.fuse.InjectedResource;
-import org.jdesktop.fuse.ResourceInjector;
-
 /**
- * @author Daniel Spiewak
+ * DOCUMENT ME!
+ *
+ * @author   Daniel Spiewak
+ * @version  $Revision$, $Date$
  */
 public class IndentLabel extends JLabel {
-    private String text;
 
-    @InjectedResource
-    private Color accentColor, textColor;
+    //~ Static fields/initializers ---------------------------------------------
 
     private static final float OFFSET = 1;
 
+    //~ Instance fields --------------------------------------------------------
+
+    private String text;
+
+    @InjectedResource
+    private Color accentColor;
+    @InjectedResource
+    private Color textColor;
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new IndentLabel object.
+     */
     public IndentLabel() {
         this("");
     }
 
-    public IndentLabel(String text) {
-            this.text = text;
-            ResourceInjector.get("coolpanel.style").inject(this);
+    /**
+     * Creates a new IndentLabel object.
+     *
+     * @param  text  DOCUMENT ME!
+     */
+    public IndentLabel(final String text) {
+        this.text = text;
+        ResourceInjector.get("coolpanel.style").inject(this);
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    protected void paintComponent(final Graphics g) {
+        final Graphics2D g2 = (Graphics2D)g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD).deriveFont((float)g2.getFont().getSize() + 1));
+
+        final float x = 2;
+        float y = getHeight() - ((getHeight() - g2.getFontMetrics().getHeight()) / 2) + OFFSET;
+
+        g2.setColor(accentColor);
+        g2.drawString(text, x, y);
+
+        y -= OFFSET;
+        g2.setColor(textColor);
+
+        g2.drawString(text, x, y);
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
-            Graphics2D g2 = (Graphics2D) g;
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.setFont(g2.getFont().deriveFont(Font.BOLD).deriveFont((float) g2.getFont().getSize() + 1));
-
-            float x = 2;
-            float y = getHeight() - ((getHeight() - g2.getFontMetrics().getHeight()) / 2) + OFFSET;
-
-            g2.setColor(accentColor);
-            g2.drawString(text, x, y);
-
-            y -= OFFSET;
-            g2.setColor(textColor);
-
-            g2.drawString(text, x, y);
-    }
-
     public String getText() {
-            return text;
+        return text;
     }
 
-    public void setText(String text) {
-            this.text = text;
-            repaint();
+    @Override
+    public void setText(final String text) {
+        this.text = text;
+        repaint();
     }
 
     @Override
     public Dimension getMinimumSize() {
-            return new Dimension(super.getMinimumSize().width, super.getMinimumSize().height+2);
+        return new Dimension(super.getMinimumSize().width, super.getMinimumSize().height + 2);
     }
 
     @Override
     public Dimension getPreferredSize() {
-            return new Dimension(super.getPreferredSize().width, super.getPreferredSize().height+2);
+        return new Dimension(super.getPreferredSize().width, super.getPreferredSize().height + 2);
     }
 
-    public void setPreferredSize(Dimension preferredSize) {
-        super.setPreferredSize(new Dimension(preferredSize.width, preferredSize.height+2));
+    @Override
+    public void setPreferredSize(final Dimension preferredSize) {
+        super.setPreferredSize(new Dimension(preferredSize.width, preferredSize.height + 2));
     }
 }

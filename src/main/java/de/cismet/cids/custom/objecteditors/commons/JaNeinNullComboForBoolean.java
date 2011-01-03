@@ -10,11 +10,10 @@
  */
 package de.cismet.cids.custom.objecteditors.commons;
 
-import de.cismet.cids.editors.Bindable;
-
 import org.jdesktop.beansbinding.Converter;
 import org.jdesktop.beansbinding.Validator;
 
+import de.cismet.cids.editors.Bindable;
 
 /**
  * DOCUMENT ME!
@@ -23,47 +22,54 @@ import org.jdesktop.beansbinding.Validator;
  * @version  $Revision$, $Date$
  */
 public class JaNeinNullComboForBoolean extends JaNeinNullCombo implements Bindable {
+
+    //~ Instance fields --------------------------------------------------------
+
     transient Converter<Boolean, String> c = new Converter<Boolean, String>() {
 
-            @Override public String convertForward(Boolean b) {
-
+            @Override
+            public String convertForward(final Boolean b) {
                 if ((b == null) || (b == false)) {
                     return "Nein";
-                }
-                else {
+                } else {
                     return "Ja";
                 }
             }
 
-            @Override public Boolean convertReverse(String s) {
-
+            @Override
+            public Boolean convertReverse(final String s) {
                 if ((s != null) && s.equals("Ja")) {
                     return true;
-                }
-                else {
+                } else {
                     return false;
                 }
             }
         };
 
-    @Override public String getBindingProperty() {
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public String getBindingProperty() {
         return "selectedItem";
     }
 
-    @Override public Converter getConverter() {
+    @Override
+    public Converter getConverter() {
         return c;
     }
 
-    @Override public Validator getValidator() {
+    @Override
+    public Validator getValidator() {
         return null;
     }
 
-    @Override public Object getErrorSourceValue() {
+    @Override
+    public Object getErrorSourceValue() {
         return Boolean.FALSE;
     }
 
-    @Override public Object getNullSourceValue() {
+    @Override
+    public Object getNullSourceValue() {
         return Boolean.FALSE;
     }
-
 }

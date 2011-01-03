@@ -1,31 +1,56 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.cids.custom.wunda_blau.search;
 
 import Sirius.server.middleware.interfaces.domainserver.MetaService;
 import Sirius.server.search.CidsServerSearch;
+
 import java.rmi.RemoteException;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
 /**
+ * DOCUMENT ME!
  *
- * @author stefan
+ * @author   stefan
+ * @version  $Revision$, $Date$
  */
 public class Alb_BaulastChecker extends CidsServerSearch {
 
+    //~ Instance fields --------------------------------------------------------
+
     private String searchQuery;
 
-    public Alb_BaulastChecker(String blattnummer, String lastnummer, int id) {
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new Alb_BaulastChecker object.
+     *
+     * @param  blattnummer  DOCUMENT ME!
+     * @param  lastnummer   DOCUMENT ME!
+     * @param  id           DOCUMENT ME!
+     */
+    public Alb_BaulastChecker(String blattnummer, String lastnummer, final int id) {
         blattnummer = blattnummer.replaceAll("'", "");
         lastnummer = lastnummer.replaceAll("'", "");
-        this.searchQuery = "select count(*) from alb_baulast where blattnummer = '" + blattnummer + "' and laufende_nummer = '" + lastnummer + "' and id <> " + id;
+        this.searchQuery = "select count(*) from alb_baulast where blattnummer = '" + blattnummer
+                    + "' and laufende_nummer = '" + lastnummer + "' and id <> " + id;
     }
+
+    //~ Methods ----------------------------------------------------------------
 
     @Override
     public Collection performServerSearch() {
-        MetaService ms = (MetaService) getActiveLoaclServers().get("WUNDA_BLAU");
+        final MetaService ms = (MetaService)getActiveLoaclServers().get("WUNDA_BLAU");
         if (ms != null) {
             try {
-                ArrayList<ArrayList> lists = ms.performCustomSearch(searchQuery);
+                final ArrayList<ArrayList> lists = ms.performCustomSearch(searchQuery);
                 return lists;
             } catch (RemoteException ex) {
             }

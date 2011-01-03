@@ -1,4 +1,10 @@
-
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * BaulastWindowSearch.java
  *
@@ -7,64 +13,122 @@
 package de.cismet.cids.custom.wunda_blau.search;
 
 import Sirius.navigator.actiontag.ActionTagProtected;
-import Sirius.navigator.exception.ConnectionException;
-import de.cismet.cids.custom.objecteditors.wunda_blau.FlurstueckSelectionDialoge;
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.method.MethodManager;
+
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.Node;
 import Sirius.server.search.CidsServerSearch;
-import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
-import de.cismet.cids.dynamics.CidsBean;
-import de.cismet.cids.editors.DefaultBindableReferenceCombo;
-import de.cismet.cids.navigator.utils.CidsBeanDropListener;
-import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
-import de.cismet.cids.navigator.utils.ClassCacheMultiple;
-import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
-import de.cismet.cismap.commons.BoundingBox;
-import de.cismet.cismap.commons.features.Feature;
-import de.cismet.cismap.commons.interaction.CismapBroker;
-import de.cismet.cismap.navigatorplugin.CidsFeature;
-import de.cismet.tools.CismetThreadPool;
+
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+
+import org.openide.util.Exceptions;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.SwingWorker;
-import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
-import org.openide.util.Exceptions;
+
+import de.cismet.cids.custom.objecteditors.wunda_blau.FlurstueckSelectionDialoge;
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
+
+import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.editors.DefaultBindableReferenceCombo;
+
+import de.cismet.cids.navigator.utils.CidsBeanDropListener;
+import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
+import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+
+import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
+
+import de.cismet.cismap.commons.BoundingBox;
+import de.cismet.cismap.commons.features.Feature;
+import de.cismet.cismap.commons.interaction.CismapBroker;
+
+import de.cismet.cismap.navigatorplugin.CidsFeature;
+
+import de.cismet.tools.CismetThreadPool;
 
 /**
+ * DOCUMENT ME!
  *
- * @author stefan
+ * @author   stefan
+ * @version  $Revision$, $Date$
  */
 @org.openide.util.lookup.ServiceProvider(service = CidsWindowSearch.class)
-public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindowSearch, CidsBeanDropListener, ActionTagProtected {
+public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindowSearch,
+    CidsBeanDropListener,
+    ActionTagProtected {
+
+    //~ Static fields/initializers ---------------------------------------------
 
     static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(BaulastWindowSearch.class);
 
-    /** Creates new form BaulastWindowSearch */
+    //~ Instance fields --------------------------------------------------------
+
+    private final MetaClass mc;
+    private final ImageIcon icon;
+    private final FlurstueckSelectionDialoge fsSelectionDialoge;
+    private final DefaultListModel model;
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddFS;
+    private javax.swing.JButton btnFromMapFS;
+    private javax.swing.JButton btnRemoveFS;
+    private javax.swing.JButton btnSearch;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JComboBox cbArt;
+    private javax.swing.JCheckBox chkBeguenstigt;
+    private javax.swing.JCheckBox chkBelastet;
+    private javax.swing.JCheckBox chkGeloescht;
+    private javax.swing.JCheckBox chkGueltig;
+    private javax.swing.JCheckBox chkKartenausschnitt;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JScrollPane jScrollPane1;
+    private org.jdesktop.swingx.JXBusyLabel lblBusy;
+    private javax.swing.JList lstFlurstueck;
+    private javax.swing.JPanel panCommand;
+    private javax.swing.JPanel panSearch;
+    private javax.swing.JRadioButton rbBaulastBlaetter;
+    private javax.swing.JRadioButton rbBaulasten;
+    private javax.swing.JTextField txtBlattnummer;
+    // End of variables declaration//GEN-END:variables
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates new form BaulastWindowSearch.
+     */
     public BaulastWindowSearch() {
         mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "ALB_BAULAST");
         icon = new ImageIcon(mc.getIconData());
         fsSelectionDialoge = new FlurstueckSelectionDialoge(false) {
 
-            @Override
-            public void okHook() {
-                List<CidsBean> result = getCurrentListToAdd();
-                if (result.size() > 0) {
-                    model.addElement(result.get(0));
+                @Override
+                public void okHook() {
+                    final List<CidsBean> result = getCurrentListToAdd();
+                    if (result.size() > 0) {
+                        model.addElement(result.get(0));
+                    }
                 }
-            }
-        };
+            };
         initComponents();
-        MetaClass artMC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "ALB_BAULAST_ART");
-        DefaultComboBoxModel cbArtModel;
+        final MetaClass artMC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "ALB_BAULAST_ART");
+        final DefaultComboBoxModel cbArtModel;
         try {
             cbArtModel = DefaultBindableReferenceCombo.getModelByMetaClass(artMC, true);
             cbArt.setModel(cbArtModel);
@@ -79,10 +143,11 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         fsSelectionDialoge.setLocationRelativeTo(this);
     }
 
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -128,14 +193,17 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
 
         panCommand.add(lblBusy);
 
-        btnSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom.gif"))); // NOI18N
+        btnSearch.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom.gif"))); // NOI18N
         btnSearch.setText("Suchen");
         btnSearch.setToolTipText("Suche starten");
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSearchActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnSearchActionPerformed(evt);
+                }
+            });
         panCommand.add(btnSearch);
 
         jPanel1.setMaximumSize(new java.awt.Dimension(26, 26));
@@ -227,13 +295,16 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(jScrollPane1, gridBagConstraints);
 
-        btnAddFS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit-add.png"))); // NOI18N
+        btnAddFS.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit-add.png"))); // NOI18N
         btnAddFS.setToolTipText("Flurstück hinzufügen");
         btnAddFS.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddFSActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnAddFSActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -241,13 +312,16 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(btnAddFS, gridBagConstraints);
 
-        btnRemoveFS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit-delete.png"))); // NOI18N
+        btnRemoveFS.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit-delete.png"))); // NOI18N
         btnRemoveFS.setToolTipText("Ausgewählte Flurstücke entfernen");
         btnRemoveFS.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemoveFSActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnRemoveFSActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
@@ -255,13 +329,16 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(btnRemoveFS, gridBagConstraints);
 
-        btnFromMapFS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/bookmark-new.png"))); // NOI18N
+        btnFromMapFS.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/bookmark-new.png"))); // NOI18N
         btnFromMapFS.setToolTipText("Selektierte Flurstücke aus Karte hinzufügen");
         btnFromMapFS.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFromMapFSActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnFromMapFSActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
@@ -337,71 +414,93 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         panSearch.add(jPanel5, gridBagConstraints);
 
         add(panSearch, java.awt.BorderLayout.CENTER);
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
-    private void btnAddFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddFSActionPerformed
-        List<CidsBean> result = new ArrayList<CidsBean>(1);
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnAddFSActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddFSActionPerformed
+        final List<CidsBean> result = new ArrayList<CidsBean>(1);
         fsSelectionDialoge.setCurrentListToAdd(result);
         fsSelectionDialoge.setVisible(true);
+    }                                                                            //GEN-LAST:event_btnAddFSActionPerformed
 
-    }//GEN-LAST:event_btnAddFSActionPerformed
-
-    private void btnRemoveFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveFSActionPerformed
-        Object[] selection = lstFlurstueck.getSelectedValues();
-        for (Object o : selection) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnRemoveFSActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveFSActionPerformed
+        final Object[] selection = lstFlurstueck.getSelectedValues();
+        for (final Object o : selection) {
             model.removeElement(o);
         }
-    }//GEN-LAST:event_btnRemoveFSActionPerformed
+    }                                                                               //GEN-LAST:event_btnRemoveFSActionPerformed
 
-    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnSearchActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnSearchActionPerformed
         performSearch();
-    }//GEN-LAST:event_btnSearchActionPerformed
+    }                                                                             //GEN-LAST:event_btnSearchActionPerformed
 
-    private void btnFromMapFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFromMapFSActionPerformed
-        Collection<Feature> selFeatures = CismapBroker.getInstance().getMappingComponent().getFeatureCollection().getSelectedFeatures();
-        for (Feature feature : selFeatures) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnFromMapFSActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFromMapFSActionPerformed
+        final Collection<Feature> selFeatures = CismapBroker.getInstance()
+                    .getMappingComponent()
+                    .getFeatureCollection()
+                    .getSelectedFeatures();
+        for (final Feature feature : selFeatures) {
             if (feature instanceof CidsFeature) {
-                CidsFeature cf = (CidsFeature) feature;
-                MetaObject mo = cf.getMetaObject();
-                String tableName = mo.getMetaClass().getTableName();
+                final CidsFeature cf = (CidsFeature)feature;
+                final MetaObject mo = cf.getMetaObject();
+                final String tableName = mo.getMetaClass().getTableName();
                 if ("FLURSTUECK".equalsIgnoreCase(tableName) || "ALB_FLURSTUECK_KICKER".equalsIgnoreCase(tableName)) {
 //                if ("FLURSTUECK".equalsIgnoreCase(tableName) || "ALB_FLURSTUECK_KICKER".equalsIgnoreCase(tableName) || "ALKIS_LANDPARCEL".equalsIgnoreCase(tableName)) {
                     model.addElement(mo.getBean());
                 }
             }
         }
-    }//GEN-LAST:event_btnFromMapFSActionPerformed
-    private final MetaClass mc;
-    private final ImageIcon icon;
-    private final FlurstueckSelectionDialoge fsSelectionDialoge;
-    private final DefaultListModel model;
+    }                                                                                //GEN-LAST:event_btnFromMapFSActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     */
     private void performSearch() {
         btnSearch.setEnabled(false);
         lblBusy.setBusy(true);
-        SwingWorker<Void, Void> searchWorker = new SwingWorker<Void, Void>() {
+        final SwingWorker<Void, Void> searchWorker = new SwingWorker<Void, Void>() {
 
-            @Override
-            protected Void doInBackground() throws Exception {
-                Collection<Node> r = SessionManager.getProxy().customServerSearch(SessionManager.getSession().getUser(), getServerSearch());
-                MethodManager.getManager().showSearchResults(r.toArray(new Node[r.size()]), false);
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                try {
-                    get();
-                } catch (InterruptedException ex) {
-                    log.warn(ex, ex);
-                } catch (ExecutionException ex) {
-                    log.error(ex, ex);
-                } finally {
-                    lblBusy.setBusy(false);
-                    btnSearch.setEnabled(true);
+                @Override
+                protected Void doInBackground() throws Exception {
+                    final Collection<Node> r = SessionManager.getProxy()
+                                .customServerSearch(SessionManager.getSession().getUser(), getServerSearch());
+                    MethodManager.getManager().showSearchResults(r.toArray(new Node[r.size()]), false);
+                    return null;
                 }
-            }
-        };
+
+                @Override
+                protected void done() {
+                    try {
+                        get();
+                    } catch (InterruptedException ex) {
+                        log.warn(ex, ex);
+                    } catch (ExecutionException ex) {
+                        log.error(ex, ex);
+                    } finally {
+                        lblBusy.setBusy(false);
+                        btnSearch.setEnabled(true);
+                    }
+                }
+            };
         CismetThreadPool.execute(searchWorker);
     }
 
@@ -420,11 +519,17 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         return this;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     private BaulastSearchInfo getBaulastInfoFromGUI() {
-        BaulastSearchInfo bsi = new BaulastSearchInfo();
-        bsi.setResult(rbBaulastBlaetter.isSelected() ? CidsBaulastSearchStatement.Result.BAULASTBLATT : CidsBaulastSearchStatement.Result.BAULAST);
+        final BaulastSearchInfo bsi = new BaulastSearchInfo();
+        bsi.setResult(rbBaulastBlaetter.isSelected() ? CidsBaulastSearchStatement.Result.BAULASTBLATT
+                                                     : CidsBaulastSearchStatement.Result.BAULAST);
         if (chkKartenausschnitt.isSelected()) {
-            BoundingBox bb = CismapBroker.getInstance().getMappingComponent().getCurrentBoundingBox();
+            final BoundingBox bb = CismapBroker.getInstance().getMappingComponent().getCurrentBoundingBox();
             bsi.setBounds(bb.getGeometryFromTextLineString());
         }
         bsi.setBelastet(chkBelastet.isSelected());
@@ -432,7 +537,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         bsi.setUngueltig(chkGeloescht.isSelected());
         bsi.setGueltig(chkGueltig.isSelected());
         bsi.setBlattnummer(txtBlattnummer.getText());
-        Object art = cbArt.getSelectedItem();
+        final Object art = cbArt.getSelectedItem();
         if (art != null) {
             bsi.setArt(art.toString());
         }
@@ -443,14 +548,20 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     public CidsServerSearch getServerSearch() {
         final BaulastSearchInfo bsi = getBaulastInfoFromGUI();
         for (int i = 0; i < model.size(); ++i) {
-            CidsBean fsBean = (CidsBean) model.getElementAt(i);
+            final CidsBean fsBean = (CidsBean)model.getElementAt(i);
             try {
                 if ("ALB_FLURSTUECK_KICKER".equalsIgnoreCase(fsBean.getMetaObject().getMetaClass().getTableName())) {
-                    FlurstueckInfo fi = new FlurstueckInfo((Integer) fsBean.getProperty("gemarkung"), (String) fsBean.getProperty("flur"), (String) fsBean.getProperty("zaehler"), (String) fsBean.getProperty("nenner"));
+                    final FlurstueckInfo fi = new FlurstueckInfo((Integer)fsBean.getProperty("gemarkung"),
+                            (String)fsBean.getProperty("flur"),
+                            (String)fsBean.getProperty("zaehler"),
+                            (String)fsBean.getProperty("nenner"));
                     bsi.getFlurstuecke().add(fi);
                 } else if ("FLURSTUECK".equalsIgnoreCase(fsBean.getMetaObject().getMetaClass().getTableName())) {
-                    CidsBean gemarkung = (CidsBean) fsBean.getProperty("gemarkungs_nr");
-                    FlurstueckInfo fi = new FlurstueckInfo((Integer) gemarkung.getProperty("gemarkungsnummer"), (String) fsBean.getProperty("flur"), String.valueOf(fsBean.getProperty("fstnr_z")), String.valueOf(fsBean.getProperty("fstnr_n")));
+                    final CidsBean gemarkung = (CidsBean)fsBean.getProperty("gemarkungs_nr");
+                    final FlurstueckInfo fi = new FlurstueckInfo((Integer)gemarkung.getProperty("gemarkungsnummer"),
+                            (String)fsBean.getProperty("flur"),
+                            String.valueOf(fsBean.getProperty("fstnr_z")),
+                            String.valueOf(fsBean.getProperty("fstnr_n")));
                     bsi.getFlurstuecke().add(fi);
                 }
 //                else if ("ALKIS_LANDPARCEL".equalsIgnoreCase(fsBean.getMetaObject().getMetaClass().getTableName())) {
@@ -464,38 +575,10 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         }
         return new CidsBaulastSearchStatement(bsi);
     }
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAddFS;
-    private javax.swing.JButton btnFromMapFS;
-    private javax.swing.JButton btnRemoveFS;
-    private javax.swing.JButton btnSearch;
-    private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JComboBox cbArt;
-    private javax.swing.JCheckBox chkBeguenstigt;
-    private javax.swing.JCheckBox chkBelastet;
-    private javax.swing.JCheckBox chkGeloescht;
-    private javax.swing.JCheckBox chkGueltig;
-    private javax.swing.JCheckBox chkKartenausschnitt;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JScrollPane jScrollPane1;
-    private org.jdesktop.swingx.JXBusyLabel lblBusy;
-    private javax.swing.JList lstFlurstueck;
-    private javax.swing.JPanel panCommand;
-    private javax.swing.JPanel panSearch;
-    private javax.swing.JRadioButton rbBaulastBlaetter;
-    private javax.swing.JRadioButton rbBaulasten;
-    private javax.swing.JTextField txtBlattnummer;
-    // End of variables declaration//GEN-END:variables
 
     @Override
-    public void beansDropped(ArrayList<CidsBean> beans) {
-        for (CidsBean bean : beans) {
+    public void beansDropped(final ArrayList<CidsBean> beans) {
+        for (final CidsBean bean : beans) {
             if ("FLURSTUECK".equalsIgnoreCase(bean.getMetaObject().getMetaClass().getTableName())) {
 //            if ("FLURSTUECK".equalsIgnoreCase(bean.getMetaObject().getMetaClass().getTableName()) || "ALKIS_LANDPARCEL".equalsIgnoreCase(bean.getMetaObject().getMetaClass().getTableName())) {
                 model.addElement(bean);
@@ -507,7 +590,8 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     @Override
     public boolean checkActionTag() {
         try {
-            return SessionManager.getConnection().getConfigAttr(SessionManager.getSession().getUser(), "navigator.baulasten.search") != null;
+            return SessionManager.getConnection()
+                        .getConfigAttr(SessionManager.getSession().getUser(), "navigator.baulasten.search") != null;
         } catch (ConnectionException ex) {
             log.error("Can not validate ActionTag for Baulasten Suche!", ex);
             return false;

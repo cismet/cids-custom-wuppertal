@@ -1,40 +1,62 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package de.cismet.cids.custom.objecteditors.commons;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Vector;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Vector;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+
 /**
+ * DOCUMENT ME!
  *
- * @author thorsten
+ * @author   thorsten
+ * @version  $Revision$, $Date$
  */
 public class JComboWithStringsFilledFromProperties extends JComboBox {
 
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new JComboWithStringsFilledFromProperties object.
+     */
     public JComboWithStringsFilledFromProperties() {
         this(null);
     }
 
-    public JComboWithStringsFilledFromProperties(String entryPropertyFile) {
+    /**
+     * Creates a new JComboWithStringsFilledFromProperties object.
+     *
+     * @param  entryPropertyFile  DOCUMENT ME!
+     */
+    public JComboWithStringsFilledFromProperties(final String entryPropertyFile) {
         InputStream is = null;
         try {
-            SAXBuilder builder = new SAXBuilder(false);
+            final SAXBuilder builder = new SAXBuilder(false);
             is = JComboWithStringsFilledFromProperties.class.getResourceAsStream(entryPropertyFile);
-            Document doc = builder.build(is);
-            List entries = doc.getRootElement().getChildren();
-            Vector<String> v = new Vector<String>();
-            for (Object o : entries) {
-                Element e = (Element) o;
+            final Document doc = builder.build(is);
+            final List entries = doc.getRootElement().getChildren();
+            final Vector<String> v = new Vector<String>();
+            for (final Object o : entries) {
+                final Element e = (Element)o;
                 v.add(e.getText());
             }
             setModel(new DefaultComboBoxModel(v));

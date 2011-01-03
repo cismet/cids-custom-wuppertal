@@ -1,32 +1,59 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
 import com.vividsolutions.jts.geom.Geometry;
-import de.cismet.cids.annotations.CidsAttribute;
-import de.cismet.cids.custom.deprecated.CoolTabPanel;
-import de.cismet.cids.custom.deprecated.JBreakLabel;
-import de.cismet.cids.custom.deprecated.JLoadDots;
-import de.cismet.cids.custom.deprecated.TabbedPaneUITransparent;
-import de.cismet.tools.BrowserLauncher;
+
 import java.awt.EventQueue;
 import java.awt.image.BufferedImage;
+
 import java.io.IOException;
+
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Date;
+
 import java.text.DateFormat;
+
+import java.util.Date;
 import java.util.Locale;
+
 import javax.imageio.ImageIO;
+
 import javax.swing.ImageIcon;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import de.cismet.cids.annotations.CidsAttribute;
+
+import de.cismet.cids.custom.deprecated.CoolTabPanel;
+import de.cismet.cids.custom.deprecated.JBreakLabel;
+import de.cismet.cids.custom.deprecated.JLoadDots;
+import de.cismet.cids.custom.deprecated.TabbedPaneUITransparent;
+
+import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
+
+import de.cismet.tools.BrowserLauncher;
+
 /**
- * de.cismet.cids.objectrenderer.CoolMauerRenderer
- * @author srichter
+ * de.cismet.cids.objectrenderer.CoolMauerRenderer.
+ *
+ * @author   srichter
+ * @version  $Revision$, $Date$
  */
 //de.cismet.cids.objectrenderer.CoolMauerRenderer
 public class MauerRenderer extends CoolPanel {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final String TITLE = "Mauern";
+    private static int lastSelected = 0;
+
+    //~ Instance fields --------------------------------------------------------
 
     @CidsAttribute("Georeferenz.GEO_STRING")
     public Geometry geometry = null;
@@ -39,7 +66,7 @@ public class MauerRenderer extends CoolPanel {
     @CidsAttribute("Bauwerksbuchfertigstellung")
     public Date bwbfs = null;
     @CidsAttribute("Stuetzmauertyp")
-    public String stuetzmauertyp = null;    //------------------------------------------------
+    public String stuetzmauertyp = null; // ------------------------------------------------
     @CidsAttribute("Zustand_Gelaender")
     public Float zustand_Gelaender = 0.0f;
     @CidsAttribute("San_Kosten_Gelaender")
@@ -50,7 +77,7 @@ public class MauerRenderer extends CoolPanel {
     public String san_Massnahme_Gelaender = null;
     @CidsAttribute("Beschreibung_Gelaender")
     public String beschreibung_Gelaender = null;
-    //------------------------------------------------
+    // ------------------------------------------------
     @CidsAttribute("Zustand_Kopf")
     public Float zustand_Kopf = 0.0f;
     @CidsAttribute("San_Kosten_Kopf")
@@ -61,7 +88,7 @@ public class MauerRenderer extends CoolPanel {
     public String san_Massnahme_Kopf = null;
     @CidsAttribute("Beschreibung_Kopf")
     public String beschreibung_Kopf = null;
-    //------------------------------------------------
+    // ------------------------------------------------
     @CidsAttribute("Zustand_Ansicht")
     public Float zustand_Ansicht = 0.0f;
     @CidsAttribute("San_Kosten_Ansicht")
@@ -72,7 +99,7 @@ public class MauerRenderer extends CoolPanel {
     public String san_Massnahme_Ansicht = null;
     @CidsAttribute("Beschreibung_Ansicht")
     public String beschreibung_Ansicht = null;
-    //------------------------------------------------
+    // ------------------------------------------------
     @CidsAttribute("Zustand_Gruendung")
     public Float zustand_Gruendung = 0.0f;
     @CidsAttribute("San_Kosten_Gruendung")
@@ -83,7 +110,7 @@ public class MauerRenderer extends CoolPanel {
     public String san_Massnahme_Gruendung = null;
     @CidsAttribute("Beschreibung_Gruendung")
     public String beschreibung_Gruendung = null;
-    //------------------------------------------------
+    // ------------------------------------------------
     @CidsAttribute("Zustand_Verformung")
     public Float zustand_Verformung = 0.0f;
     @CidsAttribute("San_Kosten_Verformung")
@@ -94,7 +121,7 @@ public class MauerRenderer extends CoolPanel {
     public String san_Massnahme_Verformung = null;
     @CidsAttribute("Beschreibung_Verformung")
     public String beschreibung_Verformung = null;
-    //------------------------------------------------
+    // ------------------------------------------------
     @CidsAttribute("Zustand_Gelaende")
     public Float zustand_Gelaende = 0.0f;
     @CidsAttribute("San_Kosten_Gelaende")
@@ -105,7 +132,7 @@ public class MauerRenderer extends CoolPanel {
     public String san_Massnahme_Gelaende = null;
     @CidsAttribute("Beschreibung_Gelaende")
     public String beschreibung_Gelaende = null;
-    //------------------------------------------------
+    // ------------------------------------------------
     @CidsAttribute("Umgebung")
     public String umgebung = null;
     @CidsAttribute("Lagebeschreibung")
@@ -141,16 +168,143 @@ public class MauerRenderer extends CoolPanel {
     @CidsAttribute("Bild_1.URL_BASE_ID.PROT_PREFIX")
     public String prot = null;
     @CidsAttribute("Bild_1.URL_BASE_ID.PATH")
-    public String path = null;    //TODO: ggf path fuer bild_2 extra machen
+    public String path = null; // TODO: ggf path fuer bild_2 extra machen
     private ImageIcon ii1 = null;
     private ImageIcon ii2 = null;
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
-    private static final String TITLE = "Mauern";
-    private static int lastSelected = 0;
     private Date timer;
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabe31;
+    private javax.swing.JLabel jLabe32;
+    private javax.swing.JLabel jLabe33;
+    private javax.swing.JLabel jLabe42;
+    private javax.swing.JLabel jLabe43;
+    private javax.swing.JLabel jLabe44;
+    private javax.swing.JLabel jLabe45;
+    private javax.swing.JLabel jLabe46;
+    private javax.swing.JLabel jLabe47;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
+    private javax.swing.JLabel jLabel38;
+    private javax.swing.JLabel jLabel39;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
+    private javax.swing.JLabel jLabel41;
+    private javax.swing.JLabel jLabel48;
+    private javax.swing.JLabel jLabel49;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel51;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JLabel lbl1;
+    private javax.swing.JLabel lbl10;
+    private javax.swing.JLabel lbl11;
+    private javax.swing.JLabel lbl12;
+    private javax.swing.JLabel lbl13;
+    private javax.swing.JLabel lbl14;
+    private javax.swing.JLabel lbl15;
+    private javax.swing.JLabel lbl16;
+    private javax.swing.JLabel lbl17;
+    private javax.swing.JLabel lbl18;
+    private javax.swing.JLabel lbl19;
+    private javax.swing.JLabel lbl2;
+    private javax.swing.JLabel lbl20;
+    private javax.swing.JLabel lbl21;
+    private javax.swing.JLabel lbl22;
+    private javax.swing.JLabel lbl23;
+    private javax.swing.JLabel lbl24;
+    private javax.swing.JLabel lbl25;
+    private javax.swing.JLabel lbl26;
+    private javax.swing.JLabel lbl27;
+    private javax.swing.JLabel lbl28;
+    private javax.swing.JLabel lbl29;
+    private javax.swing.JLabel lbl3;
+    private javax.swing.JLabel lbl30;
+    private javax.swing.JLabel lbl31;
+    private javax.swing.JLabel lbl32;
+    private javax.swing.JLabel lbl33;
+    private javax.swing.JLabel lbl34;
+    private javax.swing.JLabel lbl35;
+    private javax.swing.JLabel lbl36;
+    private javax.swing.JLabel lbl37;
+    private javax.swing.JLabel lbl38;
+    private javax.swing.JLabel lbl39;
+    private javax.swing.JLabel lbl4;
+    private javax.swing.JLabel lbl40;
+    private javax.swing.JLabel lbl41;
+    private javax.swing.JLabel lbl42;
+    private javax.swing.JLabel lbl43;
+    private javax.swing.JLabel lbl44;
+    private javax.swing.JLabel lbl45;
+    private javax.swing.JLabel lbl46;
+    private javax.swing.JLabel lbl47;
+    private javax.swing.JLabel lbl5;
+    private javax.swing.JLabel lbl51;
+    private javax.swing.JLabel lbl6;
+    private javax.swing.JLabel lbl7;
+    private javax.swing.JLabel lbl8;
+    private javax.swing.JLabel lbl9;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JPanel panContent;
+    private javax.swing.JPanel panInhalt;
+    private javax.swing.JPanel panInhalt1;
+    private javax.swing.JPanel panInhalt2;
+    private javax.swing.JPanel panInhalt3;
+    private javax.swing.JPanel panInhalt4;
+    private javax.swing.JPanel panInhalt5;
+    private javax.swing.JPanel panInhalt6;
+    private javax.swing.JPanel panInhalt7;
+    private javax.swing.JPanel panInter;
+    private javax.swing.JPanel panMap;
+    private javax.swing.JPanel panSpinner;
+    private javax.swing.JPanel panTitle;
+    // End of variables declaration//GEN-END:variables
+
+    //~ Constructors -----------------------------------------------------------
 
     /**
-     * Konstruktor
+     * Konstruktor.
      */
     public MauerRenderer() {
         initComponents();
@@ -162,17 +316,18 @@ public class MauerRenderer extends CoolPanel {
         timer = new Date();
         jTabbedPane1.addChangeListener(new ChangeListener() {
 
-            public void stateChanged(ChangeEvent e) {
-                lastSelected = jTabbedPane1.getSelectedIndex();
-                timer = new Date();
-            }
-        });
+                @Override
+                public void stateChanged(final ChangeEvent e) {
+                    lastSelected = jTabbedPane1.getSelectedIndex();
+                    timer = new Date();
+                }
+            });
         if ((new Date().getTime() - timer.getTime()) < (60 * 1000L)) {
             jTabbedPane1.setSelectedIndex(lastSelected);
         }
-
-
     }
+
+    //~ Methods ----------------------------------------------------------------
 
     @Override
     public void assignAggregation() {
@@ -180,8 +335,6 @@ public class MauerRenderer extends CoolPanel {
 
     @Override
     public void assignSingle() {
-
-
         if (this.geometry != null) {
             setGeometry(this.geometry);
         }
@@ -266,7 +419,7 @@ public class MauerRenderer extends CoolPanel {
             lbl12.setVisible(false);
             jLabel12.setVisible(false);
         }
-        //-------------------------------------------------------------
+        // -------------------------------------------------------------
         if (beschreibung_Gelaender != null) {
             lbl13.setText((beschreibung_Gelaender.trim()));
         } else {
@@ -286,7 +439,7 @@ public class MauerRenderer extends CoolPanel {
         lbl16.setText(String.valueOf(san_Kosten_Gelaender));
 
         lbl17.setText(String.valueOf(san_Eingriff_Gelaender));
-        //-------------------------------------------------------------
+        // -------------------------------------------------------------
         if (beschreibung_Kopf != null) {
             lbl18.setText((beschreibung_Kopf.trim()));
         } else {
@@ -306,7 +459,7 @@ public class MauerRenderer extends CoolPanel {
         lbl21.setText(String.valueOf(san_Kosten_Kopf));
 
         lbl22.setText(String.valueOf(san_Eingriff_Kopf));
-        //-------------------------------------------------------------
+        // -------------------------------------------------------------
         if (beschreibung_Ansicht != null) {
             lbl23.setText((beschreibung_Ansicht.trim()));
         } else {
@@ -326,7 +479,7 @@ public class MauerRenderer extends CoolPanel {
         lbl26.setText(String.valueOf(san_Kosten_Ansicht));
 
         lbl27.setText(String.valueOf(san_Eingriff_Ansicht));
-        //-------------------------------------------------------------
+        // -------------------------------------------------------------
         if (beschreibung_Gruendung != null) {
             lbl28.setText((beschreibung_Gruendung.trim()));
         } else {
@@ -346,7 +499,7 @@ public class MauerRenderer extends CoolPanel {
         lbl31.setText(String.valueOf(san_Kosten_Gruendung));
 
         lbl32.setText(String.valueOf(san_Eingriff_Gruendung));
-        //-------------------------------------------------------------
+        // -------------------------------------------------------------
         if (beschreibung_Verformung != null) {
             lbl33.setText((beschreibung_Verformung.trim()));
         } else {
@@ -366,7 +519,7 @@ public class MauerRenderer extends CoolPanel {
         lbl36.setText(String.valueOf(san_Kosten_Verformung));
 
         lbl37.setText(String.valueOf(san_Eingriff_Verformung));
-        //-------------------------------------------------------------
+        // -------------------------------------------------------------
         if (beschreibung_Gelaende != null) {
             lbl38.setText((beschreibung_Gelaende.trim()));
         } else {
@@ -386,155 +539,178 @@ public class MauerRenderer extends CoolPanel {
         lbl41.setText(String.valueOf(san_Kosten_Gelaende));
 
         lbl42.setText(String.valueOf(san_Eingriff_Gelaende));
-        //-------------------------------------------------------------
-
+        // -------------------------------------------------------------
 
         lbl43.setText(String.valueOf(sanierung));
 
-        if (standsicherheit != null && !standsicherheit.trim().equals("null") && !standsicherheit.trim().equals("")) {
+        if ((standsicherheit != null) && !standsicherheit.trim().equals("null") && !standsicherheit.trim().equals("")) {
             lbl44.setText((standsicherheit.trim()));
         } else {
             lbl44.setVisible(false);
             jLabe44.setVisible(false);
         }
 
-        if (verkehrssicherheit != null && !verkehrssicherheit.trim().equals("null") && !verkehrssicherheit.trim().equals("")) {
+        if ((verkehrssicherheit != null) && !verkehrssicherheit.trim().equals("null")
+                    && !verkehrssicherheit.trim().equals("")) {
             lbl45.setText((verkehrssicherheit.trim()));
         } else {
             lbl45.setVisible(false);
             jLabe45.setVisible(false);
         }
 
-        if (dauerhaftigkeit != null && !dauerhaftigkeit.trim().equals("null") && !dauerhaftigkeit.trim().equals("")) {
+        if ((dauerhaftigkeit != null) && !dauerhaftigkeit.trim().equals("null") && !dauerhaftigkeit.trim().equals("")) {
             lbl46.setText((dauerhaftigkeit.trim()));
         } else {
             lbl46.setVisible(false);
             jLabe46.setVisible(false);
         }
-        if (besonderheiten != null && !besonderheiten.trim().equals("null") && !besonderheiten.trim().equals("")) {
+        if ((besonderheiten != null) && !besonderheiten.trim().equals("null") && !besonderheiten.trim().equals("")) {
             lbl47.setText((besonderheiten.trim()));
         } else {
             lbl47.setVisible(false);
             jLabe47.setVisible(false);
         }
-        //---------------------------------------------------------------
+        // ---------------------------------------------------------------
         if (bild1 != null) {
-            Thread t1 = new Thread(new Runnable() {
+            final Thread t1 = new Thread(new Runnable() {
 
-                public void run() {
-                    try {
-                        BufferedImage bi = ImageIO.read(new URL(prot + server + path + bild1));
-                        if (bi.getWidth() > bi.getHeight()) {
-                            setIi1(new ImageIcon((bi.getScaledInstance(150, -1, BufferedImage.SCALE_SMOOTH))));
-                        } else {
-                            setIi1(new ImageIcon((bi.getScaledInstance(-1, 150, BufferedImage.SCALE_SMOOTH))));
-                        }
-                    } catch (MalformedURLException ex) {
-                        ex.printStackTrace();
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-                    EventQueue.invokeLater(new Runnable() {
-
+                        @Override
                         public void run() {
-                            if (getIi1() != null) {
-                                jButton1.setIcon(getIi1());
-                            } else {
-                                jButton1.setVisible(false);
-                                jLabel48.setVisible(false);
+                            try {
+                                final BufferedImage bi = ImageIO.read(new URL(prot + server + path + bild1));
+                                if (bi.getWidth() > bi.getHeight()) {
+                                    setIi1(new ImageIcon((bi.getScaledInstance(150, -1, BufferedImage.SCALE_SMOOTH))));
+                                } else {
+                                    setIi1(new ImageIcon((bi.getScaledInstance(-1, 150, BufferedImage.SCALE_SMOOTH))));
+                                }
+                            } catch (MalformedURLException ex) {
+                                ex.printStackTrace();
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
                             }
+                            EventQueue.invokeLater(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        if (getIi1() != null) {
+                                            jButton1.setIcon(getIi1());
+                                        } else {
+                                            jButton1.setVisible(false);
+                                            jLabel48.setVisible(false);
+                                        }
+                                    }
+                                });
                         }
                     });
-                }
-            });
             t1.start();
         } else {
             EventQueue.invokeLater(new Runnable() {
 
-                public void run() {
-                    jButton1.setVisible(false);
-                    jLabel48.setVisible(false);
-                }
-            });
+                    @Override
+                    public void run() {
+                        jButton1.setVisible(false);
+                        jLabel48.setVisible(false);
+                    }
+                });
         }
 
-
-
-
         if (bild2 != null) {
-            Thread t2 = new Thread(new Runnable() {
+            final Thread t2 = new Thread(new Runnable() {
 
-                public void run() {
-                    try {
-                        BufferedImage bi = ImageIO.read(new URL(prot + server + path + bild2));
-                        if (bi.getWidth() > bi.getHeight()) {
-                            setIi2(new ImageIcon((bi.getScaledInstance(150, -1, BufferedImage.SCALE_SMOOTH))));
-                        } else {
-                            setIi2(new ImageIcon((bi.getScaledInstance(-1, 150, BufferedImage.SCALE_SMOOTH))));
-                        }
-                    } catch (MalformedURLException ex) {
-                        ex.printStackTrace();
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-                    EventQueue.invokeLater(new Runnable() {
-
+                        @Override
                         public void run() {
-                            if (getIi2() != null) {
-                                jButton2.setIcon(getIi2());
-                            } else {
-                                jButton2.setVisible(false);
-                                jLabel49.setVisible(false);
+                            try {
+                                final BufferedImage bi = ImageIO.read(new URL(prot + server + path + bild2));
+                                if (bi.getWidth() > bi.getHeight()) {
+                                    setIi2(new ImageIcon((bi.getScaledInstance(150, -1, BufferedImage.SCALE_SMOOTH))));
+                                } else {
+                                    setIi2(new ImageIcon((bi.getScaledInstance(-1, 150, BufferedImage.SCALE_SMOOTH))));
+                                }
+                            } catch (MalformedURLException ex) {
+                                ex.printStackTrace();
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
                             }
+                            EventQueue.invokeLater(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        if (getIi2() != null) {
+                                            jButton2.setIcon(getIi2());
+                                        } else {
+                                            jButton2.setVisible(false);
+                                            jLabel49.setVisible(false);
+                                        }
+                                    }
+                                });
                         }
                     });
-                }
-            });
             t2.start();
         } else {
             EventQueue.invokeLater(new Runnable() {
 
-                public void run() {
-                    jButton2.setVisible(false);
-                    jLabel49.setVisible(false);
-                    if (bild1 == null) {
-                        jPanel2.setBorder(null);
-                        jPanel2.setVisible(false);
+                    @Override
+                    public void run() {
+                        jButton2.setVisible(false);
+                        jLabel49.setVisible(false);
+                        if (bild1 == null) {
+                            jPanel2.setBorder(null);
+                            jPanel2.setVisible(false);
+                        }
                     }
-                }
-            });
+                });
         }
     }
 
     /**
      * Gibt das Verhaeltnis der Breite des Renderers zur Breite des internen Browsers aus.
-     * @return Verhaeltnis Renderers / interner Browser
+     *
+     * @return  Verhaeltnis Renderers / interner Browser
      */
     @Override
     public double getWidthRatio() {
         return 1.0;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public ImageIcon getIi1() {
         return ii1;
     }
 
-    public void setIi1(ImageIcon ii1) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  ii1  DOCUMENT ME!
+     */
+    public void setIi1(final ImageIcon ii1) {
         this.ii1 = ii1;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public ImageIcon getIi2() {
         return ii2;
     }
 
-    public void setIi2(ImageIcon ii2) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  ii2  DOCUMENT ME!
+     */
+    public void setIi2(final ImageIcon ii2) {
         this.ii2 = ii2;
     }
 
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -678,16 +854,18 @@ public class MauerRenderer extends CoolPanel {
 
         panSpinner.setOpaque(false);
 
-        javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
+        final javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
         panSpinner.setLayout(panSpinnerLayout);
         panSpinnerLayout.setHorizontalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                100,
+                Short.MAX_VALUE));
         panSpinnerLayout.setVerticalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                100,
+                Short.MAX_VALUE));
 
         panMap.add(panSpinner, new java.awt.GridBagConstraints());
 
@@ -696,16 +874,18 @@ public class MauerRenderer extends CoolPanel {
         panInter.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 5, 1));
         panInter.setOpaque(false);
 
-        javax.swing.GroupLayout panInterLayout = new javax.swing.GroupLayout(panInter);
+        final javax.swing.GroupLayout panInterLayout = new javax.swing.GroupLayout(panInter);
         panInter.setLayout(panInterLayout);
         panInterLayout.setHorizontalGroup(
-            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 589, Short.MAX_VALUE)
-        );
+            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                589,
+                Short.MAX_VALUE));
         panInterLayout.setVerticalGroup(
-            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 9, Short.MAX_VALUE)
-        );
+            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                9,
+                Short.MAX_VALUE));
 
         add(panInter, java.awt.BorderLayout.SOUTH);
 
@@ -715,22 +895,18 @@ public class MauerRenderer extends CoolPanel {
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblTitle.setText("Mauer");
 
-        javax.swing.GroupLayout panTitleLayout = new javax.swing.GroupLayout(panTitle);
+        final javax.swing.GroupLayout panTitleLayout = new javax.swing.GroupLayout(panTitle);
         panTitle.setLayout(panTitleLayout);
         panTitleLayout.setHorizontalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panTitleLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblTitle)
-                .addContainerGap(523, Short.MAX_VALUE))
-        );
+            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addContainerGap(
+                    523,
+                    Short.MAX_VALUE)));
         panTitleLayout.setVerticalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panTitleLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblTitle)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addContainerGap(
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    Short.MAX_VALUE)));
 
         add(panTitle, java.awt.BorderLayout.NORTH);
 
@@ -1517,7 +1693,11 @@ public class MauerRenderer extends CoolPanel {
         jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createEmptyBorder(1, 10, 10, 10), javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(255, 255, 255), new java.awt.Color(0, 0, 0))));
+        jPanel2.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+                javax.swing.BorderFactory.createEmptyBorder(1, 10, 10, 10),
+                javax.swing.BorderFactory.createEtchedBorder(
+                    new java.awt.Color(255, 255, 255),
+                    new java.awt.Color(0, 0, 0))));
         jPanel2.setOpaque(false);
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
@@ -1534,10 +1714,12 @@ public class MauerRenderer extends CoolPanel {
         jPanel2.add(jLabel49, gridBagConstraints);
 
         jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton1ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1545,10 +1727,12 @@ public class MauerRenderer extends CoolPanel {
         jPanel2.add(jButton1, gridBagConstraints);
 
         jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton2ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -1653,148 +1837,31 @@ public class MauerRenderer extends CoolPanel {
         panContent.add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
         add(panContent, java.awt.BorderLayout.WEST);
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
         try {
             BrowserLauncher.openURL(prot + server + path + bild2);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         try {
             BrowserLauncher.openURL(prot + server + path + bild1);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabe31;
-    private javax.swing.JLabel jLabe32;
-    private javax.swing.JLabel jLabe33;
-    private javax.swing.JLabel jLabe42;
-    private javax.swing.JLabel jLabe43;
-    private javax.swing.JLabel jLabe44;
-    private javax.swing.JLabel jLabe45;
-    private javax.swing.JLabel jLabe46;
-    private javax.swing.JLabel jLabe47;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
-    private javax.swing.JLabel jLabel24;
-    private javax.swing.JLabel jLabel25;
-    private javax.swing.JLabel jLabel26;
-    private javax.swing.JLabel jLabel27;
-    private javax.swing.JLabel jLabel28;
-    private javax.swing.JLabel jLabel29;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel30;
-    private javax.swing.JLabel jLabel34;
-    private javax.swing.JLabel jLabel35;
-    private javax.swing.JLabel jLabel36;
-    private javax.swing.JLabel jLabel37;
-    private javax.swing.JLabel jLabel38;
-    private javax.swing.JLabel jLabel39;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel40;
-    private javax.swing.JLabel jLabel41;
-    private javax.swing.JLabel jLabel48;
-    private javax.swing.JLabel jLabel49;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel51;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel10;
-    private javax.swing.JPanel jPanel11;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
-    private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JLabel lbl1;
-    private javax.swing.JLabel lbl10;
-    private javax.swing.JLabel lbl11;
-    private javax.swing.JLabel lbl12;
-    private javax.swing.JLabel lbl13;
-    private javax.swing.JLabel lbl14;
-    private javax.swing.JLabel lbl15;
-    private javax.swing.JLabel lbl16;
-    private javax.swing.JLabel lbl17;
-    private javax.swing.JLabel lbl18;
-    private javax.swing.JLabel lbl19;
-    private javax.swing.JLabel lbl2;
-    private javax.swing.JLabel lbl20;
-    private javax.swing.JLabel lbl21;
-    private javax.swing.JLabel lbl22;
-    private javax.swing.JLabel lbl23;
-    private javax.swing.JLabel lbl24;
-    private javax.swing.JLabel lbl25;
-    private javax.swing.JLabel lbl26;
-    private javax.swing.JLabel lbl27;
-    private javax.swing.JLabel lbl28;
-    private javax.swing.JLabel lbl29;
-    private javax.swing.JLabel lbl3;
-    private javax.swing.JLabel lbl30;
-    private javax.swing.JLabel lbl31;
-    private javax.swing.JLabel lbl32;
-    private javax.swing.JLabel lbl33;
-    private javax.swing.JLabel lbl34;
-    private javax.swing.JLabel lbl35;
-    private javax.swing.JLabel lbl36;
-    private javax.swing.JLabel lbl37;
-    private javax.swing.JLabel lbl38;
-    private javax.swing.JLabel lbl39;
-    private javax.swing.JLabel lbl4;
-    private javax.swing.JLabel lbl40;
-    private javax.swing.JLabel lbl41;
-    private javax.swing.JLabel lbl42;
-    private javax.swing.JLabel lbl43;
-    private javax.swing.JLabel lbl44;
-    private javax.swing.JLabel lbl45;
-    private javax.swing.JLabel lbl46;
-    private javax.swing.JLabel lbl47;
-    private javax.swing.JLabel lbl5;
-    private javax.swing.JLabel lbl51;
-    private javax.swing.JLabel lbl6;
-    private javax.swing.JLabel lbl7;
-    private javax.swing.JLabel lbl8;
-    private javax.swing.JLabel lbl9;
-    private javax.swing.JLabel lblTitle;
-    private javax.swing.JPanel panContent;
-    private javax.swing.JPanel panInhalt;
-    private javax.swing.JPanel panInhalt1;
-    private javax.swing.JPanel panInhalt2;
-    private javax.swing.JPanel panInhalt3;
-    private javax.swing.JPanel panInhalt4;
-    private javax.swing.JPanel panInhalt5;
-    private javax.swing.JPanel panInhalt6;
-    private javax.swing.JPanel panInhalt7;
-    private javax.swing.JPanel panInter;
-    private javax.swing.JPanel panMap;
-    private javax.swing.JPanel panSpinner;
-    private javax.swing.JPanel panTitle;
-    // End of variables declaration//GEN-END:variables
+    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
 }

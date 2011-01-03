@@ -1,68 +1,118 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
 import com.vividsolutions.jts.geom.Geometry;
-import de.cismet.cids.annotations.CidsAttribute;
-import de.cismet.cids.annotations.CidsRendererTitle;
-import de.cismet.cids.custom.deprecated.JLoadDots;
+
 import java.sql.Date;
+
 import java.text.DateFormat;
+
 import java.util.Locale;
 
+import de.cismet.cids.annotations.CidsAttribute;
+import de.cismet.cids.annotations.CidsRendererTitle;
+
+import de.cismet.cids.custom.deprecated.JLoadDots;
+
+import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
+
 /**
- * de.cismet.cids.objectrenderer.CoolAuftragsbuchRenderer
+ * de.cismet.cids.objectrenderer.CoolAuftragsbuchRenderer.
  *
- * @author cschmidt
- * @author nh
+ * @author   cschmidt
+ * @author   nh
+ * @version  $Revision$, $Date$
  */
 public class AuftragsbuchRenderer extends CoolPanel {
-    
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final String AUFTRAGSBUCH = "Auftragsbuch";
+
+    //~ Instance fields --------------------------------------------------------
+
     @CidsRendererTitle
     public String compTitle = "";
-            
+
     @CidsAttribute("Auftragsnummer")
     public Integer auftragsnummer = null;
-    
+
     @CidsAttribute("Auftrag erteilt am")
     public Date auftragsdatum = null;
-    
+
     @CidsAttribute("Auftragsart")
     public String auftragsart = "";
-    
+
     @CidsAttribute("Auftraggeber")
     public String auftraggeber = "";
-    
+
     @CidsAttribute("Aktenzeichen")
     public String aktenzeichen = "";
-    
+
     @CidsAttribute("Lage")
     public String lage = "";
-    
+
     @CidsAttribute("Bemerkungen(1)")
     public String bemerkungEins = "";
-    
+
     @CidsAttribute("Bemerkungen(2)")
     public String bemerkungZwei = "";
-    
+
     @CidsAttribute("Erledigt am")
     public Date erledigtAm = null;
-    
+
     @CidsAttribute("Bearbeiter")
     public String bearbeiter = "";
-    
+
     @CidsAttribute("Hinweise")
     public String hinweise = "";
-    
-    @CidsAttribute("Georeferenz.GEO_STRING") 
+
+    @CidsAttribute("Georeferenz.GEO_STRING")
     public Geometry geometry = null;
-    
+
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
-        
-    private static final String AUFTRAGSBUCH = "Auftragsbuch";
-    
-        
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel lblAktenzeichen;
+    private javax.swing.JLabel lblAuftraggeber;
+    private javax.swing.JLabel lblAuftragsart;
+    private javax.swing.JLabel lblAuftragsdatum;
+    private javax.swing.JLabel lblAuftragsnummer;
+    private javax.swing.JLabel lblBearbeiter;
+    private javax.swing.JLabel lblBemerkEins;
+    private javax.swing.JLabel lblBemerkZwei;
+    private javax.swing.JLabel lblErledigtAm;
+    private javax.swing.JLabel lblHinweise;
+    private javax.swing.JLabel lblLage;
+    private javax.swing.JLabel lblTitel;
+    private javax.swing.JPanel panInter;
+    private javax.swing.JPanel panMain;
+    private javax.swing.JPanel panMap;
+    private javax.swing.JPanel panSpinner;
+    private javax.swing.JPanel panTitle;
+    // End of variables declaration//GEN-END:variables
+
+    //~ Constructors -----------------------------------------------------------
+
     /**
-     * Creates new form CoolAuftragsbuchRenderer
+     * Creates new form CoolAuftragsbuchRenderer.
      */
     public AuftragsbuchRenderer() {
         initComponents();
@@ -72,96 +122,100 @@ public class AuftragsbuchRenderer extends CoolPanel {
         setPanTitle(panTitle);
         setSpinner(panSpinner);
     }
-    
+
+    //~ Methods ----------------------------------------------------------------
+
     @Override
     public void assignSingle() {
-        if(auftragsnummer != null)
+        if (auftragsnummer != null) {
             lblAuftragsnummer.setText(auftragsnummer.toString());
-        else{
+        } else {
             lblAuftragsnummer.setText("Keine g\u00FCltige Auftragsnummmer");
             log.error("auftragsnummer = Null");
         }
-        
-        if(auftragsdatum != null){
-            lblAuftragsdatum.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY).format(auftragsdatum));
-        }
-        else{
+
+        if (auftragsdatum != null) {
+            lblAuftragsdatum.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY).format(
+                    auftragsdatum));
+        } else {
             jLabel3.setVisible(false);
             lblAuftragsdatum.setVisible(false);
-            log.debug("Auftragdatum nicht in der Datenbank gespeichert");
+            if (log.isDebugEnabled()) {
+                log.debug("Auftragdatum nicht in der Datenbank gespeichert");
+            }
         }
-        
-        if(auftragsart != null && !auftragsart.equals("") && !auftragsart.equals("null"))
+
+        if ((auftragsart != null) && !auftragsart.equals("") && !auftragsart.equals("null")) {
             lblAuftragsart.setText(auftragsart);
-        else{
+        } else {
             jLabel4.setVisible(false);
             lblAuftragsart.setVisible(false);
         }
-        
-        if(auftraggeber != null && !auftraggeber.equals("") && !auftraggeber.equals("null"))
+
+        if ((auftraggeber != null) && !auftraggeber.equals("") && !auftraggeber.equals("null")) {
             lblAuftraggeber.setText(auftraggeber);
-        else{
+        } else {
             jLabel5.setVerifyInputWhenFocusTarget(false);
             lblAuftraggeber.setVisible(false);
         }
-        
-        if(aktenzeichen != null && !aktenzeichen.equals("") && !aktenzeichen.equals("null"))
+
+        if ((aktenzeichen != null) && !aktenzeichen.equals("") && !aktenzeichen.equals("null")) {
             lblAktenzeichen.setText(aktenzeichen);
-        else{
+        } else {
             jLabel6.setVisible(false);
-            lblAktenzeichen.setVisible(false);            
+            lblAktenzeichen.setVisible(false);
         }
-        
-        if(lage != null && !lage.equals("") && !lage.equals("null"))
+
+        if ((lage != null) && !lage.equals("") && !lage.equals("null")) {
             lblLage.setText(lage);
-        else{
+        } else {
             jLabel7.setVisible(false);
             lblLage.setVisible(false);
         }
-        
-        if(bemerkungEins != null && !bemerkungEins.equals("") && !bemerkungEins.equals("null"))
+
+        if ((bemerkungEins != null) && !bemerkungEins.equals("") && !bemerkungEins.equals("null")) {
             lblBemerkEins.setText(bemerkungEins);
-        else{
+        } else {
             jLabel8.setVisible(false);
             lblBemerkEins.setVisible(false);
         }
-        
-        if(bemerkungZwei != null && !bemerkungZwei.equals("") && !bemerkungZwei.equals("null"))
+
+        if ((bemerkungZwei != null) && !bemerkungZwei.equals("") && !bemerkungZwei.equals("null")) {
             lblBemerkZwei.setText(bemerkungZwei);
-        else{
+        } else {
             jLabel9.setVisible(false);
             lblBemerkZwei.setVisible(false);
         }
-        
-        if(erledigtAm != null)
+
+        if (erledigtAm != null) {
             lblErledigtAm.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY).format(erledigtAm));
-        else{
+        } else {
             jLabel10.setVisible(false);
-            lblErledigtAm.setVisible(false);            
+            lblErledigtAm.setVisible(false);
         }
-        
-        if(bearbeiter != null && !bearbeiter.equals("") && !bearbeiter.equals("null"))
+
+        if ((bearbeiter != null) && !bearbeiter.equals("") && !bearbeiter.equals("null")) {
             lblBearbeiter.setText(bearbeiter);
-        else{
+        } else {
             jLabel11.setVisible(false);
             lblBearbeiter.setVisible(false);
         }
-        
-        if(hinweise != null && !hinweise.equals("") && !hinweise.equals("null"))
+
+        if ((hinweise != null) && !hinweise.equals("") && !hinweise.equals("null")) {
             lblHinweise.setText(hinweise);
-        else{
+        } else {
             jLabel12.setVisible(false);
             lblHinweise.setVisible(false);
         }
-        
-        if (geometry != null)
+
+        if (geometry != null) {
             setGeometry(geometry);
+        }
     }
-    
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -201,16 +255,18 @@ public class AuftragsbuchRenderer extends CoolPanel {
 
         panInter.setOpaque(false);
 
-        javax.swing.GroupLayout panInterLayout = new javax.swing.GroupLayout(panInter);
+        final javax.swing.GroupLayout panInterLayout = new javax.swing.GroupLayout(panInter);
         panInter.setLayout(panInterLayout);
         panInterLayout.setHorizontalGroup(
-            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 380, Short.MAX_VALUE)
-        );
+            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                380,
+                Short.MAX_VALUE));
         panInterLayout.setVerticalGroup(
-            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 20, Short.MAX_VALUE)
-        );
+            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                20,
+                Short.MAX_VALUE));
 
         add(panInter, java.awt.BorderLayout.SOUTH);
 
@@ -405,22 +461,22 @@ public class AuftragsbuchRenderer extends CoolPanel {
         lblTitel.setForeground(new java.awt.Color(255, 255, 255));
         lblTitel.setText("Auftragsbuch");
 
-        javax.swing.GroupLayout panTitleLayout = new javax.swing.GroupLayout(panTitle);
+        final javax.swing.GroupLayout panTitleLayout = new javax.swing.GroupLayout(panTitle);
         panTitle.setLayout(panTitleLayout);
         panTitleLayout.setHorizontalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panTitleLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblTitel)
-                .addContainerGap(248, Short.MAX_VALUE))
-        );
+            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitel).addContainerGap(
+                    248,
+                    Short.MAX_VALUE)));
         panTitleLayout.setVerticalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panTitleLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblTitel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(
+                    lblTitel,
+                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                    27,
+                    javax.swing.GroupLayout.PREFERRED_SIZE).addContainerGap(
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    Short.MAX_VALUE)));
 
         add(panTitle, java.awt.BorderLayout.NORTH);
 
@@ -431,51 +487,21 @@ public class AuftragsbuchRenderer extends CoolPanel {
         panSpinner.setMinimumSize(new java.awt.Dimension(100, 100));
         panSpinner.setOpaque(false);
 
-        javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
+        final javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
         panSpinner.setLayout(panSpinnerLayout);
         panSpinnerLayout.setHorizontalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                100,
+                Short.MAX_VALUE));
         panSpinnerLayout.setVerticalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                100,
+                Short.MAX_VALUE));
 
         panMap.add(panSpinner, new java.awt.GridBagConstraints());
 
         add(panMap, java.awt.BorderLayout.CENTER);
-    }// </editor-fold>//GEN-END:initComponents
-    
-    
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JLabel lblAktenzeichen;
-    private javax.swing.JLabel lblAuftraggeber;
-    private javax.swing.JLabel lblAuftragsart;
-    private javax.swing.JLabel lblAuftragsdatum;
-    private javax.swing.JLabel lblAuftragsnummer;
-    private javax.swing.JLabel lblBearbeiter;
-    private javax.swing.JLabel lblBemerkEins;
-    private javax.swing.JLabel lblBemerkZwei;
-    private javax.swing.JLabel lblErledigtAm;
-    private javax.swing.JLabel lblHinweise;
-    private javax.swing.JLabel lblLage;
-    private javax.swing.JLabel lblTitel;
-    private javax.swing.JPanel panInter;
-    private javax.swing.JPanel panMain;
-    private javax.swing.JPanel panMap;
-    private javax.swing.JPanel panSpinner;
-    private javax.swing.JPanel panTitle;
-    // End of variables declaration//GEN-END:variables
+    } // </editor-fold>//GEN-END:initComponents
 }

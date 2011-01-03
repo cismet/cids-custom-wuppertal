@@ -1,8 +1,14 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /*
  * Alkis_pointRenderer.java
  *
@@ -13,18 +19,11 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 import de.aedsicad.aaaweb.service.alkis.info.ALKISInfoServices;
 import de.aedsicad.aaaweb.service.util.Point;
 import de.aedsicad.aaaweb.service.util.PointLocation;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisCommons;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisSOAPWorkerService;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.SOAPAccessProvider;
-import de.cismet.cids.dynamics.CidsBean;
-import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
-import de.cismet.tools.collections.TypeSafeCollections;
-import de.cismet.tools.gui.BorderProvider;
-import de.cismet.tools.gui.FooterComponentProvider;
-import de.cismet.tools.gui.RoundedPanel;
-import de.cismet.tools.gui.StaticSwingTools;
-import de.cismet.tools.gui.TitleComponentProvider;
+
+import org.jdesktop.beansbinding.Converter;
+import org.jdesktop.swingx.error.ErrorInfo;
+import org.jdesktop.swingx.graphics.ReflectionRenderer;
+
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -33,6 +32,7 @@ import java.awt.LayoutManager;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -41,7 +41,9 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.imageio.ImageIO;
+
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -50,19 +52,41 @@ import javax.swing.ListCellRenderer;
 import javax.swing.SwingWorker;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import org.jdesktop.beansbinding.Converter;
-import org.jdesktop.swingx.error.ErrorInfo;
-import org.jdesktop.swingx.graphics.ReflectionRenderer;
+
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisCommons;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisSOAPWorkerService;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.SOAPAccessProvider;
+
+import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+
+import de.cismet.tools.collections.TypeSafeCollections;
+
+import de.cismet.tools.gui.BorderProvider;
+import de.cismet.tools.gui.FooterComponentProvider;
+import de.cismet.tools.gui.RoundedPanel;
+import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.TitleComponentProvider;
 
 /**
+ * DOCUMENT ME!
  *
- * @author srichter
+ * @author   srichter
+ * @version  $Revision$, $Date$
  */
-public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanRenderer, TitleComponentProvider, FooterComponentProvider, BorderProvider {
+public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanRenderer,
+    TitleComponentProvider,
+    FooterComponentProvider,
+    BorderProvider {
+
+    //~ Static fields/initializers ---------------------------------------------
 
     private static final String ICON_RES_PACKAGE = "/de/cismet/cids/custom/wunda_blau/res/";
     private static final String ALKIS_RES_PACKAGE = ICON_RES_PACKAGE + "alkis/";
-    private static final Pattern ERHEBUNG_FILTER_PATTERN = Pattern.compile("<LI_Source><description>(.*)</description></LI_Source>");
+    private static final Pattern ERHEBUNG_FILTER_PATTERN = Pattern.compile(
+            "<LI_Source><description>(.*)</description></LI_Source>");
     private static final String CARD_1 = "CARD_1";
     private static final String CARD_2 = "CARD_2";
     private static final String ERHEBUNGS_PROPERTIES = "datenerhebung.properties";
@@ -72,6 +96,166 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
 //    private ImageIcon BACKWARD_SELECTED;
     private static final Color PUNKTORT_MIT_KARTENDARSTELLUNG = new Color(120, 255, 190);
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alkis_pointRenderer.class);
+    private static final Converter<String, String> ALKIS_BOOLEAN_CONVERTER = new Converter<String, String>() {
+
+            private static final String TRUE_REP = "Ja";
+            private static final String FALSE_REP = "Nein";
+
+            @Override
+            public String convertForward(final String s) {
+                if ((s != null) && s.equals("1")) {
+                    return TRUE_REP;
+                } else {
+                    return FALSE_REP;
+                }
+            }
+
+            @Override
+            public String convertReverse(final String t) {
+                if (TRUE_REP.equals(t)) {
+                    return "1";
+                } else {
+                    return "0";
+                }
+            }
+        };
+
+    private static final Converter<String, String> ALKIS_ERHEBUNG_CONVERTER = new Converter<String, String>() {
+
+            // anonymous constructor
+
+            {
+                this.datenerhebungWerte = new Properties();
+                try {
+                    this.datenerhebungWerte.load(getClass().getResource(ALKIS_RES_PACKAGE + ERHEBUNGS_PROPERTIES)
+                                .openStream());
+                } catch (Exception ex) {
+                    log.error(ex, ex);
+                }
+            }
+
+            private final Properties datenerhebungWerte;
+
+            @Override
+            public String convertForward(final String s) {
+                if (s != null) {
+                    final Matcher matcher = ERHEBUNG_FILTER_PATTERN.matcher(s);
+                    if (matcher.find()) {
+                        // take the 4 digit code
+                        final String matcherResultG1 = matcher.group(1);
+                        if ((matcherResultG1 != null) && (matcherResultG1.length() > 3)) {
+                            final String searchKey = matcherResultG1.substring(0, 4);
+                            // lookup description for code
+                            final String descr = datenerhebungWerte.getProperty(searchKey);
+                            if (descr != null) {
+                                // return result + format with html (max. column length)
+                                return "<html><table width=\"300\" border=\"0\"><tr><td>(" + searchKey + ") " + descr
+                                            + "</tr></table></html>";
+                            } else {
+                                log.warn("No description found for Erhebung with key: " + searchKey);
+                            }
+                        }
+                    }
+                    log.warn("Could not translate response: " + s);
+                }
+                return "keine Angabe";
+            }
+
+            @Override
+            public String convertReverse(final String t) {
+                throw new UnsupportedOperationException("Will not be supported!");
+            }
+        };
+
+    private static final Converter<CidsBean, String> ALKIS_VERMARKUNG_CONVERTER = new Converter<CidsBean, String>() {
+
+            @Override
+            public String convertForward(final CidsBean bean) {
+                Object markenObj = bean.getProperty("abmarkung");
+                if (markenObj == null) {
+                    markenObj = bean.getProperty("vermarkung");
+                }
+                return (markenObj == null) ? null : markenObj.toString();
+            }
+
+            @Override
+            public CidsBean convertReverse(final String vermarkungText) {
+                throw new UnsupportedOperationException("Will/Can not be supported!");
+            }
+        };
+
+    private static final Comparator<PointLocation> POINTLOCATION_COMPARATOR = new Comparator<PointLocation>() {
+
+            @Override
+            public int compare(final PointLocation p1, final PointLocation p2) {
+                final int result = compareKartendarstellung(p1, p2);
+                if (result != 0) {
+                    // descending order
+                    return -result;
+                } else {
+                    // descending order
+                    return -compareDate(p1, p2);
+                }
+            }
+
+            private int compareKartendarstellung(final PointLocation p1, final PointLocation p2) {
+                final String kd1 = p1.getKartendarstellung();
+                final String kd2 = p2.getKartendarstellung();
+                if (kd1 != kd2) {
+                    if (kd1 != null) {
+                        if (kd2 != null) {
+                            return kd1.compareTo(kd2);
+                        } else {
+                            return 1;
+                        }
+                    } else {
+                        return -1;
+                    }
+                } else {
+                    return 0;
+                }
+            }
+
+            private int compareDate(final PointLocation p1, final PointLocation p2) {
+                final String lz1 = p1.getLebenszeitIntervallBeginnt();
+                final String lz2 = p2.getLebenszeitIntervallBeginnt();
+                if (lz1 != lz2) {
+                    if (lz1 != null) {
+                        if (lz2 != null) {
+                            if ((lz1.length() > 9) && (lz2.length() > 9)) {
+                                // 10 = length of YYYY-MM-DD
+                                return compareDateStrings(lz1.substring(0, 11), lz2.substring(0, 11));
+                            } else {
+                                throw new IllegalStateException("Could not parse Dates: " + lz1 + " or " + lz2);
+                            }
+                        } else {
+                            return 1;
+                        }
+                    } else {
+                        return -1;
+                    }
+                } else {
+                    return 0;
+                }
+            }
+
+            private int compareDateStrings(final String ds1, final String ds2) {
+                final String[] ymd1 = ds1.split("-");
+                final String[] ymd2 = ds2.split("-");
+                if ((ymd1.length == 3) && (ymd2.length == 3)) {
+                    int result = 0;
+                    for (int i = 0; (i < 3) && (result == 0); ++i) {
+                        result = ymd1[i].compareTo(ymd2[i]);
+                    }
+                    return result;
+                } else {
+                    throw new IllegalStateException("Could not parse Dates: " + ds1 + " or " + ds2);
+                }
+            }
+        };
+
+    //~ Instance fields --------------------------------------------------------
+
     private final Map<Object, ImageIcon> productPreviewImages;
     private final List<JLabel> retrieveableLabels;
     private SOAPAccessProvider soapProvider;
@@ -82,163 +266,111 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
     private final CardLayout cardLayout;
 //    private BindingGroup punktOrtBindingGroup;
     private List<PointLocation> pointLocations;
-    //should be static!
+    // should be static!
     private ImageIcon PUNKT_PDF;
     private ImageIcon PUNKT_HTML;
     private ImageIcon PUNKT_TXT;
-    private static final Converter<String, String> ALKIS_BOOLEAN_CONVERTER = new Converter<String, String>() {
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private org.jdesktop.swingx.JXBusyLabel blWaiting;
+    private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnForward;
+    private javax.swing.JButton btnRetrieve;
+    private javax.swing.JComboBox cbPunktorte;
+    private org.jdesktop.swingx.JXHyperlink hlPunktlisteHtml;
+    private org.jdesktop.swingx.JXHyperlink hlPunktlistePdf;
+    private org.jdesktop.swingx.JXHyperlink hlPunktlisteTxt;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JLabel lblBack;
+    private javax.swing.JLabel lblDescAnlass;
+    private javax.swing.JLabel lblDescBeginn;
+    private javax.swing.JLabel lblDescDatenerhebung;
+    private javax.swing.JLabel lblDescDienststelle;
+    private javax.swing.JLabel lblDescEnde;
+    private javax.swing.JLabel lblDescGenauigkeitsstufe;
+    private javax.swing.JLabel lblDescHinweise;
+    private javax.swing.JLabel lblDescHochwert;
+    private javax.swing.JLabel lblDescIdentifikator;
+    private javax.swing.JLabel lblDescKartendarstellung;
+    private javax.swing.JLabel lblDescKoordStatus;
+    private javax.swing.JLabel lblDescLand;
+    private javax.swing.JLabel lblDescMarke;
+    private javax.swing.JLabel lblDescModellart;
+    private javax.swing.JLabel lblDescPLIdentifikator;
+    private javax.swing.JLabel lblDescPLObjektart;
+    private javax.swing.JLabel lblDescPOAnlass;
+    private javax.swing.JLabel lblDescPOBeginn;
+    private javax.swing.JLabel lblDescPOEnde;
+    private javax.swing.JLabel lblDescPOModellart;
+    private javax.swing.JLabel lblDescPunktart;
+    private javax.swing.JLabel lblDescPunktkennung;
+    private javax.swing.JLabel lblDescPunktorte;
+    private javax.swing.JLabel lblDescRechtswert;
+    private javax.swing.JLabel lblForw;
+    private javax.swing.JLabel lblLocHead;
+    private javax.swing.JLabel lblPointHead;
+    private javax.swing.JLabel lblPreviewHead;
+    private javax.swing.JLabel lblProductPreview;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JLabel lblTxtAbmarkungMarke;
+    private javax.swing.JLabel lblTxtAnlass;
+    private javax.swing.JLabel lblTxtBeginn;
+    private javax.swing.JLabel lblTxtDatenerhebung;
+    private javax.swing.JLabel lblTxtDienststelle;
+    private javax.swing.JLabel lblTxtEnde;
+    private javax.swing.JLabel lblTxtGenauigkeitsstufe;
+    private javax.swing.JLabel lblTxtHinweise;
+    private javax.swing.JLabel lblTxtHochwert;
+    private javax.swing.JLabel lblTxtIdentifikator;
+    private javax.swing.JLabel lblTxtKartendarstellung;
+    private javax.swing.JLabel lblTxtKoordStatus;
+    private javax.swing.JLabel lblTxtLand;
+    private javax.swing.JLabel lblTxtModellart;
+    private javax.swing.JLabel lblTxtPLIdentifikator;
+    private javax.swing.JLabel lblTxtPLObjektart;
+    private javax.swing.JLabel lblTxtPOAnlass;
+    private javax.swing.JLabel lblTxtPOBeginn;
+    private javax.swing.JLabel lblTxtPOEnde;
+    private javax.swing.JLabel lblTxtPOModellart;
+    private javax.swing.JLabel lblTxtPunktart;
+    private javax.swing.JLabel lblTxtPunktkennung;
+    private javax.swing.JLabel lblTxtRechtswert;
+    private javax.swing.JPanel panButtons;
+    private javax.swing.JPanel panFooter;
+    private javax.swing.JPanel panFooterLeft;
+    private javax.swing.JPanel panFooterRight;
+    private javax.swing.JPanel panHtmlProducts;
+    private javax.swing.JPanel panInfo;
+    private javax.swing.JPanel panLocationInfos;
+    private javax.swing.JPanel panPdfProducts;
+    private javax.swing.JPanel panPointInfo;
+    private javax.swing.JPanel panProductPreview;
+    private javax.swing.JPanel panProducts;
+    private javax.swing.JPanel panSpacing;
+    private javax.swing.JPanel panTitle;
+    private javax.swing.JPanel panTxtProducts;
+    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel3;
+    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel4;
+    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel5;
+    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel6;
+    private de.cismet.tools.gui.SemiRoundedPanel srpHeadLocInfo;
+    private de.cismet.tools.gui.SemiRoundedPanel srpPointInfo;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
+    // End of variables declaration//GEN-END:variables
 
-        private static final String TRUE_REP = "Ja";
-        private static final String FALSE_REP = "Nein";
+    //~ Constructors -----------------------------------------------------------
 
-        @Override
-        public String convertForward(String s) {
-            if (s != null && s.equals("1")) {
-                return TRUE_REP;
-            } else {
-                return FALSE_REP;
-            }
-        }
-
-        @Override
-        public String convertReverse(String t) {
-            if (TRUE_REP.equals(t)) {
-                return "1";
-            } else {
-                return "0";
-            }
-        }
-    };
-    private static final Converter<String, String> ALKIS_ERHEBUNG_CONVERTER = new Converter<String, String>() {
-        //anonymous constructor
-
-        {
-            this.datenerhebungWerte = new Properties();
-            try {
-                this.datenerhebungWerte.load(getClass().getResource(ALKIS_RES_PACKAGE + ERHEBUNGS_PROPERTIES).openStream());
-            } catch (Exception ex) {
-                log.error(ex, ex);
-            }
-        }
-        private final Properties datenerhebungWerte;
-
-        @Override
-        public String convertForward(String s) {
-            if (s != null) {
-                final Matcher matcher = ERHEBUNG_FILTER_PATTERN.matcher(s);
-                if (matcher.find()) {
-                    //take the 4 digit code
-                    final String matcherResultG1 = matcher.group(1);
-                    if (matcherResultG1 != null && matcherResultG1.length() > 3) {
-                        final String searchKey = matcherResultG1.substring(0, 4);
-                        //lookup description for code
-                        final String descr = datenerhebungWerte.getProperty(searchKey);
-                        if (descr != null) {
-                            //return result + format with html (max. column length)
-                            return "<html><table width=\"300\" border=\"0\"><tr><td>(" + searchKey + ") " + descr + "</tr></table></html>";
-                        } else {
-                            log.warn("No description found for Erhebung with key: " + searchKey);
-                        }
-                    }
-                }
-                log.warn("Could not translate response: " + s);
-            }
-            return "keine Angabe";
-        }
-
-        @Override
-        public String convertReverse(String t) {
-            throw new UnsupportedOperationException("Will not be supported!");
-        }
-    };
-    private static final Converter<CidsBean, String> ALKIS_VERMARKUNG_CONVERTER = new Converter<CidsBean, String>() {
-
-        @Override
-        public String convertForward(CidsBean bean) {
-            Object markenObj = bean.getProperty("abmarkung");
-            if (markenObj == null) {
-                markenObj = bean.getProperty("vermarkung");
-            }
-            return markenObj == null ? null : markenObj.toString();
-        }
-
-        @Override
-        public CidsBean convertReverse(String vermarkungText) {
-            throw new UnsupportedOperationException("Will/Can not be supported!");
-        }
-    };
-    private static final Comparator<PointLocation> POINTLOCATION_COMPARATOR = new Comparator<PointLocation>() {
-
-        @Override
-        public int compare(PointLocation p1, PointLocation p2) {
-            int result = compareKartendarstellung(p1, p2);
-            if (result != 0) {
-                //descending order
-                return -result;
-            } else {
-                //descending order
-                return -compareDate(p1, p2);
-            }
-
-        }
-
-        private int compareKartendarstellung(PointLocation p1, PointLocation p2) {
-            String kd1 = p1.getKartendarstellung();
-            String kd2 = p2.getKartendarstellung();
-            if (kd1 != kd2) {
-                if (kd1 != null) {
-                    if (kd2 != null) {
-                        return kd1.compareTo(kd2);
-                    } else {
-                        return 1;
-                    }
-                } else {
-                    return -1;
-                }
-            } else {
-                return 0;
-            }
-        }
-
-        private int compareDate(PointLocation p1, PointLocation p2) {
-            String lz1 = p1.getLebenszeitIntervallBeginnt();
-            String lz2 = p2.getLebenszeitIntervallBeginnt();
-            if (lz1 != lz2) {
-                if (lz1 != null) {
-                    if (lz2 != null) {
-                        if (lz1.length() > 9 && lz2.length() > 9) {
-                            //10 = length of YYYY-MM-DD
-                            return compareDateStrings(lz1.substring(0, 11), lz2.substring(0, 11));
-                        } else {
-                            throw new IllegalStateException("Could not parse Dates: " + lz1 + " or " + lz2);
-                        }
-                    } else {
-                        return 1;
-                    }
-                } else {
-                    return -1;
-                }
-            } else {
-                return 0;
-            }
-        }
-
-        private int compareDateStrings(String ds1, String ds2) {
-            String[] ymd1 = ds1.split("-");
-            String[] ymd2 = ds2.split("-");
-            if (ymd1.length == 3 && ymd2.length == 3) {
-                int result = 0;
-                for (int i = 0; i < 3 && result == 0; ++i) {
-                    result = ymd1[i].compareTo(ymd2[i]);
-                }
-                return result;
-            } else {
-                throw new IllegalStateException("Could not parse Dates: " + ds1 + " or " + ds2);
-            }
-        }
-    };
-
-    /** Creates new form Alkis_pointRenderer */
+    /**
+     * Creates new form Alkis_pointRenderer.
+     */
     public Alkis_pointRenderer() {
         retrieveableLabels = TypeSafeCollections.newArrayList();
         productPreviewImages = TypeSafeCollections.newHashMap();
@@ -258,11 +390,12 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         cbPunktorte.setRenderer(new LocationComboBoxRenderer());
         final LayoutManager layoutManager = getLayout();
         if (layoutManager instanceof CardLayout) {
-            cardLayout = (CardLayout) layoutManager;
+            cardLayout = (CardLayout)layoutManager;
             cardLayout.show(this, CARD_1);
         } else {
             cardLayout = new CardLayout();
-            log.error("Alkis_landparcelRenderer exspects CardLayout as major layout manager, but has " + getLayout() + "!");
+            log.error("Alkis_landparcelRenderer exspects CardLayout as major layout manager, but has " + getLayout()
+                        + "!");
         }
         retrieveableLabels.add(lblTxtBeginn);
         retrieveableLabels.add(lblTxtEnde);
@@ -272,12 +405,17 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         retrieveableLabels.add(lblTxtDienststelle);
         retrieveableLabels.add(lblTxtAnlass);
         if (!AlkisCommons.validateUserHasAlkisProductAccess()) {
-            //disable Product page if user does not have the right to see it.
+            // disable Product page if user does not have the right to see it.
             btnForward.setEnabled(false);
             lblForw.setEnabled(false);
         }
     }
 
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     */
     private void initProductPreviewImages() {
         productPreviewImages.put(hlPunktlistePdf, PUNKT_PDF);
         productPreviewImages.put(hlPunktlisteHtml, PUNKT_HTML);
@@ -288,10 +426,14 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         hlPunktlisteTxt.addMouseListener(productListener);
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     private void initProductPreview() {
         initProductPreviewImages();
-        int maxX = 0, maxY = 0;
-        for (ImageIcon ii : productPreviewImages.values()) {
+        int maxX = 0;
+        int maxY = 0;
+        for (final ImageIcon ii : productPreviewImages.values()) {
             if (ii.getIconWidth() > maxX) {
                 maxX = ii.getIconWidth();
             }
@@ -303,13 +445,27 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         ObjectRendererUtils.setAllDimensions(panProductPreview, previewDim);
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     private void initFooterElements() {
-        ObjectRendererUtils.decorateJLabelAndButtonSynced(lblForw, btnForward, ObjectRendererUtils.FORWARD_SELECTED, ObjectRendererUtils.FORWARD_PRESSED);
-        ObjectRendererUtils.decorateJLabelAndButtonSynced(lblBack, btnBack, ObjectRendererUtils.BACKWARD_SELECTED, ObjectRendererUtils.BACKWARD_PRESSED);
+        ObjectRendererUtils.decorateJLabelAndButtonSynced(
+            lblForw,
+            btnForward,
+            ObjectRendererUtils.FORWARD_SELECTED,
+            ObjectRendererUtils.FORWARD_PRESSED);
+        ObjectRendererUtils.decorateJLabelAndButtonSynced(
+            lblBack,
+            btnBack,
+            ObjectRendererUtils.BACKWARD_SELECTED,
+            ObjectRendererUtils.BACKWARD_PRESSED);
 //        ObjectRendererUtils.decorateJLabelAndButtonSynced(lblForw, btnForward, FORWARD_SELECTED, FORWARD_PRESSED);
 //        ObjectRendererUtils.decorateJLabelAndButtonSynced(lblBack, btnBack, BACKWARD_SELECTED, BACKWARD_PRESSED);
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     private void initIcons() {
 //        BACKWARD_SELECTED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-left-sel.png"));
 //        BACKWARD_PRESSED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-left-pressed.png"));
@@ -317,12 +473,17 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
 //        FORWARD_SELECTED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-right-sel.png"));
 //        FORWARD_PRESSED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-right-pressed.png"));
         final ReflectionRenderer reflectionRenderer = new ReflectionRenderer(0.5f, 0.15f, false);
-        BufferedImage i1 = null, i2 = null, i3 = null;
+        BufferedImage i1 = null;
+        BufferedImage i2 = null;
+        BufferedImage i3 = null;
         try {
-            //TODO: own picture!
-            i1 = reflectionRenderer.appendReflection(ImageIO.read(getClass().getResource(ALKIS_RES_PACKAGE + "punktlistepdf.png")));
-            i2 = reflectionRenderer.appendReflection(ImageIO.read(getClass().getResource(ALKIS_RES_PACKAGE + "punktlistehtml.png")));
-            i3 = reflectionRenderer.appendReflection(ImageIO.read(getClass().getResource(ALKIS_RES_PACKAGE + "punktlistetxt.png")));
+            // TODO: own picture!
+            i1 = reflectionRenderer.appendReflection(ImageIO.read(
+                        getClass().getResource(ALKIS_RES_PACKAGE + "punktlistepdf.png")));
+            i2 = reflectionRenderer.appendReflection(ImageIO.read(
+                        getClass().getResource(ALKIS_RES_PACKAGE + "punktlistehtml.png")));
+            i3 = reflectionRenderer.appendReflection(ImageIO.read(
+                        getClass().getResource(ALKIS_RES_PACKAGE + "punktlistetxt.png")));
         } catch (Exception ex) {
             log.error(ex, ex);
         }
@@ -331,15 +492,19 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         PUNKT_TXT = new ImageIcon(i3);
     }
 
-    private void setWait(boolean waiting) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  waiting  DOCUMENT ME!
+     */
+    private void setWait(final boolean waiting) {
         blWaiting.setBusy(waiting);
         blWaiting.setVisible(waiting);
     }
 
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -476,13 +641,16 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         lblBack.setText("Info");
         lblBack.setEnabled(false);
         lblBack.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblBackMouseClicked(evt);
-            }
-        });
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblBackMouseClicked(evt);
+                }
+            });
         panFooterLeft.add(lblBack);
 
-        btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left.png"))); // NOI18N
+        btnBack.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left.png")));         // NOI18N
         btnBack.setBorder(null);
         btnBack.setBorderPainted(false);
         btnBack.setContentAreaFilled(false);
@@ -491,13 +659,17 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         btnBack.setMaximumSize(new java.awt.Dimension(30, 30));
         btnBack.setMinimumSize(new java.awt.Dimension(30, 30));
         btnBack.setPreferredSize(new java.awt.Dimension(30, 30));
-        btnBack.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-pressed.png"))); // NOI18N
-        btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-sel.png"))); // NOI18N
+        btnBack.setPressedIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-pressed.png"))); // NOI18N
+        btnBack.setRolloverIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-sel.png")));     // NOI18N
         btnBack.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBackActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnBackActionPerformed(evt);
+                }
+            });
         panFooterLeft.add(btnBack);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -508,7 +680,8 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         panFooterRight.setOpaque(false);
         panFooterRight.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 5));
 
-        btnForward.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-right.png"))); // NOI18N
+        btnForward.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-right.png"))); // NOI18N
         btnForward.setBorder(null);
         btnForward.setBorderPainted(false);
         btnForward.setContentAreaFilled(false);
@@ -517,20 +690,24 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         btnForward.setMinimumSize(new java.awt.Dimension(30, 30));
         btnForward.setPreferredSize(new java.awt.Dimension(30, 30));
         btnForward.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnForwardActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnForwardActionPerformed(evt);
+                }
+            });
         panFooterRight.add(btnForward);
 
         lblForw.setFont(new java.awt.Font("Tahoma", 1, 14));
         lblForw.setForeground(new java.awt.Color(255, 255, 255));
         lblForw.setText("Produkte");
         lblForw.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblForwMouseClicked(evt);
-            }
-        });
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblForwMouseClicked(evt);
+                }
+            });
         panFooterRight.add(lblForw);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -550,7 +727,12 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         panPointInfo.setPreferredSize(new java.awt.Dimension(350, 500));
         panPointInfo.setLayout(new java.awt.GridBagLayout());
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.pointcode}"), lblTxtPunktkennung, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.pointcode}"),
+                lblTxtPunktkennung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -562,7 +744,12 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(14, 7, 7, 7);
         panPointInfo.add(lblTxtPunktkennung, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.uuid}"), lblTxtIdentifikator, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.uuid}"),
+                lblTxtIdentifikator,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -574,13 +761,16 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPointInfo.add(lblTxtIdentifikator, gridBagConstraints);
 
-        btnRetrieve.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/network-wired.png"))); // NOI18N
+        btnRetrieve.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/icons/network-wired.png"))); // NOI18N
         btnRetrieve.setText("Punktorte laden");
         btnRetrieve.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRetrieveActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnRetrieveActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 12;
@@ -615,7 +805,12 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPointInfo.add(lblDescPunktart, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.pointtype.bezeichnung}"), lblTxtPunktart, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.pointtype.bezeichnung}"),
+                lblTxtPunktart,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -636,7 +831,12 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(14, 7, 7, 7);
         panPointInfo.add(lblDescPunktkennung, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean}"), lblTxtAbmarkungMarke, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean}"),
+                lblTxtAbmarkungMarke,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         binding.setConverter(ALKIS_VERMARKUNG_CONVERTER);
@@ -649,7 +849,12 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPointInfo.add(lblTxtAbmarkungMarke, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.beginn}"), lblTxtBeginn, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.beginn}"),
+                lblTxtBeginn,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -697,7 +902,12 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPointInfo.add(lblDescBeginn, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.modellart}"), lblTxtModellart, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.modellart}"),
+                lblTxtModellart,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -709,7 +919,12 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPointInfo.add(lblTxtModellart, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.land}"), lblTxtLand, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.land}"),
+                lblTxtLand,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -721,7 +936,12 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPointInfo.add(lblTxtLand, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dienststelle}"), lblTxtDienststelle, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dienststelle}"),
+                lblTxtDienststelle,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -742,7 +962,12 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPointInfo.add(lblDescEnde, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ende}"), lblTxtEnde, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ende}"),
+                lblTxtEnde,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -763,7 +988,12 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPointInfo.add(lblDescAnlass, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.anlass}"), lblTxtAnlass, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.anlass}"),
+                lblTxtAnlass,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -817,17 +1047,25 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         cbPunktorte.setMinimumSize(new java.awt.Dimension(200, 20));
         cbPunktorte.setPreferredSize(new java.awt.Dimension(200, 20));
 
-        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${pointLocations}");
-        org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, eLProperty, cbPunktorte);
+        final org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
+                "${pointLocations}");
+        final org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings
+                    .createJComboBoxBinding(
+                        org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                        this,
+                        eLProperty,
+                        cbPunktorte);
         jComboBoxBinding.setSourceNullValue(null);
         jComboBoxBinding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(jComboBoxBinding);
 
         cbPunktorte.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbPunktorteActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cbPunktorteActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -871,7 +1109,12 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblDescDatenerhebung, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, cbPunktorte, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.rechtswert}"), lblTxtRechtswert, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                cbPunktorte,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedItem.rechtswert}"),
+                lblTxtRechtswert,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -883,7 +1126,12 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblTxtRechtswert, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, cbPunktorte, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.hochwert}"), lblTxtHochwert, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                cbPunktorte,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedItem.hochwert}"),
+                lblTxtHochwert,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -895,7 +1143,12 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblTxtHochwert, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, cbPunktorte, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.hinweis}"), lblTxtHinweise, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                cbPunktorte,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedItem.hinweis}"),
+                lblTxtHinweise,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -916,7 +1169,12 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblDescKoordStatus, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, cbPunktorte, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.koordinatenStatusName}"), lblTxtKoordStatus, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                cbPunktorte,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedItem.koordinatenStatusName}"),
+                lblTxtKoordStatus,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -946,7 +1204,12 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblDescHinweise, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, cbPunktorte, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.qualitaetsangabenGenauigkeitsstufeName}"), lblTxtGenauigkeitsstufe, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                cbPunktorte,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedItem.qualitaetsangabenGenauigkeitsstufeName}"),
+                lblTxtGenauigkeitsstufe,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -958,7 +1221,12 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblTxtGenauigkeitsstufe, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, cbPunktorte, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.qualitaetsangabenHerkunft}"), lblTxtDatenerhebung, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                cbPunktorte,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedItem.qualitaetsangabenHerkunft}"),
+                lblTxtDatenerhebung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         binding.setConverter(ALKIS_ERHEBUNG_CONVERTER);
@@ -1006,7 +1274,12 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblDescPOModellart, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, cbPunktorte, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.modellArt}"), lblTxtPOModellart, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                cbPunktorte,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedItem.modellArt}"),
+                lblTxtPOModellart,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -1027,7 +1300,12 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblDescPOAnlass, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, cbPunktorte, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.anlass}"), lblTxtPOAnlass, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                cbPunktorte,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedItem.anlass}"),
+                lblTxtPOAnlass,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -1048,7 +1326,12 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblDescPOBeginn, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, cbPunktorte, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.lebenszeitIntervallBeginnt}"), lblTxtPOBeginn, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                cbPunktorte,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedItem.lebenszeitIntervallBeginnt}"),
+                lblTxtPOBeginn,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -1069,7 +1352,12 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblDescPOEnde, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, cbPunktorte, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.lebenszeitIntervallEndet}"), lblTxtPOEnde, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                cbPunktorte,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedItem.lebenszeitIntervallEndet}"),
+                lblTxtPOEnde,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -1098,7 +1386,12 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblDescPLIdentifikator, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, cbPunktorte, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.UUId}"), lblTxtPLIdentifikator, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                cbPunktorte,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedItem.UUId}"),
+                lblTxtPLIdentifikator,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -1119,7 +1412,12 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblDescPLObjektart, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, cbPunktorte, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.pointLocationType}"), lblTxtPLObjektart, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                cbPunktorte,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedItem.pointLocationType}"),
+                lblTxtPLObjektart,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -1131,7 +1429,12 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblTxtPLObjektart, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, cbPunktorte, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.kartendarstellung}"), lblTxtKartendarstellung, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                cbPunktorte,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedItem.kartendarstellung}"),
+                lblTxtKartendarstellung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         binding.setConverter(ALKIS_BOOLEAN_CONVERTER);
@@ -1172,13 +1475,16 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         panPdfProducts.setPreferredSize(new java.awt.Dimension(175, 80));
         panPdfProducts.setLayout(new java.awt.GridBagLayout());
 
-        hlPunktlistePdf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
+        hlPunktlistePdf.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
         hlPunktlistePdf.setText("Punktliste");
         hlPunktlistePdf.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                hlPunktlistePdfActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    hlPunktlistePdfActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1220,13 +1526,16 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         panHtmlProducts.setPreferredSize(new java.awt.Dimension(175, 80));
         panHtmlProducts.setLayout(new java.awt.GridBagLayout());
 
-        hlPunktlisteHtml.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/text-html.png"))); // NOI18N
+        hlPunktlisteHtml.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/icons/text-html.png"))); // NOI18N
         hlPunktlisteHtml.setText("Punktliste");
         hlPunktlisteHtml.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                hlPunktlisteHtmlActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    hlPunktlisteHtmlActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1303,13 +1612,16 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         panTxtProducts.setPreferredSize(new java.awt.Dimension(175, 80));
         panTxtProducts.setLayout(new java.awt.GridBagLayout());
 
-        hlPunktlisteTxt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/text-plain.png"))); // NOI18N
+        hlPunktlisteTxt.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/icons/text-plain.png"))); // NOI18N
         hlPunktlisteTxt.setText("Punktliste");
         hlPunktlisteTxt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                hlPunktlisteTxtActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    hlPunktlisteTxtActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1350,9 +1662,14 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         add(panProducts, "CARD_2");
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
-    private void btnRetrieveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetrieveActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnRetrieveActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRetrieveActionPerformed
         final CidsBean bean = cidsBean;
         if (bean != null) {
             final String pointCode = String.valueOf(bean.getProperty("pointcode"));
@@ -1360,76 +1677,125 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
                 AlkisSOAPWorkerService.execute(new RetrieveWorker(pointCode));
             }
         }
-    }//GEN-LAST:event_btnRetrieveActionPerformed
+    }                                                                               //GEN-LAST:event_btnRetrieveActionPerformed
 
-    private void lblBackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBackMouseClicked
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lblBackMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblBackMouseClicked
         btnBackActionPerformed(null);
-}//GEN-LAST:event_lblBackMouseClicked
+    }                                                                       //GEN-LAST:event_lblBackMouseClicked
 
-    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnBackActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBackActionPerformed
         cardLayout.show(this, CARD_1);
         btnBack.setEnabled(false);
         btnForward.setEnabled(true);
         lblBack.setEnabled(false);
         lblForw.setEnabled(true);
-}//GEN-LAST:event_btnBackActionPerformed
+    }                                                                           //GEN-LAST:event_btnBackActionPerformed
 
-    private void btnForwardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnForwardActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnForwardActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnForwardActionPerformed
         cardLayout.show(this, CARD_2);
         btnBack.setEnabled(true);
         btnForward.setEnabled(false);
         lblBack.setEnabled(true);
         lblForw.setEnabled(false);
-}//GEN-LAST:event_btnForwardActionPerformed
+    }                                                                              //GEN-LAST:event_btnForwardActionPerformed
 
-    private void lblForwMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblForwMouseClicked
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lblForwMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblForwMouseClicked
         btnForwardActionPerformed(null);
-}//GEN-LAST:event_lblForwMouseClicked
+    }                                                                       //GEN-LAST:event_lblForwMouseClicked
 
-    private void hlPunktlistePdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlPunktlistePdfActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void hlPunktlistePdfActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlPunktlistePdfActionPerformed
         try {
             final String pointID = lblTxtIdentifikator.getText();
             final String pointArt = lblTxtPunktart.getText();
             AlkisCommons.Products.productPunktliste(pointID, pointArt, AlkisCommons.ProductFormat.PDF);
         } catch (Exception ex) {
-            ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_pointRenderer.this);
+            ObjectRendererUtils.showExceptionWindowToUser(
+                "Fehler beim Aufruf des Produkts",
+                ex,
+                Alkis_pointRenderer.this);
             log.error(ex);
         }
-}//GEN-LAST:event_hlPunktlistePdfActionPerformed
+    }                                                                                   //GEN-LAST:event_hlPunktlistePdfActionPerformed
 
-    private void hlPunktlisteHtmlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlPunktlisteHtmlActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void hlPunktlisteHtmlActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlPunktlisteHtmlActionPerformed
         try {
             final String pointID = lblTxtIdentifikator.getText();
             final String pointArt = lblTxtPunktart.getText();
             AlkisCommons.Products.productPunktliste(pointID, pointArt, AlkisCommons.ProductFormat.HTML);
         } catch (Exception ex) {
-            ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_pointRenderer.this);
+            ObjectRendererUtils.showExceptionWindowToUser(
+                "Fehler beim Aufruf des Produkts",
+                ex,
+                Alkis_pointRenderer.this);
             log.error(ex);
         }
-}//GEN-LAST:event_hlPunktlisteHtmlActionPerformed
+    }                                                                                    //GEN-LAST:event_hlPunktlisteHtmlActionPerformed
 
-    private void cbPunktorteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPunktorteActionPerformed
-        Object selection = cbPunktorte.getSelectedItem();
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cbPunktorteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbPunktorteActionPerformed
+        final Object selection = cbPunktorte.getSelectedItem();
         if (selection instanceof PointLocation) {
-            PointLocation pointLoc = (PointLocation) selection;
-            if (pointLoc.getKartendarstellung() != null && pointLoc.getKartendarstellung().equals("1")) {
+            final PointLocation pointLoc = (PointLocation)selection;
+            if ((pointLoc.getKartendarstellung() != null) && pointLoc.getKartendarstellung().equals("1")) {
                 cbPunktorte.setBackground(PUNKTORT_MIT_KARTENDARSTELLUNG);
             } else {
                 cbPunktorte.setBackground(Color.WHITE);
             }
         }
-    }//GEN-LAST:event_cbPunktorteActionPerformed
+    }                                                                               //GEN-LAST:event_cbPunktorteActionPerformed
 
-    private void hlPunktlisteTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlPunktlisteTxtActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void hlPunktlisteTxtActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlPunktlisteTxtActionPerformed
         try {
             final String pointID = lblTxtIdentifikator.getText();
             final String pointArt = lblTxtPunktart.getText();
             AlkisCommons.Products.productPunktliste(pointID, pointArt, AlkisCommons.ProductFormat.TEXT);
         } catch (Exception ex) {
-            ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Aufruf des Produkts", ex, Alkis_pointRenderer.this);
+            ObjectRendererUtils.showExceptionWindowToUser(
+                "Fehler beim Aufruf des Produkts",
+                ex,
+                Alkis_pointRenderer.this);
             log.error(ex);
         }
-    }//GEN-LAST:event_hlPunktlisteTxtActionPerformed
+    }                                                                                   //GEN-LAST:event_hlPunktlisteTxtActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
@@ -1437,7 +1803,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
     }
 
     @Override
-    public void setCidsBean(CidsBean cb) {
+    public void setCidsBean(final CidsBean cb) {
         bindingGroup.unbind();
         if (cb != null) {
             this.cidsBean = cb;
@@ -1475,101 +1841,6 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
     public Border getCenterrBorder() {
         return new EmptyBorder(5, 5, 5, 5);
     }
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private org.jdesktop.swingx.JXBusyLabel blWaiting;
-    private javax.swing.JButton btnBack;
-    private javax.swing.JButton btnForward;
-    private javax.swing.JButton btnRetrieve;
-    private javax.swing.JComboBox cbPunktorte;
-    private org.jdesktop.swingx.JXHyperlink hlPunktlisteHtml;
-    private org.jdesktop.swingx.JXHyperlink hlPunktlistePdf;
-    private org.jdesktop.swingx.JXHyperlink hlPunktlisteTxt;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JLabel lblBack;
-    private javax.swing.JLabel lblDescAnlass;
-    private javax.swing.JLabel lblDescBeginn;
-    private javax.swing.JLabel lblDescDatenerhebung;
-    private javax.swing.JLabel lblDescDienststelle;
-    private javax.swing.JLabel lblDescEnde;
-    private javax.swing.JLabel lblDescGenauigkeitsstufe;
-    private javax.swing.JLabel lblDescHinweise;
-    private javax.swing.JLabel lblDescHochwert;
-    private javax.swing.JLabel lblDescIdentifikator;
-    private javax.swing.JLabel lblDescKartendarstellung;
-    private javax.swing.JLabel lblDescKoordStatus;
-    private javax.swing.JLabel lblDescLand;
-    private javax.swing.JLabel lblDescMarke;
-    private javax.swing.JLabel lblDescModellart;
-    private javax.swing.JLabel lblDescPLIdentifikator;
-    private javax.swing.JLabel lblDescPLObjektart;
-    private javax.swing.JLabel lblDescPOAnlass;
-    private javax.swing.JLabel lblDescPOBeginn;
-    private javax.swing.JLabel lblDescPOEnde;
-    private javax.swing.JLabel lblDescPOModellart;
-    private javax.swing.JLabel lblDescPunktart;
-    private javax.swing.JLabel lblDescPunktkennung;
-    private javax.swing.JLabel lblDescPunktorte;
-    private javax.swing.JLabel lblDescRechtswert;
-    private javax.swing.JLabel lblForw;
-    private javax.swing.JLabel lblLocHead;
-    private javax.swing.JLabel lblPointHead;
-    private javax.swing.JLabel lblPreviewHead;
-    private javax.swing.JLabel lblProductPreview;
-    private javax.swing.JLabel lblTitle;
-    private javax.swing.JLabel lblTxtAbmarkungMarke;
-    private javax.swing.JLabel lblTxtAnlass;
-    private javax.swing.JLabel lblTxtBeginn;
-    private javax.swing.JLabel lblTxtDatenerhebung;
-    private javax.swing.JLabel lblTxtDienststelle;
-    private javax.swing.JLabel lblTxtEnde;
-    private javax.swing.JLabel lblTxtGenauigkeitsstufe;
-    private javax.swing.JLabel lblTxtHinweise;
-    private javax.swing.JLabel lblTxtHochwert;
-    private javax.swing.JLabel lblTxtIdentifikator;
-    private javax.swing.JLabel lblTxtKartendarstellung;
-    private javax.swing.JLabel lblTxtKoordStatus;
-    private javax.swing.JLabel lblTxtLand;
-    private javax.swing.JLabel lblTxtModellart;
-    private javax.swing.JLabel lblTxtPLIdentifikator;
-    private javax.swing.JLabel lblTxtPLObjektart;
-    private javax.swing.JLabel lblTxtPOAnlass;
-    private javax.swing.JLabel lblTxtPOBeginn;
-    private javax.swing.JLabel lblTxtPOEnde;
-    private javax.swing.JLabel lblTxtPOModellart;
-    private javax.swing.JLabel lblTxtPunktart;
-    private javax.swing.JLabel lblTxtPunktkennung;
-    private javax.swing.JLabel lblTxtRechtswert;
-    private javax.swing.JPanel panButtons;
-    private javax.swing.JPanel panFooter;
-    private javax.swing.JPanel panFooterLeft;
-    private javax.swing.JPanel panFooterRight;
-    private javax.swing.JPanel panHtmlProducts;
-    private javax.swing.JPanel panInfo;
-    private javax.swing.JPanel panLocationInfos;
-    private javax.swing.JPanel panPdfProducts;
-    private javax.swing.JPanel panPointInfo;
-    private javax.swing.JPanel panProductPreview;
-    private javax.swing.JPanel panProducts;
-    private javax.swing.JPanel panSpacing;
-    private javax.swing.JPanel panTitle;
-    private javax.swing.JPanel panTxtProducts;
-    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel3;
-    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel4;
-    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel5;
-    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel6;
-    private de.cismet.tools.gui.SemiRoundedPanel srpHeadLocInfo;
-    private de.cismet.tools.gui.SemiRoundedPanel srpPointInfo;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
-    // End of variables declaration//GEN-END:variables
 
     @Override
     public JComponent getTitleComponent() {
@@ -1582,30 +1853,38 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
     }
 
     /**
-     * @return the point
+     * DOCUMENT ME!
+     *
+     * @return  the point
      */
     public Point getPoint() {
         return point;
     }
 
     /**
-     * @param point the point to set
+     * DOCUMENT ME!
+     *
+     * @param  point  the point to set
      */
-    public void setPoint(Point point) {
+    public void setPoint(final Point point) {
         this.point = point;
     }
 
     /**
-     * @return the pointLocations
+     * DOCUMENT ME!
+     *
+     * @return  the pointLocations
      */
     public List<PointLocation> getPointLocations() {
         return pointLocations;
     }
 
     /**
-     * @param pointLocations the pointLocations to set
+     * DOCUMENT ME!
+     *
+     * @param  pointLocations  the pointLocations to set
      */
-    public void setPointLocations(List<PointLocation> pointLocations) {
+    public void setPointLocations(final List<PointLocation> pointLocations) {
         this.pointLocations = pointLocations;
     }
 
@@ -1614,20 +1893,42 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         bindingGroup.unbind();
     }
 
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     final class RetrieveWorker extends SwingWorker<Point, Void> {
 
-        public RetrieveWorker(String pointCode) {
+        //~ Instance fields ----------------------------------------------------
+
+        private final String pointCode;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new RetrieveWorker object.
+         *
+         * @param  pointCode  DOCUMENT ME!
+         */
+        public RetrieveWorker(final String pointCode) {
             setWait(true);
             this.pointCode = pointCode;
             btnRetrieve.setEnabled(false);
         }
-        private final String pointCode;
+
+        //~ Methods ------------------------------------------------------------
 
         @Override
         protected Point doInBackground() throws Exception {
             return infoService.getPoint(soapProvider.getIdentityCard(), soapProvider.getService(), pointCode);
         }
 
+        /**
+         * DOCUMENT ME!
+         */
         private void restoreOnException() {
             btnRetrieve.setEnabled(true);
         }
@@ -1653,31 +1954,49 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
                     restoreOnException();
                     log.warn(ex, ex);
                 } catch (Exception ex) {
-                    //TODO show error message to user?
+                    // TODO show error message to user?
                     restoreOnException();
-                    org.jdesktop.swingx.error.ErrorInfo ei = new ErrorInfo("Fehler beim Retrieve", ex.getMessage(), null, null, ex, Level.ALL, null);
-                    org.jdesktop.swingx.JXErrorPane.showDialog(StaticSwingTools.getParentFrame(Alkis_pointRenderer.this), ei);
+                    final org.jdesktop.swingx.error.ErrorInfo ei = new ErrorInfo(
+                            "Fehler beim Retrieve",
+                            ex.getMessage(),
+                            null,
+                            null,
+                            ex,
+                            Level.ALL,
+                            null);
+                    org.jdesktop.swingx.JXErrorPane.showDialog(StaticSwingTools.getParentFrame(
+                            Alkis_pointRenderer.this),
+                        ei);
                     log.error(ex, ex);
                 }
             }
         }
     }
 
-    static final class LocationComboBoxRenderer extends JLabel
-            implements ListCellRenderer {
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    static final class LocationComboBoxRenderer extends JLabel implements ListCellRenderer {
 
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new LocationComboBoxRenderer object.
+         */
         public LocationComboBoxRenderer() {
             setOpaque(true);
         }
 
-        @Override
-        public Component getListCellRendererComponent(
-                JList list,
-                Object value,
-                int index,
-                boolean isSelected,
-                boolean cellHasFocus) {
+        //~ Methods ------------------------------------------------------------
 
+        @Override
+        public Component getListCellRendererComponent(final JList list,
+                final Object value,
+                final int index,
+                final boolean isSelected,
+                final boolean cellHasFocus) {
             if (isSelected) {
                 setBackground(list.getSelectionBackground());
                 setForeground(list.getSelectionForeground());
@@ -1688,24 +2007,31 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
             }
 
             if (value instanceof PointLocation) {
-                final PointLocation loc = (PointLocation) value;
+                final PointLocation loc = (PointLocation)value;
                 setText(loc.getKoordinatenReferenzSystem());
-                if (loc.getKartendarstellung() != null && loc.getKartendarstellung().equals("1")) {
+                if ((loc.getKartendarstellung() != null) && loc.getKartendarstellung().equals("1")) {
                     if (!isSelected) {
                         setBackground(PUNKTORT_MIT_KARTENDARSTELLUNG);
                     }
                 }
             } else {
-                setText(value == null ? "" : value.toString());
+                setText((value == null) ? "" : value.toString());
             }
             return this;
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     class ProductLabelMouseAdaper extends MouseAdapter {
 
+        //~ Methods ------------------------------------------------------------
+
         @Override
-        public void mouseEntered(MouseEvent e) {
+        public void mouseEntered(final MouseEvent e) {
             final Object srcObj = e.getSource();
             final ImageIcon imageIcon = productPreviewImages.get(srcObj);
             if (imageIcon != null) {
@@ -1714,7 +2040,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         }
 
         @Override
-        public void mouseExited(MouseEvent e) {
+        public void mouseExited(final MouseEvent e) {
             lblProductPreview.setIcon(null);
         }
     }

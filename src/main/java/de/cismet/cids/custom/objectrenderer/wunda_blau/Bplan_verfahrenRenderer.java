@@ -1,59 +1,95 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
 import com.vividsolutions.jts.geom.Geometry;
+
+import org.apache.log4j.Logger;
+
+import java.util.Date;
+
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import de.cismet.cids.annotations.CidsAttribute;
 import de.cismet.cids.annotations.CidsRendererTitle;
+
 import de.cismet.cids.custom.deprecated.CoolTabPanel;
 import de.cismet.cids.custom.deprecated.JBreakLabel;
 import de.cismet.cids.custom.deprecated.JLoadDots;
 import de.cismet.cids.custom.deprecated.TabbedPaneUITransparent;
-import java.util.Date;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import org.apache.log4j.Logger;
+
+import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
 
 /**
- * de.cismet.cids.objectrenderer.CoolBplanVerfahrenRenderrer.java
- * @author  verkennis
+ * de.cismet.cids.objectrenderer.CoolBplanVerfahrenRenderrer.java.
+ *
+ * @author   verkennis
+ * @version  $Revision$, $Date$
  */
 public class Bplan_verfahrenRenderer extends CoolPanel implements ChangeListener {
-    
-    private final Logger log = Logger.getLogger(this.getClass());
-    
-    @CidsAttribute("Nummer")
-    public String nummer = "";
-    
-    @CidsAttribute("Bezeichnung")
-    public String bezeichnung = "";
-    
-    @CidsAttribute("Status")
-    public String status;
-    
-    
 
-// Historie
+    //~ Static fields/initializers ---------------------------------------------
 
-        public Object historie = null;
-        
-
-        
-        
-    
-        
-    @CidsAttribute("Georeferenz.GEO_STRING")
-    public Geometry geometry = null;
-    
-    @CidsRendererTitle
-    public String title = "";
-    
     private static final String TITLE = "Bebauungsplanverfahren";
     private static final int HISTORIE_INDEX = 1;
     private static int lastSelected = 0;
     private static Date timer = new Date();
-    
-    /** 
-     * Creates new form CoolTIMRenderer
+
+    //~ Instance fields --------------------------------------------------------
+
+    @CidsAttribute("Nummer")
+    public String nummer = "";
+
+    @CidsAttribute("Bezeichnung")
+    public String bezeichnung = "";
+
+    @CidsAttribute("Status")
+    public String status;
+
+// Historie
+
+    public Object historie = null;
+
+    @CidsAttribute("Georeferenz.GEO_STRING")
+    public Geometry geometry = null;
+
+    @CidsRendererTitle
+    public String title = "";
+
+    private final Logger log = Logger.getLogger(this.getClass());
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel lblAlkRelevant;
+    private javax.swing.JLabel lblBezeichnung;
+    private javax.swing.JLabel lblNummer;
+    private javax.swing.JLabel lblStatus;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JPanel panAlkis;
+    private javax.swing.JPanel panAllgemein;
+    private javax.swing.JPanel panContent;
+    private javax.swing.JPanel panInter;
+    private javax.swing.JPanel panMap;
+    private javax.swing.JPanel panSpinner;
+    private javax.swing.JPanel panTabAlkis;
+    private javax.swing.JPanel panTabAllgemein;
+    private javax.swing.JPanel panTitle;
+    private javax.swing.JTabbedPane tabbedPane;
+    // End of variables declaration//GEN-END:variables
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates new form CoolTIMRenderer.
      */
     public Bplan_verfahrenRenderer() {
         initComponents();
@@ -63,62 +99,60 @@ public class Bplan_verfahrenRenderer extends CoolPanel implements ChangeListener
         setPanTitle(panTitle);
         setSpinner(panSpinner);
         tabbedPane.addChangeListener(this);
-        if((new Date().getTime() - timer.getTime()) < (60 * 1000L)) {
+        if ((new Date().getTime() - timer.getTime()) < (60 * 1000L)) {
             tabbedPane.setSelectedIndex(lastSelected);
         }
     }
-    
+
+    //~ Methods ----------------------------------------------------------------
+
     @Override
     public void assignSingle() {
-        if (geometry != null)
+        if (geometry != null) {
             setGeometry(geometry);
-        
+        }
+
         if (title != null) {
             if (title.length() > 50) {
-                title = title.substring(0,50);
+                title = title.substring(0, 50);
                 title = title + "...";
             }
             lblTitle.setText(TITLE + " - " + title);
         } else {
             lblTitle.setText(TITLE);
         }
-        
+
         if (nummer != null) {
             lblNummer.setText(nummer);
         } else {
             lblNummer.setVisible(false);
             jLabel1.setVisible(false);
         }
-        
+
         if (bezeichnung != null) {
             lblBezeichnung.setText(bezeichnung);
         } else {
             jLabel2.setVisible(false);
             lblBezeichnung.setVisible(false);
         }
-        
+
         if (status != null) {
             lblStatus.setText(status);
         } else {
             jLabel3.setVisible(false);
             lblStatus.setVisible(false);
         }
-        
 
         // ALKIS-Assign
         if (historie != null) {
-           
         } else {
             tabbedPane.removeTabAt(HISTORIE_INDEX);
         }
-        
-        
     }
-    
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -154,22 +188,18 @@ public class Bplan_verfahrenRenderer extends CoolPanel implements ChangeListener
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblTitle.setText("Bebauungsplan");
 
-        javax.swing.GroupLayout panTitleLayout = new javax.swing.GroupLayout(panTitle);
+        final javax.swing.GroupLayout panTitleLayout = new javax.swing.GroupLayout(panTitle);
         panTitle.setLayout(panTitleLayout);
         panTitleLayout.setHorizontalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panTitleLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblTitle)
-                .addContainerGap(304, Short.MAX_VALUE))
-        );
+            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addContainerGap(
+                    304,
+                    Short.MAX_VALUE)));
         panTitleLayout.setVerticalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panTitleLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblTitle)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addContainerGap(
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    Short.MAX_VALUE)));
 
         add(panTitle, java.awt.BorderLayout.NORTH);
 
@@ -279,47 +309,27 @@ public class Bplan_verfahrenRenderer extends CoolPanel implements ChangeListener
         panSpinner.setMinimumSize(new java.awt.Dimension(100, 100));
         panSpinner.setOpaque(false);
 
-        javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
+        final javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
         panSpinner.setLayout(panSpinnerLayout);
         panSpinnerLayout.setHorizontalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 69, Short.MAX_VALUE)
-        );
+            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                69,
+                Short.MAX_VALUE));
         panSpinnerLayout.setVerticalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                100,
+                Short.MAX_VALUE));
 
         panMap.add(panSpinner, new java.awt.GridBagConstraints());
 
         add(panMap, java.awt.BorderLayout.CENTER);
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
-    public void stateChanged(ChangeEvent e) {
+    @Override
+    public void stateChanged(final ChangeEvent e) {
         lastSelected = tabbedPane.getSelectedIndex();
         timer = new Date();
     }
-    
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JLabel lblAlkRelevant;
-    private javax.swing.JLabel lblBezeichnung;
-    private javax.swing.JLabel lblNummer;
-    private javax.swing.JLabel lblStatus;
-    private javax.swing.JLabel lblTitle;
-    private javax.swing.JPanel panAlkis;
-    private javax.swing.JPanel panAllgemein;
-    private javax.swing.JPanel panContent;
-    private javax.swing.JPanel panInter;
-    private javax.swing.JPanel panMap;
-    private javax.swing.JPanel panSpinner;
-    private javax.swing.JPanel panTabAlkis;
-    private javax.swing.JPanel panTabAllgemein;
-    private javax.swing.JPanel panTitle;
-    private javax.swing.JTabbedPane tabbedPane;
-    // End of variables declaration//GEN-END:variables
-    
 }

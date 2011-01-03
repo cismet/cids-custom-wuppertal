@@ -1,41 +1,71 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import java.net.URL;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import org.jdesktop.beansbinding.Converter;
 
+import java.net.URL;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+
 /**
+ * DOCUMENT ME!
  *
- * @author srichter
+ * @author   srichter
+ * @version  $Revision$, $Date$
  */
 public class FilenameToIconConverter extends Converter<String, Icon> {
 
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(FilenameToIconConverter.class);
+
+    //~ Instance fields --------------------------------------------------------
+
+    private final String prefix;
+    private final String postfix;
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new FilenameToIconConverter object.
+     */
     public FilenameToIconConverter() {
         prefix = postfix = "";
     }
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(FilenameToIconConverter.class);
 
-    public FilenameToIconConverter(String prefix, String postfix) {
+    /**
+     * Creates a new FilenameToIconConverter object.
+     *
+     * @param  prefix   DOCUMENT ME!
+     * @param  postfix  DOCUMENT ME!
+     */
+    public FilenameToIconConverter(final String prefix, final String postfix) {
         this.prefix = prefix;
         this.postfix = postfix;
     }
-    private final String prefix;
-    private final String postfix;
+
+    //~ Methods ----------------------------------------------------------------
 
     @Override
     public Icon convertForward(String in) {
         in = prefix + in + postfix;
         log.fatal("converting: " + in);
         try {
-            //first try to load from jar
+            // first try to load from jar
             URL symbolURL = Object.class.getResource(in);
             if (symbolURL == null) {
-                //otherwise try to resolve directly
+                // otherwise try to resolve directly
                 symbolURL = new URL(in);
             }
             if (symbolURL != null) {
@@ -49,7 +79,7 @@ public class FilenameToIconConverter extends Converter<String, Icon> {
     }
 
     @Override
-    public String convertReverse(Icon value) {
+    public String convertReverse(final Icon value) {
         return "";
     }
 }

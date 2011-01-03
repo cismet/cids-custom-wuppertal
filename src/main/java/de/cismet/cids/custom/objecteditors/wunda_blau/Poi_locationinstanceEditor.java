@@ -1,8 +1,14 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /*
  * Poi_locationinstanceEditor.java
  *
@@ -11,34 +17,118 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
+
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.objectrenderer.wunda_blau.SignaturListCellRenderer;
-import de.cismet.cids.dynamics.CidsBean;
-import de.cismet.cids.editors.DefaultCustomObjectEditor;
-import de.cismet.cids.editors.FastBindableReferenceCombo;
-import de.cismet.cids.tools.metaobjectrenderer.Titled;
-import de.cismet.cids.navigator.utils.ClassCacheMultiple;
-import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
-import de.cismet.tools.gui.RoundedPanel;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.logging.Level;
-import javax.swing.JOptionPane;
+
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.logging.Level;
+
+import javax.swing.JOptionPane;
+
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.wunda_blau.SignaturListCellRenderer;
+
+import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.editors.DefaultCustomObjectEditor;
+import de.cismet.cids.editors.FastBindableReferenceCombo;
+
+import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+
+import de.cismet.cids.tools.metaobjectrenderer.Titled;
+
+import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
+
+import de.cismet.tools.gui.RoundedPanel;
+
 /**
+ * DOCUMENT ME!
  *
- * @author srichter
+ * @author   srichter
+ * @version  $Revision$, $Date$
  */
 public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implements Titled {
 
+    //~ Instance fields --------------------------------------------------------
+
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private String title = "";
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddThema;
+    private javax.swing.JButton btnAddZusNamen;
+    private javax.swing.JButton btnMenAbort;
+    private javax.swing.JButton btnMenOk;
+    private javax.swing.JButton btnNamesMenAbort;
+    private javax.swing.JButton btnNamesMenOk;
+    private javax.swing.JButton btnRemoveThema;
+    private javax.swing.JButton btnRemoveZusNamen;
+    private javax.swing.JComboBox cbGeomPoint;
+    private javax.swing.JComboBox cbMainLocationType;
+    private javax.swing.JComboBox cbSignatur;
+    private javax.swing.JComboBox cbTypes;
+    private javax.swing.JCheckBox chkVeroeffentlicht;
+    private javax.swing.JDialog dlgAddLocationType;
+    private javax.swing.JDialog dlgAddZusNamen;
+    private javax.swing.JLabel lblArt;
+    private javax.swing.JLabel lblAuswaehlen;
+    private javax.swing.JLabel lblBezeichnung;
+    private javax.swing.JLabel lblEmail;
+    private javax.swing.JLabel lblFax;
+    private javax.swing.JLabel lblGeomPoint;
+    private javax.swing.JLabel lblHeader1;
+    private javax.swing.JLabel lblHeader2;
+    private javax.swing.JLabel lblInfo;
+    private javax.swing.JLabel lblLocationTypes;
+    private javax.swing.JLabel lblLocationTypes1;
+    private javax.swing.JLabel lblMainLocationType;
+    private javax.swing.JLabel lblNamesAuswaehlen;
+    private javax.swing.JLabel lblPLZ;
+    private javax.swing.JLabel lblSignatur;
+    private javax.swing.JLabel lblStadt;
+    private javax.swing.JLabel lblStrasse;
+    private javax.swing.JLabel lblTelefon;
+    private javax.swing.JLabel lblUrl;
+    private javax.swing.JLabel lblVeroeffentlicht;
+    private javax.swing.JList lstLocationTypes;
+    private javax.swing.JList lstZusNamen;
+    private javax.swing.JPanel panAddLocationType;
+    private javax.swing.JPanel panAddName;
+    private javax.swing.JPanel panButtons;
+    private javax.swing.JPanel panButtons1;
+    private javax.swing.JPanel panCenter;
+    private javax.swing.JPanel panContent;
+    private javax.swing.JPanel panContent2;
+    private javax.swing.JPanel panMenButtons;
+    private javax.swing.JPanel panMenNamesButtons;
+    private javax.swing.JPanel panSpacing1;
+    private javax.swing.JPanel panSpacing2;
+    private javax.swing.JScrollPane scpLstLocationTypes;
+    private javax.swing.JScrollPane scpTxtInfo;
+    private javax.swing.JScrollPane scpZusNamen;
+    private javax.swing.JTextField txtArt;
+    private javax.swing.JTextField txtBezeichnung;
+    private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtFax;
+    private javax.swing.JTextField txtPLZ;
+    private javax.swing.JTextField txtStadt;
+    private javax.swing.JTextField txtStrasse;
+    private javax.swing.JTextField txtTelefon;
+    private javax.swing.JTextField txtUrl;
+    private javax.swing.JTextField txtZusNamen;
+    private javax.swing.JTextArea txtaInfo;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
+    // End of variables declaration//GEN-END:variables
 
-    /** Creates new form Poi_locationinstanceEditor */
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates new form Poi_locationinstanceEditor.
+     */
     public Poi_locationinstanceEditor() {
         initComponents();
         dlgAddLocationType.pack();
@@ -46,6 +136,8 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         dlgAddLocationType.getRootPane().setDefaultButton(btnMenOk);
         dlgAddZusNamen.getRootPane().setDefaultButton(btnNamesMenOk);
     }
+
+    //~ Methods ----------------------------------------------------------------
 
     @Override
     public void dispose() {
@@ -55,9 +147,18 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         ((DefaultCismapGeometryComboBoxEditor)cbGeomPoint).dispose();
     }
 
-    private final void deleteItemFromList(String propertyName, Object value, boolean andDeleteObjectFromDB) {
-        if (value instanceof CidsBean && propertyName != null) {
-            final CidsBean bean = (CidsBean) value;
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  propertyName           DOCUMENT ME!
+     * @param  value                  DOCUMENT ME!
+     * @param  andDeleteObjectFromDB  DOCUMENT ME!
+     */
+    private void deleteItemFromList(final String propertyName,
+            final Object value,
+            final boolean andDeleteObjectFromDB) {
+        if ((value instanceof CidsBean) && (propertyName != null)) {
+            final CidsBean bean = (CidsBean)value;
             if (andDeleteObjectFromDB) {
                 try {
                     bean.delete();
@@ -67,7 +168,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
             } else {
                 final Object coll = cidsBean.getProperty(propertyName);
                 if (coll instanceof Collection) {
-                    ((Collection) coll).remove(bean);
+                    ((Collection)coll).remove(bean);
                 }
             }
         }
@@ -78,10 +179,9 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 //        super.setCidsBean(cidsBean);
 //    }
 
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -92,8 +192,10 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         dlgAddLocationType = new javax.swing.JDialog();
         panAddLocationType = new javax.swing.JPanel();
         lblAuswaehlen = new javax.swing.JLabel();
-        final MetaObject[] locationtypes = ObjectRendererUtils.getLightweightMetaObjectsForTable("poi_locationtype", new String[]{"identification"});
-        if(locationtypes != null) {
+        final MetaObject[] locationtypes = ObjectRendererUtils.getLightweightMetaObjectsForTable(
+                "poi_locationtype",
+                new String[] { "identification" });
+        if (locationtypes != null) {
             Arrays.sort(locationtypes);
             cbTypes = new javax.swing.JComboBox(locationtypes);
             panMenButtons = new javax.swing.JPanel();
@@ -149,7 +251,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
             lstZusNamen = new javax.swing.JList();
             lblLocationTypes1 = new javax.swing.JLabel();
             lblSignatur = new javax.swing.JLabel();
-            cbSignatur = new FastBindableReferenceCombo("%1$2s", new String[]{"definition", "filename"});
+            cbSignatur = new FastBindableReferenceCombo("%1$2s", new String[] { "definition", "filename" });
             panSpacing2 = new javax.swing.JPanel();
             lblVeroeffentlicht = new javax.swing.JLabel();
             chkVeroeffentlicht = new javax.swing.JCheckBox();
@@ -166,7 +268,6 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
             panAddLocationType.add(lblAuswaehlen, gridBagConstraints);
-
         }
         cbTypes.setMaximumSize(new java.awt.Dimension(100, 20));
         cbTypes.setMinimumSize(new java.awt.Dimension(100, 20));
@@ -182,10 +283,12 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         btnMenAbort.setText("Abbrechen");
         btnMenAbort.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenAbortActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnMenAbortActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -195,10 +298,12 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         btnMenOk.setText("Ok");
         btnMenOk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenOkActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnMenOkActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -230,10 +335,12 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         btnNamesMenAbort.setText("Abbrechen");
         btnNamesMenAbort.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNamesMenAbortActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnNamesMenAbortActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -243,10 +350,12 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         btnNamesMenOk.setText("Ok");
         btnNamesMenOk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNamesMenOkActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnNamesMenOkActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -358,7 +467,12 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblArt, gridBagConstraints);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fax}"), txtFax, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fax}"),
+                txtFax,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -370,7 +484,12 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(txtFax, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.strasse}"), txtStrasse, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.strasse}"),
+                txtStrasse,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -382,7 +501,12 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(txtStrasse, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.stadt}"), txtStadt, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.stadt}"),
+                txtStadt,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -394,7 +518,12 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(txtStadt, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.plz}"), txtPLZ, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.plz}"),
+                txtPLZ,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -406,7 +535,12 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(txtPLZ, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.telefon}"), txtTelefon, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.telefon}"),
+                txtTelefon,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -418,7 +552,12 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(txtTelefon, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.email}"), txtEmail, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.email}"),
+                txtEmail,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -434,7 +573,12 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         txtaInfo.setFont(new java.awt.Font("Tahoma", 0, 11));
         txtaInfo.setRows(5);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.info}"), txtaInfo, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.info}"),
+                txtaInfo,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -448,7 +592,12 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(scpTxtInfo, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.art_info}"), txtArt, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.art_info}"),
+                txtArt,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -460,7 +609,12 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(txtArt, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.url}"), txtUrl, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.url}"),
+                txtUrl,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -481,7 +635,12 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblBezeichnung, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geographicidentifier}"), txtBezeichnung, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geographicidentifier}"),
+                txtBezeichnung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -520,7 +679,12 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent.add(lblGeomPoint, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.pos}"), cbGeomPoint, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.pos}"),
+                cbGeomPoint,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("<Error>");
         binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeomPoint).getConverter());
@@ -556,10 +720,21 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(lblMainLocationType, gridBagConstraints);
 
-        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.locationtypes}");
-        org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, cbMainLocationType);
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
+                "${cidsBean.locationtypes}");
+        final org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings
+                    .createJComboBoxBinding(
+                        org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                        this,
+                        eLProperty,
+                        cbMainLocationType);
         bindingGroup.addBinding(jComboBoxBinding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.mainlocationtype}"), cbMainLocationType, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.mainlocationtype}"),
+                cbMainLocationType,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -584,7 +759,12 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         lstLocationTypes.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.locationtypes}");
-        org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstLocationTypes);
+        org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings
+                    .createJListBinding(
+                        org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                        this,
+                        eLProperty,
+                        lstLocationTypes);
         bindingGroup.addBinding(jListBinding);
 
         scpLstLocationTypes.setViewportView(lstLocationTypes);
@@ -601,22 +781,28 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         panButtons.setOpaque(false);
         panButtons.setLayout(new java.awt.GridBagLayout());
 
-        btnAddThema.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddThema.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddThema.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddThemaActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnAddThemaActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panButtons.add(btnAddThema, gridBagConstraints);
 
-        btnRemoveThema.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveThema.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemoveThema.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemoveThemaActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnRemoveThemaActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -633,22 +819,28 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         panButtons1.setOpaque(false);
         panButtons1.setLayout(new java.awt.GridBagLayout());
 
-        btnAddZusNamen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddZusNamen.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         btnAddZusNamen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddZusNamenActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnAddZusNamenActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panButtons1.add(btnAddZusNamen, gridBagConstraints);
 
-        btnRemoveZusNamen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveZusNamen.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         btnRemoveZusNamen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemoveZusNamenActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnRemoveZusNamenActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -663,7 +855,11 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         panContent2.add(panButtons1, gridBagConstraints);
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alternativegeographicidentifier}");
-        jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstZusNamen);
+        jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                eLProperty,
+                lstZusNamen);
         bindingGroup.addBinding(jListBinding);
 
         scpZusNamen.setViewportView(lstZusNamen);
@@ -695,7 +891,12 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         ((FastBindableReferenceCombo)cbSignatur).setSorted(true);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.signatur}"), cbSignatur, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.signatur}"),
+                cbSignatur,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -730,7 +931,12 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
         chkVeroeffentlicht.setOpaque(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.to_publish}"), chkVeroeffentlicht, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.to_publish}"),
+                chkVeroeffentlicht,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -764,77 +970,139 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         add(panCenter, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
-    private void btnAddThemaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddThemaActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnAddThemaActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddThemaActionPerformed
         dlgAddLocationType.setLocationRelativeTo(Poi_locationinstanceEditor.this);
         dlgAddLocationType.setVisible(true);
-}//GEN-LAST:event_btnAddThemaActionPerformed
+    }                                                                               //GEN-LAST:event_btnAddThemaActionPerformed
 
-    private void btnRemoveThemaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveThemaActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnRemoveThemaActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveThemaActionPerformed
         final Object selection = lstLocationTypes.getSelectedValue();
         if (selection != null) {
-            final int answer = JOptionPane.showConfirmDialog(this, "Soll das Thema wirklich gelöscht werden?", "Thema entfernen", JOptionPane.YES_NO_OPTION);
+            final int answer = JOptionPane.showConfirmDialog(
+                    this,
+                    "Soll das Thema wirklich gelöscht werden?",
+                    "Thema entfernen",
+                    JOptionPane.YES_NO_OPTION);
             if (answer == JOptionPane.YES_OPTION) {
                 try {
                     deleteItemFromList("locationtypes", selection, false);
                 } catch (Exception ex) {
-                    final ErrorInfo ei = new ErrorInfo("Fehler beim Löschen", "Beim Löschen des Themas ist ein Fehler aufgetreten", null,
-                            null, ex, Level.SEVERE, null);
+                    final ErrorInfo ei = new ErrorInfo(
+                            "Fehler beim Löschen",
+                            "Beim Löschen des Themas ist ein Fehler aufgetreten",
+                            null,
+                            null,
+                            ex,
+                            Level.SEVERE,
+                            null);
                     JXErrorPane.showDialog(this, ei);
                 }
             }
         }
-}//GEN-LAST:event_btnRemoveThemaActionPerformed
+    }                                                                                  //GEN-LAST:event_btnRemoveThemaActionPerformed
 
-    private void btnMenAbortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbortActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenAbortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbortActionPerformed
         dlgAddLocationType.setVisible(false);
-}//GEN-LAST:event_btnMenAbortActionPerformed
+    }                                                                               //GEN-LAST:event_btnMenAbortActionPerformed
 
-    private void btnMenOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOkActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMenOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOkActionPerformed
         try {
             final Object selItem = cbTypes.getSelectedItem();
             if (selItem instanceof MetaObject) {
-                addBeanToCollection("locationtypes", ((MetaObject) selItem).getBean());
+                addBeanToCollection("locationtypes", ((MetaObject)selItem).getBean());
             }
         } catch (Exception ex) {
             log.error(ex, ex);
         } finally {
             dlgAddLocationType.setVisible(false);
         }
-}//GEN-LAST:event_btnMenOkActionPerformed
+    }                                                                            //GEN-LAST:event_btnMenOkActionPerformed
 
-    private void btnAddZusNamenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddZusNamenActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnAddZusNamenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddZusNamenActionPerformed
         dlgAddZusNamen.setLocationRelativeTo(Poi_locationinstanceEditor.this);
         dlgAddZusNamen.setVisible(true);
-    }//GEN-LAST:event_btnAddZusNamenActionPerformed
+    }                                                                                  //GEN-LAST:event_btnAddZusNamenActionPerformed
 
-    private void btnRemoveZusNamenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveZusNamenActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnRemoveZusNamenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveZusNamenActionPerformed
         final Object selection = lstZusNamen.getSelectedValue();
         if (selection != null) {
-            final int answer = JOptionPane.showConfirmDialog(this, "Soll der zusätzliche Name wirklich gelöscht werden?", "Name entfernen", JOptionPane.YES_NO_OPTION);
+            final int answer = JOptionPane.showConfirmDialog(
+                    this,
+                    "Soll der zusätzliche Name wirklich gelöscht werden?",
+                    "Name entfernen",
+                    JOptionPane.YES_NO_OPTION);
             if (answer == JOptionPane.YES_OPTION) {
                 try {
                     deleteItemFromList("alternativegeographicidentifier", selection, true);
                 } catch (Exception ex) {
-                    final ErrorInfo ei = new ErrorInfo("Fehler beim Löschen", "Beim Löschen des zusätzlichen Namens ist ein Fehler aufgetreten", null,
-                            null, ex, Level.SEVERE, null);
+                    final ErrorInfo ei = new ErrorInfo(
+                            "Fehler beim Löschen",
+                            "Beim Löschen des zusätzlichen Namens ist ein Fehler aufgetreten",
+                            null,
+                            null,
+                            ex,
+                            Level.SEVERE,
+                            null);
                     JXErrorPane.showDialog(this, ei);
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveZusNamenActionPerformed
+    }                                                                                     //GEN-LAST:event_btnRemoveZusNamenActionPerformed
 
-    private void btnNamesMenAbortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNamesMenAbortActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnNamesMenAbortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnNamesMenAbortActionPerformed
         dlgAddZusNamen.setVisible(false);
         txtZusNamen.setText("");
-    }//GEN-LAST:event_btnNamesMenAbortActionPerformed
+    }                                                                                    //GEN-LAST:event_btnNamesMenAbortActionPerformed
 
-    private void btnNamesMenOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNamesMenOkActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnNamesMenOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnNamesMenOkActionPerformed
         try {
             final String addName = txtZusNamen.getText();
             if (addName.length() > 0) {
-                final MetaClass alternativeGeoIdentifierMC = ClassCacheMultiple.getMetaClass(SessionManager.getSession().getUser().getDomain(), "poi_alternativegeographicidentifier");
+                final MetaClass alternativeGeoIdentifierMC = ClassCacheMultiple.getMetaClass(SessionManager.getSession()
+                                .getUser().getDomain(),
+                        "poi_alternativegeographicidentifier");
                 final MetaObject newAGI = alternativeGeoIdentifierMC.getEmptyInstance();
                 final CidsBean newAGIBean = newAGI.getBean();
                 newAGIBean.setProperty("alternativegeographicidentifier", addName);
@@ -846,14 +1114,20 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
             txtZusNamen.setText("");
             dlgAddZusNamen.setVisible(false);
         }
-    }//GEN-LAST:event_btnNamesMenOkActionPerformed
+    }                                                                                 //GEN-LAST:event_btnNamesMenOkActionPerformed
 
-    private final void addBeanToCollection(final String propName, final CidsBean newTypeBean) {
-        if (newTypeBean != null && propName != null) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  propName     DOCUMENT ME!
+     * @param  newTypeBean  DOCUMENT ME!
+     */
+    private void addBeanToCollection(final String propName, final CidsBean newTypeBean) {
+        if ((newTypeBean != null) && (propName != null)) {
             final Object o = cidsBean.getProperty(propName);
             if (o instanceof Collection) {
                 try {
-                    final Collection<CidsBean> col = (Collection) o;
+                    final Collection<CidsBean> col = (Collection)o;
                     for (final CidsBean bean : col) {
                         if (newTypeBean.equals(bean)) {
                             log.info("Bean " + newTypeBean + " already present in " + propName + "!");
@@ -867,86 +1141,25 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
             }
         }
     }
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAddThema;
-    private javax.swing.JButton btnAddZusNamen;
-    private javax.swing.JButton btnMenAbort;
-    private javax.swing.JButton btnMenOk;
-    private javax.swing.JButton btnNamesMenAbort;
-    private javax.swing.JButton btnNamesMenOk;
-    private javax.swing.JButton btnRemoveThema;
-    private javax.swing.JButton btnRemoveZusNamen;
-    private javax.swing.JComboBox cbGeomPoint;
-    private javax.swing.JComboBox cbMainLocationType;
-    private javax.swing.JComboBox cbSignatur;
-    private javax.swing.JComboBox cbTypes;
-    private javax.swing.JCheckBox chkVeroeffentlicht;
-    private javax.swing.JDialog dlgAddLocationType;
-    private javax.swing.JDialog dlgAddZusNamen;
-    private javax.swing.JLabel lblArt;
-    private javax.swing.JLabel lblAuswaehlen;
-    private javax.swing.JLabel lblBezeichnung;
-    private javax.swing.JLabel lblEmail;
-    private javax.swing.JLabel lblFax;
-    private javax.swing.JLabel lblGeomPoint;
-    private javax.swing.JLabel lblHeader1;
-    private javax.swing.JLabel lblHeader2;
-    private javax.swing.JLabel lblInfo;
-    private javax.swing.JLabel lblLocationTypes;
-    private javax.swing.JLabel lblLocationTypes1;
-    private javax.swing.JLabel lblMainLocationType;
-    private javax.swing.JLabel lblNamesAuswaehlen;
-    private javax.swing.JLabel lblPLZ;
-    private javax.swing.JLabel lblSignatur;
-    private javax.swing.JLabel lblStadt;
-    private javax.swing.JLabel lblStrasse;
-    private javax.swing.JLabel lblTelefon;
-    private javax.swing.JLabel lblUrl;
-    private javax.swing.JLabel lblVeroeffentlicht;
-    private javax.swing.JList lstLocationTypes;
-    private javax.swing.JList lstZusNamen;
-    private javax.swing.JPanel panAddLocationType;
-    private javax.swing.JPanel panAddName;
-    private javax.swing.JPanel panButtons;
-    private javax.swing.JPanel panButtons1;
-    private javax.swing.JPanel panCenter;
-    private javax.swing.JPanel panContent;
-    private javax.swing.JPanel panContent2;
-    private javax.swing.JPanel panMenButtons;
-    private javax.swing.JPanel panMenNamesButtons;
-    private javax.swing.JPanel panSpacing1;
-    private javax.swing.JPanel panSpacing2;
-    private javax.swing.JScrollPane scpLstLocationTypes;
-    private javax.swing.JScrollPane scpTxtInfo;
-    private javax.swing.JScrollPane scpZusNamen;
-    private javax.swing.JTextField txtArt;
-    private javax.swing.JTextField txtBezeichnung;
-    private javax.swing.JTextField txtEmail;
-    private javax.swing.JTextField txtFax;
-    private javax.swing.JTextField txtPLZ;
-    private javax.swing.JTextField txtStadt;
-    private javax.swing.JTextField txtStrasse;
-    private javax.swing.JTextField txtTelefon;
-    private javax.swing.JTextField txtUrl;
-    private javax.swing.JTextField txtZusNamen;
-    private javax.swing.JTextArea txtaInfo;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
-    // End of variables declaration//GEN-END:variables
 
     @Override
     public String getTitle() {
-        if (title == null || title.length() == 0) {
+        if ((title == null) || (title.length() == 0)) {
             title = getTitleBackup();
-
         }
         return title;
     }
 
     @Override
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public String getTitleBackup() {
         final CidsBean bean = cidsBean;
         if (bean != null) {

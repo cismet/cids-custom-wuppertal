@@ -13,10 +13,11 @@
 package de.cismet.cids.custom.tostringconverter.wunda_blau;
 import Sirius.server.localserver.attribute.*;
 import Sirius.server.middleware.types.MetaObject;
-import de.cismet.cids.tools.tostring.GeometryStringConverter;
-import de.cismet.cids.tools.tostring.ToStringConverter;
 
 import java.util.Collection;
+
+import de.cismet.cids.tools.tostring.GeometryStringConverter;
+import de.cismet.cids.tools.tostring.ToStringConverter;
 /**
  * DOCUMENT ME!
  *
@@ -41,15 +42,16 @@ public class StrasseToStringConverter extends ToStringConverter implements java.
 
     //~ Methods ----------------------------------------------------------------
 
-    public String convert(de.cismet.cids.tools.tostring.StringConvertable o) {
-        MetaObject mo = (MetaObject)o;
+    @Override
+    public String convert(final de.cismet.cids.tools.tostring.StringConvertable o) {
+        final MetaObject mo = (MetaObject)o;
 
         String stringRepresentation = "";
 
-        Collection<Attribute> attrs = mo.getAttributeByName("NAME", 1);
+        final Collection<Attribute> attrs = mo.getAttributeByName("NAME", 1);
 
         if (!attrs.isEmpty()) {
-            Attribute attr = attrs.iterator().next();
+            final Attribute attr = attrs.iterator().next();
 
             stringRepresentation += (attr.toString() + " ");
         }

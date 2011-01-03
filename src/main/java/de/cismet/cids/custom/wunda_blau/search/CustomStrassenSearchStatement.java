@@ -1,16 +1,23 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  *  Copyright (C) 2010 thorsten
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -22,41 +29,53 @@ import Sirius.server.middleware.types.MetaObjectNode;
 import Sirius.server.middleware.types.Node;
 import Sirius.server.newuser.permission.Policy;
 import Sirius.server.search.CidsServerSearch;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
 /**
+ * DOCUMENT ME!
  *
- * @author thorsten
+ * @author   thorsten
+ * @version  $Revision$, $Date$
  */
 public class CustomStrassenSearchStatement extends CidsServerSearch {
-   
+
+    //~ Instance fields --------------------------------------------------------
+
     private String searchString;
 
-    public CustomStrassenSearchStatement(String searchString) {
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new CustomStrassenSearchStatement object.
+     *
+     * @param  searchString  DOCUMENT ME!
+     */
+    public CustomStrassenSearchStatement(final String searchString) {
         this.searchString = searchString;
     }
-    
+
+    //~ Methods ----------------------------------------------------------------
+
     @Override
     public Collection performServerSearch() {
         try {
             getLog().fatal("search started");
 
+            final MetaService ms = (MetaService)getActiveLoaclServers().get("WUNDA_BLAU");
 
-            MetaService ms = (MetaService) getActiveLoaclServers().get("WUNDA_BLAU");
+            final MetaClass c = ms.getClassByTableName(getUser(), "strasse");
 
-            MetaClass c = ms.getClassByTableName(getUser(), "strasse");
+            final String sql = "select strassenschluessel,name from strasse where name like '%" + searchString
+                        + "%' order by name desc";
 
+            final ArrayList<ArrayList> result = ms.performCustomSearch(sql);
 
-            String sql = "select strassenschluessel,name from strasse where name like '%" + searchString + "%' order by name desc";
-
-            ArrayList<ArrayList> result = ms.performCustomSearch(sql);
-
-            ArrayList<Node> aln = new ArrayList<Node>();
-            for (ArrayList al : result) {
-
-                int id = (Integer) al.get(0);
-                MetaObjectNode mon = new MetaObjectNode(c.getDomain(), id, c.getId());
+            final ArrayList<Node> aln = new ArrayList<Node>();
+            for (final ArrayList al : result) {
+                final int id = (Integer)al.get(0);
+                final MetaObjectNode mon = new MetaObjectNode(c.getDomain(), id, c.getId());
 
                 aln.add(mon);
             }
@@ -68,5 +87,3 @@ public class CustomStrassenSearchStatement extends CidsServerSearch {
         }
     }
 }
-
-

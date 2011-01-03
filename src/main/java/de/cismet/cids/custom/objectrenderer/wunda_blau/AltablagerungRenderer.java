@@ -1,59 +1,104 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
 import com.vividsolutions.jts.geom.Geometry;
+
 import de.cismet.cids.annotations.CidsAttribute;
+
 import de.cismet.cids.custom.deprecated.JLoadDots;
 
+import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
+
 /**
- * de.cismet.cids.objectrenderer.CoolAltablagerungRenderer
- * @author nh
+ * de.cismet.cids.objectrenderer.CoolAltablagerungRenderer.
+ *
+ * @author   nh
+ * @version  $Revision$, $Date$
  */
 public class AltablagerungRenderer extends CoolPanel {
-    
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final String TITLE = "Altablagerung";
+
+    //~ Instance fields --------------------------------------------------------
+
     @CidsAttribute("NAME")
     public String name = "";
-    
+
     @CidsAttribute("DESCRIPTION.OBJECT_NAME")
     public String url_name = "";
-    
+
     @CidsAttribute("DESCRIPTION.URL_BASE_ID.PROT_PREFIX")
     public String url_prefix = "";
-    
+
     @CidsAttribute("DESCRIPTION.URL_BASE_ID.SERVER")
     public String url_server = "";
-    
+
     @CidsAttribute("DESCRIPTION.URL_BASE_ID.PATH")
     public String url_path = "";
-    
+
     @CidsAttribute("ISBA_NUMMER")
     public String isba = "";
-    
+
     @CidsAttribute("BEGINN_ABLAGERUNG")
     public String beginn = "";
-    
+
     @CidsAttribute("ENDE_ABLAGERUNG")
     public String ende = "";
-    
+
     @CidsAttribute("FLAECHENKUERZEL")
     public String kuerzel = "";
-            
+
     @CidsAttribute("QUELLE")
     public String quelle = "";
-    
+
     @CidsAttribute("BEMERKUNG")
     public String bemerkung = "";
-    
+
     @CidsAttribute("FLAECHENTYP")
     public String typ = "";
-    
+
     @CidsAttribute("Georeferenz.GEO_STRING")
     public Geometry geom = null;
-    
-    private static final String TITLE = "Altablagerung";
-    
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel lblBeginn;
+    private javax.swing.JLabel lblBem;
+    private javax.swing.JLabel lblEnde;
+    private javax.swing.JLabel lblISBA;
+    private javax.swing.JLabel lblKuerzel;
+    private javax.swing.JLabel lblName;
+    private javax.swing.JLabel lblQuelle;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JLabel lblTyp;
+    private javax.swing.JLabel lblURL;
+    private javax.swing.JPanel panInhalt;
+    private javax.swing.JPanel panInter;
+    private javax.swing.JPanel panMap;
+    private javax.swing.JPanel panSpinner;
+    private javax.swing.JPanel panTitle;
+    // End of variables declaration//GEN-END:variables
+
+    //~ Constructors -----------------------------------------------------------
+
     /**
-     * Creates new form CoolAltablagerungRenderer
+     * Creates new form CoolAltablagerungRenderer.
      */
     public AltablagerungRenderer() {
         initComponents();
@@ -63,14 +108,16 @@ public class AltablagerungRenderer extends CoolPanel {
         setPanTitle(panTitle);
         setSpinner(panSpinner);
     }
-    
+
+    //~ Methods ----------------------------------------------------------------
+
     @Override
     public void assignSingle() {
         if (geom != null) {
             super.setGeometry(geom);
         }
-        
-        if(name != null) {
+
+        if (name != null) {
             lblName.setText(name);
             lblTitle.setText(name);
         } else {
@@ -78,60 +125,59 @@ public class AltablagerungRenderer extends CoolPanel {
             lblName.setVisible(false);
             lblTitle.setText(TITLE);
         }
-        if(url_prefix != null && url_server != null && url_path != null && url_name != null) {
+        if ((url_prefix != null) && (url_server != null) && (url_path != null) && (url_name != null)) {
             lblURL.setText(url_prefix + url_server + url_path + url_name);
         } else {
             jLabel2.setVisible(false);
             lblURL.setVisible(false);
         }
-        if(isba != null) {
+        if (isba != null) {
             lblISBA.setText(isba);
         } else {
             jLabel3.setVisible(false);
             lblISBA.setVisible(false);
         }
-        if(beginn != null) {
+        if (beginn != null) {
             lblBeginn.setText(beginn);
         } else {
             jLabel4.setVisible(false);
             lblBeginn.setVisible(false);
         }
-        if(ende != null) {
+        if (ende != null) {
             lblEnde.setText(ende);
         } else {
             jLabel5.setVisible(false);
             lblEnde.setVisible(false);
         }
-        if(kuerzel != null) {
+        if (kuerzel != null) {
             lblKuerzel.setText(kuerzel);
         } else {
             jLabel6.setVisible(false);
             lblKuerzel.setVisible(false);
         }
-        if(quelle != null) {
+        if (quelle != null) {
             lblQuelle.setText(quelle);
         } else {
             jLabel7.setVisible(false);
             lblQuelle.setVisible(false);
         }
-        if(bemerkung != null && !bemerkung.equals("null")) {
+        if ((bemerkung != null) && !bemerkung.equals("null")) {
             lblBem.setText(bemerkung);
         } else {
             jLabel8.setVisible(false);
             lblBem.setVisible(false);
         }
-        if(typ != null) {
+        if (typ != null) {
             lblTyp.setText(typ);
         } else {
             jLabel9.setVisible(false);
             lblTyp.setVisible(false);
         }
     }
-    
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -174,37 +220,35 @@ public class AltablagerungRenderer extends CoolPanel {
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblTitle.setText("Altablagerung");
 
-        javax.swing.GroupLayout panTitleLayout = new javax.swing.GroupLayout(panTitle);
+        final javax.swing.GroupLayout panTitleLayout = new javax.swing.GroupLayout(panTitle);
         panTitle.setLayout(panTitleLayout);
         panTitleLayout.setHorizontalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panTitleLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblTitle)
-                .addContainerGap(171, Short.MAX_VALUE))
-        );
+            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addContainerGap(
+                    171,
+                    Short.MAX_VALUE)));
         panTitleLayout.setVerticalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panTitleLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblTitle)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addContainerGap(
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    Short.MAX_VALUE)));
 
         add(panTitle, java.awt.BorderLayout.NORTH);
 
         panInter.setOpaque(false);
 
-        javax.swing.GroupLayout panInterLayout = new javax.swing.GroupLayout(panInter);
+        final javax.swing.GroupLayout panInterLayout = new javax.swing.GroupLayout(panInter);
         panInter.setLayout(panInterLayout);
         panInterLayout.setHorizontalGroup(
-            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 313, Short.MAX_VALUE)
-        );
+            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                313,
+                Short.MAX_VALUE));
         panInterLayout.setVerticalGroup(
-            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 14, Short.MAX_VALUE)
-        );
+            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                14,
+                Short.MAX_VALUE));
 
         add(panInter, java.awt.BorderLayout.SOUTH);
 
@@ -217,16 +261,18 @@ public class AltablagerungRenderer extends CoolPanel {
         panSpinner.setPreferredSize(new java.awt.Dimension(100, 100));
         panSpinner.setRequestFocusEnabled(false);
 
-        javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
+        final javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
         panSpinner.setLayout(panSpinnerLayout);
         panSpinnerLayout.setHorizontalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                100,
+                Short.MAX_VALUE));
         panSpinnerLayout.setVerticalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                100,
+                Short.MAX_VALUE));
 
         panMap.add(panSpinner, new java.awt.GridBagConstraints());
 
@@ -386,35 +432,5 @@ public class AltablagerungRenderer extends CoolPanel {
         panInhalt.add(lblTyp, gridBagConstraints);
 
         add(panInhalt, java.awt.BorderLayout.WEST);
-    }// </editor-fold>//GEN-END:initComponents
-    
-    
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JLabel lblBeginn;
-    private javax.swing.JLabel lblBem;
-    private javax.swing.JLabel lblEnde;
-    private javax.swing.JLabel lblISBA;
-    private javax.swing.JLabel lblKuerzel;
-    private javax.swing.JLabel lblName;
-    private javax.swing.JLabel lblQuelle;
-    private javax.swing.JLabel lblTitle;
-    private javax.swing.JLabel lblTyp;
-    private javax.swing.JLabel lblURL;
-    private javax.swing.JPanel panInhalt;
-    private javax.swing.JPanel panInter;
-    private javax.swing.JPanel panMap;
-    private javax.swing.JPanel panSpinner;
-    private javax.swing.JPanel panTitle;
-    // End of variables declaration//GEN-END:variables
-
-    
+    } // </editor-fold>//GEN-END:initComponents
 }

@@ -1,8 +1,14 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /*
  * Tester.java
  *
@@ -16,30 +22,43 @@ import Sirius.navigator.connection.ConnectionInfo;
 import Sirius.navigator.connection.ConnectionSession;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.connection.proxy.ConnectionProxy;
-import Sirius.server.middleware.interfaces.proxy.MetaService;
+
 import Sirius.server.middleware.interfaces.proxy.CatalogueService;
+import Sirius.server.middleware.interfaces.proxy.MetaService;
 import Sirius.server.middleware.interfaces.proxy.SearchService;
 import Sirius.server.middleware.interfaces.proxy.UserService;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.newuser.User;
-import de.cismet.cids.editors.CidsObjectEditorFactory;
-import de.cismet.cids.navigator.utils.ClassCacheMultiple;
-import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
+
 import java.awt.BorderLayout;
+
 import java.rmi.Naming;
 import java.rmi.Remote;
 import java.rmi.registry.LocateRegistry;
+
 import javax.swing.JComponent;
 
+import de.cismet.cids.editors.CidsObjectEditorFactory;
+
+import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+
+import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
+
 /**
+ * DOCUMENT ME!
  *
- * @author thorsten
+ * @author   thorsten
+ * @version  $Revision$, $Date$
  */
 public class Tester extends javax.swing.JFrame {
 
-    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
-    final static String domain = "WUNDA_DEMO";
-    final static int AAPERSON_CLASSID = 374;
+    //~ Static fields/initializers ---------------------------------------------
+
+    static final String domain = "WUNDA_DEMO";
+    static final int AAPERSON_CLASSID = 374;
+
+    //~ Instance fields --------------------------------------------------------
+
     java.rmi.registry.Registry rmiRegistry = LocateRegistry.getRegistry(1099);
 
     // lookup des callservers
@@ -52,27 +71,34 @@ public class Tester extends javax.swing.JFrame {
     JComponent generatedComponent;
     MetaObject preloaded;
 
-    /** Creates new form Tester */
-    public Tester() throws Exception {
+    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
 
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates new form Tester.
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public Tester() throws Exception {
         Log4JQuickConfig.configure4LumbermillOnLocalhost();
         // rmi registry lokaliseren
 
-        //  ich weiss, dass die server von callserver implementiert werden
+        // ich weiss, dass die server von callserver implementiert werden
 
         rmiRegistry = LocateRegistry.getRegistry(1099);
 
         // lookup des callservers
-        r = (Remote) Naming.lookup("rmi://localhost/callServer");
-        ss = (SearchService) r;
-        cat = (CatalogueService) r;
-        meta = (MetaService) r;
-        us = (UserService) r;
+        r = (Remote)Naming.lookup("rmi://localhost/callServer");
+        ss = (SearchService)r;
+        cat = (CatalogueService)r;
+        meta = (MetaService)r;
+        us = (UserService)r;
         u = us.getUser(domain, "Demo", domain, "demo", "demo");
 
         ConnectionSession session = null;
         ConnectionProxy proxy = null;
-        ConnectionInfo connectionInfo = new ConnectionInfo();
+        final ConnectionInfo connectionInfo = new ConnectionInfo();
         connectionInfo.setCallserverURL("rmi://localhost/callServer");
         connectionInfo.setPassword("demo");
         connectionInfo.setUsergroup("Demo");
@@ -80,52 +106,55 @@ public class Tester extends javax.swing.JFrame {
         connectionInfo.setUsergroupDomain("WUNDA_DEMO");
         connectionInfo.setUsername("demo");
 
-        Connection connection = ConnectionFactory.getFactory().createConnection("Sirius.navigator.connection.RMIConnection", connectionInfo.getCallserverURL());
-
+        final Connection connection = ConnectionFactory.getFactory()
+                    .createConnection("Sirius.navigator.connection.RMIConnection", connectionInfo.getCallserverURL());
 
         session = ConnectionFactory.getFactory().createSession(connection, connectionInfo, true);
-        proxy = ConnectionFactory.getFactory().createProxy("Sirius.navigator.connection.proxy.DefaultConnectionProxyHandler", session);
+        proxy = ConnectionFactory.getFactory()
+                    .createProxy("Sirius.navigator.connection.proxy.DefaultConnectionProxyHandler", session);
         SessionManager.init(proxy);
 
-
-        ClassCacheMultiple.setInstance(domain);//, meta, u);
+        ClassCacheMultiple.setInstance(domain); // , meta, u);
 
         initComponents();
 
-        MetaObject mo = meta.getMetaObject(u, 2, AAPERSON_CLASSID, domain);
-        JComponent c = CidsObjectEditorFactory.getInstance().getEditor(mo);
-        getContentPane().add(c,BorderLayout.CENTER);
+        final MetaObject mo = meta.getMetaObject(u, 2, AAPERSON_CLASSID, domain);
+        final JComponent c = CidsObjectEditorFactory.getInstance().getEditor(mo);
+        getContentPane().add(c, BorderLayout.CENTER);
     }
 
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-800)/2, (screenSize.height-600)/2, 800, 600);
-    }// </editor-fold>//GEN-END:initComponents
+        final java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+        setBounds((screenSize.width - 800) / 2, (screenSize.height - 600) / 2, 800, 600);
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
-     * @param args the command line arguments
+     * DOCUMENT ME!
+     *
+     * @param  args  the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(final String[] args) {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
-            public void run() {
-                try {
-                    new Tester().setVisible(true);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+                @Override
+                public void run() {
+                    try {
+                        new Tester().setVisible(true);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
-            }
-        });
+            });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

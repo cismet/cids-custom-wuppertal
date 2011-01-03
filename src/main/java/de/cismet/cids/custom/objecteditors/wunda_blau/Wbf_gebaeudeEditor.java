@@ -1,8 +1,14 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /*
  * Wbf_gebaeudeEditor.java
  *
@@ -12,34 +18,7 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
-import de.cismet.cids.dynamics.CidsBean;
-import de.cismet.cids.editors.BindingGroupStore;
-import de.cismet.cids.editors.DefaultBindableReferenceCombo;
-import de.cismet.cids.editors.DefaultCustomObjectEditor;
-import de.cismet.cids.tools.metaobjectrenderer.Titled;
-import de.cismet.cids.navigator.utils.ClassCacheMultiple;
-import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
-import de.cismet.tools.gui.RoundedPanel;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Vector;
-import java.util.logging.Level;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.ListCellRenderer;
+
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.Binding.SyncFailure;
 import org.jdesktop.beansbinding.BindingGroup;
@@ -52,45 +31,164 @@ import org.jdesktop.jxlayer.plaf.ext.LockableUI;
 import org.jdesktop.observablecollections.ObservableList;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
+
 import org.openide.util.WeakListeners;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Vector;
+import java.util.logging.Level;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.ListCellRenderer;
+
+import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.editors.BindingGroupStore;
+import de.cismet.cids.editors.DefaultBindableReferenceCombo;
+import de.cismet.cids.editors.DefaultCustomObjectEditor;
+
+import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+
+import de.cismet.cids.tools.metaobjectrenderer.Titled;
+
+import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
+
+import de.cismet.tools.gui.RoundedPanel;
+
 /**
+ * DOCUMENT ME!
  *
- * @author thorsten
+ * @author   thorsten
+ * @version  $Revision$, $Date$
  */
 public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Titled, BindingGroupStore {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    public static final Color COLOR_TXT_BACK = new Color(230, 230, 230);
+
+    //~ Instance fields --------------------------------------------------------
+
+    MyLockableUI luiGeb;
+    MyLockableUI luiVorg;
+    JXLayer lVorg;
 
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private String domain = "";
 //    ImageIcon warn = new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/warn.png"));
     private HashMap<String, Collection<String>> validationDependencies = new HashMap<String, Collection<String>>();
     private final DefaultListCellRenderer dlcr = new DefaultListCellRenderer();
-    public static final Color COLOR_TXT_BACK = new Color(230, 230, 230);
     private boolean editable;
     private String title = "";
-    MyLockableUI luiGeb, luiVorg;
-    JXLayer lVorg;
-    private final List<PropertyChangeListener> strongReferencesToWeakListeners = new ArrayList<PropertyChangeListener>();
+    private final List<PropertyChangeListener> strongReferencesToWeakListeners =
+        new ArrayList<PropertyChangeListener>();
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox cbEinkommensgruppe;
+    private javax.swing.JComboBox cbMassnahmenkategorisierung;
+    private de.cismet.cids.editors.DefaultBindableReferenceCombo cbNutzungsart;
+    private javax.swing.JComboBox cboGeom;
+    private javax.swing.JButton cmdAddVorgang;
+    private javax.swing.JButton cmdRemoveVorgang;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextArea2;
+    private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
+    private org.jdesktop.swingx.JXDatePicker jXDatePicker2;
+    private org.jdesktop.swingx.JXDatePicker jXDatePicker3;
+    private javax.swing.JLabel lblAnschriftEigentuemer;
+    private javax.swing.JLabel lblAnschriftGebaeude;
+    private javax.swing.JLabel lblAnzahlWohneinheiten;
+    private javax.swing.JLabel lblBemerkungen;
+    private javax.swing.JLabel lblBeschreibung1;
+    private javax.swing.JLabel lblBetroffeneWohneinheiten;
+    private javax.swing.JLabel lblBewilligungsNr;
+    private javax.swing.JLabel lblBewilligungsdatum;
+    private javax.swing.JLabel lblBindungsdauer;
+    private javax.swing.JLabel lblEinkommensgruppe;
+    private javax.swing.JLabel lblFolgenummer;
+    private javax.swing.JLabel lblGeom;
+    private javax.swing.JLabel lblHoeheMietpreisbindung;
+    private javax.swing.JLabel lblMassnahmetyp;
+    private javax.swing.JLabel lblNameEigentuemer;
+    private javax.swing.JLabel lblNutzungsart;
+    private javax.swing.JLabel lblSachbearbeiterTech;
+    private javax.swing.JLabel lblSachbearbeiterVerw;
+    private javax.swing.JLabel lblUebergabedatum;
+    private javax.swing.JLabel lblVergabeNr;
+    private javax.swing.JLabel lblVorgangsliste;
+    private javax.swing.JList lstVorgaenge;
+    private javax.swing.JPanel panGebaeude;
+    private javax.swing.JPanel panVorgang;
+    private javax.swing.JPanel panVorgangX;
+    private javax.swing.JPanel panVorgangsauswahl;
+    private de.cismet.cids.editors.converters.SqlDateToUtilDateConverter sqlDateToUtilDateConverter;
+    private javax.swing.JTextField txtAnzahlWohneinheiten;
+    private javax.swing.JTextArea txtBemerkungen;
+    private javax.swing.JTextField txtBetroffeneWohneinheiten;
+    private javax.swing.JTextField txtBewilligungsNr;
+    private javax.swing.JTextField txtEigentuemerName;
+    private javax.swing.JTextField txtFolgenummer;
+    private javax.swing.JTextField txtHoeheMietpreisbindung;
+    private javax.swing.JTextArea txtMassnahmenbeschreibung;
+    private javax.swing.JTextField txtSachbearbeiterTechnik;
+    private javax.swing.JTextField txtSachbearbeiterVerwaltung;
+    private javax.swing.JTextField txtVergabeNr;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
+    // End of variables declaration//GEN-END:variables
 
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new Wbf_gebaeudeEditor object.
+     */
     public Wbf_gebaeudeEditor() {
         this(true);
     }
 
-    /** Creates new form Wbf_gebaeudeEditor */
-    public Wbf_gebaeudeEditor(boolean editable) {
+    /**
+     * Creates new form Wbf_gebaeudeEditor.
+     *
+     * @param  editable  DOCUMENT ME!
+     */
+    public Wbf_gebaeudeEditor(final boolean editable) {
 //        editable=true;
         this.editable = editable;
         initComponents();
-
-
 
         panVorgangX.setOpaque(false);
         panVorgangsauswahl.setOpaque(false);
         panGebaeude.setOpaque(false);
 
-        ((RoundedPanel) panVorgangX).setAlpha(255);
-        ((RoundedPanel) panGebaeude).setAlpha(255);
-        ((RoundedPanel) panVorgangsauswahl).setAlpha(255);
+        ((RoundedPanel)panVorgangX).setAlpha(255);
+        ((RoundedPanel)panGebaeude).setAlpha(255);
+        ((RoundedPanel)panVorgangsauswahl).setAlpha(255);
 
         panVorgangX.setBackground(getBackground());
         panGebaeude.setBackground(getBackground());
@@ -98,18 +196,16 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         if (!editable) {
             bindingGroup.removeBinding(bindingGroup.getBinding("geometrie"));
-            GridBagConstraints cbgVorgang = ((GridBagLayout) getLayout()).getConstraints(panVorgang);
+            final GridBagConstraints cbgVorgang = ((GridBagLayout)getLayout()).getConstraints(panVorgang);
             lVorg = new JXLayer(panVorgang);
             luiVorg = new MyLockableUI();
-
-
 
             luiVorg.setLocked(!editable);
             lVorg.setUI(luiVorg);
             lVorg.setOpaque(false);
             add(lVorg, cbgVorgang);
-            GridBagConstraints cbgGeb = ((GridBagLayout) getLayout()).getConstraints(panGebaeude);
-            JXLayer lGeb = new JXLayer(panGebaeude);
+            final GridBagConstraints cbgGeb = ((GridBagLayout)getLayout()).getConstraints(panGebaeude);
+            final JXLayer lGeb = new JXLayer(panGebaeude);
             lGeb.setOpaque(false);
             luiGeb = new MyLockableUI();
             luiGeb.setLocked(!editable);
@@ -120,13 +216,10 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
             cmdRemoveVorgang.setVisible(false);
         }
 
-
-        Vector v = new Vector(Arrays.asList(panVorgangX.getComponents()));
+        final Vector v = new Vector(Arrays.asList(panVorgangX.getComponents()));
         v.addAll(Arrays.asList(panGebaeude.getComponents()));
 
-
         for (final Object inputField : v) {
-
 //            if (inputField instanceof JTextField || inputField instanceof JTextArea) {
 //
 //                ((JComponent) inputField).setBorder(null);
@@ -136,144 +229,181 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 //                }
 //            } else
             if (inputField instanceof DefaultBindableReferenceCombo) {
-                ((DefaultBindableReferenceCombo) inputField).setFakeModel(!editable);
-                //((DefaultBindableReferenceCombo) inputField).setFakeModel(true);
+                ((DefaultBindableReferenceCombo)inputField).setFakeModel(!editable);
+                // ((DefaultBindableReferenceCombo) inputField).setFakeModel(true);
             }
         }
 
         lblGeom.setVisible(editable);
         cboGeom.setVisible(editable);
 
-
-
-
-
-        final MassnahmenkategorisierungValidator massnahmenkategorisierungValidator = new MassnahmenkategorisierungValidator();
+        final MassnahmenkategorisierungValidator massnahmenkategorisierungValidator =
+            new MassnahmenkategorisierungValidator();
         cbMassnahmenkategorisierung.setRenderer(new ListCellRenderer() {
 
-            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                JLabel l = (JLabel) dlcr.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                if (value != null) {
-                    Validator.Result result = massnahmenkategorisierungValidator.validate((CidsBean) value);
-                    if (result != null) {
-                        if (result.getType().equals(result.ERROR)) {
-                            l.setForeground(Color.red);
+                @Override
+                public Component getListCellRendererComponent(final JList list,
+                        final Object value,
+                        final int index,
+                        final boolean isSelected,
+                        final boolean cellHasFocus) {
+                    final JLabel l = (JLabel)dlcr.getListCellRendererComponent(
+                            list,
+                            value,
+                            index,
+                            isSelected,
+                            cellHasFocus);
+                    if (value != null) {
+                        final Validator.Result result = massnahmenkategorisierungValidator.validate((CidsBean)value);
+                        if (result != null) {
+                            if (result.getType().equals(result.ERROR)) {
+                                l.setForeground(Color.red);
+                            } else {
+                                l.setForeground(Color.MAGENTA);
+                            }
                         } else {
-                            l.setForeground(Color.MAGENTA);
+                            l.setForeground(Color.black);
                         }
-
-                    } else {
-                        l.setForeground(Color.black);
                     }
+                    return l;
                 }
-                return l;
-            }
-        });
-
+            });
 
         cbNutzungsart.setNullValueRepresentation("Bitte Nutzungsart auswählen");
 
-        validationDependencies.put("art", Arrays.asList("anzahl_wohneinheiten", "massnahmenkategorisierung", "hoehe_mietpreisbindung", "bindungsdauer"));
+        validationDependencies.put(
+            "art",
+            Arrays.asList(
+                "anzahl_wohneinheiten",
+                "massnahmenkategorisierung",
+                "hoehe_mietpreisbindung",
+                "bindungsdauer"));
         bindingGroup.addBindingListener(new BindingListener() {
 
-            public void bindingBecameBound(Binding binding) {
-                if (binding.getName() != null && binding.getName().equalsIgnoreCase("VORGAENGE")) {
-                    lstVorgaenge.setSelectedIndex(0);
+                @Override
+                public void bindingBecameBound(final Binding binding) {
+                    if ((binding.getName() != null) && binding.getName().equalsIgnoreCase("VORGAENGE")) {
+                        lstVorgaenge.setSelectedIndex(0);
+                    }
                 }
-            }
 
-            public void bindingBecameUnbound(Binding binding) {
-            }
+                @Override
+                public void bindingBecameUnbound(final Binding binding) {
+                }
 
-            public void syncFailed(Binding binding, SyncFailure failure) {
-                if (Wbf_gebaeudeEditor.this.editable) {
-                    log.debug("syncFailed");
-                    Object target = binding.getTargetObject();
-                    if (target instanceof JComponent) {//&& !(target instanceof JComboBox)) {
-                        JComponent c = (JComponent) target;
-                        c.setForeground(Color.red);
+                @Override
+                public void syncFailed(final Binding binding, final SyncFailure failure) {
+                    if (Wbf_gebaeudeEditor.this.editable) {
+                        if (log.isDebugEnabled()) {
+                            log.debug("syncFailed");
+                        }
+                        final Object target = binding.getTargetObject();
+                        if (target instanceof JComponent) { // && !(target instanceof JComboBox)) {
+                            final JComponent c = (JComponent)target;
+                            c.setForeground(Color.red);
 
-                        try {
+                            try {
+                                c.setToolTipText(failure.getValidationResult().getDescription());
+                            } catch (Exception skip) {
+                            }
+                        } else {
+                            log.error("keine JCOmponent");
+                        }
+                    }
+                }
+
+                @Override
+                public void syncWarning(final Binding binding, final SyncFailure failure) {
+                    if (Wbf_gebaeudeEditor.this.editable) {
+                        if (log.isDebugEnabled()) {
+                            log.debug("synWarning " + failure);
+                        }
+                        final Object target = binding.getTargetObject();
+                        if (target instanceof JComponent) { // && !(target instanceof JComboBox)) {
+                            final JComponent c = (JComponent)target;
+                            c.setForeground(Color.magenta);
                             c.setToolTipText(failure.getValidationResult().getDescription());
-                        } catch (Exception skip) {
+                        } else {
+                            log.error("keine JCOmponent");
+                        }
+                    }
+                }
+
+                @Override
+                public void synced(final Binding binding) {
+                    if (Wbf_gebaeudeEditor.this.editable) {
+                        if (log.isDebugEnabled()) {
+                            log.debug("sync");
+                        }
+                        final Object target = binding.getTargetObject();
+                        if (target instanceof JComponent) { // && !(target instanceof JComboBox)) {
+                            final JComponent c = (JComponent)target;
+                            c.setForeground(Color.black);
+                            c.setToolTipText(null);
+                        } else {
+                            log.error("keine JCOmponent");
                         }
 
-                    } else {
-                        log.error("keine JCOmponent");
-                    }
-                }
-            }
-
-            public void syncWarning(Binding binding, SyncFailure failure) {
-                if (Wbf_gebaeudeEditor.this.editable) {
-                    log.debug("synWarning " + failure);
-                    Object target = binding.getTargetObject();
-                    if (target instanceof JComponent) {// && !(target instanceof JComboBox)) {
-                        JComponent c = (JComponent) target;
-                        c.setForeground(Color.magenta);
-                        c.setToolTipText(failure.getValidationResult().getDescription());
-
-
-                    } else {
-                        log.error("keine JCOmponent");
-                    }
-                }
-            }
-
-            public void synced(Binding binding) {
-                if (Wbf_gebaeudeEditor.this.editable) {
-                    log.debug("sync");
-                    Object target = binding.getTargetObject();
-                    if (target instanceof JComponent) {//&& !(target instanceof JComboBox)) {
-                        JComponent c = (JComponent) target;
-                        c.setForeground(Color.black);
-                        c.setToolTipText(null);
-
-                    } else {
-                        log.error("keine JCOmponent");
-                    }
-
-
-                    String bindingName = binding.getName();
-                    if (bindingName != null) {
-                        Collection<String> additionalValidationBindings = validationDependencies.get(binding.getName());
-                        log.debug("for binding " + bindingName + "-->> dependencies: " + additionalValidationBindings);
-                        if (additionalValidationBindings != null) {
-
-                            for (String name : additionalValidationBindings) {
-                                Binding b = bindingGroup.getBinding(name);
-                                if (b != null) {
-                                    log.debug("CheckAgain: " + name);
-                                    b.saveAndNotify();
+                        final String bindingName = binding.getName();
+                        if (bindingName != null) {
+                            final Collection<String> additionalValidationBindings = validationDependencies.get(
+                                    binding.getName());
+                            if (log.isDebugEnabled()) {
+                                log.debug(
+                                    "for binding "
+                                            + bindingName
+                                            + "-->> dependencies: "
+                                            + additionalValidationBindings);
+                            }
+                            if (additionalValidationBindings != null) {
+                                for (final String name : additionalValidationBindings) {
+                                    final Binding b = bindingGroup.getBinding(name);
+                                    if (b != null) {
+                                        if (log.isDebugEnabled()) {
+                                            log.debug("CheckAgain: " + name);
+                                        }
+                                        b.saveAndNotify();
+                                    }
                                 }
                             }
                         }
-
                     }
                 }
-            }
 
-            public void sourceChanged(Binding binding, PropertyStateEvent event) {
-            }
+                @Override
+                public void sourceChanged(final Binding binding, final PropertyStateEvent event) {
+                }
 
-            public void targetChanged(Binding binding, PropertyStateEvent event) {
-            }
-        });
+                @Override
+                public void targetChanged(final Binding binding, final PropertyStateEvent event) {
+                }
+            });
 
         lstVorgaenge.setCellRenderer(new ListCellRenderer() {
 
-            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                JLabel l = (JLabel) dlcr.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                if (value == null || value instanceof CidsBean && ((CidsBean) value).getProperty("vergabenummer") == null) {
-                    l.setText("Neuer Vorgang");
+                @Override
+                public Component getListCellRendererComponent(final JList list,
+                        final Object value,
+                        final int index,
+                        final boolean isSelected,
+                        final boolean cellHasFocus) {
+                    final JLabel l = (JLabel)dlcr.getListCellRendererComponent(
+                            list,
+                            value,
+                            index,
+                            isSelected,
+                            cellHasFocus);
+                    if ((value == null)
+                                || ((value instanceof CidsBean)
+                                    && (((CidsBean)value).getProperty("vergabenummer") == null))) {
+                        l.setText("Neuer Vorgang");
+                    }
+                    return l;
                 }
-                return l;
-            }
-        });
-
+            });
 
         cbNutzungsart.setSelectedItem(null);
-        Vector einkommensgruppen = new Vector();
+        final Vector einkommensgruppen = new Vector();
         einkommensgruppen.add("A");
         einkommensgruppen.add("B");
         einkommensgruppen.add(null);
@@ -281,22 +411,31 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         cbEinkommensgruppe.setModel(new DefaultComboBoxModel(einkommensgruppen));
         cbEinkommensgruppe.setRenderer(new ListCellRenderer() {
 
-            @Override
-            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                JLabel l = (JLabel) dlcr.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                if (value == null) {
-                    l.setText(" ");
+                @Override
+                public Component getListCellRendererComponent(final JList list,
+                        final Object value,
+                        final int index,
+                        final boolean isSelected,
+                        final boolean cellHasFocus) {
+                    final JLabel l = (JLabel)dlcr.getListCellRendererComponent(
+                            list,
+                            value,
+                            index,
+                            isSelected,
+                            cellHasFocus);
+                    if (value == null) {
+                        l.setText(" ");
+                    }
+                    return l;
                 }
-                return l;
-            }
-        });
-
+            });
     }
 
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -418,7 +557,12 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         txtEigentuemerName.setBorder(null);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.eigentuemer_name}"), txtEigentuemerName, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.eigentuemer_name}"),
+                txtEigentuemerName,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -432,7 +576,13 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         txtAnzahlWohneinheiten.setBorder(null);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.anzahl_wohneinheiten}"), txtAnzahlWohneinheiten, org.jdesktop.beansbinding.BeanProperty.create("text"), "anzahl_wohneinheiten");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.anzahl_wohneinheiten}"),
+                txtAnzahlWohneinheiten,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "anzahl_wohneinheiten");
         binding.setValidator(new AnzahlWohneinheitenValidator());
         bindingGroup.addBinding(binding);
 
@@ -447,7 +597,13 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         cbNutzungsart.setMaximumRowCount(10);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.art}"), cbNutzungsart, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"), "art");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.art}"),
+                cbNutzungsart,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"),
+                "art");
         binding.setSourceNullValue(null);
         binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
@@ -467,7 +623,12 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         jTextArea1.setRows(2);
         jTextArea1.setMinimumSize(new java.awt.Dimension(1, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebaeude_anschrift}"), jTextArea1, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebaeude_anschrift}"),
+                jTextArea1,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jScrollPane2.setViewportView(jTextArea1);
@@ -488,7 +649,12 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         jTextArea2.setColumns(20);
         jTextArea2.setRows(2);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.eigentuemer_anschrift}"), jTextArea2, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.eigentuemer_anschrift}"),
+                jTextArea2,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jScrollPane3.setViewportView(jTextArea2);
@@ -521,7 +687,13 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panGebaeude.add(lblGeom, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geometrie}"), cboGeom, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"), "geometrie");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geometrie}"),
+                cboGeom,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"),
+                "geometrie");
         binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cboGeom).getConverter());
         bindingGroup.addBinding(binding);
 
@@ -546,20 +718,26 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         jPanel1.setOpaque(false);
 
-        cmdAddVorgang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        cmdAddVorgang.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         cmdAddVorgang.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmdAddVorgangActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cmdAddVorgangActionPerformed(evt);
+                }
+            });
         jPanel1.add(cmdAddVorgang);
 
-        cmdRemoveVorgang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        cmdRemoveVorgang.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
         cmdRemoveVorgang.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmdRemoveVorgangActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cmdRemoveVorgangActionPerformed(evt);
+                }
+            });
         jPanel1.add(cmdRemoveVorgang);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -583,24 +761,41 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         jScrollPane1.setPreferredSize(new java.awt.Dimension(150, 140));
 
         lstVorgaenge.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
+
+                String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+
+                @Override
+                public int getSize() {
+                    return strings.length;
+                }
+                @Override
+                public Object getElementAt(final int i) {
+                    return strings[i];
+                }
+            });
         lstVorgaenge.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstVorgaenge.setMaximumSize(new java.awt.Dimension(39000, 850000));
         lstVorgaenge.setMinimumSize(new java.awt.Dimension(1, 1));
         lstVorgaenge.setPreferredSize(new java.awt.Dimension(1, 1));
 
-        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.vorgaenge}");
-        org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstVorgaenge, "vorgaenge");
+        final org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
+                "${cidsBean.vorgaenge}");
+        final org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings
+                    .createJListBinding(
+                        org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                        this,
+                        eLProperty,
+                        lstVorgaenge,
+                        "vorgaenge");
         bindingGroup.addBinding(jListBinding);
 
         lstVorgaenge.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                lstVorgaengeValueChanged(evt);
-            }
-        });
+
+                @Override
+                public void valueChanged(final javax.swing.event.ListSelectionEvent evt) {
+                    lstVorgaengeValueChanged(evt);
+                }
+            });
         jScrollPane1.setViewportView(lstVorgaenge);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -638,7 +833,12 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         txtVergabeNr.setBorder(null);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, lstVorgaenge, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.vergabenummer}"), txtVergabeNr, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                lstVorgaenge,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedElement.vergabenummer}"),
+                txtVergabeNr,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -660,7 +860,12 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         txtBemerkungen.setRows(4);
         txtBemerkungen.setBorder(null);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, lstVorgaenge, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.bemerkungen}"), txtBemerkungen, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                lstVorgaenge,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedElement.bemerkungen}"),
+                txtBemerkungen,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jScrollPane4.setViewportView(txtBemerkungen);
@@ -675,16 +880,12 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         panVorgangX.add(jScrollPane4, gridBagConstraints);
         jScrollPane3.getViewport().setOpaque(false);
 
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        final javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -731,7 +932,12 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         txtSachbearbeiterTechnik.setBorder(null);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, lstVorgaenge, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.sachbearbeiter_technik}"), txtSachbearbeiterTechnik, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                lstVorgaenge,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedElement.sachbearbeiter_technik}"),
+                txtSachbearbeiterTechnik,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -745,7 +951,12 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         txtSachbearbeiterVerwaltung.setBorder(null);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, lstVorgaenge, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.sachbearbeiter_verwaltung}"), txtSachbearbeiterVerwaltung, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                lstVorgaenge,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedElement.sachbearbeiter_verwaltung}"),
+                txtSachbearbeiterVerwaltung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -766,7 +977,12 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(lblUebergabedatum, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, lstVorgaenge, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.uebergabedatum}"), jXDatePicker1, org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                lstVorgaenge,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedElement.uebergabedatum}"),
+                jXDatePicker1,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
         binding.setConverter(sqlDateToUtilDateConverter);
         bindingGroup.addBinding(binding);
 
@@ -814,7 +1030,13 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(lblBeschreibung1, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, lstVorgaenge, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.massnahmenkategorisierung}"), cbMassnahmenkategorisierung, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"), "massnahmenkategorisierung");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                lstVorgaenge,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedElement.massnahmenkategorisierung}"),
+                cbMassnahmenkategorisierung,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"),
+                "massnahmenkategorisierung");
         binding.setSourceNullValue(null);
         binding.setSourceUnreadableValue(null);
         binding.setValidator(new MassnahmenkategorisierungValidator());
@@ -829,7 +1051,12 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         txtBetroffeneWohneinheiten.setBorder(null);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, lstVorgaenge, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.betroffene_wohneinheiten}"), txtBetroffeneWohneinheiten, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                lstVorgaenge,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedElement.betroffene_wohneinheiten}"),
+                txtBetroffeneWohneinheiten,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -849,7 +1076,12 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         txtMassnahmenbeschreibung.setRows(4);
         txtMassnahmenbeschreibung.setBorder(null);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, lstVorgaenge, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.massnahmenbeschreibung}"), txtMassnahmenbeschreibung, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                lstVorgaenge,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedElement.massnahmenbeschreibung}"),
+                txtMassnahmenbeschreibung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jScrollPane6.setViewportView(txtMassnahmenbeschreibung);
@@ -909,7 +1141,13 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         txtHoeheMietpreisbindung.setBorder(null);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, lstVorgaenge, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.hoehe_mietpreisbindung}"), txtHoeheMietpreisbindung, org.jdesktop.beansbinding.BeanProperty.create("text"), "hoehe_mietpreisbindung");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                lstVorgaenge,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedElement.hoehe_mietpreisbindung}"),
+                txtHoeheMietpreisbindung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "hoehe_mietpreisbindung");
         binding.setValidator(new MietpreisbindungshoeheValidator());
         bindingGroup.addBinding(binding);
 
@@ -922,7 +1160,12 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         txtBewilligungsNr.setBorder(null);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, lstVorgaenge, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.bewilligungsnummer}"), txtBewilligungsNr, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                lstVorgaenge,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedElement.bewilligungsnummer}"),
+                txtBewilligungsNr,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -932,7 +1175,12 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(txtBewilligungsNr, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, lstVorgaenge, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.bewilligungsdatum}"), jXDatePicker2, org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                lstVorgaenge,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedElement.bewilligungsdatum}"),
+                jXDatePicker2,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
         binding.setConverter(sqlDateToUtilDateConverter);
         bindingGroup.addBinding(binding);
 
@@ -943,7 +1191,13 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(jXDatePicker2, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, lstVorgaenge, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.bindungsdauer}"), jXDatePicker3, org.jdesktop.beansbinding.BeanProperty.create("date"), "bindungsdauer");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                lstVorgaenge,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedElement.bindungsdauer}"),
+                jXDatePicker3,
+                org.jdesktop.beansbinding.BeanProperty.create("date"),
+                "bindungsdauer");
         binding.setConverter(sqlDateToUtilDateConverter);
         bindingGroup.addBinding(binding);
 
@@ -966,14 +1220,21 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         txtFolgenummer.setBorder(null);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, lstVorgaenge, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.folgenummer}"), txtFolgenummer, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                lstVorgaenge,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedElement.folgenummer}"),
+                txtFolgenummer,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         txtFolgenummer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFolgenummerActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    txtFolgenummerActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -992,7 +1253,12 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panVorgangX.add(lblEinkommensgruppe, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, lstVorgaenge, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.einkommensgruppe}"), cbEinkommensgruppe, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                lstVorgaenge,
+                org.jdesktop.beansbinding.ELProperty.create("${selectedElement.einkommensgruppe}"),
+                cbEinkommensgruppe,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1016,145 +1282,113 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         add(panVorgang, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
-    private void cmdAddVorgangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdAddVorgangActionPerformed
-        MetaClass vorgangMC = ClassCacheMultiple.getMetaClass(domain, "WBF_VORGANG");
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cmdAddVorgangActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdAddVorgangActionPerformed
+        final MetaClass vorgangMC = ClassCacheMultiple.getMetaClass(domain, "WBF_VORGANG");
         if (vorgangMC != null) {
-            MetaObject mo = vorgangMC.getEmptyInstance();
-            CidsBean vorgangBean = mo.getBean();
-            PropertyChangeListener pcl = new PropertyChangeListener() {
+            final MetaObject mo = vorgangMC.getEmptyInstance();
+            final CidsBean vorgangBean = mo.getBean();
+            final PropertyChangeListener pcl = new PropertyChangeListener() {
 
-                public void propertyChange(PropertyChangeEvent evt) {
-                    lstVorgaenge.repaint();
-                }
-            };
+                    @Override
+                    public void propertyChange(final PropertyChangeEvent evt) {
+                        lstVorgaenge.repaint();
+                    }
+                };
             strongReferencesToWeakListeners.add(pcl);
             vorgangBean.addPropertyChangeListener(WeakListeners.propertyChange(pcl, vorgangBean));
 
-            ((ObservableList) cidsBean.getProperty("vorgaenge")).add(vorgangBean);
+            ((ObservableList)cidsBean.getProperty("vorgaenge")).add(vorgangBean);
         } else {
             log.error("MetaClass von Vorgang war NULL");
         }
+    } //GEN-LAST:event_cmdAddVorgangActionPerformed
 
-    }//GEN-LAST:event_cmdAddVorgangActionPerformed
-
-    private void cmdRemoveVorgangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdRemoveVorgangActionPerformed
-        int answer = JOptionPane.showConfirmDialog(this, "Soll dieser Vorgang wirklich gelöscht werden?", "Vorgang entfernen", JOptionPane.YES_NO_OPTION);
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cmdRemoveVorgangActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdRemoveVorgangActionPerformed
+        final int answer = JOptionPane.showConfirmDialog(
+                this,
+                "Soll dieser Vorgang wirklich gelöscht werden?",
+                "Vorgang entfernen",
+                JOptionPane.YES_NO_OPTION);
         if (answer == JOptionPane.YES_OPTION) {
             try {
-                CidsBean vorg = (CidsBean) lstVorgaenge.getSelectedValue();
-                ((ObservableList) cidsBean.getProperty("vorgaenge")).remove(vorg);
-                //((CidsBean) lstVorgaenge.getSelectedValue()).delete();
+                final CidsBean vorg = (CidsBean)lstVorgaenge.getSelectedValue();
+                ((ObservableList)cidsBean.getProperty("vorgaenge")).remove(vorg);
+                // ((CidsBean) lstVorgaenge.getSelectedValue()).delete();
             } catch (Exception e) {
-                ErrorInfo ei = new ErrorInfo("Fehler beim Entfernen", "Beim Entfernen des Vorgangs ist ein Fehler aufgetreten", null,
-                        null, e, Level.SEVERE, null);
+                final ErrorInfo ei = new ErrorInfo(
+                        "Fehler beim Entfernen",
+                        "Beim Entfernen des Vorgangs ist ein Fehler aufgetreten",
+                        null,
+                        null,
+                        e,
+                        Level.SEVERE,
+                        null);
                 JXErrorPane.showDialog(this, ei);
             }
         }
-    }//GEN-LAST:event_cmdRemoveVorgangActionPerformed
+    }                                                                                    //GEN-LAST:event_cmdRemoveVorgangActionPerformed
 
-    private void lstVorgaengeValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstVorgaengeValueChanged
-        if (!editable && luiVorg != null) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lstVorgaengeValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstVorgaengeValueChanged
+        if (!editable && (luiVorg != null)) {
             luiVorg.setDirty(true);
 //            luiVorg.setLocked(false);
 //            luiVorg.setLocked(true);
 //            panVorgang.setSize(panVorgang.getSize().width+1,panVorgang.getSize().height);
 //            panVorgang.repaint();
         }
-    }//GEN-LAST:event_lstVorgaengeValueChanged
+    }                                                                                       //GEN-LAST:event_lstVorgaengeValueChanged
 
-    private void txtFolgenummerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFolgenummerActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void txtFolgenummerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtFolgenummerActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtFolgenummerActionPerformed
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox cbEinkommensgruppe;
-    private javax.swing.JComboBox cbMassnahmenkategorisierung;
-    private de.cismet.cids.editors.DefaultBindableReferenceCombo cbNutzungsart;
-    private javax.swing.JComboBox cboGeom;
-    private javax.swing.JButton cmdAddVorgang;
-    private javax.swing.JButton cmdRemoveVorgang;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
-    private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
-    private org.jdesktop.swingx.JXDatePicker jXDatePicker2;
-    private org.jdesktop.swingx.JXDatePicker jXDatePicker3;
-    private javax.swing.JLabel lblAnschriftEigentuemer;
-    private javax.swing.JLabel lblAnschriftGebaeude;
-    private javax.swing.JLabel lblAnzahlWohneinheiten;
-    private javax.swing.JLabel lblBemerkungen;
-    private javax.swing.JLabel lblBeschreibung1;
-    private javax.swing.JLabel lblBetroffeneWohneinheiten;
-    private javax.swing.JLabel lblBewilligungsNr;
-    private javax.swing.JLabel lblBewilligungsdatum;
-    private javax.swing.JLabel lblBindungsdauer;
-    private javax.swing.JLabel lblEinkommensgruppe;
-    private javax.swing.JLabel lblFolgenummer;
-    private javax.swing.JLabel lblGeom;
-    private javax.swing.JLabel lblHoeheMietpreisbindung;
-    private javax.swing.JLabel lblMassnahmetyp;
-    private javax.swing.JLabel lblNameEigentuemer;
-    private javax.swing.JLabel lblNutzungsart;
-    private javax.swing.JLabel lblSachbearbeiterTech;
-    private javax.swing.JLabel lblSachbearbeiterVerw;
-    private javax.swing.JLabel lblUebergabedatum;
-    private javax.swing.JLabel lblVergabeNr;
-    private javax.swing.JLabel lblVorgangsliste;
-    private javax.swing.JList lstVorgaenge;
-    private javax.swing.JPanel panGebaeude;
-    private javax.swing.JPanel panVorgang;
-    private javax.swing.JPanel panVorgangX;
-    private javax.swing.JPanel panVorgangsauswahl;
-    private de.cismet.cids.editors.converters.SqlDateToUtilDateConverter sqlDateToUtilDateConverter;
-    private javax.swing.JTextField txtAnzahlWohneinheiten;
-    private javax.swing.JTextArea txtBemerkungen;
-    private javax.swing.JTextField txtBetroffeneWohneinheiten;
-    private javax.swing.JTextField txtBewilligungsNr;
-    private javax.swing.JTextField txtEigentuemerName;
-    private javax.swing.JTextField txtFolgenummer;
-    private javax.swing.JTextField txtHoeheMietpreisbindung;
-    private javax.swing.JTextArea txtMassnahmenbeschreibung;
-    private javax.swing.JTextField txtSachbearbeiterTechnik;
-    private javax.swing.JTextField txtSachbearbeiterVerwaltung;
-    private javax.swing.JTextField txtVergabeNr;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
-    // End of variables declaration//GEN-END:variables
+    } //GEN-LAST:event_txtFolgenummerActionPerformed
 
     // End of variables declaration
     @Override
-    public void setCidsBean(CidsBean cidsBean) {
+    public void setCidsBean(final CidsBean cidsBean) {
         domain = cidsBean.getMetaObject().getDomain();
-        ObservableList ol = (ObservableList) cidsBean.getProperty("vorgaenge");
-        for (Object o : ol) {
-            CidsBean vorgBean = (CidsBean) o;
-            PropertyChangeListener pcl = new PropertyChangeListener() {
+        final ObservableList ol = (ObservableList)cidsBean.getProperty("vorgaenge");
+        for (final Object o : ol) {
+            final CidsBean vorgBean = (CidsBean)o;
+            final PropertyChangeListener pcl = new PropertyChangeListener() {
 
-                public void propertyChange(PropertyChangeEvent evt) {
-                    lstVorgaenge.repaint();
-                }
-            };
+                    @Override
+                    public void propertyChange(final PropertyChangeEvent evt) {
+                        lstVorgaenge.repaint();
+                    }
+                };
             strongReferencesToWeakListeners.add(pcl);
             vorgBean.addPropertyChangeListener(WeakListeners.propertyChange(pcl, vorgBean));
         }
 
         ClassCacheMultiple.addInstance(domain);
         try {
-
             final MetaClass massnahmenClass = ClassCacheMultiple.getMetaClass(domain, "wbf_massnahme");
-            DefaultComboBoxModel result = DefaultBindableReferenceCombo.getModelByMetaClass(massnahmenClass, true);
+            final DefaultComboBoxModel result = DefaultBindableReferenceCombo.getModelByMetaClass(
+                    massnahmenClass,
+                    true);
             cbMassnahmenkategorisierung.setModel(result);
-
 
 //            ((DefaultBindableReferenceCombo)cbMassnahmenkategorisierung).setMetaClass(massnahmenClass);
 
@@ -1170,28 +1404,40 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         ((DefaultCismapGeometryComboBoxEditor)cboGeom).dispose();
     }
 
+    @Override
+    public String getTitle() {
+        return title;
+    }
 
+    @Override
+    public void setTitle(final String title) {
+        this.title = title;
+    }
 
-//    class NutzungsartValidator extends Validator<CidsBean> {
-//
-//        @Override
-//        public Result validate(CidsBean value) {
-//            if (value != null) {
-//                return null;
-//            } else {
-//                return new Result("code", "Nutzungsart soll nicht leer sein.");
-//            }
-//        }
-//    }
+    @Override
+    public BindingGroup getBindingGroup() {
+        return bindingGroup;
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * class NutzungsartValidator extends Validator<CidsBean> { @Override public Result validate(CidsBean value) { if
+     * (value != null) { return null; } else { return new Result("code", "Nutzungsart soll nicht leer sein."); } } }.
+     *
+     * @version  $Revision$, $Date$
+     */
     class AnzahlWohneinheitenValidator extends Validator<Integer> {
 
+        //~ Methods ------------------------------------------------------------
+
         @Override
-        public Result validate(Integer value) {
-            String warn = "Die Anzahl der Wohneinheiten darf nur bei Mietobjekten ausgefüllt sein.";
-            CidsBean nutzungsart = (CidsBean) cidsBean.getProperty("art");
+        public Result validate(final Integer value) {
+            final String warn = "Die Anzahl der Wohneinheiten darf nur bei Mietobjekten ausgefüllt sein.";
+            final CidsBean nutzungsart = (CidsBean)cidsBean.getProperty("art");
             if (nutzungsart != null) {
-                Boolean bool = (Boolean) nutzungsart.getProperty("wohneinheiten_gueltig");
-                if (bool != null && bool) {
+                final Boolean bool = (Boolean)nutzungsart.getProperty("wohneinheiten_gueltig");
+                if ((bool != null) && bool) {
                     return null;
                 }
             }
@@ -1199,15 +1445,22 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     class MietpreisbindungsdauerValidator extends Validator<Integer> {
 
+        //~ Methods ------------------------------------------------------------
+
         @Override
-        public Result validate(Integer value) {
-            CidsBean nutzungsart = (CidsBean) cidsBean.getProperty("art");
+        public Result validate(final Integer value) {
+            final CidsBean nutzungsart = (CidsBean)cidsBean.getProperty("art");
             if (nutzungsart != null) {
                 try {
-                    Boolean bool = (Boolean) nutzungsart.getProperty("mietpreisbindung_gueltig");
-                    if (bool != null && bool) {
+                    final Boolean bool = (Boolean)nutzungsart.getProperty("mietpreisbindung_gueltig");
+                    if ((bool != null) && bool) {
                         return null;
                     }
                 } catch (Exception e) {
@@ -1217,15 +1470,22 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     class MietpreisbindungshoeheValidator extends Validator<Integer> {
 
+        //~ Methods ------------------------------------------------------------
+
         @Override
-        public Result validate(Integer value) {
-            CidsBean nutzungsart = (CidsBean) cidsBean.getProperty("art");
+        public Result validate(final Integer value) {
+            final CidsBean nutzungsart = (CidsBean)cidsBean.getProperty("art");
             if (nutzungsart != null) {
                 try {
-                    Boolean bool = (Boolean) nutzungsart.getProperty("mietpreisbindung_gueltig");
-                    if (bool != null && bool) {
+                    final Boolean bool = (Boolean)nutzungsart.getProperty("mietpreisbindung_gueltig");
+                    if ((bool != null) && bool) {
                         return null;
                     }
                 } catch (Exception e) {
@@ -1235,17 +1495,26 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     class MassnahmenkategorisierungValidator extends Validator<CidsBean> {
 
+        //~ Methods ------------------------------------------------------------
+
         @Override
-        public Result validate(CidsBean validationBean) {
-            String kuerzel = (String) validationBean.getProperty("kuerzel");
-            CidsBean nutzungsart = (CidsBean) cidsBean.getProperty("art");
+        public Result validate(final CidsBean validationBean) {
+            final String kuerzel = (String)validationBean.getProperty("kuerzel");
+            final CidsBean nutzungsart = (CidsBean)cidsBean.getProperty("art");
             if (nutzungsart != null) {
                 String gueltigeMassnahmen = null;
-                gueltigeMassnahmen = (String) nutzungsart.getProperty("massnahmen_gueltig");
-                log.debug("ist kuerzel:" + kuerzel + " in " + gueltigeMassnahmen + " ?");
-                if (kuerzel != null && gueltigeMassnahmen != null && gueltigeMassnahmen.contains(kuerzel)) {
+                gueltigeMassnahmen = (String)nutzungsart.getProperty("massnahmen_gueltig");
+                if (log.isDebugEnabled()) {
+                    log.debug("ist kuerzel:" + kuerzel + " in " + gueltigeMassnahmen + " ?");
+                }
+                if ((kuerzel != null) && (gueltigeMassnahmen != null) && gueltigeMassnahmen.contains(kuerzel)) {
                     return null;
                 }
                 return new Result(null, "keine gültige Maßnahme", Validator.Result.WARNING);
@@ -1253,23 +1522,19 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
             return new Result(null, "ohne Nutzungsart, keine Maßnahme", Validator.Result.WARNING);
         }
     }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public BindingGroup getBindingGroup() {
-        return bindingGroup;
-    }
 }
 
+/**
+ * DOCUMENT ME!
+ *
+ * @version  $Revision$, $Date$
+ */
 class MyLockableUI extends LockableUI {
 
-    public void setDirty(boolean dirty) {
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void setDirty(final boolean dirty) {
         super.setDirty(dirty);
     }
 }

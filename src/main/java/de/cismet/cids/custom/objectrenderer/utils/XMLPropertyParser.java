@@ -1,31 +1,54 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package de.cismet.cids.custom.objectrenderer.utils;
 
-import de.cismet.cids.dynamics.CidsBean;
-import java.awt.Font;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import javax.swing.JLabel;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import org.jdesktop.beansbinding.Converter;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import java.awt.Font;
+
+import java.io.InputStream;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.swing.JLabel;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import de.cismet.cids.dynamics.CidsBean;
+
 /**
+ * DOCUMENT ME!
  *
- * @author srichter
+ * @author   srichter
+ * @version  $Revision$, $Date$
  */
 public class XMLPropertyParser {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(XMLPropertyParser.class);
+//    private static final SQLDateToStringConverter DATE_CONVERTER = new SQLDateToStringConverter();
+
+    //~ Instance fields --------------------------------------------------------
 
     private Document document;
     private List<String> properties;
@@ -34,10 +57,17 @@ public class XMLPropertyParser {
     private List<Integer> size;
     private List<Boolean> bg;
     private List<Boolean> it;
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(XMLPropertyParser.class);
-//    private static final SQLDateToStringConverter DATE_CONVERTER = new SQLDateToStringConverter();
     private final Map<Class<?>, Converter<?, ?>> converters;
 
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new XMLPropertyParser object.
+     *
+     * @param   is  DOCUMENT ME!
+     *
+     * @throws  NullPointerException  DOCUMENT ME!
+     */
     public XMLPropertyParser(final InputStream is) {
         if (is == null) {
             throw new NullPointerException();
@@ -50,7 +80,7 @@ public class XMLPropertyParser {
         bg = new ArrayList<Boolean>();
         it = new ArrayList<Boolean>();
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder;
+        final DocumentBuilder builder;
         try {
             builder = factory.newDocumentBuilder();
             this.document = builder.parse(is);
@@ -95,12 +125,22 @@ public class XMLPropertyParser {
         }
     }
 
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   <T>  DOCUMENT ME!
+     * @param   o    DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     private <T> Object convertProperty(final Object o) {
         if (o != null) {
             try {
-                final Converter<T, ?> conv = (Converter<T, ?>) converters.get(o.getClass());
+                final Converter<T, ?> conv = (Converter<T, ?>)converters.get(o.getClass());
                 if (conv != null) {
-                    return conv.convertForward((T) o);
+                    return conv.convertForward((T)o);
                 }
             } catch (Exception ex) {
                 log.error(ex, ex);
@@ -109,20 +149,44 @@ public class XMLPropertyParser {
         return o;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  <T>    DOCUMENT ME!
+     * @param  clazz  DOCUMENT ME!
+     * @param  con    DOCUMENT ME!
+     */
     public <T> void addConverterForClass(final Class<T> clazz, final Converter<T, ?> con) {
-        if (clazz != null && con != null) {
+        if ((clazz != null) && (con != null)) {
             converters.put(clazz, con);
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  clazz  DOCUMENT ME!
+     */
     public void removeConverter(final Class<?> clazz) {
         converters.remove(clazz);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public Set<Class<?>> getConvertedClasses() {
         return converters.keySet();
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   bean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public List<JLabel> getLabels(final CidsBean bean) {
         final List<JLabel> ret = new ArrayList<JLabel>();
         for (int i = 0; i < properties.size(); ++i) {

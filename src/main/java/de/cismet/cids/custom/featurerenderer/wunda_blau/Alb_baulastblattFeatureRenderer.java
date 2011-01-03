@@ -1,56 +1,89 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  *  Copyright (C) 2010 srichter
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package de.cismet.cids.custom.featurerenderer.wunda_blau;
 
 import Sirius.navigator.exception.ConnectionException;
+
 import Sirius.server.middleware.types.MetaObject;
-import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
-import de.cismet.cids.dynamics.CidsBean;
-import de.cismet.cids.featurerenderer.CustomCidsFeatureRenderer;
-import de.cismet.cismap.commons.Refreshable;
-import de.cismet.cismap.commons.gui.piccolo.FeatureAnnotationSymbol;
-import de.cismet.cismap.commons.gui.piccolo.FixedWidthStroke;
-import de.cismet.cismap.navigatorplugin.CidsFeature;
-import de.cismet.tools.collections.TypeSafeCollections;
+
 import java.awt.Color;
 import java.awt.Paint;
 import java.awt.Stroke;
+
 import java.util.Collection;
 import java.util.Set;
+
 import javax.swing.JComponent;
 
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
+
+import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.featurerenderer.CustomCidsFeatureRenderer;
+
+import de.cismet.cismap.commons.Refreshable;
+import de.cismet.cismap.commons.gui.piccolo.FeatureAnnotationSymbol;
+import de.cismet.cismap.commons.gui.piccolo.FixedWidthStroke;
+
+import de.cismet.cismap.navigatorplugin.CidsFeature;
+
+import de.cismet.tools.collections.TypeSafeCollections;
+
 /**
+ * DOCUMENT ME!
  *
- * @author srichter
+ * @author   srichter
+ * @version  $Revision$, $Date$
  */
 public class Alb_baulastblattFeatureRenderer extends CustomCidsFeatureRenderer {
 
-    public Alb_baulastblattFeatureRenderer() {
-    }
+    //~ Static fields/initializers ---------------------------------------------
+
     private static final Color BELASTET_COLOR = new Color(0, 255, 0);
     private static final Color BEGUENSTIGT_COLOR = new Color(255, 255, 0);
     private static final Color BEIDES_COLOR = Color.RED;
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_baulastblattFeatureRenderer.class);
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(
+            Alb_baulastblattFeatureRenderer.class);
+
+    //~ Instance fields --------------------------------------------------------
+
     private final Set<Integer> belastetBeans = TypeSafeCollections.newHashSet();
     private final Set<Integer> beguenstigtBeans = TypeSafeCollections.newHashSet();
 
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new Alb_baulastblattFeatureRenderer object.
+     */
+    public Alb_baulastblattFeatureRenderer() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
     @Override
-    public Paint getFillingStyle(CidsFeature subFeature) {
-        if (subFeature != null && subFeature.getMyAttributeStringInParentFeature().contains("flurstueck")) {
+    public Paint getFillingStyle(final CidsFeature subFeature) {
+        if ((subFeature != null) && subFeature.getMyAttributeStringInParentFeature().contains("flurstueck")) {
             final Integer id = subFeature.getMetaObject().getID();
             if (belastetBeans.contains(id)) {
                 if (beguenstigtBeans.contains(id)) {
@@ -68,27 +101,27 @@ public class Alb_baulastblattFeatureRenderer extends CustomCidsFeatureRenderer {
     }
 
     @Override
-    public JComponent getInfoComponent(Refreshable refresh, CidsFeature subFeature) {
+    public JComponent getInfoComponent(final Refreshable refresh, final CidsFeature subFeature) {
         return null;
     }
 
     @Override
-    public Paint getLinePaint(CidsFeature subFeature) {
+    public Paint getLinePaint(final CidsFeature subFeature) {
         return Color.BLACK;
     }
 
     @Override
-    public Stroke getLineStyle(CidsFeature subFeature) {
+    public Stroke getLineStyle(final CidsFeature subFeature) {
         return new FixedWidthStroke();
     }
 
     @Override
-    public FeatureAnnotationSymbol getPointSymbol(CidsFeature subFeature) {
+    public FeatureAnnotationSymbol getPointSymbol(final CidsFeature subFeature) {
         return null;
     }
 
     @Override
-    public float getTransparency(CidsFeature subFeature) {
+    public float getTransparency(final CidsFeature subFeature) {
         return 0.6f;
     }
 
@@ -98,7 +131,7 @@ public class Alb_baulastblattFeatureRenderer extends CustomCidsFeatureRenderer {
     }
 
     @Override
-    public JComponent getInfoComponent(Refreshable refresh) {
+    public JComponent getInfoComponent(final Refreshable refresh) {
         return getInfoComponent(refresh, null);
     }
 
@@ -123,20 +156,22 @@ public class Alb_baulastblattFeatureRenderer extends CustomCidsFeatureRenderer {
     }
 
     @Override
-    public void setMetaObject(MetaObject metaObject) throws ConnectionException {
+    public void setMetaObject(final MetaObject metaObject) throws ConnectionException {
         super.setMetaObject(metaObject);
         belastetBeans.clear();
         beguenstigtBeans.clear();
         if (cidsBean != null) {
             final Collection<CidsBean> beans = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "baulasten");
-            for (CidsBean baulast : beans) {
-                Collection<CidsBean> flurstueckBeans = CidsBeanSupport.getBeanCollectionFromProperty(baulast, "flurstuecke_belastet");
-                for (CidsBean bean : flurstueckBeans) {
+            for (final CidsBean baulast : beans) {
+                Collection<CidsBean> flurstueckBeans = CidsBeanSupport.getBeanCollectionFromProperty(
+                        baulast,
+                        "flurstuecke_belastet");
+                for (final CidsBean bean : flurstueckBeans) {
                     belastetBeans.add(bean.getMetaObject().getID());
                 }
 
                 flurstueckBeans = CidsBeanSupport.getBeanCollectionFromProperty(baulast, "flurstuecke_beguenstigt");
-                for (CidsBean bean : flurstueckBeans) {
+                for (final CidsBean bean : flurstueckBeans) {
                     beguenstigtBeans.add(bean.getMetaObject().getID());
                 }
             }

@@ -1,20 +1,26 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  *  Copyright (C) 2010 srichter
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 /*
  * Alkis_pointAggregationRenderer.java
  *
@@ -26,25 +32,14 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisCommons;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisCommons.ProductFormat;
-import de.cismet.cids.dynamics.CidsBean;
-import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
-import de.cismet.cismap.commons.BoundingBox;
-import de.cismet.cismap.commons.XBoundingBox;
-import de.cismet.cismap.commons.features.FeatureCollection;
-import de.cismet.cismap.commons.gui.MappingComponent;
-import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
-import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
-import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
-import de.cismet.cismap.navigatorplugin.CidsFeature;
-import de.cismet.tools.collections.TypeSafeCollections;
+
 import java.text.DecimalFormat;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.event.ListSelectionEvent;
@@ -53,31 +48,81 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisCommons;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisCommons.ProductFormat;
+
+import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
+
+import de.cismet.cismap.commons.BoundingBox;
+import de.cismet.cismap.commons.XBoundingBox;
+import de.cismet.cismap.commons.features.FeatureCollection;
+import de.cismet.cismap.commons.gui.MappingComponent;
+import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
+import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
+import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
+
+import de.cismet.cismap.navigatorplugin.CidsFeature;
+
+import de.cismet.tools.collections.TypeSafeCollections;
+
 /**
+ * DOCUMENT ME!
  *
- * @author srichter
+ * @author   srichter
+ * @version  $Revision$, $Date$
  */
 public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer {
 
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alkis_pointAggregationRenderer.class);
-    //Spaltenueberschriften
-    private static final String[] AGR_COMLUMN_NAMES = new String[]{"Auswahl", "Punktkennung", "Punktart", "Punktort"};
-    //Spaltenbreiten
-    private static final int[] AGR_COMLUMN_WIDTH = new int[]{40, 80, 200, 200};
-    //Namen der Properties -> Spalten
-    private static final String[] AGR_PROPERTY_NAMES = new String[]{"pointcode", "pointtype", "geom.geo_field"};
-    //Formater fuer Hochwert/Rechtswert
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(
+            Alkis_pointAggregationRenderer.class);
+    // Spaltenueberschriften
+    private static final String[] AGR_COMLUMN_NAMES = new String[] {
+            "Auswahl",
+            "Punktkennung",
+            "Punktart",
+            "Punktort"
+        };
+    // Spaltenbreiten
+    private static final int[] AGR_COMLUMN_WIDTH = new int[] { 40, 80, 200, 200 };
+    // Namen der Properties -> Spalten
+    private static final String[] AGR_PROPERTY_NAMES = new String[] { "pointcode", "pointtype", "geom.geo_field" };
+    // Formater fuer Hochwert/Rechtswert
     private static final DecimalFormat HW_RW_NUMBER_FORMAT = new DecimalFormat("0000000.000");
-    //Modell fuer die Auswahlbox des produktformats
-    private static final ComboBoxModel PRODUCT_FORMATS_MODEL = new DefaultComboBoxModel(AlkisCommons.ProductFormat.values());
-    //Speichert Punkte ueber die Lebzeit eines Renderers hinaus
+    // Modell fuer die Auswahlbox des produktformats
+    private static final ComboBoxModel PRODUCT_FORMATS_MODEL = new DefaultComboBoxModel(AlkisCommons.ProductFormat
+                    .values());
+    // Speichert Punkte ueber die Lebzeit eines Renderers hinaus
     private static final Set<CidsBean> gehaltenePunkte = TypeSafeCollections.newLinkedHashSet();
+
+    //~ Instance fields --------------------------------------------------------
+
     private List<CidsBean> cidsBeans = null;
     private Collection<CidsBean> pureSelectionCidsBeans = null;
     private String title = "";
     private PointTableModel tableModel;
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCreate;
+    private javax.swing.JButton btnRelease;
+    private javax.swing.JButton btnRemember;
+    private javax.swing.JComboBox cbProducts;
+    private javax.swing.JLabel lblProductDescr;
+    private de.cismet.cismap.commons.gui.MappingComponent mappingComponent;
+    private javax.swing.JPanel panMap;
+    private javax.swing.JPanel panProdukte;
+    private javax.swing.JScrollPane scpAggregationTable;
+    private javax.swing.JTable tblAggregation;
+    // End of variables declaration//GEN-END:variables
 
-    /** Creates new form Alkis_pointAggregationRenderer */
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates new form Alkis_pointAggregationRenderer.
+     */
     public Alkis_pointAggregationRenderer() {
         initComponents();
         scpAggregationTable.getViewport().setOpaque(false);
@@ -87,10 +132,11 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
         btnRelease.setVisible(false);
     }
 
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -130,10 +176,12 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
 
         btnCreate.setText("Erzeugen");
         btnCreate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCreateActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnCreateActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
@@ -149,10 +197,12 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
 
         btnRemember.setText("Merken");
         btnRemember.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRememberActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnRememberActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -161,10 +211,12 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
 
         btnRelease.setText("Vergessen");
         btnRelease.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnReleaseActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnReleaseActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -190,34 +242,54 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
         panMap.add(mappingComponent, gridBagConstraints);
 
         add(panMap, java.awt.BorderLayout.EAST);
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
-    private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
-        AlkisCommons.ProductFormat format = (ProductFormat) cbProducts.getSelectedItem();
-        String punktListenString = getPunktlistenStringForChosenPoints();
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCreateActionPerformed
+        final AlkisCommons.ProductFormat format = (ProductFormat)cbProducts.getSelectedItem();
+        final String punktListenString = getPunktlistenStringForChosenPoints();
         if (punktListenString.length() > 3) {
             AlkisCommons.Products.productPunktliste(punktListenString, format);
         }
-    }//GEN-LAST:event_btnCreateActionPerformed
+    }                                                                             //GEN-LAST:event_btnCreateActionPerformed
 
-    private void btnReleaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReleaseActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnReleaseActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReleaseActionPerformed
         gehaltenePunkte.clear();
         setCidsBeans(pureSelectionCidsBeans);
         btnRelease.setEnabled(false);
-    }//GEN-LAST:event_btnReleaseActionPerformed
+    }                                                                              //GEN-LAST:event_btnReleaseActionPerformed
 
-    private void btnRememberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRememberActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnRememberActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRememberActionPerformed
         gehaltenePunkte.addAll(cidsBeans);
         btnRelease.setEnabled(true);
-    }//GEN-LAST:event_btnRememberActionPerformed
+    }                                                                               //GEN-LAST:event_btnRememberActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     private String getPunktlistenStringForChosenPoints() {
         final StringBuffer punktListeString = new StringBuffer();
         final TableModel tModel = tblAggregation.getModel();
         for (int i = 0; i < tModel.getRowCount(); ++i) {
-            Object includedObj = tModel.getValueAt(i, 0);
-            if (includedObj instanceof Boolean && (Boolean) includedObj) {
-                CidsBean selectedBean = cidsBeans.get(i);
+            final Object includedObj = tModel.getValueAt(i, 0);
+            if ((includedObj instanceof Boolean) && (Boolean)includedObj) {
+                final CidsBean selectedBean = cidsBeans.get(i);
                 if (punktListeString.length() > 0) {
                     punktListeString.append(",");
                 }
@@ -240,35 +312,33 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
     }
 
     @Override
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         String desc = "Punktliste";
         final Collection<CidsBean> beans = cidsBeans;
-        if (beans != null && beans.size() > 0) {
+        if ((beans != null) && (beans.size() > 0)) {
             desc += " - " + beans.size() + " Punkte ausgewählt";
         }
         this.title = desc;
-
     }
 
     @Override
-    public void setCidsBeans(Collection<CidsBean> beans) {
+    public void setCidsBeans(final Collection<CidsBean> beans) {
         if (beans instanceof List) {
             pureSelectionCidsBeans = beans;
             if (gehaltenePunkte.size() > 0) {
                 gehaltenePunkte.addAll(beans);
                 this.cidsBeans = Arrays.asList(gehaltenePunkte.toArray(new CidsBean[gehaltenePunkte.size()]));
             } else {
-                this.cidsBeans = (List<CidsBean>) beans;
+                this.cidsBeans = (List<CidsBean>)beans;
             }
             initMap();
             final List<Object[]> tableData = TypeSafeCollections.newArrayList();
-            for (CidsBean punktBean : cidsBeans) {
+            for (final CidsBean punktBean : cidsBeans) {
                 tableData.add(cidsBean2Row(punktBean));
-
             }
             tableModel = new PointTableModel(tableData.toArray(new Object[tableData.size()][]), AGR_COMLUMN_NAMES);
             tblAggregation.setModel(tableModel);
-            TableColumnModel cModel = tblAggregation.getColumnModel();
+            final TableColumnModel cModel = tblAggregation.getColumnModel();
             for (int i = 0; i < cModel.getColumnCount(); ++i) {
                 cModel.getColumn(i).setPreferredWidth(AGR_COMLUMN_WIDTH[i]);
             }
@@ -276,37 +346,26 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
         }
         setTitle(null);
     }
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCreate;
-    private javax.swing.JButton btnRelease;
-    private javax.swing.JButton btnRemember;
-    private javax.swing.JComboBox cbProducts;
-    private javax.swing.JLabel lblProductDescr;
-    private de.cismet.cismap.commons.gui.MappingComponent mappingComponent;
-    private javax.swing.JPanel panMap;
-    private javax.swing.JPanel panProdukte;
-    private javax.swing.JScrollPane scpAggregationTable;
-    private javax.swing.JTable tblAggregation;
-    // End of variables declaration//GEN-END:variables
 
     /**
-     * Extracts the date from a CidsBean into an Object[] -> table row.
-     * (Collection attributes are flatened to comaseparated lists)
+     * Extracts the date from a CidsBean into an Object[] -> table row. (Collection attributes are flatened to
+     * comaseparated lists)
      *
-     * @param baulastBean
-     * @param blBlattnummer
-     * @return
+     * @param   baulastBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
      */
-    private Object[] cidsBean2Row(CidsBean baulastBean) {
+    private Object[] cidsBean2Row(final CidsBean baulastBean) {
         if (baulastBean != null) {
             final Object[] result = new Object[AGR_COMLUMN_NAMES.length];
             result[0] = Boolean.TRUE;
             for (int i = 0; i < AGR_PROPERTY_NAMES.length; ++i) {
-                Object property = baulastBean.getProperty(AGR_PROPERTY_NAMES[i]);
+                final Object property = baulastBean.getProperty(AGR_PROPERTY_NAMES[i]);
                 String propertyString;
                 if (property instanceof Point) {
-                    Point point = (Point) property;
-                    propertyString = "RW: " + HW_RW_NUMBER_FORMAT.format(point.getX()) + "; HW: " + HW_RW_NUMBER_FORMAT.format(point.getY());
+                    final Point point = (Point)property;
+                    propertyString = "RW: " + HW_RW_NUMBER_FORMAT.format(point.getX()) + "; HW: "
+                                + HW_RW_NUMBER_FORMAT.format(point.getY());
                 } else {
                     propertyString = ObjectRendererUtils.propertyPrettyPrint(property);
                 }
@@ -317,13 +376,22 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
         return new Object[0];
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     private void initMap() {
         try {
             final ActiveLayerModel mappingModel = new ActiveLayerModel();
             mappingModel.setSrs(AlkisCommons.SRS);
             final BoundingBox box = boundingBoxFromPointList(cidsBeans);
-            mappingModel.addHome(new XBoundingBox(box.getX1(), box.getY1(), box.getX2(), box.getY2(), AlkisCommons.SRS, true));
-            SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisCommons.MAP_CALL_STRING));
+            mappingModel.addHome(new XBoundingBox(
+                    box.getX1(),
+                    box.getY1(),
+                    box.getX2(),
+                    box.getY2(),
+                    AlkisCommons.SRS,
+                    true));
+            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisCommons.MAP_CALL_STRING));
             swms.setName("Alkis_Points");
             mappingModel.addLayer(swms);
             mappingComponent.setMappingModel(mappingModel);
@@ -332,7 +400,7 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
             final int duration = mappingComponent.getAnimationDuration();
             mappingComponent.setAnimationDuration(0);
             mappingComponent.setInteractionMode(MappingComponent.ZOOM);
-            //finally when all configurations are done ...
+            // finally when all configurations are done ...
             mappingComponent.setInteractionMode(MappingComponent.PAN);
 //            mappingComponent.addCustomInputListener("MUTE", new PBasicInputEventHandler() {
 //
@@ -356,19 +424,27 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
         } catch (Throwable t) {
             log.fatal(t, t);
         }
-
     }
 
-    private BoundingBox boundingBoxFromPointList(Collection<CidsBean> lpList) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   lpList  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private BoundingBox boundingBoxFromPointList(final Collection<CidsBean> lpList) {
         final List<Geometry> allGeomList = TypeSafeCollections.newArrayList();
         for (final CidsBean parcel : lpList) {
             try {
-                allGeomList.add((Geometry) parcel.getProperty("geom.geo_field"));
+                allGeomList.add((Geometry)parcel.getProperty("geom.geo_field"));
             } catch (Exception ex) {
                 log.warn(ex, ex);
             }
         }
-        final GeometryCollection geoCollection = new GeometryCollection(allGeomList.toArray(new Geometry[allGeomList.size()]), new GeometryFactory());
+        final GeometryCollection geoCollection = new GeometryCollection(allGeomList.toArray(
+                    new Geometry[allGeomList.size()]),
+                new GeometryFactory());
         return new BoundingBox(geoCollection);
     }
 
@@ -377,18 +453,27 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
         mappingComponent.dispose();
     }
 
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     final class TableSelectionListener implements ListSelectionListener {
 
+        //~ Methods ------------------------------------------------------------
+
         @Override
-        public void valueChanged(ListSelectionEvent e) {
-            if (!e.getValueIsAdjusting() && cidsBeans != null) {
-                int[] indexes = tblAggregation.getSelectedRows();
-                FeatureCollection mapFC = mappingComponent.getFeatureCollection();
+        public void valueChanged(final ListSelectionEvent e) {
+            if (!e.getValueIsAdjusting() && (cidsBeans != null)) {
+                final int[] indexes = tblAggregation.getSelectedRows();
+                final FeatureCollection mapFC = mappingComponent.getFeatureCollection();
                 mapFC.removeAllFeatures();
-                if (indexes != null && indexes.length > 0) {
-                    for (int index : indexes) {
-                        if (index > -1 && index < cidsBeans.size()) {
-                            CidsBean selectedBean = cidsBeans.get(index);
+                if ((indexes != null) && (indexes.length > 0)) {
+                    for (final int index : indexes) {
+                        if ((index > -1) && (index < cidsBeans.size())) {
+                            final CidsBean selectedBean = cidsBeans.get(index);
                             mapFC.addFeature(new CidsFeature(selectedBean.getMetaObject()));
                         }
                     }
@@ -398,19 +483,34 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     static final class PointTableModel extends DefaultTableModel {
 
-        public PointTableModel(Object[][] data, String[] labels) {
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new PointTableModel object.
+         *
+         * @param  data    DOCUMENT ME!
+         * @param  labels  DOCUMENT ME!
+         */
+        public PointTableModel(final Object[][] data, final String[] labels) {
             super(data, labels);
         }
 
+        //~ Methods ------------------------------------------------------------
+
         @Override
-        public boolean isCellEditable(int row, int column) {
+        public boolean isCellEditable(final int row, final int column) {
             return column == 0;
         }
 
         @Override
-        public Class<?> getColumnClass(int columnIndex) {
+        public Class<?> getColumnClass(final int columnIndex) {
             if (columnIndex == 0) {
                 return Boolean.class;
             } else {

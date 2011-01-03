@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -7,36 +14,59 @@ package de.cismet.cids.custom.objectrenderer.utils;
 import javax.swing.JLabel;
 
 /**
+ * DOCUMENT ME!
  *
- * @author srichter
+ * @author   srichter
+ * @version  $Revision$, $Date$
  */
 public class LoaderLabel extends JLabel {
 
-    public LoaderLabel(int macPixelX, int maxPixelY, int shadowSize) {
-        this.maxY = maxPixelY;
-        this.maxX = macPixelX;
-        this.shadowSize = shadowSize;
-    }
+    //~ Instance fields --------------------------------------------------------
 
-    public LoaderLabel() {
-        this(300, 300, 4);
-    }
     private int maxY;
     private int maxX;
     private int shadowSize;
     private String pictureURL;
 
+    //~ Constructors -----------------------------------------------------------
+
     /**
-     * @return the pictureURL
+     * Creates a new LoaderLabel object.
+     */
+    public LoaderLabel() {
+        this(300, 300, 4);
+    }
+
+    /**
+     * Creates a new LoaderLabel object.
+     *
+     * @param  macPixelX   DOCUMENT ME!
+     * @param  maxPixelY   DOCUMENT ME!
+     * @param  shadowSize  DOCUMENT ME!
+     */
+    public LoaderLabel(final int macPixelX, final int maxPixelY, final int shadowSize) {
+        this.maxY = maxPixelY;
+        this.maxX = macPixelX;
+        this.shadowSize = shadowSize;
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  the pictureURL
      */
     public String getPictureURL() {
         return pictureURL;
     }
 
     /**
-     * @param pictureURL the pictureURL to set
+     * DOCUMENT ME!
+     *
+     * @param  pictureURL  the pictureURL to set
      */
-    public void setPictureURL(String pictureURL) {
+    public void setPictureURL(final String pictureURL) {
         this.pictureURL = pictureURL;
         if (pictureURL != null) {
             ObjectRendererUtils.loadPictureAndSet(pictureURL, maxX, maxY, shadowSize, this);
@@ -44,44 +74,56 @@ public class LoaderLabel extends JLabel {
     }
 
     /**
-     * @return the maxY
+     * DOCUMENT ME!
+     *
+     * @return  the maxY
      */
     public int getMaxY() {
         return maxY;
     }
 
     /**
-     * @param maxY the maxY to set
+     * DOCUMENT ME!
+     *
+     * @param  maxY  the maxY to set
      */
-    public void setMaxY(int maxY) {
+    public void setMaxY(final int maxY) {
         this.maxY = maxY;
     }
 
     /**
-     * @return the maxX
+     * DOCUMENT ME!
+     *
+     * @return  the maxX
      */
     public int getMaxX() {
         return maxX;
     }
 
     /**
-     * @param maxX the maxX to set
+     * DOCUMENT ME!
+     *
+     * @param  maxX  the maxX to set
      */
-    public void setMaxX(int maxX) {
+    public void setMaxX(final int maxX) {
         this.maxX = maxX;
     }
 
     /**
-     * @return the shadowSize
+     * DOCUMENT ME!
+     *
+     * @return  the shadowSize
      */
     public int getShadowSize() {
         return shadowSize;
     }
 
     /**
-     * @param shadowSize the shadowSize to set
+     * DOCUMENT ME!
+     *
+     * @param  shadowSize  the shadowSize to set
      */
-    public void setShadowSize(int shadowSize) {
+    public void setShadowSize(final int shadowSize) {
         this.shadowSize = shadowSize;
     }
 }

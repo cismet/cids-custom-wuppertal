@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -5,12 +12,46 @@
 package de.cismet.cids.custom.objectrenderer.utils.alkis;
 
 /**
+ * DOCUMENT ME!
  *
- * @author stefan
+ * @author   stefan
+ * @version  $Revision$, $Date$
  */
 public class AlkisProduct {
 
-    public AlkisProduct(String clazz, String type, String code, String dinFormat, String massstab, String fileFormat, int width, int height) {
+    //~ Instance fields --------------------------------------------------------
+
+    int width;
+    int height;
+    private final String clazz;
+    private final String type;
+    private final String code;
+    private final String dinFormat;
+    private final String fileFormat;
+    private final String massstab;
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new AlkisProduct object.
+     *
+     * @param  clazz       DOCUMENT ME!
+     * @param  type        DOCUMENT ME!
+     * @param  code        DOCUMENT ME!
+     * @param  dinFormat   DOCUMENT ME!
+     * @param  massstab    DOCUMENT ME!
+     * @param  fileFormat  DOCUMENT ME!
+     * @param  width       DOCUMENT ME!
+     * @param  height      DOCUMENT ME!
+     */
+    public AlkisProduct(final String clazz,
+            final String type,
+            final String code,
+            final String dinFormat,
+            final String massstab,
+            final String fileFormat,
+            final int width,
+            final int height) {
         this.clazz = clazz;
         this.type = type;
         this.code = code;
@@ -20,87 +61,106 @@ public class AlkisProduct {
         this.width = width;
         this.height = height;
     }
-    private final String clazz;
-    private final String type;
-    private final String code;
-    private final String dinFormat;
-    private final String fileFormat;
-    private final String massstab;
-    int width;
-    int height;
+
+    //~ Methods ----------------------------------------------------------------
 
     /**
-     * @return the clazz
+     * DOCUMENT ME!
+     *
+     * @return  the clazz
      */
     public String getClazz() {
         return clazz;
     }
 
     /**
-     * @return the type
+     * DOCUMENT ME!
+     *
+     * @return  the type
      */
     public String getType() {
         return type;
     }
 
     /**
-     * @return the code
+     * DOCUMENT ME!
+     *
+     * @return  the code
      */
     public String getCode() {
         return code;
     }
 
     /**
-     * @return the format
+     * DOCUMENT ME!
+     *
+     * @return  the format
      */
     public String getDinFormat() {
         return dinFormat;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public int getHeight() {
         return height;
     }
 
     /**
-     * @return the massstab
+     * DOCUMENT ME!
+     *
+     * @return  the massstab
      */
     public String getMassstab() {
         return massstab;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public String getFileFormat() {
         return fileFormat;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (obj == null) {
             return false;
         }
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final AlkisProduct other = (AlkisProduct) obj;
-        if ((this.code == null) ? (other.code != null) : !this.code.equals(other.code)) {
+        final AlkisProduct other = (AlkisProduct)obj;
+        if ((this.code == null) ? (other.code != null) : (!this.code.equals(other.code))) {
             return false;
         }
-        if ((this.clazz == null) ? (other.clazz != null) : !this.clazz.equals(other.clazz)) {
+        if ((this.clazz == null) ? (other.clazz != null) : (!this.clazz.equals(other.clazz))) {
             return false;
         }
-        if ((this.type == null) ? (other.type != null) : !this.type.equals(other.type)) {
+        if ((this.type == null) ? (other.type != null) : (!this.type.equals(other.type))) {
             return false;
         }
-        if ((this.dinFormat == null) ? (other.dinFormat != null) : !this.dinFormat.equals(other.dinFormat)) {
+        if ((this.dinFormat == null) ? (other.dinFormat != null) : (!this.dinFormat.equals(other.dinFormat))) {
             return false;
         }
-        if ((this.massstab == null) ? (other.massstab != null) : !this.massstab.equals(other.massstab)) {
+        if ((this.massstab == null) ? (other.massstab != null) : (!this.massstab.equals(other.massstab))) {
             return false;
         }
-        if ((this.fileFormat == null) ? (other.fileFormat != null) : !this.fileFormat.equals(other.fileFormat)) {
+        if ((this.fileFormat == null) ? (other.fileFormat != null) : (!this.fileFormat.equals(other.fileFormat))) {
             return false;
         }
         return true;
@@ -109,12 +169,12 @@ public class AlkisProduct {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 23 * hash + (this.clazz != null ? this.clazz.hashCode() : 0);
-        hash = 23 * hash + (this.type != null ? this.type.hashCode() : 0);
-        hash = 23 * hash + (this.code != null ? this.code.hashCode() : 0);
-        hash = 23 * hash + (this.fileFormat != null ? this.fileFormat.hashCode() : 0);
-        hash = 23 * hash + (this.dinFormat != null ? this.dinFormat.hashCode() : 0);
-        hash = 23 * hash + (this.massstab != null ? this.massstab.hashCode() : 0);
+        hash = (23 * hash) + ((this.clazz != null) ? this.clazz.hashCode() : 0);
+        hash = (23 * hash) + ((this.type != null) ? this.type.hashCode() : 0);
+        hash = (23 * hash) + ((this.code != null) ? this.code.hashCode() : 0);
+        hash = (23 * hash) + ((this.fileFormat != null) ? this.fileFormat.hashCode() : 0);
+        hash = (23 * hash) + ((this.dinFormat != null) ? this.dinFormat.hashCode() : 0);
+        hash = (23 * hash) + ((this.massstab != null) ? this.massstab.hashCode() : 0);
 
         return hash;
     }
@@ -122,12 +182,12 @@ public class AlkisProduct {
     @Override
     public String toString() {
         return "Product["
-                + "code: " + code
-                + ", class: " + clazz
-                + ", type: " + type
-                + ", dinFormat: " + dinFormat
-                + ", scale: " + massstab
-                + ", fileFormat: " + fileFormat
-                + "]";
+                    + "code: " + code
+                    + ", class: " + clazz
+                    + ", type: " + type
+                    + ", dinFormat: " + dinFormat
+                    + ", scale: " + massstab
+                    + ", fileFormat: " + fileFormat
+                    + "]";
     }
 }

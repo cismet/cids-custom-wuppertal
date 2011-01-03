@@ -14,6 +14,7 @@
 package de.cismet.cids.custom.tostringconverter.wunda_blau;
 import Sirius.server.localserver.attribute.*;
 import Sirius.server.middleware.types.MetaObject;
+
 import de.cismet.cids.tools.tostring.ToStringConverter;
 /**
  * DOCUMENT ME!
@@ -38,12 +39,13 @@ public class AdresseToStringConverter extends ToStringConverter implements java.
 
     //~ Methods ----------------------------------------------------------------
 
-    public String convert(de.cismet.cids.tools.tostring.StringConvertable o) {
-        MetaObject mo = (MetaObject)o;
+    @Override
+    public String convert(final de.cismet.cids.tools.tostring.StringConvertable o) {
+        final MetaObject mo = (MetaObject)o;
 
         String stringRepresentation = "";
 
-        ObjectAttribute[] attrs = mo.getAttribs();
+        final ObjectAttribute[] attrs = mo.getAttribs();
 
         for (int i = 0; i < attrs.length; i++) {
             // besser getAttributeByname

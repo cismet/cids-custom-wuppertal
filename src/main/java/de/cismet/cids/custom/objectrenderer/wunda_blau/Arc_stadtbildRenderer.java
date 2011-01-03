@@ -1,8 +1,14 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /*
  * Arc_stadtbildRenderer.java
  *
@@ -10,42 +16,108 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import java.awt.Cursor;
+
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+
 import de.cismet.cids.custom.objectrenderer.converter.CollectionToStringConverter;
 import de.cismet.cids.custom.objectrenderer.utils.AbstractJasperReportPrint;
 import de.cismet.cids.custom.objectrenderer.utils.FixedLabel;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
+
 import de.cismet.cids.dynamics.CidsBean;
+
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.TitleComponentProvider;
-import java.awt.Cursor;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
 
 /**
+ * DOCUMENT ME!
  *
- * @author srichter
+ * @author   srichter
+ * @version  $Revision$, $Date$
  */
 public class Arc_stadtbildRenderer extends JPanel implements CidsBeanRenderer, TitleComponentProvider {
 
-    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
+    //~ Static fields/initializers ---------------------------------------------
+
     public static final String REPORT_FILE = "/de/cismet/cids/custom/wunda_blau/res/StadtbildA4H.jasper";
+
+    //~ Instance fields --------------------------------------------------------
+
+    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private CidsBean cidsBean;
     private String title;
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox chkAuswahl;
+    private javax.swing.JCheckBox chkLager;
+    private javax.swing.JCheckBox chkPruefen;
+    private javax.swing.JLabel lblAufDat;
+    private javax.swing.JLabel lblAuftraggeber;
+    private javax.swing.JLabel lblBildnummer;
+    private javax.swing.JLabel lblBildnummern;
+    private javax.swing.JLabel lblDescAufnahmedatum;
+    private javax.swing.JLabel lblDescAuftraggeber;
+    private javax.swing.JLabel lblDescBildnummer;
+    private javax.swing.JLabel lblDescBildnummern;
+    private javax.swing.JLabel lblDescEingabedatum;
+    private javax.swing.JLabel lblDescFilmart;
+    private javax.swing.JLabel lblDescFotograf;
+    private javax.swing.JLabel lblDescHausnummer;
+    private javax.swing.JLabel lblDescInfo;
+    private javax.swing.JLabel lblDescName;
+    private javax.swing.JLabel lblDescStadtteil;
+    private javax.swing.JLabel lblDescSuchworte;
+    private javax.swing.JLabel lblEindat;
+    private javax.swing.JLabel lblFilmart;
+    private javax.swing.JLabel lblFotograf;
+    private javax.swing.JLabel lblHausnummer;
+    private javax.swing.JLabel lblInfo;
+    private javax.swing.JLabel lblName;
+    private de.cismet.cids.custom.objectrenderer.utils.LoaderLabel lblPicture;
+    private javax.swing.JLabel lblPrint;
+    private javax.swing.JLabel lblStadtteil;
+    private javax.swing.JLabel lblSuchworte;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JPanel panChkboxes;
+    private javax.swing.JPanel panContent;
+    private javax.swing.JPanel panContent2;
+    private javax.swing.JPanel panDetails;
+    private javax.swing.JPanel panPicture;
+    private javax.swing.JPanel panPrintButton;
+    private javax.swing.JPanel panTitle;
+    private javax.swing.JPanel panTitleString;
+    private de.cismet.cids.custom.objectrenderer.converter.SQLDateToStringConverter sqlDateToStringConverter;
+    private de.cismet.cids.editors.converters.SqlDateToUtilDateConverter sqlDateToUtilDateConverter;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
+    // End of variables declaration//GEN-END:variables
 
-    /** Creates new form Arc_stadtbildRenderer */
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates new form Arc_stadtbildRenderer.
+     */
     public Arc_stadtbildRenderer() {
         initComponents();
         title = "";
-        ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(lblPicture, Cursor.HAND_CURSOR, Cursor.DEFAULT_CURSOR);
-        ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(lblPrint, Cursor.HAND_CURSOR, Cursor.DEFAULT_CURSOR);
+        ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(
+            lblPicture,
+            Cursor.HAND_CURSOR,
+            Cursor.DEFAULT_CURSOR);
+        ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(
+            lblPrint,
+            Cursor.HAND_CURSOR,
+            Cursor.DEFAULT_CURSOR);
     }
 
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -117,10 +189,12 @@ public class Arc_stadtbildRenderer extends JPanel implements CidsBeanRenderer, T
 
         lblPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/printer.png"))); // NOI18N
         lblPrint.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblPrintMouseClicked(evt);
-            }
-        });
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblPrintMouseClicked(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
@@ -141,7 +215,13 @@ public class Arc_stadtbildRenderer extends JPanel implements CidsBeanRenderer, T
         gridBagConstraints.insets = new java.awt.Insets(5, 9, 5, 5);
         panContent.add(lblDescBildnummer, gridBagConstraints);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bildnummer}"), lblBildnummer, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndBildnummer");
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bildnummer}"),
+                lblBildnummer,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndBildnummer");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -160,7 +240,13 @@ public class Arc_stadtbildRenderer extends JPanel implements CidsBeanRenderer, T
         gridBagConstraints.insets = new java.awt.Insets(5, 9, 5, 5);
         panContent.add(lblDescBildnummern, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bildnummern}"), lblBildnummern, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndBildnummern");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bildnummern}"),
+                lblBildnummern,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndBildnummern");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -180,7 +266,13 @@ public class Arc_stadtbildRenderer extends JPanel implements CidsBeanRenderer, T
         gridBagConstraints.insets = new java.awt.Insets(5, 9, 5, 5);
         panContent.add(lblDescHausnummer, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hausnummer}"), lblHausnummer, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndHausnummer");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hausnummer}"),
+                lblHausnummer,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndHausnummer");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -209,7 +301,13 @@ public class Arc_stadtbildRenderer extends JPanel implements CidsBeanRenderer, T
         gridBagConstraints.insets = new java.awt.Insets(5, 9, 5, 5);
         panContent.add(lblDescInfo, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.info}"), lblInfo, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndInfo");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.info}"),
+                lblInfo,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndInfo");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -229,7 +327,13 @@ public class Arc_stadtbildRenderer extends JPanel implements CidsBeanRenderer, T
         gridBagConstraints.insets = new java.awt.Insets(5, 9, 5, 5);
         panContent.add(lblDescName, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ort.name}"), lblName, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndName");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ort.name}"),
+                lblName,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndName");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -249,7 +353,13 @@ public class Arc_stadtbildRenderer extends JPanel implements CidsBeanRenderer, T
         gridBagConstraints.insets = new java.awt.Insets(5, 9, 5, 5);
         panContent.add(lblDescStadtteil, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ort.stadtteil.stadtteil}"), lblStadtteil, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndStadtteil");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ort.stadtteil.stadtteil}"),
+                lblStadtteil,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndStadtteil");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -260,7 +370,12 @@ public class Arc_stadtbildRenderer extends JPanel implements CidsBeanRenderer, T
         gridBagConstraints.insets = new java.awt.Insets(5, 4, 5, 5);
         panContent.add(lblStadtteil, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.aufnahmedatum}"), lblAufDat, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.aufnahmedatum}"),
+                lblAufDat,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setConverter(sqlDateToStringConverter);
         bindingGroup.addBinding(binding);
 
@@ -281,7 +396,12 @@ public class Arc_stadtbildRenderer extends JPanel implements CidsBeanRenderer, T
         gridBagConstraints.insets = new java.awt.Insets(5, 9, 5, 5);
         panContent.add(lblDescSuchworte, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.suchworte}"), lblSuchworte, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.suchworte}"),
+                lblSuchworte,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setConverter(new CollectionToStringConverter("suchwort"));
         bindingGroup.addBinding(binding);
 
@@ -306,7 +426,12 @@ public class Arc_stadtbildRenderer extends JPanel implements CidsBeanRenderer, T
         chkAuswahl.setEnabled(false);
         chkAuswahl.setOpaque(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.auswahl}"), chkAuswahl, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.auswahl}"),
+                chkAuswahl,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -320,7 +445,12 @@ public class Arc_stadtbildRenderer extends JPanel implements CidsBeanRenderer, T
         chkLager.setEnabled(false);
         chkLager.setOpaque(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.lager}"), chkLager, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.lager}"),
+                chkLager,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -335,7 +465,12 @@ public class Arc_stadtbildRenderer extends JPanel implements CidsBeanRenderer, T
         chkPruefen.setEnabled(false);
         chkPruefen.setOpaque(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.pruefen}"), chkPruefen, org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.pruefen}"),
+                chkPruefen,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -373,7 +508,13 @@ public class Arc_stadtbildRenderer extends JPanel implements CidsBeanRenderer, T
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panDetails.add(lblDescFotograf, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.filmart.filmart}"), lblFilmart, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndFilmart");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.filmart.filmart}"),
+                lblFilmart,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndFilmart");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -384,7 +525,13 @@ public class Arc_stadtbildRenderer extends JPanel implements CidsBeanRenderer, T
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         panDetails.add(lblFilmart, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fotograf.fotograf}"), lblFotograf, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndFotograf");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fotograf.fotograf}"),
+                lblFotograf,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndFotograf");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -404,7 +551,12 @@ public class Arc_stadtbildRenderer extends JPanel implements CidsBeanRenderer, T
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panDetails.add(lblDescEingabedatum, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.eingabedatum}"), lblEindat, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.eingabedatum}"),
+                lblEindat,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setConverter(sqlDateToStringConverter);
         bindingGroup.addBinding(binding);
 
@@ -425,7 +577,13 @@ public class Arc_stadtbildRenderer extends JPanel implements CidsBeanRenderer, T
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panDetails.add(lblDescAuftraggeber, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.auftraggeber.auftraggeber}"), lblAuftraggeber, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndAuftraggeber");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.auftraggeber.auftraggeber}"),
+                lblAuftraggeber,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndAuftraggeber");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -451,39 +609,53 @@ public class Arc_stadtbildRenderer extends JPanel implements CidsBeanRenderer, T
 
         lblPicture.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
         lblPicture.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblPictureMouseClicked(evt);
-            }
-        });
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblPictureMouseClicked(evt);
+                }
+            });
         panPicture.add(lblPicture, java.awt.BorderLayout.CENTER);
 
         add(panPicture, java.awt.BorderLayout.EAST);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
-    private void lblPrintMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPrintMouseClicked
-        if (evt != null && !evt.isPopupTrigger()) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lblPrintMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblPrintMouseClicked
+        if ((evt != null) && !evt.isPopupTrigger()) {
             final CidsBean bean = cidsBean;
             if (bean != null) {
                 final AbstractJasperReportPrint jp = new StadtbildJasperReportPrint(REPORT_FILE, bean);
                 jp.print();
             }
         }
-    }//GEN-LAST:event_lblPrintMouseClicked
+    }                                                                        //GEN-LAST:event_lblPrintMouseClicked
 
-    private void lblPictureMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPictureMouseClicked
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lblPictureMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblPictureMouseClicked
         if (!evt.isPopupTrigger()) {
             if (lblPicture.getPictureURL() != null) {
                 ObjectRendererUtils.openURL(lblPicture.getPictureURL());
             }
         }
-    }//GEN-LAST:event_lblPictureMouseClicked
+    }                                                                          //GEN-LAST:event_lblPictureMouseClicked
 
+    @Override
     public CidsBean getCidsBean() {
         return cidsBean;
     }
 
+    @Override
     public void setCidsBean(final CidsBean cidsBean) {
         bindingGroup.unbind();
         if (cidsBean != null) {
@@ -493,59 +665,19 @@ public class Arc_stadtbildRenderer extends JPanel implements CidsBeanRenderer, T
             lblPicture.setPictureURL(StaticProperties.ARCHIVAR_URL_PREFIX + obj + StaticProperties.ARCHIVAR_URL_SUFFIX);
         }
     }
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JCheckBox chkAuswahl;
-    private javax.swing.JCheckBox chkLager;
-    private javax.swing.JCheckBox chkPruefen;
-    private javax.swing.JLabel lblAufDat;
-    private javax.swing.JLabel lblAuftraggeber;
-    private javax.swing.JLabel lblBildnummer;
-    private javax.swing.JLabel lblBildnummern;
-    private javax.swing.JLabel lblDescAufnahmedatum;
-    private javax.swing.JLabel lblDescAuftraggeber;
-    private javax.swing.JLabel lblDescBildnummer;
-    private javax.swing.JLabel lblDescBildnummern;
-    private javax.swing.JLabel lblDescEingabedatum;
-    private javax.swing.JLabel lblDescFilmart;
-    private javax.swing.JLabel lblDescFotograf;
-    private javax.swing.JLabel lblDescHausnummer;
-    private javax.swing.JLabel lblDescInfo;
-    private javax.swing.JLabel lblDescName;
-    private javax.swing.JLabel lblDescStadtteil;
-    private javax.swing.JLabel lblDescSuchworte;
-    private javax.swing.JLabel lblEindat;
-    private javax.swing.JLabel lblFilmart;
-    private javax.swing.JLabel lblFotograf;
-    private javax.swing.JLabel lblHausnummer;
-    private javax.swing.JLabel lblInfo;
-    private javax.swing.JLabel lblName;
-    private de.cismet.cids.custom.objectrenderer.utils.LoaderLabel lblPicture;
-    private javax.swing.JLabel lblPrint;
-    private javax.swing.JLabel lblStadtteil;
-    private javax.swing.JLabel lblSuchworte;
-    private javax.swing.JLabel lblTitle;
-    private javax.swing.JPanel panChkboxes;
-    private javax.swing.JPanel panContent;
-    private javax.swing.JPanel panContent2;
-    private javax.swing.JPanel panDetails;
-    private javax.swing.JPanel panPicture;
-    private javax.swing.JPanel panPrintButton;
-    private javax.swing.JPanel panTitle;
-    private javax.swing.JPanel panTitleString;
-    private de.cismet.cids.custom.objectrenderer.converter.SQLDateToStringConverter sqlDateToStringConverter;
-    private de.cismet.cids.editors.converters.SqlDateToUtilDateConverter sqlDateToUtilDateConverter;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
-    // End of variables declaration//GEN-END:variables
 
+    @Override
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    @Override
+    public void setTitle(final String title) {
         this.title = "Stadtbild " + title;
         lblTitle.setText(this.title);
     }
 
+    @Override
     public JComponent getTitleComponent() {
         return panTitle;
     }

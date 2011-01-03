@@ -1,80 +1,144 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import de.cismet.tools.gui.RoundedPanel;
-import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
 import com.vividsolutions.jts.geom.Geometry;
+
 import de.cismet.cids.annotations.CidsAttribute;
+
 import de.cismet.cids.custom.deprecated.JLoadDots;
 
+import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
+
+import de.cismet.tools.gui.RoundedPanel;
+
 /**
- * de.cismet.cids.objectrenderer.CoolSegmentRenderer
- * 
- * @author nh
+ * de.cismet.cids.objectrenderer.CoolSegmentRenderer.
+ *
+ * @author   nh
+ * @version  $Revision$, $Date$
  */
 public class SegmentRenderer extends CoolPanel {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final String SEGMENT = "Segment";
+
+    //~ Instance fields --------------------------------------------------------
+
     @CidsAttribute("NAME")
     public String name = "";
-    
+
     @CidsAttribute("OBJEKT_ID")
     public String objektID = "";
-    
+
     @CidsAttribute("KMNR")
     public Integer kilometerNr;
-    
+
     @CidsAttribute("SEGNR")
     public Integer segmentNr;
-    
+
     @CidsAttribute("STRASSENSCHLUESSEL.NAME")
     public String strasse = "";
-    
+
     @CidsAttribute("LAENGE")
     public Integer laenge;
-    
+
     @CidsAttribute("BREITE")
     public Integer breite;
-    
+
     @CidsAttribute("HOEHE_ANFANG")
     public Float hoeheAnfang;
-    
+
     @CidsAttribute("HOEHE_ENDE")
     public Float hoeheEnde;
-    
+
     @CidsAttribute("NEIGUNG")
     public Float neigung;
-    
+
     @CidsAttribute("KLASSE")
     public Integer klasse;
-    
+
     @CidsAttribute("LOCATION")
     public String location = "";
-        
+
     @CidsAttribute("KNOTEN_ANFANG.NAME")
     public String knotenAName = "";
-    
+
     @CidsAttribute("KNOTEN_ENDE.NAME")
     public String knotenEName = "";
-    
+
     @CidsAttribute("KNOTEN_ANFANG.HOEHE")
     public Integer knotenAHoehe;
-    
+
     @CidsAttribute("KNOTEN_ENDE.HOEHE")
     public Integer knotenEHoehe;
-    
+
     @CidsAttribute("SEGMENTSEITE_L.NAME")
     public String segmentLName = "";
-    
+
     @CidsAttribute("SEGMENTSEITE_R.NAME")
     public String segmentRName = "";
-    
+
     @CidsAttribute("Georeferenz.GEO_STRING")
     public Geometry geometry = null;
-    
+
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
-        
-    private static final String SEGMENT = "Segment";
-    
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel lblHoeheAn;
+    private javax.swing.JLabel lblHoeheEn;
+    private javax.swing.JLabel lblKlasse;
+    private javax.swing.JLabel lblKmnr;
+    private javax.swing.JLabel lblKnAHoehe;
+    private javax.swing.JLabel lblKnAName;
+    private javax.swing.JLabel lblKnEHoehe;
+    private javax.swing.JLabel lblKnEName;
+    private javax.swing.JLabel lblLaengeBreite;
+    private javax.swing.JLabel lblLocation;
+    private javax.swing.JLabel lblNeigung;
+    private javax.swing.JLabel lblObjectID;
+    private javax.swing.JLabel lblSegLName;
+    private javax.swing.JLabel lblSegRName;
+    private javax.swing.JLabel lblSegnr;
+    private javax.swing.JLabel lblStrasse;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JPanel panInhalt;
+    private javax.swing.JPanel panInter;
+    private javax.swing.JPanel panKnotenAn;
+    private javax.swing.JPanel panKnotenEn;
+    private javax.swing.JPanel panMap;
+    private javax.swing.JPanel panSpinner;
+    private javax.swing.JPanel panTitle;
+    // End of variables declaration//GEN-END:variables
+
+    //~ Constructors -----------------------------------------------------------
+
     /**
-     * Creates new form TestRenderer
+     * Creates new form TestRenderer.
      */
     public SegmentRenderer() {
         initComponents();
@@ -85,141 +149,140 @@ public class SegmentRenderer extends CoolPanel {
         setSpinner(panSpinner);
     }
 
+    //~ Methods ----------------------------------------------------------------
+
     @Override
-     public void setGeometry(Geometry geometry) {
+    public void setGeometry(final Geometry geometry) {
         super.setGeometry(geometry);
     }
 
     @Override
     public void assignAggregation() {
     }
-   
+
     @Override
     public void assignSingle() {
-        if (!name.equals(""))
+        if (!name.equals("")) {
             lblTitle.setText(name);
-        else
+        } else {
             lblTitle.setText(SEGMENT);
-        
-        if (!objektID.equals(""))
+        }
+
+        if (!objektID.equals("")) {
             lblObjectID.setText(objektID);
-        else {
+        } else {
             lblObjectID.setVisible(false);
             jLabel1.setVisible(false);
         }
-        
-        if (kilometerNr > -1)
+
+        if (kilometerNr > -1) {
             lblKmnr.setText(kilometerNr.toString());
-        else {
+        } else {
             lblKmnr.setVisible(false);
             jLabel2.setVisible(false);
         }
-        
-        if (segmentNr > -1)
+
+        if (segmentNr > -1) {
             lblSegnr.setText(segmentNr.toString());
-        else {
+        } else {
             lblSegnr.setVisible(false);
             jLabel3.setVisible(false);
-        } 
-        
-        if (strasse != null && !strasse.equals(""))
+        }
+
+        if ((strasse != null) && !strasse.equals("")) {
             lblStrasse.setText(strasse);
-        else {
+        } else {
             lblStrasse.setVisible(false);
             jLabel4.setVisible(false);
         }
-        
-        if (laenge > -1 && breite > -1)
+
+        if ((laenge > -1) && (breite > -1)) {
             lblLaengeBreite.setText(laenge + " x " + breite);
-        else {
+        } else {
             lblLaengeBreite.setVisible(false);
             jLabel5.setVisible(false);
         }
-        
+
         if (hoeheAnfang > -1.0f) {
             lblHoeheAn.setText(hoeheAnfang.toString());
             log.info("H\u00F6he Anfang: " + hoeheAnfang.toString());
-        }
-        else {
+        } else {
             lblHoeheAn.setVisible(false);
             jLabel6.setVisible(false);
         }
-        
+
         if (hoeheEnde > -1.0f) {
             lblHoeheEn.setText(hoeheEnde.toString());
             log.info("H\u00F6he Ende: " + hoeheEnde.toString());
-        }
-        else {
+        } else {
             lblHoeheEn.setVisible(false);
             jLabel7.setVisible(false);
         }
-        
-        if (neigung > -1.0f)
+
+        if (neigung > -1.0f) {
             lblNeigung.setText(neigung.toString());
-        else {
+        } else {
             lblNeigung.setVisible(false);
             jLabel8.setVisible(false);
         }
-        
-        if (klasse > -1)
+
+        if (klasse > -1) {
             lblKlasse.setText(klasse.toString());
-        else {
+        } else {
             lblKlasse.setVisible(false);
             jLabel9.setVisible(false);
         }
-        
-        if (!location.equals(""))
+
+        if (!location.equals("")) {
             lblLocation.setText(location);
-        else {
+        } else {
             lblLocation.setVisible(false);
             jLabel10.setVisible(false);
         }
-        
-        if (!knotenAName.equals("") && knotenAHoehe > -1) {
+
+        if (!knotenAName.equals("") && (knotenAHoehe > -1)) {
             lblKnAName.setText(knotenAName);
             lblKnAHoehe.setText(knotenAHoehe.toString());
-        }
-        else {
+        } else {
             panKnotenAn.setVisible(false);
             jLabel11.setVisible(false);
         }
-        
-        if (!knotenEName.equals("") &&  knotenEHoehe > -1) {
+
+        if (!knotenEName.equals("") && (knotenEHoehe > -1)) {
             lblKnEName.setText(knotenEName);
             lblKnEHoehe.setText(knotenEHoehe.toString());
-        }
-        else {
+        } else {
             panKnotenEn.setVisible(false);
             jLabel14.setVisible(false);
         }
-        
-        if (!segmentRName.equals("")) 
+
+        if (!segmentRName.equals("")) {
             lblSegRName.setText(segmentRName);
-        else {
+        } else {
             lblSegRName.setVisible(false);
             jLabel17.setVisible(false);
         }
-        
-        if (!segmentLName.equals("")) 
+
+        if (!segmentLName.equals("")) {
             lblSegLName.setText(segmentLName);
-        else {
+        } else {
             lblSegLName.setVisible(false);
             jLabel18.setVisible(false);
         }
-        
+
         if (geometry != null) {
             setGeometry(geometry);
         }
     }
-    
+
+    @Override
     public double getWidthRatio() {
         return 1.0;
     }
-    
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -273,16 +336,18 @@ public class SegmentRenderer extends CoolPanel {
 
         panInter.setOpaque(false);
 
-        javax.swing.GroupLayout panInterLayout = new javax.swing.GroupLayout(panInter);
+        final javax.swing.GroupLayout panInterLayout = new javax.swing.GroupLayout(panInter);
         panInter.setLayout(panInterLayout);
         panInterLayout.setHorizontalGroup(
-            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 497, Short.MAX_VALUE)
-        );
+            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                497,
+                Short.MAX_VALUE));
         panInterLayout.setVerticalGroup(
-            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 20, Short.MAX_VALUE)
-        );
+            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                20,
+                Short.MAX_VALUE));
 
         add(panInter, java.awt.BorderLayout.SOUTH);
 
@@ -293,16 +358,18 @@ public class SegmentRenderer extends CoolPanel {
         panSpinner.setMinimumSize(new java.awt.Dimension(100, 100));
         panSpinner.setOpaque(false);
 
-        javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
+        final javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
         panSpinner.setLayout(panSpinnerLayout);
         panSpinnerLayout.setHorizontalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                100,
+                Short.MAX_VALUE));
         panSpinnerLayout.setVerticalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                100,
+                Short.MAX_VALUE));
 
         panMap.add(panSpinner, new java.awt.GridBagConstraints());
 
@@ -314,22 +381,18 @@ public class SegmentRenderer extends CoolPanel {
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblTitle.setText("Segment - 7871.4");
 
-        javax.swing.GroupLayout panTitleLayout = new javax.swing.GroupLayout(panTitle);
+        final javax.swing.GroupLayout panTitleLayout = new javax.swing.GroupLayout(panTitle);
         panTitle.setLayout(panTitleLayout);
         panTitleLayout.setHorizontalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panTitleLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblTitle)
-                .addContainerGap(328, Short.MAX_VALUE))
-        );
+            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addContainerGap(
+                    328,
+                    Short.MAX_VALUE)));
         panTitleLayout.setVerticalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panTitleLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblTitle)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addContainerGap(
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    Short.MAX_VALUE)));
 
         add(panTitle, java.awt.BorderLayout.NORTH);
 
@@ -524,34 +587,28 @@ public class SegmentRenderer extends CoolPanel {
 
         lblKnAHoehe.setText("105");
 
-        javax.swing.GroupLayout panKnotenAnLayout = new javax.swing.GroupLayout(panKnotenAn);
+        final javax.swing.GroupLayout panKnotenAnLayout = new javax.swing.GroupLayout(panKnotenAn);
         panKnotenAn.setLayout(panKnotenAnLayout);
         panKnotenAnLayout.setHorizontalGroup(
-            panKnotenAnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panKnotenAnLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panKnotenAnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel13)
-                    .addComponent(jLabel12))
-                .addGap(35, 35, 35)
-                .addGroup(panKnotenAnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblKnAName)
-                    .addComponent(lblKnAHoehe))
-                .addContainerGap(17, Short.MAX_VALUE))
-        );
+            panKnotenAnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                panKnotenAnLayout.createSequentialGroup().addContainerGap().addGroup(
+                    panKnotenAnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
+                        jLabel13).addComponent(jLabel12)).addGap(35, 35, 35).addGroup(
+                    panKnotenAnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
+                        lblKnAName).addComponent(lblKnAHoehe)).addContainerGap(17, Short.MAX_VALUE)));
         panKnotenAnLayout.setVerticalGroup(
-            panKnotenAnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panKnotenAnLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panKnotenAnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblKnAName))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panKnotenAnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13)
-                    .addComponent(lblKnAHoehe))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+            panKnotenAnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                panKnotenAnLayout.createSequentialGroup().addContainerGap().addGroup(
+                    panKnotenAnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(
+                        jLabel12,
+                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                        14,
+                        javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(lblKnAName)).addPreferredGap(
+                    javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
+                    panKnotenAnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(
+                        jLabel13).addComponent(lblKnAHoehe)).addContainerGap(
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    Short.MAX_VALUE)));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -573,34 +630,27 @@ public class SegmentRenderer extends CoolPanel {
 
         lblKnEName.setText("Knoten 7871.36");
 
-        javax.swing.GroupLayout panKnotenEnLayout = new javax.swing.GroupLayout(panKnotenEn);
+        final javax.swing.GroupLayout panKnotenEnLayout = new javax.swing.GroupLayout(panKnotenEn);
         panKnotenEn.setLayout(panKnotenEnLayout);
         panKnotenEnLayout.setHorizontalGroup(
-            panKnotenEnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panKnotenEnLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panKnotenEnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel15)
-                    .addComponent(jLabel16))
-                .addGap(36, 36, 36)
-                .addGroup(panKnotenEnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblKnEName)
-                    .addComponent(lblKnEHoehe))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+            panKnotenEnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                panKnotenEnLayout.createSequentialGroup().addContainerGap().addGroup(
+                    panKnotenEnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
+                        jLabel15).addComponent(jLabel16)).addGap(36, 36, 36).addGroup(
+                    panKnotenEnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
+                        lblKnEName).addComponent(lblKnEHoehe)).addContainerGap(
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    Short.MAX_VALUE)));
         panKnotenEnLayout.setVerticalGroup(
-            panKnotenEnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panKnotenEnLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panKnotenEnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel15)
-                    .addComponent(lblKnEName))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panKnotenEnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel16)
-                    .addComponent(lblKnEHoehe))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+            panKnotenEnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                panKnotenEnLayout.createSequentialGroup().addContainerGap().addGroup(
+                    panKnotenEnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(
+                        jLabel15).addComponent(lblKnEName)).addPreferredGap(
+                    javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
+                    panKnotenEnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(
+                        jLabel16).addComponent(lblKnEHoehe)).addContainerGap(
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    Short.MAX_VALUE)));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -654,52 +704,5 @@ public class SegmentRenderer extends CoolPanel {
         panInhalt.add(lblSegLName, gridBagConstraints);
 
         add(panInhalt, java.awt.BorderLayout.WEST);
-    }// </editor-fold>//GEN-END:initComponents
-    
-    
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JLabel lblHoeheAn;
-    private javax.swing.JLabel lblHoeheEn;
-    private javax.swing.JLabel lblKlasse;
-    private javax.swing.JLabel lblKmnr;
-    private javax.swing.JLabel lblKnAHoehe;
-    private javax.swing.JLabel lblKnAName;
-    private javax.swing.JLabel lblKnEHoehe;
-    private javax.swing.JLabel lblKnEName;
-    private javax.swing.JLabel lblLaengeBreite;
-    private javax.swing.JLabel lblLocation;
-    private javax.swing.JLabel lblNeigung;
-    private javax.swing.JLabel lblObjectID;
-    private javax.swing.JLabel lblSegLName;
-    private javax.swing.JLabel lblSegRName;
-    private javax.swing.JLabel lblSegnr;
-    private javax.swing.JLabel lblStrasse;
-    private javax.swing.JLabel lblTitle;
-    private javax.swing.JPanel panInhalt;
-    private javax.swing.JPanel panInter;
-    private javax.swing.JPanel panKnotenAn;
-    private javax.swing.JPanel panKnotenEn;
-    private javax.swing.JPanel panMap;
-    private javax.swing.JPanel panSpinner;
-    private javax.swing.JPanel panTitle;
-    // End of variables declaration//GEN-END:variables
-    
+    } // </editor-fold>//GEN-END:initComponents
 }

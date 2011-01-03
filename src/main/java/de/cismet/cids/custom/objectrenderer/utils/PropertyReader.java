@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -7,18 +14,37 @@ package de.cismet.cids.custom.objectrenderer.utils;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
 import java.util.Properties;
 
 /**
+ * DOCUMENT ME!
  *
- * @author srichter
+ * @author   srichter
+ * @version  $Revision$, $Date$
  */
 public class PropertyReader {
 
+    //~ Static fields/initializers ---------------------------------------------
+
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(PropertyReader.class);
 
+    //~ Instance fields --------------------------------------------------------
+
+    private final String filename;
+    private final Properties properties;
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new PropertyReader object.
+     *
+     * @param   filename  DOCUMENT ME!
+     *
+     * @throws  IllegalArgumentException  DOCUMENT ME!
+     */
     public PropertyReader(final String filename) {
-        if (filename == null || filename.length() < 1) {
+        if ((filename == null) || (filename.length() < 1)) {
             throw new IllegalArgumentException();
         }
         this.filename = filename;
@@ -39,28 +65,33 @@ public class PropertyReader {
             }
         }
     }
-    private final String filename;
-    private final Properties properties;
+
+    //~ Methods ----------------------------------------------------------------
 
     /**
-     * 
-     * @param key
-     * @return
+     * DOCUMENT ME!
+     *
+     * @param   key  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
      */
-    public final String getProperty(String key) {
+    public final String getProperty(final String key) {
         return properties.getProperty(key);
     }
 
     /**
-     * @return the filename
+     * DOCUMENT ME!
+     *
+     * @return  the filename
      */
     public String getFilename() {
         return filename;
     }
 
     /**
-     * 
-     * @return
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
      */
     public Properties getInternalProperties() {
         return properties;

@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * TabbedPaneUITransparent.java
  *
@@ -6,7 +13,6 @@
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
  */
-
 package de.cismet.cids.custom.deprecated;
 
 /**
@@ -14,6 +20,7 @@ package de.cismet.cids.custom.deprecated;
  * @author srichter
  */
 import com.sun.java.swing.plaf.windows.WindowsTabbedPaneUI;
+
 import java.awt.AlphaComposite;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -22,31 +29,44 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Rectangle;
 
+/**
+ * DOCUMENT ME!
+ *
+ * @version  $Revision$, $Date$
+ */
 public class TabbedPaneUITransparent extends WindowsTabbedPaneUI {
-    
+
+    //~ Methods ----------------------------------------------------------------
+
     @Override
-    protected void paintContentBorder(Graphics g, int arg1, int arg2) {
+    protected void paintContentBorder(final Graphics g, final int arg1, final int arg2) {
 /*
 int tw = tabPane.getBounds().width;
 int th = tabPane.getBounds().height;
 g.setColor(new Color(0, 0, 0));//, 0));
- 
+
 g.fillRect(0, 0, tw, th);
- 
+
 super.paintContentBorder(g, arg1, arg2);
  */
     }
-    
+
     @Override
-    protected int calculateTabHeight(int tabPlacement, int tabIndex, int fontHeight) {
-        int retValue;
+    protected int calculateTabHeight(final int tabPlacement, final int tabIndex, final int fontHeight) {
+        final int retValue;
         retValue = super.calculateTabHeight(tabPlacement, tabIndex, fontHeight) + 15;
         return retValue;
     }
-    
-    
+
     @Override
-    protected void paintTabBackground(Graphics g, int tabPlacement, int tabIndex, int x, int y, int w, int h, boolean isSelected) {
+    protected void paintTabBackground(final Graphics g,
+            final int tabPlacement,
+            final int tabIndex,
+            final int x,
+            final int y,
+            final int w,
+            final int h,
+            final boolean isSelected) {
 //        Color bu = g.getColor();
 //        g.setColor(Color.BLACK);
 //        Rectangle r = rects[tabIndex];
@@ -63,42 +83,46 @@ super.paintContentBorder(g, arg1, arg2);
 //        ((Graphics2D)g).setComposite(AlphaComposite.SrcAtop.derive(0.5f));
         super.paintTabBackground(g, tabPlacement, tabIndex, x, y, w, h, isSelected);
     }
-    
+
     @Override
-    protected void paintText(Graphics g, int tabPlacement, Font font, FontMetrics metrics, int tabIndex, String title, Rectangle textRect, boolean isSelected) {
+    protected void paintText(final Graphics g,
+            final int tabPlacement,
+            final Font font,
+            final FontMetrics metrics,
+            final int tabIndex,
+            final String title,
+            final Rectangle textRect,
+            final boolean isSelected) {
         ((Graphics2D)g).setComposite(AlphaComposite.SrcOver.derive(1.0f));
         super.paintText(g, tabPlacement, font, metrics, tabIndex, title, textRect, isSelected);
     }
 
     @Override
-    protected Insets getContentBorderInsets(int tabPlacement) {
+    protected Insets getContentBorderInsets(final int tabPlacement) {
 //        Insets retValue;
-//        
+//
 //        retValue = super.getContentBorderInsets(tabPlacement);
         return new Insets(2, 0, 0, 2);
     }
-    
-    
 
     @Override
-    protected void paintFocusIndicator(Graphics g, int tabPlacement, Rectangle[] rects, int tabIndex, Rectangle iconRect, Rectangle textRect, boolean isSelected) {
-        //super.paintFocusIndicator(g, tabPlacement, rects, tabIndex, iconRect, textRect, isSelected);
+    protected void paintFocusIndicator(final Graphics g,
+            final int tabPlacement,
+            final Rectangle[] rects,
+            final int tabIndex,
+            final Rectangle iconRect,
+            final Rectangle textRect,
+            final boolean isSelected) {
+        // super.paintFocusIndicator(g, tabPlacement, rects, tabIndex, iconRect, textRect, isSelected);
     }
 
     @Override
-    protected void paintTab(Graphics g, int tabPlacement, Rectangle[] rects, int tabIndex, Rectangle iconRect, Rectangle textRect) {
+    protected void paintTab(final Graphics g,
+            final int tabPlacement,
+            final Rectangle[] rects,
+            final int tabIndex,
+            final Rectangle iconRect,
+            final Rectangle textRect) {
         super.paintTab(g, tabPlacement, rects, tabIndex, iconRect, textRect);
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 }

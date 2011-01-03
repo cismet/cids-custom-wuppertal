@@ -1,16 +1,23 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  *  Copyright (C) 2010 stefan
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -18,27 +25,42 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
+
 import Sirius.server.search.CidsServerSearch;
-import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
-import de.cismet.cids.custom.wunda_blau.search.Alb_BaulastChecker;
-import de.cismet.cids.custom.wunda_blau.search.Alb_BaulastblattChecker;
-import de.cismet.cids.dynamics.CidsBean;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
+import de.cismet.cids.custom.wunda_blau.search.Alb_BaulastChecker;
+import de.cismet.cids.custom.wunda_blau.search.Alb_BaulastblattChecker;
+
+import de.cismet.cids.dynamics.CidsBean;
+
 /**
+ * DOCUMENT ME!
  *
- * @author stefan
+ * @author   stefan
+ * @version  $Revision$, $Date$
  */
 public class Alb_Constraints {
 
-    public static List<String> getIncorrectBaulastDates(CidsBean blattBean) {
-        List<String> result = new ArrayList<String>();
-        List<CidsBean> baulastBeans = CidsBeanSupport.getBeanCollectionFromProperty(blattBean, "baulasten");
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   blattBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static List<String> getIncorrectBaulastDates(final CidsBean blattBean) {
+        final List<String> result = new ArrayList<String>();
+        final List<CidsBean> baulastBeans = CidsBeanSupport.getBeanCollectionFromProperty(blattBean, "baulasten");
         if (baulastBeans != null) {
-            for (CidsBean baulast : baulastBeans) {
+            for (final CidsBean baulast : baulastBeans) {
                 if (!checkBaulastDates(baulast)) {
                     result.add(baulast.toString());
                 }
@@ -47,25 +69,32 @@ public class Alb_Constraints {
         return result;
     }
 
-    public static boolean checkBaulastDates(CidsBean baulastBean) {
-        Object eintragungsDatumObj = baulastBean.getProperty("eintragungsdatum");
-        Object loeschungsDatumObj = baulastBean.getProperty("loeschungsdatum");
-        Object befristungsDatumObj = baulastBean.getProperty("befristungsdatum");
-        Object geschlossenAmDatumObj = baulastBean.getProperty("geschlossen_am");
-        List<Date> testDates = new ArrayList<Date>();
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   baulastBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static boolean checkBaulastDates(final CidsBean baulastBean) {
+        final Object eintragungsDatumObj = baulastBean.getProperty("eintragungsdatum");
+        final Object loeschungsDatumObj = baulastBean.getProperty("loeschungsdatum");
+        final Object befristungsDatumObj = baulastBean.getProperty("befristungsdatum");
+        final Object geschlossenAmDatumObj = baulastBean.getProperty("geschlossen_am");
+        final List<Date> testDates = new ArrayList<Date>();
         if (befristungsDatumObj instanceof Date) {
-            testDates.add((Date) befristungsDatumObj);
+            testDates.add((Date)befristungsDatumObj);
         }
         if (geschlossenAmDatumObj instanceof Date) {
-            testDates.add((Date) geschlossenAmDatumObj);
+            testDates.add((Date)geschlossenAmDatumObj);
         }
         if (loeschungsDatumObj instanceof Date) {
-            testDates.add((Date) loeschungsDatumObj);
+            testDates.add((Date)loeschungsDatumObj);
         }
         if (testDates.size() > 0) {
             if (eintragungsDatumObj instanceof Date) {
-                Date eintragungsDatum = (Date) eintragungsDatumObj;
-                for (Date toTest : testDates) {
+                final Date eintragungsDatum = (Date)eintragungsDatumObj;
+                for (final Date toTest : testDates) {
                     if (toTest.compareTo(eintragungsDatum) < 0) {
                         return false;
                     }
@@ -75,21 +104,31 @@ public class Alb_Constraints {
             }
         }
         return true;
-
-
     }
 
-    public static boolean checkUniqueBlattNummer(String blattnummer, int id) throws ConnectionException {
-        CidsServerSearch search = new Alb_BaulastblattChecker(blattnummer, id);
-        Collection result = SessionManager.getConnection().customServerSearch(SessionManager.getSession().getUser(), search);
-        if (result != null && result.size() > 0) {
-            Object o = result.iterator().next();
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   blattnummer  DOCUMENT ME!
+     * @param   id           DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  ConnectionException  DOCUMENT ME!
+     * @throws  RuntimeException     DOCUMENT ME!
+     */
+    public static boolean checkUniqueBlattNummer(final String blattnummer, final int id) throws ConnectionException {
+        final CidsServerSearch search = new Alb_BaulastblattChecker(blattnummer, id);
+        final Collection result = SessionManager.getConnection()
+                    .customServerSearch(SessionManager.getSession().getUser(), search);
+        if ((result != null) && (result.size() > 0)) {
+            final Object o = result.iterator().next();
             if (o instanceof List) {
-                List<?> innerList = (List<?>) o;
+                final List<?> innerList = (List<?>)o;
                 if (innerList.size() > 0) {
-                    Object countObj = innerList.get(0);
+                    final Object countObj = innerList.get(0);
                     if (countObj instanceof Long) {
-                        long count = (Long) countObj;
+                        final long count = (Long)countObj;
                         if (count < 1) {
 //                                log.debug("blattnummer is unique");
                             return true;
@@ -105,17 +144,31 @@ public class Alb_Constraints {
         throw new RuntimeException("Unbekannter Fehler beim Speichern!");
     }
 
-    public static boolean checkUniqueBaulastNummer(String blattnummer, String laufendeNr, int id) throws ConnectionException {
-        CidsServerSearch search = new Alb_BaulastChecker(blattnummer, laufendeNr, id);
-        Collection result = SessionManager.getConnection().customServerSearch(SessionManager.getSession().getUser(), search);
-        if (result != null && result.size() > 0) {
-            Object o = result.iterator().next();
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   blattnummer  DOCUMENT ME!
+     * @param   laufendeNr   DOCUMENT ME!
+     * @param   id           DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  ConnectionException  DOCUMENT ME!
+     * @throws  RuntimeException     DOCUMENT ME!
+     */
+    public static boolean checkUniqueBaulastNummer(final String blattnummer, final String laufendeNr, final int id)
+            throws ConnectionException {
+        final CidsServerSearch search = new Alb_BaulastChecker(blattnummer, laufendeNr, id);
+        final Collection result = SessionManager.getConnection()
+                    .customServerSearch(SessionManager.getSession().getUser(), search);
+        if ((result != null) && (result.size() > 0)) {
+            final Object o = result.iterator().next();
             if (o instanceof List) {
-                List<?> innerList = (List<?>) o;
+                final List<?> innerList = (List<?>)o;
                 if (innerList.size() > 0) {
-                    Object countObj = innerList.get(0);
+                    final Object countObj = innerList.get(0);
                     if (countObj instanceof Long) {
-                        long count = (Long) countObj;
+                        final long count = (Long)countObj;
                         if (count < 1) {
                             return true;
                         } else {
@@ -128,11 +181,22 @@ public class Alb_Constraints {
         throw new RuntimeException("Unbekannter Fehler beim Speichern!");
     }
 
-    public static List<String> getBaulastenOhneBelastestesFlurstueckFromBlatt(CidsBean baulastBlattBean) {
-        List<String> result = new ArrayList<String>();
-        List<CidsBean> baulastenList = CidsBeanSupport.getBeanCollectionFromProperty(baulastBlattBean, "baulasten");
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   baulastBlattBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  RuntimeException  DOCUMENT ME!
+     */
+    public static List<String> getBaulastenOhneBelastestesFlurstueckFromBlatt(final CidsBean baulastBlattBean) {
+        final List<String> result = new ArrayList<String>();
+        final List<CidsBean> baulastenList = CidsBeanSupport.getBeanCollectionFromProperty(
+                baulastBlattBean,
+                "baulasten");
         if (baulastenList != null) {
-            for (CidsBean baulast : baulastenList) {
+            for (final CidsBean baulast : baulastenList) {
                 if (!checkBaulastHasBelastetesFlurstueck(baulast)) {
                     result.add(baulast.toString());
                 }
@@ -143,10 +207,19 @@ public class Alb_Constraints {
         return result;
     }
 
-    public static boolean checkBaulastHasBelastetesFlurstueck(CidsBean baulastBean) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   baulastBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static boolean checkBaulastHasBelastetesFlurstueck(final CidsBean baulastBean) {
         if (baulastBean != null) {
-            List<CidsBean> fsList = CidsBeanSupport.getBeanCollectionFromProperty(baulastBean, "flurstuecke_belastet");
-            return fsList != null && fsList.size() > 0;
+            final List<CidsBean> fsList = CidsBeanSupport.getBeanCollectionFromProperty(
+                    baulastBean,
+                    "flurstuecke_belastet");
+            return (fsList != null) && (fsList.size() > 0);
         }
         return false;
     }

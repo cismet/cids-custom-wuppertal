@@ -1,16 +1,26 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import de.cismet.tools.gui.RoundedPanel;
-import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
 import Sirius.navigator.tools.BrowserLauncher;
+
 import com.vividsolutions.jts.geom.Geometry;
-import de.cismet.cids.annotations.AggregationRenderer;
-import de.cismet.cids.annotations.CidsAttribute;
-import de.cismet.cids.annotations.CidsAttributeVector;
-import de.cismet.cids.custom.deprecated.JBreakLabel;
-import de.cismet.cids.custom.deprecated.JLoadDots;
-import de.cismet.cids.custom.objectrenderer.utils.PrintingWaitDialog;
-import de.cismet.tools.gui.StaticSwingTools;
+
+import net.sf.jasperreports.engine.JRPrintPage;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JRViewer;
+
+import org.jdesktop.swingx.JXHyperlink;
+import org.jdesktop.swingx.graphics.ShadowRenderer;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -25,111 +35,170 @@ import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorConvertOp;
+
 import java.net.URL;
+
 import java.sql.Timestamp;
+
 import java.text.DateFormat;
+
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Vector;
+
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import net.sf.jasperreports.engine.JRPrintPage;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.view.JRViewer;
-import org.jdesktop.swingx.JXHyperlink;
-import org.jdesktop.swingx.graphics.ShadowRenderer;
+
+import de.cismet.cids.annotations.AggregationRenderer;
+import de.cismet.cids.annotations.CidsAttribute;
+import de.cismet.cids.annotations.CidsAttributeVector;
+
+import de.cismet.cids.custom.deprecated.JBreakLabel;
+import de.cismet.cids.custom.deprecated.JLoadDots;
+import de.cismet.cids.custom.objectrenderer.utils.PrintingWaitDialog;
+
+import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
+
+import de.cismet.tools.gui.RoundedPanel;
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
- * de.cismet.cids.objectrenderer.CoolLuftBildRenderer
+ * de.cismet.cids.objectrenderer.CoolLuftBildRenderer.
  *
- * Renderer speziell fuer Luftbildschraegaufnahmen.
+ * <p>Renderer speziell fuer Luftbildschraegaufnahmen.</p>
  *
- * @author nhaffke
+ * @author   nhaffke
+ * @version  $Revision$, $Date$
  */
 @AggregationRenderer
 public class LuftbildschraegaufnahmenRenderer extends CoolPanel {
-    
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final String ERROR_STR = "/de/cismet/cids/tools/metaobjectrenderer/examples/error.png";
+
+    private static final String TITLE = "Luftbildschr\u00E4gaufnahme";
+    private static final String TITLE_AGR = "Luftbildschr\u00E4gaufnahmen";
+
+    //~ Instance fields --------------------------------------------------------
+
     // Rendererzuweisungen
     @CidsAttribute("NAME")
     public String name = "";
-    
+
     @CidsAttribute("BILDNUMMER")
     public String nummer = "";
-    
+
     @CidsAttribute("Strasse/Lage")
     public String lage = "";
-    
+
     @CidsAttribute("Hinweise")
     public String hinweise = "";
-    
+
     @CidsAttribute("Aufnahmedatum")
     public Timestamp aufnahme = null;
-    
+
     @CidsAttribute("Erfassungsdatum")
     public Timestamp erfassung = null;
-    
+
     @CidsAttribute("Datum der Aktualisierung")
     public Timestamp aktualisierung = null;
-    
+
     @CidsAttribute("Auftraggeber")
     public String auftraggeber = "";
-    
+
     @CidsAttribute("Fotograf")
     public String fotograf = "";
-    
+
     @CidsAttribute("Filmart")
     public String filmart = "";
-    
+
     @CidsAttribute("Bild im Original vorr\u00E4tig")
     public String bildOriginal = "";
-    
+
     @CidsAttribute("Dateiname")
     public String dateiname = "";
-    
+
     @CidsAttribute("Organisationskennzeichen")
     public String orgaKennzeichen = "";
-    
+
 //    @CidsAttribute("DESCRIPTION")
     public URL link = null;
-    
+
     @CidsAttribute("Georeferenz.GEO_STRING")
     public Geometry geometry = null;
-    
+
     // AggregationRenderer-Zuweisungen
     @CidsAttributeVector("Strasse/Lage")
     public Vector<String> agrLage = new Vector();
-    
+
     @CidsAttributeVector("Hinweise")
     public Vector<String> agrHinweis = new Vector();
-    
+
     @CidsAttributeVector("Dateiname")
     public Vector<String> agrDatei = new Vector();
-    
+
     @CidsAttributeVector("BILDNUMMER")
     public Vector<String> agrNummer = new Vector();
-    
+
     @CidsAttributeVector("Georeferenz.GEO_STRING")
     public Vector<Geometry> geoAgr = new Vector();
-    
-    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
-    private static final String ERROR_STR = "/de/cismet/cids/tools/metaobjectrenderer/examples/error.png";
-    PrintingWaitDialog printingWaitDialog= new PrintingWaitDialog(StaticSwingTools.getParentFrame(this),true);
+    PrintingWaitDialog printingWaitDialog = new PrintingWaitDialog(StaticSwingTools.getParentFrame(this), true);
     Properties properties = new Properties();
-    
-    private static final String TITLE = "Luftbildschr\u00E4gaufnahme";
-    private static final String TITLE_AGR = "Luftbildschr\u00E4gaufnahmen";
-    private ImageIcon error=new ImageIcon(getClass().getResource(ERROR_STR));
-    
+
+    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
+    private ImageIcon error = new ImageIcon(getClass().getResource(ERROR_STR));
+
     private Geometry allGeom;
     private JXHyperlink[] jxhImages;
-    
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private org.jdesktop.swingx.JXHyperlink jxhAgrPrint;
+    private org.jdesktop.swingx.JXHyperlink jxhPicture;
+    private org.jdesktop.swingx.JXHyperlink jxhPrint;
+    private javax.swing.JLabel lblAgrTitle;
+    private javax.swing.JLabel lblAktdat;
+    private javax.swing.JLabel lblAufnahmedat;
+    private javax.swing.JLabel lblAuftraggeber;
+    private javax.swing.JLabel lblBildOrig;
+    private javax.swing.JLabel lblDateiname;
+    private javax.swing.JLabel lblErfassungsdat;
+    private javax.swing.JLabel lblFilmart;
+    private javax.swing.JLabel lblFotograf;
+    private javax.swing.JLabel lblHinweise;
+    private javax.swing.JLabel lblLage;
+    private javax.swing.JLabel lblLink;
+    private javax.swing.JLabel lblOrganisation;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JPanel panAggregation;
+    private javax.swing.JPanel panAgrContent;
+    private javax.swing.JPanel panAgrTitle;
+    private javax.swing.JPanel panContent;
+    private javax.swing.JPanel panInter;
+    private javax.swing.JPanel panMap;
+    private javax.swing.JPanel panPicture;
+    private javax.swing.JPanel panSpinner;
+    private javax.swing.JPanel panTitle;
+    // End of variables declaration//GEN-END:variables
+
+    //~ Constructors -----------------------------------------------------------
+
     /**
      * Konstruktor.
      */
@@ -143,336 +212,395 @@ public class LuftbildschraegaufnahmenRenderer extends CoolPanel {
         extraAggregationRendererComponent = panAggregation;
         try {
             properties.load(getClass().getResourceAsStream("/renderer.properties"));
-        } catch(Exception e){
-            log.warn("Fehler beim Laden der Properties",e);
+        } catch (Exception e) {
+            log.warn("Fehler beim Laden der Properties", e);
         }
         allGeom = null;
     }
-    
+
+    //~ Methods ----------------------------------------------------------------
+
     @Override
     public void assignAggregation() {
         // GridLayout der Anzahl Objekte anpassen
-        if (agrDatei.size() % 3 == 0)
-            ((GridLayout)panAgrContent.getLayout()).setRows(agrDatei.size()/3);
-        else if (agrDatei.size() % 3 == 1)
-            ((GridLayout)panAgrContent.getLayout()).setRows((agrDatei.size()+2)/3);
-        else
-            ((GridLayout)panAgrContent.getLayout()).setRows((agrDatei.size()+1)/3);
-        
+        if ((agrDatei.size() % 3) == 0) {
+            ((GridLayout)panAgrContent.getLayout()).setRows(agrDatei.size() / 3);
+        } else if ((agrDatei.size() % 3) == 1) {
+            ((GridLayout)panAgrContent.getLayout()).setRows((agrDatei.size() + 2) / 3);
+        } else {
+            ((GridLayout)panAgrContent.getLayout()).setRows((agrDatei.size() + 1) / 3);
+        }
+
         lblAgrTitle.setText(agrDatei.size() + " " + TITLE_AGR);
         jxhImages = new JXHyperlink[agrDatei.size()];
-        
+
         // In Schleife alle Objekte erzeugen und einfuegen
         for (int i = 0; i < agrDatei.size(); i++) {
-            if (allGeom != null && geoAgr.get(i) != null) {
+            if ((allGeom != null) && (geoAgr.get(i) != null)) {
                 allGeom = allGeom.union(geoAgr.get(i));
-            }
-            else if (allGeom == null && geoAgr.get(i) != null) {
+            } else if ((allGeom == null) && (geoAgr.get(i) != null)) {
                 allGeom = geoAgr.get(i);
             }
-            RoundedPanel rnd = new RoundedPanel();
+            final RoundedPanel rnd = new RoundedPanel();
             rnd.setLayout(new BorderLayout());
-            JLabel lblAgrLage = new JLabel(agrLage.get(i));
+            final JLabel lblAgrLage = new JLabel(agrLage.get(i));
             lblAgrLage.setFont(new Font("Tahoma", Font.BOLD, 11));
-            JLabel lblAgrHinweis = new JBreakLabel(agrHinweis.get(i), 50, true);
-            JPanel panLabels = new JPanel(new BorderLayout());
-            panLabels.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+            final JLabel lblAgrHinweis = new JBreakLabel(agrHinweis.get(i), 50, true);
+            final JPanel panLabels = new JPanel(new BorderLayout());
+            panLabels.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
             panLabels.setOpaque(false);
-            JPanel panArr = new JPanel(new FlowLayout(FlowLayout.CENTER));
-            panArr.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+            final JPanel panArr = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            panArr.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
             panArr.setOpaque(false);
-            
+
             jxhImages[i] = new JXHyperlink();
             jxhImages[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/load.png")));
             jxhImages[i].setFocusPainted(false);
             panArr.add(jxhImages[i]);
-            
+
             panLabels.add(lblAgrLage, BorderLayout.NORTH);
             panLabels.add(lblAgrHinweis, BorderLayout.CENTER);
             rnd.add(panLabels, BorderLayout.NORTH);
             rnd.add(panArr, BorderLayout.SOUTH);
             panAgrContent.add(rnd);
-            
+
             // Luftbild von Server laden
             final int index = i;
             final Thread t = new Thread(new Runnable() {
-                public void run() {
-                    try {
-                        String url = properties.getProperty("luftbildschraegaufnahmenservicesmall");
-                        ImageIcon ii;
-                        if (url == null) {
-                            log.fatal("Aggregation Wupp " + EventQueue.isDispatchThread());
-                            ii = new ImageIcon(new URL("http://s10220:8098/luft/tiffer?bnr=" +
-                                    agrNummer.get(index) + "&scale=0.075&format=JPG"));
-                        } else{
-                            log.fatal("Aggregation Kif " + EventQueue.isDispatchThread());
-                            String newUrl = url.replaceAll("<cismet::nummer>",agrNummer.get(index));
-                            ii=new ImageIcon(new URL(newUrl));
-                        }
-                        
-                        // falls kein Bild geladen werden konnte, erzeuge Ausnahme
-                        if (ii == null) {
-                            throw new Exception("Luftbildaufnahme konnte nicht geladen werden.");
-                        }
-                        ShadowRenderer renderer = new ShadowRenderer(shadowLength, shadowIntensity, shadowColor);
-                        BufferedImage temp = new BufferedImage(ii.getIconWidth(),ii.getIconHeight(),
-                                BufferedImage.TYPE_4BYTE_ABGR);
-                        Graphics tg = temp.createGraphics();
-                        tg.drawImage(ii.getImage(),0,0,null);
-                        tg.dispose();
-                        
-                        // Schatten erstellen
-                        BufferedImage shadow = renderer.createShadow(temp);
-                        
-                        BufferedImage result = new BufferedImage(ii.getIconWidth()+6,ii.getIconHeight()+6,
-                                BufferedImage.TYPE_INT_ARGB);
-                        Graphics rg = result.createGraphics();
-                        rg.drawImage(shadow,0,0,null);
-                        rg.drawImage(temp,0,0,null);
-                        rg.setColor(new Color(0,0,0,120));
-                        rg.drawRect(0,0,ii.getIconWidth(),ii.getIconHeight());
-                        rg.dispose();
-                        shadow.flush();
-                        
-                        // RollOver-Image erzeugen
-                        BufferedImage resGray = null;
-                        ColorSpace cs     = ColorSpace.getInstance(ColorSpace.CS_GRAY);
-                        ColorConvertOp op = new ColorConvertOp(cs,null);
-                        resGray = op.filter(result,null);
-                        
-                        // Images zu konstanten Icons machen fuer Thread
-                        final ImageIcon icon_orig = new ImageIcon(result);
-                        final ImageIcon icon_gray = new ImageIcon(resGray);
-                        
-                        EventQueue.invokeLater(new Runnable() {
-                            public void run() {
-                                jxhImages[index].setIcon(icon_orig);
-                                jxhImages[index].setRolloverEnabled(true);
-                                jxhImages[index].setRolloverIcon(icon_gray);
-                                jxhImages[index].addActionListener(new ActionListener() {
-                                    public void actionPerformed(ActionEvent e) {
-                                        String url = "";
-                                        try {
-                                            url = properties.getProperty("luftbildschraegaufnahmenservicefull");
-                                            if (url == null) {
-                                                BrowserLauncher.openURL("http://s10220:8098/luft/tiffer?bnr=" +
-                                                        agrNummer.get(index) + "&scale=1&format=JPG");
-                                            } else{
-                                                String newUrl = url.replaceAll("<cismet::nummer>",agrNummer.get(index));
-                                                BrowserLauncher.openURL(newUrl);
-                                            }
-                                        } catch (Exception ex) {
-                                            log.error("Fehler beim OEffnen der URL \"" + url + "\"",ex);
+
+                        @Override
+                        public void run() {
+                            try {
+                                String url = properties.getProperty("luftbildschraegaufnahmenservicesmall");
+                                ImageIcon ii;
+                                if (url == null) {
+                                    log.fatal("Aggregation Wupp " + EventQueue.isDispatchThread());
+                                    ii = new ImageIcon(
+                                            new URL(
+                                                "http://s10220:8098/luft/tiffer?bnr="
+                                                        + agrNummer.get(index)
+                                                        + "&scale=0.075&format=JPG"));
+                                } else {
+                                    log.fatal("Aggregation Kif " + EventQueue.isDispatchThread());
+                                    final String newUrl = url.replaceAll("<cismet::nummer>", agrNummer.get(index));
+                                    ii = new ImageIcon(new URL(newUrl));
+                                }
+
+                                // falls kein Bild geladen werden konnte, erzeuge Ausnahme
+                                if (ii == null) {
+                                    throw new Exception("Luftbildaufnahme konnte nicht geladen werden.");
+                                }
+                                final ShadowRenderer renderer = new ShadowRenderer(
+                                        shadowLength,
+                                        shadowIntensity,
+                                        shadowColor);
+                                final BufferedImage temp = new BufferedImage(
+                                        ii.getIconWidth(),
+                                        ii.getIconHeight(),
+                                        BufferedImage.TYPE_4BYTE_ABGR);
+                                final Graphics tg = temp.createGraphics();
+                                tg.drawImage(ii.getImage(), 0, 0, null);
+                                tg.dispose();
+
+                                // Schatten erstellen
+                                final BufferedImage shadow = renderer.createShadow(temp);
+
+                                final BufferedImage result = new BufferedImage(
+                                        ii.getIconWidth()
+                                                + 6,
+                                        ii.getIconHeight()
+                                                + 6,
+                                        BufferedImage.TYPE_INT_ARGB);
+                                final Graphics rg = result.createGraphics();
+                                rg.drawImage(shadow, 0, 0, null);
+                                rg.drawImage(temp, 0, 0, null);
+                                rg.setColor(new Color(0, 0, 0, 120));
+                                rg.drawRect(0, 0, ii.getIconWidth(), ii.getIconHeight());
+                                rg.dispose();
+                                shadow.flush();
+
+                                // RollOver-Image erzeugen
+                                BufferedImage resGray = null;
+                                final ColorSpace cs = ColorSpace.getInstance(ColorSpace.CS_GRAY);
+                                final ColorConvertOp op = new ColorConvertOp(cs, null);
+                                resGray = op.filter(result, null);
+
+                                // Images zu konstanten Icons machen fuer Thread
+                                final ImageIcon icon_orig = new ImageIcon(result);
+                                final ImageIcon icon_gray = new ImageIcon(resGray);
+
+                                EventQueue.invokeLater(new Runnable() {
+
+                                        @Override
+                                        public void run() {
+                                            jxhImages[index].setIcon(icon_orig);
+                                            jxhImages[index].setRolloverEnabled(true);
+                                            jxhImages[index].setRolloverIcon(icon_gray);
+                                            jxhImages[index].addActionListener(new ActionListener() {
+
+                                                    @Override
+                                                    public void actionPerformed(final ActionEvent e) {
+                                                        String url = "";
+                                                        try {
+                                                            url = properties.getProperty(
+                                                                    "luftbildschraegaufnahmenservicefull");
+                                                            if (url == null) {
+                                                                BrowserLauncher.openURL(
+                                                                    "http://s10220:8098/luft/tiffer?bnr="
+                                                                            + agrNummer.get(index)
+                                                                            + "&scale=1&format=JPG");
+                                                            } else {
+                                                                final String newUrl = url.replaceAll(
+                                                                        "<cismet::nummer>",
+                                                                        agrNummer.get(index));
+                                                                BrowserLauncher.openURL(newUrl);
+                                                            }
+                                                        } catch (Exception ex) {
+                                                            log.error(
+                                                                "Fehler beim OEffnen der URL \""
+                                                                        + url
+                                                                        + "\"",
+                                                                ex);
+                                                        }
+                                                    }
+                                                });
                                         }
-                                    }
-                                });
+                                    });
+                            } catch (Exception e) {
+                                log.error(
+                                    "Konnte Bild aus URL \"http://s10220:8098/luft/tiffer?bnr="
+                                            + agrNummer.get(index)
+                                            + "&scale=0.15&format=JPG\" nicht erzeugen.");
+
+                                EventQueue.invokeLater(new Runnable() {
+
+                                        @Override
+                                        public void run() {
+                                            jxhImages[index].setIcon(error);
+                                        }
+                                    });
                             }
-                        });
-                    } catch(Exception e) {
-                        log.error("Konnte Bild aus URL \"http://s10220:8098/luft/tiffer?bnr=" +
-                                agrNummer.get(index) + "&scale=0.15&format=JPG\" nicht erzeugen.");
-                        
-                        EventQueue.invokeLater(new Runnable() {
-                            public void run() {
-                                jxhImages[index].setIcon(error);
-                            }
-                        });
-                    }
-                }
-            });
+                        }
+                    });
             t.start();
         }
         ((CoolPanel)panAggregation).setGeometry(allGeom);
     }
-    
+
     @Override
     public void assignSingle() {
-        if (!name.equals(""))
+        if (!name.equals("")) {
             lblTitle.setText(TITLE + " - " + name);
-        else
+        } else {
             lblTitle.setText(TITLE);
-        
-        if (!lage.equals(""))
+        }
+
+        if (!lage.equals("")) {
             lblLage.setText(lage);
-        else {
+        } else {
             lblLage.setVisible(false);
             jLabel1.setVisible(false);
         }
-        
-        if (!hinweise.equals(""))
+
+        if (!hinweise.equals("")) {
             lblHinweise.setText(hinweise.trim());
-        else {
+        } else {
             lblHinweise.setVisible(false);
             jLabel2.setVisible(false);
         }
-        
-        if (aufnahme != null)
+
+        if (aufnahme != null) {
             lblAufnahmedat.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY).format(aufnahme));
-        else {
+        } else {
             lblAufnahmedat.setVisible(false);
             jLabel3.setVisible(false);
         }
-        
-        if (erfassung != null)
+
+        if (erfassung != null) {
             lblErfassungsdat.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY).format(erfassung));
-        else {
+        } else {
             lblErfassungsdat.setVisible(false);
             jLabel4.setVisible(false);
         }
-        
-        if (aktualisierung != null)
+
+        if (aktualisierung != null) {
             lblAktdat.setText(DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMANY).format(aktualisierung));
-        else {
+        } else {
             lblAktdat.setVisible(false);
             jLabel5.setVisible(false);
         }
-        
-        if (!auftraggeber.equals(""))
+
+        if (!auftraggeber.equals("")) {
             lblAuftraggeber.setText(auftraggeber);
-        else {
+        } else {
             lblAuftraggeber.setVisible(false);
             jLabel6.setVisible(false);
         }
-        
-        if (!fotograf.equals(""))
+
+        if (!fotograf.equals("")) {
             lblFotograf.setText(fotograf);
-        else {
+        } else {
             lblFotograf.setVisible(false);
             jLabel7.setVisible(false);
         }
-        
-        if (!filmart.equals(""))
+
+        if (!filmart.equals("")) {
             lblFilmart.setText(filmart);
-        else {
+        } else {
             lblFilmart.setVisible(false);
             jLabel8.setVisible(false);
         }
-        
+
         if (!bildOriginal.equals("")) {
-            if (bildOriginal.equals("1"))
+            if (bildOriginal.equals("1")) {
                 lblBildOrig.setText("ja");
-            else
+            } else {
                 lblBildOrig.setText("nein");
+            }
         } else {
             lblBildOrig.setVisible(false);
             jLabel9.setVisible(false);
         }
-        
-        if (!dateiname.equals(""))
+
+        if (!dateiname.equals("")) {
             lblDateiname.setText(dateiname);
-        else {
+        } else {
             lblDateiname.setVisible(false);
             jLabel10.setVisible(false);
         }
-        
-        if (!orgaKennzeichen.equals(""))
+
+        if (!orgaKennzeichen.equals("")) {
             lblOrganisation.setText(orgaKennzeichen);
-        else {
+        } else {
             lblOrganisation.setVisible(false);
             jLabel11.setVisible(false);
         }
-        
-        if (link != null)
+
+        if (link != null) {
             lblLink.setText(link.toString());
-        else {
+        } else {
             lblLink.setVisible(false);
             jLabel12.setVisible(false);
         }
-        
+
         if (geometry != null) {
             super.setGeometry(geometry);
         }
-        
-        Thread t = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    String url=properties.getProperty("luftbildschraegaufnahmenservicesmall");
-                    ImageIcon i;
-                    if (url==null) {
-                        log.fatal("Single Wupp " + EventQueue.isDispatchThread());
-                        i=new ImageIcon(new URL("http://s10220:8098/luft/tiffer?bnr="+nummer+"&scale=0.075&format=JPG"));
-                    } else{
-                        log.fatal("Single Kif " + EventQueue.isDispatchThread());
-                        String newUrl=url.replaceAll("<cismet::nummer>",nummer);
-                        i=new ImageIcon(new URL(newUrl));
-                    }
-                    
-                    // falls kein Bild geladen werden konnte, erzeuge Ausnahme
-                    if (i == null) {
-                        throw new Exception("Luftbildaufnahme konnte nicht geladen werden.");
-                    }
-                    ShadowRenderer renderer = new ShadowRenderer(3, 0.5f, Color.BLACK);
-                    BufferedImage temp = new BufferedImage(i.getIconWidth(),i.getIconHeight(),
-                            BufferedImage.TYPE_4BYTE_ABGR);
-                    Graphics tg = temp.createGraphics();
-                    tg.drawImage(i.getImage(),0,0,null);
-                    tg.dispose();
-                    
-                    // Schatten erstellen
-                    BufferedImage shadow = renderer.createShadow(temp);
-                    
-                    BufferedImage result = new BufferedImage(i.getIconWidth()+6,i.getIconHeight()+6,
-                            BufferedImage.TYPE_4BYTE_ABGR);
-                    Graphics rg = result.createGraphics();
-                    rg.drawImage(shadow,0,0,null);
-                    rg.drawImage(temp,0,0,null);
-                    rg.setColor(new Color(0,0,0,120));
-                    rg.drawRect(0,0,i.getIconWidth(),i.getIconHeight());
-                    rg.dispose();
-                    shadow.flush();
-                    final ImageIcon icon = new ImageIcon(result);
-                    
-                    EventQueue.invokeLater(new Runnable() {
-                        public void run() {
-                            jxhPicture.setIcon(icon);
-                            jxhPicture.setToolTipText("Klicken, um Bild im Browser zu ?ffnen");
-                            jxhPicture.addActionListener(new ActionListener() {
-                                public void actionPerformed(ActionEvent e) {
-                                    String url = "";
-                                    try {
-                                        url = properties.getProperty("luftbildschraegaufnahmenservicefull");
-                                        if (url == null) {
-                                            BrowserLauncher.openURL("http://s10220:8098/luft/tiffer?bnr=" +
-                                                    nummer + "&scale=1&format=JPG");
-                                        } else{
-                                            String newUrl = url.replaceAll("<cismet::nummer>",nummer);
-                                            BrowserLauncher.openURL(newUrl);
-                                        }
-                                    } catch (Exception ex) {
-                                        log.error("Fehler beim ?ffnen der URL \"" + url + "\"", ex);
+
+        final Thread t = new Thread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        try {
+                            String url = properties.getProperty("luftbildschraegaufnahmenservicesmall");
+                            ImageIcon i;
+                            if (url == null) {
+                                log.fatal("Single Wupp " + EventQueue.isDispatchThread());
+                                i = new ImageIcon(
+                                        new URL(
+                                            "http://s10220:8098/luft/tiffer?bnr="
+                                                    + nummer
+                                                    + "&scale=0.075&format=JPG"));
+                            } else {
+                                log.fatal("Single Kif " + EventQueue.isDispatchThread());
+                                final String newUrl = url.replaceAll("<cismet::nummer>", nummer);
+                                i = new ImageIcon(new URL(newUrl));
+                            }
+
+                            // falls kein Bild geladen werden konnte, erzeuge Ausnahme
+                            if (i == null) {
+                                throw new Exception("Luftbildaufnahme konnte nicht geladen werden.");
+                            }
+                            final ShadowRenderer renderer = new ShadowRenderer(3, 0.5f, Color.BLACK);
+                            final BufferedImage temp = new BufferedImage(
+                                    i.getIconWidth(),
+                                    i.getIconHeight(),
+                                    BufferedImage.TYPE_4BYTE_ABGR);
+                            final Graphics tg = temp.createGraphics();
+                            tg.drawImage(i.getImage(), 0, 0, null);
+                            tg.dispose();
+
+                            // Schatten erstellen
+                            final BufferedImage shadow = renderer.createShadow(temp);
+
+                            final BufferedImage result = new BufferedImage(
+                                    i.getIconWidth()
+                                            + 6,
+                                    i.getIconHeight()
+                                            + 6,
+                                    BufferedImage.TYPE_4BYTE_ABGR);
+                            final Graphics rg = result.createGraphics();
+                            rg.drawImage(shadow, 0, 0, null);
+                            rg.drawImage(temp, 0, 0, null);
+                            rg.setColor(new Color(0, 0, 0, 120));
+                            rg.drawRect(0, 0, i.getIconWidth(), i.getIconHeight());
+                            rg.dispose();
+                            shadow.flush();
+                            final ImageIcon icon = new ImageIcon(result);
+
+                            EventQueue.invokeLater(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        jxhPicture.setIcon(icon);
+                                        jxhPicture.setToolTipText("Klicken, um Bild im Browser zu ?ffnen");
+                                        jxhPicture.addActionListener(new ActionListener() {
+
+                                                @Override
+                                                public void actionPerformed(final ActionEvent e) {
+                                                    String url = "";
+                                                    try {
+                                                        url = properties.getProperty(
+                                                                "luftbildschraegaufnahmenservicefull");
+                                                        if (url == null) {
+                                                            BrowserLauncher.openURL(
+                                                                "http://s10220:8098/luft/tiffer?bnr="
+                                                                        + nummer
+                                                                        + "&scale=1&format=JPG");
+                                                        } else {
+                                                            final String newUrl = url.replaceAll(
+                                                                    "<cismet::nummer>",
+                                                                    nummer);
+                                                            BrowserLauncher.openURL(newUrl);
+                                                        }
+                                                    } catch (Exception ex) {
+                                                        log.error("Fehler beim ?ffnen der URL \"" + url + "\"", ex);
+                                                    }
+                                                }
+                                            });
                                     }
-                                }
-                            });
+                                });
+                        } catch (Exception e) {
+                            log.error(
+                                "Konnte Bild aus URL \"http://s10220:8098/luft/tiffer?bnr="
+                                        + nummer
+                                        + "&scale=0.15&format=JPG\" nicht erzeugen.");
+                            EventQueue.invokeLater(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        jxhPicture.setIcon(error);
+                                    }
+                                });
                         }
-                    });
-                } catch(Exception e) {
-                    log.error("Konnte Bild aus URL \"http://s10220:8098/luft/tiffer?bnr=" +
-                            nummer + "&scale=0.15&format=JPG\" nicht erzeugen.");
-                    EventQueue.invokeLater(new Runnable() {
-                        public void run() {
-                            jxhPicture.setIcon(error);
-                        }
-                    });
-                }
-                
-            }
-        });
+                    }
+                });
         t.start();
     }
-    
+
     /**
      * Gibt das Verhaeltnis der Breite des Renderers zur Breite des internen Browsers aus.
-     * @return Verhaeltnis Renderers / interner Browser
+     *
+     * @return  Verhaeltnis Renderers / interner Browser
      */
     @Override
     public double getWidthRatio() {
         return 1.0;
     }
-    
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -524,34 +652,40 @@ public class LuftbildschraegaufnahmenRenderer extends CoolPanel {
         jxhAgrPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/printer.png"))); // NOI18N
         jxhAgrPrint.setFocusPainted(false);
         jxhAgrPrint.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AgrPrintActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    AgrPrintActionPerformed(evt);
+                }
+            });
 
         lblAgrTitle.setFont(new java.awt.Font("Tahoma", 1, 18));
         lblAgrTitle.setText("2 Luftbildaufnahmen");
 
-        javax.swing.GroupLayout panAgrTitleLayout = new javax.swing.GroupLayout(panAgrTitle);
+        final javax.swing.GroupLayout panAgrTitleLayout = new javax.swing.GroupLayout(panAgrTitle);
         panAgrTitle.setLayout(panAgrTitleLayout);
         panAgrTitleLayout.setHorizontalGroup(
-            panAgrTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panAgrTitleLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblAgrTitle)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
-                .addComponent(jxhAgrPrint, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
+            panAgrTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                javax.swing.GroupLayout.Alignment.TRAILING,
+                panAgrTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblAgrTitle).addPreferredGap(
+                    javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                    62,
+                    Short.MAX_VALUE).addComponent(
+                    jxhAgrPrint,
+                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE).addContainerGap()));
         panAgrTitleLayout.setVerticalGroup(
-            panAgrTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panAgrTitleLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panAgrTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblAgrTitle)
-                    .addComponent(jxhAgrPrint, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+            panAgrTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                panAgrTitleLayout.createSequentialGroup().addContainerGap().addGroup(
+                    panAgrTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
+                        lblAgrTitle).addComponent(
+                        jxhAgrPrint,
+                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                        javax.swing.GroupLayout.PREFERRED_SIZE)).addContainerGap(
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    Short.MAX_VALUE)));
 
         panAggregation.add(panAgrTitle, java.awt.BorderLayout.NORTH);
 
@@ -574,50 +708,56 @@ public class LuftbildschraegaufnahmenRenderer extends CoolPanel {
         jxhPrint.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         jxhPrint.setUnclickedColor(new java.awt.Color(255, 255, 255));
         jxhPrint.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                printActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    printActionPerformed(evt);
+                }
+            });
 
         lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18));
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblTitle.setText("Luftbildschr\u00E4gaufnahme - 571203");
 
-        javax.swing.GroupLayout panTitleLayout = new javax.swing.GroupLayout(panTitle);
+        final javax.swing.GroupLayout panTitleLayout = new javax.swing.GroupLayout(panTitle);
         panTitle.setLayout(panTitleLayout);
         panTitleLayout.setHorizontalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panTitleLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblTitle)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 252, Short.MAX_VALUE)
-                .addComponent(jxhPrint, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
+            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addPreferredGap(
+                    javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                    252,
+                    Short.MAX_VALUE).addComponent(
+                    jxhPrint,
+                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE).addContainerGap()));
         panTitleLayout.setVerticalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panTitleLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jxhPrint, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblTitle))
-                .addContainerGap(13, Short.MAX_VALUE))
-        );
+            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                panTitleLayout.createSequentialGroup().addContainerGap().addGroup(
+                    panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING).addComponent(
+                        jxhPrint,
+                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                        javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(lblTitle)).addContainerGap(
+                    13,
+                    Short.MAX_VALUE)));
 
         add(panTitle, java.awt.BorderLayout.NORTH);
 
         panInter.setOpaque(false);
 
-        javax.swing.GroupLayout panInterLayout = new javax.swing.GroupLayout(panInter);
+        final javax.swing.GroupLayout panInterLayout = new javax.swing.GroupLayout(panInter);
         panInter.setLayout(panInterLayout);
         panInterLayout.setHorizontalGroup(
-            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 600, Short.MAX_VALUE)
-        );
+            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                600,
+                Short.MAX_VALUE));
         panInterLayout.setVerticalGroup(
-            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 14, Short.MAX_VALUE)
-        );
+            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                14,
+                Short.MAX_VALUE));
 
         add(panInter, java.awt.BorderLayout.SOUTH);
 
@@ -628,16 +768,18 @@ public class LuftbildschraegaufnahmenRenderer extends CoolPanel {
         panSpinner.setMinimumSize(new java.awt.Dimension(100, 100));
         panSpinner.setOpaque(false);
 
-        javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
+        final javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
         panSpinner.setLayout(panSpinnerLayout);
         panSpinnerLayout.setHorizontalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                100,
+                Short.MAX_VALUE));
         panSpinnerLayout.setVerticalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                100,
+                Short.MAX_VALUE));
 
         panMap.add(panSpinner, new java.awt.GridBagConstraints());
 
@@ -865,254 +1007,309 @@ public class LuftbildschraegaufnahmenRenderer extends CoolPanel {
         panContent.add(panPicture, gridBagConstraints);
 
         add(panContent, java.awt.BorderLayout.WEST);
-    }// </editor-fold>//GEN-END:initComponents
-    
-    private void AgrPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgrPrintActionPerformed
-        Thread t = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    EventQueue.invokeLater(new Runnable() {
-                        public void run() {
-                            printingWaitDialog.setLocationRelativeTo(StaticSwingTools.getParentFrame(LuftbildschraegaufnahmenRenderer.this));
-                            printingWaitDialog.setVisible(true);
+    } // </editor-fold>//GEN-END:initComponents
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void AgrPrintActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_AgrPrintActionPerformed
+        final Thread t = new Thread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        try {
+                            EventQueue.invokeLater(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        printingWaitDialog.setLocationRelativeTo(
+                                            StaticSwingTools.getParentFrame(LuftbildschraegaufnahmenRenderer.this));
+                                        printingWaitDialog.setVisible(true);
+                                    }
+                                });
+
+                            final String url = properties.getProperty("luftbildschraegaufnahmenservicefull");
+                            final JasperReport jasperReport = (JasperReport)JRLoader.loadObject(
+                                    getClass().getResourceAsStream(
+                                        "/de/cismet/cids/objectrenderer/LuftbildschraegaufnahmenA4H.jasper"));
+                            JasperPrint jasperPrint = null;
+                            try {
+                                for (int j = 0; j < agrNummer.size(); ++j) {
+                                    ImageIcon i;
+                                    if (url == null) {
+                                        i = new ImageIcon(
+                                                new URL(
+                                                    "http://s10220:8098/luft/tiffer?bnr="
+                                                            + nummer
+                                                            + "&scale=1&format=JPG"));
+                                    } else {
+                                        final String newUrl = url.replaceAll("<cismet::nummer>", agrNummer.get(j));
+                                        if (log.isDebugEnabled()) {
+                                            log.debug("Url der LSA:" + newUrl);
+                                        }
+                                        i = new ImageIcon(new URL(newUrl));
+                                    }
+
+                                    // falls kein Bild geladen werden konnte, erzeuge Ausnahme
+                                    if (i == null) {
+                                        throw new Exception("Luftbildaufnahme konnte nicht geladen werden.");
+                                    }
+
+                                    ImageIcon icon = i;
+
+                                    final int w = icon.getIconWidth();
+                                    final int h = icon.getIconHeight();
+                                    if (w > h) {
+                                        try {
+                                            // drehen
+                                            final BufferedImage src = new BufferedImage(
+                                                    icon.getIconWidth(),
+                                                    icon.getIconHeight(),
+                                                    BufferedImage.TYPE_4BYTE_ABGR);
+                                            final int iSizeDiff = src.getWidth() - src.getHeight();
+
+                                            final Graphics2D o2d = (Graphics2D)src.createGraphics();
+                                            o2d.drawImage(icon.getImage(), 0, 0, null);
+                                            o2d.dispose();
+
+                                            final AffineTransform affineTransform = AffineTransform.getRotateInstance(
+                                                    Math.toRadians(90),
+                                                    src.getWidth()
+                                                            / 2,
+                                                    src.getHeight()
+                                                            / 2);
+                                            final BufferedImage rotatedImage = new BufferedImage(
+                                                    src.getHeight(),
+                                                    src.getWidth(),
+                                                    src.getType());
+                                            final Graphics2D g = (Graphics2D)rotatedImage.getGraphics();
+                                            g.setTransform(affineTransform);
+                                            g.drawImage(src, iSizeDiff / 2, iSizeDiff / 2, null);
+                                            icon = new ImageIcon(rotatedImage);
+                                        } catch (Exception ex) {
+                                            log.error("Drehen des Images fehlgeschlagen.", ex);
+                                        }
+                                    }
+                                    if (log.isDebugEnabled()) {
+                                        log.debug("LSA hinzugef\u00FCgt");
+                                    }
+                                    final HashMap params = new HashMap();
+                                    params.put("Ueberschrift", lage + " (" + TITLE + ")");
+                                    params.put("Unterschrift", hinweise);
+                                    params.put("image", icon.getImage());
+                                    if (log.isDebugEnabled()) {
+                                        log.debug(params);
+                                    }
+                                    if (jasperPrint == null) {
+                                        jasperPrint = JasperFillManager.fillReport(jasperReport, params);
+                                    } else {
+                                        jasperPrint.addPage(
+                                            (JRPrintPage)JasperFillManager.fillReport(jasperReport, params).getPages()
+                                                        .get(0));
+                                    }
+                                }
+
+                                final JasperPrint jasperPrintCopy = jasperPrint;
+                                EventQueue.invokeLater(new Runnable() {
+
+                                        @Override
+                                        public void run() {
+                                            printingWaitDialog.setVisible(false);
+                                            final JRViewer aViewer = new JRViewer(jasperPrintCopy);
+                                            aViewer.setZoomRatio(0.35f);
+                                            final JFrame aFrame = new JFrame("Druckvorschau");
+                                            aFrame.getContentPane().add(aViewer);
+                                            final java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit()
+                                                        .getScreenSize();
+                                            aFrame.setSize(screenSize.width / 2, screenSize.height / 2);
+                                            final java.awt.Insets insets = aFrame.getInsets();
+                                            aFrame.setSize(
+                                                aFrame.getWidth()
+                                                        + insets.left
+                                                        + insets.right,
+                                                aFrame.getHeight()
+                                                        + insets.top
+                                                        + insets.bottom
+                                                        + 20);
+                                            aFrame.setLocation(
+                                                (screenSize.width - aFrame.getWidth())
+                                                        / 2,
+                                                (screenSize.height - aFrame.getHeight())
+                                                        / 2);
+                                            aFrame.setVisible(true);
+                                        }
+                                    });
+                            } catch (Throwable e) {
+                                log.error("Fehler beim Jaspern", e);
+                                EventQueue.invokeLater(new Runnable() {
+
+                                        @Override
+                                        public void run() {
+                                            printingWaitDialog.setVisible(false);
+                                        }
+                                    });
+                            }
+                        } catch (Exception e) {
+                            log.error(
+                                "Fehler beim laden des Bildes mit URL \"http://s10220:8098/luft/tiffer?bnr="
+                                        + nummer
+                                        + "&scale=1&format=JPG\"",
+                                e);
+                            EventQueue.invokeLater(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        printingWaitDialog.setVisible(false);
+                                    }
+                                });
                         }
-                    });
-                    
-                    final String url=properties.getProperty("luftbildschraegaufnahmenservicefull");
-                    JasperReport jasperReport=(JasperReport)JRLoader.loadObject(getClass().getResourceAsStream("/de/cismet/cids/objectrenderer/LuftbildschraegaufnahmenA4H.jasper"));
-                    JasperPrint jasperPrint=null;
-                    try {
-                        for (int j=0;j<agrNummer.size();++j) {
+                    }
+                });
+        t.start();
+    } //GEN-LAST:event_AgrPrintActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void printActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_printActionPerformed
+        final Thread t = new Thread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        try {
+                            EventQueue.invokeLater(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        printingWaitDialog.setLocationRelativeTo(
+                                            StaticSwingTools.getParentFrame(LuftbildschraegaufnahmenRenderer.this));
+                                        printingWaitDialog.setVisible(true);
+                                    }
+                                });
+
+                            final String url = properties.getProperty("luftbildschraegaufnahmenservicefull");
                             ImageIcon i;
                             if (url == null) {
-                                i = new ImageIcon(new URL("http://s10220:8098/luft/tiffer?bnr="+nummer+"&scale=1&format=JPG"));
-                            } else{
-                                String newUrl = url.replaceAll("<cismet::nummer>",agrNummer.get(j));
-                                log.debug("Url der LSA:"+newUrl);
+                                i = new ImageIcon(
+                                        new URL(
+                                            "http://s10220:8098/luft/tiffer?bnr="
+                                                    + nummer
+                                                    + "&scale=1&format=JPG"));
+                            } else {
+                                final String newUrl = url.replaceAll("<cismet::nummer>", nummer);
                                 i = new ImageIcon(new URL(newUrl));
                             }
-                            
+
                             // falls kein Bild geladen werden konnte, erzeuge Ausnahme
                             if (i == null) {
                                 throw new Exception("Luftbildaufnahme konnte nicht geladen werden.");
                             }
-                            
+
                             ImageIcon icon = i;
-                          
-                            int w = icon.getIconWidth();
-                            int h = icon.getIconHeight();
+
+                            final int w = icon.getIconWidth();
+                            final int h = icon.getIconHeight();
                             if (w > h) {
                                 try {
                                     // drehen
-                                    BufferedImage src = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(),
+                                    final BufferedImage src = new BufferedImage(
+                                            icon.getIconWidth(),
+                                            icon.getIconHeight(),
                                             BufferedImage.TYPE_4BYTE_ABGR);
-                                    int iSizeDiff = src.getWidth() - src.getHeight();
+                                    final int iSizeDiff = src.getWidth() - src.getHeight();
 
-                                    Graphics2D o2d = (Graphics2D)src.createGraphics();
-                                    o2d.drawImage(icon.getImage(),0,0,null);
+                                    final Graphics2D o2d = (Graphics2D)src.createGraphics();
+                                    o2d.drawImage(icon.getImage(), 0, 0, null);
                                     o2d.dispose();
 
-                                    AffineTransform affineTransform = AffineTransform.getRotateInstance(Math.toRadians(90), src.getWidth() / 2, src.getHeight() / 2);
-                                    BufferedImage rotatedImage = new BufferedImage(src.getHeight(), src.getWidth(), src.getType());
-                                    Graphics2D g = (Graphics2D) rotatedImage.getGraphics();
+                                    final AffineTransform affineTransform = AffineTransform.getRotateInstance(
+                                            Math.toRadians(90),
+                                            src.getWidth()
+                                                    / 2,
+                                            src.getHeight()
+                                                    / 2);
+                                    final BufferedImage rotatedImage = new BufferedImage(
+                                            src.getHeight(),
+                                            src.getWidth(),
+                                            src.getType());
+                                    final Graphics2D g = (Graphics2D)rotatedImage.getGraphics();
                                     g.setTransform(affineTransform);
-                                    g.drawImage(src, iSizeDiff/2, iSizeDiff/2, null);  
+                                    g.drawImage(src, iSizeDiff / 2, iSizeDiff / 2, null);
                                     icon = new ImageIcon(rotatedImage);
                                 } catch (Exception ex) {
                                     log.error("Drehen des Images fehlgeschlagen.", ex);
                                 }
                             }
-                            log.debug("LSA hinzugef\u00FCgt");
-                            HashMap params = new HashMap();
+
+                            final HashMap params = new HashMap();
                             params.put("Ueberschrift", lage + " (" + TITLE + ")");
-                            params.put("Unterschrift",hinweise);
-                            params.put("image",icon.getImage());
-                            log.debug(params);
-                            if (jasperPrint==null) {
-                                jasperPrint = JasperFillManager.fillReport(jasperReport,params);
-                            } else {
-                                jasperPrint.addPage((JRPrintPage)JasperFillManager.fillReport(jasperReport,params).getPages().get(0));
-                            }
-                            
-                        }
-                        
-                        final JasperPrint jasperPrintCopy=jasperPrint;
-                        EventQueue.invokeLater(new Runnable() {
-                            public void run() {
-                                printingWaitDialog.setVisible(false);
-                                JRViewer aViewer = new JRViewer(jasperPrintCopy);
-                                aViewer.setZoomRatio(0.35f);
-                                JFrame aFrame = new JFrame("Druckvorschau");
-                                aFrame.getContentPane().add(aViewer);
-                                java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-                                aFrame.setSize(screenSize.width/2, screenSize.height/2);
-                                java.awt.Insets insets = aFrame.getInsets();
-                                aFrame.setSize(aFrame.getWidth() + insets.left + insets.right, aFrame.getHeight() + insets.top + insets.bottom + 20);
-                                aFrame.setLocation((screenSize.width-aFrame.getWidth())/2,(screenSize.height-aFrame.getHeight())/2);
-                                aFrame.setVisible(true);
-                            }
-                        });
-                        
-                    } catch (Throwable e) {
-                        log.error("Fehler beim Jaspern",e);
-                        EventQueue.invokeLater(new Runnable() {
-                            public void run() {
-                                printingWaitDialog.setVisible(false);
-                            }
-                        });
-                    }
-                } catch (Exception e) {
-                    log.error("Fehler beim laden des Bildes mit URL \"http://s10220:8098/luft/tiffer?bnr=" +
-                            nummer + "&scale=1&format=JPG\"",e);
-                    EventQueue.invokeLater(new Runnable() {
-                        public void run() {
-                            printingWaitDialog.setVisible(false);
-                        }
-                    });
-                }
-            }
-        });
-        t.start();
-        
-    }//GEN-LAST:event_AgrPrintActionPerformed
-    
-    private void printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printActionPerformed
-        Thread t = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    EventQueue.invokeLater(new Runnable() {
-                        public void run() {
-                            printingWaitDialog.setLocationRelativeTo(StaticSwingTools.getParentFrame(LuftbildschraegaufnahmenRenderer.this));
-                            printingWaitDialog.setVisible(true);
-                        }
-                    });
-                    
-                    String url=properties.getProperty("luftbildschraegaufnahmenservicefull");
-                    ImageIcon i;
-                    if (url == null) {
-                        i = new ImageIcon(new URL("http://s10220:8098/luft/tiffer?bnr="+nummer+"&scale=1&format=JPG"));
-                    } else{
-                        String newUrl = url.replaceAll("<cismet::nummer>",nummer);
-                        i = new ImageIcon(new URL(newUrl));
-                    }
-                    
-                    // falls kein Bild geladen werden konnte, erzeuge Ausnahme
-                    if (i == null) {
-                        throw new Exception("Luftbildaufnahme konnte nicht geladen werden.");
-                    }
-                    
-                    ImageIcon icon = i;
-                          
-                    int w = icon.getIconWidth();
-                    int h = icon.getIconHeight();
-                    if (w > h) {
-                        try {
-                            // drehen
-                            BufferedImage src = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(),
-                                    BufferedImage.TYPE_4BYTE_ABGR);
-                            int iSizeDiff = src.getWidth() - src.getHeight();
+                            params.put("Unterschrift", hinweise);
+                            params.put("image", icon.getImage());
+                            // log.fatal(params);
 
-                            Graphics2D o2d = (Graphics2D)src.createGraphics();
-                            o2d.drawImage(icon.getImage(),0,0,null);
-                            o2d.dispose();
+                            try {
+                                final JasperReport jasperReport = (JasperReport)JRLoader.loadObject(
+                                        getClass().getResourceAsStream(
+                                            "/de/cismet/cids/objectrenderer/LuftbildschraegaufnahmenA4H.jasper"));
+                                final JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params);
+                                EventQueue.invokeLater(new Runnable() {
 
-                            AffineTransform affineTransform = AffineTransform.getRotateInstance(Math.toRadians(90), src.getWidth() / 2, src.getHeight() / 2);
-                            BufferedImage rotatedImage = new BufferedImage(src.getHeight(), src.getWidth(), src.getType());
-                            Graphics2D g = (Graphics2D) rotatedImage.getGraphics();
-                            g.setTransform(affineTransform);
-                            g.drawImage(src, iSizeDiff/2, iSizeDiff/2, null);  
-                            icon = new ImageIcon(rotatedImage);
-                        } catch (Exception ex) {
-                            log.error("Drehen des Images fehlgeschlagen.", ex);
+                                        @Override
+                                        public void run() {
+                                            printingWaitDialog.setVisible(false);
+                                            final JRViewer aViewer = new JRViewer(jasperPrint);
+                                            final JFrame aFrame = new JFrame("Druckvorschau");
+                                            aFrame.getContentPane().add(aViewer);
+                                            final java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit()
+                                                        .getScreenSize();
+                                            aFrame.setSize(screenSize.width / 2, screenSize.height / 2);
+                                            final java.awt.Insets insets = aFrame.getInsets();
+                                            aFrame.setSize(
+                                                aFrame.getWidth()
+                                                        + insets.left
+                                                        + insets.right,
+                                                aFrame.getHeight()
+                                                        + insets.top
+                                                        + insets.bottom
+                                                        + 20);
+                                            aFrame.setLocation(
+                                                (screenSize.width - aFrame.getWidth())
+                                                        / 2,
+                                                (screenSize.height - aFrame.getHeight())
+                                                        / 2);
+                                            aFrame.setVisible(true);
+                                        }
+                                    });
+                            } catch (Throwable e) {
+                                log.error("Fehler beim Jaspern", e);
+                                EventQueue.invokeLater(new Runnable() {
+
+                                        @Override
+                                        public void run() {
+                                            printingWaitDialog.setVisible(false);
+                                        }
+                                    });
+                            }
+                        } catch (Exception e) {
+                            log.error(
+                                "Fehler beim laden des Bildes mit URL \"http://s10220:8098/luft/tiffer?bnr="
+                                        + nummer
+                                        + "&scale=1&format=JPG\"",
+                                e);
+                            EventQueue.invokeLater(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        printingWaitDialog.setVisible(false);
+                                    }
+                                });
                         }
                     }
-                    
-                    HashMap params = new HashMap();
-                    params.put("Ueberschrift", lage + " (" + TITLE + ")");
-                    params.put("Unterschrift",hinweise);
-                    params.put("image",icon.getImage());
-                    //log.fatal(params);
-                    
-                    try {
-                        JasperReport jasperReport=(JasperReport)JRLoader.loadObject(getClass().getResourceAsStream("/de/cismet/cids/objectrenderer/LuftbildschraegaufnahmenA4H.jasper"));
-                        final JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,params);
-                        EventQueue.invokeLater(new Runnable() {
-                            public void run() {
-                                printingWaitDialog.setVisible(false);
-                                JRViewer aViewer = new JRViewer(jasperPrint);
-                                JFrame aFrame = new JFrame("Druckvorschau");
-                                aFrame.getContentPane().add(aViewer);
-                                java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-                                aFrame.setSize(screenSize.width/2, screenSize.height/2);
-                                java.awt.Insets insets = aFrame.getInsets();
-                                aFrame.setSize(aFrame.getWidth() + insets.left + insets.right, aFrame.getHeight() + insets.top + insets.bottom + 20);
-                                aFrame.setLocation((screenSize.width-aFrame.getWidth())/2,(screenSize.height-aFrame.getHeight())/2);
-                                aFrame.setVisible(true);
-                            }
-                        });
-                        
-                    } catch (Throwable e) {
-                        log.error("Fehler beim Jaspern",e);
-                        EventQueue.invokeLater(new Runnable() {
-                            public void run() {
-                                printingWaitDialog.setVisible(false);
-                            }
-                        });
-                    }
-                } catch (Exception e) {
-                    log.error("Fehler beim laden des Bildes mit URL \"http://s10220:8098/luft/tiffer?bnr=" +
-                            nummer + "&scale=1&format=JPG\"",e);
-                    EventQueue.invokeLater(new Runnable() {
-                        public void run() {
-                            printingWaitDialog.setVisible(false);
-                        }
-                    });
-                }
-            }
-        });
+                });
         t.start();
-    }//GEN-LAST:event_printActionPerformed
-    
-    
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private org.jdesktop.swingx.JXHyperlink jxhAgrPrint;
-    private org.jdesktop.swingx.JXHyperlink jxhPicture;
-    private org.jdesktop.swingx.JXHyperlink jxhPrint;
-    private javax.swing.JLabel lblAgrTitle;
-    private javax.swing.JLabel lblAktdat;
-    private javax.swing.JLabel lblAufnahmedat;
-    private javax.swing.JLabel lblAuftraggeber;
-    private javax.swing.JLabel lblBildOrig;
-    private javax.swing.JLabel lblDateiname;
-    private javax.swing.JLabel lblErfassungsdat;
-    private javax.swing.JLabel lblFilmart;
-    private javax.swing.JLabel lblFotograf;
-    private javax.swing.JLabel lblHinweise;
-    private javax.swing.JLabel lblLage;
-    private javax.swing.JLabel lblLink;
-    private javax.swing.JLabel lblOrganisation;
-    private javax.swing.JLabel lblTitle;
-    private javax.swing.JPanel panAggregation;
-    private javax.swing.JPanel panAgrContent;
-    private javax.swing.JPanel panAgrTitle;
-    private javax.swing.JPanel panContent;
-    private javax.swing.JPanel panInter;
-    private javax.swing.JPanel panMap;
-    private javax.swing.JPanel panPicture;
-    private javax.swing.JPanel panSpinner;
-    private javax.swing.JPanel panTitle;
-    // End of variables declaration//GEN-END:variables
-    
+    } //GEN-LAST:event_printActionPerformed
 }

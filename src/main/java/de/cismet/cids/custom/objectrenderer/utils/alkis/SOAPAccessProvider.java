@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -10,77 +17,153 @@ import de.aedsicad.aaaweb.service.alkis.info.ALKISInfoServices;
 import de.aedsicad.aaaweb.service.alkis.info.ALKISInfoServicesServiceLocator;
 import de.aedsicad.aaaweb.service.alkis.search.ALKISSearchServices;
 import de.aedsicad.aaaweb.service.alkis.search.ALKISSearchServicesServiceLocator;
+
 import java.net.URL;
 
 /**
  * TODO: Should be made (lazy) Singleton? - But check about timeouts!
- * @author srichter
+ *
+ * @author   srichter
+ * @version  $Revision$, $Date$
  */
 public final class SOAPAccessProvider {
 
-    public SOAPAccessProvider(String user, String password, String service, String catalogService, String infoService, String searchService) {
-        this(user + "," + password, service, catalogService, infoService, searchService);
-    }
+    //~ Instance fields --------------------------------------------------------
 
-    public SOAPAccessProvider(String identityCard, String service, String catalogService, String infoService, String searchService) {
-        this.identityCard = identityCard;
-        this.service = service;
-        try {
-            this.alkisCatalogServices = new ALKISCatalogServicesServiceLocator().getALKISCatalogServices(new URL(catalogService));
-            this.alkisInfoService = new ALKISInfoServicesServiceLocator().getALKISInfoServices(new URL(infoService));
-            this.alkisSearchService = new ALKISSearchServicesServiceLocator().getALKISSearchServices(new URL(searchService));
-        } catch (Exception ex) {
-            throw new IllegalStateException("Can not create SOAPAccessProvider", ex);
-        }
-    }
-
-    public SOAPAccessProvider(String user, String password, String service) {
-        this(user + "," + password, service);
-    }
-
-    public SOAPAccessProvider(String identityCard, String service) {
-        this(identityCard, service, AlkisCommons.SERVER + AlkisCommons.CATALOG_SERVICE, AlkisCommons.SERVER + AlkisCommons.INFO_SERVICE, AlkisCommons.SERVER + AlkisCommons.SEARCH_SERVICE);
-    }
-
-    public SOAPAccessProvider() {
-        this(AlkisCommons.USER, AlkisCommons.PASSWORD, AlkisCommons.SERVICE);
-    }
     private final String identityCard;
     private final String service;
     private final ALKISCatalogServices alkisCatalogServices;
     private final ALKISInfoServices alkisInfoService;
     private final ALKISSearchServices alkisSearchService;
 
+    //~ Constructors -----------------------------------------------------------
+
     /**
-     * @return the identityCard
+     * Creates a new SOAPAccessProvider object.
+     */
+    public SOAPAccessProvider() {
+        this(AlkisCommons.USER, AlkisCommons.PASSWORD, AlkisCommons.SERVICE);
+    }
+
+    /**
+     * Creates a new SOAPAccessProvider object.
+     *
+     * @param  identityCard  DOCUMENT ME!
+     * @param  service       DOCUMENT ME!
+     */
+    public SOAPAccessProvider(final String identityCard, final String service) {
+        this(
+            identityCard,
+            service,
+            AlkisCommons.SERVER
+                    + AlkisCommons.CATALOG_SERVICE,
+            AlkisCommons.SERVER
+                    + AlkisCommons.INFO_SERVICE,
+            AlkisCommons.SERVER
+                    + AlkisCommons.SEARCH_SERVICE);
+    }
+
+    /**
+     * Creates a new SOAPAccessProvider object.
+     *
+     * @param  user      DOCUMENT ME!
+     * @param  password  DOCUMENT ME!
+     * @param  service   DOCUMENT ME!
+     */
+    public SOAPAccessProvider(final String user, final String password, final String service) {
+        this(user + "," + password, service);
+    }
+
+    /**
+     * Creates a new SOAPAccessProvider object.
+     *
+     * @param   identityCard    DOCUMENT ME!
+     * @param   service         DOCUMENT ME!
+     * @param   catalogService  DOCUMENT ME!
+     * @param   infoService     DOCUMENT ME!
+     * @param   searchService   DOCUMENT ME!
+     *
+     * @throws  IllegalStateException  DOCUMENT ME!
+     */
+    public SOAPAccessProvider(final String identityCard,
+            final String service,
+            final String catalogService,
+            final String infoService,
+            final String searchService) {
+        this.identityCard = identityCard;
+        this.service = service;
+        try {
+            this.alkisCatalogServices = new ALKISCatalogServicesServiceLocator().getALKISCatalogServices(new URL(
+                        catalogService));
+            this.alkisInfoService = new ALKISInfoServicesServiceLocator().getALKISInfoServices(new URL(infoService));
+            this.alkisSearchService = new ALKISSearchServicesServiceLocator().getALKISSearchServices(new URL(
+                        searchService));
+        } catch (Exception ex) {
+            throw new IllegalStateException("Can not create SOAPAccessProvider", ex);
+        }
+    }
+
+    /**
+     * Creates a new SOAPAccessProvider object.
+     *
+     * @param  user            DOCUMENT ME!
+     * @param  password        DOCUMENT ME!
+     * @param  service         DOCUMENT ME!
+     * @param  catalogService  DOCUMENT ME!
+     * @param  infoService     DOCUMENT ME!
+     * @param  searchService   DOCUMENT ME!
+     */
+    public SOAPAccessProvider(final String user,
+            final String password,
+            final String service,
+            final String catalogService,
+            final String infoService,
+            final String searchService) {
+        this(user + "," + password, service, catalogService, infoService, searchService);
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  the identityCard
      */
     public String getIdentityCard() {
         return identityCard;
     }
 
     /**
-     * @return the service
+     * DOCUMENT ME!
+     *
+     * @return  the service
      */
     public String getService() {
         return service;
     }
 
     /**
-     * @return the alkisCatalogServices
+     * DOCUMENT ME!
+     *
+     * @return  the alkisCatalogServices
      */
     public ALKISCatalogServices getAlkisCatalogServices() {
         return alkisCatalogServices;
     }
 
     /**
-     * @return the alkisInfoService
+     * DOCUMENT ME!
+     *
+     * @return  the alkisInfoService
      */
     public ALKISInfoServices getAlkisInfoService() {
         return alkisInfoService;
     }
 
     /**
-     * @return the alkisSearchService
+     * DOCUMENT ME!
+     *
+     * @return  the alkisSearchService
      */
     public ALKISSearchServices getAlkisSearchService() {
         return alkisSearchService;

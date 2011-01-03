@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -6,21 +13,15 @@ package de.cismet.cids.custom.objectrenderer.utils;
 
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.plugin.PluginRegistry;
+
 import Sirius.server.middleware.types.AbstractAttributeRepresentationFormater;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.newuser.User;
-import de.cismet.cids.dynamics.CidsBean;
-import de.cismet.cids.navigator.utils.ClassCacheMultiple;
-import de.cismet.cismap.commons.features.Feature;
-import de.cismet.cismap.commons.features.FeatureGroups;
-import de.cismet.cismap.commons.gui.MappingComponent;
-import de.cismet.cismap.commons.interaction.CismapBroker;
-import de.cismet.cismap.navigatorplugin.CidsFeature;
-import de.cismet.tools.CismetThreadPool;
-import de.cismet.tools.collections.TypeSafeCollections;
-import de.cismet.tools.gui.StaticSwingTools;
-import de.cismet.tools.gui.documents.DefaultDocument;
+
+import org.jdesktop.swingx.error.ErrorInfo;
+import org.jdesktop.swingx.graphics.ShadowRenderer;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
@@ -35,10 +36,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+
 import javax.swing.ComboBoxModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -50,14 +53,34 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-import org.jdesktop.swingx.error.ErrorInfo;
-import org.jdesktop.swingx.graphics.ShadowRenderer;
+
+import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+
+import de.cismet.cismap.commons.features.Feature;
+import de.cismet.cismap.commons.features.FeatureGroups;
+import de.cismet.cismap.commons.gui.MappingComponent;
+import de.cismet.cismap.commons.interaction.CismapBroker;
+
+import de.cismet.cismap.navigatorplugin.CidsFeature;
+
+import de.cismet.tools.CismetThreadPool;
+
+import de.cismet.tools.collections.TypeSafeCollections;
+
+import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.documents.DefaultDocument;
 
 /**
+ * DOCUMENT ME!
  *
- * @author stefan
+ * @author   stefan
+ * @version  $Revision$, $Date$
  */
 public class ObjectRendererUtils {
+
+    //~ Static fields/initializers ---------------------------------------------
 
     private static final String ICON_RES_PACKAGE = "/de/cismet/cids/custom/wunda_blau/res/";
     public static final ImageIcon FORWARD_PRESSED;
@@ -68,25 +91,51 @@ public class ObjectRendererUtils {
     private static final String CISMAP_PLUGIN_NAME = "cismap";
 
     static {
-        BACKWARD_SELECTED = new ImageIcon(ObjectRendererUtils.class.getResource(ICON_RES_PACKAGE + "arrow-left-sel.png"));
-        BACKWARD_PRESSED = new ImageIcon(ObjectRendererUtils.class.getResource(ICON_RES_PACKAGE + "arrow-left-pressed.png"));
-        FORWARD_SELECTED = new ImageIcon(ObjectRendererUtils.class.getResource(ICON_RES_PACKAGE + "arrow-right-sel.png"));
-        FORWARD_PRESSED = new ImageIcon(ObjectRendererUtils.class.getResource(ICON_RES_PACKAGE + "arrow-right-pressed.png"));
+        BACKWARD_SELECTED = new ImageIcon(ObjectRendererUtils.class.getResource(
+                    ICON_RES_PACKAGE
+                            + "arrow-left-sel.png"));
+        BACKWARD_PRESSED = new ImageIcon(ObjectRendererUtils.class.getResource(
+                    ICON_RES_PACKAGE
+                            + "arrow-left-pressed.png"));
+        FORWARD_SELECTED = new ImageIcon(ObjectRendererUtils.class.getResource(
+                    ICON_RES_PACKAGE
+                            + "arrow-right-sel.png"));
+        FORWARD_PRESSED = new ImageIcon(ObjectRendererUtils.class.getResource(
+                    ICON_RES_PACKAGE
+                            + "arrow-right-pressed.png"));
     }
 
+    //~ Enums ------------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     public enum DateDiff {
 
-        MILLISECOND, SECOND, MINUTE, HOUR, DAY, WEEK, MONTH, YEAR
-    };
+        //~ Enum constants -----------------------------------------------------
 
-    public static void addBeanGeomsAsFeaturesToCismapMap(Collection<MetaObject> metaObjectList, boolean clear) {
+        MILLISECOND, SECOND, MINUTE, HOUR, DAY, WEEK, MONTH, YEAR
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  metaObjectList  DOCUMENT ME!
+     * @param  clear           DOCUMENT ME!
+     */
+    public static void addBeanGeomsAsFeaturesToCismapMap(final Collection<MetaObject> metaObjectList,
+            final boolean clear) {
         if (metaObjectList != null) {
             final MappingComponent bigMap = CismapBroker.getInstance().getMappingComponent();
             if (clear) {
                 bigMap.getFeatureCollection().removeAllFeatures();
             }
             final List<Feature> addedFeatures = TypeSafeCollections.newArrayList(metaObjectList.size());
-            for (MetaObject mo : metaObjectList) {
+            for (final MetaObject mo : metaObjectList) {
                 final CidsFeature newGeomFeature = new CidsFeature(mo);
                 addedFeatures.addAll(FeatureGroups.expandAll(newGeomFeature));
             }
@@ -96,17 +145,36 @@ public class ObjectRendererUtils {
         }
     }
 
-    public static void setAllDimensions(JComponent comp, Dimension dim) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  comp  DOCUMENT ME!
+     * @param  dim   DOCUMENT ME!
+     */
+    public static void setAllDimensions(final JComponent comp, final Dimension dim) {
         comp.setMaximumSize(dim);
         comp.setMinimumSize(dim);
         comp.setPreferredSize(dim);
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     public static void switchToCismapMap() {
-        PluginRegistry.getRegistry().getPluginDescriptor(CISMAP_PLUGIN_NAME).getUIDescriptor(CISMAP_PLUGIN_NAME).getView().makeVisible();
+        PluginRegistry.getRegistry()
+                .getPluginDescriptor(CISMAP_PLUGIN_NAME)
+                .getUIDescriptor(CISMAP_PLUGIN_NAME)
+                .getView()
+                .makeVisible();
     }
 
-    public static void addBeanGeomAsFeatureToCismapMap(CidsBean bean, boolean clear) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  bean   DOCUMENT ME!
+     * @param  clear  DOCUMENT ME!
+     */
+    public static void addBeanGeomAsFeatureToCismapMap(final CidsBean bean, final boolean clear) {
         if (bean != null) {
             final MetaObject mo = bean.getMetaObject();
             final List<MetaObject> mos = TypeSafeCollections.newArrayList(1);
@@ -115,48 +183,81 @@ public class ObjectRendererUtils {
         }
     }
 
-    public static void selectAllTextInEditableCombobox(JComboBox box) {
-        Component editor = box.getEditor().getEditorComponent();
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  box  DOCUMENT ME!
+     */
+    public static void selectAllTextInEditableCombobox(final JComboBox box) {
+        final Component editor = box.getEditor().getEditorComponent();
         if (editor instanceof JTextField) {
-            JTextField textEditor = (JTextField) editor;
+            final JTextField textEditor = (JTextField)editor;
             textEditor.selectAll();
         } else {
-            log.warn("Editor of Combobox " + box + " is not instanceof JTextField - can not select the text : " + editor);
+            log.warn("Editor of Combobox " + box + " is not instanceof JTextField - can not select the text : "
+                        + editor);
         }
     }
 
     /**
-     * shows an exception window to the user if the parent component is
-     * currently shown.
-     * @param titleMessage
-     * @param ex
-     * @param parent
+     * shows an exception window to the user if the parent component is currently shown.
+     *
+     * @param  titleMessage  DOCUMENT ME!
+     * @param  ex            DOCUMENT ME!
+     * @param  parent        DOCUMENT ME!
      */
-    public static void showExceptionWindowToUser(String titleMessage, Exception ex, Component parent) {
-        if (ex != null && parent != null && parent.isShowing()) {
-            org.jdesktop.swingx.error.ErrorInfo ei = new ErrorInfo(titleMessage, ex.getMessage(), null, null, ex, Level.ALL, null);
+    public static void showExceptionWindowToUser(final String titleMessage,
+            final Exception ex,
+            final Component parent) {
+        if ((ex != null) && (parent != null) && parent.isShowing()) {
+            final org.jdesktop.swingx.error.ErrorInfo ei = new ErrorInfo(
+                    titleMessage,
+                    ex.getMessage(),
+                    null,
+                    null,
+                    ex,
+                    Level.ALL,
+                    null);
             org.jdesktop.swingx.JXErrorPane.showDialog(StaticSwingTools.getParentFrame(parent), ei);
         }
     }
 
-    public static final MetaObject[] getLightweightMetaObjectsForTable(String tabName, final String[] fields) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   tabName  DOCUMENT ME!
+     * @param   fields   DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static final MetaObject[] getLightweightMetaObjectsForTable(final String tabName, final String[] fields) {
         return getLightweightMetaObjectsForTable(tabName, fields, null);
-
     }
 
-    public static final MetaObject[] getLightweightMetaObjectsForTable(String tabName, final String[] fields, AbstractAttributeRepresentationFormater formatter) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   tabName    DOCUMENT ME!
+     * @param   fields     DOCUMENT ME!
+     * @param   formatter  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static final MetaObject[] getLightweightMetaObjectsForTable(final String tabName,
+            final String[] fields,
+            AbstractAttributeRepresentationFormater formatter) {
         if (formatter == null) {
             formatter = new AbstractAttributeRepresentationFormater() {
 
-                @Override
-                public String getRepresentation() {
-                    final StringBuffer sb = new StringBuffer();
-                    for (final String attribute : fields) {
-                        sb.append(getAttribute(attribute.toLowerCase())).append(" ");
+                    @Override
+                    public String getRepresentation() {
+                        final StringBuffer sb = new StringBuffer();
+                        for (final String attribute : fields) {
+                            sb.append(getAttribute(attribute.toLowerCase())).append(" ");
+                        }
+                        return sb.toString().trim();
                     }
-                    return sb.toString().trim();
-                }
-            };
+                };
         }
         try {
             final User user = SessionManager.getSession().getUser();
@@ -168,25 +269,39 @@ public class ObjectRendererUtils {
         return new MetaObject[0];
     }
 
-    public static MetaObject[] getLightweightMetaObjectsForQuery(String tabName, String query, final String[] fields, AbstractAttributeRepresentationFormater formatter) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   tabName    DOCUMENT ME!
+     * @param   query      DOCUMENT ME!
+     * @param   fields     DOCUMENT ME!
+     * @param   formatter  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static MetaObject[] getLightweightMetaObjectsForQuery(final String tabName,
+            final String query,
+            final String[] fields,
+            AbstractAttributeRepresentationFormater formatter) {
         if (formatter == null) {
             formatter = new AbstractAttributeRepresentationFormater() {
 
-                @Override
-                public String getRepresentation() {
-                    final StringBuffer sb = new StringBuffer();
-                    for (final String attribute : fields) {
-                        sb.append(getAttribute(attribute.toLowerCase())).append(" ");
+                    @Override
+                    public String getRepresentation() {
+                        final StringBuffer sb = new StringBuffer();
+                        for (final String attribute : fields) {
+                            sb.append(getAttribute(attribute.toLowerCase())).append(" ");
+                        }
+                        return sb.toString().trim();
                     }
-                    return sb.toString().trim();
-                }
-            };
+                };
         }
         try {
             final User user = SessionManager.getSession().getUser();
             final MetaClass mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, tabName);
             if (mc != null) {
-                return SessionManager.getProxy().getLightweightMetaObjectsByQuery(mc.getID(), user, query, fields, formatter);
+                return SessionManager.getProxy()
+                            .getLightweightMetaObjectsByQuery(mc.getID(), user, query, fields, formatter);
             } else {
                 log.error("Can not find MetaClass for Tablename: " + tabName);
             }
@@ -196,15 +311,25 @@ public class ObjectRendererUtils {
         return new MetaObject[0];
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   in           DOCUMENT ME!
+     * @param   shadowPixel  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public static BufferedImage generateShadow(final Image in, final int shadowPixel) {
         if (in == null) {
             return null;
         }
         final BufferedImage input;
         if (in instanceof BufferedImage) {
-            input = (BufferedImage) in;
+            input = (BufferedImage)in;
         } else {
-            final BufferedImage temp = new BufferedImage(in.getWidth(null), in.getHeight(null), BufferedImage.TYPE_4BYTE_ABGR);
+            final BufferedImage temp = new BufferedImage(in.getWidth(null),
+                    in.getHeight(null),
+                    BufferedImage.TYPE_4BYTE_ABGR);
             final Graphics tg = temp.createGraphics();
             tg.drawImage(in, 0, 0, null);
             tg.dispose();
@@ -215,8 +340,10 @@ public class ObjectRendererUtils {
         }
         final ShadowRenderer renderer = new ShadowRenderer(shadowPixel, 0.5f, Color.BLACK);
         final BufferedImage shadow = renderer.createShadow(input);
-        final BufferedImage result = new BufferedImage(input.getWidth() + 2 * shadowPixel,
-                input.getHeight() + 2 * shadowPixel, BufferedImage.TYPE_4BYTE_ABGR);
+        final BufferedImage result = new BufferedImage(input.getWidth() + (2 * shadowPixel),
+                input.getHeight()
+                        + (2 * shadowPixel),
+                BufferedImage.TYPE_4BYTE_ABGR);
         final Graphics2D rg = result.createGraphics();
         rg.drawImage(shadow, 0, 0, null);
         rg.drawImage(input, 0, 0, null);
@@ -225,104 +352,116 @@ public class ObjectRendererUtils {
     }
 
     /**
-     * Starts a background thread with loads the picture from the url, resizes it to the given maximums,
-     * adds a dropshadow of the given length and then sets the whole picture on a given JLabel.
+     * Starts a background thread with loads the picture from the url, resizes it to the given maximums, adds a
+     * dropshadow of the given length and then sets the whole picture on a given JLabel.
      *
-     * Can be called from ANY thread, no matter if EDT or not!
+     * <p>Can be called from ANY thread, no matter if EDT or not!</p>
      *
-     * @param bildURL
-     * @param maxPixelX
-     * @param maxPixelY
-     * @param shadowSize
-     * @param toSet
+     * @param  bildURL     DOCUMENT ME!
+     * @param  maxPixelX   DOCUMENT ME!
+     * @param  maxPixelY   DOCUMENT ME!
+     * @param  shadowSize  DOCUMENT ME!
+     * @param  toSet       DOCUMENT ME!
      */
-    public static void loadPictureAndSet(final String bildURL, final int maxPixelX, final int maxPixelY, final int shadowSize, final JLabel toSet) {
-        if (bildURL != null && toSet != null) {
+    public static void loadPictureAndSet(final String bildURL,
+            final int maxPixelX,
+            final int maxPixelY,
+            final int shadowSize,
+            final JLabel toSet) {
+        if ((bildURL != null) && (toSet != null)) {
             final Runnable loader = new Runnable() {
 
-                @Override
-                public void run() {
-                    try {
-                        final ImageIcon finBild = loadPicture(bildURL, maxPixelX, maxPixelY, shadowSize);
-                        EventQueue.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            final ImageIcon finBild = loadPicture(bildURL, maxPixelX, maxPixelY, shadowSize);
+                            EventQueue.invokeLater(new Runnable() {
 
-                            @Override
-                            public void run() {
-                                if (finBild != null) {
-                                    toSet.setIcon(finBild);
-                                } else {
-                                    toSet.setIcon(null);
+                                    @Override
+                                    public void run() {
+                                        if (finBild != null) {
+                                            toSet.setIcon(finBild);
+                                        } else {
+                                            toSet.setIcon(null);
 //                                        toSet.setVisible(false);
-                                }
-                            }
-                        });
-
-                    } catch (Exception e) {
-                        log.error("Exeption when loading picture " + bildURL + " : " + e, e);
-                        toSet.setIcon(null);
+                                        }
+                                    }
+                                });
+                        } catch (Exception e) {
+                            log.error("Exeption when loading picture " + bildURL + " : " + e, e);
+                            toSet.setIcon(null);
+                        }
                     }
-                }
-            };
+                };
             CismetThreadPool.execute(loader);
         }
     }
 
     /**
-     * Starts a background thread with loads the picture from the url, resizes it to the given maximums,
-     * adds a dropshadow of the given length and then sets the whole picture on a given JButton.
+     * Starts a background thread with loads the picture from the url, resizes it to the given maximums, adds a
+     * dropshadow of the given length and then sets the whole picture on a given JButton.
      *
-     * Can be called from ANY thread, no matter if EDT or not!
+     * <p>Can be called from ANY thread, no matter if EDT or not!</p>
      *
-     * @param bildURL
-     * @param maxPixelX
-     * @param maxPixelY
-     * @param shadowSize
-     * @param toSet
+     * @param  bildURL     DOCUMENT ME!
+     * @param  maxPixelX   DOCUMENT ME!
+     * @param  maxPixelY   DOCUMENT ME!
+     * @param  shadowSize  DOCUMENT ME!
+     * @param  toSet       DOCUMENT ME!
      */
-    public static void loadPictureAndSet(final String bildURL, final int maxPixelX, final int maxPixelY, final int shadowSize, final JButton toSet) {
-        if (bildURL != null && toSet != null) {
+    public static void loadPictureAndSet(final String bildURL,
+            final int maxPixelX,
+            final int maxPixelY,
+            final int shadowSize,
+            final JButton toSet) {
+        if ((bildURL != null) && (toSet != null)) {
             final Runnable loader = new Runnable() {
 
-                @Override
-                public void run() {
-                    final ImageIcon finBild = loadPicture(bildURL, maxPixelX, maxPixelY, shadowSize);
-                    if (finBild != null) {
-                        EventQueue.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        final ImageIcon finBild = loadPicture(bildURL, maxPixelX, maxPixelY, shadowSize);
+                        if (finBild != null) {
+                            EventQueue.invokeLater(new Runnable() {
 
-                            @Override
-                            public void run() {
-                                if (finBild != null) {
-                                    toSet.setIcon(finBild);
-                                } else {
-                                    toSet.setVisible(false);
-                                }
-                            }
-                        });
+                                    @Override
+                                    public void run() {
+                                        if (finBild != null) {
+                                            toSet.setIcon(finBild);
+                                        } else {
+                                            toSet.setVisible(false);
+                                        }
+                                    }
+                                });
+                        }
                     }
-                }
-            };
+                };
             CismetThreadPool.execute(loader);
         }
     }
 
     /**
-     * Starts a background thread with loads the picture from the url, resizes it to the given maximums,
-     * adds a dropshadow of the given length.
+     * Starts a background thread with loads the picture from the url, resizes it to the given maximums, adds a
+     * dropshadow of the given length.
      *
-     * @param bildURL
-     * @param maxPixelX
-     * @param maxPixelY
-     * @param shadowSize
-     * @return ImageIcon with the loaded picture
+     * @param   bildURL     DOCUMENT ME!
+     * @param   maxPixelX   DOCUMENT ME!
+     * @param   maxPixelY   DOCUMENT ME!
+     * @param   shadowSize  DOCUMENT ME!
+     *
+     * @return  ImageIcon with the loaded picture
      */
-    public static ImageIcon loadPicture(final String bildURL, final int maxPixelX, final int maxPixelY, final int shadowSize) {
+    public static ImageIcon loadPicture(final String bildURL,
+            final int maxPixelX,
+            final int maxPixelY,
+            final int shadowSize) {
         ImageIcon bild = null;
-        if (bildURL != null && bildURL.length() > 0) {
+        if ((bildURL != null) && (bildURL.length() > 0)) {
             final String urlString = bildURL.trim();
 
             Image buffImage = new DefaultDocument(urlString, urlString).getPreview(maxPixelX, maxPixelY);
             if (buffImage != null) {
-                //Static2DTools.getFasterScaledInstance(buffImage, width, height, RenderingHints.VALUE_INTERPOLATION_BICUBIC, true)
+                // Static2DTools.getFasterScaledInstance(buffImage, width, height,
+                // RenderingHints.VALUE_INTERPOLATION_BICUBIC, true)
                 if (shadowSize > 0) {
                     buffImage = generateShadow(buffImage, shadowSize);
                 }
@@ -336,37 +475,45 @@ public class ObjectRendererUtils {
     /**
      * Adds a mouse listener to the given component, so that the cursor will change on mouse entered/exited.
      *
-     * Hint: Uses the awt.Cursor.XXX constants!
+     * <p>Hint: Uses the awt.Cursor.XXX constants!</p>
      *
-     * @param toDecorate
-     * @param mouseEntered
-     * @param mouseExited
-     * @return the listener that was added
+     * @param   toDecorate    DOCUMENT ME!
+     * @param   mouseEntered  DOCUMENT ME!
+     * @param   mouseExited   DOCUMENT ME!
+     *
+     * @return  the listener that was added
      */
-    public static MouseListener decorateComponentWithMouseOverCursorChange(final JComponent toDecorate, final int mouseEntered, final int mouseExited) {
+    public static MouseListener decorateComponentWithMouseOverCursorChange(final JComponent toDecorate,
+            final int mouseEntered,
+            final int mouseExited) {
         final MouseListener toAdd = new MouseAdapter() {
 
-            private final Cursor entered = new Cursor(mouseEntered);
-            private final Cursor exited = new Cursor(mouseExited);
+                private final Cursor entered = new Cursor(mouseEntered);
+                private final Cursor exited = new Cursor(mouseExited);
 
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                if (toDecorate.isEnabled()) {
-                    toDecorate.setCursor(entered);
+                @Override
+                public void mouseEntered(final MouseEvent e) {
+                    if (toDecorate.isEnabled()) {
+                        toDecorate.setCursor(entered);
+                    }
                 }
-            }
 
-            @Override
-            public void mouseExited(MouseEvent e) {
-                if (toDecorate.isEnabled()) {
-                    toDecorate.setCursor(exited);
+                @Override
+                public void mouseExited(final MouseEvent e) {
+                    if (toDecorate.isEnabled()) {
+                        toDecorate.setCursor(exited);
+                    }
                 }
-            }
-        };
+            };
         toDecorate.addMouseListener(toAdd);
         return toAdd;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  url  DOCUMENT ME!
+     */
     public static void openURL(final String url) {
         if (url == null) {
             return;
@@ -386,11 +533,18 @@ public class ObjectRendererUtils {
         }
     }
 
-    public static String propertyPrettyPrint(Object propertyValue) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   propertyValue  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String propertyPrettyPrint(final Object propertyValue) {
         if (propertyValue instanceof Collection) {
-            final Collection beanCollection = (Collection) propertyValue;
+            final Collection beanCollection = (Collection)propertyValue;
             final StringBuilder resultSB = new StringBuilder();
-            for (Object bean : beanCollection) {
+            for (final Object bean : beanCollection) {
                 if (resultSB.length() != 0) {
                     resultSB.append(", ");
                 }
@@ -404,9 +558,17 @@ public class ObjectRendererUtils {
         }
     }
 
-    public static final int findComboBoxItemForString(JComboBox box, String searchString) {
-        if (box != null && searchString != null) {
-            ComboBoxModel model = box.getModel();
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   box           DOCUMENT ME!
+     * @param   searchString  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static final int findComboBoxItemForString(final JComboBox box, final String searchString) {
+        if ((box != null) && (searchString != null)) {
+            final ComboBoxModel model = box.getModel();
             if (model != null) {
                 for (int i = model.getSize(); --i >= 0;) {
                     if (searchString.equals(String.valueOf(model.getElementAt(i)))) {
@@ -418,10 +580,18 @@ public class ObjectRendererUtils {
         return -1;
     }
 
-    public static String getUrlFromBean(CidsBean bean, String suffix) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   bean    DOCUMENT ME!
+     * @param   suffix  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String getUrlFromBean(final CidsBean bean, final String suffix) {
         final Object obj = bean.getProperty("url_base_id");
         if (obj instanceof CidsBean) {
-            final CidsBean urlBase = (CidsBean) obj;
+            final CidsBean urlBase = (CidsBean)obj;
             final StringBuffer bildURL = new StringBuffer(urlBase.getProperty("prot_prefix").toString());
             bildURL.append(urlBase.getProperty("server").toString());
             bildURL.append(urlBase.getProperty("path").toString());
@@ -437,9 +607,11 @@ public class ObjectRendererUtils {
     /**
      * Makes the parameter table alphanumerically sortable.
      *
-     * @param tbl
+     * @param   tbl  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
      */
-    public static TableRowSorter<TableModel> decorateTableWithSorter(JTable tbl) {
+    public static TableRowSorter<TableModel> decorateTableWithSorter(final JTable tbl) {
         final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tbl.getModel());
 //        sorter.setSortsOnUpdates(true);
         for (int i = 0; i < tbl.getColumnCount(); ++i) {
@@ -448,29 +620,72 @@ public class ObjectRendererUtils {
         tbl.setRowSorter(sorter);
         tbl.getTableHeader().addMouseListener(new TableHeaderUnsortMouseAdapter(tbl));
         return sorter;
-
     }
 
-    public static MouseAdapter decorateJLabelWithLinkBehaviour(JLabel label) {
-        LabelLinkBehaviourMouseAdapter llbma = new LabelLinkBehaviourMouseAdapter(label);
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   label  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static MouseAdapter decorateJLabelWithLinkBehaviour(final JLabel label) {
+        final LabelLinkBehaviourMouseAdapter llbma = new LabelLinkBehaviourMouseAdapter(label);
         label.addMouseListener(llbma);
         return llbma;
     }
 
-    public static MouseAdapter decorateJLabelAndButtonSynced(JLabel label, JButton button, Icon highlight, Icon pressed) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   label      DOCUMENT ME!
+     * @param   button     DOCUMENT ME!
+     * @param   highlight  DOCUMENT ME!
+     * @param   pressed    DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static MouseAdapter decorateJLabelAndButtonSynced(final JLabel label,
+            final JButton button,
+            final Icon highlight,
+            final Icon pressed) {
         final MouseAdapter syncedAdapter = new SyncLabelButtonMouseAdapter(label, button, highlight, pressed);
         label.addMouseListener(syncedAdapter);
         button.addMouseListener(syncedAdapter);
         return syncedAdapter;
     }
 
-    public static MouseAdapter decorateButtonWithStatusImages(JButton button, Icon plain, Icon highlight, Icon pressed) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   button     DOCUMENT ME!
+     * @param   plain      DOCUMENT ME!
+     * @param   highlight  DOCUMENT ME!
+     * @param   pressed    DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static MouseAdapter decorateButtonWithStatusImages(final JButton button,
+            final Icon plain,
+            final Icon highlight,
+            final Icon pressed) {
         final ImagedButtonMouseAdapter ibma = new ImagedButtonMouseAdapter(button, plain, highlight, pressed);
         button.addMouseListener(ibma);
         return ibma;
     }
 
-    public static MouseAdapter decorateButtonWithStatusImages(JButton button, Icon highlight, Icon pressed) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   button     DOCUMENT ME!
+     * @param   highlight  DOCUMENT ME!
+     * @param   pressed    DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static MouseAdapter decorateButtonWithStatusImages(final JButton button,
+            final Icon highlight,
+            final Icon pressed) {
         final ImagedButtonMouseAdapter ibma = new ImagedButtonMouseAdapter(button, highlight, pressed);
         button.addMouseListener(ibma);
         return ibma;
@@ -478,27 +693,39 @@ public class ObjectRendererUtils {
 }
 
 /**
- * MouseAdapter for remove sorting from the table when perfoming a right-click
- * on the header
+ * MouseAdapter for remove sorting from the table when perfoming a right-click on the header.
  *
- * @author srichter
+ * @author   srichter
+ * @version  $Revision$, $Date$
  */
 final class TableHeaderUnsortMouseAdapter extends MouseAdapter {
 
-    public TableHeaderUnsortMouseAdapter(JTable tbl) {
-        this.tbl = tbl;
-    }
+    //~ Instance fields --------------------------------------------------------
+
     private JTable tbl;
 
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new TableHeaderUnsortMouseAdapter object.
+     *
+     * @param  tbl  DOCUMENT ME!
+     */
+    public TableHeaderUnsortMouseAdapter(final JTable tbl) {
+        this.tbl = tbl;
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
     @Override
-    public void mousePressed(MouseEvent e) {
+    public void mousePressed(final MouseEvent e) {
         if (e.isPopupTrigger()) {
             tbl.getRowSorter().setSortKeys(null);
         }
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
+    public void mouseReleased(final MouseEvent e) {
         if (e.isPopupTrigger()) {
             tbl.getRowSorter().setSortKeys(null);
         }
@@ -506,34 +733,47 @@ final class TableHeaderUnsortMouseAdapter extends MouseAdapter {
 }
 
 /**
+ * DOCUMENT ME!
  *
- * @author srichter
+ * @author   srichter
+ * @version  $Revision$, $Date$
  */
 final class LabelLinkBehaviourMouseAdapter extends MouseAdapter {
 
-    public LabelLinkBehaviourMouseAdapter(JLabel label) {
-        this.label = label;
-        plain = label.getFont();
-        final Map<TextAttribute, Object> attributesMap = (Map<TextAttribute, Object>) plain.getAttributes();
-        attributesMap.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-        underlined = plain.deriveFont(attributesMap);
+    //~ Instance fields --------------------------------------------------------
 
-    }
+    protected final JLabel label;
     private final Cursor handCursor = new Cursor(Cursor.HAND_CURSOR);
     private final Font underlined;
     private final Font plain;
-    protected final JLabel label;
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new LabelLinkBehaviourMouseAdapter object.
+     *
+     * @param  label  DOCUMENT ME!
+     */
+    public LabelLinkBehaviourMouseAdapter(final JLabel label) {
+        this.label = label;
+        plain = label.getFont();
+        final Map<TextAttribute, Object> attributesMap = (Map<TextAttribute, Object>)plain.getAttributes();
+        attributesMap.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+        underlined = plain.deriveFont(attributesMap);
+    }
+
+    //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void mouseEntered(MouseEvent e) {
+    public void mouseEntered(final MouseEvent e) {
         label.setCursor(handCursor);
-        if (label.isEnabled() && label.getFont() != underlined) {
+        if (label.isEnabled() && (label.getFont() != underlined)) {
             label.setFont(underlined);
         }
     }
 
     @Override
-    public void mouseExited(MouseEvent e) {
+    public void mouseExited(final MouseEvent e) {
         label.setCursor(Cursor.getDefaultCursor());
         if (label.getFont() != plain) {
             label.setFont(plain);
@@ -541,57 +781,97 @@ final class LabelLinkBehaviourMouseAdapter extends MouseAdapter {
     }
 }
 
+/**
+ * DOCUMENT ME!
+ *
+ * @version  $Revision$, $Date$
+ */
 final class ImagedButtonMouseAdapter extends MouseAdapter {
 
-    public ImagedButtonMouseAdapter(JButton button, Icon plain, Icon highlight, Icon pressed) {
+    //~ Instance fields --------------------------------------------------------
+
+    protected final JButton button;
+    protected boolean over = false;
+    protected boolean pressed = false;
+    private final Icon plainIcon;
+    private final Icon highlightIcon;
+    private final Icon pressedIcon;
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new ImagedButtonMouseAdapter object.
+     *
+     * @param  button     DOCUMENT ME!
+     * @param  highlight  DOCUMENT ME!
+     * @param  pressed    DOCUMENT ME!
+     */
+    public ImagedButtonMouseAdapter(final JButton button, final Icon highlight, final Icon pressed) {
+        this(button, button.getIcon(), highlight, pressed);
+    }
+
+    /**
+     * Creates a new ImagedButtonMouseAdapter object.
+     *
+     * @param  button     DOCUMENT ME!
+     * @param  plain      DOCUMENT ME!
+     * @param  highlight  DOCUMENT ME!
+     * @param  pressed    DOCUMENT ME!
+     */
+    public ImagedButtonMouseAdapter(final JButton button, final Icon plain, final Icon highlight, final Icon pressed) {
         this.button = button;
-        ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(button, Cursor.HAND_CURSOR, Cursor.DEFAULT_CURSOR);
+        ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(
+            button,
+            Cursor.HAND_CURSOR,
+            Cursor.DEFAULT_CURSOR);
         this.plainIcon = plain;
         this.highlightIcon = highlight;
         this.pressedIcon = pressed;
     }
 
-    public ImagedButtonMouseAdapter(JButton button, Icon highlight, Icon pressed) {
-        this(button, button.getIcon(), highlight, pressed);
-    }
-    private final Icon plainIcon;
-    private final Icon highlightIcon;
-    private final Icon pressedIcon;
-    protected final JButton button;
-    protected boolean over = false;
-    protected boolean pressed = false;
+    //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void mouseEntered(MouseEvent e) {
+    public void mouseEntered(final MouseEvent e) {
         over = true;
         handleEvent(e);
     }
 
     @Override
-    public void mouseExited(MouseEvent e) {
+    public void mouseExited(final MouseEvent e) {
         over = false;
         handleEvent(e);
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
+    public void mousePressed(final MouseEvent e) {
         pressed = true;
         handleEvent(e);
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
+    public void mouseReleased(final MouseEvent e) {
         pressed = false;
         handleEvent(e);
     }
 
-    private final void testAndSet(Icon icon) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  icon  DOCUMENT ME!
+     */
+    private void testAndSet(final Icon icon) {
         if (button.getIcon() != icon) {
             button.setIcon(icon);
         }
     }
 
-    protected void handleEvent(MouseEvent e) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  e  DOCUMENT ME!
+     */
+    protected void handleEvent(final MouseEvent e) {
         if (button.isEnabled()) {
             if (pressed && over) {
                 testAndSet(pressedIcon);
@@ -606,35 +886,58 @@ final class ImagedButtonMouseAdapter extends MouseAdapter {
     }
 }
 
+/**
+ * DOCUMENT ME!
+ *
+ * @version  $Revision$, $Date$
+ */
 final class SyncLabelButtonMouseAdapter extends MouseAdapter {
 
-    public SyncLabelButtonMouseAdapter(JLabel label, JButton button, Icon highlight, Icon pressed) {
-        delegateButton = new ImagedButtonMouseAdapter(button, highlight, pressed);
-        delegateLabel = new LabelLinkBehaviourMouseAdapter(label);
-    }
+    //~ Instance fields --------------------------------------------------------
+
     private final MouseAdapter delegateButton;
     private final MouseAdapter delegateLabel;
 
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new SyncLabelButtonMouseAdapter object.
+     *
+     * @param  label      DOCUMENT ME!
+     * @param  button     DOCUMENT ME!
+     * @param  highlight  DOCUMENT ME!
+     * @param  pressed    DOCUMENT ME!
+     */
+    public SyncLabelButtonMouseAdapter(final JLabel label,
+            final JButton button,
+            final Icon highlight,
+            final Icon pressed) {
+        delegateButton = new ImagedButtonMouseAdapter(button, highlight, pressed);
+        delegateLabel = new LabelLinkBehaviourMouseAdapter(label);
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
     @Override
-    public void mouseEntered(MouseEvent e) {
+    public void mouseEntered(final MouseEvent e) {
         delegateButton.mouseEntered(e);
         delegateLabel.mouseEntered(e);
     }
 
     @Override
-    public void mouseExited(MouseEvent e) {
+    public void mouseExited(final MouseEvent e) {
         delegateButton.mouseExited(e);
         delegateLabel.mouseExited(e);
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
+    public void mousePressed(final MouseEvent e) {
         delegateButton.mousePressed(e);
         delegateLabel.mousePressed(e);
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
+    public void mouseReleased(final MouseEvent e) {
         delegateButton.mouseReleased(e);
         delegateLabel.mouseReleased(e);
     }

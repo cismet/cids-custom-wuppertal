@@ -1,14 +1,16 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import de.cismet.tools.gui.RoundedPanel;
-import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
 import com.vividsolutions.jts.geom.Geometry;
-import de.cismet.cids.annotations.AggregationRenderer;
-import de.cismet.cids.annotations.CidsAttribute;
-import de.cismet.cids.annotations.CidsAttributeVector;
-import de.cismet.cids.custom.deprecated.IndentLabel;
-import de.cismet.cids.custom.deprecated.JLoadDots;
-import de.cismet.tools.BrowserLauncher;
+
+import org.apache.log4j.Logger;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -16,85 +18,142 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+
 import java.util.Vector;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import org.apache.log4j.Logger;
+
+import de.cismet.cids.annotations.AggregationRenderer;
+import de.cismet.cids.annotations.CidsAttribute;
+import de.cismet.cids.annotations.CidsAttributeVector;
+
+import de.cismet.cids.custom.deprecated.IndentLabel;
+import de.cismet.cids.custom.deprecated.JLoadDots;
+
+import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
+
+import de.cismet.tools.BrowserLauncher;
+
+import de.cismet.tools.gui.RoundedPanel;
 
 /**
- * de.cismet.cids.objectrenderer.CoolFlurstueckRenderer
- * @author  nh
+ * de.cismet.cids.objectrenderer.CoolFlurstueckRenderer.
+ *
+ * @author   nh
+ * @version  $Revision$, $Date$
  */
 @AggregationRenderer
 public class FlurstueckRenderer extends CoolPanel {
-    private final Logger log = Logger.getLogger(this.getClass());
-    
-    @CidsAttribute("GEMARKUNGS_NR.NAME")
-    public String gemarkungsName = "";
-    
-    @CidsAttribute("FLUR")
-    public String flur = "";
-    
-    @CidsAttribute("FSTNR_Z")
-    public Integer zaehler;
-    
-    @CidsAttribute("FSTNR_N")
-    public Integer nenner;
-    
-    @CidsAttribute("X")
-    public Float x;
-    
-    @CidsAttribute("Y")
-    public Float y;
-    
-    @CidsAttribute("FLAECHE_ALB")
-    public Float flaecheALB;
-    
-    @CidsAttribute("FLAECHE_ALK")
-    public Float flaecheALK;
-    
-    @CidsAttribute("GRUNDBUCH")
-    public Integer grundbuch;
-    
-    @CidsAttribute("VERW_DIENST")
-    public Integer dienststelle;
-    
-    @CidsAttribute("LOCATION")
-    public String location = "";
-    
-    @CidsAttribute("Georeferenz.GEO_STRING")
-    public Geometry geometry = null;
-    
-    // Aggregation-Zuweisungen
-        @CidsAttributeVector("GEMARKUNGS_NR.NAME")
-        public Vector<String> nameAgr = new Vector();
 
-        @CidsAttributeVector("FLUR")
-        public Vector<String> flurAgr = new Vector();
+    //~ Static fields/initializers ---------------------------------------------
 
-        @CidsAttributeVector("FSTNR_Z")
-        public Vector<Integer> zaehlerAgr = new Vector();
-
-        @CidsAttributeVector("FSTNR_N")
-        public Vector<Integer> nennerAgr = new Vector();
-
-        @CidsAttributeVector("FLAECHE_ALB")
-        public Vector<Float> albAgr = new Vector();
-
-        @CidsAttributeVector("FLAECHE_ALK")
-        public Vector<Float> alkAgr = new Vector();
-
-        @CidsAttributeVector("Grundbuch")
-        public Vector<Integer> grundbuchAgr = new Vector();
-
-        @CidsAttributeVector("Georeferenz.GEO_STRING")
-        public Vector<Geometry> geoAgr = new Vector();
-    
     private static final String TITLE = "Flurst\u00FCck";
     private static final String TITLE_AGR = "Flurst\u00FCcke";
+
+    //~ Instance fields --------------------------------------------------------
+
+    @CidsAttribute("GEMARKUNGS_NR.NAME")
+    public String gemarkungsName = "";
+
+    @CidsAttribute("FLUR")
+    public String flur = "";
+
+    @CidsAttribute("FSTNR_Z")
+    public Integer zaehler;
+
+    @CidsAttribute("FSTNR_N")
+    public Integer nenner;
+
+    @CidsAttribute("X")
+    public Float x;
+
+    @CidsAttribute("Y")
+    public Float y;
+
+    @CidsAttribute("FLAECHE_ALB")
+    public Float flaecheALB;
+
+    @CidsAttribute("FLAECHE_ALK")
+    public Float flaecheALK;
+
+    @CidsAttribute("GRUNDBUCH")
+    public Integer grundbuch;
+
+    @CidsAttribute("VERW_DIENST")
+    public Integer dienststelle;
+
+    @CidsAttribute("LOCATION")
+    public String location = "";
+
+    @CidsAttribute("Georeferenz.GEO_STRING")
+    public Geometry geometry = null;
+
+    // Aggregation-Zuweisungen
+    @CidsAttributeVector("GEMARKUNGS_NR.NAME")
+    public Vector<String> nameAgr = new Vector();
+
+    @CidsAttributeVector("FLUR")
+    public Vector<String> flurAgr = new Vector();
+
+    @CidsAttributeVector("FSTNR_Z")
+    public Vector<Integer> zaehlerAgr = new Vector();
+
+    @CidsAttributeVector("FSTNR_N")
+    public Vector<Integer> nennerAgr = new Vector();
+
+    @CidsAttributeVector("FLAECHE_ALB")
+    public Vector<Float> albAgr = new Vector();
+
+    @CidsAttributeVector("FLAECHE_ALK")
+    public Vector<Float> alkAgr = new Vector();
+
+    @CidsAttributeVector("Grundbuch")
+    public Vector<Integer> grundbuchAgr = new Vector();
+
+    @CidsAttributeVector("Georeferenz.GEO_STRING")
+    public Vector<Geometry> geoAgr = new Vector();
     public Geometry allGeom;
-    
-    /** Creates new form CoolFlurstueckRenderer */
+    private final Logger log = Logger.getLogger(this.getClass());
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private org.jdesktop.swingx.JXHyperlink jxhALB;
+    private javax.swing.JLabel lblALB;
+    private javax.swing.JLabel lblALK;
+    private javax.swing.JLabel lblAgrTitle;
+    private javax.swing.JLabel lblDienststelle;
+    private javax.swing.JLabel lblFlur;
+    private javax.swing.JLabel lblGrundbuch;
+    private javax.swing.JLabel lblLocation;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JLabel lblX;
+    private javax.swing.JLabel lblY;
+    private javax.swing.JLabel lblZaehlerNenner;
+    private javax.swing.JPanel panAggregation;
+    private javax.swing.JPanel panAgrContent;
+    private javax.swing.JPanel panAgrTitle;
+    private javax.swing.JPanel panContent;
+    private javax.swing.JPanel panInter;
+    private javax.swing.JPanel panMap;
+    private javax.swing.JPanel panSpinner;
+    private javax.swing.JPanel panTitle;
+    // End of variables declaration//GEN-END:variables
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates new form CoolFlurstueckRenderer.
+     */
     public FlurstueckRenderer() {
         initComponents();
         setPanContent(panContent);
@@ -105,17 +164,21 @@ public class FlurstueckRenderer extends CoolPanel {
         extraAggregationRendererComponent = panAggregation;
         allGeom = null;
     }
-    
+
+    //~ Methods ----------------------------------------------------------------
+
     @Override
     public void assignSingle() {
-        if (geometry != null)
+        if (geometry != null) {
             setGeometry(geometry);
-        
+        }
+
         if (gemarkungsName != null) {
             lblTitle.setText(TITLE + " (" + gemarkungsName + ")");
-        } else
+        } else {
             lblTitle.setText(TITLE);
-        
+        }
+
         if (flur != null) {
             if (gemarkungsName != null) {
                 lblTitle.setText(TITLE + " (" + gemarkungsName + ")" + " - " + flur);
@@ -127,56 +190,56 @@ public class FlurstueckRenderer extends CoolPanel {
             jLabel1.setVisible(false);
             lblFlur.setVisible(false);
         }
-        
-        if (zaehler != null && nenner != null) {
+
+        if ((zaehler != null) && (nenner != null)) {
             lblZaehlerNenner.setText(zaehler + " / " + nenner);
         } else {
             jLabel2.setVisible(false);
             lblZaehlerNenner.setVisible(false);
         }
-        
+
         if (x != null) {
             lblX.setText(x.toString());
         } else {
             jLabel3.setVisible(false);
             lblX.setVisible(false);
         }
-        
+
         if (y != null) {
             lblY.setText(y.toString());
         } else {
             jLabel4.setVisible(false);
             lblY.setVisible(false);
         }
-        
+
         if (flaecheALB != null) {
             lblALB.setText(flaecheALB.toString());
         } else {
             jLabel5.setVisible(false);
             lblALB.setVisible(false);
         }
-        
+
         if (flaecheALK != null) {
             lblALK.setText(flaecheALK.toString());
         } else {
             jLabel6.setVisible(false);
             lblALK.setVisible(false);
         }
-        
+
         if (grundbuch != null) {
             lblGrundbuch.setText(grundbuch.toString());
         } else {
             jLabel7.setVisible(false);
             lblGrundbuch.setVisible(false);
         }
-        
+
         if (dienststelle != null) {
             lblDienststelle.setText(dienststelle.toString());
         } else {
             jLabel8.setVisible(false);
             lblDienststelle.setVisible(false);
         }
-        
+
         if (location != null) {
             lblLocation.setText(location);
         } else {
@@ -184,24 +247,25 @@ public class FlurstueckRenderer extends CoolPanel {
             lblLocation.setVisible(false);
         }
     }
-    
+
     @Override
     public void assignAggregation() {
         // GridLayout der Anzahl Objekte anpassen
-        if (nameAgr.size() % 3 == 0)
-            ((GridLayout)panAgrContent.getLayout()).setRows(nameAgr.size()/3);
-        else if (nameAgr.size() % 3 == 1)
-            ((GridLayout)panAgrContent.getLayout()).setRows((nameAgr.size()+2)/3);
-        else
-            ((GridLayout)panAgrContent.getLayout()).setRows((nameAgr.size()+1)/3);
-        
+        if ((nameAgr.size() % 3) == 0) {
+            ((GridLayout)panAgrContent.getLayout()).setRows(nameAgr.size() / 3);
+        } else if ((nameAgr.size() % 3) == 1) {
+            ((GridLayout)panAgrContent.getLayout()).setRows((nameAgr.size() + 2) / 3);
+        } else {
+            ((GridLayout)panAgrContent.getLayout()).setRows((nameAgr.size() + 1) / 3);
+        }
+
         lblAgrTitle.setText(nameAgr.size() + " " + TITLE_AGR);
-        
+
         // Im Schleife alle Objekte erzeugen und einfuegen
         for (int i = 0; i < nameAgr.size(); i++) {
-            if (allGeom != null && geoAgr.get(i) != null) {
+            if ((allGeom != null) && (geoAgr.get(i) != null)) {
                 allGeom = allGeom.union(geoAgr.get(i));
-            } else if (allGeom == null && geoAgr.get(i) != null) {
+            } else if ((allGeom == null) && (geoAgr.get(i) != null)) {
                 allGeom = geoAgr.get(i);
             }
             final Font bold = new Font("Tahoma", Font.BOLD, 11);
@@ -217,103 +281,106 @@ public class FlurstueckRenderer extends CoolPanel {
             jLabel14.setFont(bold);
             final JLabel jLabel15 = new JLabel("Grundbuch:");
             jLabel15.setFont(bold);
-            
+
             final int index = i;
-            
-            Thread t = new Thread(new Runnable() {
+
+            final Thread t = new Thread(new Runnable() {
+
 //            EventQueue.invokeLater(new Runnable() {
-                public void run() {
-                    RoundedPanel rnd = new RoundedPanel(new BorderLayout());
-                    rnd.setLayout(new BorderLayout());
-                    
-                    JPanel panTemp = new JPanel();
-                    panTemp.setLayout(new GridBagLayout());
-                    panTemp.setOpaque(false);
-
-                    panTemp.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 5, 5, 5));
-                    
-                    GridBagConstraints c = new GridBagConstraints();
-                    c.anchor = GridBagConstraints.NORTHWEST;
-                    c.insets = new Insets(0, 0, 5, 30);
-                    panTemp.add(jLabel10, c);
-
-                    c.gridx = 0;
-                    c.gridy = 1;
-                    panTemp.add(jLabel11, c);
-                    
-                    c.gridx = 0;
-                    c.gridy = 2;
-                    panTemp.add(jLabel12, c);
-                    
-                    c.gridx = 0;
-                    c.gridy = 3;
-                    panTemp.add(jLabel13, c);
-
-                    c.gridx = 0;
-                    c.gridy = 4;
-                    panTemp.add(jLabel14, c);
-
-                    c.gridx = 0;
-                    c.gridy = 5;
-                    panTemp.add(jLabel15, c);
-
-                    JLabel lblNameAgr = new JLabel(nameAgr.get(index));
-                    c.gridx = 1;
-                    c.gridy = 0;
-                    c.insets = new java.awt.Insets(0, 0, 5, 0);
-                    panTemp.add(lblNameAgr, c);
-                        
-                    JLabel lblFlurAgr = new JLabel(flurAgr.get(index));
-                    c.gridx = 1;
-                    c.gridy = 1;
-                    panTemp.add(lblFlurAgr, c);
-
-                    JLabel lblZNAgr = new JLabel(zaehlerAgr.get(index) + " / " + nennerAgr.get(index));
-                    c.gridx = 1;
-                    c.gridy = 2;
-                    panTemp.add(lblZNAgr, c);
-
-                    if (albAgr.get(index) != null) {
-                        JLabel lblFlALBAgr = new JLabel(albAgr.get(index).toString());
-                        c.gridx = 1;
-                        c.gridy = 3;
-                        panTemp.add(lblFlALBAgr, c);
-                    }
-
-                    if (alkAgr.get(index) != null) {
-                        JLabel lblFlALKAgr = new JLabel(alkAgr.get(index).toString());
-                        c.gridx = 1;
-                        c.gridy = 4;
-                        panTemp.add(lblFlALKAgr, c);
-                    }
-
-                    if (grundbuchAgr.get(index) != null) {
-                        JLabel lblGrundbuchAgr = new JLabel(grundbuchAgr.get(index).toString());
-                        c.gridx = 1;
-                        c.gridy = 5;
-                        panTemp.add(lblGrundbuchAgr, c);
-                    }
-
-                    rnd.add(panTemp, BorderLayout.CENTER);
-                    final JPanel finalPan = rnd;
-                    
-                    EventQueue.invokeLater(new Runnable() {
+                        @Override
                         public void run() {
-                            panAgrContent.add(finalPan);
-                            panAgrContent.validate();
+                            final RoundedPanel rnd = new RoundedPanel(new BorderLayout());
+                            rnd.setLayout(new BorderLayout());
+
+                            final JPanel panTemp = new JPanel();
+                            panTemp.setLayout(new GridBagLayout());
+                            panTemp.setOpaque(false);
+
+                            panTemp.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 5, 5, 5));
+
+                            final GridBagConstraints c = new GridBagConstraints();
+                            c.anchor = GridBagConstraints.NORTHWEST;
+                            c.insets = new Insets(0, 0, 5, 30);
+                            panTemp.add(jLabel10, c);
+
+                            c.gridx = 0;
+                            c.gridy = 1;
+                            panTemp.add(jLabel11, c);
+
+                            c.gridx = 0;
+                            c.gridy = 2;
+                            panTemp.add(jLabel12, c);
+
+                            c.gridx = 0;
+                            c.gridy = 3;
+                            panTemp.add(jLabel13, c);
+
+                            c.gridx = 0;
+                            c.gridy = 4;
+                            panTemp.add(jLabel14, c);
+
+                            c.gridx = 0;
+                            c.gridy = 5;
+                            panTemp.add(jLabel15, c);
+
+                            final JLabel lblNameAgr = new JLabel(nameAgr.get(index));
+                            c.gridx = 1;
+                            c.gridy = 0;
+                            c.insets = new java.awt.Insets(0, 0, 5, 0);
+                            panTemp.add(lblNameAgr, c);
+
+                            final JLabel lblFlurAgr = new JLabel(flurAgr.get(index));
+                            c.gridx = 1;
+                            c.gridy = 1;
+                            panTemp.add(lblFlurAgr, c);
+
+                            final JLabel lblZNAgr = new JLabel(zaehlerAgr.get(index) + " / " + nennerAgr.get(index));
+                            c.gridx = 1;
+                            c.gridy = 2;
+                            panTemp.add(lblZNAgr, c);
+
+                            if (albAgr.get(index) != null) {
+                                final JLabel lblFlALBAgr = new JLabel(albAgr.get(index).toString());
+                                c.gridx = 1;
+                                c.gridy = 3;
+                                panTemp.add(lblFlALBAgr, c);
+                            }
+
+                            if (alkAgr.get(index) != null) {
+                                final JLabel lblFlALKAgr = new JLabel(alkAgr.get(index).toString());
+                                c.gridx = 1;
+                                c.gridy = 4;
+                                panTemp.add(lblFlALKAgr, c);
+                            }
+
+                            if (grundbuchAgr.get(index) != null) {
+                                final JLabel lblGrundbuchAgr = new JLabel(grundbuchAgr.get(index).toString());
+                                c.gridx = 1;
+                                c.gridy = 5;
+                                panTemp.add(lblGrundbuchAgr, c);
+                            }
+
+                            rnd.add(panTemp, BorderLayout.CENTER);
+                            final JPanel finalPan = rnd;
+
+                            EventQueue.invokeLater(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        panAgrContent.add(finalPan);
+                                        panAgrContent.validate();
+                                    }
+                                });
                         }
                     });
-                }
-            });
             t.start();
         }
         ((CoolPanel)panAggregation).setGeometry(allGeom);
     }
-    
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -359,21 +426,22 @@ public class FlurstueckRenderer extends CoolPanel {
         lblAgrTitle.setForeground(new java.awt.Color(51, 51, 51));
         lblAgrTitle.setText("5 Flurst\u00FCcke");
 
-        javax.swing.GroupLayout panAgrTitleLayout = new javax.swing.GroupLayout(panAgrTitle);
+        final javax.swing.GroupLayout panAgrTitleLayout = new javax.swing.GroupLayout(panAgrTitle);
         panAgrTitle.setLayout(panAgrTitleLayout);
         panAgrTitleLayout.setHorizontalGroup(
-            panAgrTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panAgrTitleLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblAgrTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+            panAgrTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                panAgrTitleLayout.createSequentialGroup().addContainerGap().addComponent(
+                    lblAgrTitle,
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    319,
+                    Short.MAX_VALUE).addContainerGap()));
         panAgrTitleLayout.setVerticalGroup(
-            panAgrTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panAgrTitleLayout.createSequentialGroup()
-                .addComponent(lblAgrTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+            panAgrTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                panAgrTitleLayout.createSequentialGroup().addComponent(
+                    lblAgrTitle,
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    33,
+                    Short.MAX_VALUE).addContainerGap()));
 
         panAggregation.add(panAgrTitle, java.awt.BorderLayout.NORTH);
 
@@ -565,10 +633,12 @@ public class FlurstueckRenderer extends CoolPanel {
         jxhALB.setFocusPainted(false);
         jxhALB.setUnclickedColor(new java.awt.Color(255, 255, 255));
         jxhALB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jxhALBActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jxhALBActionPerformed(evt);
+                }
+            });
         panInter.add(jxhALB);
 
         add(panInter, java.awt.BorderLayout.SOUTH);
@@ -582,61 +652,34 @@ public class FlurstueckRenderer extends CoolPanel {
         panSpinner.setPreferredSize(new java.awt.Dimension(100, 100));
         panSpinner.setRequestFocusEnabled(false);
 
-        javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
+        final javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
         panSpinner.setLayout(panSpinnerLayout);
         panSpinnerLayout.setHorizontalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                100,
+                Short.MAX_VALUE));
         panSpinnerLayout.setVerticalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                100,
+                Short.MAX_VALUE));
 
         panMap.add(panSpinner, new java.awt.GridBagConstraints());
 
         add(panMap, java.awt.BorderLayout.CENTER);
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
-    private void jxhALBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxhALBActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jxhALBActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxhALBActionPerformed
         try {
             BrowserLauncher.openURL("http://kif/web/alb/ALB.htm");
         } catch (Exception e) {
             log.error("Konnte Flurst\u00FCck nicht im ALB-Browser \u00F6ffnen", e);
         }
-    }//GEN-LAST:event_jxhALBActionPerformed
-    
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    private org.jdesktop.swingx.JXHyperlink jxhALB;
-    private javax.swing.JLabel lblALB;
-    private javax.swing.JLabel lblALK;
-    private javax.swing.JLabel lblAgrTitle;
-    private javax.swing.JLabel lblDienststelle;
-    private javax.swing.JLabel lblFlur;
-    private javax.swing.JLabel lblGrundbuch;
-    private javax.swing.JLabel lblLocation;
-    private javax.swing.JLabel lblTitle;
-    private javax.swing.JLabel lblX;
-    private javax.swing.JLabel lblY;
-    private javax.swing.JLabel lblZaehlerNenner;
-    private javax.swing.JPanel panAggregation;
-    private javax.swing.JPanel panAgrContent;
-    private javax.swing.JPanel panAgrTitle;
-    private javax.swing.JPanel panContent;
-    private javax.swing.JPanel panInter;
-    private javax.swing.JPanel panMap;
-    private javax.swing.JPanel panSpinner;
-    private javax.swing.JPanel panTitle;
-    // End of variables declaration//GEN-END:variables
-    
+    }                                                                          //GEN-LAST:event_jxhALBActionPerformed
 }

@@ -1,8 +1,14 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /*
  * ThemaAggregationRenderer.java
  *
@@ -10,27 +16,20 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import de.cismet.cids.custom.objectrenderer.converter.SQLDateToStringConverter;
-import de.cismet.cids.custom.objectrenderer.utils.AbstractJasperReportPrint;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.objectrenderer.utils.XMLPropertyParser;
-import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
-import de.cismet.cids.dynamics.CidsBean;
-import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
-import de.cismet.tools.CismetThreadPool;
-import de.cismet.tools.gui.RoundedPanel;
-import de.cismet.tools.gui.TitleComponentProvider;
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import java.io.BufferedInputStream;
 import java.io.InputStream;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -38,41 +37,86 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
-/**
- *
- * @author thorsten
- */
-public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer, TitleComponentProvider {
+import de.cismet.cids.custom.objectrenderer.converter.SQLDateToStringConverter;
+import de.cismet.cids.custom.objectrenderer.utils.AbstractJasperReportPrint;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.XMLPropertyParser;
+import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Arc_stadtbildAggregationRenderer.class);
+import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
+
+import de.cismet.tools.CismetThreadPool;
+
+import de.cismet.tools.gui.RoundedPanel;
+import de.cismet.tools.gui.TitleComponentProvider;
+
+/**
+ * DOCUMENT ME!
+ *
+ * @author   thorsten
+ * @version  $Revision$, $Date$
+ */
+public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer,
+    TitleComponentProvider {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(
+            Arc_stadtbildAggregationRenderer.class);
     private static final XMLPropertyParser labelParser;
-    private Collection<CidsBean> cidsBeans = null;
 //    private static final List<String> ATTRIBUTES;
 //    private static final List<String> DESCRIPTIONS;
 //    private static final List<String> STYLES;
     public static final int GAP = 5;
     private static final String ERROR_STR = "/de/cismet/cids/tools/metaobjectrenderer/examples/error.png";
-    public static final ImageIcon ERROR_ICON = new ImageIcon(Arc_stadtbildAggregationRenderer.class.getResource(ERROR_STR));
-    public static final ImageIcon LOADING_ICON = new ImageIcon(Arc_stadtbildAggregationRenderer.class.getResource("/de/cismet/cids/custom/icons/load.png"));
-    private JLabel[] imgLabels;
-    private PictureWorker worker;
+    public static final ImageIcon ERROR_ICON = new ImageIcon(Arc_stadtbildAggregationRenderer.class.getResource(
+                ERROR_STR));
+    public static final ImageIcon LOADING_ICON = new ImageIcon(Arc_stadtbildAggregationRenderer.class.getResource(
+                "/de/cismet/cids/custom/icons/load.png"));
     private static final int MAX_ROWS = 2;
 
     static {
-        final InputStream is = new BufferedInputStream(Arc_stadtbildAggregationRenderer.class.getResourceAsStream("/de/cismet/cids/custom/wunda_blau/res/stadtbild_agg_renderer.xml"));
+        final InputStream is = new BufferedInputStream(Arc_stadtbildAggregationRenderer.class.getResourceAsStream(
+                    "/de/cismet/cids/custom/wunda_blau/res/stadtbild_agg_renderer.xml"));
 //        final InputStream is = new BufferedInputStream(Arc_stadtbildAggregationRenderer.class.getResourceAsStream("/res/stadtbild_agg_renderer.xml"));
         labelParser = new XMLPropertyParser(is);
-        //add converters for correct property presentation
+        // add converters for correct property presentation
         labelParser.addConverterForClass(java.sql.Date.class, new SQLDateToStringConverter());
     }
 
+    //~ Instance fields --------------------------------------------------------
+
+    private Collection<CidsBean> cidsBeans = null;
+    private JLabel[] imgLabels;
+    private PictureWorker worker;
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel lblAgrTitle;
+    private javax.swing.JLabel lblPrint;
+    private javax.swing.JPanel panAgrContent;
+    private javax.swing.JPanel panTitle;
+    private javax.swing.JPanel panTitlePrint;
+    private javax.swing.JPanel panTitleString;
+    // End of variables declaration//GEN-END:variables
+//    private org.jdesktop.beansbinding.BindingGroup bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new Arc_stadtbildAggregationRenderer object.
+     */
     public Arc_stadtbildAggregationRenderer() {
         initComponents();
-        ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(lblPrint, Cursor.HAND_CURSOR, Cursor.DEFAULT_CURSOR);
+        ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(
+            lblPrint,
+            Cursor.HAND_CURSOR,
+            Cursor.DEFAULT_CURSOR);
     }
 
+    //~ Methods ----------------------------------------------------------------
 
-    //TODO: error prone: remove notify is called by the docking framework -> we need a remove-hook
+    // TODO: error prone: remove notify is called by the docking framework -> we need a remove-hook
     @Override
     public void removeNotify() {
         final PictureWorker w = worker;
@@ -82,10 +126,9 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
         super.removeNotify();
     }
 
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -121,10 +164,12 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
 
         lblPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/printer.png"))); // NOI18N
         lblPrint.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblPrintMouseClicked(evt);
-            }
-        });
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblPrintMouseClicked(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
@@ -140,33 +185,30 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
         panAgrContent.setOpaque(false);
         panAgrContent.setLayout(new java.awt.GridLayout(1, 0));
 
-        //final LockableUI lockTblAgr = new LockableUI();
-        //lockLayerAgr.setLockedCursor(Cursor.getDefaultCursor());
-        //final JXLayer<JComponent> lockTblLayer = new JXLayer<JComponent>(panAgrContent, lockTblAgr);
+        // final LockableUI lockTblAgr = new LockableUI();
+        // lockLayerAgr.setLockedCursor(Cursor.getDefaultCursor());
+        // final JXLayer<JComponent> lockTblLayer = new JXLayer<JComponent>(panAgrContent, lockTblAgr);
 
         add(panAgrContent, java.awt.BorderLayout.CENTER);
-        //panAggregationRenderer.add(layerAgr, java.awt.BorderLayout.CENTER);
-        //lockTblAgr.setLocked(true);
-    }// </editor-fold>//GEN-END:initComponents
+        // panAggregationRenderer.add(layerAgr, java.awt.BorderLayout.CENTER); lockTblAgr.setLocked(true);
+    } // </editor-fold>//GEN-END:initComponents
 
-    private void lblPrintMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPrintMouseClicked
-        if (evt != null && !evt.isPopupTrigger()) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lblPrintMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblPrintMouseClicked
+        if ((evt != null) && !evt.isPopupTrigger()) {
             final Collection<CidsBean> beans = cidsBeans;
             if (beans != null) {
-                final AbstractJasperReportPrint jp = new StadtbildJasperReportPrint(Arc_stadtbildRenderer.REPORT_FILE, beans);
+                final AbstractJasperReportPrint jp = new StadtbildJasperReportPrint(
+                        Arc_stadtbildRenderer.REPORT_FILE,
+                        beans);
                 jp.print();
             }
         }
-}//GEN-LAST:event_lblPrintMouseClicked
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel lblAgrTitle;
-    private javax.swing.JLabel lblPrint;
-    private javax.swing.JPanel panAgrContent;
-    private javax.swing.JPanel panTitle;
-    private javax.swing.JPanel panTitlePrint;
-    private javax.swing.JPanel panTitleString;
-    // End of variables declaration//GEN-END:variables
-//    private org.jdesktop.beansbinding.BindingGroup bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
+    }                                                                        //GEN-LAST:event_lblPrintMouseClicked
 
     @Override
     public Collection<CidsBean> getCidsBeans() {
@@ -174,17 +216,17 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
     }
 
     @Override
-    public void setCidsBeans(Collection<CidsBean> cidsBeans) {
+    public void setCidsBeans(final Collection<CidsBean> cidsBeans) {
         this.cidsBeans = cidsBeans;
         setTitle(null);
         // GridLayout der Anzahl Objekte anpassen
-        final GridLayout gl = (GridLayout) panAgrContent.getLayout();
+        final GridLayout gl = (GridLayout)panAgrContent.getLayout();
         gl.setHgap(GAP);
         gl.setVgap(GAP);
 
         final int rowsRemainer = cidsBeans.size() % MAX_ROWS;
         final int lowerBound = cidsBeans.size() / MAX_ROWS;
-        gl.setRows(rowsRemainer == 0 ? lowerBound : (lowerBound + 1));
+        gl.setRows((rowsRemainer == 0) ? lowerBound : (lowerBound + 1));
 
         imgLabels = new JLabel[cidsBeans.size()];
 
@@ -235,10 +277,10 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
     }
 
     @Override
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         String desc = "Lichtkasten";
         final Collection<CidsBean> beans = cidsBeans;
-        if (beans != null && beans.size() > 0) {
+        if ((beans != null) && (beans.size() > 0)) {
             desc += " - " + beans.size() + " Bilder ausgewählt";
         }
         lblAgrTitle.setText(desc);
@@ -251,18 +293,35 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
 
     @Override
     public void dispose() {
-        
     }
 
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     final class PictureWorker extends SwingWorker<Void, ImageIcon> {
+
+        //~ Instance fields ----------------------------------------------------
 
         private int i = -1;
         private String[] urls;
+        private Collection<CidsBean> beans;
 
-        public PictureWorker(Collection<CidsBean> beans) {
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new PictureWorker object.
+         *
+         * @param  beans  DOCUMENT ME!
+         */
+        public PictureWorker(final Collection<CidsBean> beans) {
             this.beans = beans;
         }
-        private Collection<CidsBean> beans;
+
+        //~ Methods ------------------------------------------------------------
 
         @Override
         protected Void doInBackground() throws Exception {
@@ -299,29 +358,32 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
         }
 
         @Override
-        protected void process(List<ImageIcon> chunks) {
+        protected void process(final List<ImageIcon> chunks) {
             if (chunks != null) {
-                for (ImageIcon ii : chunks) {
+                for (final ImageIcon ii : chunks) {
                     if (!isCancelled()) {
                         if (++i < imgLabels.length) {
                             final JLabel label = imgLabels[i];
                             if (label != null) {
                                 label.setIcon(ii);
-                                ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(label, Cursor.HAND_CURSOR, Cursor.DEFAULT_CURSOR);
+                                ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(
+                                    label,
+                                    Cursor.HAND_CURSOR,
+                                    Cursor.DEFAULT_CURSOR);
                                 if (ii != ERROR_ICON) {
                                     label.addMouseListener(new MouseAdapter() {
 
-                                        private final String u = urls[i];
+                                            private final String u = urls[i];
 
-                                        @Override
-                                        public void mouseClicked(MouseEvent e) {
-                                            if (!e.isPopupTrigger()) {
-                                                if (u != null) {
-                                                    ObjectRendererUtils.openURL(u);
+                                            @Override
+                                            public void mouseClicked(final MouseEvent e) {
+                                                if (!e.isPopupTrigger()) {
+                                                    if (u != null) {
+                                                        ObjectRendererUtils.openURL(u);
+                                                    }
                                                 }
                                             }
-                                        }
-                                    });
+                                        });
                                 }
                             }
                         }

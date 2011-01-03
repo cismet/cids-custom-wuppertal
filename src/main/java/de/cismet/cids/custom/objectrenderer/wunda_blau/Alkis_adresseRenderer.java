@@ -1,8 +1,14 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /*
  * Alkis_pointRenderer.java
  *
@@ -11,35 +17,55 @@
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import Sirius.navigator.ui.ComponentRegistry;
+
 import Sirius.server.middleware.types.AbstractAttributeRepresentationFormater;
 import Sirius.server.middleware.types.LightweightMetaObject;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
+
 import de.aedsicad.aaaweb.service.util.Buchungsblatt;
-import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.dynamics.CidsBean;
-import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
-import de.cismet.cids.navigator.utils.ClassCacheMultiple;
-import de.cismet.tools.collections.TypeSafeCollections;
-import de.cismet.tools.gui.BorderProvider;
-import de.cismet.tools.gui.FooterComponentProvider;
-import de.cismet.tools.gui.RoundedPanel;
-import de.cismet.tools.gui.TitleComponentProvider;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import javax.swing.JComponent;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+
+import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+
+import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+
+import de.cismet.tools.collections.TypeSafeCollections;
+
+import de.cismet.tools.gui.BorderProvider;
+import de.cismet.tools.gui.FooterComponentProvider;
+import de.cismet.tools.gui.RoundedPanel;
+import de.cismet.tools.gui.TitleComponentProvider;
+
 /**
+ * DOCUMENT ME!
  *
- * @author srichter
+ * @author   srichter
+ * @version  $Revision$, $Date$
  */
-public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBeanRenderer, BorderProvider, TitleComponentProvider, FooterComponentProvider {
+public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBeanRenderer,
+    BorderProvider,
+    TitleComponentProvider,
+    FooterComponentProvider {
+
+    //~ Static fields/initializers ---------------------------------------------
 
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alkis_adresseRenderer.class);
+
+    //~ Instance fields --------------------------------------------------------
+
     private Buchungsblatt buchungsblatt;
     private CidsBean cidsBean;
     private String title;
@@ -54,36 +80,87 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
 //        }
 //
 //    };
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private org.jdesktop.swingx.JXBusyLabel blWait;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel9;
+    private javax.swing.JLabel lblBauweise;
+    private javax.swing.JLabel lblDescBauweise;
+    private javax.swing.JLabel lblDescFlurstuecke;
+    private javax.swing.JLabel lblDescFunktion;
+    private javax.swing.JLabel lblDescHausnummer;
+    private javax.swing.JLabel lblDescLage;
+    private javax.swing.JLabel lblDescStockwerkeOber;
+    private javax.swing.JLabel lblDescStockwerkeUnter;
+    private javax.swing.JLabel lblDescStrasse;
+    private javax.swing.JLabel lblFunktion;
+    private javax.swing.JLabel lblHausnummer;
+    private javax.swing.JLabel lblLage;
+    private javax.swing.JLabel lblStockwerkeOber;
+    private javax.swing.JLabel lblStockwerkeUnter;
+    private javax.swing.JLabel lblStrasse;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JList lstLandparcels;
+    private javax.swing.JPanel panAdresse;
+    private javax.swing.JPanel panAdresseContent;
+    private javax.swing.JPanel panFooter;
+    private javax.swing.JPanel panGebaeude;
+    private javax.swing.JPanel panGebaeudeContent;
+    private javax.swing.JPanel panTitle;
+    private javax.swing.JScrollPane scpLandparcels;
+    private de.cismet.tools.gui.SemiRoundedPanel srpHeadAdresse;
+    private de.cismet.tools.gui.SemiRoundedPanel srpHeadGebaeude;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
+    // End of variables declaration//GEN-END:variables
 
-    /** Creates new form Alkis_pointRenderer */
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates new form Alkis_pointRenderer.
+     */
     public Alkis_adresseRenderer() {
         initComponents();
         blWait.setVisible(false);
     }
 
-    private final MetaObject[] getAllAdressesForSameBuilding(CidsBean gebaeudeBean) {
-        if (gebaeudeBean != null) {
-            Object idObj = gebaeudeBean.getProperty("id");
-            if (idObj instanceof Integer) {
-                final Integer searchID = (Integer) idObj;
-                return ObjectRendererUtils.getLightweightMetaObjectsForQuery("alkis_adresse", "select id,strasse,nummer from alkis_adresse where gebaeude = " + searchID + " order by strasse,nummer", new String[]{"id", "strasse", "nummer"}, new AbstractAttributeRepresentationFormater() {
+    //~ Methods ----------------------------------------------------------------
 
-                    @Override
-                    public String getRepresentation() {
-                        StringBuilder result = new StringBuilder();
-                        result.append(getAttribute("strasse")).append(" ").append(getAttribute("nummer"));
-                        return result.toString();
-                    }
-                });
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   gebaeudeBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private MetaObject[] getAllAdressesForSameBuilding(final CidsBean gebaeudeBean) {
+        if (gebaeudeBean != null) {
+            final Object idObj = gebaeudeBean.getProperty("id");
+            if (idObj instanceof Integer) {
+                final Integer searchID = (Integer)idObj;
+                return ObjectRendererUtils.getLightweightMetaObjectsForQuery(
+                        "alkis_adresse",
+                        "select id,strasse,nummer from alkis_adresse where gebaeude = "
+                                + searchID
+                                + " order by strasse,nummer",
+                        new String[] { "id", "strasse", "nummer" },
+                        new AbstractAttributeRepresentationFormater() {
+
+                            @Override
+                            public String getRepresentation() {
+                                final StringBuilder result = new StringBuilder();
+                                result.append(getAttribute("strasse")).append(" ").append(getAttribute("nummer"));
+                                return result.toString();
+                            }
+                        });
             }
         }
         return new MetaObject[0];
     }
 
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -183,7 +260,12 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panAdresseContent.add(lblDescHausnummer, gridBagConstraints);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.strasse}"), lblStrasse, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.strasse}"),
+                lblStrasse,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -194,7 +276,12 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panAdresseContent.add(lblStrasse, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.nummer}"), lblHausnummer, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.nummer}"),
+                lblHausnummer,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -248,7 +335,12 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panGebaeudeContent.add(lblDescStockwerkeOber, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebaeude.funktion}"), lblFunktion, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebaeude.funktion}"),
+                lblFunktion,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -259,7 +351,12 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panGebaeudeContent.add(lblFunktion, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebaeude.geschosse_oberirdisch}"), lblStockwerkeOber, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebaeude.geschosse_oberirdisch}"),
+                lblStockwerkeOber,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -280,7 +377,12 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panGebaeudeContent.add(lblDescBauweise, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebaeude.bauweise}"), lblBauweise, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebaeude.bauweise}"),
+                lblBauweise,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -301,7 +403,12 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panGebaeudeContent.add(lblDescStockwerkeUnter, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebaeude.geschosse_unterirdisch}"), lblStockwerkeUnter, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebaeude.geschosse_unterirdisch}"),
+                lblStockwerkeUnter,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -313,17 +420,25 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panGebaeudeContent.add(lblStockwerkeUnter, gridBagConstraints);
 
-        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebaeude.landparcels}");
-        org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, eLProperty, lstLandparcels);
+        final org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
+                "${cidsBean.gebaeude.landparcels}");
+        final org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings
+                    .createJListBinding(
+                        org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                        this,
+                        eLProperty,
+                        lstLandparcels);
         jListBinding.setSourceNullValue(null);
         jListBinding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(jListBinding);
 
         lstLandparcels.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lstLandparcelsMouseClicked(evt);
-            }
-        });
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lstLandparcelsMouseClicked(evt);
+                }
+            });
         scpLandparcels.setViewportView(lstLandparcels);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -372,37 +487,41 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
         add(panGebaeude, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
-    private void lstLandparcelsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstLandparcelsMouseClicked
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lstLandparcelsMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstLandparcelsMouseClicked
         if (evt.getClickCount() > 1) {
             final Object selection = lstLandparcels.getSelectedValue();
             if (selection instanceof CidsBean) {
-                final CidsBean selBean = (CidsBean) selection;
-                Object jumpID = selBean.getProperty("fullobjectid");
+                final CidsBean selBean = (CidsBean)selection;
+                final Object jumpID = selBean.getProperty("fullobjectid");
                 if (jumpID instanceof Integer) {
-                    String tabname = "alkis_landparcel";
-                    MetaClass mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, tabname);
+                    final String tabname = "alkis_landparcel";
+                    final MetaClass mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, tabname);
                     if (mc != null) {
-                        ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObject(mc, (Integer) jumpID, "");
+                        ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObject(mc, (Integer)jumpID, "");
                     } else {
                         log.error("Could not find MetaClass for " + tabname);
                     }
                 }
             }
         }
-    }//GEN-LAST:event_lstLandparcelsMouseClicked
+    }                                                                              //GEN-LAST:event_lstLandparcelsMouseClicked
 
     @Override
-    public void setCidsBean(CidsBean cb) {
+    public void setCidsBean(final CidsBean cb) {
         bindingGroup.unbind();
         if (cb != null) {
             cidsBean = cb;
             final Object gebaeudeObj = cidsBean.getProperty("gebaeude");
             if (gebaeudeObj instanceof CidsBean) {
                 panGebaeude.setVisible(true);
-                initLageLabel(getAllAdressesForSameBuilding((CidsBean) gebaeudeObj));
-
+                initLageLabel(getAllAdressesForSameBuilding((CidsBean)gebaeudeObj));
             } else {
                 panGebaeude.setVisible(false);
             }
@@ -410,13 +529,18 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
         }
     }
 
-    private void initLageLabel(MetaObject[] sameBuildingAdresses) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  sameBuildingAdresses  DOCUMENT ME!
+     */
+    private void initLageLabel(final MetaObject[] sameBuildingAdresses) {
         final Map<String, List<String>> multiMap = TypeSafeCollections.newLinkedHashMap();
         for (final MetaObject adressMO : sameBuildingAdresses) {
             if (adressMO instanceof LightweightMetaObject) {
-                LightweightMetaObject lwmo = (LightweightMetaObject) adressMO;
-                Object strasse = lwmo.getLWAttribute("strasse");
-                Object nummer = lwmo.getLWAttribute("nummer");
+                final LightweightMetaObject lwmo = (LightweightMetaObject)adressMO;
+                final Object strasse = lwmo.getLWAttribute("strasse");
+                final Object nummer = lwmo.getLWAttribute("nummer");
                 if (strasse != null) {
                     List<String> bucket = multiMap.get(strasse.toString());
                     if (bucket == null) {
@@ -431,15 +555,15 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
         }
         final StringBuilder lageTxt = new StringBuilder("<html>");
         int size = multiMap.size();
-        for (Entry<String, List<String>> entry : multiMap.entrySet()) {
-            String strasse = entry.getKey();
-            List<String> nummern = entry.getValue();
+        for (final Entry<String, List<String>> entry : multiMap.entrySet()) {
+            final String strasse = entry.getKey();
+            final List<String> nummern = entry.getValue();
             lageTxt.append(strasse);
             if (nummern.size() > 0) {
                 lageTxt.append(" ");
                 for (int i = 0; i < nummern.size(); ++i) {
                     lageTxt.append(nummern.get(i));
-                    if (i < nummern.size() - 1) {
+                    if (i < (nummern.size() - 1)) {
                         lageTxt.append(", ");
                     }
                 }
@@ -467,39 +591,6 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
         this.title = title;
         lblTitle.setText(this.title);
     }
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private org.jdesktop.swingx.JXBusyLabel blWait;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel9;
-    private javax.swing.JLabel lblBauweise;
-    private javax.swing.JLabel lblDescBauweise;
-    private javax.swing.JLabel lblDescFlurstuecke;
-    private javax.swing.JLabel lblDescFunktion;
-    private javax.swing.JLabel lblDescHausnummer;
-    private javax.swing.JLabel lblDescLage;
-    private javax.swing.JLabel lblDescStockwerkeOber;
-    private javax.swing.JLabel lblDescStockwerkeUnter;
-    private javax.swing.JLabel lblDescStrasse;
-    private javax.swing.JLabel lblFunktion;
-    private javax.swing.JLabel lblHausnummer;
-    private javax.swing.JLabel lblLage;
-    private javax.swing.JLabel lblStockwerkeOber;
-    private javax.swing.JLabel lblStockwerkeUnter;
-    private javax.swing.JLabel lblStrasse;
-    private javax.swing.JLabel lblTitle;
-    private javax.swing.JList lstLandparcels;
-    private javax.swing.JPanel panAdresse;
-    private javax.swing.JPanel panAdresseContent;
-    private javax.swing.JPanel panFooter;
-    private javax.swing.JPanel panGebaeude;
-    private javax.swing.JPanel panGebaeudeContent;
-    private javax.swing.JPanel panTitle;
-    private javax.swing.JScrollPane scpLandparcels;
-    private de.cismet.tools.gui.SemiRoundedPanel srpHeadAdresse;
-    private de.cismet.tools.gui.SemiRoundedPanel srpHeadGebaeude;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
-    // End of variables declaration//GEN-END:variables
 
     @Override
     public JComponent getTitleComponent() {
@@ -512,25 +603,39 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
     }
 
     /**
-     * @return the buchungsblatt
+     * DOCUMENT ME!
+     *
+     * @return  the buchungsblatt
      */
     public Object getBuchungsblatt() {
         return buchungsblatt;
     }
 
     /**
-     * @param buchungsblatt the buchungsblatt to set
+     * DOCUMENT ME!
+     *
+     * @param  buchungsblatt  the buchungsblatt to set
      */
-    public void setBuchungsblatt(Buchungsblatt buchungsblatt) {
+    public void setBuchungsblatt(final Buchungsblatt buchungsblatt) {
         this.buchungsblatt = buchungsblatt;
     }
 
-    private final void setWaiting(boolean waiting) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  waiting  DOCUMENT ME!
+     */
+    private void setWaiting(final boolean waiting) {
         blWait.setVisible(waiting);
         blWait.setBusy(waiting);
     }
 
-    private final boolean isWaiting() {
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private boolean isWaiting() {
         return blWait.isBusy();
     }
 

@@ -12,6 +12,7 @@
  */
 package de.cismet.cids.custom.tostringconverter.wunda_blau;
 import Sirius.server.localserver.attribute.*;
+
 import de.cismet.cids.tools.tostring.ToStringConverter;
 /**
  * DOCUMENT ME!
@@ -39,10 +40,10 @@ public class AltbetriebToStringConverter extends ToStringConverter implements ja
      *
      * @return  DOCUMENT ME!
      */
-    public String convert(Sirius.server.localserver.object.Object o) {
+    public String convert(final Sirius.server.localserver.object.Object o) {
         String stringRepresentation = "";
 
-        ObjectAttribute[] attrs = o.getAttribs();
+        final ObjectAttribute[] attrs = o.getAttribs();
 
         for (int i = 0; i < attrs.length; i++) {
             if (attrs[i].getName().equalsIgnoreCase("name")) {

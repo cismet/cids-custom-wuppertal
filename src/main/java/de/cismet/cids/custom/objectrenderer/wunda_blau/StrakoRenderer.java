@@ -1,92 +1,153 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
 import com.vividsolutions.jts.geom.Geometry;
-import de.cismet.cids.annotations.CidsAttribute;
-import de.cismet.cids.custom.deprecated.JLoadDots;
+
 import java.sql.Timestamp;
 
+import de.cismet.cids.annotations.CidsAttribute;
+
+import de.cismet.cids.custom.deprecated.JLoadDots;
+
+import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
+
 /**
- * de.cismet.cids.objectrenderer.CoolStraKoRenderer
- * 
- * @author nh
+ * de.cismet.cids.objectrenderer.CoolStraKoRenderer.
+ *
+ * @author   nh
+ * @version  $Revision$, $Date$
  */
 public class StrakoRenderer extends CoolPanel {
-    
+
+    //~ Instance fields --------------------------------------------------------
+
     @CidsAttribute("Strako_ID")
     public Integer id;
-    
+
     @CidsAttribute("Betreff")
     public String betreff = "";
-    
+
     @CidsAttribute("Schaden")
     public String schaden = "";
-    
+
     @CidsAttribute("Menge")
     public String menge = "";
-    
+
     @CidsAttribute("Einheit")
     public String einheit = "";
-    
+
     @CidsAttribute("Zust\u00E4ndigkeit")
     public String zust = "";
-    
+
     @CidsAttribute("Prioritaet")
     public String prio = "";
-    
+
     @CidsAttribute("Status")
     public String status = "";
-    
+
     @CidsAttribute("Strasse")
     public String strasse = "";
-    
+
     @CidsAttribute("Strassenschluessel")
     public String strassenschl = "";
-    
+
     @CidsAttribute("von")
     public String von = "";
-    
+
     @CidsAttribute("bis")
     public String bis = "";
-    
+
     @CidsAttribute("Objekt")
     public String obj = "";
-    
+
     @CidsAttribute("bis Hausnummer")
     public String hausnrVon = "";
-    
+
     @CidsAttribute("von Hausnummer")
     public String hausnrBis = "";
-    
+
     @CidsAttribute("Lokaladverb")
     public String lokaladv = "";
-    
+
     @CidsAttribute("Merkmal")
     public String merkmal = "";
-    
+
     @CidsAttribute("Bereich")
     public String bereich = "";
-    
+
     @CidsAttribute("Seite")
     public String seite = "";
-    
+
     @CidsAttribute("Tour")
     public String tour = "";
-    
+
     @CidsAttribute("Bemerkung")
     public String bemerkung = "";
-    
+
     @CidsAttribute("Kontrolleur")
     public String kontrolleur = "";
-    
+
     @CidsAttribute("Datum und Uhrzeit")
     public Timestamp datum;
-    
+
     @CidsAttribute("PunktGeometrie.GEO_STRING")
     public Geometry geom = null;
-    
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel lblBemerkung;
+    private javax.swing.JLabel lblBereich;
+    private javax.swing.JLabel lblBetreff;
+    private javax.swing.JLabel lblDatum;
+    private javax.swing.JLabel lblHausnrVonBis;
+    private javax.swing.JLabel lblKontrolleur;
+    private javax.swing.JLabel lblLokaladv;
+    private javax.swing.JLabel lblMenge;
+    private javax.swing.JLabel lblMerkmal;
+    private javax.swing.JLabel lblObjekt;
+    private javax.swing.JLabel lblPrio;
+    private javax.swing.JLabel lblSchaden;
+    private javax.swing.JLabel lblSeite;
+    private javax.swing.JLabel lblStatus;
+    private javax.swing.JLabel lblStrasse;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JLabel lblTour;
+    private javax.swing.JLabel lblVonBis;
+    private javax.swing.JLabel lblZust;
+    private javax.swing.JPanel panInhalt;
+    private javax.swing.JPanel panInter;
+    private javax.swing.JPanel panMap;
+    private javax.swing.JPanel panSpinner;
+    private javax.swing.JPanel panTitle;
+    // End of variables declaration//GEN-END:variables
+
+    //~ Constructors -----------------------------------------------------------
+
     /**
-     * Creates new form CoolAdressenRenderer
+     * Creates new form CoolAdressenRenderer.
      */
     public StrakoRenderer() {
         initComponents();
@@ -96,6 +157,8 @@ public class StrakoRenderer extends CoolPanel {
         setPanTitle(panTitle);
         setSpinner(panSpinner);
     }
+
+    //~ Methods ----------------------------------------------------------------
 
     @Override
     public void assignSingle() {
@@ -252,11 +315,9 @@ public class StrakoRenderer extends CoolPanel {
         }
     }
 
-    
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -315,37 +376,35 @@ public class StrakoRenderer extends CoolPanel {
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblTitle.setText("StraKo");
 
-        javax.swing.GroupLayout panTitleLayout = new javax.swing.GroupLayout(panTitle);
+        final javax.swing.GroupLayout panTitleLayout = new javax.swing.GroupLayout(panTitle);
         panTitle.setLayout(panTitleLayout);
         panTitleLayout.setHorizontalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panTitleLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblTitle)
-                .addContainerGap(393, Short.MAX_VALUE))
-        );
+            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addContainerGap(
+                    393,
+                    Short.MAX_VALUE)));
         panTitleLayout.setVerticalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panTitleLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblTitle)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addContainerGap(
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    Short.MAX_VALUE)));
 
         add(panTitle, java.awt.BorderLayout.NORTH);
 
         panInter.setOpaque(false);
 
-        javax.swing.GroupLayout panInterLayout = new javax.swing.GroupLayout(panInter);
+        final javax.swing.GroupLayout panInterLayout = new javax.swing.GroupLayout(panInter);
         panInter.setLayout(panInterLayout);
         panInterLayout.setHorizontalGroup(
-            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 469, Short.MAX_VALUE)
-        );
+            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                469,
+                Short.MAX_VALUE));
         panInterLayout.setVerticalGroup(
-            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 20, Short.MAX_VALUE)
-        );
+            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                20,
+                Short.MAX_VALUE));
 
         add(panInter, java.awt.BorderLayout.SOUTH);
 
@@ -356,16 +415,18 @@ public class StrakoRenderer extends CoolPanel {
         panSpinner.setMinimumSize(new java.awt.Dimension(100, 100));
         panSpinner.setOpaque(false);
 
-        javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
+        final javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
         panSpinner.setLayout(panSpinnerLayout);
         panSpinnerLayout.setHorizontalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                100,
+                Short.MAX_VALUE));
         panSpinnerLayout.setVerticalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                100,
+                Short.MAX_VALUE));
 
         panMap.add(panSpinner, new java.awt.GridBagConstraints());
 
@@ -680,53 +741,5 @@ public class StrakoRenderer extends CoolPanel {
         panInhalt.add(lblDatum, gridBagConstraints);
 
         add(panInhalt, java.awt.BorderLayout.WEST);
-    }// </editor-fold>//GEN-END:initComponents
-    
-    
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JLabel lblBemerkung;
-    private javax.swing.JLabel lblBereich;
-    private javax.swing.JLabel lblBetreff;
-    private javax.swing.JLabel lblDatum;
-    private javax.swing.JLabel lblHausnrVonBis;
-    private javax.swing.JLabel lblKontrolleur;
-    private javax.swing.JLabel lblLokaladv;
-    private javax.swing.JLabel lblMenge;
-    private javax.swing.JLabel lblMerkmal;
-    private javax.swing.JLabel lblObjekt;
-    private javax.swing.JLabel lblPrio;
-    private javax.swing.JLabel lblSchaden;
-    private javax.swing.JLabel lblSeite;
-    private javax.swing.JLabel lblStatus;
-    private javax.swing.JLabel lblStrasse;
-    private javax.swing.JLabel lblTitle;
-    private javax.swing.JLabel lblTour;
-    private javax.swing.JLabel lblVonBis;
-    private javax.swing.JLabel lblZust;
-    private javax.swing.JPanel panInhalt;
-    private javax.swing.JPanel panInter;
-    private javax.swing.JPanel panMap;
-    private javax.swing.JPanel panSpinner;
-    private javax.swing.JPanel panTitle;
-    // End of variables declaration//GEN-END:variables
-
-    
+    } // </editor-fold>//GEN-END:initComponents
 }

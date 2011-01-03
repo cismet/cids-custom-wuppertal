@@ -1,8 +1,14 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /*
  * ThemaAggregationRenderer.java
  *
@@ -10,43 +16,62 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import de.cismet.cids.dynamics.CidsBean;
-import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
-import de.cismet.tools.LinkedProperties;
-import de.cismet.tools.gui.TitleComponentProvider;
-import java.awt.Color;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import javax.swing.JComponent;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.Highlighter;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
-/**
- *
- * @author thorsten
- */
-public class ThemaAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer, TitleComponentProvider {
+import java.awt.Color;
 
-    //should be static!
-    private LinkedProperties aggregationColumns = null;
-    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import java.io.IOException;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import javax.swing.JComponent;
+
+import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
+
+import de.cismet.tools.LinkedProperties;
+
+import de.cismet.tools.gui.TitleComponentProvider;
+
+/**
+ * DOCUMENT ME!
+ *
+ * @author   thorsten
+ * @version  $Revision$, $Date$
+ */
+public class ThemaAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer,
+    TitleComponentProvider {
+
+    //~ Static fields/initializers ---------------------------------------------
+
     public static final List<Integer> COLUMN_SIZES = new CopyOnWriteArrayList<Integer>();
-    private Collection<CidsBean> cidsBeans = null;
     public static final Color COLOR_TXT_BACK = new Color(230, 230, 230);
     public static final Color COLOR_TBL_SECOND = new Color(210, 210, 210);
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblAgrTitle;
+    private javax.swing.JPanel panAgrContent;
+    private javax.swing.JTable tblAggregation;
 
+    /**
+     * Creates a new ThemaAggregationRenderer object.
+     */
     public ThemaAggregationRenderer() {
-        //should be in a static block....
+        // should be in a static block....
         if (aggregationColumns == null) {
             aggregationColumns = new LinkedProperties();
             java.io.InputStream is = null;
             try {
-                is = ThemaAggregationRenderer.class.getResourceAsStream("/de/cismet/navigator/objectrenderer/thema/aggregation_renderer.properties");
+                is = ThemaAggregationRenderer.class.getResourceAsStream(
+                        "/de/cismet/navigator/objectrenderer/thema/aggregation_renderer.properties");
                 aggregationColumns.load(is);
             } catch (IOException ex) {
                 log.warn("Could not load properties for aggregation renderer: thema", ex);
@@ -61,7 +86,6 @@ public class ThemaAggregationRenderer extends javax.swing.JPanel implements Cids
                 aggregationColumns.put("zuk_realisierungsstand.status", "Zuk. Status");
                 aggregationColumns.put("fachthema", "Fachthema");
                 aggregationColumns.put("fachverfahren", "Fachverfahren");
-
             } finally {
                 if (is != null) {
                     try {
@@ -74,31 +98,29 @@ public class ThemaAggregationRenderer extends javax.swing.JPanel implements Cids
         }
         initComponents();
 
-        Highlighter alternateRowHighlighter = HighlighterFactory.createAlternateStriping(COLOR_TXT_BACK, COLOR_TBL_SECOND);
-        ((JXTable) tblAggregation).setHighlighters(alternateRowHighlighter);
+        final Highlighter alternateRowHighlighter = HighlighterFactory.createAlternateStriping(
+                COLOR_TXT_BACK,
+                COLOR_TBL_SECOND);
+        ((JXTable)tblAggregation).setHighlighters(alternateRowHighlighter);
 
         tblAggregation.addPropertyChangeListener(new PropertyChangeListener() {
 
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                if (evt.getPropertyName().equals("ancestor")) {
-                    savePreferredColumnWidths();
+                @Override
+                public void propertyChange(final PropertyChangeEvent evt) {
+                    if (evt.getPropertyName().equals("ancestor")) {
+                        savePreferredColumnWidths();
+                    }
                 }
-            }
-        });
-
-
+            });
     }
 
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         lblAgrTitle = new javax.swing.JLabel();
         panAgrContent = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -119,66 +141,89 @@ public class ThemaAggregationRenderer extends javax.swing.JPanel implements Cids
 
         panAgrContent.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        //final LockableUI lockTblAgr = new LockableUI();
-        //lockLayerAgr.setLockedCursor(Cursor.getDefaultCursor());
-        //final JXLayer<JComponent> lockTblLayer = new JXLayer<JComponent>(panAgrContent, lockTblAgr);
+        // final LockableUI lockTblAgr = new LockableUI();
+        // lockLayerAgr.setLockedCursor(Cursor.getDefaultCursor());
+        // final JXLayer<JComponent> lockTblLayer = new JXLayer<JComponent>(panAgrContent, lockTblAgr);
 
         add(panAgrContent, java.awt.BorderLayout.CENTER);
-        //panAggregationRenderer.add(layerAgr, java.awt.BorderLayout.CENTER);
-        //lockTblAgr.setLocked(true);
-    }// </editor-fold>//GEN-END:initComponents
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblAgrTitle;
-    private javax.swing.JPanel panAgrContent;
-    private javax.swing.JTable tblAggregation;
+        // panAggregationRenderer.add(layerAgr, java.awt.BorderLayout.CENTER); lockTblAgr.setLocked(true);
+    } // </editor-fold>//GEN-END:initComponents
+
+    // should be static!
+
+    //~ Instance fields --------------------------------------------------------
+
+    // </editor-fold>//GEN-END:initComponents
+
+    // should be static!
+    private LinkedProperties aggregationColumns = null;
+    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
+    private Collection<CidsBean> cidsBeans = null;
     // End of variables declaration//GEN-END:variables
     private org.jdesktop.beansbinding.BindingGroup bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
     public Collection<CidsBean> getCidsBeans() {
         return cidsBeans;
     }
 
-    public void setCidsBeans(Collection<CidsBean> cidsBeans) {
+    @Override
+    public void setCidsBeans(final Collection<CidsBean> cidsBeans) {
         this.cidsBeans = cidsBeans;
-        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBeans}");
-        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, tblAggregation);
+        final org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
+                "${cidsBeans}");
+        final org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings
+                    .createJTableBinding(
+                        org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                        this,
+                        eLProperty,
+                        tblAggregation);
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = null;
 
-        for (Object key : aggregationColumns.keySet()) {
-            String beanProperty = (String) key;
+        for (final Object key : aggregationColumns.keySet()) {
+            final String beanProperty = (String)key;
 
-            String bezeichnung = aggregationColumns.getProperty(beanProperty);
+            final String bezeichnung = aggregationColumns.getProperty(beanProperty);
 
-            columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${" + beanProperty + "}"));
+            columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create(
+                        "${"
+                                + beanProperty
+                                + "}"));
             columnBinding.setEditable(false);
             columnBinding.setColumnName(bezeichnung);
 
-            CidsBean first = (CidsBean) cidsBeans.toArray()[0];
-            Object example = first.getProperty(beanProperty);
+            final CidsBean first = (CidsBean)cidsBeans.toArray()[0];
+            final Object example = first.getProperty(beanProperty);
 
-            if (beanProperty != null && (beanProperty.equalsIgnoreCase("fachthema") || beanProperty.equalsIgnoreCase("fachverfahren"))) {
+            if ((beanProperty != null)
+                        && (beanProperty.equalsIgnoreCase("fachthema")
+                            || beanProperty.equalsIgnoreCase("fachverfahren"))) {
                 columnBinding.setColumnClass(java.lang.Boolean.class);
-
             }
 //            else {
 //                log.fatal(beanProperty);
 //            }
-
         }
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
     }
 
+    @Override
     public String getTitle() {
         return lblAgrTitle.getText();
     }
 
-    public void setTitle(String title) {
+    @Override
+    public void setTitle(final String title) {
 //        lblAgrTitle.setText(title);
         lblAgrTitle.setText("Themenkatalog");
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     private void savePreferredColumnWidths() {
 //        COLUMN_SIZES.clear();
 //        for (int i = 0; i < tblAggregation.getColumnModel().getColumnCount(); ++i) {
@@ -188,7 +233,7 @@ public class ThemaAggregationRenderer extends javax.swing.JPanel implements Cids
     }
 
     /**
-     *
+     * DOCUMENT ME!
      */
     private void restorePreferredColumnWidths() {
 //        for (int i = 0; i < tblAggregation.getColumnModel().getColumnCount(); ++i) {
@@ -200,12 +245,12 @@ public class ThemaAggregationRenderer extends javax.swing.JPanel implements Cids
 //        }
     }
 
+    @Override
     public JComponent getTitleComponent() {
         return lblAgrTitle;
     }
 
     @Override
     public void dispose() {
-        
     }
 }

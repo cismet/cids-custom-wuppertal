@@ -6,7 +6,7 @@
     <parent>
         <groupId>de.cismet.cids</groupId>
         <artifactId>cids-parent</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.3</version>
     </parent>
 
     <groupId>de.cismet.cids.custom.wupp</groupId>
@@ -41,13 +41,6 @@
             <artifactId>aaawebclient</artifactId>
             <version>6.1.1</version>
         </dependency>
-        <!--
-        <dependency>
-            <groupId>de.cismet.cids.custom.wupp</groupId>
-            <artifactId>wuppertal-renderer</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        -->
         <dependency>
             <groupId>axis</groupId>
             <artifactId>axis</artifactId>
@@ -64,6 +57,7 @@
             <version>0.9.5</version>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <!-- overwritten because the artifact has to be renamed du to
@@ -86,6 +80,31 @@
             </plugin>
         </plugins>
     </build>
+
+
+    <profiles>
+        <!--
+            this profile is added because jalopy complains about signer information of classes of the
+            de.cismet.cids.featurerenderer package. this package is duplicated by cismap-plugin
+         -->
+        <profile>
+            <id>skip-jalopy</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>triemax</groupId>
+                        <artifactId>jalopy-maven</artifactId>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
 
 
