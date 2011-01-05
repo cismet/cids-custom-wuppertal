@@ -496,6 +496,9 @@
       </SubComponents>
     </Container>
     <Component class="de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel" name="alb_picturePanel">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel(!editable)"/>
+      </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
           <CardConstraints cardName="card2"/>
