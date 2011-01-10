@@ -1,117 +1,113 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Produktbeschreibung xsi:schemaLocation="http://products.aaaweb.aedsicad.de Produktbeschreibung.xsd " xmlns="http://products.aaaweb.aedsicad.de" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" content="alkis">
   <Layernamen>
-    <Layername ID="6" Name="Karte (farbig)"/>
-    <Layername ID="10" Name="Karte (sw)"/>
-    <Layername ID="14" Name="LK mit Bodenschätzung (farbig)"/>
-    <Layername ID="18" Name="LK mit Bodenschätzung (sw)"/>
-    <Layername ID="22" Name="graphischer Fortführungsnachweis"/>
-    <Layername ID="132" Name="Karte (farbig)"/>
-    <Layername ID="136" Name="Karte (sw)"/>
-    <Layername ID="140" Name="LK mit Bodenschätzung (farbig)"/>
-    <Layername ID="144" Name="LK mit Bodenschätzung (sw)"/>
-    <Layername ID="148" Name="graphischer Fortführungsnachweis"/>
-    <Layername ID="256" Name="Amtliche Basiskarte (farbig)"/>
-    <Layername ID="258" Name="Amtliche Basiskarte (sw)"/>
+    <Layername ID="10,14,18,22,26,30,34,38,154,158,162,166,170,174,178,182,294,298" Name="Karte (farbig)"/>
+    <Layername ID="6,14,18,22,26,30,34,38,150,158,162,166,170,174,178,182,294,298" Name="Karte (sw)"/>
+    <Layername ID="6,10,18,22,26,30,34,38,150,154,162,166,170,174,178,182,294,298" Name="LK mit Bodenschätzung (farbig)"/>
+    <Layername ID="6,10,14,22,26,30,34,38,150,154,158,166,170,174,178,182,294,298" Name="LK mit Bodenschätzung (sw)"/>
+    <Layername ID="6,10,14,18,22,26,30,34,150,154,158,162,166,170,174,178,294,298" Name="graphischer Fortführungsnachweis"/>
+    <Layername ID="6,10,14,18,22,26,30,34,38,150,154,158,162,166,170,174,178,182,298" Name="Amtliche Basiskarte (farbig)"/>
+    <Layername ID="6,10,14,18,22,26,30,34,38,150,154,158,162,166,170,174,178,182,294" Name="Amtliche Basiskarte (sw)"/>
+	<Layername ID="6,10,14,18,26,30,34,38,150,154,158,162,170,174,178,182,294,298" Name="Stadtgrundkarte (farbig)"/>
+    <Layername ID="6,10,14,18,22,30,34,38,150,154,158,162,166,174,178,182,294,298" Name="Stadtgrundkarte (sw)"/>
+    <Layername ID="6,10,14,18,22,26,34,38,150,154,158,162,166,170,178,182,294,298" Name="Stadtgrundkarte mit kom. Erg. (farbig)"/>
+    <Layername ID="6,10,14,18,22,26,30,38,150,154,158,162,166,170,174,182,294,298" Name="Stadtgrundkarte mit kom. Erg. (sw)"/>
   </Layernamen>
   <Karte>
-  
-    <Kartenklasse ID="LK.GDBNRW.A" Name="Gdb-NRW-Amtlich">
-    
-      <GUIKartenProdukt Antragsart="NW03" ID="LK.GDBNRW.A.F" Name="Flurkarte, farbig" Logo="logo-aaa-wappen-f" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Karte (farbig)" ProduktnameAuswertung="Flurkarte, farbig" ProduktnameGUI="Flurkarte, farbig" Zusatzlegende="false">
-                        
+    <Kartenklasse ID="LK.GDBNRW.A" Name="LiKa-Standardkarten">
+      <GUIKartenProdukt Antragsart="NW03" ID="LK.GDBNRW.A.F" Name="Liegenschaftskarte, farbig" Logo="logo-aaa-wappen-wup-f" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Karte (farbig)" ProduktnameAuswertung="Liegenschaftskarte, farbig" ProduktnameGUI="LiKa, farbig" Zusatzlegende="false">
         <KartenProdukt ID="LK.GDBNRW.A.F.1" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Flurkarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
         <KartenProdukt ID="LK.GDBNRW.A.F.2" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Flurkarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.F.3" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Flurkarte NRW 1:500">
+		<KartenProdukt ID="LK.GDBNRW.A.F.3" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Flurkarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
         <KartenProdukt ID="LK.GDBNRW.A.F.4" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Flurkarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.F.5" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Flurkarte NRW 1:500">
+		<KartenProdukt ID="LK.GDBNRW.A.F.5" Kartenname="Karte" Layout="LKA2H" Praesentationshinweis1="Flurkarte NRW 1:500">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.A.F.6" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Flurkarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.F.6" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Flurkarte NRW 1:500">
+		<KartenProdukt ID="LK.GDBNRW.A.F.7" Kartenname="Karte" Layout="LKA1H" Praesentationshinweis1="Flurkarte NRW 1:500">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.GDBNRW.A.F.8" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Flurkarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.F.7" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Flurkarte NRW 1:500">
+		<KartenProdukt ID="LK.GDBNRW.A.F.9" Kartenname="Karte" Layout="LKA0H" Praesentationshinweis1="Flurkarte NRW 1:500">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.GDBNRW.A.F.10" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Flurkarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-         
-        <KartenProdukt ID="LK.GDBNRW.A.F.8" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Flurkarte NRW 1:1000">
+		<KartenProdukt ID="LK.GDBNRW.A.F.11" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Flurkarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.F.9" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.A.F.12" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.F.10" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Flurkarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.A.F.13" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Flurkarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.F.11" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.A.F.14" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.F.12" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
+		<KartenProdukt ID="LK.GDBNRW.A.F.15" Kartenname="Karte" Layout="LKA2H" Praesentationshinweis1="Flurkarte NRW 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.GDBNRW.A.F.16" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.F.13" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
+		<KartenProdukt ID="LK.GDBNRW.A.F.17" Kartenname="Karte" Layout="LKA1H" Praesentationshinweis1="Flurkarte NRW 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.GDBNRW.A.F.18" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.F.14" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
+		<KartenProdukt ID="LK.GDBNRW.A.F.19" Kartenname="Karte" Layout="LKA0H" Praesentationshinweis1="Flurkarte NRW 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.GDBNRW.A.F.20" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.A.F.15" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Flurkarte NRW 1:2000">
+		<KartenProdukt ID="LK.GDBNRW.A.F.21" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Flurkarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.F.16" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.A.F.22" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.F.17" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Flurkarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.A.F.23" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Flurkarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.F.18" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.A.F.24" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.F.19" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
+		<KartenProdukt ID="LK.GDBNRW.A.F.25" Kartenname="Karte" Layout="LKA2H" Praesentationshinweis1="Flurkarte NRW 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.GDBNRW.A.F.26" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.F.20" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
+		<KartenProdukt ID="LK.GDBNRW.A.F.27" Kartenname="Karte" Layout="LKA1H" Praesentationshinweis1="Flurkarte NRW 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.GDBNRW.A.F.28" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.F.21" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
+		<KartenProdukt ID="LK.GDBNRW.A.F.29" Kartenname="Karte" Layout="LKA0H" Praesentationshinweis1="Flurkarte NRW 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.GDBNRW.A.F.30" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-
-        <KartenProdukt ID="LK.GDBNRW.A.F.22" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Flurkarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.F.23" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Flurkarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.F.24" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Flurkarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.F.25" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Flurkarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.F.26" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Flurkarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.F.27" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Flurkarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.F.28" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Flurkarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-
       </GUIKartenProdukt>
-      
-       <GUIKartenProdukt Antragsart="NW03" ID="LK.GDBNRW.A.SW" Name="Flurkarte, schwarzweiß" Logo="logo-aaa-wappen-sw" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Karte (sw)" ProduktnameAuswertung="Flurkarte, schwarz-weiß" ProduktnameGUI="Flurkarte, sw" Zusatzlegende="false">
-                        
+       <GUIKartenProdukt Antragsart="NW03" ID="LK.GDBNRW.A.SW" Name="Liegenschaftskarte, grau" Logo="logo-aaa-wappen-sw" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Karte (sw)" ProduktnameAuswertung="Liegenschaftskarte, grau" ProduktnameGUI="LiKa, grau" Zusatzlegende="false">
         <KartenProdukt ID="LK.GDBNRW.A.SW.1" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Flurkarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
@@ -124,86 +120,86 @@
         <KartenProdukt ID="LK.GDBNRW.A.SW.4" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Flurkarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.SW.5" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Flurkarte NRW 1:500">
+		<KartenProdukt ID="LK.GDBNRW.A.SW.5" Kartenname="Karte" Layout="LKA2H" Praesentationshinweis1="Flurkarte NRW 1:500">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.GDBNRW.A.SW.6" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Flurkarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.SW.6" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Flurkarte NRW 1:500">
+		<KartenProdukt ID="LK.GDBNRW.A.SW.7" Kartenname="Karte" Layout="LKA1H" Praesentationshinweis1="Flurkarte NRW 1:500">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.GDBNRW.A.SW.8" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Flurkarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.SW.7" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Flurkarte NRW 1:500">
+		<KartenProdukt ID="LK.GDBNRW.A.SW.9" Kartenname="Karte" Layout="LKA0H" Praesentationshinweis1="Flurkarte NRW 1:500">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.GDBNRW.A.SW.10" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Flurkarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.A.SW.8" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Flurkarte NRW 1:1000">
+		<KartenProdukt ID="LK.GDBNRW.A.SW.11" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Flurkarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.SW.9" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.A.SW.12" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.SW.10" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Flurkarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.A.SW.13" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Flurkarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.SW.11" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.A.SW.14" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.SW.12" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
+		<KartenProdukt ID="LK.GDBNRW.A.SW.15" Kartenname="Karte" Layout="LKA2H" Praesentationshinweis1="Flurkarte NRW 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.GDBNRW.A.SW.16" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.SW.13" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.A.SW.17" Kartenname="Karte" Layout="LKA1H" Praesentationshinweis1="Flurkarte NRW 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.GDBNRW.A.SW.18" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.SW.14" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
+		<KartenProdukt ID="LK.GDBNRW.A.SW.19" Kartenname="Karte" Layout="LKA0H" Praesentationshinweis1="Flurkarte NRW 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.A.SW.20" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.A.SW.15" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Flurkarte NRW 1:2000">
+		<KartenProdukt ID="LK.GDBNRW.A.SW.21" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Flurkarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.SW.16" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.A.SW.22" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.SW.17" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Flurkarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.A.SW.23" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Flurkarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.SW.18" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.A.SW.24" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.SW.19" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
+		<KartenProdukt ID="LK.GDBNRW.A.SW.25" Kartenname="Karte" Layout="LKA2H" Praesentationshinweis1="Flurkarte NRW 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.GDBNRW.A.SW.26" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.SW.20" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
+		<KartenProdukt ID="LK.GDBNRW.A.SW.27" Kartenname="Karte" Layout="LKA1H" Praesentationshinweis1="Flurkarte NRW 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.A.SW.28" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.SW.21" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
+		<KartenProdukt ID="LK.GDBNRW.A.SW.29" Kartenname="Karte" Layout="LKA0H" Praesentationshinweis1="Flurkarte NRW 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.GDBNRW.A.SW.30" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2000"/>
-        </KartenProdukt>
-
-        <KartenProdukt ID="LK.GDBNRW.A.SW.22" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Flurkarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.SW.23" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Flurkarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.SW.24" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Flurkarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.SW.25" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Flurkarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.SW.26" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Flurkarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.SW.27" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Flurkarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.SW.28" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Flurkarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
+        </KartenProdukt>				
       </GUIKartenProdukt>
-      
-      <GUIKartenProdukt Antragsart="NW04" ID="LK.GDBNRW.A.BF" Name="Schätzungskarte, farbig" Logo="logo-aaa-wappen-f" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="LK mit Bodenschätzung (farbig)" ProduktnameAuswertung="Schätzungskarte, farbig" ProduktnameGUI="Schätzungskarte, farbig" Zusatzlegende="false">
-                        
+      <GUIKartenProdukt Antragsart="NW04" ID="LK.GDBNRW.A.BF" Name="Schätzungskarte, farbig" Logo="logo-aaa-wappen-wup-f" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="LK mit Bodenschätzung (farbig)" ProduktnameAuswertung="Schätzungskarte, farbig" ProduktnameGUI="Schätzungskarte, farbig" Zusatzlegende="false">
         <KartenProdukt ID="LK.GDBNRW.A.BF.1" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
@@ -216,86 +212,86 @@
         <KartenProdukt ID="LK.GDBNRW.A.BF.4" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BF.5" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
+		<KartenProdukt ID="LK.GDBNRW.A.BF.5" Kartenname="Karte" Layout="LKA2H" Praesentationshinweis1="Schätzungskarte NRW 1:500">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.A.BF.6" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BF.6" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
+		<KartenProdukt ID="LK.GDBNRW.A.BF.7" Kartenname="Karte" Layout="LKA1H" Praesentationshinweis1="Schätzungskarte NRW 1:500">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.A.BF.8" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BF.7" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
+		<KartenProdukt ID="LK.GDBNRW.A.BF.9" Kartenname="Karte" Layout="LKA0H" Praesentationshinweis1="Schätzungskarte NRW 1:500">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.A.BF.10" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.A.BF.8" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.A.BF.11" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BF.9" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.A.BF.12" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BF.10" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.A.BF.13" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BF.11" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.A.BF.14" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BF.12" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+		<KartenProdukt ID="LK.GDBNRW.A.BF.15" Kartenname="Karte" Layout="LKA2H" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.A.BF.16" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BF.13" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+		<KartenProdukt ID="LK.GDBNRW.A.BF.17" Kartenname="Karte" Layout="LKA1H" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.A.BF.18" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BF.14" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+		<KartenProdukt ID="LK.GDBNRW.A.BF.19" Kartenname="Karte" Layout="LKA0H" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.A.BF.20" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.A.BF.15" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.A.BF.21" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BF.16" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.A.BF.22" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BF.17" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.A.BF.23" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BF.18" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.A.BF.24" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BF.19" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+		<KartenProdukt ID="LK.GDBNRW.A.BF.25" Kartenname="Karte" Layout="LKA2H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.A.BF.26" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BF.20" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+		<KartenProdukt ID="LK.GDBNRW.A.BF.27" Kartenname="Karte" Layout="LKA1H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.A.BF.28" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BF.21" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+		<KartenProdukt ID="LK.GDBNRW.A.BF.29" Kartenname="Karte" Layout="LKA0H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.A.BF.30" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-
-        <KartenProdukt ID="LK.GDBNRW.A.BF.22" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Schätzungskarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BF.23" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Schätzungskarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BF.24" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Schätzungskarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BF.25" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Schätzungskarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BF.26" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BF.27" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BF.28" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
       </GUIKartenProdukt>
-      
-       <GUIKartenProdukt Antragsart="NW04" ID="LK.GDBNRW.A.BSW" Name="Schätzungskarte, schwarzweiß" Logo="logo-aaa-wappen-sw" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="LK mit Bodenschätzung (sw)" ProduktnameAuswertung="Schätzungskarte, schwarz-weiß" ProduktnameGUI="Schätzungskarte, sw" Zusatzlegende="false">
-                        
+       <GUIKartenProdukt Antragsart="NW04" ID="LK.GDBNRW.A.BSW" Name="Schätzungskarte, grau" Logo="logo-aaa-wappen-sw" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="LK mit Bodenschätzung (sw)" ProduktnameAuswertung="Schätzungskarte, grau" ProduktnameGUI="Schätzungskarte, grau" Zusatzlegende="false">
         <KartenProdukt ID="LK.GDBNRW.A.BSW.1" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
@@ -308,86 +304,86 @@
         <KartenProdukt ID="LK.GDBNRW.A.BSW.4" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BSW.5" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
+		<KartenProdukt ID="LK.GDBNRW.A.BSW.5" Kartenname="Karte" Layout="LKA2H" Praesentationshinweis1="Schätzungskarte NRW 1:500">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.A.BSW.6" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BSW.6" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
+		<KartenProdukt ID="LK.GDBNRW.A.BSW.7" Kartenname="Karte" Layout="LKA1H" Praesentationshinweis1="Schätzungskarte NRW 1:500">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.A.BSW.8" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BSW.7" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
+		<KartenProdukt ID="LK.GDBNRW.A.BSW.9" Kartenname="Karte" Layout="LKA0H" Praesentationshinweis1="Schätzungskarte NRW 1:500">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.A.BSW.10" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.A.BSW.8" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.A.BSW.11" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BSW.9" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.A.BSW.12" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BSW.10" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.A.BSW.13" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BSW.11" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.A.BSW.14" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BSW.12" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+		<KartenProdukt ID="LK.GDBNRW.A.BSW.15" Kartenname="Karte" Layout="LKA2H" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.A.BSW.16" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BSW.13" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+		<KartenProdukt ID="LK.GDBNRW.A.BSW.17" Kartenname="Karte" Layout="LKA1H" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.A.BSW.18" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BSW.14" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+		<KartenProdukt ID="LK.GDBNRW.A.BSW.19" Kartenname="Karte" Layout="LKA0H" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.A.BSW.20" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.A.BSW.15" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.A.BSW.21" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BSW.16" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.A.BSW.22" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BSW.17" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.A.BSW.23" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BSW.18" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.A.BSW.24" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BSW.19" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+		<KartenProdukt ID="LK.GDBNRW.A.BSW.25" Kartenname="Karte" Layout="LKA2H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.A.BSW.26" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BSW.20" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+		<KartenProdukt ID="LK.GDBNRW.A.BSW.27" Kartenname="Karte" Layout="LKA1H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.A.BSW.28" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BSW.21" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+		<KartenProdukt ID="LK.GDBNRW.A.BSW.29" Kartenname="Karte" Layout="LKA0H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.A.BSW.30" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-
-        <KartenProdukt ID="LK.GDBNRW.A.BSW.22" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Schätzungskarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BSW.23" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Schätzungskarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BSW.24" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Schätzungskarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BSW.25" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Schätzungskarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BSW.26" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BSW.27" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BSW.28" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
       </GUIKartenProdukt>
-      
-      <GUIKartenProdukt Antragsart="NW05" ID="LK.GDBNRW.A.ABKF" Name="Amtliche Basiskarte, farbig" Logo="logo-aaa-wappen-f" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Amtliche Basiskarte (farbig)" ProduktnameAuswertung="Amtliche Basiskarte (farbig)" ProduktnameGUI="ABK, farbig" Zusatzlegende="false">
-                        
+      <GUIKartenProdukt Antragsart="NW05" ID="LK.GDBNRW.A.ABKF" Name="Amtliche Basiskarte, farbig" Logo="logo-aaa-wappen-wup-f" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Amtliche Basiskarte (farbig)" ProduktnameAuswertung="Amtliche Basiskarte, farbig" ProduktnameGUI="ABK, farbig" Zusatzlegende="false">
         <KartenProdukt ID="LK.GDBNRW.A.ABKF.1" Kartenname="Karte" Layout="ABKA4H" Praesentationshinweis1="Amtliche Basiskarte NRW 1:2500">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="2500"/>
         </KartenProdukt>
@@ -418,7 +414,6 @@
         <KartenProdukt ID="LK.GDBNRW.A.ABKF.10" Kartenname="Karte" Layout="ABKA0Q" Praesentationshinweis1="Amtliche Basiskarte NRW 1:2500">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2500"/>
         </KartenProdukt>
-        
         <KartenProdukt ID="LK.GDBNRW.A.ABKF.11" Kartenname="Karte" Layout="ABKA4H" Praesentationshinweis1="Amtliche Basiskarte NRW 1:5000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="5000"/>
         </KartenProdukt>
@@ -449,7 +444,6 @@
         <KartenProdukt ID="LK.GDBNRW.A.ABKF.20" Kartenname="Karte" Layout="ABKA0Q" Praesentationshinweis1="Amtliche Basiskarte NRW 1:5000">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="5000"/>
         </KartenProdukt>
-        
         <KartenProdukt ID="LK.GDBNRW.A.ABKF.21" Kartenname="Karte" Layout="ABKA4H" Praesentationshinweis1="Amtliche Basiskarte NRW 1:10000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="10000"/>
         </KartenProdukt>
@@ -481,9 +475,7 @@
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="10000"/>
         </KartenProdukt>
      </GUIKartenProdukt>
-
-       <GUIKartenProdukt Antragsart="NW05" ID="LK.GDBNRW.A.ABKSW" Name="Amtliche Basiskarte, sw" Logo="logo-aaa-wappen-sw" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Amtliche Basiskarte (sw)" ProduktnameAuswertung="Amtliche Basiskarte (sw)" ProduktnameGUI="ABK, sw" Zusatzlegende="false">
-                        
+       <GUIKartenProdukt Antragsart="NW05" ID="LK.GDBNRW.A.ABKSW" Name="Amtliche Basiskarte, grau" Logo="logo-aaa-wappen-sw" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Amtliche Basiskarte (sw)" ProduktnameAuswertung="Amtliche Basiskarte, grau" ProduktnameGUI="ABK, grau" Zusatzlegende="false">
         <KartenProdukt ID="LK.GDBNRW.A.ABKSW.1" Kartenname="Karte" Layout="ABKA4H" Praesentationshinweis1="Amtliche Basiskarte NRW 1:2500">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="2500"/>
         </KartenProdukt>
@@ -514,7 +506,6 @@
         <KartenProdukt ID="LK.GDBNRW.A.ABKSW.10" Kartenname="Karte" Layout="ABKA0Q" Praesentationshinweis1="Amtliche Basiskarte NRW 1:2500">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2500"/>
         </KartenProdukt>
-        
         <KartenProdukt ID="LK.GDBNRW.A.ABKSW.11" Kartenname="Karte" Layout="ABKA4H" Praesentationshinweis1="Amtliche Basiskarte NRW 1:5000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="5000"/>
         </KartenProdukt>
@@ -545,7 +536,6 @@
         <KartenProdukt ID="LK.GDBNRW.A.ABKSW.20" Kartenname="Karte" Layout="ABKA0Q" Praesentationshinweis1="Amtliche Basiskarte NRW 1:5000">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="5000"/>
         </KartenProdukt>
-        
         <KartenProdukt ID="LK.GDBNRW.A.ABKSW.21" Kartenname="Karte" Layout="ABKA4H" Praesentationshinweis1="Amtliche Basiskarte NRW 1:10000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="10000"/>
         </KartenProdukt>
@@ -577,475 +567,377 @@
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="10000"/>
         </KartenProdukt>
      </GUIKartenProdukt>
-
 	 </Kartenklasse>
-    
-    <Kartenklasse ID="LK.GDBNRW.I" Name="Gdb-NRW-Intern">
-    
-       <GUIKartenProdukt Antragsart="NW03" ID="LK.GDBNRW.A.F" Name="Flurkarte, farbig" Logo="logo-aaa-f" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Karte (farbig)" ProduktnameAuswertung="Flurkarte, farbig" ProduktnameGUI="Flurkarte, farbig" Zusatzlegende="true">
-
+    <Kartenklasse ID="LK.GDBNRW.I" Name="LiKa-interne-Karten">
+       <GUIKartenProdukt Antragsart="NW03" ID="LK.GDBNRW.A.F" Name="Liegenschaftskarte, farbig" Logo="logo-aaa-wup-f" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Karte (farbig)" ProduktnameAuswertung="Liegenschaftskarte, farbig" ProduktnameGUI="LiKa, farbig" Zusatzlegende="true">
         <KartenProdukt ID="LK.GDBNRW.I.F.1" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Flurkarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
         <KartenProdukt ID="LK.GDBNRW.I.F.2" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Flurkarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
         <KartenProdukt ID="LK.GDBNRW.I.F.3" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Flurkarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
         <KartenProdukt ID="LK.GDBNRW.I.F.4" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Flurkarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.F.5" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Flurkarte NRW 1:500">
+		<KartenProdukt ID="LK.GDBNRW.I.F.5" Kartenname="Karte" Layout="LKA2H" Praesentationshinweis1="Flurkarte NRW 1:500">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.F.6" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Flurkarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.F.6" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Flurkarte NRW 1:500">
+		<KartenProdukt ID="LK.GDBNRW.I.F.7" Kartenname="Karte" Layout="LKA1H" Praesentationshinweis1="Flurkarte NRW 1:500">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.F.8" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Flurkarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.F.7" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Flurkarte NRW 1:500">
+		<KartenProdukt ID="LK.GDBNRW.I.F.9" Kartenname="Karte" Layout="LKA0H" Praesentationshinweis1="Flurkarte NRW 1:500">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.F.10" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Flurkarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.F.8" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Flurkarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.I.F.11" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Flurkarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.F.9" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.I.F.12" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.F.10" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Flurkarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.I.F.13" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Flurkarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.F.11" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.I.F.14" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.F.12" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
+		<KartenProdukt ID="LK.GDBNRW.I.F.15" Kartenname="Karte" Layout="LKA2H" Praesentationshinweis1="Flurkarte NRW 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.F.16" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.F.13" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
+		<KartenProdukt ID="LK.GDBNRW.I.F.17" Kartenname="Karte" Layout="LKA1H" Praesentationshinweis1="Flurkarte NRW 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.F.18" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.F.14" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
+		<KartenProdukt ID="LK.GDBNRW.I.F.19" Kartenname="Karte" Layout="LKA0H" Praesentationshinweis1="Flurkarte NRW 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.F.20" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.F.15" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Flurkarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.I.F.21" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Flurkarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.F.16" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.I.F.22" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.F.17" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Flurkarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.I.F.23" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Flurkarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.F.18" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.I.F.24" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.F.19" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
+		<KartenProdukt ID="LK.GDBNRW.I.F.25" Kartenname="Karte" Layout="LKA2H" Praesentationshinweis1="Flurkarte NRW 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.F.26" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.F.20" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
+		<KartenProdukt ID="LK.GDBNRW.I.F.27" Kartenname="Karte" Layout="LKA1H" Praesentationshinweis1="Flurkarte NRW 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.F.28" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.F.21" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
+		<KartenProdukt ID="LK.GDBNRW.I.F.29" Kartenname="Karte" Layout="LKA0H" Praesentationshinweis1="Flurkarte NRW 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.F.30" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-
-        <KartenProdukt ID="LK.GDBNRW.I.F.22" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Flurkarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.F.23" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Flurkarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.F.24" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Flurkarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.F.25" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Flurkarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.F.26" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Flurkarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.F.27" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Flurkarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.F.28" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Flurkarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-
       </GUIKartenProdukt>
-      
-       <GUIKartenProdukt Antragsart="NW03" ID="LK.GDBNRW.I.SW" Name="Flurkarte, schwarzweiß" Logo="logo-aaa-sw" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Karte (sw)" ProduktnameAuswertung="Flurkarte, schwarz-weiß" ProduktnameGUI="Flurkarte, sw" Zusatzlegende="true">
-                        
+       <GUIKartenProdukt Antragsart="NW03" ID="LK.GDBNRW.I.SW" Name="Liegenschaftskarte, grau" Logo="logo-aaa-wup-sw" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Karte (sw)" ProduktnameAuswertung="Liegenschaftskarte, grau" ProduktnameGUI="LiKa, grau" Zusatzlegende="true">
         <KartenProdukt ID="LK.GDBNRW.I.SW.1" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Flurkarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
         <KartenProdukt ID="LK.GDBNRW.I.SW.2" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Flurkarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
         <KartenProdukt ID="LK.GDBNRW.I.SW.3" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Flurkarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
         <KartenProdukt ID="LK.GDBNRW.I.SW.4" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Flurkarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.SW.5" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Flurkarte NRW 1:500">
+		<KartenProdukt ID="LK.GDBNRW.I.SW.5" Kartenname="Karte" Layout="LKA2H" Praesentationshinweis1="Flurkarte NRW 1:500">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.SW.6" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Flurkarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.SW.6" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Flurkarte NRW 1:500">
+		<KartenProdukt ID="LK.GDBNRW.I.SW.7" Kartenname="Karte" Layout="LKA1H" Praesentationshinweis1="Flurkarte NRW 1:500">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.SW.8" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Flurkarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.SW.7" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Flurkarte NRW 1:500">
+		<KartenProdukt ID="LK.GDBNRW.I.SW.9" Kartenname="Karte" Layout="LKA0H" Praesentationshinweis1="Flurkarte NRW 1:500">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.SW.10" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Flurkarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.SW.8" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Flurkarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.I.SW.11" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Flurkarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.SW.9" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.I.SW.12" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.SW.10" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Flurkarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.I.SW.13" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Flurkarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.SW.11" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.I.SW.14" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.SW.12" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
+		<KartenProdukt ID="LK.GDBNRW.I.SW.15" Kartenname="Karte" Layout="LKA2H" Praesentationshinweis1="Flurkarte NRW 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.SW.16" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.SW.13" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
+		<KartenProdukt ID="LK.GDBNRW.I.SW.17" Kartenname="Karte" Layout="LKA1H" Praesentationshinweis1="Flurkarte NRW 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.SW.18" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.SW.14" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
+		<KartenProdukt ID="LK.GDBNRW.I.SW.19" Kartenname="Karte" Layout="LKA0H" Praesentationshinweis1="Flurkarte NRW 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.SW.20" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Flurkarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.SW.15" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Flurkarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.I.SW.21" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Flurkarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.SW.16" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.I.SW.22" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.SW.17" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Flurkarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.I.SW.23" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Flurkarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.SW.18" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.I.SW.24" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.SW.19" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
+		<KartenProdukt ID="LK.GDBNRW.I.SW.25" Kartenname="Karte" Layout="LKA2H" Praesentationshinweis1="Flurkarte NRW 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.SW.26" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.SW.20" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
+		<KartenProdukt ID="LK.GDBNRW.I.SW.27" Kartenname="Karte" Layout="LKA1H" Praesentationshinweis1="Flurkarte NRW 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.SW.28" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.SW.21" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
+		<KartenProdukt ID="LK.GDBNRW.I.SW.29" Kartenname="Karte" Layout="LKA0H" Praesentationshinweis1="Flurkarte NRW 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.SW.30" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Flurkarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-
-        <KartenProdukt ID="LK.GDBNRW.I.SW.22" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Flurkarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.SW.23" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Flurkarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.SW.24" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Flurkarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.SW.25" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Flurkarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.SW.26" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Flurkarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.SW.27" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Flurkarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.SW.28" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Flurkarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
       </GUIKartenProdukt>
-      
-       <GUIKartenProdukt Antragsart="NW04" ID="LK.GDBNRW.I.BF" Name="Schätzungskarte, farbig" Logo="logo-aaa-f" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="LK mit Bodenschätzung (farbig)" ProduktnameAuswertung="Schätzungskarte, farbig" ProduktnameGUI="Schätzungskarte, farbig" Zusatzlegende="true">
-                        
+       <GUIKartenProdukt Antragsart="NW04" ID="LK.GDBNRW.I.BF" Name="Schätzungskarte, farbig" Logo="logo-aaa-wup-f" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="LK mit Bodenschätzung (farbig)" ProduktnameAuswertung="Schätzungskarte, farbig" ProduktnameGUI="Schätzungskarte, farbig" Zusatzlegende="true">
         <KartenProdukt ID="LK.GDBNRW.I.BF.1" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
         <KartenProdukt ID="LK.GDBNRW.I.BF.2" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
         <KartenProdukt ID="LK.GDBNRW.I.BF.3" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
         <KartenProdukt ID="LK.GDBNRW.I.BF.4" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BF.5" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
+		<KartenProdukt ID="LK.GDBNRW.I.BF.5" Kartenname="Karte" Layout="LKA2H" Praesentationshinweis1="Schätzungskarte NRW 1:500">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.BF.6" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BF.6" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
+		<KartenProdukt ID="LK.GDBNRW.I.BF.7" Kartenname="Karte" Layout="LKA1H" Praesentationshinweis1="Schätzungskarte NRW 1:500">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.BF.8" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BF.7" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
+		<KartenProdukt ID="LK.GDBNRW.I.BF.9" Kartenname="Karte" Layout="LKA0H" Praesentationshinweis1="Schätzungskarte NRW 1:500">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.BF.10" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BF.8" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.I.BF.11" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BF.9" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.I.BF.12" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BF.10" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.I.BF.13" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BF.11" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.I.BF.14" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BF.12" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+		<KartenProdukt ID="LK.GDBNRW.I.BF.15" Kartenname="Karte" Layout="LKA2H" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.BF.16" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BF.13" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+		<KartenProdukt ID="LK.GDBNRW.I.BF.17" Kartenname="Karte" Layout="LKA1H" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.BF.18" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BF.14" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+		<KartenProdukt ID="LK.GDBNRW.I.BF.19" Kartenname="Karte" Layout="LKA0H" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.BF.20" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BF.15" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.I.BF.21" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BF.16" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.I.BF.22" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BF.17" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.I.BF.23" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BF.18" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.I.BF.24" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BF.19" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+		<KartenProdukt ID="LK.GDBNRW.I.BF.25" Kartenname="Karte" Layout="LKA2H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.BF.26" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BF.20" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+		<KartenProdukt ID="LK.GDBNRW.I.BF.27" Kartenname="Karte" Layout="LKA1H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.BF.28" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BF.21" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+		<KartenProdukt ID="LK.GDBNRW.I.BF.29" Kartenname="Karte" Layout="LKA0H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.BF.30" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-
-        <KartenProdukt ID="LK.GDBNRW.I.BF.22" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Schätzungskarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BF.23" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Schätzungskarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BF.24" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Schätzungskarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BF.25" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Schätzungskarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BF.26" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BF.27" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BF.28" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
       </GUIKartenProdukt>
-      
-       <GUIKartenProdukt Antragsart="NW04" ID="LK.GDBNRW.I.BSW" Name="Schätzungskarte, schwarzweiß" Logo="logo-aaa-sw" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="LK mit Bodenschätzung (sw)" ProduktnameAuswertung="Schätzungskarte, schwarz-weiß" ProduktnameGUI="Schätzungskarte, sw" Zusatzlegende="true">
-                        
+       <GUIKartenProdukt Antragsart="NW04" ID="LK.GDBNRW.I.BSW" Name="Schätzungskarte, grau" Logo="logo-aaa-wup-sw" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="LK mit Bodenschätzung (sw)" ProduktnameAuswertung="Schätzungskarte, grau" ProduktnameGUI="Schätzungskarte, grau" Zusatzlegende="true">
         <KartenProdukt ID="LK.GDBNRW.I.BSW.1" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
         <KartenProdukt ID="LK.GDBNRW.I.BSW.2" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
         <KartenProdukt ID="LK.GDBNRW.I.BSW.3" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
         <KartenProdukt ID="LK.GDBNRW.I.BSW.4" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BSW.5" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
+		<KartenProdukt ID="LK.GDBNRW.I.BSW.5" Kartenname="Karte" Layout="LKA2H" Praesentationshinweis1="Schätzungskarte NRW 1:500">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.BSW.6" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BSW.6" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
+		<KartenProdukt ID="LK.GDBNRW.I.BSW.7" Kartenname="Karte" Layout="LKA1H" Praesentationshinweis1="Schätzungskarte NRW 1:500">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.BSW.8" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BSW.7" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
+		<KartenProdukt ID="LK.GDBNRW.I.BSW.9" Kartenname="Karte" Layout="LKA0H" Praesentationshinweis1="Schätzungskarte NRW 1:500">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.BSW.10" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BSW.8" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.I.BSW.11" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BSW.9" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.I.BSW.12" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BSW.10" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.I.BSW.13" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BSW.11" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+        <KartenProdukt ID="LK.GDBNRW.I.BSW.14" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BSW.12" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+		<KartenProdukt ID="LK.GDBNRW.I.BSW.15" Kartenname="Karte" Layout="LKA2H" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.BSW.16" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BSW.13" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+		<KartenProdukt ID="LK.GDBNRW.I.BSW.17" Kartenname="Karte" Layout="LKA1H" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.BSW.18" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BSW.14" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+		<KartenProdukt ID="LK.GDBNRW.I.BSW.19" Kartenname="Karte" Layout="LKA0H" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.BSW.20" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:1000">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BSW.15" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.I.BSW.21" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BSW.16" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.I.BSW.22" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BSW.17" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.I.BSW.23" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BSW.18" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+        <KartenProdukt ID="LK.GDBNRW.I.BSW.24" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BSW.19" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+		<KartenProdukt ID="LK.GDBNRW.I.BSW.25" Kartenname="Karte" Layout="LKA2H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.BSW.26" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BSW.20" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+		<KartenProdukt ID="LK.GDBNRW.I.BSW.27" Kartenname="Karte" Layout="LKA1H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.BSW.28" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BSW.21" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+		<KartenProdukt ID="LK.GDBNRW.I.BSW.29" Kartenname="Karte" Layout="LKA0H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.GDBNRW.I.BSW.30" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
-
-        <KartenProdukt ID="LK.GDBNRW.I.BSW.22" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Schätzungskarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BSW.23" Kartenname="Karte" Layout="LKA4Q" Praesentationshinweis1="Schätzungskarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BSW.24" Kartenname="Karte" Layout="LKA3H" Praesentationshinweis1="Schätzungskarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BSW.25" Kartenname="Karte" Layout="LKA3Q" Praesentationshinweis1="Schätzungskarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BSW.26" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BSW.27" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
-        
-        <KartenProdukt ID="LK.GDBNRW.I.BSW.28" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:5000">
-           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="5000"/>
-        </KartenProdukt>
       </GUIKartenProdukt>
-       <GUIKartenProdukt Antragsart="NW05" ID="LK.GDBNRW.I.ABKF" Name="Amtliche Basiskarte, farbig" Logo="logo-aaa-f" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Amtliche Basiskarte (farbig)" ProduktnameAuswertung="Amtliche Basiskarte (farbig)" ProduktnameGUI="ABK, farbig" Zusatzlegende="true">
-                        
+       <GUIKartenProdukt Antragsart="NW05" ID="LK.GDBNRW.I.ABKF" Name="Amtliche Basiskarte, farbig" Logo="logo-aaa-wup-f" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Amtliche Basiskarte (farbig)" ProduktnameAuswertung="Amtliche Basiskarte, farbig" ProduktnameGUI="ABK, farbig" Zusatzlegende="true">
         <KartenProdukt ID="LK.GDBNRW.I.ABKF.1" Kartenname="Karte" Layout="ABKA4H" Praesentationshinweis1="Amtliche Basiskarte NRW 1:2500">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="2500"/>
         </KartenProdukt>
@@ -1076,7 +968,6 @@
         <KartenProdukt ID="LK.GDBNRW.I.ABKF.10" Kartenname="Karte" Layout="ABKA0Q" Praesentationshinweis1="Amtliche Basiskarte NRW 1:2500">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2500"/>
         </KartenProdukt>
-        
         <KartenProdukt ID="LK.GDBNRW.I.ABKF.11" Kartenname="Karte" Layout="ABKA4H" Praesentationshinweis1="Amtliche Basiskarte NRW 1:5000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="5000"/>
         </KartenProdukt>
@@ -1107,7 +998,6 @@
         <KartenProdukt ID="LK.GDBNRW.I.ABKF.20" Kartenname="Karte" Layout="ABKA0Q" Praesentationshinweis1="Amtliche Basiskarte NRW 1:5000">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="5000"/>
         </KartenProdukt>
-        
         <KartenProdukt ID="LK.GDBNRW.I.ABKF.21" Kartenname="Karte" Layout="ABKA4H" Praesentationshinweis1="Amtliche Basiskarte NRW 1:10000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="10000"/>
         </KartenProdukt>
@@ -1139,9 +1029,7 @@
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="10000"/>
         </KartenProdukt>
      </GUIKartenProdukt>
-
-       <GUIKartenProdukt Antragsart="NW05" ID="LK.GDBNRW.I.ABKSW" Name="Amtliche Basiskarte, sw" Logo="logo-aaa-sw" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Amtliche Basiskarte (sw)" ProduktnameAuswertung="Amtliche Basiskarte (sw)" ProduktnameGUI="ABK, sw" Zusatzlegende="true">
-                        
+       <GUIKartenProdukt Antragsart="NW05" ID="LK.GDBNRW.I.ABKSW" Name="Amtliche Basiskarte, grau" Logo="logo-aaa-wup-sw" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Amtliche Basiskarte (sw)" ProduktnameAuswertung="Amtliche Basiskarte, grau" ProduktnameGUI="ABK, grau" Zusatzlegende="true">
         <KartenProdukt ID="LK.GDBNRW.I.ABKSW.1" Kartenname="Karte" Layout="ABKA4H" Praesentationshinweis1="Amtliche Basiskarte NRW 1:2500">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="2500"/>
         </KartenProdukt>
@@ -1172,7 +1060,6 @@
         <KartenProdukt ID="LK.GDBNRW.I.ABKSW.10" Kartenname="Karte" Layout="ABKA0Q" Praesentationshinweis1="Amtliche Basiskarte NRW 1:2500">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2500"/>
         </KartenProdukt>
-        
         <KartenProdukt ID="LK.GDBNRW.I.ABKSW.11" Kartenname="Karte" Layout="ABKA4H" Praesentationshinweis1="Amtliche Basiskarte NRW 1:5000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="5000"/>
         </KartenProdukt>
@@ -1203,7 +1090,6 @@
         <KartenProdukt ID="LK.GDBNRW.I.ABKSW.20" Kartenname="Karte" Layout="ABKA0Q" Praesentationshinweis1="Amtliche Basiskarte NRW 1:5000">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="5000"/>
         </KartenProdukt>
-        
         <KartenProdukt ID="LK.GDBNRW.I.ABKSW.21" Kartenname="Karte" Layout="ABKA4H" Praesentationshinweis1="Amtliche Basiskarte NRW 1:10000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="10000"/>
         </KartenProdukt>
@@ -1235,141 +1121,572 @@
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="10000"/>
         </KartenProdukt>
      </GUIKartenProdukt>
-
     </Kartenklasse>
-    
+    <Kartenklasse ID="LK.NRW.K" Name="Stadtgrundkarte">
+      <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="farbige Ausgabe" Logo="logo-aaa-wappen-wup-f" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" ProduktnameAuswertung="Stadtgrundkarte, farbig" ProduktnameGUI="farbig" Zusatzlegende="false">
+        <KartenProdukt ID="LK.NRW.K.F.1" Kartenname="KarteNameSGK" Layout="SGKA4H" Praesentationshinweis1="Stadtgrundkarte 1:500">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.F.2" Kartenname="KarteNameSGK" Layout="SGKA4Q" Praesentationshinweis1="Stadtgrundkarte 1:500">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.F.3" Kartenname="KarteNameSGK" Layout="SGKA3H" Praesentationshinweis1="Stadtgrundkarte 1:500">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.F.4" Kartenname="KarteNameSGK" Layout="SGKA3Q" Praesentationshinweis1="Stadtgrundkarte 1:500">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.F.5" Kartenname="KarteNameSGK" Layout="SGKA2H" Praesentationshinweis1="Stadtgrundkarte 1:500">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.F.6" Kartenname="KarteNameSGK" Layout="SGKA2Q" Praesentationshinweis1="Stadtgrundkarte 1:500">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.F.7" Kartenname="KarteNameSGK" Layout="SGKA1H" Praesentationshinweis1="Stadtgrundkarte 1:500">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.F.8" Kartenname="KarteNameSGK" Layout="SGKA1Q" Praesentationshinweis1="Stadtgrundkarte 1:500">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.F.9" Kartenname="KarteNameSGK" Layout="SGKA0H" Praesentationshinweis1="Stadtgrundkarte 1:500">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.F.10" Kartenname="KarteNameSGK" Layout="SGKA0Q" Praesentationshinweis1="Stadtgrundkarte 1:500">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.F.11" Kartenname="KarteNameSGK" Layout="SGKA4H" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.F.12" Kartenname="KarteNameSGK" Layout="SGKA4Q" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.F.13" Kartenname="KarteNameSGK" Layout="SGKA3H" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.F.14" Kartenname="KarteNameSGK" Layout="SGKA3Q" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.F.15" Kartenname="KarteNameSGK" Layout="SGKA2H" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.F.16" Kartenname="KarteNameSGK" Layout="SGKA2Q" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.F.17" Kartenname="KarteNameSGK" Layout="SGKA1H" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.F.18" Kartenname="KarteNameSGK" Layout="SGKA1Q" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.F.19" Kartenname="KarteNameSGK" Layout="SGKA0H" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.F.20" Kartenname="KarteNameSGK" Layout="SGKA0Q" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.F.21" Kartenname="KarteNameSGK" Layout="SGKA4H" Praesentationshinweis1="Stadtgrundkarte 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.F.22" Kartenname="KarteNameSGK" Layout="SGKA4Q" Praesentationshinweis1="Stadtgrundkarte 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.F.23" Kartenname="KarteNameSGK" Layout="SGKA3H" Praesentationshinweis1="Stadtgrundkarte 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.F.24" Kartenname="KarteNameSGK" Layout="SGKA3Q" Praesentationshinweis1="Stadtgrundkarte 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.F.25" Kartenname="KarteNameSGK" Layout="SGKA2H" Praesentationshinweis1="Stadtgrundkarte 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.F.26" Kartenname="KarteNameSGK" Layout="SGKA2Q" Praesentationshinweis1="Stadtgrundkarte 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.F.27" Kartenname="KarteNameSGK" Layout="SGKA1H" Praesentationshinweis1="Stadtgrundkarte 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.F.28" Kartenname="KarteNameSGK" Layout="SGKA1Q" Praesentationshinweis1="Stadtgrundkarte 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.F.29" Kartenname="KarteNameSGK" Layout="SGKA0H" Praesentationshinweis1="Stadtgrundkarte 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.F.30" Kartenname="KarteNameSGK" Layout="SGKA0Q" Praesentationshinweis1="Stadtgrundkarte 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+      </GUIKartenProdukt>
+       <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.SW" Name="Graustufenausgabe" Logo="logo-aaa-wappen-wup-sw" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (sw)" ProduktnameAuswertung="Stadtgrundkarte, grau" ProduktnameGUI="grau" Zusatzlegende="false">
+        <KartenProdukt ID="LK.NRW.K.SW.1" Kartenname="KarteNameSGK" Layout="SGKA4H" Praesentationshinweis1="Stadtgrundkarte 1:500">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.SW.2" Kartenname="KarteNameSGK" Layout="SGKA4Q" Praesentationshinweis1="Stadtgrundkarte 1:500">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.SW.3" Kartenname="KarteNameSGK" Layout="SGKA3H" Praesentationshinweis1="Stadtgrundkarte 1:500">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.SW.4" Kartenname="KarteNameSGK" Layout="SGKA3Q" Praesentationshinweis1="Stadtgrundkarte 1:500">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.SW.5" Kartenname="KarteNameSGK" Layout="SGKA2H" Praesentationshinweis1="Stadtgrundkarte 1:500">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.SW.6" Kartenname="KarteNameSGK" Layout="SGKA2Q" Praesentationshinweis1="Stadtgrundkarte 1:500">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.SW.7" Kartenname="KarteNameSGK" Layout="SGKA1H" Praesentationshinweis1="Stadtgrundkarte 1:500">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.SW.8" Kartenname="KarteNameSGK" Layout="SGKA1Q" Praesentationshinweis1="Stadtgrundkarte 1:500">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.SW.9" Kartenname="KarteNameSGK" Layout="SGKA0H" Praesentationshinweis1="Stadtgrundkarte 1:500">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.SW.10" Kartenname="KarteNameSGK" Layout="SGKA0Q" Praesentationshinweis1="Stadtgrundkarte 1:500">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.SW.11" Kartenname="KarteNameSGK" Layout="SGKA4H" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.SW.12" Kartenname="KarteNameSGK" Layout="SGKA4Q" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.SW.13" Kartenname="KarteNameSGK" Layout="SGKA3H" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.SW.14" Kartenname="KarteNameSGK" Layout="SGKA3Q" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.SW.15" Kartenname="KarteNameSGK" Layout="SGKA2H" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.SW.16" Kartenname="KarteNameSGK" Layout="SGKA2Q" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.SW.17" Kartenname="KarteNameSGK" Layout="SGKA1H" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.SW.18" Kartenname="KarteNameSGK" Layout="SGKA1Q" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.SW.19" Kartenname="KarteNameSGK" Layout="SGKA0H" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.SW.20" Kartenname="KarteNameSGK" Layout="SGKA0Q" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.SW.21" Kartenname="KarteNameSGK" Layout="SGKA4H" Praesentationshinweis1="Stadtgrundkarte 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.SW.22" Kartenname="KarteNameSGK" Layout="SGKA4Q" Praesentationshinweis1="Stadtgrundkarte 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.SW.23" Kartenname="KarteNameSGK" Layout="SGKA3H" Praesentationshinweis1="Stadtgrundkarte 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.SW.24" Kartenname="KarteNameSGK" Layout="SGKA3Q" Praesentationshinweis1="Stadtgrundkarte 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.SW.25" Kartenname="KarteNameSGK" Layout="SGKA2H" Praesentationshinweis1="Stadtgrundkarte 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.SW.26" Kartenname="KarteNameSGK" Layout="SGKA2Q" Praesentationshinweis1="Stadtgrundkarte 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.SW.27" Kartenname="KarteNameSGK" Layout="SGKA1H" Praesentationshinweis1="Stadtgrundkarte 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.SW.28" Kartenname="KarteNameSGK" Layout="SGKA1Q" Praesentationshinweis1="Stadtgrundkarte 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.SW.29" Kartenname="KarteNameSGK" Layout="SGKA0H" Praesentationshinweis1="Stadtgrundkarte 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.SW.30" Kartenname="KarteNameSGK" Layout="SGKA0Q" Praesentationshinweis1="Stadtgrundkarte 1:2000">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+      </GUIKartenProdukt>
+      <GUIKartenProdukt Antragsart="KS04" ID="LK.NRW.K.BF" Name="mit kommunalen Erg., farbig" Logo="logo-aaa-wappen-wup-f" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte mit kom. Erg. (farbig)" ProduktnameAuswertung="Stadtgrundkarte m. kom. Erg., farbig" ProduktnameGUI="mit kommunalen Erg., farbig" Zusatzlegende="false">
+        <KartenProdukt ID="LK.NRW.K.BF.1" Kartenname="KarteNameSGK" Layout="SGKA4H" Praesentationshinweis1="Stadtgrundkarte 1:500" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.2" Kartenname="KarteNameSGK" Layout="SGKA4Q" Praesentationshinweis1="Stadtgrundkarte 1:500" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.3" Kartenname="KarteNameSGK" Layout="SGKA3H" Praesentationshinweis1="Stadtgrundkarte 1:500" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.4" Kartenname="KarteNameSGK" Layout="SGKA3Q" Praesentationshinweis1="Stadtgrundkarte 1:500" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.BF.5" Kartenname="KarteNameSGK" Layout="SGKA2H" Praesentationshinweis1="Stadtgrundkarte 1:500" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.6" Kartenname="KarteNameSGK" Layout="SGKA2Q" Praesentationshinweis1="Stadtgrundkarte 1:500" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.BF.7" Kartenname="KarteNameSGK" Layout="SGKA1H" Praesentationshinweis1="Stadtgrundkarte 1:500" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.8" Kartenname="KarteNameSGK" Layout="SGKA1Q" Praesentationshinweis1="Stadtgrundkarte 1:500" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.BF.9" Kartenname="KarteNameSGK" Layout="SGKA0H" Praesentationshinweis1="Stadtgrundkarte 1:500" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.10" Kartenname="KarteNameSGK" Layout="SGKA0Q" Praesentationshinweis1="Stadtgrundkarte 1:500" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.11" Kartenname="KarteNameSGK" Layout="SGKA4H" Praesentationshinweis1="Stadtgrundkarte 1:1000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.12" Kartenname="KarteNameSGK" Layout="SGKA4Q" Praesentationshinweis1="Stadtgrundkarte 1:1000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.13" Kartenname="KarteNameSGK" Layout="SGKA3H" Praesentationshinweis1="Stadtgrundkarte 1:1000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.14" Kartenname="KarteNameSGK" Layout="SGKA3Q" Praesentationshinweis1="Stadtgrundkarte 1:1000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.BF.15" Kartenname="KarteNameSGK" Layout="SGKA2H" Praesentationshinweis1="Stadtgrundkarte 1:1000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.16" Kartenname="KarteNameSGK" Layout="SGKA2Q" Praesentationshinweis1="Stadtgrundkarte 1:1000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.BF.17" Kartenname="KarteNameSGK" Layout="SGKA1H" Praesentationshinweis1="Stadtgrundkarte 1:1000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.18" Kartenname="KarteNameSGK" Layout="SGKA1Q" Praesentationshinweis1="Stadtgrundkarte 1:1000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.BF.19" Kartenname="KarteNameSGK" Layout="SGKA0H" Praesentationshinweis1="Stadtgrundkarte 1:1000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.20" Kartenname="KarteNameSGK" Layout="SGKA0Q" Praesentationshinweis1="Stadtgrundkarte 1:1000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.21" Kartenname="KarteNameSGK" Layout="SGKA4H" Praesentationshinweis1="Stadtgrundkarte 1:2000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.22" Kartenname="KarteNameSGK" Layout="SGKA4Q" Praesentationshinweis1="Stadtgrundkarte 1:2000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.23" Kartenname="KarteNameSGK" Layout="SGKA3H" Praesentationshinweis1="Stadtgrundkarte 1:2000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.24" Kartenname="KarteNameSGK" Layout="SGKA3Q" Praesentationshinweis1="Stadtgrundkarte 1:2000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.BF.25" Kartenname="KarteNameSGK" Layout="SGKA2H" Praesentationshinweis1="Stadtgrundkarte 1:2000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.26" Kartenname="KarteNameSGK" Layout="SGKA2Q" Praesentationshinweis1="Stadtgrundkarte 1:2000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.BF.27" Kartenname="KarteNameSGK" Layout="SGKA1H" Praesentationshinweis1="Stadtgrundkarte 1:2000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.28" Kartenname="KarteNameSGK" Layout="SGKA1Q" Praesentationshinweis1="Stadtgrundkarte 1:2000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.BF.29" Kartenname="KarteNameSGK" Layout="SGKA0H" Praesentationshinweis1="Stadtgrundkarte 1:2000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.30" Kartenname="KarteNameSGK" Layout="SGKA0Q" Praesentationshinweis1="Stadtgrundkarte 1:2000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+      </GUIKartenProdukt>
+       <GUIKartenProdukt Antragsart="KS04" ID="LK.NRW.K.BSW" Name="mit kommunalen Erg., grau" Logo="logo-aaa-wappen-wup-sw" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte mit kom. Erg. (sw)" ProduktnameAuswertung="Stadtgrundkarte m. kom. Erg., schwarz-weiß" ProduktnameGUI="mit kommunalen Erg., grau" Zusatzlegende="false">
+        <KartenProdukt ID="LK.NRW.K.BSW.1" Kartenname="KarteNameSGK" Layout="SGKA4H" Praesentationshinweis1="Stadtgrundkarte 1:500" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.2" Kartenname="KarteNameSGK" Layout="SGKA4Q" Praesentationshinweis1="Stadtgrundkarte 1:500" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.3" Kartenname="KarteNameSGK" Layout="SGKA3H" Praesentationshinweis1="Stadtgrundkarte 1:500" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.4" Kartenname="KarteNameSGK" Layout="SGKA3Q" Praesentationshinweis1="Stadtgrundkarte 1:500" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.BSW.5" Kartenname="KarteNameSGK" Layout="SGKA2H" Praesentationshinweis1="Stadtgrundkarte 1:500" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.6" Kartenname="KarteNameSGK" Layout="SGKA2Q" Praesentationshinweis1="Stadtgrundkarte 1:500" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.BSW.7" Kartenname="KarteNameSGK" Layout="SGKA1H" Praesentationshinweis1="Stadtgrundkarte 1:500" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.8" Kartenname="KarteNameSGK" Layout="SGKA1Q" Praesentationshinweis1="Stadtgrundkarte 1:500" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.BSW.9" Kartenname="KarteNameSGK" Layout="SGKA0H" Praesentationshinweis1="Stadtgrundkarte 1:500" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.10" Kartenname="KarteNameSGK" Layout="SGKA0Q" Praesentationshinweis1="Stadtgrundkarte 1:500" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.BSW.11" Kartenname="KarteNameSGK" Layout="SGKA4H" Praesentationshinweis1="Stadtgrundkarte 1:1000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.12" Kartenname="KarteNameSGK" Layout="SGKA4Q" Praesentationshinweis1="Stadtgrundkarte 1:1000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.13" Kartenname="KarteNameSGK" Layout="SGKA3H" Praesentationshinweis1="Stadtgrundkarte 1:1000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.14" Kartenname="KarteNameSGK" Layout="SGKA3Q" Praesentationshinweis1="Stadtgrundkarte 1:1000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.BSW.15" Kartenname="KarteNameSGK" Layout="SGKA2H" Praesentationshinweis1="Stadtgrundkarte 1:1000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.16" Kartenname="KarteNameSGK" Layout="SGKA2Q" Praesentationshinweis1="Stadtgrundkarte 1:1000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.BSW.17" Kartenname="KarteNameSGK" Layout="SGKA1H" Praesentationshinweis1="Stadtgrundkarte 1:1000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.18" Kartenname="KarteNameSGK" Layout="SGKA1Q" Praesentationshinweis1="Stadtgrundkarte 1:1000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.BSW.19" Kartenname="KarteNameSGK" Layout="SGKA0H" Praesentationshinweis1="Stadtgrundkarte 1:1000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.20" Kartenname="KarteNameSGK" Layout="SGKA0Q" Praesentationshinweis1="Stadtgrundkarte 1:1000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.21" Kartenname="KarteNameSGK" Layout="SGKA4H" Praesentationshinweis1="Stadtgrundkarte 1:2000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.22" Kartenname="KarteNameSGK" Layout="SGKA4Q" Praesentationshinweis1="Stadtgrundkarte 1:2000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.23" Kartenname="KarteNameSGK" Layout="SGKA3H" Praesentationshinweis1="Stadtgrundkarte 1:2000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.24" Kartenname="KarteNameSGK" Layout="SGKA3Q" Praesentationshinweis1="Stadtgrundkarte 1:2000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.BSW.25" Kartenname="KarteNameSGK" Layout="SGKA2H" Praesentationshinweis1="Stadtgrundkarte 1:2000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.26" Kartenname="KarteNameSGK" Layout="SGKA2Q" Praesentationshinweis1="Stadtgrundkarte 1:2000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.BSW.27" Kartenname="KarteNameSGK" Layout="SGKA1H" Praesentationshinweis1="Stadtgrundkarte 1:2000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.28" Kartenname="KarteNameSGK" Layout="SGKA1Q" Praesentationshinweis1="Stadtgrundkarte 1:2000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="LK.NRW.K.BSW.29" Kartenname="KarteNameSGK" Layout="SGKA0H" Praesentationshinweis1="Stadtgrundkarte 1:2000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.30" Kartenname="KarteNameSGK" Layout="SGKA0Q" Praesentationshinweis1="Stadtgrundkarte 1:2000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2000"/>
+        </KartenProdukt>
+      </GUIKartenProdukt>
+	  <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="Rahmenkarte, farbig" Logo="logo-aaa-wappen-wup-f" 
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" 
+                        ProduktnameAuswertung="Rahmenkarte, farbig" ProduktnameGUI="Rahmenkarte, farbig" Zusatzlegende="false">
+        <KartenProdukt ID="LK.NRW.K.F.50" Kartenname="Karte" Layout="RAKA" Praesentationshinweis1="Stadtgrundkarte 1:500">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+	  </GUIKartenProdukt>
+	  <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.SW" Name="Rahmenkarte, grau" Logo="logo-aaa-wappen-wup-sw" 
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (sw)" 
+                        ProduktnameAuswertung="Rahmenkarte, schwarzweiß" ProduktnameGUI="Rahmenkarte, sw" Zusatzlegende="false">
+        <KartenProdukt ID="LK.NRW.K.SW.50" Kartenname="Karte" Layout="RAKA" Praesentationshinweis1="Stadtgrundkarte 1:500">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+	  </GUIKartenProdukt>
+	 </Kartenklasse>
+	 <Kartenklasse ID="LK.NRW.K" Name="EXPORT">
+     <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF" 
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" 
+                        ProduktnameAuswertung="100m x 100m" ProduktnameGUI="100m x 100m" Zusatzlegende="false">
+        <KartenProdukt ID="LK.NRW.K.F.60" Kartenname="Karte" Layout="EXPORT100" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+	 </GUIKartenProdukt>
+	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF" 
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" 
+                        ProduktnameAuswertung="200m x 200m" ProduktnameGUI="200m x 200m" Zusatzlegende="false">
+        <KartenProdukt ID="LK.NRW.K.F.61" Kartenname="Karte" Layout="EXPORT200" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+	 </GUIKartenProdukt>
+	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF" 
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" 
+                        ProduktnameAuswertung="300m x 300m" ProduktnameGUI="300m x 300m" Zusatzlegende="false">
+        <KartenProdukt ID="LK.NRW.K.F.62" Kartenname="Karte" Layout="EXPORT300" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+	 </GUIKartenProdukt>
+	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF" 
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" 
+                        ProduktnameAuswertung="400m x 400m" ProduktnameGUI="400m x 400m" Zusatzlegende="false">
+        <KartenProdukt ID="LK.NRW.K.F.63" Kartenname="Karte" Layout="EXPORT400" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+	 </GUIKartenProdukt>
+	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF" 
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" 
+                        ProduktnameAuswertung="500m x 500m" ProduktnameGUI="500m x 500m" Zusatzlegende="false">
+        <KartenProdukt ID="LK.NRW.K.F.64" Kartenname="Karte" Layout="EXPORT500" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+	 </GUIKartenProdukt>
+	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF" 
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" 
+                        ProduktnameAuswertung="600m x 600m" ProduktnameGUI="600m x 600m" Zusatzlegende="false">
+        <KartenProdukt ID="LK.NRW.K.F.65" Kartenname="Karte" Layout="EXPORT600" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+	 </GUIKartenProdukt>
+	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF" 
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" 
+                        ProduktnameAuswertung="600m x 600m" ProduktnameGUI="600m x 600m" Zusatzlegende="false">
+        <KartenProdukt ID="LK.NRW.K.F.66" Kartenname="Karte" Layout="EXPORT600" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+	 </GUIKartenProdukt>
+	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF" 
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" 
+                        ProduktnameAuswertung="700m x 700m" ProduktnameGUI="700m x 700m" Zusatzlegende="false">
+        <KartenProdukt ID="LK.NRW.K.F.67" Kartenname="Karte" Layout="EXPORT700" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+	 </GUIKartenProdukt>
+	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF" 
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" 
+                        ProduktnameAuswertung="800m x 800m" ProduktnameGUI="800m x 800m" Zusatzlegende="false">
+        <KartenProdukt ID="LK.NRW.K.F.68" Kartenname="Karte" Layout="EXPORT800" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+	 </GUIKartenProdukt>
+	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF" 
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" 
+                        ProduktnameAuswertung="900m x 900m" ProduktnameGUI="900m x 900m" Zusatzlegende="false">
+        <KartenProdukt ID="LK.NRW.K.F.69" Kartenname="Karte" Layout="EXPORT900" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+	 </GUIKartenProdukt>
+	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF" 
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" 
+                        ProduktnameAuswertung="1000m x 1000m" ProduktnameGUI="1000m x 1000m" Zusatzlegende="false">
+        <KartenProdukt ID="LK.NRW.K.F.70" Kartenname="Karte" Layout="EXPORT1000" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+	 </GUIKartenProdukt>
+	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF" 
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" 
+                        ProduktnameAuswertung="1500m x 1500m" ProduktnameGUI="1500m x 1500m" Zusatzlegende="false">
+        <KartenProdukt ID="LK.NRW.K.F.71" Kartenname="Karte" Layout="EXPORT1500" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+	 </GUIKartenProdukt>
+	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF" 
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" 
+                        ProduktnameAuswertung="2000m x 2000m" ProduktnameGUI="2000m x 2000m" Zusatzlegende="false">
+        <KartenProdukt ID="LK.NRW.K.F.72" Kartenname="Karte" Layout="EXPORT2000" Praesentationshinweis1="Stadtgrundkarte 1:1000">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+	 </GUIKartenProdukt>
+	 </Kartenklasse>
   </Karte>
-  
   <Einzelnachweis>
-  
-    <Einzelnachweisklasse ID="LB.GDBNRW.A" Name="Gdb-NRW-Amtlich">
-    
+    <Einzelnachweisklasse ID="LB.GDBNRW.A"  Name="Wuppertal-Amtlich">
       <GUIEinzelnachweisprodukt Antragsart="NW07" ID="LB.GDBNRW.A.FNW" Name="Flurstücksnachweis" SelektionsKriterium="Flurstückskennzeichen" ProduktnameAuswertung="Flurstücksnachweis(G) NRW" ProduktnameGUI="Flurstücksnachweis">
-                                 
          <Einzelnachweisprodukt ID="LB.GDBNRW.A.FNW.1" Layout="NW07.xsl">
           <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="PDF"/>
         </Einzelnachweisprodukt>
-        
          <Einzelnachweisprodukt ID="LB.GDBNRW.A.FNW.2" Layout="NW07.xsl">
           <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="HTML"/>
         </Einzelnachweisprodukt>
-        
       </GUIEinzelnachweisprodukt>
-      
       <GUIEinzelnachweisprodukt Antragsart="NW08" ID="LB.GDBNRW.A.FENW" Name="Flurstücks- und Eigentumsnachweis" SelektionsKriterium="Flurstückskennzeichen" ProduktnameAuswertung="Flurstücks- und Eigentumsnachweis(G) NRW" ProduktnameGUI="Flurstücks- u. Eig.-nachweis">
-                                
          <Einzelnachweisprodukt ID="LB.GDBNRW.A.FENW.1" Layout="NW08.xsl">
           <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="PDF"/>
         </Einzelnachweisprodukt>
-        
          <Einzelnachweisprodukt ID="LB.GDBNRW.A.FENW.2" Layout="NW08.xsl">
           <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="HTML"/>
         </Einzelnachweisprodukt>
-        
       </GUIEinzelnachweisprodukt>
-      
       <GUIEinzelnachweisprodukt Antragsart="NW09" ID="LB.GDBNRW.A.GNW" Name="Grundstücksnachweis" SelektionsKriterium="Buchungsstelle" ProduktnameAuswertung="Grundstücksnachweis(G) NRW" ProduktnameGUI="Grundstücksnachweis">
-                                
          <Einzelnachweisprodukt ID="LB.GDBNRW.A.GNW.1" Layout="NW09.xsl">
           <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="PDF"/>
         </Einzelnachweisprodukt>
-        
          <Einzelnachweisprodukt ID="LB.GDBNRW.A.GNW.2" Layout="NW09.xsl">
           <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="HTML"/>
         </Einzelnachweisprodukt>
-        
       </GUIEinzelnachweisprodukt>
-       
       <GUIEinzelnachweisprodukt Antragsart="NW10" ID="LB.GDBNRW.A.BNW" Name="Bestandsnachweis" SelektionsKriterium="Bestandskennzeichen" ProduktnameAuswertung="Bestandsnachweis(G) NRW" ProduktnameGUI="Bestandsnachweis">
-                                
          <Einzelnachweisprodukt ID="LB.GDBNRW.A.BNW.1" Layout="NW10.xsl">
           <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="PDF"/>
         </Einzelnachweisprodukt>
-        
          <Einzelnachweisprodukt ID="LB.GDBNRW.A.BNW.2" Layout="NW10.xsl">
           <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="HTML"/>
         </Einzelnachweisprodukt>
-        
       </GUIEinzelnachweisprodukt>
-       
        <GUIEinzelnachweisprodukt Antragsart="NW11" ID="LB.GDBNRW.A.BNWST" Name="Bestandsnachweis, stichtagsbezogen" SelektionsKriterium="Bestandskennzeichen, Stichtag" ProduktnameAuswertung="Bestandsnachweis stichtagsbezogen (G) NRW" ProduktnameGUI="Bestandsnachweis, stichtagsbez.">
-          
+          <ProduktionsserverBuch URL="http://s102x180:80/AaaDhkWebService/AuftragsManager.asmx"/>
           <Einzelnachweisprodukt ID="LB.GDBNRW.A.BNWST.1" Layout="NW11.xsl">
              <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="PDF"/>
           </Einzelnachweisprodukt>
-          
           <Einzelnachweisprodukt ID="LB.GDBNRW.A.BNWST.2" Layout="NW11.xsl">
              <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="HTML"/>
           </Einzelnachweisprodukt>
-          
        </GUIEinzelnachweisprodukt>
-       
     </Einzelnachweisklasse>
- 
-    <Einzelnachweisklasse ID="LB.GDBNRW.I" Name="Gdb-NRW-Intern">
-    
-      <GUIEinzelnachweisprodukt Antragsart="NW07" ID="LB.GDBNRW.I.FNW" Name="Flurstücksnachweis" SelektionsKriterium="Flurstückskennzeichen" ProduktnameAuswertung="Flurstücksnachweis(G) NRW" ProduktnameGUI="Flurstücksnachweis" Logo="http://s102x182:8080/plotwmps/logo-wuppertal.png">
-                                 
+    <Einzelnachweisklasse ID="LB.GDBNRW.I"  Name="Wuppertal-Intern">
+      <GUIEinzelnachweisprodukt Antragsart="NW07" ID="LB.GDBNRW.I.FNW" Name="Flurstücksnachweis" SelektionsKriterium="Flurstückskennzeichen" ProduktnameAuswertung="Flurstücksnachweis(G) NRW" ProduktnameGUI="Flurstücksnachweis" Logo="http://localhost:81/AaaDhkWebService/logo-aaa-wup-f.png">
          <Einzelnachweisprodukt ID="LB.GDBNRW.I.FNW.1" Layout="NW07.xsl">
           <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="PDF"/>
         </Einzelnachweisprodukt>
-        
          <Einzelnachweisprodukt ID="LB.GDBNRW.I.FNW.2" Layout="NW07.xsl">
           <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="HTML"/>
         </Einzelnachweisprodukt>
-        
       </GUIEinzelnachweisprodukt>
-      
-      <GUIEinzelnachweisprodukt Antragsart="NW08" ID="LB.GDBNRW.I.FENW" Name="Flurstücks- und Eigentumsnachweis" SelektionsKriterium="Flurstückskennzeichen" ProduktnameAuswertung="Flurstücks- und Eigentumsnachweis(G) NRW" ProduktnameGUI="Flurstücks- u. Eig.-nachweis" Logo="http://s102x182:8080/plotwmps/logo-wuppertal.png">
-                                
+      <GUIEinzelnachweisprodukt Antragsart="NW08" ID="LB.GDBNRW.I.FENW" Name="Flurstücks- und Eigentumsnachweis" SelektionsKriterium="Flurstückskennzeichen" ProduktnameAuswertung="Flurstücks- und Eigentumsnachweis(G) NRW" ProduktnameGUI="Flurstücks- u. Eig.-nachweis" Logo="http://localhost:81/AaaDhkWebService/logo-aaa-wup-f.png">
          <Einzelnachweisprodukt ID="LB.GDBNRW.I.FENW.1" Layout="NW08.xsl">
           <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="PDF"/>
         </Einzelnachweisprodukt>
-        
          <Einzelnachweisprodukt ID="LB.GDBNRW.I.FENW.2" Layout="NW08.xsl">
           <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="HTML"/>
         </Einzelnachweisprodukt>
-        
       </GUIEinzelnachweisprodukt>
-      
-      <GUIEinzelnachweisprodukt Antragsart="NW09" ID="LB.GDBNRW.I.GNW" Name="Grundstücksnachweis" SelektionsKriterium="Buchungsstelle" ProduktnameAuswertung="Grundstücksnachweis(G) NRW" ProduktnameGUI="Grundstücksnachweis" Logo="http://s102x182:8080/plotwmps/logo-wuppertal.png">
-                                
+      <GUIEinzelnachweisprodukt Antragsart="NW09" ID="LB.GDBNRW.I.GNW" Name="Grundstücksnachweis" SelektionsKriterium="Buchungsstelle" ProduktnameAuswertung="Grundstücksnachweis(G) NRW" ProduktnameGUI="Grundstücksnachweis" Logo="http://localhost:81/AaaDhkWebService/logo-aaa-wup-f.png">
          <Einzelnachweisprodukt ID="LB.GDBNRW.I.GNW.1" Layout="NW09.xsl">
           <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="PDF"/>
         </Einzelnachweisprodukt>
-        
          <Einzelnachweisprodukt ID="LB.GDBNRW.I.GNW.2" Layout="NW09.xsl">
           <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="HTML"/>
         </Einzelnachweisprodukt>
-        
       </GUIEinzelnachweisprodukt>
-       
-       <GUIEinzelnachweisprodukt Antragsart="NW10" ID="LB.GDBNRW.I.BNW" Name="Bestandsnachweis" SelektionsKriterium="Bestandskennzeichen" ProduktnameAuswertung="Bestandsnachweis(G) NRW" ProduktnameGUI="Bestandsnachweis" Logo="http://s102x182:8080/plotwmps/logo-wuppertal.png">
-          
+       <GUIEinzelnachweisprodukt Antragsart="NW10" ID="LB.GDBNRW.I.BNW" Name="Bestandsnachweis" SelektionsKriterium="Bestandskennzeichen" ProduktnameAuswertung="Bestandsnachweis(G) NRW" ProduktnameGUI="Bestandsnachweis" Logo="http://localhost:81/AaaDhkWebService/logo-aaa-wup-f.png">
           <Einzelnachweisprodukt ID="LB.GDBNRW.I.BNW.1" Layout="NW10.xsl">
              <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="PDF"/>
           </Einzelnachweisprodukt>
-          
           <Einzelnachweisprodukt ID="LB.GDBNRW.I.BNW.2" Layout="NW10.xsl">
              <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="HTML"/>
           </Einzelnachweisprodukt>
-          
        </GUIEinzelnachweisprodukt>
-       
-       <GUIEinzelnachweisprodukt Antragsart="NW11" ID="LB.GDBNRW.I.BNWST" Name="Bestandsnachweis, stichtagsbezogen" SelektionsKriterium="Bestandskennzeichen, Stichtag" ProduktnameAuswertung="Bestandsnachweis stichtagsbezogen (G) NRW" ProduktnameGUI="Bestandsnachweis, stichtagsbez." Logo="http://s102x182:8080/plotwmps/logo-wuppertal.png">
-          
+       <GUIEinzelnachweisprodukt Antragsart="NW11" ID="LB.GDBNRW.I.BNWST" Name="Bestandsnachweis, stichtagsbezogen" SelektionsKriterium="Bestandskennzeichen, Stichtag" ProduktnameAuswertung="Bestandsnachweis stichtagsbezogen (G) NRW" ProduktnameGUI="Bestandsnachweis, stichtagsbez." Logo="http://localhost:81/AaaDhkWebService/logo-aaa-f.png">
+          <ProduktionsserverBuch URL="http://s102x180:80/AaaDhkWebService/AuftragsManager.asmx"/>
           <Einzelnachweisprodukt ID="LB.GDBNRW.I.BNWST.1" Layout="NW11.xsl">
              <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="PDF"/>
           </Einzelnachweisprodukt>
-          
           <Einzelnachweisprodukt ID="LB.GDBNRW.I.BNWST.2" Layout="NW11.xsl">
              <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="HTML"/>
           </Einzelnachweisprodukt>
-          
        </GUIEinzelnachweisprodukt>
-       
     </Einzelnachweisklasse>
- 
      <Einzelnachweisklasse ID="LB.GDBADV.A" Name="Gdb-AdV-Amtlich" XsltBasisverzeichnis="D:\Tomcat 6.0\webapps\ASWeb\WEB-INF\ASA_AAAWeb\xsl\ALKIS\GID_6_0_0\Default">
          <GUIEinzelnachweisprodukt Antragsart="0511" ID="LB.GDBADV.A.FNW" Name="Flurstücksnachweis" ProduktnameAuswertung="Flurstücksnachweis (G)" SelektionsKriterium="Flurstückskennzeichen" ProduktnameGUI="Flurstücksnachweis">
             <Einzelnachweisprodukt ID="LB.GDBADV.A.FNW.1" Layout="0510.xsl">
@@ -1420,31 +1737,38 @@
             </Einzelnachweisprodukt>
          </GUIEinzelnachweisprodukt>
       </Einzelnachweisklasse>
-
-  </Einzelnachweis>
-  
+	 <Einzelnachweisklasse ID="LB.NRW.K"  Name="NRW-Kommunal">
+	     <GUIEinzelnachweisprodukt Antragsart="KS08" ID="LB.NRW.K.FENW" Name="Flurstücks- und Eigentumsnachweis" SelektionsKriterium="Flurstückskennzeichen" ProduktnameAuswertung="Flurstücks- und Eigentumsnachweis NRW Kommunal" ProduktnameGUI="Flurstücks- u. Eig.-nachweis">
+         <Einzelnachweisprodukt ID="LB.NRW.K.FENW.1" Layout="KS08.xsl">
+          <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="PDF"/>
+        </Einzelnachweisprodukt>
+        <Einzelnachweisprodukt ID="LB.NRW.K.FENW.2" Layout="KS08.xsl">
+          <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="HTML"/>
+        </Einzelnachweisprodukt>
+      </GUIEinzelnachweisprodukt>
+      <GUIEinzelnachweisprodukt Antragsart="KS10" ID="LB.NRW.K.BNW" Name="Bestandsnachweis" SelektionsKriterium="Bestandskennzeichen" ProduktnameAuswertung="Bestandsnachweis NRW Kommunal" ProduktnameGUI="Bestandsnachweis">
+         <Einzelnachweisprodukt ID="LB.NRW.K.BNW.1" Layout="KS10.xsl">
+          <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="PDF"/>
+        </Einzelnachweisprodukt>
+        <Einzelnachweisprodukt ID="LB.NRW.K.BNW.2" Layout="KS10.xsl">
+          <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="HTML"/>
+        </Einzelnachweisprodukt>
+      </GUIEinzelnachweisprodukt>
+    </Einzelnachweisklasse>
+ </Einzelnachweis>
   <Listennachweis>
-  
-      <Listennachweisklasse ID="LN.GDBNRW.A" Name="Gdb-NRW-Amtlich"> 
-      
+      <Listennachweisklasse ID="LN.GDBNRW.A" Name="Wuppertal-Amtlich"> 
           <GUIListennachweisprodukt ID="LN.GDBNRW.A.PL" Name="Punktliste" Antragsart="1019" SelektionsKriterium="UUIDListe" ProduktnameGUI="Punktliste" ProduktnameAuswertung="Punktliste">
-                                    
             <Listennachweisprodukt ID="LN.GDBNRW.A.PL.1" Layout="1019.xsl">
                <PreisfaktorenListennachweis DINFormat="DINA4 Querformat" Dateiformat="PDF" Paketgroesse="25"/>
             </Listennachweisprodukt>
-            
             <Listennachweisprodukt ID="LN.GDBNRW.A.PL.2" Layout="1019.xsl">
                <PreisfaktorenListennachweis DINFormat="DINA4 Querformat" Dateiformat="HTML" Paketgroesse="25"/>
             </Listennachweisprodukt>
-            
             <Listennachweisprodukt ID="LN.GDBNRW.A.PL.3" Layout="1019_txt.xsl">
                <PreisfaktorenListennachweis DINFormat="DINA4 Querformat" Dateiformat="TXT" Paketgroesse="25"/>
             </Listennachweisprodukt>
-            
          </GUIListennachweisprodukt>
-         
       </Listennachweisklasse>
-      
    </Listennachweis>
-   
 </Produktbeschreibung>

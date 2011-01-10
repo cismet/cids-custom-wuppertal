@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * PrintingSettingsWidget.java
  *
@@ -64,13 +64,10 @@ import de.cismet.tools.gui.StaticSwingTools;
 public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements CidsBeanDropListener {
 
     //~ Static fields/initializers ---------------------------------------------
-
     private static final String ALKIS_LANDPARCEL_TABLE = "ALKIS_LANDPARCEL";
     private static final List<AlkisProduct> kartenProducts = AlkisCommons.ALKIS_PRODUCTS.get(
             AlkisCommons.Products.PRODUCT_GROUP_KARTE);
-
     //~ Instance fields --------------------------------------------------------
-
 // private static final ProductLayout[] LAYOUTS = ProductLayout.values();
 // private static final ProductTyp[] TYPES = ProductTyp.values();
 // private static final LiegenschaftskarteProduct[] PRODUCTS = LiegenschaftskarteProduct.values();
@@ -115,7 +112,6 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
-
     /**
      * Creates new form PrintingSettingsWidget.
      *
@@ -128,8 +124,8 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         initComponents();
         getRootPane().setDefaultButton(cmdOk);
         cbClazz.setModel(getProductClassModel());
-        cbClazz.setSelectedIndex(0);
-        cbProduct.setSelectedIndex(0);
+        cbClazz.setSelectedIndex(cbClazz.getModel().getSize() - 1);
+        cbProduct.setSelectedIndex(cbProduct.getModel().getSize() -1);
         this.panDesc.setBackground(new Color(216, 228, 248));
         this.mappingComponent = mappingComponent;
         // enable D&D
@@ -141,7 +137,6 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
     }
 
     //~ Methods ----------------------------------------------------------------
-
     @Override
     public void setVisible(final boolean b) {
         flurstueckListModel.clear();
@@ -240,7 +235,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         final String layout = String.valueOf(cbFormat.getSelectedItem());
         for (final AlkisProduct product : kartenProducts) {
             if (clazz.equals(product.getClazz()) && type.equals(product.getType())
-                        && scale.equals(product.getMassstab()) && layout.equals(product.getDinFormat())) {
+                    && scale.equals(product.getMassstab()) && layout.equals(product.getDinFormat())) {
                 return product;
             }
         }
@@ -256,7 +251,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         final Collection<CidsBean> result = TypeSafeCollections.newArrayList();
         for (final Feature feature : mappingComponent.getPFeatureHM().keySet()) {
             if (feature instanceof CidsFeature) {
-                final CidsFeature cidsFeature = (CidsFeature)feature;
+                final CidsFeature cidsFeature = (CidsFeature) feature;
                 final MetaObject metaObj = cidsFeature.getMetaObject();
                 final MetaClass mc = metaObj.getMetaClass();
                 if (ALKIS_LANDPARCEL_TABLE.equalsIgnoreCase(mc.getTableName())) {
@@ -279,7 +274,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
             for (final Object nodeObj : nodes) {
                 if (nodeObj instanceof ObjectTreeNode) {
                     try {
-                        final ObjectTreeNode metaTreeNode = (ObjectTreeNode)nodeObj;
+                        final ObjectTreeNode metaTreeNode = (ObjectTreeNode) nodeObj;
                         final MetaClass mc = metaTreeNode.getMetaClass();
                         if (ALKIS_LANDPARCEL_TABLE.equalsIgnoreCase(mc.getTableName())) {
                             result.add(metaTreeNode.getMetaObject().getBean());
@@ -638,12 +633,12 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
 
         pack();
     } // </editor-fold>//GEN-END:initComponents
-    /**
+/**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmdOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdOkActionPerformed
+    private void cmdOkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdOkActionPerformed
         try {
             final AlkisProduct selectedProduct = getSelectedProduct();
             mapPrintListener.init(selectedProduct, allLandparcelGeometryUnion, chkRotation.isSelected());
@@ -651,50 +646,50 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         } catch (Exception e) {
             log.error("Fehler beim Verarbeiten der Druckeinstellungen", e);
         }
-    }                                                                         //GEN-LAST:event_cmdOkActionPerformed
+    }//GEN-LAST:event_cmdOkActionPerformed
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmdCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdCancelActionPerformed
+    private void cmdCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdCancelActionPerformed
         dispose();
-    }                                                                             //GEN-LAST:event_cmdCancelActionPerformed
+    }//GEN-LAST:event_cmdCancelActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveActionPerformed
+    private void btnRemoveActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
         final int[] sel = lstFlurstuecke.getSelectedIndices();
         for (int i = sel.length; --i >= 0;) {
             flurstueckListModel.removeElementAt(sel[i]);
         }
         updateFormatProposal();
         syncOkButtonWithListStatus();
-    }                                                                             //GEN-LAST:event_btnRemoveActionPerformed
+    }//GEN-LAST:event_btnRemoveActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbClazzActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbClazzActionPerformed
+    private void cbClazzActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbClazzActionPerformed
         cbProduct.setModel(getProductTypeModel());
         cbProductActionPerformed(null);
-    }                                                                           //GEN-LAST:event_cbClazzActionPerformed
+    }//GEN-LAST:event_cbClazzActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbProductActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbProductActionPerformed
+    private void cbProductActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbProductActionPerformed
         final ComboBoxModel[] models = getProductDetailModels();
         cbFormat.setModel(models[0]);
         cbScales.setModel(models[1]);
-    }                                                                             //GEN-LAST:event_cbProductActionPerformed
+    }//GEN-LAST:event_cbProductActionPerformed
 
     @Override
     public void beansDropped(final ArrayList<CidsBean> beans) {
@@ -710,6 +705,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
             syncOkButtonWithListStatus();
         }
     }
+
     /**
      * private boolean doCurrentLandparcelsFitNordedToSelectedFormatAndScale() { BoundingBox allGeomBB = new
      * BoundingBox(allLandparcelGeometryUnion); return doesBoundingBoxFitIntoLayout(allGeomBB, (ProduktLayout)
@@ -724,13 +720,13 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
 // String type = String.valueOf(cbProduct.getSelectedItem());
             for (int j = 0; j < cbScales.getModel().getSize(); ++j) {
                 for (int i = 0; i < cbFormat.getModel().getSize(); ++i) {
-                    final LayoutMetaInfo currentLayout = (LayoutMetaInfo)cbFormat.getItemAt(i);
+                    final LayoutMetaInfo currentLayout = (LayoutMetaInfo) cbFormat.getItemAt(i);
                     final Integer currentMassstab = Integer.parseInt(String.valueOf(cbScales.getItemAt(j)));
                     if (doesBoundingBoxFitIntoLayout(
-                                    allGeomBB,
-                                    currentLayout.width,
-                                    currentLayout.heigth,
-                                    currentMassstab)) {
+                            allGeomBB,
+                            currentLayout.width,
+                            currentLayout.heigth,
+                            currentMassstab)) {
                         cbFormat.setSelectedIndex(i);
                         cbScales.setSelectedIndex(j);
                         chkRotation.setSelected(false);
@@ -758,8 +754,8 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
             cbScales.setSelectedIndex(cbScales.getModel().getSize() - 1);
         } else {
             chkRotation.setSelected(false);
-            cbFormat.setSelectedIndex(0);
-            cbScales.setSelectedIndex(0);
+            cbFormat.setSelectedIndex(cbFormat.getModel().getSize() -1);
+            cbScales.setSelectedIndex(cbScales.getModel().getSize() -1);
         }
     }
 
@@ -772,16 +768,16 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
     public void createProduct(final Point center, final double rotationAngle) {
         if (flurstueckListModel.size() > 0) {
             final String landParcelCode = AlkisCommons.getLandparcelCodeFromParcelBeanObject(flurstueckListModel.get(
-                        0));
+                    0));
             final AlkisProduct selectedProduct = getSelectedProduct();
             AlkisCommons.Products.productKarte(
-                landParcelCode,
-                selectedProduct,
-                toInt(rotationAngle),
-                toInt(center.getX()),
-                toInt(center.getY()),
-                taAdditionalText.getText(),
-                false);
+                    landParcelCode,
+                    selectedProduct,
+                    toInt(rotationAngle),
+                    toInt(center.getX()),
+                    toInt(center.getY()),
+                    taAdditionalText.getText(),
+                    false);
         }
     }
 
@@ -806,10 +802,10 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         for (int i = flurstueckListModel.size(); --i >= 0;) {
             final Object currentLandparcelObj = flurstueckListModel.get(i);
             if (currentLandparcelObj instanceof CidsBean) {
-                final CidsBean currentLandparcelBean = (CidsBean)currentLandparcelObj;
+                final CidsBean currentLandparcelBean = (CidsBean) currentLandparcelObj;
                 final Object currentGeomObj = currentLandparcelBean.getProperty("geometrie.geo_field");
                 if (currentGeomObj instanceof Geometry) {
-                    final Geometry currentGeom = (Geometry)currentGeomObj;
+                    final Geometry currentGeom = (Geometry) currentGeomObj;
                     if (allGeomUnion == null) {
                         allGeomUnion = currentGeom;
                     } else {
@@ -852,7 +848,6 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
     }
 
     //~ Inner Classes ----------------------------------------------------------
-
     /**
      * DOCUMENT ME!
      *
@@ -861,14 +856,12 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
     static final class LayoutMetaInfo {
 
         //~ Instance fields ----------------------------------------------------
-
         String layoutDesc;
         String layoutCode;
         int width;
         int heigth;
 
         //~ Constructors -------------------------------------------------------
-
         /**
          * Creates a new LayoutMetaInfo object.
          *
@@ -883,7 +876,6 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         }
 
         //~ Methods ------------------------------------------------------------
-
         @Override
         public String toString() {
             return layoutDesc;
