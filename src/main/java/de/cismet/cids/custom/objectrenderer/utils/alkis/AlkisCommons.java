@@ -96,7 +96,7 @@ public final class AlkisCommons {
                                 final String clazz = productClass.getAttribute("Name").getValue();
                                 for (final Object o2 : productClass.getChildren()) {
                                     final Element guiProduct = (Element) o2;
-                                    final String type = guiProduct.getAttribute("Name").getValue();
+                                    final String type = guiProduct.getAttribute("ProduktnameAuswertung").getValue();
                                     for (final Object o3 : guiProduct.getChildren()) {
                                         final Element singleProduct = (Element) o3;
                                         final Attribute codeAttr = singleProduct.getAttribute("ID");
