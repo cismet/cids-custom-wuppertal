@@ -24,7 +24,6 @@ import Sirius.server.search.CidsServerSearch;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
-import org.openide.util.Exceptions;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -98,6 +97,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private org.jdesktop.swingx.JXBusyLabel lblBusy;
     private javax.swing.JList lstFlurstueck;
@@ -180,6 +180,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         rbBaulastBlaetter = new javax.swing.JRadioButton();
         rbBaulasten = new javax.swing.JRadioButton();
         jPanel5 = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
 
         setMaximumSize(new java.awt.Dimension(325, 460));
         setMinimumSize(new java.awt.Dimension(325, 460));
@@ -404,6 +405,13 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSearch.add(jPanel4, gridBagConstraints);
+
+        jPanel6.setOpaque(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.weighty = 1.0;
+        panSearch.add(jPanel6, gridBagConstraints);
 
         add(panSearch, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
