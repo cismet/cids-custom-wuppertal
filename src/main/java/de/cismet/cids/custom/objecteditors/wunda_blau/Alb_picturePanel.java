@@ -93,7 +93,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         }
     };
     private static boolean alreadyWarnedAboutPermissionProblem = false;
-    // Variables declaration - do not modify                     
+    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btnGrpDocs;
     private javax.swing.JButton btnHome;
     private javax.swing.JButton btnOpen;
@@ -129,6 +129,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     private javax.swing.JToggleButton togMessenPoly;
     private javax.swing.JToggleButton togPan;
     private javax.swing.JToggleButton togZoom;
+    // End of variables declaration//GEN-END:variables
 
     /**
      * Creates new form Alb_picturePanel.

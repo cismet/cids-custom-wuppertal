@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * CoolThemaRenderer.java
  *
@@ -12,6 +12,7 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaObject;
@@ -29,6 +30,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import de.cismet.cids.annotations.AggregationRenderer;
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 
@@ -40,6 +42,8 @@ import de.cismet.cids.editors.EditorSaveListener;
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
+import java.awt.event.MouseListener;
+import java.sql.Date;
 
 /**
  * de.cismet.cids.objectrenderer.CoolThemaRenderer.
@@ -51,19 +55,16 @@ import de.cismet.tools.gui.TitleComponentProvider;
  */
 @AggregationRenderer
 public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore,
-    TitleComponentProvider,
-    FooterComponentProvider,
-    BorderProvider,
-    RequestsFullSizeComponent,
-    EditorSaveListener {
+        TitleComponentProvider,
+        FooterComponentProvider,
+        BorderProvider,
+        RequestsFullSizeComponent,
+        EditorSaveListener {
 
     //~ Static fields/initializers ---------------------------------------------
-
     private static final Logger LOG = Logger.getLogger(Alb_baulastEditor.class);
     public static final String TITLE_AGR_PREFIX = "Baulasten";
-
     //~ Instance fields --------------------------------------------------------
-
     private final boolean editable;
     private CidsBean cidsBean;
     private final CardLayout cardLayout;
@@ -84,7 +85,6 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
-
     /**
      * Creates new form CoolThemaRenderer.
      */
@@ -101,25 +101,35 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         this.editable = editable;
         this.initComponents();
         initFooterElements();
-        cardLayout = (CardLayout)getLayout();
+        cardLayout = (CardLayout) getLayout();
+    }
+
+    public static void addPruefungsInfoToBean(CidsBean cidsBean) {
+        try {
+            if (cidsBean != null && cidsBean.getMetaObject().getStatus() == MetaObject.MODIFIED) {
+                cidsBean.setProperty("geprueft_von", SessionManager.getSession().getUser().getName());
+                cidsBean.setProperty("pruefdatum", new Date(System.currentTimeMillis()));
+            }
+        } catch (Exception ex) {
+            LOG.error("Can not set Pruefunfsinfo for Bean!", ex);
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
-
     /**
      * DOCUMENT ME!
      */
     private void initFooterElements() {
         ObjectRendererUtils.decorateJLabelAndButtonSynced(
-            lblForw,
-            btnForward,
-            ObjectRendererUtils.FORWARD_SELECTED,
-            ObjectRendererUtils.FORWARD_PRESSED);
+                lblForw,
+                btnForward,
+                ObjectRendererUtils.FORWARD_SELECTED,
+                ObjectRendererUtils.FORWARD_PRESSED);
         ObjectRendererUtils.decorateJLabelAndButtonSynced(
-            lblBack,
-            btnBack,
-            ObjectRendererUtils.BACKWARD_SELECTED,
-            ObjectRendererUtils.BACKWARD_PRESSED);
+                lblBack,
+                btnBack,
+                ObjectRendererUtils.BACKWARD_SELECTED,
+                ObjectRendererUtils.BACKWARD_PRESSED);
     }
 
     @Override
@@ -140,11 +150,27 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
     public void setCidsBean(final CidsBean cidsBean) {
         if (cidsBean != null) {
             this.cidsBean = cidsBean;
+            disableSecondPageIfNoWritePermission(cidsBean);
             this.panMain.setCidsBean(cidsBean);
             this.alb_picturePanel.setCidsBean(cidsBean);
             final Object laufendeNr = cidsBean.getProperty("laufende_nummer");
             final Object blattNummer = cidsBean.getProperty("blattnummer");
             lblTitle.setText("Baulastblatt " + blattNummer + ": lfd. Nummer " + laufendeNr);
+        }
+    }
+
+    private void disableSecondPageIfNoWritePermission(CidsBean cidsBean) {
+        if (!CidsBeanSupport.checkWritePermission(cidsBean)) {
+            for (MouseListener l : lblForw.getMouseListeners()) {
+                lblForw.removeMouseListener(l);
+            }
+            lblForw.setEnabled(false);
+            btnForward.setEnabled(false);
+            for (MouseListener l : lblBack.getMouseListeners()) {
+                lblBack.removeMouseListener(l);
+            }
+            lblBack.setEnabled(false);
+            btnBack.setEnabled(false);
         }
     }
 
@@ -315,10 +341,10 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         final String fileCollisionWarning = alb_picturePanel.getCollisionWarning();
         if (fileCollisionWarning.length() > 0) {
             JOptionPane.showMessageDialog(
-                this,
-                fileCollisionWarning,
-                "Unterschiedliche Dateiformate",
-                JOptionPane.WARNING_MESSAGE);
+                    this,
+                    fileCollisionWarning,
+                    "Unterschiedliche Dateiformate",
+                    JOptionPane.WARNING_MESSAGE);
         }
         alb_picturePanel.clearCollisionWarning();
     }//GEN-LAST:event_btnForwardActionPerformed
@@ -377,26 +403,29 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
                     cidsBean.getMetaObject().getID());
             if (!unique) {
                 JOptionPane.showMessageDialog(
-                    this,
-                    "Die Laufende Nummer "
-                            + laufendeNrObj
-                            + " existiert bereits unter Baulastblatt "
-                            + blattNrObj
-                            + "! Bitte geben Sie eine andere Nummer ein.");
+                        this,
+                        "Die Laufende Nummer "
+                        + laufendeNrObj
+                        + " existiert bereits unter Baulastblatt "
+                        + blattNrObj
+                        + "! Bitte geben Sie eine andere Nummer ein.");
                 return false;
             }
             if (!Alb_Constraints.checkBaulastHasBelastetesFlurstueck(cidsBean)) {
                 JOptionPane.showMessageDialog(
-                    this,
-                    "Der Baulast ist noch kein belastetes Flurstück zugeordnet!\nBitte ordnen Sie mind. ein belastetes Flurstück zu, erst dann kann der Datensatz gespeichert werden.");
+                        this,
+                        "Der Baulast ist noch kein belastetes Flurstück zugeordnet!\nBitte ordnen Sie mind. ein belastetes Flurstück zu, erst dann kann der Datensatz gespeichert werden.");
                 return false;
             }
             if (!Alb_Constraints.checkBaulastDates(cidsBean)) {
                 JOptionPane.showMessageDialog(
-                    this,
-                    "Sie haben unplausible Datumsangaben vorgenommen (Eingabedatum fehlt oder liegt nach dem Lösch- Schließ oder Befristungsdatum).\nBitte korrigieren Sie die fehlerhaften Datumsangaben, erst dann kann der Datensatz gespeichert werden.");
+                        this,
+                        "Sie haben unplausible Datumsangaben vorgenommen (Eingabedatum fehlt oder liegt nach dem Lösch- Schließ oder Befristungsdatum).\nBitte korrigieren Sie die fehlerhaften Datumsangaben, erst dann kann der Datensatz gespeichert werden.");
                 return false;
             }
+
+            addPruefungsInfoToBean(cidsBean);
+
             return true;
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Speichern", ex, this);
