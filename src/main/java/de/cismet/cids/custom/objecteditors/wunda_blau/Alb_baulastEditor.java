@@ -107,8 +107,14 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
     public static void addPruefungsInfoToBean(CidsBean cidsBean) {
         try {
             if (cidsBean != null && cidsBean.getMetaObject().getStatus() == MetaObject.MODIFIED) {
-                cidsBean.setProperty("geprueft_von", SessionManager.getSession().getUser().getName());
-                cidsBean.setProperty("pruefdatum", new Date(System.currentTimeMillis()));
+                Object geprueftObj = cidsBean.getProperty("geprueft");
+                if (geprueftObj instanceof Boolean && ((Boolean) geprueftObj)) {
+                    cidsBean.setProperty("geprueft_von", SessionManager.getSession().getUser().getName());
+                    cidsBean.setProperty("pruefdatum", new Date(System.currentTimeMillis()));
+                } else {
+                    cidsBean.setProperty("geprueft_von", null);
+                    cidsBean.setProperty("pruefdatum", null);
+                }
             }
         } catch (Exception ex) {
             LOG.error("Can not set Pruefunfsinfo for Bean!", ex);
