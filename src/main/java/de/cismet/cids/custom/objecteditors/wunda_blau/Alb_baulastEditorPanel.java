@@ -90,8 +90,8 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
             throw new UnsupportedOperationException("Not supported yet.");
         }
     };
-    private static final Icon STATUS_OK = new ImageIcon(Alb_baulastEditorPanel.class.getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status.png"));
-    private static final Icon STATUS_FAIL = new ImageIcon(Alb_baulastEditorPanel.class.getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"));
+    private final Icon STATUS_OK = new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status.png"));
+    private final Icon STATUS_FAIL = new ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"));
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddArt;
     private javax.swing.JButton btnAddBeguenstigt;
