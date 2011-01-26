@@ -58,6 +58,8 @@ import de.cismet.tools.collections.TypeSafeCollections;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import org.jdesktop.beansbinding.Converter;
 
 /**
@@ -88,6 +90,8 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
             throw new UnsupportedOperationException("Not supported yet.");
         }
     };
+    private static final Icon STATUS_OK = new ImageIcon(Alb_baulastEditorPanel.class.getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status.png"));
+    private static final Icon STATUS_FAIL = new ImageIcon(Alb_baulastEditorPanel.class.getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"));
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddArt;
     private javax.swing.JButton btnAddBeguenstigt;
@@ -348,8 +352,6 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         panAddBaulastArt.add(panMenButtons1, gridBagConstraints);
 
         dlgAddBaulastArt.getContentPane().add(panAddBaulastArt, java.awt.BorderLayout.CENTER);
-
-        lblGeprueft.setText("?");
 
         setOpaque(false);
         setLayout(new java.awt.BorderLayout());
@@ -1111,11 +1113,13 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                 if (!editable) {
                     Object geprueftObj = cidsBean.getProperty("geprueft");
                     if (geprueftObj instanceof Boolean && ((Boolean) geprueftObj)) {
-                        lblGeprueft.setText("ja");
-                        lblGeprueft.setForeground(Color.GREEN);
+                        lblGeprueft.setIcon(STATUS_OK);
+//                        lblGeprueft.setText("ja");
+//                        lblGeprueft.setForeground(Color.GREEN);
                     } else {
-                        lblGeprueft.setText("nein");
-                        lblGeprueft.setForeground(Color.RED);
+                        lblGeprueft.setIcon(STATUS_FAIL);
+//                        lblGeprueft.setText("nein");
+//                        lblGeprueft.setForeground(Color.RED);
                     }
 
                 }

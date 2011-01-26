@@ -117,9 +117,6 @@
       </SubComponents>
     </Container>
     <Component class="javax.swing.JLabel" name="lblGeprueft">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="?"/>
-      </Properties>
     </Component>
   </NonVisualComponents>
   <Properties>
