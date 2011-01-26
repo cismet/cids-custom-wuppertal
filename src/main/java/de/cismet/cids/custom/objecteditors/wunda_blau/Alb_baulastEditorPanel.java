@@ -113,6 +113,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
     private javax.swing.JLabel lblDescLaufendeNr;
     private javax.swing.JLabel lblDescLoeschungsdatum;
     private javax.swing.JLabel lblDescTextblatt;
+    private javax.swing.JLabel lblGeprueft;
     private javax.swing.JLabel lblHeadBegFlurstuecke;
     private javax.swing.JLabel lblHeadBelFlurstuecke;
     private javax.swing.JLabel lblHeadInfo;
@@ -187,7 +188,14 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         for (final JComponent editableComponent : editableComponents) {
             editableComponent.setOpaque(editable);
             if (!editable) {
+                rpInfo.remove(chkGeprueft);
                 chkGeprueft.setEnabled(false);
+                java.awt.GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 4;
+                gridBagConstraints.gridy = 1;
+                gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+                gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
+                rpInfo.add(lblGeprueft, gridBagConstraints);
                 editableComponent.setBorder(null);
                 if (editableComponent instanceof JTextField) {
                     ((JTextField) editableComponent).setEditable(false);
@@ -228,6 +236,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         panMenButtons1 = new javax.swing.JPanel();
         btnMenAbort1 = new javax.swing.JButton();
         btnMenOk1 = new javax.swing.JButton();
+        lblGeprueft = new javax.swing.JLabel();
         panMain = new javax.swing.JPanel();
         rpFSBeguenstigt = new de.cismet.tools.gui.RoundedPanel();
         scpFlurstueckeBeguenstigt = new ColorJScrollpane(new Color(255, 255, 0));
@@ -339,6 +348,8 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         panAddBaulastArt.add(panMenButtons1, gridBagConstraints);
 
         dlgAddBaulastArt.getContentPane().add(panAddBaulastArt, java.awt.BorderLayout.CENTER);
+
+        lblGeprueft.setText("?");
 
         setOpaque(false);
         setLayout(new java.awt.BorderLayout());
@@ -1096,6 +1107,20 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                 Collections.sort(landParcelCol, AlphanumComparator.getInstance());
                 landParcelCol = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "flurstuecke_beguenstigt");
                 Collections.sort(landParcelCol, AlphanumComparator.getInstance());
+
+                if (!editable) {
+                    Object geprueftObj = cidsBean.getProperty("geprueft");
+                    if (geprueftObj instanceof Boolean && ((Boolean) geprueftObj)) {
+                        lblGeprueft.setText("ja");
+                        lblGeprueft.setForeground(Color.GREEN);
+                    } else {
+                        lblGeprueft.setText("nein");
+                        lblGeprueft.setForeground(Color.RED);
+                    }
+
+                }
+
+
                 bindingGroup.bind();
                 lstFlurstueckeBelastet.setSelectedIndices(belIdx);
                 lstFlurstueckeBeguenstigt.setSelectedIndices(begIdx);
