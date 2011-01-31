@@ -58,8 +58,6 @@ import de.cismet.tools.collections.TypeSafeCollections;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.util.ArrayList;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import org.jdesktop.beansbinding.Converter;
 
 /**
@@ -79,9 +77,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         @Override
         public String convertForward(Date value) {
             if (value != null) {
-                return DateFormat.getDateInstance().format(value);
+                return "(" + DateFormat.getDateInstance().format(value) + ")";
             } else {
-                return "-";
+                return "";
             }
         }
 
@@ -90,8 +88,8 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
             throw new UnsupportedOperationException("Not supported yet.");
         }
     };
-    private static final Icon STATUS_OK = new ImageIcon(Alb_baulastEditorPanel.class.getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status.png"));
-    private static final Icon STATUS_FAIL = new ImageIcon(Alb_baulastEditorPanel.class.getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"));
+//    private static final Icon STATUS_OK = new ImageIcon(Alb_baulastEditorPanel.class.getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status.png"));
+//    private static final Icon STATUS_FAIL = new ImageIcon(Alb_baulastEditorPanel.class.getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/status-busy.png"));
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddArt;
     private javax.swing.JButton btnAddBeguenstigt;
@@ -108,7 +106,6 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
     private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooser3;
     private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooser4;
     private javax.swing.JDialog dlgAddBaulastArt;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblDescBaulastart;
     private javax.swing.JLabel lblDescBefristungsdatum;
     private javax.swing.JLabel lblDescEintragungsdatum;
@@ -192,6 +189,8 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         for (final JComponent editableComponent : editableComponents) {
             editableComponent.setOpaque(editable);
             if (!editable) {
+                lblTxtGeprueft.setText("abschließend geprüft:");
+                lblLetzteAenderung.setVisible(false);
                 rpInfo.remove(chkGeprueft);
                 chkGeprueft.setEnabled(false);
                 java.awt.GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
@@ -285,7 +284,6 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         chkGeprueft = new javax.swing.JCheckBox();
         lblTxtGeprueft = new javax.swing.JLabel();
         lblLetzteAenderung = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
 
         dlgAddBaulastArt.setTitle("Art hinzufügen");
         dlgAddBaulastArt.setMinimumSize(new java.awt.Dimension(300, 120));
@@ -352,6 +350,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         panAddBaulastArt.add(panMenButtons1, gridBagConstraints);
 
         dlgAddBaulastArt.getContentPane().add(panAddBaulastArt, java.awt.BorderLayout.CENTER);
+
+        lblGeprueft.setText("<Error>");
+        lblGeprueft.setOpaque(true);
 
         setOpaque(false);
         setLayout(new java.awt.BorderLayout());
@@ -567,7 +568,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 7;
+        gridBagConstraints.gridwidth = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -608,7 +609,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 7;
-        gridBagConstraints.gridwidth = 7;
+        gridBagConstraints.gridwidth = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -624,7 +625,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 7;
+        gridBagConstraints.gridwidth = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -640,7 +641,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 7;
+        gridBagConstraints.gridwidth = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -655,7 +656,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 7;
+        gridBagConstraints.gridwidth = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -670,7 +671,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 7;
+        gridBagConstraints.gridwidth = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -733,7 +734,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 1.0;
@@ -776,7 +777,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         panArtControls.add(btnRemoveArt, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         rpInfo.add(panArtControls, gridBagConstraints);
@@ -795,7 +796,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
         rpInfo.add(chkGeprueft, gridBagConstraints);
 
-        lblTxtGeprueft.setText("Übereinstimmung mit Akten:");
+        lblTxtGeprueft.setText("Abschlussprüfung erfolgt:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
@@ -804,25 +805,17 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         rpInfo.add(lblTxtGeprueft, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.pruefdatum}"), lblLetzteAenderung, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("-");
-        binding.setSourceUnreadableValue("-");
+        binding.setSourceNullValue("");
+        binding.setSourceUnreadableValue("");
         binding.setConverter(DATE_TO_STRING);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(11, 6, 6, 6);
         rpInfo.add(lblLetzteAenderung, gridBagConstraints);
-
-        jLabel1.setText("zuletzt festgestellt am:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
-        rpInfo.add(jLabel1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridwidth = 2;
@@ -1113,13 +1106,14 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                 if (!editable) {
                     Object geprueftObj = cidsBean.getProperty("geprueft");
                     if (geprueftObj instanceof Boolean && ((Boolean) geprueftObj)) {
-                        lblGeprueft.setIcon(STATUS_OK);
-//                        lblGeprueft.setText("ja");
-//                        lblGeprueft.setForeground(Color.GREEN);
+                        lblGeprueft.setBackground(new Color(0, 255, 0, 130));
+                        Object dateObj = cidsBean.getProperty("pruefdatum");
+                        if (dateObj instanceof Date) {
+                            lblGeprueft.setText(DateFormat.getDateInstance().format((Date) dateObj));
+                        }
                     } else {
-                        lblGeprueft.setIcon(STATUS_FAIL);
-//                        lblGeprueft.setText("nein");
-//                        lblGeprueft.setForeground(Color.RED);
+                        lblGeprueft.setBackground(new Color(255, 0, 0, 130));
+                        lblGeprueft.setText("       -/-       ");
                     }
 
                 }
