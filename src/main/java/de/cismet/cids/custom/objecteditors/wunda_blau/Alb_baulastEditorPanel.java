@@ -1113,7 +1113,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                         }
                     } else {
                         lblGeprueft.setBackground(new Color(255, 0, 0, 130));
-                        lblGeprueft.setText("       -/-       ");
+                        lblGeprueft.setText("       ---       ");
                     }
 
                 }
