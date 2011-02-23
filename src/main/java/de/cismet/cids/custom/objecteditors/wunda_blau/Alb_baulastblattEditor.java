@@ -49,6 +49,7 @@ import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 
 import de.cismet.cids.editors.DefaultBeanInitializer;
 import de.cismet.cids.editors.EditorBeanInitializerStore;
+import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.tools.collections.TypeSafeCollections;
@@ -1087,7 +1088,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
     }
 
     @Override
-    public void editorClosed(final EditorSaveStatus status) {
+    public void editorClosed(EditorClosedEvent event) {
 //            log.fatal(status);
 //        if (EditorSaveStatus.SAVE_SUCCESS == status) {
 //            for (CidsBean toDelete : baulastenBeansToDelete) {

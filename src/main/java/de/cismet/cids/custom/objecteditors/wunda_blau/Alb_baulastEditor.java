@@ -16,6 +16,7 @@ import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaObject;
+import de.cismet.cids.editors.EditorClosedEvent;
 
 import org.apache.log4j.Logger;
 
@@ -395,8 +396,9 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         alb_picturePanel.dispose();
     }
 
+
     @Override
-    public void editorClosed(final EditorSaveStatus status) {
+    public void editorClosed(EditorClosedEvent event) {        
     }
 
     @Override
