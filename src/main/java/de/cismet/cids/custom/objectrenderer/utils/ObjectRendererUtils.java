@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -12,6 +12,7 @@
 package de.cismet.cids.custom.objectrenderer.utils;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.plugin.PluginRegistry;
 
 import Sirius.server.middleware.types.AbstractAttributeRepresentationFormater;
@@ -80,8 +81,10 @@ import de.cismet.tools.gui.documents.DefaultDocument;
  */
 public class ObjectRendererUtils {
 
+    private ObjectRendererUtils() {
+        throw new AssertionError("so gehts aber nicht ;-)");
+    }
     //~ Static fields/initializers ---------------------------------------------
-
     private static final String ICON_RES_PACKAGE = "/de/cismet/cids/custom/wunda_blau/res/";
     public static final ImageIcon FORWARD_PRESSED;
     public static final ImageIcon FORWARD_SELECTED;
@@ -92,21 +95,20 @@ public class ObjectRendererUtils {
 
     static {
         BACKWARD_SELECTED = new ImageIcon(ObjectRendererUtils.class.getResource(
-                    ICON_RES_PACKAGE
-                            + "arrow-left-sel.png"));
+                ICON_RES_PACKAGE
+                + "arrow-left-sel.png"));
         BACKWARD_PRESSED = new ImageIcon(ObjectRendererUtils.class.getResource(
-                    ICON_RES_PACKAGE
-                            + "arrow-left-pressed.png"));
+                ICON_RES_PACKAGE
+                + "arrow-left-pressed.png"));
         FORWARD_SELECTED = new ImageIcon(ObjectRendererUtils.class.getResource(
-                    ICON_RES_PACKAGE
-                            + "arrow-right-sel.png"));
+                ICON_RES_PACKAGE
+                + "arrow-right-sel.png"));
         FORWARD_PRESSED = new ImageIcon(ObjectRendererUtils.class.getResource(
-                    ICON_RES_PACKAGE
-                            + "arrow-right-pressed.png"));
+                ICON_RES_PACKAGE
+                + "arrow-right-pressed.png"));
     }
 
     //~ Enums ------------------------------------------------------------------
-
     /**
      * DOCUMENT ME!
      *
@@ -115,12 +117,10 @@ public class ObjectRendererUtils {
     public enum DateDiff {
 
         //~ Enum constants -----------------------------------------------------
-
         MILLISECOND, SECOND, MINUTE, HOUR, DAY, WEEK, MONTH, YEAR
     }
 
     //~ Methods ----------------------------------------------------------------
-
     /**
      * DOCUMENT ME!
      *
@@ -161,11 +161,7 @@ public class ObjectRendererUtils {
      * DOCUMENT ME!
      */
     public static void switchToCismapMap() {
-        PluginRegistry.getRegistry()
-                .getPluginDescriptor(CISMAP_PLUGIN_NAME)
-                .getUIDescriptor(CISMAP_PLUGIN_NAME)
-                .getView()
-                .makeVisible();
+        PluginRegistry.getRegistry().getPluginDescriptor(CISMAP_PLUGIN_NAME).getUIDescriptor(CISMAP_PLUGIN_NAME).getView().makeVisible();
     }
 
     /**
@@ -191,11 +187,11 @@ public class ObjectRendererUtils {
     public static void selectAllTextInEditableCombobox(final JComboBox box) {
         final Component editor = box.getEditor().getEditorComponent();
         if (editor instanceof JTextField) {
-            final JTextField textEditor = (JTextField)editor;
+            final JTextField textEditor = (JTextField) editor;
             textEditor.selectAll();
         } else {
             log.warn("Editor of Combobox " + box + " is not instanceof JTextField - can not select the text : "
-                        + editor);
+                    + editor);
         }
     }
 
@@ -249,15 +245,15 @@ public class ObjectRendererUtils {
         if (formatter == null) {
             formatter = new AbstractAttributeRepresentationFormater() {
 
-                    @Override
-                    public String getRepresentation() {
-                        final StringBuffer sb = new StringBuffer();
-                        for (final String attribute : fields) {
-                            sb.append(getAttribute(attribute.toLowerCase())).append(" ");
-                        }
-                        return sb.toString().trim();
+                @Override
+                public String getRepresentation() {
+                    final StringBuffer sb = new StringBuffer();
+                    for (final String attribute : fields) {
+                        sb.append(getAttribute(attribute.toLowerCase())).append(" ");
                     }
-                };
+                    return sb.toString().trim();
+                }
+            };
         }
         try {
             final User user = SessionManager.getSession().getUser();
@@ -286,22 +282,21 @@ public class ObjectRendererUtils {
         if (formatter == null) {
             formatter = new AbstractAttributeRepresentationFormater() {
 
-                    @Override
-                    public String getRepresentation() {
-                        final StringBuffer sb = new StringBuffer();
-                        for (final String attribute : fields) {
-                            sb.append(getAttribute(attribute.toLowerCase())).append(" ");
-                        }
-                        return sb.toString().trim();
+                @Override
+                public String getRepresentation() {
+                    final StringBuffer sb = new StringBuffer();
+                    for (final String attribute : fields) {
+                        sb.append(getAttribute(attribute.toLowerCase())).append(" ");
                     }
-                };
+                    return sb.toString().trim();
+                }
+            };
         }
         try {
             final User user = SessionManager.getSession().getUser();
             final MetaClass mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, tabName);
             if (mc != null) {
-                return SessionManager.getProxy()
-                            .getLightweightMetaObjectsByQuery(mc.getID(), user, query, fields, formatter);
+                return SessionManager.getProxy().getLightweightMetaObjectsByQuery(mc.getID(), user, query, fields, formatter);
             } else {
                 log.error("Can not find MetaClass for Tablename: " + tabName);
             }
@@ -325,7 +320,7 @@ public class ObjectRendererUtils {
         }
         final BufferedImage input;
         if (in instanceof BufferedImage) {
-            input = (BufferedImage)in;
+            input = (BufferedImage) in;
         } else {
             final BufferedImage temp = new BufferedImage(in.getWidth(null),
                     in.getHeight(null),
@@ -342,7 +337,7 @@ public class ObjectRendererUtils {
         final BufferedImage shadow = renderer.createShadow(input);
         final BufferedImage result = new BufferedImage(input.getWidth() + (2 * shadowPixel),
                 input.getHeight()
-                        + (2 * shadowPixel),
+                + (2 * shadowPixel),
                 BufferedImage.TYPE_4BYTE_ABGR);
         final Graphics2D rg = result.createGraphics();
         rg.drawImage(shadow, 0, 0, null);
@@ -371,28 +366,28 @@ public class ObjectRendererUtils {
         if ((bildURL != null) && (toSet != null)) {
             final Runnable loader = new Runnable() {
 
-                    @Override
-                    public void run() {
-                        try {
-                            final ImageIcon finBild = loadPicture(bildURL, maxPixelX, maxPixelY, shadowSize);
-                            EventQueue.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        final ImageIcon finBild = loadPicture(bildURL, maxPixelX, maxPixelY, shadowSize);
+                        EventQueue.invokeLater(new Runnable() {
 
-                                    @Override
-                                    public void run() {
-                                        if (finBild != null) {
-                                            toSet.setIcon(finBild);
-                                        } else {
-                                            toSet.setIcon(null);
+                            @Override
+                            public void run() {
+                                if (finBild != null) {
+                                    toSet.setIcon(finBild);
+                                } else {
+                                    toSet.setIcon(null);
 //                                        toSet.setVisible(false);
-                                        }
-                                    }
-                                });
-                        } catch (Exception e) {
-                            log.error("Exeption when loading picture " + bildURL + " : " + e, e);
-                            toSet.setIcon(null);
-                        }
+                                }
+                            }
+                        });
+                    } catch (Exception e) {
+                        log.error("Exeption when loading picture " + bildURL + " : " + e, e);
+                        toSet.setIcon(null);
                     }
-                };
+                }
+            };
             CismetThreadPool.execute(loader);
         }
     }
@@ -417,26 +412,37 @@ public class ObjectRendererUtils {
         if ((bildURL != null) && (toSet != null)) {
             final Runnable loader = new Runnable() {
 
-                    @Override
-                    public void run() {
-                        final ImageIcon finBild = loadPicture(bildURL, maxPixelX, maxPixelY, shadowSize);
-                        if (finBild != null) {
-                            EventQueue.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    final ImageIcon finBild = loadPicture(bildURL, maxPixelX, maxPixelY, shadowSize);
+                    if (finBild != null) {
+                        EventQueue.invokeLater(new Runnable() {
 
-                                    @Override
-                                    public void run() {
-                                        if (finBild != null) {
-                                            toSet.setIcon(finBild);
-                                        } else {
-                                            toSet.setVisible(false);
-                                        }
-                                    }
-                                });
-                        }
+                            @Override
+                            public void run() {
+                                if (finBild != null) {
+                                    toSet.setIcon(finBild);
+                                } else {
+                                    toSet.setVisible(false);
+                                }
+                            }
+                        });
                     }
-                };
+                }
+            };
             CismetThreadPool.execute(loader);
         }
+    }
+
+    public static boolean checkActionTag(String tagToCheck) {
+        boolean result;
+        try {
+            result = SessionManager.getConnection().getConfigAttr(SessionManager.getSession().getUser(), tagToCheck) != null;
+        } catch (ConnectionException ex) {
+            log.error("Can not check ActionTag!", ex);
+            result = false;
+        }
+        return result;
     }
 
     /**
@@ -488,23 +494,23 @@ public class ObjectRendererUtils {
             final int mouseExited) {
         final MouseListener toAdd = new MouseAdapter() {
 
-                private final Cursor entered = new Cursor(mouseEntered);
-                private final Cursor exited = new Cursor(mouseExited);
+            private final Cursor entered = new Cursor(mouseEntered);
+            private final Cursor exited = new Cursor(mouseExited);
 
-                @Override
-                public void mouseEntered(final MouseEvent e) {
-                    if (toDecorate.isEnabled()) {
-                        toDecorate.setCursor(entered);
-                    }
+            @Override
+            public void mouseEntered(final MouseEvent e) {
+                if (toDecorate.isEnabled()) {
+                    toDecorate.setCursor(entered);
                 }
+            }
 
-                @Override
-                public void mouseExited(final MouseEvent e) {
-                    if (toDecorate.isEnabled()) {
-                        toDecorate.setCursor(exited);
-                    }
+            @Override
+            public void mouseExited(final MouseEvent e) {
+                if (toDecorate.isEnabled()) {
+                    toDecorate.setCursor(exited);
                 }
-            };
+            }
+        };
         toDecorate.addMouseListener(toAdd);
         return toAdd;
     }
@@ -542,7 +548,7 @@ public class ObjectRendererUtils {
      */
     public static String propertyPrettyPrint(final Object propertyValue) {
         if (propertyValue instanceof Collection) {
-            final Collection beanCollection = (Collection)propertyValue;
+            final Collection beanCollection = (Collection) propertyValue;
             final StringBuilder resultSB = new StringBuilder();
             for (final Object bean : beanCollection) {
                 if (resultSB.length() != 0) {
@@ -591,7 +597,7 @@ public class ObjectRendererUtils {
     public static String getUrlFromBean(final CidsBean bean, final String suffix) {
         final Object obj = bean.getProperty("url_base_id");
         if (obj instanceof CidsBean) {
-            final CidsBean urlBase = (CidsBean)obj;
+            final CidsBean urlBase = (CidsBean) obj;
             final StringBuffer bildURL = new StringBuffer(urlBase.getProperty("prot_prefix").toString());
             bildURL.append(urlBase.getProperty("server").toString());
             bildURL.append(urlBase.getProperty("path").toString());
@@ -701,11 +707,9 @@ public class ObjectRendererUtils {
 final class TableHeaderUnsortMouseAdapter extends MouseAdapter {
 
     //~ Instance fields --------------------------------------------------------
-
     private JTable tbl;
 
     //~ Constructors -----------------------------------------------------------
-
     /**
      * Creates a new TableHeaderUnsortMouseAdapter object.
      *
@@ -716,7 +720,6 @@ final class TableHeaderUnsortMouseAdapter extends MouseAdapter {
     }
 
     //~ Methods ----------------------------------------------------------------
-
     @Override
     public void mousePressed(final MouseEvent e) {
         if (e.isPopupTrigger()) {
@@ -741,14 +744,12 @@ final class TableHeaderUnsortMouseAdapter extends MouseAdapter {
 final class LabelLinkBehaviourMouseAdapter extends MouseAdapter {
 
     //~ Instance fields --------------------------------------------------------
-
     protected final JLabel label;
     private final Cursor handCursor = new Cursor(Cursor.HAND_CURSOR);
     private final Font underlined;
     private final Font plain;
 
     //~ Constructors -----------------------------------------------------------
-
     /**
      * Creates a new LabelLinkBehaviourMouseAdapter object.
      *
@@ -757,13 +758,12 @@ final class LabelLinkBehaviourMouseAdapter extends MouseAdapter {
     public LabelLinkBehaviourMouseAdapter(final JLabel label) {
         this.label = label;
         plain = label.getFont();
-        final Map<TextAttribute, Object> attributesMap = (Map<TextAttribute, Object>)plain.getAttributes();
+        final Map<TextAttribute, Object> attributesMap = (Map<TextAttribute, Object>) plain.getAttributes();
         attributesMap.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
         underlined = plain.deriveFont(attributesMap);
     }
 
     //~ Methods ----------------------------------------------------------------
-
     @Override
     public void mouseEntered(final MouseEvent e) {
         label.setCursor(handCursor);
@@ -789,7 +789,6 @@ final class LabelLinkBehaviourMouseAdapter extends MouseAdapter {
 final class ImagedButtonMouseAdapter extends MouseAdapter {
 
     //~ Instance fields --------------------------------------------------------
-
     protected final JButton button;
     protected boolean over = false;
     protected boolean pressed = false;
@@ -798,7 +797,6 @@ final class ImagedButtonMouseAdapter extends MouseAdapter {
     private final Icon pressedIcon;
 
     //~ Constructors -----------------------------------------------------------
-
     /**
      * Creates a new ImagedButtonMouseAdapter object.
      *
@@ -821,16 +819,15 @@ final class ImagedButtonMouseAdapter extends MouseAdapter {
     public ImagedButtonMouseAdapter(final JButton button, final Icon plain, final Icon highlight, final Icon pressed) {
         this.button = button;
         ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(
-            button,
-            Cursor.HAND_CURSOR,
-            Cursor.DEFAULT_CURSOR);
+                button,
+                Cursor.HAND_CURSOR,
+                Cursor.DEFAULT_CURSOR);
         this.plainIcon = plain;
         this.highlightIcon = highlight;
         this.pressedIcon = pressed;
     }
 
     //~ Methods ----------------------------------------------------------------
-
     @Override
     public void mouseEntered(final MouseEvent e) {
         over = true;
@@ -894,12 +891,10 @@ final class ImagedButtonMouseAdapter extends MouseAdapter {
 final class SyncLabelButtonMouseAdapter extends MouseAdapter {
 
     //~ Instance fields --------------------------------------------------------
-
     private final MouseAdapter delegateButton;
     private final MouseAdapter delegateLabel;
 
     //~ Constructors -----------------------------------------------------------
-
     /**
      * Creates a new SyncLabelButtonMouseAdapter object.
      *
@@ -917,7 +912,6 @@ final class SyncLabelButtonMouseAdapter extends MouseAdapter {
     }
 
     //~ Methods ----------------------------------------------------------------
-
     @Override
     public void mouseEntered(final MouseEvent e) {
         delegateButton.mouseEntered(e);

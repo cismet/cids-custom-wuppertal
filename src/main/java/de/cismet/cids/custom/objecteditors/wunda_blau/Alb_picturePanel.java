@@ -1109,7 +1109,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                 final List[] result = get();
                 final StringBuffer collisionLists = new StringBuffer();
                 for (int i = 0; i < result.length; ++i) {
-                    //implizid cast!
+                    //cast!
                     final List<File> current = result[i];
                     if (current != null) {
                         if (current.size() > 0) {

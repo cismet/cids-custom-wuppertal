@@ -12,7 +12,6 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaObject;
@@ -58,7 +57,6 @@ import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
 import java.awt.event.MouseListener;
-import java.util.Date;
 
 /**
  * de.cismet.cids.objectrenderer.CoolThemaRenderer.
@@ -215,8 +213,8 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         return cidsBean;
     }
 
-    private void disableSecondPageIfNoWritePermission(CidsBean cidsBean) {
-        if (!CidsBeanSupport.checkWritePermission(cidsBean)) {
+    private void disableSecondPageIfNoWritePermission() {
+        if (ObjectRendererUtils.checkActionTag("custom.baulast.document")) {
             for (MouseListener l : lblForw.getMouseListeners()) {
                 lblForw.removeMouseListener(l);
             }
@@ -274,7 +272,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                         strongReferenceToWeakListener,
                         cidsBean));
             }
-            disableSecondPageIfNoWritePermission(cidsBean);
+            disableSecondPageIfNoWritePermission();
         } catch (Exception x) {
             log.error(x, x);
         }

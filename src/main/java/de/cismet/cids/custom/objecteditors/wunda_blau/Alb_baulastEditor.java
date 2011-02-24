@@ -157,7 +157,7 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
     public void setCidsBean(final CidsBean cidsBean) {
         if (cidsBean != null) {
             this.cidsBean = cidsBean;
-            disableSecondPageIfNoWritePermission(cidsBean);
+            disableSecondPageIfNoWritePermission();
             this.panMain.setCidsBean(cidsBean);
             this.alb_picturePanel.setCidsBean(cidsBean);
             final Object laufendeNr = cidsBean.getProperty("laufende_nummer");
@@ -166,8 +166,8 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         }
     }
 
-    private void disableSecondPageIfNoWritePermission(CidsBean cidsBean) {
-        if (!CidsBeanSupport.checkWritePermission(cidsBean)) {
+    private void disableSecondPageIfNoWritePermission() {
+        if (ObjectRendererUtils.checkActionTag("custom.baulast.document")) {
             for (MouseListener l : lblForw.getMouseListeners()) {
                 lblForw.removeMouseListener(l);
             }

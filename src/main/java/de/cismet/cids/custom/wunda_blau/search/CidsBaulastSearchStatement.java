@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.cids.custom.wunda_blau.search;
 
 import Sirius.server.middleware.interfaces.domainserver.MetaService;
@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.List;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+import java.util.Collections;
 
 //select distinct 666 as class_id, l.id, l.blattnummer, l.laufende_nummer as object_id from alb_baulast l
 //, alb_baulast_baulastarten la, alb_baulast_art a
@@ -48,7 +49,6 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 public class CidsBaulastSearchStatement extends CidsServerSearch {
 
     //~ Enums ------------------------------------------------------------------
-
     /**
      * DOCUMENT ME!
      *
@@ -57,12 +57,9 @@ public class CidsBaulastSearchStatement extends CidsServerSearch {
     public enum Result {
 
         //~ Enum constants -----------------------------------------------------
-
         BAULAST, BAULASTBLATT
     }
-
     //~ Instance fields --------------------------------------------------------
-
     //
     private String blattnummer;
     //
@@ -83,7 +80,6 @@ public class CidsBaulastSearchStatement extends CidsServerSearch {
     private final int baulastblattClassID;
 
     //~ Constructors -----------------------------------------------------------
-
     /**
      * Creates a new CidsBaulastSearchStatement object.
      *
@@ -115,7 +111,6 @@ public class CidsBaulastSearchStatement extends CidsServerSearch {
     }
 
     //~ Methods ----------------------------------------------------------------
-
     @Override
     public Collection performServerSearch() {
         try {
@@ -125,14 +120,14 @@ public class CidsBaulastSearchStatement extends CidsServerSearch {
             String query = "";
             if (result == Result.BAULASTBLATT) {
                 query += "select " + baulastblattClassID
-                            + " as class_id, b.id as object_id, b.blattnummer from alb_baulastblatt b where b.blattnummer in (select blattnummer from (";
+                        + " as class_id, b.id as object_id, b.blattnummer from alb_baulastblatt b where b.blattnummer in (select blattnummer from (";
             }
             for (int i = 0; i < iter; ++i) {
                 if (i > 0) {
                     query += " UNION ";
                 }
                 query += " select " + baulastClassID
-                            + " as class_id, l.id as object_id, l.blattnummer, l.laufende_nummer from alb_baulast l";
+                        + " as class_id, l.id as object_id, l.blattnummer, l.laufende_nummer from alb_baulast l";
                 if ((art != null) && (art.length() > 0)) {
                     query += " , alb_baulast_baulastarten la, alb_baulast_art a";
                 }
@@ -172,18 +167,18 @@ public class CidsBaulastSearchStatement extends CidsServerSearch {
                 if (bounds != null) {
                     query += " and k.fs_referenz = f.id and f.umschreibendes_rechteck = g.id";
                     query += " and g.geo_field && GeometryFromText('" + bounds
-                                + "') and intersects(g.geo_field,GeometryFromText('" + bounds + "'))";
+                            + "') and intersects(g.geo_field,GeometryFromText('" + bounds + "'))";
                 }
                 if (fsSearch) {
                     final FlurstueckInfo fi = flurstuecke.get(i);
                     query += " and k.gemarkung = '" + fi.gemarkung + "' and k.flur = '"
-                                + StringEscapeUtils.escapeSql(fi.flur) + "' and k.zaehler = '"
-                                + StringEscapeUtils.escapeSql(fi.zaehler) + "' and k.nenner = '"
-                                + StringEscapeUtils.escapeSql(fi.nenner) + "'";
+                            + StringEscapeUtils.escapeSql(fi.flur) + "' and k.zaehler = '"
+                            + StringEscapeUtils.escapeSql(fi.zaehler) + "' and k.nenner = '"
+                            + StringEscapeUtils.escapeSql(fi.nenner) + "'";
                 }
                 if ((art != null) && (art.length() > 0)) {
                     query += " and l.id = la.baulast_reference and la.baulast_art = a.id and a.baulast_art = '" + art
-                                + "'";
+                            + "'";
                 }
             }
             if (result == Result.BAULASTBLATT) {
@@ -196,19 +191,19 @@ public class CidsBaulastSearchStatement extends CidsServerSearch {
             }
 
             getLog().info("Search:\n" + query);
-            final MetaService ms = (MetaService)getActiveLoaclServers().get("WUNDA_BLAU");
+            final MetaService ms = (MetaService) getActiveLoaclServers().get("WUNDA_BLAU");
             final List<ArrayList> resultList = ms.performCustomSearch(query);
             final List<Node> aln = new ArrayList<Node>();
             for (final ArrayList al : resultList) {
-                final int cid = (Integer)al.get(0);
-                final int oid = (Integer)al.get(1);
+                final int cid = (Integer) al.get(0);
+                final int oid = (Integer) al.get(1);
                 final MetaObjectNode mon = new MetaObjectNode("WUNDA_BLAU", oid, cid);
                 aln.add(mon);
             }
             return aln;
         } catch (Exception e) {
             getLog().error("Problem", e);
-            return null;
+            return Collections.EMPTY_LIST;
         }
     }
 }
