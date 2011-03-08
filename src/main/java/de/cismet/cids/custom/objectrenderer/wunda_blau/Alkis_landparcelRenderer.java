@@ -1227,7 +1227,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlKarteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlKarteActionPerformed
+    private void hlKarteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlKarteActionPerformed
         try {
             final String parcelCode = AlkisCommons.getLandparcelCodeFromParcelBeanObject(cidsBean);
             if (parcelCode.length() > 0) {
@@ -1240,18 +1240,18 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                 Alkis_landparcelRenderer.this);
             log.error(ex);
         }
-    }                                                                           //GEN-LAST:event_hlKarteActionPerformed
+    }//GEN-LAST:event_hlKarteActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlFlurstuecksnachweisPdfActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlFlurstuecksnachweisPdfActionPerformed
+    private void hlFlurstuecksnachweisPdfActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlFlurstuecksnachweisPdfActionPerformed
         try {
             final String parcelCode = AlkisCommons.getLandparcelCodeFromParcelBeanObject(cidsBean);
             if (parcelCode.length() > 0) {
-                AlkisCommons.Products.productFlurstuecksnachweis(parcelCode, AlkisCommons.ProductFormat.PDF);
+                AlkisCommons.Products.productEinzelNachweis(parcelCode, AlkisCommons.Products.FLURSTUECKSNACHWEIS_PDF);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser(
@@ -1260,18 +1260,18 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                 Alkis_landparcelRenderer.this);
             log.error(ex);
         }
-    }                                                                                            //GEN-LAST:event_hlFlurstuecksnachweisPdfActionPerformed
+    }//GEN-LAST:event_hlFlurstuecksnachweisPdfActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlFlurstuecksEigentumsnachweisHtmlActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlFlurstuecksEigentumsnachweisHtmlActionPerformed
+    private void hlFlurstuecksEigentumsnachweisHtmlActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlFlurstuecksEigentumsnachweisHtmlActionPerformed
         try {
             final String parcelCode = AlkisCommons.getLandparcelCodeFromParcelBeanObject(cidsBean);
             if (parcelCode.length() > 0) {
-                AlkisCommons.Products.productFlurstuecksEigentumsnachweis(parcelCode, AlkisCommons.ProductFormat.HTML);
+                AlkisCommons.Products.productEinzelNachweis(parcelCode, AlkisCommons.Products.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_HTML);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser(
@@ -1280,18 +1280,18 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                 Alkis_landparcelRenderer.this);
             log.error(ex);
         }
-    }                                                                                                      //GEN-LAST:event_hlFlurstuecksEigentumsnachweisHtmlActionPerformed
+    }//GEN-LAST:event_hlFlurstuecksEigentumsnachweisHtmlActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlFlurstuecksnachweisHtmlActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlFlurstuecksnachweisHtmlActionPerformed
+    private void hlFlurstuecksnachweisHtmlActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlFlurstuecksnachweisHtmlActionPerformed
         try {
             final String parcelCode = AlkisCommons.getLandparcelCodeFromParcelBeanObject(cidsBean);
             if (parcelCode.length() > 0) {
-                AlkisCommons.Products.productFlurstuecksnachweis(parcelCode, AlkisCommons.ProductFormat.HTML);
+                AlkisCommons.Products.productEinzelNachweis(parcelCode, AlkisCommons.Products.FLURSTUECKSNACHWEIS_HTML);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser(
@@ -1300,58 +1300,58 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                 Alkis_landparcelRenderer.this);
             log.error(ex);
         }
-    }                                                                                             //GEN-LAST:event_hlFlurstuecksnachweisHtmlActionPerformed
+    }//GEN-LAST:event_hlFlurstuecksnachweisHtmlActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBackActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBackActionPerformed
+    private void btnBackActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         cardLayout.show(this, CARD_1);
         btnBack.setEnabled(false);
         btnForward.setEnabled(true);
         lblBack.setEnabled(false);
         lblForw.setEnabled(true);
-    }                                                                           //GEN-LAST:event_btnBackActionPerformed
+    }//GEN-LAST:event_btnBackActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnForwardActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnForwardActionPerformed
+    private void btnForwardActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnForwardActionPerformed
         cardLayout.show(this, CARD_2);
         btnBack.setEnabled(true);
         btnForward.setEnabled(false);
         lblBack.setEnabled(true);
         lblForw.setEnabled(false);
-    }                                                                              //GEN-LAST:event_btnForwardActionPerformed
+    }//GEN-LAST:event_btnForwardActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblBackMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblBackMouseClicked
+    private void lblBackMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBackMouseClicked
         btnBackActionPerformed(null);
-    }                                                                       //GEN-LAST:event_lblBackMouseClicked
+    }//GEN-LAST:event_lblBackMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblForwMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblForwMouseClicked
+    private void lblForwMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblForwMouseClicked
         btnForwardActionPerformed(null);
-    }                                                                       //GEN-LAST:event_lblForwMouseClicked
+    }//GEN-LAST:event_lblForwMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstBuchungsblaetterValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstBuchungsblaetterValueChanged
+    private void lstBuchungsblaetterValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstBuchungsblaetterValueChanged
         if (!evt.getValueIsAdjusting()) {
             final Object[] selectedObjs = lstBuchungsblaetter.getSelectedValues();
             if ((selectedObjs != null) && (selectedObjs.length > 0)) {
@@ -1370,18 +1370,18 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                 AlkisSOAPWorkerService.execute(retrieveBuchungsblaetterWorker);
             }
         }
-    } //GEN-LAST:event_lstBuchungsblaetterValueChanged
+    }//GEN-LAST:event_lstBuchungsblaetterValueChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlFlurstuecksEigentumsnachweisPdfActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlFlurstuecksEigentumsnachweisPdfActionPerformed
+    private void hlFlurstuecksEigentumsnachweisPdfActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlFlurstuecksEigentumsnachweisPdfActionPerformed
         try {
             final String parcelCode = AlkisCommons.getLandparcelCodeFromParcelBeanObject(cidsBean);
             if (parcelCode.length() > 0) {
-                AlkisCommons.Products.productFlurstuecksEigentumsnachweis(parcelCode, AlkisCommons.ProductFormat.PDF);
+                AlkisCommons.Products.productEinzelNachweis(parcelCode, AlkisCommons.Products.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_PDF);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser(
@@ -1390,14 +1390,14 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                 Alkis_landparcelRenderer.this);
             log.error(ex);
         }
-    }                                                                                                     //GEN-LAST:event_hlFlurstuecksEigentumsnachweisPdfActionPerformed
+    }//GEN-LAST:event_hlFlurstuecksEigentumsnachweisPdfActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstBuchungsblaetterMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstBuchungsblaetterMouseClicked
+    private void lstBuchungsblaetterMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstBuchungsblaetterMouseClicked
         if (evt.getClickCount() > 1) {
             final Object selObject = lstBuchungsblaetter.getSelectedValue();
             if (selObject instanceof CidsBean) {
@@ -1405,7 +1405,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                 ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObject(selBean.getMetaObject(), "");
             }
         }
-    }                                                                                   //GEN-LAST:event_lstBuchungsblaetterMouseClicked
+    }//GEN-LAST:event_lstBuchungsblaetterMouseClicked
 
     @Override
     public CidsBean getCidsBean() {

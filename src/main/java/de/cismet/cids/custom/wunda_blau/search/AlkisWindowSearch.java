@@ -47,7 +47,7 @@ import de.cismet.tools.CismetThreadPool;
  * @author   stefan
  * @version  $Revision$, $Date$
  */
-//@org.openide.util.lookup.ServiceProvider(service = CidsWindowSearch.class)
+@org.openide.util.lookup.ServiceProvider(service = CidsWindowSearch.class)
 public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowSearch {
 
     //~ Static fields/initializers ---------------------------------------------

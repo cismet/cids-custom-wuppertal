@@ -934,14 +934,12 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlBestandsnachweisHtmlActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlBestandsnachweisHtmlActionPerformed
+    private void hlBestandsnachweisHtmlActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlBestandsnachweisHtmlActionPerformed
         try {
             String buchungsblattCode = getCompleteBuchungsblattCode();
             if (buchungsblattCode.length() > 0) {
                 buchungsblattCode = AlkisCommons.escapeHtmlSpaces(buchungsblattCode);
-                AlkisCommons.Products.productBestandsnachweisProduct(
-                    buchungsblattCode,
-                    AlkisCommons.ProductFormat.HTML);
+                AlkisCommons.Products.productEinzelNachweis(buchungsblattCode, AlkisCommons.Products.BESTANDSNACHWEIS_HTML);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser(
@@ -950,19 +948,19 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
                 Alkis_buchungsblattRenderer.this);
             log.error(ex);
         }
-    }                                                                                          //GEN-LAST:event_hlBestandsnachweisHtmlActionPerformed
+    }//GEN-LAST:event_hlBestandsnachweisHtmlActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void hlBestandsnachweisPdfActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlBestandsnachweisPdfActionPerformed
+    private void hlBestandsnachweisPdfActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlBestandsnachweisPdfActionPerformed
         try {
             String buchungsblattCode = getCompleteBuchungsblattCode();
             if (buchungsblattCode.length() > 0) {
                 buchungsblattCode = AlkisCommons.escapeHtmlSpaces(buchungsblattCode);
-                AlkisCommons.Products.productBestandsnachweisProduct(buchungsblattCode, AlkisCommons.ProductFormat.PDF);
+                AlkisCommons.Products.productEinzelNachweis(buchungsblattCode, AlkisCommons.Products.BESTANDSNACHWEIS_PDF);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser(
@@ -971,14 +969,14 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
                 Alkis_buchungsblattRenderer.this);
             log.error(ex);
         }
-    }                                                                                         //GEN-LAST:event_hlBestandsnachweisPdfActionPerformed
+    }//GEN-LAST:event_hlBestandsnachweisPdfActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstLandparcelsMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstLandparcelsMouseClicked
+    private void lstLandparcelsMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstLandparcelsMouseClicked
         if (evt.getClickCount() > 1) {
             try {
                 final Object selection = lstLandparcels.getSelectedValue();
@@ -996,14 +994,14 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
                 log.error(ex, ex);
             }
         }
-    }                                                                              //GEN-LAST:event_lstLandparcelsMouseClicked
+    }//GEN-LAST:event_lstLandparcelsMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstLandparcelsValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstLandparcelsValueChanged
+    private void lstLandparcelsValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstLandparcelsValueChanged
         if (!evt.getValueIsAdjusting()) {
             try {
                 // release cache
@@ -1033,51 +1031,51 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
                 log.fatal(t, t);
             }
         }
-    } //GEN-LAST:event_lstLandparcelsValueChanged
+    }//GEN-LAST:event_lstLandparcelsValueChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblBackMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblBackMouseClicked
+    private void lblBackMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBackMouseClicked
         btnBackActionPerformed(null);
-    }                                                                       //GEN-LAST:event_lblBackMouseClicked
+    }//GEN-LAST:event_lblBackMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBackActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBackActionPerformed
+    private void btnBackActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         cardLayout.show(this, CARD_1);
         btnBack.setEnabled(false);
         btnForward.setEnabled(true);
         lblBack.setEnabled(false);
         lblForw.setEnabled(true);
-    }                                                                           //GEN-LAST:event_btnBackActionPerformed
+    }//GEN-LAST:event_btnBackActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnForwardActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnForwardActionPerformed
+    private void btnForwardActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnForwardActionPerformed
         cardLayout.show(this, CARD_2);
         btnBack.setEnabled(true);
         btnForward.setEnabled(false);
         lblBack.setEnabled(true);
         lblForw.setEnabled(false);
-    }                                                                              //GEN-LAST:event_btnForwardActionPerformed
+    }//GEN-LAST:event_btnForwardActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblForwMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblForwMouseClicked
+    private void lblForwMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblForwMouseClicked
         btnForwardActionPerformed(null);
-    }                                                                       //GEN-LAST:event_lblForwMouseClicked
+    }//GEN-LAST:event_lblForwMouseClicked
 
     /**
      * DOCUMENT ME!

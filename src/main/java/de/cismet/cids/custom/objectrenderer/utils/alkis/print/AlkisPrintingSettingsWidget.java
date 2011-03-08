@@ -65,8 +65,6 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
 
     //~ Static fields/initializers ---------------------------------------------
     private static final String ALKIS_LANDPARCEL_TABLE = "ALKIS_LANDPARCEL";
-    private static final List<AlkisProduct> kartenProducts = AlkisCommons.ALKIS_PRODUCTS.get(
-            AlkisCommons.Products.PRODUCT_GROUP_KARTE);
     //~ Instance fields --------------------------------------------------------
 // private static final ProductLayout[] LAYOUTS = ProductLayout.values();
 // private static final ProductTyp[] TYPES = ProductTyp.values();
@@ -170,7 +168,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
      */
     private ComboBoxModel getProductClassModel() {
         final Set<String> classes = new HashSet<String>();
-        for (final AlkisProduct product : kartenProducts) {
+        for (final AlkisProduct product : AlkisCommons.Products.ALKIS_MAP_PRODUCTS) {
             classes.add(product.getClazz());
         }
         return new DefaultComboBoxModel(classes.toArray());
@@ -185,7 +183,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         final String clazz = String.valueOf(cbClazz.getSelectedItem());
         final Set<String> prodSet = new HashSet<String>();
         final List<String> typesOrdered = new ArrayList<String>();
-        for (final AlkisProduct product : kartenProducts) {
+        for (final AlkisProduct product : AlkisCommons.Products.ALKIS_MAP_PRODUCTS) {
             if (clazz.equals(product.getClazz())) {
                 if (prodSet.add(product.getType())) {
                     typesOrdered.add(product.getType());
@@ -207,7 +205,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         final Set<String> prodScale = new TreeSet<String>(AlphanumComparator.getInstance());
         final Set<String> prodLayout = new HashSet<String>();
         final List<LayoutMetaInfo> prodLayoutOrdered = new ArrayList<LayoutMetaInfo>();
-        for (final AlkisProduct product : kartenProducts) {
+        for (final AlkisProduct product : AlkisCommons.Products.ALKIS_MAP_PRODUCTS) {
             if (clazz.equals(product.getClazz()) && type.equals(product.getType())) {
                 prodScale.add(product.getMassstab());
                 if (prodLayout.add(product.getDinFormat())) {
@@ -233,7 +231,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         final String type = String.valueOf(cbProduct.getSelectedItem());
         final String scale = String.valueOf(cbScales.getSelectedItem());
         final String layout = String.valueOf(cbFormat.getSelectedItem());
-        for (final AlkisProduct product : kartenProducts) {
+        for (final AlkisProduct product : AlkisCommons.Products.ALKIS_MAP_PRODUCTS) {
             if (clazz.equals(product.getClazz()) && type.equals(product.getType())
                     && scale.equals(product.getMassstab()) && layout.equals(product.getDinFormat())) {
                 return product;

@@ -28,7 +28,6 @@ import java.awt.Point;
 
 import java.io.InputStream;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -40,6 +39,7 @@ import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.PropertyReader;
 
 import de.cismet.cids.dynamics.CidsBean;
+import java.util.ArrayList;
 
 /**
  * DOCUMENT ME!
@@ -53,25 +53,45 @@ public final class AlkisCommons {
     static {
         org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisCommons.class);
         try {
-            final Map<String, List<AlkisProduct>> productsMap = new HashMap<String, List<AlkisProduct>>();
+            final List<AlkisProduct> mapProducts = new ArrayList<AlkisProduct>();
             final Map<String, Point> formatMap = new HashMap<String, Point>();
-            ALKIS_FORMATS = Collections.unmodifiableMap(formatMap);
-            ALKIS_PRODUCTS = Collections.unmodifiableMap(productsMap);
+            Products.ALKIS_FORMATS = Collections.unmodifiableMap(formatMap);
+            Products.ALKIS_MAP_PRODUCTS = Collections.unmodifiableList(mapProducts);
             final PropertyReader serviceProperties = new PropertyReader(
                     "/de/cismet/cids/custom/wunda_blau/res/alkis/alkis_conf.properties");
+            final PropertyReader productProperties = new PropertyReader(
+                    "/de/cismet/cids/custom/wunda_blau/res/alkis/alkis_products.properties");
+            log.debug("SERVICE_PROPERTIES: " + serviceProperties.getInternalProperties());
+            log.debug("PRODUCT_PROPERTIES: " + productProperties.getInternalProperties());
             final String server = serviceProperties.getProperty("SERVER");
+            final String service = serviceProperties.getProperty("SERVICE");
+            final String user = serviceProperties.getProperty("USER");
+            final String pass = serviceProperties.getProperty("PASSWORD");
             SERVER = server;
-            SERVICE = serviceProperties.getProperty("SERVICE");
-            USER = serviceProperties.getProperty("USER");
-            PASSWORD = serviceProperties.getProperty("PASSWORD");
+            SERVICE = service;
+            USER = user;
+            PASSWORD = pass;
+            Products.IDENTIFICATION = "user=" + user + "&password=" + pass + "&service=" + service;
             //
             CATALOG_SERVICE = serviceProperties.getProperty("CATALOG_SERVICE");
             INFO_SERVICE = serviceProperties.getProperty("INFO_SERVICE");
             SEARCH_SERVICE = serviceProperties.getProperty("SEARCH_SERVICE");
             //
-            BUCH_NACHWEIS_SERVICE = server + serviceProperties.getProperty("BUCH_NACHWEIS_SERVICE");
+            EINZEL_NACHWEIS_SERVICE = server + serviceProperties.getProperty("BUCH_NACHWEIS_SERVICE");
             LISTEN_NACHWEIS_SERVICE = server + serviceProperties.getProperty("LISTEN_NACHWEIS_SERVICE");
             LIEGENSCHAFTSKARTE_SERVICE = server + serviceProperties.getProperty("LIEGENSCHAFTSKARTE_SERVICE");
+            //
+            Products.FLURSTUECKSNACHWEIS_PDF = productProperties.getProperty("FLURSTUECKSNACHWEIS_PDF");
+            Products.FLURSTUECKSNACHWEIS_HTML = productProperties.getProperty("FLURSTUECKSNACHWEIS_HTML");
+            Products.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_PDF = productProperties.getProperty("FLURSTUECKS_UND_EIGENTUMSNACHWEIS_PDF");
+            Products.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_HTML = productProperties.getProperty("FLURSTUECKS_UND_EIGENTUMSNACHWEIS_HTML");
+            //
+            Products.BESTANDSNACHWEIS_PDF = productProperties.getProperty("BESTANDSNACHWEIS_PDF");
+            Products.BESTANDSNACHWEIS_HTML = productProperties.getProperty("BESTANDSNACHWEIS_HTML");
+            //
+            Products.PUNKTLISTE_PDF = productProperties.getProperty("PUNKTLISTE_PDF");
+            Products.PUNKTLISTE_HTML = productProperties.getProperty("PUNKTLISTE_HTML");
+            Products.PUNKTLISTE_TXT = productProperties.getProperty("PUNKTLISTE_TXT");
             //
             final String srs = serviceProperties.getProperty("SRS");
             SRS = srs;
@@ -88,8 +108,7 @@ public final class AlkisCommons {
                 for (final Object o0 : document.getRootElement().getChildren()) {
                     final Element category = (Element) o0;
                     final String catName = category.getName();
-                    if ("Karte".equals(catName) || "Einzelnachweis".equals(catName) || "Listennachweis".equals(catName)) {
-                        final List<AlkisProduct> productList = new ArrayList<AlkisProduct>();
+                    if ("Karte".equals(catName)) {
                         for (final Object o1 : category.getChildren()) {
                             final Element productClass = (Element) o1;
                             if (productClass.getName().matches(".*[Kk]lasse.*")) {
@@ -124,7 +143,7 @@ public final class AlkisCommons {
                                             } else {
                                                 massstab = "-";
                                             }
-                                            productList.add(new AlkisProduct(
+                                            AlkisProduct currentProduct = new AlkisProduct(
                                                     clazz,
                                                     type,
                                                     code,
@@ -132,23 +151,24 @@ public final class AlkisCommons {
                                                     massstab,
                                                     fileFormat,
                                                     width,
-                                                    height));
+                                                    height);
+
+                                            mapProducts.add(currentProduct);
+
                                         }
                                     }
                                 }
                             }
                         }
-                        productsMap.put(catName, productList);
                     }
                 }
             } catch (Exception ex) {
-                log.error("Error whild parsing Alkis Product Description!", ex);
+                log.error("Error while parsing Alkis Product Description!", ex);
             }
         } catch (Exception ex) {
-            log.error(ex, ex);
+            log.error("AlkisCommons Error!", ex);
         }
     }
-    public static Map<String, List<AlkisProduct>> ALKIS_PRODUCTS;
     public static String USER;
     public static String PASSWORD;
     public static String SERVICE;
@@ -156,52 +176,16 @@ public final class AlkisCommons {
     public static String CATALOG_SERVICE;
     public static String INFO_SERVICE;
     public static String SEARCH_SERVICE;
-    public static Map<String, Point> ALKIS_FORMATS;
-    public static String SRS;             // = "EPSG:31466";
-    public static String MAP_CALL_STRING; // =
-    // "http://s102x082.wuppertal-intra.de:8080/wmsconnector/com.esri.wms.Esrimap/web_navigation_lf?&VERSION=1.1.1&REQUEST=GetMap&SRS="
-    // + SRS +
-    // "&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&LAYERS=26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0&STYLES="
-//                + "&BBOX=<cismap:boundingBox>"
-//                + "&WIDTH=<cismap:width>"
-//                + "&HEIGHT=<cismap:height>";
-    public static double GEO_BUFFER; // = 5.0;
-    public static String BUCH_NACHWEIS_SERVICE;
+    public static String SRS;
+    public static String MAP_CALL_STRING;
+    public static double GEO_BUFFER;
+    public static String EINZEL_NACHWEIS_SERVICE;
     public static String LISTEN_NACHWEIS_SERVICE;
     public static String LIEGENSCHAFTSKARTE_SERVICE;
+    //
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisCommons.class);
     private static final String NEWLINE = "<br>";
     public static final String LINK_SEPARATOR_TOKEN = "::";
-
-    //~ Enums ------------------------------------------------------------------
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    public static enum ProductFormat {
-
-        //~ Enum constants -----------------------------------------------------
-        PDF("PDF"), HTML("HTML"), TEXT("TXT");
-        //~ Instance fields ----------------------------------------------------
-        private final String formatString;
-
-        //~ Constructors -------------------------------------------------------
-        /**
-         * Creates a new ProductFormat object.
-         *
-         * @param  string  DOCUMENT ME!
-         */
-        private ProductFormat(final String string) {
-            this.formatString = string;
-        }
-
-        //~ Methods ------------------------------------------------------------
-        @Override
-        public String toString() {
-            return formatString;
-        }
-    }
 
     //~ Methods ----------------------------------------------------------------
     /**
@@ -612,16 +596,22 @@ public final class AlkisCommons {
     public static final class Products {
 
         //~ Static fields/initializers -----------------------------------------
-        public static final String PRODUCT_GROUP_EINZELNACHWEIS = "Einzelnachweis";
-        public static final String PRODUCT_GROUP_KARTE = "Karte";
-        public static final String PRODUCT_GROUP_LISTENNACHWEIS = "Listennachweis";
+        //Flurstueck
+        public static String FLURSTUECKSNACHWEIS_PDF;
+        public static String FLURSTUECKSNACHWEIS_HTML;
+        public static String FLURSTUECKS_UND_EIGENTUMSNACHWEIS_PDF;
+        public static String FLURSTUECKS_UND_EIGENTUMSNACHWEIS_HTML;
+        //Buchungsblatt
+        public static String BESTANDSNACHWEIS_PDF;
+        public static String BESTANDSNACHWEIS_HTML;
+        //Punkt
+        public static String PUNKTLISTE_PDF;
+        public static String PUNKTLISTE_HTML;
+        public static String PUNKTLISTE_TXT;
         //
-        public static final String PRODUCT_BESTANDSNACHWEIS = "Bestandsnachweis";
-        public static final String PRODUCT_FLURSTUECKSNACHWEIS = "Flurstücksnachweis";
-        public static final String PRODUCT_EIGENTUMSNACHWEIS = "Flurstücks- und Eigentumsnachweis";
-        public static final String PRODUCT_PUNKTLISTE = "Punktliste";
-        //
-        private static final String IDENTIFICATION = "user=" + USER + "&password=" + PASSWORD + "&service=" + SERVICE;
+        public static Map<String, Point> ALKIS_FORMATS;
+        public static List<AlkisProduct> ALKIS_MAP_PRODUCTS;
+        private static String IDENTIFICATION;
         //
 
         //~ Constructors -------------------------------------------------------
@@ -638,58 +628,15 @@ public final class AlkisCommons {
         /**
          * DOCUMENT ME!
          *
-         * @param  buchungsblattCode  DOCUMENT ME!
-         * @param  format             DOCUMENT ME!
-         */
-        public static void productBestandsnachweisProduct(final String buchungsblattCode, final ProductFormat format) {
-            final List<AlkisProduct> einzelnachweise = ALKIS_PRODUCTS.get(PRODUCT_GROUP_EINZELNACHWEIS);
-            for (final AlkisProduct product : einzelnachweise) {
-                if (PRODUCT_BESTANDSNACHWEIS.equals(product.getType())
-                        && format.formatString.equals(product.getFileFormat())
-                        && product.getCode().contains("GDBNRW.A")) {
-                    final String url = BUCH_NACHWEIS_SERVICE + "?" + IDENTIFICATION + "&product=" + product.getCode()
-                            + "&id=" + buchungsblattCode;
-                    ObjectRendererUtils.openURL(url);
-                }
-            }
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  parcelCode  DOCUMENT ME!
+         * @param  objectID  DOCUMENT ME!
          * @param  format      DOCUMENT ME!
          */
-        public static void productFlurstuecksnachweis(final String parcelCode, final ProductFormat format) {
-            final List<AlkisProduct> einzelnachweise = ALKIS_PRODUCTS.get(PRODUCT_GROUP_EINZELNACHWEIS);
-            for (final AlkisProduct product : einzelnachweise) {
-                if (PRODUCT_FLURSTUECKSNACHWEIS.equals(product.getType())
-                        && format.formatString.equals(product.getFileFormat())
-                        && product.getCode().contains("GDBNRW.A")) {
-                    final String url = BUCH_NACHWEIS_SERVICE + "?" + IDENTIFICATION + "&product=" + product.getCode()
-                            + "&id=" + parcelCode;
-                    ObjectRendererUtils.openURL(url);
-                }
-            }
-        }
+        public static void productEinzelNachweis(final String objectID, final String productCode) {
+            final String url = EINZEL_NACHWEIS_SERVICE + "?" + IDENTIFICATION + "&product=" + productCode
+                    + "&id=" + objectID;
+            log.info("Open product URL : " + url);
+            ObjectRendererUtils.openURL(url);
 
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  parcelCode  DOCUMENT ME!
-         * @param  format      DOCUMENT ME!
-         */
-        public static void productFlurstuecksEigentumsnachweis(final String parcelCode, final ProductFormat format) {
-            final List<AlkisProduct> einzelnachweise = ALKIS_PRODUCTS.get(PRODUCT_GROUP_EINZELNACHWEIS);
-            for (final AlkisProduct product : einzelnachweise) {
-                if (PRODUCT_EIGENTUMSNACHWEIS.equals(product.getType())
-                        && format.formatString.equals(product.getFileFormat())
-                        && product.getCode().contains("GDBNRW.A")) {
-                    final String url = BUCH_NACHWEIS_SERVICE + "?" + IDENTIFICATION + "&product=" + product.getCode()
-                            + "&id=" + parcelCode;
-                    ObjectRendererUtils.openURL(url);
-                }
-            }
         }
 
         /**
@@ -699,8 +646,8 @@ public final class AlkisCommons {
          * @param  pointArt  DOCUMENT ME!
          * @param  format    DOCUMENT ME!
          */
-        public static void productPunktliste(final String pointID, final String pointArt, final ProductFormat format) {
-            productPunktliste(pointArt + ":" + pointID, format);
+        public static void productListenNachweis(final String pointID, final String pointArt, final String productCode) {
+            productListenNachweis(pointArt + ":" + pointID, productCode);
         }
 
         /**
@@ -709,36 +656,33 @@ public final class AlkisCommons {
          * @param  punktliste  DOCUMENT ME!
          * @param  format      DOCUMENT ME!
          */
-        public static void productPunktliste(final String punktliste, final ProductFormat format) {
-            final List<AlkisProduct> listennachweise = ALKIS_PRODUCTS.get(PRODUCT_GROUP_LISTENNACHWEIS);
-            for (final AlkisProduct product : listennachweise) {
-                if (PRODUCT_PUNKTLISTE.equals(product.getType()) && format.formatString.equals(product.getFileFormat())
-                        && product.getCode().contains("GDBNRW.A")) {
-                    final String url = LISTEN_NACHWEIS_SERVICE + "?" + IDENTIFICATION + "&product=" + product.getCode()
-                            + "&ids=" + punktliste;
-                    ObjectRendererUtils.openURL(url);
-                }
-            }
+        public static void productListenNachweis(final String punktliste, final String productCode) {
+            final String url = LISTEN_NACHWEIS_SERVICE + "?" + IDENTIFICATION + "&product=" + productCode
+                    + "&ids=" + punktliste;
+            log.info("Open product URL : " + url);
+            ObjectRendererUtils.openURL(url);
+
+
         }
 
         /**
          * DOCUMENT ME!
          *
-         * @param  pointIDs   DOCUMENT ME!
+         * @param  objectIDs   DOCUMENT ME!
          * @param  pointArts  DOCUMENT ME!
-         * @param  format     DOCUMENT ME!
+         * @param  productCode     DOCUMENT ME!
          */
-        public static void productPunktliste(final String[] pointIDs,
+        public static void productListenNachweis(final String[] objectIDs,
                 final String[] pointArts,
-                final ProductFormat format) {
+                final String productCode) {
             final StringBuilder punktListe = new StringBuilder();
-            for (int i = 0; i < pointIDs.length; ++i) {
+            for (int i = 0; i < objectIDs.length; ++i) {
                 if (punktListe.length() > 0) {
                     punktListe.append(",");
                 }
-                punktListe.append(pointArts[i]).append(":").append(pointIDs[i]);
+                punktListe.append(pointArts[i]).append(":").append(objectIDs[i]);
             }
-            productPunktliste(punktListe.toString(), format);
+            productListenNachweis(punktListe.toString(), productCode);
         }
 
         /**
@@ -748,6 +692,7 @@ public final class AlkisCommons {
          */
         public static void productKarte(final String parcelCode) {
             final String url = LIEGENSCHAFTSKARTE_SERVICE + "?" + IDENTIFICATION + "&landparcel=" + parcelCode;
+            log.info("Open product URL : " + url);
             ObjectRendererUtils.openURL(url);
         }
 
@@ -780,6 +725,7 @@ public final class AlkisCommons {
                 url += "&additionalLandparcel=true";
             }
             url += "&";
+            log.info("Open product URL : " + url);
             ObjectRendererUtils.openURL(url);
         }
     }
