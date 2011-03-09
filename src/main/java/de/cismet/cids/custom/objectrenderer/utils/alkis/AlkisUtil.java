@@ -47,143 +47,56 @@ import java.util.ArrayList;
  * @author   srichter
  * @version  $Revision$, $Date$
  */
-public final class AlkisCommons {
+public final class AlkisUtil {
 
-    //~ Static fields/initializers ---------------------------------------------
-    static {
-        org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisCommons.class);
+    private AlkisUtil() {
         try {
-            final List<AlkisProduct> mapProducts = new ArrayList<AlkisProduct>();
-            final Map<String, Point> formatMap = new HashMap<String, Point>();
-            Products.ALKIS_FORMATS = Collections.unmodifiableMap(formatMap);
-            Products.ALKIS_MAP_PRODUCTS = Collections.unmodifiableList(mapProducts);
+            if (System.currentTimeMillis() > 1) {
+                throw new Exception("lala");
+            }
             final PropertyReader serviceProperties = new PropertyReader(
                     "/de/cismet/cids/custom/wunda_blau/res/alkis/alkis_conf.properties");
-            final PropertyReader productProperties = new PropertyReader(
-                    "/de/cismet/cids/custom/wunda_blau/res/alkis/alkis_products.properties");
-            log.debug("SERVICE_PROPERTIES: " + serviceProperties.getInternalProperties());
-            log.debug("PRODUCT_PROPERTIES: " + productProperties.getInternalProperties());
-            final String server = serviceProperties.getProperty("SERVER");
-            final String service = serviceProperties.getProperty("SERVICE");
-            final String user = serviceProperties.getProperty("USER");
-            final String pass = serviceProperties.getProperty("PASSWORD");
-            SERVER = server;
-            SERVICE = service;
-            USER = user;
-            PASSWORD = pass;
-            Products.IDENTIFICATION = "user=" + user + "&password=" + pass + "&service=" + service;
+
+            SERVER = serviceProperties.getProperty("SERVER");
+            SERVICE = serviceProperties.getProperty("SERVICE");
+            USER = serviceProperties.getProperty("USER");
+            PASSWORD = serviceProperties.getProperty("PASSWORD");
             //
             CATALOG_SERVICE = serviceProperties.getProperty("CATALOG_SERVICE");
             INFO_SERVICE = serviceProperties.getProperty("INFO_SERVICE");
             SEARCH_SERVICE = serviceProperties.getProperty("SEARCH_SERVICE");
             //
-            EINZEL_NACHWEIS_SERVICE = server + serviceProperties.getProperty("BUCH_NACHWEIS_SERVICE");
-            LISTEN_NACHWEIS_SERVICE = server + serviceProperties.getProperty("LISTEN_NACHWEIS_SERVICE");
-            LIEGENSCHAFTSKARTE_SERVICE = server + serviceProperties.getProperty("LIEGENSCHAFTSKARTE_SERVICE");
-            //
-            Products.FLURSTUECKSNACHWEIS_PDF = productProperties.getProperty("FLURSTUECKSNACHWEIS_PDF");
-            Products.FLURSTUECKSNACHWEIS_HTML = productProperties.getProperty("FLURSTUECKSNACHWEIS_HTML");
-            Products.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_PDF = productProperties.getProperty("FLURSTUECKS_UND_EIGENTUMSNACHWEIS_PDF");
-            Products.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_HTML = productProperties.getProperty("FLURSTUECKS_UND_EIGENTUMSNACHWEIS_HTML");
-            //
-            Products.BESTANDSNACHWEIS_PDF = productProperties.getProperty("BESTANDSNACHWEIS_PDF");
-            Products.BESTANDSNACHWEIS_HTML = productProperties.getProperty("BESTANDSNACHWEIS_HTML");
-            //
-            Products.PUNKTLISTE_PDF = productProperties.getProperty("PUNKTLISTE_PDF");
-            Products.PUNKTLISTE_HTML = productProperties.getProperty("PUNKTLISTE_HTML");
-            Products.PUNKTLISTE_TXT = productProperties.getProperty("PUNKTLISTE_TXT");
-            //
-            final String srs = serviceProperties.getProperty("SRS");
-            SRS = srs;
-            MAP_CALL_STRING = serviceProperties.getProperty("MAP_CALL_STRING") + srs;
+            EINZEL_NACHWEIS_SERVICE = SERVER + serviceProperties.getProperty("BUCH_NACHWEIS_SERVICE");
+            LISTEN_NACHWEIS_SERVICE = SERVER + serviceProperties.getProperty("LISTEN_NACHWEIS_SERVICE");
+            LIEGENSCHAFTSKARTE_SERVICE = SERVER + serviceProperties.getProperty("LIEGENSCHAFTSKARTE_SERVICE");
+            //            
+            SRS = serviceProperties.getProperty("SRS");
+            MAP_CALL_STRING = serviceProperties.getProperty("MAP_CALL_STRING") + SRS;
             GEO_BUFFER = Double.parseDouble(serviceProperties.getProperty("GEO_BUFFER"));
             //
-            try {
-                final PropertyReader formats = new PropertyReader(
-                        "/de/cismet/cids/custom/wunda_blau/res/alkis/formats.properties");
-                final InputStream is = AlkisCommons.class.getClassLoader().getResourceAsStream(
-                        "de/cismet/cids/custom/wunda_blau/res/alkis/Produktbeschreibung_ALKIS.xml");
-                final Document document = new SAXBuilder().build(is);
-                // ---------Kartenprodukte----------
-                for (final Object o0 : document.getRootElement().getChildren()) {
-                    final Element category = (Element) o0;
-                    final String catName = category.getName();
-                    if ("Karte".equals(catName)) {
-                        for (final Object o1 : category.getChildren()) {
-                            final Element productClass = (Element) o1;
-                            if (productClass.getName().matches(".*[Kk]lasse.*")) {
-                                final String clazz = productClass.getAttribute("Name").getValue();
-                                for (final Object o2 : productClass.getChildren()) {
-                                    final Element guiProduct = (Element) o2;
-                                    final String type = guiProduct.getAttribute("ProduktnameAuswertung").getValue();
-                                    for (final Object o3 : guiProduct.getChildren()) {
-                                        final Element singleProduct = (Element) o3;
-                                        final Attribute codeAttr = singleProduct.getAttribute("ID");
-                                        if (codeAttr != null) {
-                                            final String code = codeAttr.getValue();
-                                            final String dinFormatCode = singleProduct.getAttribute("Layout").getValue();
-                                            final String layoutDim = formats.getProperty(dinFormatCode);
-                                            int width = -1;
-                                            int height = -1;
-                                            if (layoutDim == null) {
-                                                org.apache.log4j.Logger.getLogger(AlkisCommons.class).info("Can not find format dimensions for: " + dinFormatCode);
-                                            } else {
-                                                final String[] dims = layoutDim.split("(x|X)");
-                                                width = Integer.parseInt(dims[0]);
-                                                height = Integer.parseInt(dims[1]);
-                                                formatMap.put(dinFormatCode, new Point(width, height));
-                                            }
-                                            final Element preisFaktoren = (Element) singleProduct.getChildren().get(0);
-                                            final String dinFormat = preisFaktoren.getAttribute("DINFormat").getValue();
-                                            final String fileFormat = preisFaktoren.getAttribute("Dateiformat").getValue();
-                                            final Attribute massstabAttr = preisFaktoren.getAttribute("Massstab");
-                                            String massstab;
-                                            if (massstabAttr != null) {
-                                                massstab = preisFaktoren.getAttribute("Massstab").getValue();
-                                            } else {
-                                                massstab = "-";
-                                            }
-                                            AlkisProduct currentProduct = new AlkisProduct(
-                                                    clazz,
-                                                    type,
-                                                    code,
-                                                    dinFormat,
-                                                    massstab,
-                                                    fileFormat,
-                                                    width,
-                                                    height);
-
-                                            mapProducts.add(currentProduct);
-
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            } catch (Exception ex) {
-                log.error("Error while parsing Alkis Product Description!", ex);
-            }
+            PRODUCTS = new Products(USER, PASSWORD, SERVICE);
         } catch (Exception ex) {
-            log.error("AlkisCommons Error!", ex);
+//            log.error("AlkisCommons Error!", ex);
+            throw new RuntimeException(ex);
         }
     }
-    public static String USER;
-    public static String PASSWORD;
-    public static String SERVICE;
-    public static String SERVER;
-    public static String CATALOG_SERVICE;
-    public static String INFO_SERVICE;
-    public static String SEARCH_SERVICE;
-    public static String SRS;
-    public static String MAP_CALL_STRING;
-    public static double GEO_BUFFER;
-    public static String EINZEL_NACHWEIS_SERVICE;
-    public static String LISTEN_NACHWEIS_SERVICE;
-    public static String LIEGENSCHAFTSKARTE_SERVICE;
+    public static final AlkisUtil COMMONS = new AlkisUtil();
+    public final Products PRODUCTS;
+    public final String USER;
+    public final String PASSWORD;
+    public final String SERVICE;
+    public final String SERVER;
+    public final String CATALOG_SERVICE;
+    public final String INFO_SERVICE;
+    public final String SEARCH_SERVICE;
+    public final String SRS;
+    public final String MAP_CALL_STRING;
+    public final double GEO_BUFFER;
+    public final String EINZEL_NACHWEIS_SERVICE;
+    public final String LISTEN_NACHWEIS_SERVICE;
+    public final String LIEGENSCHAFTSKARTE_SERVICE;
     //
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisCommons.class);
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisUtil.class);
     private static final String NEWLINE = "<br>";
     public static final String LINK_SEPARATOR_TOKEN = "::";
 
@@ -597,21 +510,21 @@ public final class AlkisCommons {
 
         //~ Static fields/initializers -----------------------------------------
         //Flurstueck
-        public static String FLURSTUECKSNACHWEIS_PDF;
-        public static String FLURSTUECKSNACHWEIS_HTML;
-        public static String FLURSTUECKS_UND_EIGENTUMSNACHWEIS_PDF;
-        public static String FLURSTUECKS_UND_EIGENTUMSNACHWEIS_HTML;
+        public final String FLURSTUECKSNACHWEIS_PDF;
+        public final String FLURSTUECKSNACHWEIS_HTML;
+        public final String FLURSTUECKS_UND_EIGENTUMSNACHWEIS_PDF;
+        public final String FLURSTUECKS_UND_EIGENTUMSNACHWEIS_HTML;
         //Buchungsblatt
-        public static String BESTANDSNACHWEIS_PDF;
-        public static String BESTANDSNACHWEIS_HTML;
+        public final String BESTANDSNACHWEIS_PDF;
+        public final String BESTANDSNACHWEIS_HTML;
         //Punkt
-        public static String PUNKTLISTE_PDF;
-        public static String PUNKTLISTE_HTML;
-        public static String PUNKTLISTE_TXT;
+        public final String PUNKTLISTE_PDF;
+        public final String PUNKTLISTE_HTML;
+        public final String PUNKTLISTE_TXT;
         //
-        public static Map<String, Point> ALKIS_FORMATS;
-        public static List<AlkisProduct> ALKIS_MAP_PRODUCTS;
-        private static String IDENTIFICATION;
+        public final Map<String, Point> ALKIS_FORMATS;
+        public final List<AlkisProductDescription> ALKIS_MAP_PRODUCTS;
+        private final String IDENTIFICATION;
         //
 
         //~ Constructors -------------------------------------------------------
@@ -620,8 +533,92 @@ public final class AlkisCommons {
          *
          * @throws  AssertionError  DOCUMENT ME!
          */
-        private Products() {
-            throw new AssertionError();
+        private Products(String user, String pw, String service) {
+            final PropertyReader productProperties = new PropertyReader(
+                    "/de/cismet/cids/custom/wunda_blau/res/alkis/alkis_products.properties");
+            final List<AlkisProductDescription> mapProducts = new ArrayList<AlkisProductDescription>();
+            final Map<String, Point> formatMap = new HashMap<String, Point>();
+            ALKIS_FORMATS = Collections.unmodifiableMap(formatMap);
+            ALKIS_MAP_PRODUCTS = Collections.unmodifiableList(mapProducts);
+            IDENTIFICATION = "user=" + user + "&password=" + pw + "&service=" + service;
+            FLURSTUECKSNACHWEIS_PDF = productProperties.getProperty("FLURSTUECKSNACHWEIS_PDF");
+            FLURSTUECKSNACHWEIS_HTML = productProperties.getProperty("FLURSTUECKSNACHWEIS_HTML");
+            FLURSTUECKS_UND_EIGENTUMSNACHWEIS_PDF = productProperties.getProperty("FLURSTUECKS_UND_EIGENTUMSNACHWEIS_PDF");
+            FLURSTUECKS_UND_EIGENTUMSNACHWEIS_HTML = productProperties.getProperty("FLURSTUECKS_UND_EIGENTUMSNACHWEIS_HTML");
+            //
+            BESTANDSNACHWEIS_PDF = productProperties.getProperty("BESTANDSNACHWEIS_PDF");
+            BESTANDSNACHWEIS_HTML = productProperties.getProperty("BESTANDSNACHWEIS_HTML");
+            //
+            PUNKTLISTE_PDF = productProperties.getProperty("PUNKTLISTE_PDF");
+            PUNKTLISTE_HTML = productProperties.getProperty("PUNKTLISTE_HTML");
+            PUNKTLISTE_TXT = productProperties.getProperty("PUNKTLISTE_TXT");
+            try {
+                final PropertyReader formats = new PropertyReader(
+                        "/de/cismet/cids/custom/wunda_blau/res/alkis/formats.properties");
+                final InputStream is = AlkisUtil.class.getClassLoader().getResourceAsStream(
+                        "de/cismet/cids/custom/wunda_blau/res/alkis/Produktbeschreibung_ALKIS.xml");
+                final Document document = new SAXBuilder().build(is);
+                // ---------Kartenprodukte----------
+                for (final Object o0 : document.getRootElement().getChildren()) {
+                    final Element category = (Element) o0;
+                    final String catName = category.getName();
+                    if ("Karte".equals(catName)) {
+                        for (final Object o1 : category.getChildren()) {
+                            final Element productClass = (Element) o1;
+                            if (productClass.getName().matches(".*[Kk]lasse.*")) {
+                                final String clazz = productClass.getAttribute("Name").getValue();
+                                for (final Object o2 : productClass.getChildren()) {
+                                    final Element guiProduct = (Element) o2;
+                                    final String type = guiProduct.getAttribute("ProduktnameAuswertung").getValue();
+                                    for (final Object o3 : guiProduct.getChildren()) {
+                                        final Element singleProduct = (Element) o3;
+                                        final Attribute codeAttr = singleProduct.getAttribute("ID");
+                                        if (codeAttr != null) {
+                                            final String code = codeAttr.getValue();
+                                            final String dinFormatCode = singleProduct.getAttribute("Layout").getValue();
+                                            final String layoutDim = formats.getProperty(dinFormatCode);
+                                            int width = -1;
+                                            int height = -1;
+                                            if (layoutDim == null) {
+                                                org.apache.log4j.Logger.getLogger(AlkisUtil.class).info("Can not find format dimensions for: " + dinFormatCode);
+                                            } else {
+                                                final String[] dims = layoutDim.split("(x|X)");
+                                                width = Integer.parseInt(dims[0]);
+                                                height = Integer.parseInt(dims[1]);
+                                                formatMap.put(dinFormatCode, new Point(width, height));
+                                            }
+                                            final Element preisFaktoren = (Element) singleProduct.getChildren().get(0);
+                                            final String dinFormat = preisFaktoren.getAttribute("DINFormat").getValue();
+                                            final String fileFormat = preisFaktoren.getAttribute("Dateiformat").getValue();
+                                            final Attribute massstabAttr = preisFaktoren.getAttribute("Massstab");
+                                            String massstab;
+                                            if (massstabAttr != null) {
+                                                massstab = preisFaktoren.getAttribute("Massstab").getValue();
+                                            } else {
+                                                massstab = "-";
+                                            }
+                                            AlkisProductDescription currentProduct = new AlkisProductDescription(
+                                                    clazz,
+                                                    type,
+                                                    code,
+                                                    dinFormat,
+                                                    massstab,
+                                                    fileFormat,
+                                                    width,
+                                                    height);
+
+                                            mapProducts.add(currentProduct);
+
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                log.error("Error while parsing Alkis Product Description!", ex);
+            }
         }
 
         //~ Methods ------------------------------------------------------------
@@ -631,8 +628,8 @@ public final class AlkisCommons {
          * @param  objectID  DOCUMENT ME!
          * @param  format      DOCUMENT ME!
          */
-        public static void productEinzelNachweis(final String objectID, final String productCode) {
-            final String url = EINZEL_NACHWEIS_SERVICE + "?" + IDENTIFICATION + "&product=" + productCode
+        public void productEinzelNachweis(final String objectID, final String productCode) {
+            final String url = COMMONS.EINZEL_NACHWEIS_SERVICE + "?" + IDENTIFICATION + "&product=" + productCode
                     + "&id=" + objectID;
             log.info("Open product URL : " + url);
             ObjectRendererUtils.openURL(url);
@@ -646,7 +643,7 @@ public final class AlkisCommons {
          * @param  pointArt  DOCUMENT ME!
          * @param  format    DOCUMENT ME!
          */
-        public static void productListenNachweis(final String pointID, final String pointArt, final String productCode) {
+        public void productListenNachweis(final String pointID, final String pointArt, final String productCode) {
             productListenNachweis(pointArt + ":" + pointID, productCode);
         }
 
@@ -656,8 +653,8 @@ public final class AlkisCommons {
          * @param  punktliste  DOCUMENT ME!
          * @param  format      DOCUMENT ME!
          */
-        public static void productListenNachweis(final String punktliste, final String productCode) {
-            final String url = LISTEN_NACHWEIS_SERVICE + "?" + IDENTIFICATION + "&product=" + productCode
+        public void productListenNachweis(final String punktliste, final String productCode) {
+            final String url = COMMONS.LISTEN_NACHWEIS_SERVICE + "?" + IDENTIFICATION + "&product=" + productCode
                     + "&ids=" + punktliste;
             log.info("Open product URL : " + url);
             ObjectRendererUtils.openURL(url);
@@ -672,7 +669,7 @@ public final class AlkisCommons {
          * @param  pointArts  DOCUMENT ME!
          * @param  productCode     DOCUMENT ME!
          */
-        public static void productListenNachweis(final String[] objectIDs,
+        public void productListenNachweis(final String[] objectIDs,
                 final String[] pointArts,
                 final String productCode) {
             final StringBuilder punktListe = new StringBuilder();
@@ -690,8 +687,8 @@ public final class AlkisCommons {
          *
          * @param  parcelCode  DOCUMENT ME!
          */
-        public static void productKarte(final String parcelCode) {
-            final String url = LIEGENSCHAFTSKARTE_SERVICE + "?" + IDENTIFICATION + "&landparcel=" + parcelCode;
+        public void productKarte(final String parcelCode) {
+            final String url = COMMONS.LIEGENSCHAFTSKARTE_SERVICE + "?" + IDENTIFICATION + "&landparcel=" + parcelCode;
             log.info("Open product URL : " + url);
             ObjectRendererUtils.openURL(url);
         }
@@ -707,14 +704,14 @@ public final class AlkisCommons {
          * @param  zusText            DOCUMENT ME!
          * @param  moreThanOneParcel  DOCUMENT ME!
          */
-        public static void productKarte(final String parcelCode,
-                final AlkisProduct produkt,
+        public void productKarte(final String parcelCode,
+                final AlkisProductDescription produkt,
                 final int winkel,
                 final int centerX,
                 final int centerY,
                 final String zusText,
                 final boolean moreThanOneParcel) {
-            String url = LIEGENSCHAFTSKARTE_SERVICE + "?" + IDENTIFICATION + "&landparcel=" + parcelCode
+            String url = COMMONS.LIEGENSCHAFTSKARTE_SERVICE + "?" + IDENTIFICATION + "&landparcel=" + parcelCode
                     + "&angle=" + winkel
                     + "&product=" + produkt.getCode()
                     + "&centerx=" + centerX + "&centery=" + centerY;

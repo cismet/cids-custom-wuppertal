@@ -42,7 +42,7 @@ public final class SOAPAccessProvider {
      * Creates a new SOAPAccessProvider object.
      */
     public SOAPAccessProvider() {
-        this(AlkisCommons.USER, AlkisCommons.PASSWORD, AlkisCommons.SERVICE);
+        this(AlkisUtil.COMMONS.USER, AlkisUtil.COMMONS.PASSWORD, AlkisUtil.COMMONS.SERVICE);
     }
 
     /**
@@ -55,12 +55,12 @@ public final class SOAPAccessProvider {
         this(
             identityCard,
             service,
-            AlkisCommons.SERVER
-                    + AlkisCommons.CATALOG_SERVICE,
-            AlkisCommons.SERVER
-                    + AlkisCommons.INFO_SERVICE,
-            AlkisCommons.SERVER
-                    + AlkisCommons.SEARCH_SERVICE);
+            AlkisUtil.COMMONS.SERVER
+                    + AlkisUtil.COMMONS.CATALOG_SERVICE,
+            AlkisUtil.COMMONS.SERVER
+                    + AlkisUtil.COMMONS.INFO_SERVICE,
+            AlkisUtil.COMMONS.SERVER
+                    + AlkisUtil.COMMONS.SEARCH_SERVICE);
     }
 
     /**

@@ -66,7 +66,7 @@ import javax.swing.text.html.StyleSheet;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.StyleListCellRenderer;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisCommons;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtil;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisSOAPWorkerService;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.SOAPAccessProvider;
 
@@ -342,7 +342,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         map = new MappingComponent();
         panFlurstueckMap.add(map, BorderLayout.CENTER);
         initEditorPanes();
-        if (!AlkisCommons.validateUserHasAlkisProductAccess()) {
+        if (!AlkisUtil.validateUserHasAlkisProductAccess()) {
             // disable Product page if user does not have the right to see it.
             btnForward.setEnabled(false);
             lblForw.setEnabled(false);
@@ -1229,9 +1229,9 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
      */
     private void hlKarteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlKarteActionPerformed
         try {
-            final String parcelCode = AlkisCommons.getLandparcelCodeFromParcelBeanObject(cidsBean);
+            final String parcelCode = AlkisUtil.getLandparcelCodeFromParcelBeanObject(cidsBean);
             if (parcelCode.length() > 0) {
-                AlkisCommons.Products.productKarte(parcelCode);
+                AlkisUtil.COMMONS.PRODUCTS.productKarte(parcelCode);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser(
@@ -1249,9 +1249,9 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
      */
     private void hlFlurstuecksnachweisPdfActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlFlurstuecksnachweisPdfActionPerformed
         try {
-            final String parcelCode = AlkisCommons.getLandparcelCodeFromParcelBeanObject(cidsBean);
+            final String parcelCode = AlkisUtil.getLandparcelCodeFromParcelBeanObject(cidsBean);
             if (parcelCode.length() > 0) {
-                AlkisCommons.Products.productEinzelNachweis(parcelCode, AlkisCommons.Products.FLURSTUECKSNACHWEIS_PDF);
+                AlkisUtil.COMMONS.PRODUCTS.productEinzelNachweis(parcelCode, AlkisUtil.COMMONS.PRODUCTS.FLURSTUECKSNACHWEIS_PDF);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser(
@@ -1269,9 +1269,9 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
      */
     private void hlFlurstuecksEigentumsnachweisHtmlActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlFlurstuecksEigentumsnachweisHtmlActionPerformed
         try {
-            final String parcelCode = AlkisCommons.getLandparcelCodeFromParcelBeanObject(cidsBean);
+            final String parcelCode = AlkisUtil.getLandparcelCodeFromParcelBeanObject(cidsBean);
             if (parcelCode.length() > 0) {
-                AlkisCommons.Products.productEinzelNachweis(parcelCode, AlkisCommons.Products.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_HTML);
+                AlkisUtil.COMMONS.PRODUCTS.productEinzelNachweis(parcelCode, AlkisUtil.COMMONS.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_HTML);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser(
@@ -1289,9 +1289,9 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
      */
     private void hlFlurstuecksnachweisHtmlActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlFlurstuecksnachweisHtmlActionPerformed
         try {
-            final String parcelCode = AlkisCommons.getLandparcelCodeFromParcelBeanObject(cidsBean);
+            final String parcelCode = AlkisUtil.getLandparcelCodeFromParcelBeanObject(cidsBean);
             if (parcelCode.length() > 0) {
-                AlkisCommons.Products.productEinzelNachweis(parcelCode, AlkisCommons.Products.FLURSTUECKSNACHWEIS_HTML);
+                AlkisUtil.COMMONS.PRODUCTS.productEinzelNachweis(parcelCode, AlkisUtil.COMMONS.PRODUCTS.FLURSTUECKSNACHWEIS_HTML);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser(
@@ -1379,9 +1379,9 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
      */
     private void hlFlurstuecksEigentumsnachweisPdfActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlFlurstuecksEigentumsnachweisPdfActionPerformed
         try {
-            final String parcelCode = AlkisCommons.getLandparcelCodeFromParcelBeanObject(cidsBean);
+            final String parcelCode = AlkisUtil.getLandparcelCodeFromParcelBeanObject(cidsBean);
             if (parcelCode.length() > 0) {
-                AlkisCommons.Products.productEinzelNachweis(parcelCode, AlkisCommons.Products.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_PDF);
+                AlkisUtil.COMMONS.PRODUCTS.productEinzelNachweis(parcelCode, AlkisUtil.COMMONS.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_PDF);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser(
@@ -1443,7 +1443,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         if (buchungsblaetterCollectionObj instanceof List) {
             final List<CidsBean> blaetterList = (List<CidsBean>)buchungsblaetterCollectionObj;
             for (final CidsBean blatt : blaetterList) {
-                gotoBeanMap.put(blatt.getMetaObject().getMetaClass().getID() + AlkisCommons.LINK_SEPARATOR_TOKEN
+                gotoBeanMap.put(blatt.getMetaObject().getMetaClass().getID() + AlkisUtil.LINK_SEPARATOR_TOKEN
                             + blatt.getMetaObject().getID(),
                     blatt);
             }
@@ -1454,7 +1454,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         if (adressenCollectionObj instanceof List) {
             final List<CidsBean> adressenList = (List<CidsBean>)adressenCollectionObj;
             for (final CidsBean adresse : adressenList) {
-                gotoBeanMap.put(adresse.getMetaObject().getMetaClass().getID() + AlkisCommons.LINK_SEPARATOR_TOKEN
+                gotoBeanMap.put(adresse.getMetaObject().getMetaClass().getID() + AlkisUtil.LINK_SEPARATOR_TOKEN
                             + adresse.getMetaObject().getID(),
                     adresse);
             }
@@ -1516,7 +1516,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
             if (hausnummernToBeans.isEmpty()) {
                 for (final CidsBean bean : beansWithThisStreet) {
                     adressenContent.append("<tr><td>");
-                    adressenContent.append(AlkisCommons.generateLinkFromCidsBean(bean, strasse));
+                    adressenContent.append(AlkisUtil.generateLinkFromCidsBean(bean, strasse));
                     adressenContent.append("</td></tr>");
                 }
             } else {
@@ -1529,7 +1529,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                 for (final Entry<String, CidsBean> entry : hausnummernToBeans.entrySet()) {
                     final String nummer = entry.getKey();
                     final CidsBean numberBean = entry.getValue();
-                    adressenContent.append(AlkisCommons.generateLinkFromCidsBean(numberBean, nummer));
+                    adressenContent.append(AlkisUtil.generateLinkFromCidsBean(numberBean, nummer));
                     adressenContent.append(", ");
                 }
                 adressenContent.delete(adressenContent.length() - 2, adressenContent.length());
@@ -1558,7 +1558,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         final Object geoObj = cidsBean.getProperty("geometrie.geo_field");
         if (geoObj instanceof Geometry) {
             final Geometry pureGeom = (Geometry)geoObj;
-            final BoundingBox box = new BoundingBox(pureGeom.getEnvelope().buffer(AlkisCommons.GEO_BUFFER));
+            final BoundingBox box = new BoundingBox(pureGeom.getEnvelope().buffer(AlkisUtil.COMMONS.GEO_BUFFER));
 
             final Runnable mapRunnable = new Runnable() {
 
@@ -1570,10 +1570,10 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                                 box.getY1(),
                                 box.getX2(),
                                 box.getY2(),
-                                AlkisCommons.SRS,
+                                AlkisUtil.COMMONS.SRS,
                                 true));
-                        mappingModel.setSrs(AlkisCommons.SRS);
-                        final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisCommons.MAP_CALL_STRING));
+                        mappingModel.setSrs(AlkisUtil.COMMONS.SRS);
+                        final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisUtil.COMMONS.MAP_CALL_STRING));
                         swms.setName("Flurstueck");
                         final StyledFeature dsf = new DefaultStyledFeature();
                         dsf.setGeometry(pureGeom);
@@ -1624,7 +1624,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         if (title == null) {
             title = "<Error>";
         } else {
-            title = AlkisCommons.prettyPrintLandparcelCode(title);
+            title = AlkisUtil.prettyPrintLandparcelCode(title);
         }
         this.title = title;
         lblTitle.setText(this.title);
@@ -1676,7 +1676,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                             stelle.getFraction();
                         }
                     }
-                    currentInfoText.append(AlkisCommons.buchungsblattToString(buchungsblatt, buchungsblattBean));
+                    currentInfoText.append(AlkisUtil.buchungsblattToString(buchungsblatt, buchungsblattBean));
                     if (isCancelled()) {
                         return currentInfoText.toString();
                     }

@@ -28,7 +28,7 @@ import java.beans.PropertyChangeListener;
 import java.util.Collection;
 import java.util.List;
 
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProduct;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDescription;
 
 import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.features.DefaultFeatureCollection;
@@ -118,7 +118,7 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
      * @param  geom                 DOCUMENT ME!
      * @param  findOptimalRotation  DOCUMENT ME!
      */
-    public void init(final AlkisProduct product, final Geometry geom, final boolean findOptimalRotation) {
+    public void init(final AlkisProductDescription product, final Geometry geom, final boolean findOptimalRotation) {
         final String currentInteractionMode = mappingComponent.getInteractionMode();
         final double massstab = Double.parseDouble(product.getMassstab());
         final double realWorldWidth = FormatToRealWordCalculator.toRealWorldValue(product.getWidth(), massstab);

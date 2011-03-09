@@ -77,7 +77,7 @@ import javax.swing.text.html.StyleSheet;
 
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisCommons;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtil;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisSOAPWorkerService;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.SOAPAccessProvider;
 
@@ -261,7 +261,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
                 lstLandparcels);
         landparcelListBinding.setSourceNullValue(null);
         landparcelListBinding.setSourceUnreadableValue(null);
-        if (!AlkisCommons.validateUserHasAlkisProductAccess()) {
+        if (!AlkisUtil.validateUserHasAlkisProductAccess()) {
             // disable Product page if user does not have the right to see it.
             btnForward.setEnabled(false);
             lblForw.setEnabled(false);
@@ -938,8 +938,8 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         try {
             String buchungsblattCode = getCompleteBuchungsblattCode();
             if (buchungsblattCode.length() > 0) {
-                buchungsblattCode = AlkisCommons.escapeHtmlSpaces(buchungsblattCode);
-                AlkisCommons.Products.productEinzelNachweis(buchungsblattCode, AlkisCommons.Products.BESTANDSNACHWEIS_HTML);
+                buchungsblattCode = AlkisUtil.escapeHtmlSpaces(buchungsblattCode);
+                AlkisUtil.COMMONS.PRODUCTS.productEinzelNachweis(buchungsblattCode, AlkisUtil.COMMONS.PRODUCTS.BESTANDSNACHWEIS_HTML);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser(
@@ -959,8 +959,8 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         try {
             String buchungsblattCode = getCompleteBuchungsblattCode();
             if (buchungsblattCode.length() > 0) {
-                buchungsblattCode = AlkisCommons.escapeHtmlSpaces(buchungsblattCode);
-                AlkisCommons.Products.productEinzelNachweis(buchungsblattCode, AlkisCommons.Products.BESTANDSNACHWEIS_PDF);
+                buchungsblattCode = AlkisUtil.escapeHtmlSpaces(buchungsblattCode);
+                AlkisUtil.COMMONS.PRODUCTS.productEinzelNachweis(buchungsblattCode, AlkisUtil.COMMONS.PRODUCTS.BESTANDSNACHWEIS_PDF);
             }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser(
@@ -1184,7 +1184,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         if (landParcelList.size() > 0) {
             try {
                 final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                mappingModel.setSrs(AlkisCommons.SRS);
+                mappingModel.setSrs(AlkisUtil.COMMONS.SRS);
                 // TODO: do we need an swsw for every class?
                 final BoundingBox box = boundingBoxFromLandparcelList(landParcelList);
                 mappingModel.addHome(new XBoundingBox(
@@ -1192,9 +1192,9 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
                         box.getY1(),
                         box.getX2(),
                         box.getY2(),
-                        AlkisCommons.SRS,
+                        AlkisUtil.COMMONS.SRS,
                         true));
-                final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisCommons.MAP_CALL_STRING));
+                final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisUtil.COMMONS.MAP_CALL_STRING));
                 swms.setName("Buchungsblatt");
                 mappingModel.addLayer(swms);
                 map.setMappingModel(mappingModel);
@@ -1295,12 +1295,12 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
 //            buchungsblatt.getBuchungsstellen()[0].getLandParcel()[0].getAdministrativeDistricts().get;
             if (offices != null) {
                 lblAmtgericht.setText(surroundWithHTMLTags(
-                        AlkisCommons.arrayToSeparatedString(offices.getDistrictCourtName(), "<br>")));
+                        AlkisUtil.arrayToSeparatedString(offices.getDistrictCourtName(), "<br>")));
                 lblKatasteramt.setText(surroundWithHTMLTags(
-                        AlkisCommons.arrayToSeparatedString(offices.getLandRegistryOfficeName(), "<br>")));
+                        AlkisUtil.arrayToSeparatedString(offices.getLandRegistryOfficeName(), "<br>")));
             }
             lblBlattart.setText(buchungsblatt.getBlattart());
-            lblBuchungsart.setText(AlkisCommons.getBuchungsartFromBuchungsblatt(buchungsblatt));
+            lblBuchungsart.setText(AlkisUtil.getBuchungsartFromBuchungsblatt(buchungsblatt));
         }
     }
 
@@ -1478,7 +1478,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
 //                    final StringBuilder ownerBuilder = new StringBuilder("<html>");
                         final StringBuilder ownerBuilder = new StringBuilder("<html>");
                         for (final Owner owner : owners) {
-                            ownerBuilder.append(AlkisCommons.ownerToString(owner, ""));
+                            ownerBuilder.append(AlkisUtil.ownerToString(owner, ""));
                         }
                         ownerBuilder.append("</html>");
                         epOwner.setText(ownerBuilder.toString());

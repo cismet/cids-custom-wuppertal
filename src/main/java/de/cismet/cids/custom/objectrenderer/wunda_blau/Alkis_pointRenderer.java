@@ -54,7 +54,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisCommons;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtil;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisSOAPWorkerService;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.SOAPAccessProvider;
 
@@ -404,7 +404,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         retrieveableLabels.add(lblTxtLand);
         retrieveableLabels.add(lblTxtDienststelle);
         retrieveableLabels.add(lblTxtAnlass);
-        if (!AlkisCommons.validateUserHasAlkisProductAccess()) {
+        if (!AlkisUtil.validateUserHasAlkisProductAccess()) {
             // disable Product page if user does not have the right to see it.
             btnForward.setEnabled(false);
             lblForw.setEnabled(false);
@@ -1584,7 +1584,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         try {
             final String pointID = lblTxtIdentifikator.getText();
             final String pointArt = lblTxtPunktart.getText();
-            AlkisCommons.Products.productListenNachweis(pointID, pointArt, AlkisCommons.Products.PUNKTLISTE_PDF);
+            AlkisUtil.COMMONS.PRODUCTS.productListenNachweis(pointID, pointArt, AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_PDF);
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser(
                 "Fehler beim Aufruf des Produkts",
@@ -1603,7 +1603,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         try {
             final String pointID = lblTxtIdentifikator.getText();
             final String pointArt = lblTxtPunktart.getText();
-            AlkisCommons.Products.productListenNachweis(pointID, pointArt, AlkisCommons.Products.PUNKTLISTE_HTML);
+            AlkisUtil.COMMONS.PRODUCTS.productListenNachweis(pointID, pointArt, AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_HTML);
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser(
                 "Fehler beim Aufruf des Produkts",
@@ -1639,7 +1639,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         try {
             final String pointID = lblTxtIdentifikator.getText();
             final String pointArt = lblTxtPunktart.getText();
-            AlkisCommons.Products.productListenNachweis(pointID, pointArt, AlkisCommons.Products.PUNKTLISTE_TXT);
+            AlkisUtil.COMMONS.PRODUCTS.productListenNachweis(pointID, pointArt, AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_TXT);
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser(
                 "Fehler beim Aufruf des Produkts",

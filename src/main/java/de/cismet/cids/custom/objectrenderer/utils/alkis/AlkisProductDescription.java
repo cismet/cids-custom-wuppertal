@@ -17,7 +17,7 @@ package de.cismet.cids.custom.objectrenderer.utils.alkis;
  * @author   stefan
  * @version  $Revision$, $Date$
  */
-public class AlkisProduct {
+public class AlkisProductDescription {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -44,7 +44,7 @@ public class AlkisProduct {
      * @param  width       DOCUMENT ME!
      * @param  height      DOCUMENT ME!
      */
-    public AlkisProduct(final String clazz,
+    public AlkisProductDescription(final String clazz,
             final String type,
             final String code,
             final String dinFormat,
@@ -144,7 +144,7 @@ public class AlkisProduct {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final AlkisProduct other = (AlkisProduct)obj;
+        final AlkisProductDescription other = (AlkisProductDescription)obj;
         if ((this.code == null) ? (other.code != null) : (!this.code.equals(other.code))) {
             return false;
         }

@@ -49,7 +49,7 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisCommons;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtil;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -249,15 +249,15 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
         final String format = cbProducts.getSelectedItem().toString();
         final String code;
         if (PDF.equals(format)) {
-            code = AlkisCommons.Products.PUNKTLISTE_PDF;
+            code = AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_PDF;
         } else if (HTML.equals(format)) {
-            code = AlkisCommons.Products.PUNKTLISTE_HTML;
+            code = AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_HTML;
         } else {
-            code = AlkisCommons.Products.PUNKTLISTE_TXT;
+            code = AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_TXT;
         }
         final String punktListenString = getPunktlistenStringForChosenPoints();
         if (punktListenString.length() > 3) {
-            AlkisCommons.Products.productListenNachweis(punktListenString, code);
+            AlkisUtil.COMMONS.PRODUCTS.productListenNachweis(punktListenString, code);
         }
     }//GEN-LAST:event_btnCreateActionPerformed
 
@@ -386,16 +386,16 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
     private void initMap() {
         try {
             final ActiveLayerModel mappingModel = new ActiveLayerModel();
-            mappingModel.setSrs(AlkisCommons.SRS);
+            mappingModel.setSrs(AlkisUtil.COMMONS.SRS);
             final BoundingBox box = boundingBoxFromPointList(cidsBeans);
             mappingModel.addHome(new XBoundingBox(
                     box.getX1(),
                     box.getY1(),
                     box.getX2(),
                     box.getY2(),
-                    AlkisCommons.SRS,
+                    AlkisUtil.COMMONS.SRS,
                     true));
-            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisCommons.MAP_CALL_STRING));
+            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisUtil.COMMONS.MAP_CALL_STRING));
             swms.setName("Alkis_Points");
             mappingModel.addLayer(swms);
             mappingComponent.setMappingModel(mappingModel);
