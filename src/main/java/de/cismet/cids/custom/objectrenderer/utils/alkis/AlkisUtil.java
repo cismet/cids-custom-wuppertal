@@ -51,9 +51,6 @@ public final class AlkisUtil {
 
     private AlkisUtil() {
         try {
-            if (System.currentTimeMillis() > 1) {
-                throw new Exception("lala");
-            }
             final PropertyReader serviceProperties = new PropertyReader(
                     "/de/cismet/cids/custom/wunda_blau/res/alkis/alkis_conf.properties");
 
