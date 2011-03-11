@@ -1184,7 +1184,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         if (landParcelList.size() > 0) {
             try {
                 final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                mappingModel.setSrs(AlkisUtil.COMMONS.SRS);
+                mappingModel.setSrs(AlkisUtil.COMMONS.SRS_GEOM);
                 // TODO: do we need an swsw for every class?
                 final BoundingBox box = boundingBoxFromLandparcelList(landParcelList);
                 mappingModel.addHome(new XBoundingBox(
@@ -1192,7 +1192,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
                         box.getY1(),
                         box.getX2(),
                         box.getY2(),
-                        AlkisUtil.COMMONS.SRS,
+                        AlkisUtil.COMMONS.SRS_GEOM,
                         true));
                 final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisUtil.COMMONS.MAP_CALL_STRING));
                 swms.setName("Buchungsblatt");

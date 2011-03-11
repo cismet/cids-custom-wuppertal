@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.cids.custom.objectrenderer.utils.alkis.print;
 
 import com.vividsolutions.jts.algorithm.MinimumDiameter;
@@ -14,6 +14,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.LinearRing;
 import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.geom.PrecisionModel;
 import com.vividsolutions.jts.geom.util.AffineTransformation;
 
 import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
@@ -29,8 +30,11 @@ import java.util.Collection;
 import java.util.List;
 
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDescription;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtil;
 
 import de.cismet.cismap.commons.BoundingBox;
+import de.cismet.cismap.commons.CrsTransformer;
+import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.features.DefaultFeatureCollection;
 import de.cismet.cismap.commons.features.DefaultStyledFeature;
 import de.cismet.cismap.commons.features.Feature;
@@ -53,17 +57,14 @@ import de.cismet.tools.collections.TypeSafeCollections;
 public class AlkisPrintListener extends PBasicInputEventHandler {
 
     //~ Static fields/initializers ---------------------------------------------
-
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisPrintListener.class);
     //
-    private static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory();
+    private static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory(new PrecisionModel(PrecisionModel.FLOATING), CrsTransformer.extractSridFromCrs(AlkisUtil.COMMONS.SRS_SERVICE));
     private static final AlkisPrintingToolTip PRINTING_TOOLTIP = new AlkisPrintingToolTip();
     public static final String WIDTH = "WIDTH";
     public static final String HEIGHT = "HEIGHT";
     public static final Color BORDER_COLOR = new Color(0, 0, 255, 75);
-
     //~ Instance fields --------------------------------------------------------
-
     //
     private final PropertyChangeListener mapInteractionModeListener;
     private final MappingComponent mappingComponent;
@@ -78,7 +79,6 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
     private StyledFeature printTemplateStyledFeature;
 
     //~ Constructors -----------------------------------------------------------
-
     /**
      * Creates a new instance of PrintingFrameListener.
      *
@@ -98,19 +98,18 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
         // listener to remove the template feature and reset the old state if interaction mode is changed by user
         this.mapInteractionModeListener = new PropertyChangeListener() {
 
-                @Override
-                public void propertyChange(final PropertyChangeEvent evt) {
-                    if ((evt != null) && MappingComponent.PROPERTY_MAP_INTERACTION_MODE.equals(evt.getPropertyName())) {
-                        if (MappingComponent.ALKIS_PRINT.equals(evt.getOldValue())) {
-                            cleanUpAndRestoreFeatures();
-                        }
+            @Override
+            public void propertyChange(final PropertyChangeEvent evt) {
+                if ((evt != null) && MappingComponent.PROPERTY_MAP_INTERACTION_MODE.equals(evt.getPropertyName())) {
+                    if (MappingComponent.ALKIS_PRINT.equals(evt.getOldValue())) {
+                        cleanUpAndRestoreFeatures();
                     }
                 }
-            };
+            }
+        };
     }
 
     //~ Methods ----------------------------------------------------------------
-
     /**
      * DOCUMENT ME!
      *
@@ -119,6 +118,8 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
      * @param  findOptimalRotation  DOCUMENT ME!
      */
     public void init(final AlkisProductDescription product, final Geometry geom, final boolean findOptimalRotation) {
+        //translate from alkis db geom srid to alkis service srid
+        final Geometry serviceConformGeometry = CrsTransformer.transformToGivenCrs(geom, AlkisUtil.COMMONS.SRS_SERVICE);
         final String currentInteractionMode = mappingComponent.getInteractionMode();
         final double massstab = Double.parseDouble(product.getMassstab());
         final double realWorldWidth = FormatToRealWordCalculator.toRealWorldValue(product.getWidth(), massstab);
@@ -126,7 +127,7 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
         if ((massstab != 0) && !mappingComponent.isFixedMapScale()) {
             mappingComponent.queryServices();
         }
-        initMapTemplate(geom, findOptimalRotation, realWorldWidth, realWorldHeight);
+        initMapTemplate(serviceConformGeometry, findOptimalRotation, realWorldWidth, realWorldHeight);
         mappingComponent.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         mappingComponent.setPointerAnnotation(PRINTING_TOOLTIP);
         mappingComponent.setPointerAnnotationVisibility(true);
@@ -151,10 +152,10 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
             final boolean findOptimalRotation,
             final double realWorldWidth,
             final double realWorldHeight) {
-        final DefaultFeatureCollection mapFeatureCol = (DefaultFeatureCollection)
-            mappingComponent.getFeatureCollection();
+        
+        final DefaultFeatureCollection mapFeatureCol = (DefaultFeatureCollection) mappingComponent.getFeatureCollection();
         // find center point for template geometry
-        final Point centroid = geom.getEnvelope().getCentroid();
+        Point centroid = geom.getEnvelope().getCentroid();
         final double centerX = centroid.getX();
         final double centerY = centroid.getY();
         final double halfRealWorldWidth = realWorldWidth / 2d;
@@ -209,7 +210,7 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
             backupHoldFeature.addAll(mapFeatureCol.getHoldFeatures());
         }
         diagonal = Math.sqrt((polygonBB.getWidth() * polygonBB.getWidth())
-                        + (polygonBB.getHeight() * polygonBB.getHeight()));
+                + (polygonBB.getHeight() * polygonBB.getHeight()));
         mapFeatureCol.clear();
         // TODO: bug, buggy bug: selection is no more done if we call hold() :-/
         mapFeatureCol.holdFeature(printTemplateStyledFeature);
@@ -217,16 +218,16 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
         final PFeature printPFeature = mappingComponent.getPFeatureHM().get(printTemplateStyledFeature);
         printPFeature.addPropertyChangeListener(new PropertyChangeListener() {
 
-                @Override
-                public void propertyChange(final PropertyChangeEvent evt) {
-                    if ("parent".equals(evt.getPropertyName()) && (evt.getNewValue() != null)) {
-                        gotoPrintAreaWithBuffer();
+            @Override
+            public void propertyChange(final PropertyChangeEvent evt) {
+                if ("parent".equals(evt.getPropertyName()) && (evt.getNewValue() != null)) {
+                    gotoPrintAreaWithBuffer();
 //                        mappingComponent.zoomToAFeatureCollection(printFeatureCollection, false, false);
-                    } else if ("visible".equals(evt.getPropertyName()) && (evt.getNewValue() == null)) {
-                        cleanUpAndRestoreFeatures();
-                    }
+                } else if ("visible".equals(evt.getPropertyName()) && (evt.getNewValue() == null)) {
+                    cleanUpAndRestoreFeatures();
                 }
-            });
+            }
+        });
 //        mappingComponent.zoomToFeatureCollection();
         gotoPrintAreaWithBuffer();
         mapFeatureCol.select(printTemplateStyledFeature);
@@ -239,15 +240,15 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
     private void gotoPrintAreaWithBuffer() {
         final Point center = printTemplateStyledFeature.getGeometry().getCentroid();
         final double halfDiagonal = diagonal / 2d;
-        final BoundingBox gotoBB = new BoundingBox(
+        final XBoundingBox gotoBB = new XBoundingBox(
                 center.getX()
-                        - halfDiagonal,
+                - halfDiagonal,
                 center.getY()
-                        - halfDiagonal,
+                - halfDiagonal,
                 center.getX()
-                        + halfDiagonal,
+                + halfDiagonal,
                 center.getY()
-                        + halfDiagonal);
+                + halfDiagonal, AlkisUtil.COMMONS.SRS_SERVICE, true);
         mappingComponent.gotoBoundingBoxWithHistory(gotoBB);
     }
 
@@ -264,12 +265,11 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
      * @param  e  DOCUMENT ME!
      */
     private void ensureSelection(final PInputEvent e) {
-        final Object o = PFeatureTools.getFirstValidObjectUnderPointer(e, new Class[] { PFeature.class });
+        final Object o = PFeatureTools.getFirstValidObjectUnderPointer(e, new Class[]{PFeature.class});
         if (o instanceof PFeature) {
-            final PFeature pFeature = (PFeature)o;
+            final PFeature pFeature = (PFeature) o;
             final Feature feature = pFeature.getFeature();
-            final DefaultFeatureCollection mapFeatureCol = (DefaultFeatureCollection)
-                mappingComponent.getFeatureCollection();
+            final DefaultFeatureCollection mapFeatureCol = (DefaultFeatureCollection) mappingComponent.getFeatureCollection();
             if (!mapFeatureCol.isSelected(feature)) {
                 mapFeatureCol.select(feature);
             }
@@ -368,7 +368,6 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
     }
 
     //~ Inner Classes ----------------------------------------------------------
-
     /**
      * DOCUMENT ME!
      *
@@ -377,7 +376,6 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
     private static final class PrintFeature extends DefaultStyledFeature {
 
         //~ Methods ------------------------------------------------------------
-
         @Override
         public String toString() {
             return "Druckbereich";

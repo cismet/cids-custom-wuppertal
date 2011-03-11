@@ -386,14 +386,14 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
     private void initMap() {
         try {
             final ActiveLayerModel mappingModel = new ActiveLayerModel();
-            mappingModel.setSrs(AlkisUtil.COMMONS.SRS);
+            mappingModel.setSrs(AlkisUtil.COMMONS.SRS_GEOM);
             final BoundingBox box = boundingBoxFromPointList(cidsBeans);
             mappingModel.addHome(new XBoundingBox(
                     box.getX1(),
                     box.getY1(),
                     box.getX2(),
                     box.getY2(),
-                    AlkisUtil.COMMONS.SRS,
+                    AlkisUtil.COMMONS.SRS_GEOM,
                     true));
             final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisUtil.COMMONS.MAP_CALL_STRING));
             swms.setName("Alkis_Points");

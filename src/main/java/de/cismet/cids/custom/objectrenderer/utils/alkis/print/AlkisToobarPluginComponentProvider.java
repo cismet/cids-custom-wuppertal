@@ -40,7 +40,8 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.tools.collections.TypeSafeCollections;
 
 /**
- * DOCUMENT ME!
+ * ToolbarComponentsProvider that delivers a Button for Alkis Print to integrate
+ * into the Navigator Toolbar.
  *
  * @author   srichter
  * @version  $Revision$, $Date$

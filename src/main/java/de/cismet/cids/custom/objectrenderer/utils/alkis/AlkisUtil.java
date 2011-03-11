@@ -67,8 +67,9 @@ public final class AlkisUtil {
             LISTEN_NACHWEIS_SERVICE = SERVER + serviceProperties.getProperty("LISTEN_NACHWEIS_SERVICE");
             LIEGENSCHAFTSKARTE_SERVICE = SERVER + serviceProperties.getProperty("LIEGENSCHAFTSKARTE_SERVICE");
             //            
-            SRS = serviceProperties.getProperty("SRS");
-            MAP_CALL_STRING = serviceProperties.getProperty("MAP_CALL_STRING") + SRS;
+            SRS_GEOM = serviceProperties.getProperty("SRS_GEOM");
+            SRS_SERVICE = serviceProperties.getProperty("SRS_SERVICE");
+            MAP_CALL_STRING = serviceProperties.getProperty("MAP_CALL_STRING") + SRS_GEOM;
             GEO_BUFFER = Double.parseDouble(serviceProperties.getProperty("GEO_BUFFER"));
             //
             PRODUCTS = new Products(USER, PASSWORD, SERVICE);
@@ -86,7 +87,8 @@ public final class AlkisUtil {
     public final String CATALOG_SERVICE;
     public final String INFO_SERVICE;
     public final String SEARCH_SERVICE;
-    public final String SRS;
+    public final String SRS_GEOM;
+    public final String SRS_SERVICE;
     public final String MAP_CALL_STRING;
     public final double GEO_BUFFER;
     public final String EINZEL_NACHWEIS_SERVICE;
