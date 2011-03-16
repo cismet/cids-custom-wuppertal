@@ -210,7 +210,6 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
     private javax.swing.JLabel lblDescGroesse;
     private javax.swing.JLabel lblDescLage;
     private javax.swing.JLabel lblDescLandparcelCode;
-    private javax.swing.JLabel lblDescTatsNutzung;
     private javax.swing.JLabel lblEnthalteneFlurstuecke;
     private javax.swing.JLabel lblForw;
     private javax.swing.JLabel lblGemarkung;
@@ -220,7 +219,6 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
     private javax.swing.JLabel lblLandparcelCode;
     private javax.swing.JLabel lblPreviewHead;
     private javax.swing.JLabel lblProductPreview;
-    private javax.swing.JLabel lblTatsNutzung;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JList lstBuchungsblaetter;
     private javax.swing.JList lstBuchungsblattFlurstuecke;
@@ -559,8 +557,6 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         lblDescLage = new javax.swing.JLabel();
         lblGroesse = new javax.swing.JLabel();
         lblDescGroesse = new javax.swing.JLabel();
-        lblDescTatsNutzung = new javax.swing.JLabel();
-        lblTatsNutzung = new javax.swing.JLabel();
         scpLage = new javax.swing.JScrollPane();
         epLage = new javax.swing.JEditorPane();
         semiRoundedPanel2 = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -622,16 +618,13 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         lblBack.setText("Info");
         lblBack.setEnabled(false);
         lblBack.addMouseListener(new java.awt.event.MouseAdapter() {
-
-                @Override
-                public void mouseClicked(final java.awt.event.MouseEvent evt) {
-                    lblBackMouseClicked(evt);
-                }
-            });
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblBackMouseClicked(evt);
+            }
+        });
         panFooterLeft.add(lblBack);
 
-        btnBack.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left.png")));         // NOI18N
+        btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left.png"))); // NOI18N
         btnBack.setBorder(null);
         btnBack.setBorderPainted(false);
         btnBack.setContentAreaFilled(false);
@@ -640,17 +633,13 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         btnBack.setMaximumSize(new java.awt.Dimension(30, 30));
         btnBack.setMinimumSize(new java.awt.Dimension(30, 30));
         btnBack.setPreferredSize(new java.awt.Dimension(30, 30));
-        btnBack.setPressedIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-pressed.png"))); // NOI18N
-        btnBack.setRolloverIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-sel.png")));     // NOI18N
+        btnBack.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-pressed.png"))); // NOI18N
+        btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-sel.png"))); // NOI18N
         btnBack.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnBackActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
         panFooterLeft.add(btnBack);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -661,8 +650,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         panFooterRight.setOpaque(false);
         panFooterRight.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 5));
 
-        btnForward.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-right.png"))); // NOI18N
+        btnForward.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-right.png"))); // NOI18N
         btnForward.setBorder(null);
         btnForward.setBorderPainted(false);
         btnForward.setContentAreaFilled(false);
@@ -671,24 +659,20 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         btnForward.setMinimumSize(new java.awt.Dimension(30, 30));
         btnForward.setPreferredSize(new java.awt.Dimension(30, 30));
         btnForward.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnForwardActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnForwardActionPerformed(evt);
+            }
+        });
         panFooterRight.add(btnForward);
 
         lblForw.setFont(new java.awt.Font("Tahoma", 1, 14));
         lblForw.setForeground(new java.awt.Color(255, 255, 255));
         lblForw.setText("Produkte");
         lblForw.addMouseListener(new java.awt.event.MouseAdapter() {
-
-                @Override
-                public void mouseClicked(final java.awt.event.MouseEvent evt) {
-                    lblForwMouseClicked(evt);
-                }
-            });
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblForwMouseClicked(evt);
+            }
+        });
         panFooterRight.add(lblForw);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -711,30 +695,20 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
 
         lstBuchungsblaetter.setOpaque(false);
 
-        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
-                "${cidsBean.buchungsblaetter}");
-        org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings
-                    .createJListBinding(
-                        org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
-                        this,
-                        eLProperty,
-                        lstBuchungsblaetter);
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.buchungsblaetter}");
+        org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, eLProperty, lstBuchungsblaetter);
         bindingGroup.addBinding(jListBinding);
 
         lstBuchungsblaetter.addMouseListener(new java.awt.event.MouseAdapter() {
-
-                @Override
-                public void mouseClicked(final java.awt.event.MouseEvent evt) {
-                    lstBuchungsblaetterMouseClicked(evt);
-                }
-            });
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lstBuchungsblaetterMouseClicked(evt);
+            }
+        });
         lstBuchungsblaetter.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-
-                @Override
-                public void valueChanged(final javax.swing.event.ListSelectionEvent evt) {
-                    lstBuchungsblaetterValueChanged(evt);
-                }
-            });
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstBuchungsblaetterValueChanged(evt);
+            }
+        });
         scpBuchungsblaetter.setViewportView(lstBuchungsblaetter);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -753,11 +727,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         lstBuchungsblattFlurstuecke.setOpaque(false);
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${selectedElement.landparcels}");
-        jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
-                lstBuchungsblaetter,
-                eLProperty,
-                lstBuchungsblattFlurstuecke);
+        jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, lstBuchungsblaetter, eLProperty, lstBuchungsblattFlurstuecke);
         bindingGroup.addBinding(jListBinding);
 
         scpBuchungsblattFlurstuecke.setViewportView(lstBuchungsblattFlurstuecke);
@@ -854,12 +824,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
 
         panMainInfo.setLayout(new java.awt.GridBagLayout());
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis_id}"),
-                lblLandparcelCode,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis_id}"), lblLandparcelCode, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -906,12 +871,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panMainInfo.add(lblDescGemarkung, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gemarkung}"),
-                lblGemarkung,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gemarkung}"), lblGemarkung, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -932,12 +892,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panMainInfo.add(lblDescLage, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.groesse} m²"),
-                lblGroesse,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.groesse} m²"), lblGroesse, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -957,23 +912,6 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panMainInfo.add(lblDescGroesse, gridBagConstraints);
-
-        lblDescTatsNutzung.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblDescTatsNutzung.setText("Tatsächliche Nutzung:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 10, 5);
-        panMainInfo.add(lblDescTatsNutzung, gridBagConstraints);
-
-        lblTatsNutzung.setText("Attribut existiert noch nicht!");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 10);
-        panMainInfo.add(lblTatsNutzung, gridBagConstraints);
 
         scpLage.setBorder(null);
         scpLage.setMaximumSize(new java.awt.Dimension(250, 20));
@@ -1034,12 +972,10 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         hlKarte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
         hlKarte.setText("Karte");
         hlKarte.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    hlKarteActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hlKarteActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -1047,16 +983,13 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 10, 7);
         panPdfProducts.add(hlKarte, gridBagConstraints);
 
-        hlFlurstuecksEigentumsnachweisPdf.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
+        hlFlurstuecksEigentumsnachweisPdf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
         hlFlurstuecksEigentumsnachweisPdf.setText("Flurstücks- und Eigentumsnachweis");
         hlFlurstuecksEigentumsnachweisPdf.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    hlFlurstuecksEigentumsnachweisPdfActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hlFlurstuecksEigentumsnachweisPdfActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -1064,16 +997,13 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPdfProducts.add(hlFlurstuecksEigentumsnachweisPdf, gridBagConstraints);
 
-        hlFlurstuecksnachweisPdf.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
+        hlFlurstuecksnachweisPdf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
         hlFlurstuecksnachweisPdf.setText("Flurstücksnachweis");
         hlFlurstuecksnachweisPdf.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    hlFlurstuecksnachweisPdfActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hlFlurstuecksnachweisPdfActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1112,16 +1042,13 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         panHtmlProducts.setOpaque(false);
         panHtmlProducts.setLayout(new java.awt.GridBagLayout());
 
-        hlFlurstuecksEigentumsnachweisHtml.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/icons/text-html.png"))); // NOI18N
+        hlFlurstuecksEigentumsnachweisHtml.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/text-html.png"))); // NOI18N
         hlFlurstuecksEigentumsnachweisHtml.setText("Flurstücks- und Eigentumsnachweis");
         hlFlurstuecksEigentumsnachweisHtml.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    hlFlurstuecksEigentumsnachweisHtmlActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hlFlurstuecksEigentumsnachweisHtmlActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -1129,16 +1056,13 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 10, 7);
         panHtmlProducts.add(hlFlurstuecksEigentumsnachweisHtml, gridBagConstraints);
 
-        hlFlurstuecksnachweisHtml.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/icons/text-html.png"))); // NOI18N
+        hlFlurstuecksnachweisHtml.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/text-html.png"))); // NOI18N
         hlFlurstuecksnachweisHtml.setText("Flurstücksnachweis");
         hlFlurstuecksnachweisHtml.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    hlFlurstuecksnachweisHtmlActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hlFlurstuecksnachweisHtmlActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1212,7 +1136,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         add(panProducts, "CARD_2");
 
         bindingGroup.bind();
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!

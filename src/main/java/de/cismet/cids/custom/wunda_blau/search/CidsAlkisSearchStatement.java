@@ -31,7 +31,7 @@ import org.apache.commons.lang.StringEscapeUtils;
  */
 public class CidsAlkisSearchStatement extends CidsServerSearch {
 
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(CidsAlkisSearchStatement.class);
+//    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(CidsAlkisSearchStatement.class);
     //~ Instance fields --------------------------------------------------------
     private final String name;
     private final String vorname;

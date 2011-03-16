@@ -638,12 +638,12 @@ public final class AlkisUtil {
         /**
          * DOCUMENT ME!
          *
-         * @param  pointID   DOCUMENT ME!
-         * @param  pointArt  DOCUMENT ME!
+         * @param  objectID   DOCUMENT ME!
+         * @param  objectArt  DOCUMENT ME!
          * @param  format    DOCUMENT ME!
          */
-        public void productListenNachweis(final String pointID, final String pointArt, final String productCode) {
-            productListenNachweis(pointArt + ":" + pointID, productCode);
+        public void productListenNachweis(final String objectID, final String objectArt, final String productCode) {
+            productListenNachweis(objectArt + ":" + objectID, productCode);
         }
 
         /**
@@ -665,18 +665,18 @@ public final class AlkisUtil {
          * DOCUMENT ME!
          *
          * @param  objectIDs   DOCUMENT ME!
-         * @param  pointArts  DOCUMENT ME!
+         * @param  objectArts  DOCUMENT ME!
          * @param  productCode     DOCUMENT ME!
          */
         public void productListenNachweis(final String[] objectIDs,
-                final String[] pointArts,
+                final String[] objectArts,
                 final String productCode) {
             final StringBuilder punktListe = new StringBuilder();
             for (int i = 0; i < objectIDs.length; ++i) {
                 if (punktListe.length() > 0) {
                     punktListe.append(",");
                 }
-                punktListe.append(pointArts[i]).append(":").append(objectIDs[i]);
+                punktListe.append(objectArts[i]).append(":").append(objectIDs[i]);
             }
             productListenNachweis(punktListe.toString(), productCode);
         }

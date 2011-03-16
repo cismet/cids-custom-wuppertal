@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -77,12 +77,11 @@ import de.cismet.tools.gui.TitleComponentProvider;
  * @version  $Revision$, $Date$
  */
 public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanRenderer,
-    TitleComponentProvider,
-    FooterComponentProvider,
-    BorderProvider {
+        TitleComponentProvider,
+        FooterComponentProvider,
+        BorderProvider {
 
     //~ Static fields/initializers ---------------------------------------------
-
     private static final String ICON_RES_PACKAGE = "/de/cismet/cids/custom/wunda_blau/res/";
     private static final String ALKIS_RES_PACKAGE = ICON_RES_PACKAGE + "alkis/";
     private static final Pattern ERHEBUNG_FILTER_PATTERN = Pattern.compile(
@@ -98,164 +97,156 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alkis_pointRenderer.class);
     private static final Converter<String, String> ALKIS_BOOLEAN_CONVERTER = new Converter<String, String>() {
 
-            private static final String TRUE_REP = "Ja";
-            private static final String FALSE_REP = "Nein";
+        private static final String TRUE_REP = "Ja";
+        private static final String FALSE_REP = "Nein";
 
-            @Override
-            public String convertForward(final String s) {
-                if ((s != null) && s.equals("1")) {
-                    return TRUE_REP;
-                } else {
-                    return FALSE_REP;
-                }
+        @Override
+        public String convertForward(final String s) {
+            if ((s != null) && s.equals("1")) {
+                return TRUE_REP;
+            } else {
+                return FALSE_REP;
             }
+        }
 
-            @Override
-            public String convertReverse(final String t) {
-                if (TRUE_REP.equals(t)) {
-                    return "1";
-                } else {
-                    return "0";
-                }
+        @Override
+        public String convertReverse(final String t) {
+            if (TRUE_REP.equals(t)) {
+                return "1";
+            } else {
+                return "0";
             }
-        };
-
+        }
+    };
     private static final Converter<String, String> ALKIS_ERHEBUNG_CONVERTER = new Converter<String, String>() {
 
-            // anonymous constructor
-
-            {
-                this.datenerhebungWerte = new Properties();
-                try {
-                    this.datenerhebungWerte.load(getClass().getResource(ALKIS_RES_PACKAGE + ERHEBUNGS_PROPERTIES)
-                                .openStream());
-                } catch (Exception ex) {
-                    log.error(ex, ex);
-                }
+        // anonymous constructor
+        {
+            this.datenerhebungWerte = new Properties();
+            try {
+                this.datenerhebungWerte.load(getClass().getResource(ALKIS_RES_PACKAGE + ERHEBUNGS_PROPERTIES).openStream());
+            } catch (Exception ex) {
+                log.error(ex, ex);
             }
+        }
+        private final Properties datenerhebungWerte;
 
-            private final Properties datenerhebungWerte;
-
-            @Override
-            public String convertForward(final String s) {
-                if (s != null) {
-                    final Matcher matcher = ERHEBUNG_FILTER_PATTERN.matcher(s);
-                    if (matcher.find()) {
-                        // take the 4 digit code
-                        final String matcherResultG1 = matcher.group(1);
-                        if ((matcherResultG1 != null) && (matcherResultG1.length() > 3)) {
-                            final String searchKey = matcherResultG1.substring(0, 4);
-                            // lookup description for code
-                            final String descr = datenerhebungWerte.getProperty(searchKey);
-                            if (descr != null) {
-                                // return result + format with html (max. column length)
-                                return "<html><table width=\"300\" border=\"0\"><tr><td>(" + searchKey + ") " + descr
-                                            + "</tr></table></html>";
-                            } else {
-                                log.warn("No description found for Erhebung with key: " + searchKey);
-                            }
+        @Override
+        public String convertForward(final String s) {
+            if (s != null) {
+                final Matcher matcher = ERHEBUNG_FILTER_PATTERN.matcher(s);
+                if (matcher.find()) {
+                    // take the 4 digit code
+                    final String matcherResultG1 = matcher.group(1);
+                    if ((matcherResultG1 != null) && (matcherResultG1.length() > 3)) {
+                        final String searchKey = matcherResultG1.substring(0, 4);
+                        // lookup description for code
+                        final String descr = datenerhebungWerte.getProperty(searchKey);
+                        if (descr != null) {
+                            // return result + format with html (max. column length)
+                            return "<html><table width=\"300\" border=\"0\"><tr><td>(" + searchKey + ") " + descr
+                                    + "</tr></table></html>";
+                        } else {
+                            log.warn("No description found for Erhebung with key: " + searchKey);
                         }
                     }
-                    log.warn("Could not translate response: " + s);
                 }
-                return "keine Angabe";
+                log.warn("Could not translate response: " + s);
             }
+            return "keine Angabe";
+        }
 
-            @Override
-            public String convertReverse(final String t) {
-                throw new UnsupportedOperationException("Will not be supported!");
-            }
-        };
-
+        @Override
+        public String convertReverse(final String t) {
+            throw new UnsupportedOperationException("Will not be supported!");
+        }
+    };
     private static final Converter<CidsBean, String> ALKIS_VERMARKUNG_CONVERTER = new Converter<CidsBean, String>() {
 
-            @Override
-            public String convertForward(final CidsBean bean) {
-                Object markenObj = bean.getProperty("abmarkung");
-                if (markenObj == null) {
-                    markenObj = bean.getProperty("vermarkung");
-                }
-                return (markenObj == null) ? null : markenObj.toString();
+        @Override
+        public String convertForward(final CidsBean bean) {
+            Object markenObj = bean.getProperty("abmarkung");
+            if (markenObj == null) {
+                markenObj = bean.getProperty("vermarkung");
             }
+            return (markenObj == null) ? null : markenObj.toString();
+        }
 
-            @Override
-            public CidsBean convertReverse(final String vermarkungText) {
-                throw new UnsupportedOperationException("Will/Can not be supported!");
-            }
-        };
-
+        @Override
+        public CidsBean convertReverse(final String vermarkungText) {
+            throw new UnsupportedOperationException("Will/Can not be supported!");
+        }
+    };
     private static final Comparator<PointLocation> POINTLOCATION_COMPARATOR = new Comparator<PointLocation>() {
 
-            @Override
-            public int compare(final PointLocation p1, final PointLocation p2) {
-                final int result = compareKartendarstellung(p1, p2);
-                if (result != 0) {
-                    // descending order
-                    return -result;
-                } else {
-                    // descending order
-                    return -compareDate(p1, p2);
-                }
+        @Override
+        public int compare(final PointLocation p1, final PointLocation p2) {
+            final int result = compareKartendarstellung(p1, p2);
+            if (result != 0) {
+                // descending order
+                return -result;
+            } else {
+                // descending order
+                return -compareDate(p1, p2);
             }
+        }
 
-            private int compareKartendarstellung(final PointLocation p1, final PointLocation p2) {
-                final String kd1 = p1.getKartendarstellung();
-                final String kd2 = p2.getKartendarstellung();
-                if (kd1 != kd2) {
-                    if (kd1 != null) {
-                        if (kd2 != null) {
-                            return kd1.compareTo(kd2);
+        private int compareKartendarstellung(final PointLocation p1, final PointLocation p2) {
+            final String kd1 = p1.getKartendarstellung();
+            final String kd2 = p2.getKartendarstellung();
+            if (kd1 != kd2) {
+                if (kd1 != null) {
+                    if (kd2 != null) {
+                        return kd1.compareTo(kd2);
+                    } else {
+                        return 1;
+                    }
+                } else {
+                    return -1;
+                }
+            } else {
+                return 0;
+            }
+        }
+
+        private int compareDate(final PointLocation p1, final PointLocation p2) {
+            final String lz1 = p1.getLebenszeitIntervallBeginnt();
+            final String lz2 = p2.getLebenszeitIntervallBeginnt();
+            if (lz1 != lz2) {
+                if (lz1 != null) {
+                    if (lz2 != null) {
+                        if ((lz1.length() > 9) && (lz2.length() > 9)) {
+                            // 10 = length of YYYY-MM-DD
+                            return compareDateStrings(lz1.substring(0, 11), lz2.substring(0, 11));
                         } else {
-                            return 1;
+                            throw new IllegalStateException("Could not parse Dates: " + lz1 + " or " + lz2);
                         }
                     } else {
-                        return -1;
+                        return 1;
                     }
                 } else {
-                    return 0;
+                    return -1;
                 }
+            } else {
+                return 0;
             }
+        }
 
-            private int compareDate(final PointLocation p1, final PointLocation p2) {
-                final String lz1 = p1.getLebenszeitIntervallBeginnt();
-                final String lz2 = p2.getLebenszeitIntervallBeginnt();
-                if (lz1 != lz2) {
-                    if (lz1 != null) {
-                        if (lz2 != null) {
-                            if ((lz1.length() > 9) && (lz2.length() > 9)) {
-                                // 10 = length of YYYY-MM-DD
-                                return compareDateStrings(lz1.substring(0, 11), lz2.substring(0, 11));
-                            } else {
-                                throw new IllegalStateException("Could not parse Dates: " + lz1 + " or " + lz2);
-                            }
-                        } else {
-                            return 1;
-                        }
-                    } else {
-                        return -1;
-                    }
-                } else {
-                    return 0;
+        private int compareDateStrings(final String ds1, final String ds2) {
+            final String[] ymd1 = ds1.split("-");
+            final String[] ymd2 = ds2.split("-");
+            if ((ymd1.length == 3) && (ymd2.length == 3)) {
+                int result = 0;
+                for (int i = 0; (i < 3) && (result == 0); ++i) {
+                    result = ymd1[i].compareTo(ymd2[i]);
                 }
+                return result;
+            } else {
+                throw new IllegalStateException("Could not parse Dates: " + ds1 + " or " + ds2);
             }
-
-            private int compareDateStrings(final String ds1, final String ds2) {
-                final String[] ymd1 = ds1.split("-");
-                final String[] ymd2 = ds2.split("-");
-                if ((ymd1.length == 3) && (ymd2.length == 3)) {
-                    int result = 0;
-                    for (int i = 0; (i < 3) && (result == 0); ++i) {
-                        result = ymd1[i].compareTo(ymd2[i]);
-                    }
-                    return result;
-                } else {
-                    throw new IllegalStateException("Could not parse Dates: " + ds1 + " or " + ds2);
-                }
-            }
-        };
-
+        }
+    };
     //~ Instance fields --------------------------------------------------------
-
     private final Map<Object, ImageIcon> productPreviewImages;
     private final List<JLabel> retrieveableLabels;
     private SOAPAccessProvider soapProvider;
@@ -367,7 +358,6 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
-
     /**
      * Creates new form Alkis_pointRenderer.
      */
@@ -390,12 +380,12 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         cbPunktorte.setRenderer(new LocationComboBoxRenderer());
         final LayoutManager layoutManager = getLayout();
         if (layoutManager instanceof CardLayout) {
-            cardLayout = (CardLayout)layoutManager;
+            cardLayout = (CardLayout) layoutManager;
             cardLayout.show(this, CARD_1);
         } else {
             cardLayout = new CardLayout();
             log.error("Alkis_landparcelRenderer exspects CardLayout as major layout manager, but has " + getLayout()
-                        + "!");
+                    + "!");
         }
         retrieveableLabels.add(lblTxtBeginn);
         retrieveableLabels.add(lblTxtEnde);
@@ -412,7 +402,6 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
     }
 
     //~ Methods ----------------------------------------------------------------
-
     /**
      * DOCUMENT ME!
      */
@@ -450,15 +439,15 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
      */
     private void initFooterElements() {
         ObjectRendererUtils.decorateJLabelAndButtonSynced(
-            lblForw,
-            btnForward,
-            ObjectRendererUtils.FORWARD_SELECTED,
-            ObjectRendererUtils.FORWARD_PRESSED);
+                lblForw,
+                btnForward,
+                ObjectRendererUtils.FORWARD_SELECTED,
+                ObjectRendererUtils.FORWARD_PRESSED);
         ObjectRendererUtils.decorateJLabelAndButtonSynced(
-            lblBack,
-            btnBack,
-            ObjectRendererUtils.BACKWARD_SELECTED,
-            ObjectRendererUtils.BACKWARD_PRESSED);
+                lblBack,
+                btnBack,
+                ObjectRendererUtils.BACKWARD_SELECTED,
+                ObjectRendererUtils.BACKWARD_PRESSED);
 //        ObjectRendererUtils.decorateJLabelAndButtonSynced(lblForw, btnForward, FORWARD_SELECTED, FORWARD_PRESSED);
 //        ObjectRendererUtils.decorateJLabelAndButtonSynced(lblBack, btnBack, BACKWARD_SELECTED, BACKWARD_PRESSED);
     }
@@ -479,11 +468,11 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         try {
             // TODO: own picture!
             i1 = reflectionRenderer.appendReflection(ImageIO.read(
-                        getClass().getResource(ALKIS_RES_PACKAGE + "punktlistepdf.png")));
+                    getClass().getResource(ALKIS_RES_PACKAGE + "punktlistepdf.png")));
             i2 = reflectionRenderer.appendReflection(ImageIO.read(
-                        getClass().getResource(ALKIS_RES_PACKAGE + "punktlistehtml.png")));
+                    getClass().getResource(ALKIS_RES_PACKAGE + "punktlistehtml.png")));
             i3 = reflectionRenderer.appendReflection(ImageIO.read(
-                        getClass().getResource(ALKIS_RES_PACKAGE + "punktlistetxt.png")));
+                    getClass().getResource(ALKIS_RES_PACKAGE + "punktlistetxt.png")));
         } catch (Exception ex) {
             log.error(ex, ex);
         }
@@ -1575,23 +1564,27 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         btnForwardActionPerformed(null);
     }//GEN-LAST:event_lblForwMouseClicked
 
+    private void processProductLink(String productType) {
+        try {
+            final String pointID = lblTxtPunktkennung.getText();
+            final String pointArt = "AX_" + lblTxtPunktart.getText();
+            AlkisUtil.COMMONS.PRODUCTS.productListenNachweis(pointID, pointArt, productType);
+        } catch (Exception ex) {
+            ObjectRendererUtils.showExceptionWindowToUser(
+                    "Fehler beim Aufruf des Produkts",
+                    ex,
+                    Alkis_pointRenderer.this);
+            log.error(ex);
+        }
+    }
+
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
     private void hlPunktlistePdfActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlPunktlistePdfActionPerformed
-        try {
-            final String pointID = lblTxtIdentifikator.getText();
-            final String pointArt = lblTxtPunktart.getText();
-            AlkisUtil.COMMONS.PRODUCTS.productListenNachweis(pointID, pointArt, AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_PDF);
-        } catch (Exception ex) {
-            ObjectRendererUtils.showExceptionWindowToUser(
-                "Fehler beim Aufruf des Produkts",
-                ex,
-                Alkis_pointRenderer.this);
-            log.error(ex);
-        }
+        processProductLink(AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_PDF);
     }//GEN-LAST:event_hlPunktlistePdfActionPerformed
 
     /**
@@ -1600,17 +1593,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
      * @param  evt  DOCUMENT ME!
      */
     private void hlPunktlisteHtmlActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlPunktlisteHtmlActionPerformed
-        try {
-            final String pointID = lblTxtIdentifikator.getText();
-            final String pointArt = lblTxtPunktart.getText();
-            AlkisUtil.COMMONS.PRODUCTS.productListenNachweis(pointID, pointArt, AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_HTML);
-        } catch (Exception ex) {
-            ObjectRendererUtils.showExceptionWindowToUser(
-                "Fehler beim Aufruf des Produkts",
-                ex,
-                Alkis_pointRenderer.this);
-            log.error(ex);
-        }
+        processProductLink(AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_HTML);
     }//GEN-LAST:event_hlPunktlisteHtmlActionPerformed
 
     /**
@@ -1621,7 +1604,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
     private void cbPunktorteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPunktorteActionPerformed
         final Object selection = cbPunktorte.getSelectedItem();
         if (selection instanceof PointLocation) {
-            final PointLocation pointLoc = (PointLocation)selection;
+            final PointLocation pointLoc = (PointLocation) selection;
             if ((pointLoc.getKartendarstellung() != null) && pointLoc.getKartendarstellung().equals("1")) {
                 cbPunktorte.setBackground(PUNKTORT_MIT_KARTENDARSTELLUNG);
             } else {
@@ -1636,17 +1619,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
      * @param  evt  DOCUMENT ME!
      */
     private void hlPunktlisteTxtActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlPunktlisteTxtActionPerformed
-        try {
-            final String pointID = lblTxtIdentifikator.getText();
-            final String pointArt = lblTxtPunktart.getText();
-            AlkisUtil.COMMONS.PRODUCTS.productListenNachweis(pointID, pointArt, AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_TXT);
-        } catch (Exception ex) {
-            ObjectRendererUtils.showExceptionWindowToUser(
-                "Fehler beim Aufruf des Produkts",
-                ex,
-                Alkis_pointRenderer.this);
-            log.error(ex);
-        }
+        processProductLink(AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_TXT);
     }//GEN-LAST:event_hlPunktlisteTxtActionPerformed
 
     @Override
@@ -1746,7 +1719,6 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
     }
 
     //~ Inner Classes ----------------------------------------------------------
-
     /**
      * DOCUMENT ME!
      *
@@ -1755,11 +1727,9 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
     final class RetrieveWorker extends SwingWorker<Point, Void> {
 
         //~ Instance fields ----------------------------------------------------
-
         private final String pointCode;
 
         //~ Constructors -------------------------------------------------------
-
         /**
          * Creates a new RetrieveWorker object.
          *
@@ -1772,7 +1742,6 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         }
 
         //~ Methods ------------------------------------------------------------
-
         @Override
         protected Point doInBackground() throws Exception {
             return infoService.getPoint(soapProvider.getIdentityCard(), soapProvider.getService(), pointCode);
@@ -1818,7 +1787,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
                             null);
                     org.jdesktop.swingx.JXErrorPane.showDialog(StaticSwingTools.getParentFrame(
                             Alkis_pointRenderer.this),
-                        ei);
+                            ei);
                     log.error(ex, ex);
                 }
             }
@@ -1833,7 +1802,6 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
     static final class LocationComboBoxRenderer extends JLabel implements ListCellRenderer {
 
         //~ Constructors -------------------------------------------------------
-
         /**
          * Creates a new LocationComboBoxRenderer object.
          */
@@ -1842,7 +1810,6 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         }
 
         //~ Methods ------------------------------------------------------------
-
         @Override
         public Component getListCellRendererComponent(final JList list,
                 final Object value,
@@ -1859,7 +1826,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
             }
 
             if (value instanceof PointLocation) {
-                final PointLocation loc = (PointLocation)value;
+                final PointLocation loc = (PointLocation) value;
                 setText(loc.getKoordinatenReferenzSystem());
                 if ((loc.getKartendarstellung() != null) && loc.getKartendarstellung().equals("1")) {
                     if (!isSelected) {
@@ -1881,7 +1848,6 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
     class ProductLabelMouseAdaper extends MouseAdapter {
 
         //~ Methods ------------------------------------------------------------
-
         @Override
         public void mouseEntered(final MouseEvent e) {
             final Object srcObj = e.getSource();

@@ -54,6 +54,7 @@ import de.cismet.cismap.navigatorplugin.CidsFeature;
 import de.cismet.tools.collections.TypeSafeCollections;
 
 import de.cismet.tools.gui.StaticSwingTools;
+import org.openide.util.WeakListeners;
 
 /**
  * DOCUMENT ME!
@@ -123,7 +124,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         getRootPane().setDefaultButton(cmdOk);
         cbClazz.setModel(getProductClassModel());
         cbClazz.setSelectedIndex(cbClazz.getModel().getSize() - 1);
-        cbProduct.setSelectedIndex(cbProduct.getModel().getSize() -1);
+        cbProduct.setSelectedIndex(cbProduct.getModel().getSize() - 1);
         this.panDesc.setBackground(new Color(216, 228, 248));
         this.mappingComponent = mappingComponent;
         // enable D&D
@@ -635,7 +636,8 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
 
         pack();
     } // </editor-fold>//GEN-END:initComponents
-/**
+
+    /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
@@ -756,8 +758,8 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
             cbScales.setSelectedIndex(cbScales.getModel().getSize() - 1);
         } else {
             chkRotation.setSelected(false);
-            cbFormat.setSelectedIndex(cbFormat.getModel().getSize() -1);
-            cbScales.setSelectedIndex(cbScales.getModel().getSize() -1);
+            cbFormat.setSelectedIndex(cbFormat.getModel().getSize() - 1);
+            cbScales.setSelectedIndex(cbScales.getModel().getSize() - 1);
         }
     }
 
