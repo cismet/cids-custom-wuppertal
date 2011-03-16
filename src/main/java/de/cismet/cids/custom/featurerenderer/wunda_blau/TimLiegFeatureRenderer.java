@@ -55,7 +55,6 @@ public class TimLiegFeatureRenderer extends CustomCidsFeatureRenderer {
      * Creates a new GeoHintFeatureRenderer object.
      */
     public TimLiegFeatureRenderer() {
-        LOG.debug("FeatureRenderer constructor");
         initComponents();
     }
 

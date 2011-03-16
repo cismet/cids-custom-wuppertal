@@ -18,6 +18,10 @@
 package de.cismet.cids.custom.actions.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
+import Sirius.navigator.types.treenode.RootTreeNode;
+import Sirius.navigator.ui.ComponentRegistry;
+import Sirius.navigator.ui.tree.MetaCatalogueTree;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.newuser.User;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
@@ -27,11 +31,16 @@ import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.features.CommonFeatureAction;
 import de.cismet.cismap.commons.features.Feature;
 import de.cismet.cismap.commons.features.PureNewFeature;
+import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
+import de.cismet.cismap.navigatorplugin.CidsFeature;
 import de.cismet.tools.gui.StaticSwingTools;
 import java.awt.event.ActionEvent;
+import java.util.Enumeration;
 import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 import org.apache.log4j.Logger;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
@@ -80,38 +89,90 @@ public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAct
             return;
         }
 
-        try {
-            final CidsBean hint = CidsBeanSupport.createNewCidsBeanFromTableName("tim_lieg");
-            final CidsBean geometry = CidsBeanSupport.createNewCidsBeanFromTableName("geom");
+        final User usr = SessionManager.getSession().getUser();
+        final String name = hinweis + " (" + usr.getName() + ")";
 
-            final User usr = SessionManager.getSession().getUser();
+        // TODO: Should be centralised somewhere. It's the third occurrence of this calculation.
+        int srid = feature.getGeometry().getSRID();
+        final int defaultSrid = CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getDefaultCrs());
+        if (srid == CismapBroker.getInstance().getDefaultCrsAlias()) {
+            srid = defaultSrid;
+        }
+        if (srid != defaultSrid) {
+            feature.setGeometry(CrsTransformer.transformToDefaultCrs(feature.getGeometry()));
+        }
+        feature.getGeometry().setSRID(CismapBroker.getInstance().getDefaultCrsAlias());
+
+        CidsBean hint = null;
+        CidsBean persistedHint = null;
+        CidsBean geometry = null;
+        try {
+            hint = CidsBeanSupport.createNewCidsBeanFromTableName("tim_lieg");
+            geometry = CidsBeanSupport.createNewCidsBeanFromTableName("geom");
+
             hint.setProperty("ein_beab", usr.getName());
             hint.setProperty("ein_dat", new java.sql.Timestamp(System.currentTimeMillis()));
-            hint.setProperty("name", hinweis + " (" + usr.getName() + ")");
+            hint.setProperty("name", name);
             hint.setProperty("hinweis", hinweis);
-
-            // TODO: Should be centralised somewhere. It's the third occurrence of this calculation.
-            int srid = feature.getGeometry().getSRID();
-            final int defaultSrid = CrsTransformer.extractSridFromCrs(CismapBroker.getInstance().getDefaultCrs());
-            if (srid == CismapBroker.getInstance().getDefaultCrsAlias()) {
-                srid = defaultSrid;
-            }
-            if (srid != defaultSrid) {
-                feature.setGeometry(CrsTransformer.transformToDefaultCrs(feature.getGeometry()));
-            }
-            feature.getGeometry().setSRID(CismapBroker.getInstance().getDefaultCrsAlias());
 
             geometry.setProperty("geo_field", feature.getGeometry());
             hint.setProperty("georeferenz", geometry);
 
-            hint.persist();
+            persistedHint = hint.persist();
         } catch (Exception ex) {
             LOG.error("Could not persist new entity for table 'tim_lieg'.", ex);
             JOptionPane.showMessageDialog(CismapBroker.getInstance().getMappingComponent(),
                 NbBundle.getMessage(SetTIMNoteAction.class, "SetTIMNoteAction.actionPerformed(ActionEvent).errorMessage"),
                 NbBundle.getMessage(SetTIMNoteAction.class, "SetTIMNoteAction.actionPerformed(ActionEvent).errorTitle"),
                 JOptionPane.ERROR_MESSAGE);
+            return;
         }
+
+        if(persistedHint == null) {
+            LOG.error("Could not persist new entity for table 'tim_lieg'.");
+            JOptionPane.showMessageDialog(CismapBroker.getInstance().getMappingComponent(),
+                NbBundle.getMessage(SetTIMNoteAction.class, "SetTIMNoteAction.actionPerformed(ActionEvent).errorMessage"),
+                NbBundle.getMessage(SetTIMNoteAction.class, "SetTIMNoteAction.actionPerformed(ActionEvent).errorTitle"),
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        updateMappingComponent(persistedHint);
+        updateCatalogueTree();
+    }
+
+    private void updateCatalogueTree() {
+        final MetaCatalogueTree catalogueTree = ComponentRegistry.getRegistry().getCatalogueTree();
+        final DefaultTreeModel catalogueTreeModel = (DefaultTreeModel) catalogueTree.getModel();
+        final Enumeration<TreePath> expandedPaths = catalogueTree.getExpandedDescendants(new TreePath(catalogueTreeModel.getRoot()));
+        TreePath selectionPath = catalogueTree.getSelectionPath();
+
+        RootTreeNode rootTreeNode = null;
+        try {
+            rootTreeNode = new RootTreeNode(SessionManager.getProxy().getRoots());
+        } catch (ConnectionException ex) {
+            LOG.error("Updating catalogue tree after successful insertion of 'tim_lieg' entity failed.", ex);
+            return;
+        }
+
+        catalogueTreeModel.setRoot(rootTreeNode);
+        catalogueTreeModel.reload();
+
+        if (selectionPath == null) {
+            while (expandedPaths.hasMoreElements()) {
+                TreePath expandedPath = expandedPaths.nextElement();
+                if (selectionPath == null || selectionPath.getPathCount() < selectionPath.getPathCount()) {
+                    selectionPath = expandedPath;
+                }
+            }
+        }
+        catalogueTree.exploreSubtree(selectionPath);
+    }
+
+    private void updateMappingComponent(CidsBean persistedHint) throws IllegalArgumentException {
+        final MappingComponent mappingComponent = CismapBroker.getInstance().getMappingComponent();
+        mappingComponent.getFeatureCollection().removeFeature(feature);
+        mappingComponent.getFeatureCollection().addFeature(new CidsFeature(persistedHint.getMetaObject()));
     }
 
     @Override
