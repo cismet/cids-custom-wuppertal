@@ -1566,9 +1566,8 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
 
     private void processProductLink(String productType) {
         try {
-            final String pointID = lblTxtPunktkennung.getText();
-            final String pointArt = "AX_" + lblTxtPunktart.getText();
-            AlkisUtil.COMMONS.PRODUCTS.productListenNachweis(pointID, pointArt, productType);
+            String pointData = AlkisUtil.COMMONS.PRODUCTS.getPointDataForProduct(cidsBean);
+            AlkisUtil.COMMONS.PRODUCTS.productListenNachweis(pointData, productType);
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser(
                     "Fehler beim Aufruf des Produkts",

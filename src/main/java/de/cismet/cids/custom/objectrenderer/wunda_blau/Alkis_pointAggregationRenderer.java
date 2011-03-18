@@ -297,10 +297,7 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
                 if (punktListeString.length() > 0) {
                     punktListeString.append(",");
                 }
-                punktListeString.append("AX_");
-                punktListeString.append(selectedBean.getProperty("pointtype"));
-                punktListeString.append(":");
-                punktListeString.append(selectedBean.getProperty("pointcode"));
+                punktListeString.append(AlkisUtil.COMMONS.PRODUCTS.getPointDataForProduct(selectedBean));
             }
         }
         return punktListeString.toString();

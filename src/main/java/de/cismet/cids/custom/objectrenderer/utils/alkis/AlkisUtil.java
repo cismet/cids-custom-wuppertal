@@ -620,6 +620,14 @@ public final class AlkisUtil {
             }
         }
 
+        public String getPointDataForProduct(CidsBean pointBean) {
+            StringBuilder sb = new StringBuilder("AX_");
+            sb.append(pointBean.getProperty("pointtype"));
+            sb.append(":");
+            sb.append(pointBean.getProperty("pointcode"));
+            return sb.toString().replace(" ", "");
+        }
+
         //~ Methods ------------------------------------------------------------
         /**
          * DOCUMENT ME!
