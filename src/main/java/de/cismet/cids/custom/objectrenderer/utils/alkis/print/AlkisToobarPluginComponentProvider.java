@@ -65,7 +65,7 @@ public class AlkisToobarPluginComponentProvider implements ToolbarComponentsProv
                 "tlbMain",
                 new AlkisPrintJButton(),
                 ToolbarPositionHint.AFTER,
-                "print");
+                "cmdPrint");
         preparationList.add(description);
         this.toolbarComponents = Collections.unmodifiableList(preparationList);
     }
@@ -113,16 +113,18 @@ final class AlkisPrintJButton extends JButton {
     public AlkisPrintJButton() {
         try {
             this.printWidget = new AlkisPrintingSettingsWidget(false, CismapBroker.getInstance().getMappingComponent());
+            printWidget.setLocationRelativeTo(CismapBroker.getInstance().getMappingComponent());
         } catch (Exception ex) {
             log.fatal(ex, ex);
             throw new RuntimeException(ex);
         }
 //        setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/frameprint.png"))); // NOI18N
-        setText("Alkis-Drucken");
+        setText(null);
         setToolTipText("Alkis Drucken");
         setName("alkis_print");
         setBorderPainted(false);
         setFocusable(false);
+        setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/alkisframeprint.png")));
         setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         addActionListener(new java.awt.event.ActionListener() {
@@ -130,7 +132,9 @@ final class AlkisPrintJButton extends JButton {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     printWidget.setVisible(true);
+                    printWidget.pack();
                 }
             });
+
     }
 }
