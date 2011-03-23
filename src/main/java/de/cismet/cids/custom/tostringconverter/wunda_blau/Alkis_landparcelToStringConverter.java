@@ -25,7 +25,7 @@ public class Alkis_landparcelToStringConverter extends CustomToStringConverter {
 
     @Override
     public String createString() {
-        final Object bezeichnung = cidsBean.getProperty("bezeichnung");
+        final Object bezeichnung = cidsBean.getProperty("alkis_id");
         if (bezeichnung != null) {
             return bezeichnung.toString();
         }
