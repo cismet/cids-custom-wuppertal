@@ -472,9 +472,10 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
                 final FeatureCollection mapFC = mappingComponent.getFeatureCollection();
                 mapFC.removeAllFeatures();
                 if ((indexes != null) && (indexes.length > 0)) {
-                    for (final int index : indexes) {
-                        if ((index > -1) && (index < cidsBeans.size())) {
-                            final CidsBean selectedBean = cidsBeans.get(index);
+                    for (final int viewIdx : indexes) {
+                        final int modelIdx = tblAggregation.getRowSorter().convertRowIndexToModel(viewIdx);
+                        if ((modelIdx > -1) && (modelIdx < cidsBeans.size())) {
+                            final CidsBean selectedBean = cidsBeans.get(modelIdx);
                             mapFC.addFeature(new CidsFeature(selectedBean.getMetaObject()));
                         }
                     }
