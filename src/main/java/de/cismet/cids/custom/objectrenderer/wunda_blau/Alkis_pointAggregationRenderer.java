@@ -66,6 +66,7 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 
 import de.cismet.tools.collections.TypeSafeCollections;
+import java.text.NumberFormat;
 
 /**
  * DOCUMENT ME!
@@ -90,7 +91,7 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
     // Namen der Properties -> Spalten
     private static final String[] AGR_PROPERTY_NAMES = new String[]{"pointcode", "pointtype", "geom.geo_field"};
     // Formater fuer Hochwert/Rechtswert
-    private static final DecimalFormat HW_RW_NUMBER_FORMAT = new DecimalFormat("0000000.000");
+    private static final NumberFormat HW_RW_NUMBER_FORMAT = new DecimalFormat("##########.###");
     // Modell fuer die Auswahlbox des produktformats
     private static final String PDF = "PDF";
     private static final String HTML = "HTML";
