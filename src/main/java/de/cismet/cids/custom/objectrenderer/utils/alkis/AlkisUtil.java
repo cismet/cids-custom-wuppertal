@@ -717,6 +717,7 @@ public final class AlkisUtil {
                 final int centerX,
                 final int centerY,
                 final String zusText,
+                final String auftragsNr,
                 final boolean moreThanOneParcel) {
             String url = COMMONS.LIEGENSCHAFTSKARTE_SERVICE + "?" + IDENTIFICATION + "&landparcel=" + parcelCode
                     + "&angle=" + winkel
@@ -724,6 +725,9 @@ public final class AlkisUtil {
                     + "&centerx=" + centerX + "&centery=" + centerY;
             if ((zusText != null) && (zusText.length() > 0)) {
                 url += "&text=" + zusText;
+            }
+            if ((auftragsNr != null) && (auftragsNr.length() > 0)) {
+                url += "&ordernumber=" + auftragsNr;
             }
             if (moreThanOneParcel) {
                 url += "&additionalLandparcel=true";

@@ -92,6 +92,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -108,6 +109,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
     private javax.swing.JScrollPane scpAdditionalText;
     private javax.swing.JScrollPane scpFlurstuecke;
     private javax.swing.JTextArea taAdditionalText;
+    private javax.swing.JTextField txtAuftragsnummer;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -326,6 +328,8 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         jLabel9 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         cbClazz = new javax.swing.JComboBox();
+        jLabel4 = new javax.swing.JLabel();
+        txtAuftragsnummer = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         cmdCancel = new javax.swing.JButton();
         cmdOk = new javax.swing.JButton();
@@ -379,8 +383,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         gridBagConstraints.insets = new java.awt.Insets(6, 10, 0, 0);
         panDesc.add(jLabel3, gridBagConstraints);
 
-        jLabel5.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cismap/commons/gui/res/frameprint.png"))); // NOI18N
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cismap/commons/gui/res/frameprint.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 5;
@@ -429,7 +432,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         jSeparator1.setMaximumSize(new java.awt.Dimension(0, 0));
         jSeparator1.setPreferredSize(new java.awt.Dimension(0, 0));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -444,7 +447,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         jSeparator4.setPreferredSize(new java.awt.Dimension(0, 0));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 421;
@@ -453,15 +456,12 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         panSettings.add(jSeparator4, gridBagConstraints);
 
-        btnRemove.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/editors/edit_remove_mini.png"))); // NOI18N
+        btnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/editors/edit_remove_mini.png"))); // NOI18N
         btnRemove.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnRemoveActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
@@ -499,7 +499,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -508,7 +508,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         jLabel10.setText("Zusätzlicher Text:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSettings.add(jLabel10, gridBagConstraints);
@@ -545,19 +545,17 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         chkRotation.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSettings.add(chkRotation, gridBagConstraints);
 
         cbProduct.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    cbProductActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbProductActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -582,18 +580,30 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         panSettings.add(jLabel12, gridBagConstraints);
 
         cbClazz.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    cbClazzActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbClazzActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSettings.add(cbClazz, gridBagConstraints);
+
+        jLabel4.setText("Auftragsnummer:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panSettings.add(jLabel4, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panSettings.add(txtAuftragsnummer, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -607,24 +617,20 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         cmdCancel.setMnemonic('A');
         cmdCancel.setText("Abbrechen");
         cmdCancel.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    cmdCancelActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdCancelActionPerformed(evt);
+            }
+        });
         jPanel1.add(cmdCancel);
 
         cmdOk.setMnemonic('O');
         cmdOk.setText("Ok");
         cmdOk.setEnabled(false);
         cmdOk.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    cmdOkActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdOkActionPerformed(evt);
+            }
+        });
         jPanel1.add(cmdOk);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -635,7 +641,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         getContentPane().add(jPanel1, gridBagConstraints);
 
         pack();
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
@@ -781,6 +787,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                     toInt(center.getX()),
                     toInt(center.getY()),
                     taAdditionalText.getText(),
+                    txtAuftragsnummer.getText(),
                     false);
         }
     }
