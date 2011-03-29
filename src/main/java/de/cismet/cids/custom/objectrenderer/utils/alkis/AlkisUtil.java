@@ -435,15 +435,15 @@ public final class AlkisUtil {
     public static String getBuchungsartFromBuchungsblatt(final Buchungsblatt blatt) {
         final Buchungsstelle[] buchungsstellen = blatt.getBuchungsstellen();
         if ((buchungsstellen != null) && (buchungsstellen.length > 0)) {
-            final Buchungsstelle letzteBuchungsstelle = buchungsstellen[buchungsstellen.length - 1];
-            if (letzteBuchungsstelle != null) {
+            final Buchungsstelle ersteBuchungsstelle = buchungsstellen[0];
+            if (ersteBuchungsstelle != null) {
                 final StringBuilder result = new StringBuilder();
-                final String prettyFration = prettyPrintFration(letzteBuchungsstelle.getFraction());
+                final String prettyFration = prettyPrintFration(ersteBuchungsstelle.getFraction());
                 result.append(prettyFration);
                 if (prettyFration.length() > 0) {
                     result.append(" ");
                 }
-                result.append(letzteBuchungsstelle.getBuchungsart());
+                result.append(ersteBuchungsstelle.getBuchungsart());
                 return result.toString();
             }
         }
