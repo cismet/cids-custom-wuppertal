@@ -29,7 +29,7 @@ import java.awt.Stroke;
 
 import javax.swing.JComponent;
 
-import de.cismet.cids.custom.objectrenderer.wunda_blau.Alkis_buchungsblattRenderer;
+import de.cismet.cids.custom.objectrenderer.wunda_blau.AlkisBuchungsblattRenderer;
 
 import de.cismet.cids.featurerenderer.CustomCidsFeatureRenderer;
 
@@ -51,15 +51,15 @@ public class Alkis_buchungsblattFeatureRenderer extends CustomCidsFeatureRendere
 
     private static int COLOR_INDEX = 0;
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(
-            Alkis_buchungsblattRenderer.class);
+            AlkisBuchungsblattRenderer.class);
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
     public synchronized Paint getFillingStyle(final CidsFeature subFeature) {
         ++COLOR_INDEX;
-        COLOR_INDEX %= Alkis_buchungsblattRenderer.LANDPARCEL_COLORS.size();
-        return Alkis_buchungsblattRenderer.LANDPARCEL_COLORS.get(COLOR_INDEX);
+        COLOR_INDEX %= AlkisBuchungsblattRenderer.LANDPARCEL_COLORS.size();
+        return AlkisBuchungsblattRenderer.LANDPARCEL_COLORS.get(COLOR_INDEX);
     }
 
     @Override

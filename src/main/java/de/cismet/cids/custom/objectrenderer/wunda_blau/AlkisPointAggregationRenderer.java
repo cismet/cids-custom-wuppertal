@@ -74,11 +74,11 @@ import java.text.NumberFormat;
  * @author   srichter
  * @version  $Revision$, $Date$
  */
-public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer {
+public final class AlkisPointAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer {
 
     //~ Static fields/initializers ---------------------------------------------
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(
-            Alkis_pointAggregationRenderer.class);
+            AlkisPointAggregationRenderer.class);
     // Spaltenueberschriften
     private static final String[] AGR_COMLUMN_NAMES = new String[]{
         "Auswahl",
@@ -121,7 +121,7 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
     /**
      * Creates new form Alkis_pointAggregationRenderer.
      */
-    public Alkis_pointAggregationRenderer() {
+    public AlkisPointAggregationRenderer() {
         initComponents();
         scpAggregationTable.getViewport().setOpaque(false);
         tblAggregation.getSelectionModel().addListSelectionListener(new TableSelectionListener());
@@ -173,12 +173,10 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
 
         btnCreate.setText("Erzeugen");
         btnCreate.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnCreateActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
@@ -194,12 +192,10 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
 
         btnRemember.setText("Merken");
         btnRemember.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnRememberActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRememberActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -208,12 +204,10 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
 
         btnRelease.setText("Vergessen");
         btnRelease.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnReleaseActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReleaseActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -239,7 +233,7 @@ public final class Alkis_pointAggregationRenderer extends javax.swing.JPanel imp
         panMap.add(mappingComponent, gridBagConstraints);
 
         add(panMap, java.awt.BorderLayout.EAST);
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!

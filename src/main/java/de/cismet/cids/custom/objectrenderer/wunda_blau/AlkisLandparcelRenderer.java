@@ -89,6 +89,8 @@ import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.TitleComponentProvider;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 
 /**
  * DOCUMENT ME!
@@ -96,7 +98,7 @@ import de.cismet.tools.gui.TitleComponentProvider;
  * @author   srichter
  * @version  $Revision$, $Date$
  */
-public class Alkis_landparcelRenderer extends javax.swing.JPanel implements BorderProvider,
+public class AlkisLandparcelRenderer extends javax.swing.JPanel implements BorderProvider,
         CidsBeanRenderer,
         TitleComponentProvider,
         FooterComponentProvider {
@@ -105,7 +107,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
     private static final String ICON_RES_PACKAGE = "/de/cismet/cids/custom/wunda_blau/res/";
     private static final String ALKIS_RES_PACKAGE = ICON_RES_PACKAGE + "alkis/";
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(
-            Alkis_landparcelRenderer.class);
+            AlkisLandparcelRenderer.class);
     private static final String CARD_1 = "CARD_1";
     private static final String CARD_2 = "CARD_2";
     //
@@ -116,7 +118,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
     //
     private static final String BUCHUNGSBLATT_TABLE = "ALKIS_BUCHUNGSBLATT";
     private static final String DOMAIN = "WUNDA_BLAU";
-
+    private final boolean buchungsblattPermission;
 
     // <editor-fold defaultstate="collapsed" desc="Border- and Titleprovider method implementations">
     @Override
@@ -285,7 +287,8 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
     /**
      * Creates new form Alkis_pointRenderer.
      */
-    public Alkis_landparcelRenderer() {
+    public AlkisLandparcelRenderer() {
+        buchungsblattPermission = ObjectRendererUtils.hasCurrentUserPermissionOnMetaClass(BUCHUNGSBLATT_TABLE, DOMAIN, ObjectRendererUtils.PermissionType.READ);
         buchungsblaetter = TypeSafeCollections.newConcurrentHashMap();
         productPreviewImages = TypeSafeCollections.newHashMap();
         gotoBeanMap = TypeSafeCollections.newHashMap();
@@ -348,6 +351,9 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
             // disable Product page if user does not have the right to see it.
             btnForward.setEnabled(false);
             lblForw.setEnabled(false);
+        }
+        if(!buchungsblattPermission) {
+            panBuchungEigentum.setVisible(false);
         }
     }
 
@@ -479,7 +485,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                 if ((buchungsblattcode != null) && (buchungsblattcode.length() > 5)) {
                     buchungsblatt = infoService.getBuchungsblatt(soapProvider.getIdentityCard(),
                             soapProvider.getService(),
-                            Alkis_buchungsblattRenderer.fixBuchungslattCode(buchungsblattcode));
+                            AlkisBuchungsblattRenderer.fixBuchungslattCode(buchungsblattcode));
                     buchungsblaetter.put(buchungsblattBean, buchungsblatt);
                 }
             }
@@ -547,7 +553,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                 ObjectRendererUtils.showExceptionWindowToUser(
                         "Fehler beim Aufruf des Produkts: " + product,
                         ex,
-                        Alkis_landparcelRenderer.this);
+                        AlkisLandparcelRenderer.this);
                 log.error(ex);
             }
         } else {
@@ -565,12 +571,13 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
             ObjectRendererUtils.showExceptionWindowToUser(
                     "Fehler beim Aufruf des Produkts: Kartenprodukt",
                     ex,
-                    Alkis_landparcelRenderer.this);
+                    AlkisLandparcelRenderer.this);
             log.error(ex);
         }
     }
 
     private void showNoProductPermissionWarning() {
+        JOptionPane.showMessageDialog(this, "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
     }
 
     /**
@@ -595,297 +602,295 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
         btnForward = new javax.swing.JButton();
         lblForw = new javax.swing.JLabel();
         panDescription = new javax.swing.JPanel();
-        if (ObjectRendererUtils.hasCurrentUserPermissionOnMetaClass(BUCHUNGSBLATT_TABLE, DOMAIN, ObjectRendererUtils.PermissionType.READ)) {
-            panBuchungEigentum = new RoundedPanel();
-            scpBuchungsblaetter = new javax.swing.JScrollPane();
-            lstBuchungsblaetter = new javax.swing.JList();
-            scpBuchungsblattFlurstuecke = new javax.swing.JScrollPane();
-            lstBuchungsblattFlurstuecke = new javax.swing.JList();
-            lblBuchungsblaetter = new javax.swing.JLabel();
-            lblInhalt = new javax.swing.JLabel();
-            lblEnthalteneFlurstuecke = new javax.swing.JLabel();
-            panInhaltBuchungsblatt = new javax.swing.JPanel();
-            scpInhaltBuchungsblatt = new javax.swing.JScrollPane();
-            epInhaltBuchungsblatt = new javax.swing.JEditorPane();
-            semiRoundedPanel1 = new de.cismet.tools.gui.SemiRoundedPanel();
-            jLabel1 = new javax.swing.JLabel();
-            panMainInfo = new RoundedPanel();
-            lblLandparcelCode = new javax.swing.JLabel();
-            lblDescLandparcelCode = new javax.swing.JLabel();
-            lblDescGemeinde = new javax.swing.JLabel();
-            lblGemeinde = new javax.swing.JLabel();
-            lblDescGemarkung = new javax.swing.JLabel();
-            lblGemarkung = new javax.swing.JLabel();
-            lblDescLage = new javax.swing.JLabel();
-            lblGroesse = new javax.swing.JLabel();
-            lblDescGroesse = new javax.swing.JLabel();
-            scpLage = new javax.swing.JScrollPane();
-            epLage = new javax.swing.JEditorPane();
-            semiRoundedPanel2 = new de.cismet.tools.gui.SemiRoundedPanel();
-            jLabel6 = new javax.swing.JLabel();
-            panFlurstueckMap = new javax.swing.JPanel();
-            panProducts = new javax.swing.JPanel();
-            panPdfProducts = new RoundedPanel();
-            hlKarte = new org.jdesktop.swingx.JXHyperlink();
-            hlFlurstuecksEigentumsnachweisNrwPdf = new org.jdesktop.swingx.JXHyperlink();
-            hlFlurstuecksnachweisPdf = new org.jdesktop.swingx.JXHyperlink();
-            jPanel1 = new javax.swing.JPanel();
-            semiRoundedPanel4 = new de.cismet.tools.gui.SemiRoundedPanel();
-            jLabel4 = new javax.swing.JLabel();
-            hlFlurstuecksEigentumsnachweisKomPdf = new org.jdesktop.swingx.JXHyperlink();
-            panHtmlProducts = new RoundedPanel();
-            hlFlurstuecksEigentumsnachweisKomHtml = new org.jdesktop.swingx.JXHyperlink();
-            hlFlurstuecksnachweisHtml = new org.jdesktop.swingx.JXHyperlink();
-            jPanel2 = new javax.swing.JPanel();
-            semiRoundedPanel5 = new de.cismet.tools.gui.SemiRoundedPanel();
-            jLabel5 = new javax.swing.JLabel();
-            hlFlurstuecksEigentumsnachweisNrwHtml = new org.jdesktop.swingx.JXHyperlink();
-            panSpacing = new javax.swing.JPanel();
-            panProductPreview = new RoundedPanel();
-            lblProductPreview = new javax.swing.JLabel();
-            semiRoundedPanel3 = new de.cismet.tools.gui.SemiRoundedPanel();
-            lblPreviewHead = new javax.swing.JLabel();
+        panBuchungEigentum = new RoundedPanel();
+        scpBuchungsblaetter = new javax.swing.JScrollPane();
+        lstBuchungsblaetter = new javax.swing.JList();
+        scpBuchungsblattFlurstuecke = new javax.swing.JScrollPane();
+        lstBuchungsblattFlurstuecke = new javax.swing.JList();
+        lblBuchungsblaetter = new javax.swing.JLabel();
+        lblInhalt = new javax.swing.JLabel();
+        lblEnthalteneFlurstuecke = new javax.swing.JLabel();
+        panInhaltBuchungsblatt = new javax.swing.JPanel();
+        scpInhaltBuchungsblatt = new javax.swing.JScrollPane();
+        epInhaltBuchungsblatt = new javax.swing.JEditorPane();
+        semiRoundedPanel1 = new de.cismet.tools.gui.SemiRoundedPanel();
+        jLabel1 = new javax.swing.JLabel();
+        panMainInfo = new RoundedPanel();
+        lblLandparcelCode = new javax.swing.JLabel();
+        lblDescLandparcelCode = new javax.swing.JLabel();
+        lblDescGemeinde = new javax.swing.JLabel();
+        lblGemeinde = new javax.swing.JLabel();
+        lblDescGemarkung = new javax.swing.JLabel();
+        lblGemarkung = new javax.swing.JLabel();
+        lblDescLage = new javax.swing.JLabel();
+        lblGroesse = new javax.swing.JLabel();
+        lblDescGroesse = new javax.swing.JLabel();
+        scpLage = new javax.swing.JScrollPane();
+        epLage = new javax.swing.JEditorPane();
+        semiRoundedPanel2 = new de.cismet.tools.gui.SemiRoundedPanel();
+        jLabel6 = new javax.swing.JLabel();
+        panFlurstueckMap = new javax.swing.JPanel();
+        panProducts = new javax.swing.JPanel();
+        panPdfProducts = new RoundedPanel();
+        hlKarte = new org.jdesktop.swingx.JXHyperlink();
+        hlFlurstuecksEigentumsnachweisNrwPdf = new org.jdesktop.swingx.JXHyperlink();
+        hlFlurstuecksnachweisPdf = new org.jdesktop.swingx.JXHyperlink();
+        jPanel1 = new javax.swing.JPanel();
+        semiRoundedPanel4 = new de.cismet.tools.gui.SemiRoundedPanel();
+        jLabel4 = new javax.swing.JLabel();
+        hlFlurstuecksEigentumsnachweisKomPdf = new org.jdesktop.swingx.JXHyperlink();
+        panHtmlProducts = new RoundedPanel();
+        hlFlurstuecksEigentumsnachweisKomHtml = new org.jdesktop.swingx.JXHyperlink();
+        hlFlurstuecksnachweisHtml = new org.jdesktop.swingx.JXHyperlink();
+        jPanel2 = new javax.swing.JPanel();
+        semiRoundedPanel5 = new de.cismet.tools.gui.SemiRoundedPanel();
+        jLabel5 = new javax.swing.JLabel();
+        hlFlurstuecksEigentumsnachweisNrwHtml = new org.jdesktop.swingx.JXHyperlink();
+        panSpacing = new javax.swing.JPanel();
+        panProductPreview = new RoundedPanel();
+        lblProductPreview = new javax.swing.JLabel();
+        semiRoundedPanel3 = new de.cismet.tools.gui.SemiRoundedPanel();
+        lblPreviewHead = new javax.swing.JLabel();
 
-            panTitle.setOpaque(false);
-            panTitle.setLayout(new java.awt.GridBagLayout());
+        panTitle.setOpaque(false);
+        panTitle.setLayout(new java.awt.GridBagLayout());
 
-            lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18));
-            lblTitle.setForeground(new java.awt.Color(255, 255, 255));
-            lblTitle.setText("TITLE");
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
-            panTitle.add(lblTitle, gridBagConstraints);
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 1;
-            gridBagConstraints.gridy = 0;
-            gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 5);
-            panTitle.add(blWait, gridBagConstraints);
+        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18));
+        lblTitle.setForeground(new java.awt.Color(255, 255, 255));
+        lblTitle.setText("TITLE");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        panTitle.add(lblTitle, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 5);
+        panTitle.add(blWait, gridBagConstraints);
 
-            panFooter.setOpaque(false);
-            panFooter.setLayout(new java.awt.BorderLayout());
+        panFooter.setOpaque(false);
+        panFooter.setLayout(new java.awt.BorderLayout());
 
-            panButtons.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 6, 0));
-            panButtons.setOpaque(false);
-            panButtons.setLayout(new java.awt.GridBagLayout());
+        panButtons.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 6, 0));
+        panButtons.setOpaque(false);
+        panButtons.setLayout(new java.awt.GridBagLayout());
 
-            panFooterLeft.setMaximumSize(new java.awt.Dimension(124, 40));
-            panFooterLeft.setMinimumSize(new java.awt.Dimension(124, 40));
-            panFooterLeft.setOpaque(false);
-            panFooterLeft.setPreferredSize(new java.awt.Dimension(124, 40));
-            panFooterLeft.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 10, 5));
+        panFooterLeft.setMaximumSize(new java.awt.Dimension(124, 40));
+        panFooterLeft.setMinimumSize(new java.awt.Dimension(124, 40));
+        panFooterLeft.setOpaque(false);
+        panFooterLeft.setPreferredSize(new java.awt.Dimension(124, 40));
+        panFooterLeft.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 10, 5));
 
-            lblBack.setFont(new java.awt.Font("Tahoma", 1, 14));
-            lblBack.setForeground(new java.awt.Color(255, 255, 255));
-            lblBack.setText("Info");
-            lblBack.setEnabled(false);
-            lblBack.addMouseListener(new java.awt.event.MouseAdapter() {
-                public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    lblBackMouseClicked(evt);
-                }
-            });
-            panFooterLeft.add(lblBack);
+        lblBack.setFont(new java.awt.Font("Tahoma", 1, 14));
+        lblBack.setForeground(new java.awt.Color(255, 255, 255));
+        lblBack.setText("Info");
+        lblBack.setEnabled(false);
+        lblBack.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblBackMouseClicked(evt);
+            }
+        });
+        panFooterLeft.add(lblBack);
 
-            btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left.png"))); // NOI18N
-            btnBack.setBorder(null);
-            btnBack.setBorderPainted(false);
-            btnBack.setContentAreaFilled(false);
-            btnBack.setEnabled(false);
-            btnBack.setFocusPainted(false);
-            btnBack.setMaximumSize(new java.awt.Dimension(30, 30));
-            btnBack.setMinimumSize(new java.awt.Dimension(30, 30));
-            btnBack.setPreferredSize(new java.awt.Dimension(30, 30));
-            btnBack.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-pressed.png"))); // NOI18N
-            btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-sel.png"))); // NOI18N
-            btnBack.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    btnBackActionPerformed(evt);
-                }
-            });
-            panFooterLeft.add(btnBack);
+        btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left.png"))); // NOI18N
+        btnBack.setBorder(null);
+        btnBack.setBorderPainted(false);
+        btnBack.setContentAreaFilled(false);
+        btnBack.setEnabled(false);
+        btnBack.setFocusPainted(false);
+        btnBack.setMaximumSize(new java.awt.Dimension(30, 30));
+        btnBack.setMinimumSize(new java.awt.Dimension(30, 30));
+        btnBack.setPreferredSize(new java.awt.Dimension(30, 30));
+        btnBack.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-pressed.png"))); // NOI18N
+        btnBack.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-sel.png"))); // NOI18N
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
+        panFooterLeft.add(btnBack);
 
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            panButtons.add(panFooterLeft, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panButtons.add(panFooterLeft, gridBagConstraints);
 
-            panFooterRight.setMaximumSize(new java.awt.Dimension(124, 40));
-            panFooterRight.setOpaque(false);
-            panFooterRight.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 5));
+        panFooterRight.setMaximumSize(new java.awt.Dimension(124, 40));
+        panFooterRight.setOpaque(false);
+        panFooterRight.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 5));
 
-            btnForward.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-right.png"))); // NOI18N
-            btnForward.setBorder(null);
-            btnForward.setBorderPainted(false);
-            btnForward.setContentAreaFilled(false);
-            btnForward.setFocusPainted(false);
-            btnForward.setMaximumSize(new java.awt.Dimension(30, 30));
-            btnForward.setMinimumSize(new java.awt.Dimension(30, 30));
-            btnForward.setPreferredSize(new java.awt.Dimension(30, 30));
-            btnForward.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    btnForwardActionPerformed(evt);
-                }
-            });
-            panFooterRight.add(btnForward);
+        btnForward.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-right.png"))); // NOI18N
+        btnForward.setBorder(null);
+        btnForward.setBorderPainted(false);
+        btnForward.setContentAreaFilled(false);
+        btnForward.setFocusPainted(false);
+        btnForward.setMaximumSize(new java.awt.Dimension(30, 30));
+        btnForward.setMinimumSize(new java.awt.Dimension(30, 30));
+        btnForward.setPreferredSize(new java.awt.Dimension(30, 30));
+        btnForward.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnForwardActionPerformed(evt);
+            }
+        });
+        panFooterRight.add(btnForward);
 
-            lblForw.setFont(new java.awt.Font("Tahoma", 1, 14));
-            lblForw.setForeground(new java.awt.Color(255, 255, 255));
-            lblForw.setText("Produkte");
-            lblForw.addMouseListener(new java.awt.event.MouseAdapter() {
-                public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    lblForwMouseClicked(evt);
-                }
-            });
-            panFooterRight.add(lblForw);
+        lblForw.setFont(new java.awt.Font("Tahoma", 1, 14));
+        lblForw.setForeground(new java.awt.Color(255, 255, 255));
+        lblForw.setText("Produkte");
+        lblForw.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblForwMouseClicked(evt);
+            }
+        });
+        panFooterRight.add(lblForw);
 
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            panButtons.add(panFooterRight, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panButtons.add(panFooterRight, gridBagConstraints);
 
-            panFooter.add(panButtons, java.awt.BorderLayout.CENTER);
+        panFooter.add(panButtons, java.awt.BorderLayout.CENTER);
 
-            setLayout(new java.awt.CardLayout());
+        setLayout(new java.awt.CardLayout());
 
-            panDescription.setOpaque(false);
-            panDescription.setLayout(new java.awt.GridBagLayout());
+        panDescription.setOpaque(false);
+        panDescription.setLayout(new java.awt.GridBagLayout());
 
-            panBuchungEigentum.setLayout(new java.awt.GridBagLayout());
+        panBuchungEigentum.setLayout(new java.awt.GridBagLayout());
 
-            scpBuchungsblaetter.setMaximumSize(new java.awt.Dimension(100, 200));
-            scpBuchungsblaetter.setMinimumSize(new java.awt.Dimension(100, 200));
-            scpBuchungsblaetter.setOpaque(false);
-            scpBuchungsblaetter.setPreferredSize(new java.awt.Dimension(100, 200));
+        scpBuchungsblaetter.setMaximumSize(new java.awt.Dimension(100, 200));
+        scpBuchungsblaetter.setMinimumSize(new java.awt.Dimension(100, 200));
+        scpBuchungsblaetter.setOpaque(false);
+        scpBuchungsblaetter.setPreferredSize(new java.awt.Dimension(100, 200));
 
-            lstBuchungsblaetter.setOpaque(false);
+        lstBuchungsblaetter.setOpaque(false);
 
-            org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.buchungsblaetter}");
-            org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, eLProperty, lstBuchungsblaetter);
-            bindingGroup.addBinding(jListBinding);
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.buchungsblaetter}");
+        org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, eLProperty, lstBuchungsblaetter);
+        bindingGroup.addBinding(jListBinding);
 
-            lstBuchungsblaetter.addMouseListener(new java.awt.event.MouseAdapter() {
-                public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    lstBuchungsblaetterMouseClicked(evt);
-                }
-            });
-            lstBuchungsblaetter.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-                public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                    lstBuchungsblaetterValueChanged(evt);
-                }
-            });
-            scpBuchungsblaetter.setViewportView(lstBuchungsblaetter);
+        lstBuchungsblaetter.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lstBuchungsblaetterMouseClicked(evt);
+            }
+        });
+        lstBuchungsblaetter.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstBuchungsblaetterValueChanged(evt);
+            }
+        });
+        scpBuchungsblaetter.setViewportView(lstBuchungsblaetter);
 
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 0;
-            gridBagConstraints.gridy = 2;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.insets = new java.awt.Insets(5, 10, 10, 10);
-            panBuchungEigentum.add(scpBuchungsblaetter, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 10, 10);
+        panBuchungEigentum.add(scpBuchungsblaetter, gridBagConstraints);
 
-            scpBuchungsblattFlurstuecke.setMaximumSize(new java.awt.Dimension(140, 200));
-            scpBuchungsblattFlurstuecke.setMinimumSize(new java.awt.Dimension(140, 200));
-            scpBuchungsblattFlurstuecke.setOpaque(false);
-            scpBuchungsblattFlurstuecke.setPreferredSize(new java.awt.Dimension(140, 200));
+        scpBuchungsblattFlurstuecke.setMaximumSize(new java.awt.Dimension(140, 200));
+        scpBuchungsblattFlurstuecke.setMinimumSize(new java.awt.Dimension(140, 200));
+        scpBuchungsblattFlurstuecke.setOpaque(false);
+        scpBuchungsblattFlurstuecke.setPreferredSize(new java.awt.Dimension(140, 200));
 
-            lstBuchungsblattFlurstuecke.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-            lstBuchungsblattFlurstuecke.setOpaque(false);
+        lstBuchungsblattFlurstuecke.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstBuchungsblattFlurstuecke.setOpaque(false);
 
-            eLProperty = org.jdesktop.beansbinding.ELProperty.create("${selectedElement.landparcels}");
-            jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, lstBuchungsblaetter, eLProperty, lstBuchungsblattFlurstuecke);
-            bindingGroup.addBinding(jListBinding);
+        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${selectedElement.landparcels}");
+        jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, lstBuchungsblaetter, eLProperty, lstBuchungsblattFlurstuecke);
+        bindingGroup.addBinding(jListBinding);
 
-            scpBuchungsblattFlurstuecke.setViewportView(lstBuchungsblattFlurstuecke);
+        scpBuchungsblattFlurstuecke.setViewportView(lstBuchungsblattFlurstuecke);
 
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 2;
-            gridBagConstraints.gridy = 2;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.insets = new java.awt.Insets(5, 10, 10, 10);
-            panBuchungEigentum.add(scpBuchungsblattFlurstuecke, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 10, 10);
+        panBuchungEigentum.add(scpBuchungsblattFlurstuecke, gridBagConstraints);
 
-            lblBuchungsblaetter.setFont(new java.awt.Font("Tahoma", 1, 11));
-            lblBuchungsblaetter.setText("Buchungsblätter:");
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 0;
-            gridBagConstraints.gridy = 1;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
-            panBuchungEigentum.add(lblBuchungsblaetter, gridBagConstraints);
+        lblBuchungsblaetter.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblBuchungsblaetter.setText("Buchungsblätter:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
+        panBuchungEigentum.add(lblBuchungsblaetter, gridBagConstraints);
 
-            lblInhalt.setFont(new java.awt.Font("Tahoma", 1, 11));
-            lblInhalt.setText("Inhalt:");
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 1;
-            gridBagConstraints.gridy = 1;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
-            panBuchungEigentum.add(lblInhalt, gridBagConstraints);
+        lblInhalt.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblInhalt.setText("Inhalt:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
+        panBuchungEigentum.add(lblInhalt, gridBagConstraints);
 
-            lblEnthalteneFlurstuecke.setFont(new java.awt.Font("Tahoma", 1, 11));
-            lblEnthalteneFlurstuecke.setText("Enthaltene Flurstücke:");
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 2;
-            gridBagConstraints.gridy = 1;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
-            panBuchungEigentum.add(lblEnthalteneFlurstuecke, gridBagConstraints);
+        lblEnthalteneFlurstuecke.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblEnthalteneFlurstuecke.setText("Enthaltene Flurstücke:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
+        panBuchungEigentum.add(lblEnthalteneFlurstuecke, gridBagConstraints);
 
-            panInhaltBuchungsblatt.setOpaque(false);
-            panInhaltBuchungsblatt.setLayout(new java.awt.BorderLayout());
+        panInhaltBuchungsblatt.setOpaque(false);
+        panInhaltBuchungsblatt.setLayout(new java.awt.BorderLayout());
 
-            scpInhaltBuchungsblatt.setBorder(null);
-            scpInhaltBuchungsblatt.setMaximumSize(new java.awt.Dimension(250, 200));
-            scpInhaltBuchungsblatt.setMinimumSize(new java.awt.Dimension(250, 200));
-            scpInhaltBuchungsblatt.setOpaque(false);
-            scpInhaltBuchungsblatt.setPreferredSize(new java.awt.Dimension(250, 200));
+        scpInhaltBuchungsblatt.setBorder(null);
+        scpInhaltBuchungsblatt.setMaximumSize(new java.awt.Dimension(250, 200));
+        scpInhaltBuchungsblatt.setMinimumSize(new java.awt.Dimension(250, 200));
+        scpInhaltBuchungsblatt.setOpaque(false);
+        scpInhaltBuchungsblatt.setPreferredSize(new java.awt.Dimension(250, 200));
 
-            epInhaltBuchungsblatt.setBorder(null);
-            epInhaltBuchungsblatt.setContentType("text/html");
-            epInhaltBuchungsblatt.setEditable(false);
-            epInhaltBuchungsblatt.setText("\n");
-            epInhaltBuchungsblatt.setMaximumSize(new java.awt.Dimension(250, 200));
-            epInhaltBuchungsblatt.setMinimumSize(new java.awt.Dimension(250, 200));
-            epInhaltBuchungsblatt.setOpaque(false);
-            epInhaltBuchungsblatt.setPreferredSize(new java.awt.Dimension(250, 200));
-            scpInhaltBuchungsblatt.setViewportView(epInhaltBuchungsblatt);
+        epInhaltBuchungsblatt.setBorder(null);
+        epInhaltBuchungsblatt.setContentType("text/html");
+        epInhaltBuchungsblatt.setEditable(false);
+        epInhaltBuchungsblatt.setText("\n");
+        epInhaltBuchungsblatt.setMaximumSize(new java.awt.Dimension(250, 200));
+        epInhaltBuchungsblatt.setMinimumSize(new java.awt.Dimension(250, 200));
+        epInhaltBuchungsblatt.setOpaque(false);
+        epInhaltBuchungsblatt.setPreferredSize(new java.awt.Dimension(250, 200));
+        scpInhaltBuchungsblatt.setViewportView(epInhaltBuchungsblatt);
 
-            panInhaltBuchungsblatt.add(scpInhaltBuchungsblatt, java.awt.BorderLayout.CENTER);
+        panInhaltBuchungsblatt.add(scpInhaltBuchungsblatt, java.awt.BorderLayout.CENTER);
 
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 1;
-            gridBagConstraints.gridy = 2;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.weighty = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(5, 15, 10, 15);
-            panBuchungEigentum.add(panInhaltBuchungsblatt, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 15, 10, 15);
+        panBuchungEigentum.add(panInhaltBuchungsblatt, gridBagConstraints);
 
-            semiRoundedPanel1.setBackground(java.awt.Color.darkGray);
-            semiRoundedPanel1.setLayout(new java.awt.GridBagLayout());
+        semiRoundedPanel1.setBackground(java.awt.Color.darkGray);
+        semiRoundedPanel1.setLayout(new java.awt.GridBagLayout());
 
-            jLabel1.setText("Buchungsblätter");
-            jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-            semiRoundedPanel1.add(jLabel1, gridBagConstraints);
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Buchungsblätter");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        semiRoundedPanel1.add(jLabel1, gridBagConstraints);
 
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridwidth = 3;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            panBuchungEigentum.add(semiRoundedPanel1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panBuchungEigentum.add(semiRoundedPanel1, gridBagConstraints);
 
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 0;
-            gridBagConstraints.gridy = 1;
-            gridBagConstraints.gridwidth = 2;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.weighty = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
-            panDescription.add(panBuchungEigentum, gridBagConstraints);
-        }
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
+        panDescription.add(panBuchungEigentum, gridBagConstraints);
 
         panMainInfo.setLayout(new java.awt.GridBagLayout());
 
@@ -1321,7 +1326,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
      * @param  evt  DOCUMENT ME!
      */
     private void lstBuchungsblaetterValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstBuchungsblaetterValueChanged
-        if (!evt.getValueIsAdjusting()) {
+        if (buchungsblattPermission && !evt.getValueIsAdjusting()) {
             final Object[] selectedObjs = lstBuchungsblaetter.getSelectedValues();
             if ((selectedObjs != null) && (selectedObjs.length > 0)) {
                 final Collection<CidsBean> selectedBeans = TypeSafeCollections.newArrayList(selectedObjs.length);
@@ -1678,7 +1683,7 @@ public class Alkis_landparcelRenderer extends javax.swing.JPanel implements Bord
                     ObjectRendererUtils.showExceptionWindowToUser(
                             "Fehler beim Empfangen",
                             ex,
-                            Alkis_landparcelRenderer.this);
+                            AlkisLandparcelRenderer.this);
                     log.error(ex, ex);
                 }
             }

@@ -228,7 +228,7 @@ public class ObjectRendererUtils {
      *
      * @return  DOCUMENT ME!
      */
-    public static final MetaObject[] getLightweightMetaObjectsForTable(final String tabName, final String[] fields) {
+    public static MetaObject[] getLightweightMetaObjectsForTable(final String tabName, final String[] fields) {
         return getLightweightMetaObjectsForTable(tabName, fields, null);
     }
 
@@ -241,7 +241,7 @@ public class ObjectRendererUtils {
      *
      * @return  DOCUMENT ME!
      */
-    public static final MetaObject[] getLightweightMetaObjectsForTable(final String tabName,
+    public static MetaObject[] getLightweightMetaObjectsForTable(final String tabName,
             final String[] fields,
             AbstractAttributeRepresentationFormater formatter) {
         if (formatter == null) {

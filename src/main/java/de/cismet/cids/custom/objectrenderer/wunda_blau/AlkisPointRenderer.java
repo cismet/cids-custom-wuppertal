@@ -76,7 +76,7 @@ import de.cismet.tools.gui.TitleComponentProvider;
  * @author   srichter
  * @version  $Revision$, $Date$
  */
-public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanRenderer,
+public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRenderer,
         TitleComponentProvider,
         FooterComponentProvider,
         BorderProvider {
@@ -94,7 +94,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
 //    private ImageIcon BACKWARD_PRESSED;
 //    private ImageIcon BACKWARD_SELECTED;
     private static final Color PUNKTORT_MIT_KARTENDARSTELLUNG = new Color(120, 255, 190);
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alkis_pointRenderer.class);
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisPointRenderer.class);
     private static final Converter<String, String> ALKIS_BOOLEAN_CONVERTER = new Converter<String, String>() {
 
         private static final String TRUE_REP = "Ja";
@@ -361,7 +361,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
     /**
      * Creates new form Alkis_pointRenderer.
      */
-    public Alkis_pointRenderer() {
+    public AlkisPointRenderer() {
         retrieveableLabels = TypeSafeCollections.newArrayList();
         productPreviewImages = TypeSafeCollections.newHashMap();
         try {
@@ -751,7 +751,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPointInfo.add(lblDescIdentifikator, gridBagConstraints);
 
-        lblDescMarke.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblDescMarke.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblDescMarke.setText("Marke:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1572,7 +1572,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
             ObjectRendererUtils.showExceptionWindowToUser(
                     "Fehler beim Aufruf des Produkts",
                     ex,
-                    Alkis_pointRenderer.this);
+                    AlkisPointRenderer.this);
             log.error(ex);
         }
     }
@@ -1760,14 +1760,14 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
                 try {
                     final Point point = get();
                     if (point != null) {
-                        Alkis_pointRenderer.this.setPoint(point);
+                        AlkisPointRenderer.this.setPoint(point);
                         final PointLocation[] pointlocArr = point.getPointLocations();
                         if (pointlocArr != null) {
                             Arrays.sort(pointlocArr, POINTLOCATION_COMPARATOR);
-                            Alkis_pointRenderer.this.setPointLocations(Arrays.asList(pointlocArr));
+                            AlkisPointRenderer.this.setPointLocations(Arrays.asList(pointlocArr));
                         }
-                        Alkis_pointRenderer.this.bindingGroup.unbind();
-                        Alkis_pointRenderer.this.bindingGroup.bind();
+                        AlkisPointRenderer.this.bindingGroup.unbind();
+                        AlkisPointRenderer.this.bindingGroup.bind();
                         panLocationInfos.setVisible(true);
                     }
                 } catch (InterruptedException ex) {
@@ -1785,7 +1785,7 @@ public class Alkis_pointRenderer extends javax.swing.JPanel implements CidsBeanR
                             Level.ALL,
                             null);
                     org.jdesktop.swingx.JXErrorPane.showDialog(StaticSwingTools.getParentFrame(
-                            Alkis_pointRenderer.this),
+                            AlkisPointRenderer.this),
                             ei);
                     log.error(ex, ex);
                 }

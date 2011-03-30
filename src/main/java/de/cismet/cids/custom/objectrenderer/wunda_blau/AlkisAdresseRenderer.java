@@ -55,14 +55,14 @@ import de.cismet.tools.gui.TitleComponentProvider;
  * @author   srichter
  * @version  $Revision$, $Date$
  */
-public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBeanRenderer,
+public class AlkisAdresseRenderer extends javax.swing.JPanel implements CidsBeanRenderer,
     BorderProvider,
     TitleComponentProvider,
     FooterComponentProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alkis_adresseRenderer.class);
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisAdresseRenderer.class);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -119,7 +119,7 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
     /**
      * Creates new form Alkis_pointRenderer.
      */
-    public Alkis_adresseRenderer() {
+    public AlkisAdresseRenderer() {
         initComponents();
         blWait.setVisible(false);
     }
@@ -260,12 +260,7 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panAdresseContent.add(lblDescHausnummer, gridBagConstraints);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.strasse}"),
-                lblStrasse,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.strasse}"), lblStrasse, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -276,12 +271,7 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panAdresseContent.add(lblStrasse, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.nummer}"),
-                lblHausnummer,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.nummer}"), lblHausnummer, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -319,14 +309,14 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
         panGebaeudeContent.setOpaque(false);
         panGebaeudeContent.setLayout(new java.awt.GridBagLayout());
 
-        lblDescFunktion.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblDescFunktion.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblDescFunktion.setText("Funktion:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panGebaeudeContent.add(lblDescFunktion, gridBagConstraints);
 
-        lblDescStockwerkeOber.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblDescStockwerkeOber.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblDescStockwerkeOber.setText("Oberirdische Geschosse:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -335,12 +325,7 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panGebaeudeContent.add(lblDescStockwerkeOber, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebaeude.funktion}"),
-                lblFunktion,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebaeude.funktion}"), lblFunktion, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -351,12 +336,7 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panGebaeudeContent.add(lblFunktion, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebaeude.geschosse_oberirdisch}"),
-                lblStockwerkeOber,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebaeude.geschosse_oberirdisch}"), lblStockwerkeOber, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -377,12 +357,7 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panGebaeudeContent.add(lblDescBauweise, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebaeude.bauweise}"),
-                lblBauweise,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebaeude.bauweise}"), lblBauweise, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -403,12 +378,7 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panGebaeudeContent.add(lblDescStockwerkeUnter, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebaeude.geschosse_unterirdisch}"),
-                lblStockwerkeUnter,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebaeude.geschosse_unterirdisch}"), lblStockwerkeUnter, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("keine Angabe");
         binding.setSourceUnreadableValue("<Error>");
         bindingGroup.addBinding(binding);
@@ -420,25 +390,17 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panGebaeudeContent.add(lblStockwerkeUnter, gridBagConstraints);
 
-        final org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
-                "${cidsBean.gebaeude.landparcels}");
-        final org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings
-                    .createJListBinding(
-                        org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
-                        this,
-                        eLProperty,
-                        lstLandparcels);
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gebaeude.landparcels}");
+        org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, eLProperty, lstLandparcels);
         jListBinding.setSourceNullValue(null);
         jListBinding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(jListBinding);
 
         lstLandparcels.addMouseListener(new java.awt.event.MouseAdapter() {
-
-                @Override
-                public void mouseClicked(final java.awt.event.MouseEvent evt) {
-                    lstLandparcelsMouseClicked(evt);
-                }
-            });
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lstLandparcelsMouseClicked(evt);
+            }
+        });
         scpLandparcels.setViewportView(lstLandparcels);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -487,14 +449,14 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
         add(panGebaeude, gridBagConstraints);
 
         bindingGroup.bind();
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstLandparcelsMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstLandparcelsMouseClicked
+    private void lstLandparcelsMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstLandparcelsMouseClicked
         if (evt.getClickCount() > 1) {
             final Object selection = lstLandparcels.getSelectedValue();
             if (selection instanceof CidsBean) {
@@ -511,7 +473,7 @@ public class Alkis_adresseRenderer extends javax.swing.JPanel implements CidsBea
                 }
             }
         }
-    }                                                                              //GEN-LAST:event_lstLandparcelsMouseClicked
+    }//GEN-LAST:event_lstLandparcelsMouseClicked
 
     @Override
     public void setCidsBean(final CidsBean cb) {

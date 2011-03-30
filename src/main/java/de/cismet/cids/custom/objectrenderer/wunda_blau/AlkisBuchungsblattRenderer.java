@@ -88,7 +88,6 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.commons.BoundingBox;
-import de.cismet.cismap.commons.Crs;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.features.DefaultStyledFeature;
 import de.cismet.cismap.commons.features.StyledFeature;
@@ -103,6 +102,7 @@ import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.TitleComponentProvider;
+import javax.swing.JOptionPane;
 
 /**
  * DOCUMENT ME!
@@ -110,7 +110,7 @@ import de.cismet.tools.gui.TitleComponentProvider;
  * @author   srichter
  * @version  $Revision$, $Date$
  */
-public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements CidsBeanRenderer,
+public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements CidsBeanRenderer,
         BorderProvider,
         TitleComponentProvider,
         FooterComponentProvider {
@@ -125,7 +125,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
     };
     public static final List<Color> LANDPARCEL_COLORS = Collections.unmodifiableList(Arrays.asList(COLORS));
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(
-            Alkis_buchungsblattRenderer.class);
+            AlkisBuchungsblattRenderer.class);
     private static final String ICON_RES_PACKAGE = "/de/cismet/cids/custom/wunda_blau/res/";
     private static final String ALKIS_RES_PACKAGE = ICON_RES_PACKAGE + "alkis/";
     private static final String CARD_1 = "CARD_1";
@@ -230,7 +230,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
     /**
      * Creates new form Alkis_pointRenderer.
      */
-    public Alkis_buchungsblattRenderer() {
+    public AlkisBuchungsblattRenderer() {
         map = new MappingComponent();
 //        landParcelFeatureMap = TypeSafeCollections.newHashMap();
         map.setOpaque(false);
@@ -316,6 +316,10 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         BESTAND_KOM_HTML = new ImageIcon(i4);
         GRUND_NRW_PDF = new ImageIcon(i5);
         GRUND_NRW_HTML = new ImageIcon(i6);
+    }
+
+    private void showNoProductPermissionWarning() {
+        JOptionPane.showMessageDialog(this, "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
     }
 
     /**
@@ -660,7 +664,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblBlattart, gridBagConstraints);
 
-        lblDescBuchungsart.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblDescBuchungsart.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblDescBuchungsart.setText("Buchungsart:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1012,10 +1016,11 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
                 ObjectRendererUtils.showExceptionWindowToUser(
                         "Fehler beim Aufruf des Produkts: " + product,
                         ex,
-                        Alkis_buchungsblattRenderer.this);
+                        AlkisBuchungsblattRenderer.this);
                 log.error(ex);
             }
         } else {
+            showNoProductPermissionWarning();
         }
     }
 
@@ -1565,7 +1570,7 @@ public class Alkis_buchungsblattRenderer extends javax.swing.JPanel implements C
                 ObjectRendererUtils.showExceptionWindowToUser(
                         "Fehler beim Retrieve",
                         ex,
-                        Alkis_buchungsblattRenderer.this);
+                        AlkisBuchungsblattRenderer.this);
                 epOwner.setText("Fehler beim Laden!");
                 log.error(ex, ex);
             } finally {

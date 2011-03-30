@@ -22,11 +22,11 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
  * @author   srichter
  * @version  $Revision$, $Date$
  */
-public class Alkis_gebaeudeRenderer extends javax.swing.JPanel implements CidsBeanRenderer {
+public class AlkisGebaeudeRenderer extends javax.swing.JPanel implements CidsBeanRenderer {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alkis_gebaeudeRenderer.class);
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisGebaeudeRenderer.class);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -38,7 +38,7 @@ public class Alkis_gebaeudeRenderer extends javax.swing.JPanel implements CidsBe
     /**
      * Creates new form Alkis_gebaeudeRenderer.
      */
-    public Alkis_gebaeudeRenderer() {
+    public AlkisGebaeudeRenderer() {
         initComponents();
     }
 
@@ -51,15 +51,20 @@ public class Alkis_gebaeudeRenderer extends javax.swing.JPanel implements CidsBe
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+
         setOpaque(false);
 
-        final javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 400, Short.MAX_VALUE));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 300, Short.MAX_VALUE));
-    } // </editor-fold>//GEN-END:initComponents
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+    }// </editor-fold>//GEN-END:initComponents
 
     @Override
     public CidsBean getCidsBean() {
