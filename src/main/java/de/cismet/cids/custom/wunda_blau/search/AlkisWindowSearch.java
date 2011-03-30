@@ -12,6 +12,7 @@
  */
 package de.cismet.cids.custom.wunda_blau.search;
 
+import Sirius.navigator.actiontag.ActionTagProtected;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.method.MethodManager;
 
@@ -29,6 +30,7 @@ import javax.swing.JComponent;
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 
 
 
@@ -48,10 +50,11 @@ import de.cismet.tools.CismetThreadPool;
  * @version  $Revision$, $Date$
  */
 @org.openide.util.lookup.ServiceProvider(service = CidsWindowSearch.class)
-public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowSearch {
+public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowSearch, ActionTagProtected {
 
     //~ Static fields/initializers ---------------------------------------------
     static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisWindowSearch.class);
+    private static final String ACTION_TAG = "custom.alkis.windowsearch";
     //~ Instance fields --------------------------------------------------------
     private final MetaClass mc;
     private final ImageIcon icon;
@@ -259,6 +262,11 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     public CidsServerSearch getServerSearch() {
         final AlkisSearchInfo bsi = getAlkisInfoFromGUI();
         return new CidsAlkisSearchStatement(bsi);
+    }
+
+    @Override
+    public boolean checkActionTag() {
+        return ObjectRendererUtils.checkActionTag(ACTION_TAG);
     }
 //    @Override
 //    public boolean checkActionTag() {

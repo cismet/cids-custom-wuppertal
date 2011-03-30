@@ -88,6 +88,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
     public static final String TITLE_AGR_PREFIX = "Baulastblätter";
     private static final String FLURSTUECKE_BELASTET = "flurstuecke_belastet";
     private static final String FLURSTUECKE_BEGUENSTIGT = "flurstuecke_beguenstigt";
+    private static final String ACTION_TAG = "custom.baulast.document";
     //~ Instance fields --------------------------------------------------------
 // private static final Validator<String> NUMBER_VALIDATOR = new Validator<String>() {
 //
@@ -213,8 +214,8 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         return cidsBean;
     }
 
-    private void disableSecondPageIfNoWritePermission() {
-        if (ObjectRendererUtils.checkActionTag("custom.baulast.document")) {
+    private void disableSecondPageIfNoPermission() {
+        if (ObjectRendererUtils.checkActionTag(ACTION_TAG)) {
             for (MouseListener l : lblForw.getMouseListeners()) {
                 lblForw.removeMouseListener(l);
             }
@@ -272,7 +273,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                         strongReferenceToWeakListener,
                         cidsBean));
             }
-            disableSecondPageIfNoWritePermission();
+            disableSecondPageIfNoPermission();
         } catch (Exception x) {
             log.error(x, x);
         }

@@ -511,11 +511,17 @@ public final class AlkisUtil {
         //Flurstueck
         public final String FLURSTUECKSNACHWEIS_PDF;
         public final String FLURSTUECKSNACHWEIS_HTML;
-        public final String FLURSTUECKS_UND_EIGENTUMSNACHWEIS_PDF;
-        public final String FLURSTUECKS_UND_EIGENTUMSNACHWEIS_HTML;
+        public final String FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF;
+        public final String FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_HTML;
+        public final String FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF;
+        public final String FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_HTML;
         //Buchungsblatt
-        public final String BESTANDSNACHWEIS_PDF;
-        public final String BESTANDSNACHWEIS_HTML;
+        public final String BESTANDSNACHWEIS_NRW_PDF;
+        public final String BESTANDSNACHWEIS_NRW_HTML;
+        public final String BESTANDSNACHWEIS_KOMMUNAL_PDF;
+        public final String BESTANDSNACHWEIS_KOMMUNAL_HTML;
+        public final String GRUNDSTUECKSNACHWEIS_NRW_PDF;
+        public final String GRUNDSTUECKSNACHWEIS_NRW_HTML;
         //Punkt
         public final String PUNKTLISTE_PDF;
         public final String PUNKTLISTE_HTML;
@@ -542,11 +548,17 @@ public final class AlkisUtil {
             IDENTIFICATION = "user=" + user + "&password=" + pw + "&service=" + service;
             FLURSTUECKSNACHWEIS_PDF = productProperties.getProperty("FLURSTUECKSNACHWEIS_PDF");
             FLURSTUECKSNACHWEIS_HTML = productProperties.getProperty("FLURSTUECKSNACHWEIS_HTML");
-            FLURSTUECKS_UND_EIGENTUMSNACHWEIS_PDF = productProperties.getProperty("FLURSTUECKS_UND_EIGENTUMSNACHWEIS_PDF");
-            FLURSTUECKS_UND_EIGENTUMSNACHWEIS_HTML = productProperties.getProperty("FLURSTUECKS_UND_EIGENTUMSNACHWEIS_HTML");
+            FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF = productProperties.getProperty("FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF");
+            FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_HTML = productProperties.getProperty("FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_HTML");
+            FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF = productProperties.getProperty("FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF");
+            FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_HTML = productProperties.getProperty("FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_HTML");
             //
-            BESTANDSNACHWEIS_PDF = productProperties.getProperty("BESTANDSNACHWEIS_PDF");
-            BESTANDSNACHWEIS_HTML = productProperties.getProperty("BESTANDSNACHWEIS_HTML");
+            GRUNDSTUECKSNACHWEIS_NRW_PDF = productProperties.getProperty("GRUNDSTUECKSNACHWEIS_NRW_PDF");
+            GRUNDSTUECKSNACHWEIS_NRW_HTML = productProperties.getProperty("GRUNDSTUECKSNACHWEIS_NRW_HTML");
+            BESTANDSNACHWEIS_NRW_PDF = productProperties.getProperty("BESTANDSNACHWEIS_NRW_PDF");
+            BESTANDSNACHWEIS_NRW_HTML = productProperties.getProperty("BESTANDSNACHWEIS_NRW_HTML");
+            BESTANDSNACHWEIS_KOMMUNAL_PDF = productProperties.getProperty("BESTANDSNACHWEIS_KOMMUNAL_PDF");
+            BESTANDSNACHWEIS_KOMMUNAL_HTML = productProperties.getProperty("BESTANDSNACHWEIS_KOMMUNAL_HTML");
             //
             PUNKTLISTE_PDF = productProperties.getProperty("PUNKTLISTE_PDF");
             PUNKTLISTE_HTML = productProperties.getProperty("PUNKTLISTE_HTML");
@@ -640,7 +652,6 @@ public final class AlkisUtil {
                     + "&id=" + objectID;
             log.info("Open product URL : " + url);
             ObjectRendererUtils.openURL(url);
-
         }
 
         /**

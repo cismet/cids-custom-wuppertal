@@ -19,6 +19,8 @@ import Sirius.server.middleware.types.AbstractAttributeRepresentationFormater;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.newuser.User;
+import Sirius.server.newuser.UserGroup;
+import Sirius.server.newuser.permission.PermissionHolder;
 
 import org.jdesktop.swingx.error.ErrorInfo;
 import org.jdesktop.swingx.graphics.ShadowRenderer;
@@ -539,6 +541,35 @@ public class ObjectRendererUtils {
         }
     }
 
+    public enum PermissionType {
+
+        READ, WRITE, READ_WRITE
+    }
+
+    public static boolean hasCurrentUserPermissionOnMetaClass(String mcTableName, String domain, PermissionType permissionToCheck) {
+        final MetaClass mc = ClassCacheMultiple.getMetaClass(domain, mcTableName);
+        return hasCurrentUserPermissionOnMetaClass(mc, permissionToCheck);
+    }
+
+    public static boolean hasCurrentUserPermissionOnMetaClass(MetaClass mc, PermissionType permissionToCheck) {
+        return hasUserPermissionOnMetaClass(mc, SessionManager.getSession().getUser(), permissionToCheck);
+    }
+
+    public static boolean hasUserPermissionOnMetaClass(MetaClass mc, User user, PermissionType permissionToCheck) {
+        final PermissionHolder mcPermissions = mc.getPermissions();
+        final UserGroup group = user.getUserGroup();
+        switch (permissionToCheck) {
+            case READ:
+                return mcPermissions.hasReadPermission(group);
+            case WRITE:
+                return mcPermissions.hasWritePermission(group);
+            case READ_WRITE:
+                return mcPermissions.hasWritePermission(group) && mcPermissions.hasReadPermission(group);
+            default:
+                return false;
+        }
+    }
+
     /**
      * DOCUMENT ME!
      *
@@ -572,7 +603,7 @@ public class ObjectRendererUtils {
      *
      * @return  DOCUMENT ME!
      */
-    public static final int findComboBoxItemForString(final JComboBox box, final String searchString) {
+    public static int findComboBoxItemForString(final JComboBox box, final String searchString) {
         if ((box != null) && (searchString != null)) {
             final ComboBoxModel model = box.getModel();
             if (model != null) {
