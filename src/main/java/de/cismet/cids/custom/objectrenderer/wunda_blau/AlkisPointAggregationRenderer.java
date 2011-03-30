@@ -67,6 +67,7 @@ import de.cismet.cismap.navigatorplugin.CidsFeature;
 
 import de.cismet.tools.collections.TypeSafeCollections;
 import java.text.NumberFormat;
+import javax.swing.JOptionPane;
 
 /**
  * DOCUMENT ME!
@@ -241,18 +242,22 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
      * @param  evt  DOCUMENT ME!
      */
     private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
-        final String format = cbProducts.getSelectedItem().toString();
-        final String code;
-        if (PDF.equals(format)) {
-            code = AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_PDF;
-        } else if (HTML.equals(format)) {
-            code = AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_HTML;
+        if (ObjectRendererUtils.checkActionTag(AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE)) {
+            final String format = cbProducts.getSelectedItem().toString();
+            final String code;
+            if (PDF.equals(format)) {
+                code = AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_PDF;
+            } else if (HTML.equals(format)) {
+                code = AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_HTML;
+            } else {
+                code = AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_TXT;
+            }
+            final String punktListenString = getPunktlistenStringForChosenPoints();
+            if (punktListenString.length() > 3) {
+                AlkisUtil.COMMONS.PRODUCTS.productListenNachweis(punktListenString, code);
+            }
         } else {
-            code = AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_TXT;
-        }
-        final String punktListenString = getPunktlistenStringForChosenPoints();
-        if (punktListenString.length() > 3) {
-            AlkisUtil.COMMONS.PRODUCTS.productListenNachweis(punktListenString, code);
+            JOptionPane.showMessageDialog(this, "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
         }
     }//GEN-LAST:event_btnCreateActionPerformed
 

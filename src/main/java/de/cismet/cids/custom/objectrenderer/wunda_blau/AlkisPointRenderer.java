@@ -69,6 +69,7 @@ import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
+import javax.swing.JOptionPane;
 
 /**
  * DOCUMENT ME!
@@ -89,6 +90,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
     private static final String CARD_1 = "CARD_1";
     private static final String CARD_2 = "CARD_2";
     private static final String ERHEBUNGS_PROPERTIES = "datenerhebung.properties";
+    static final String PRODUCT_ACTION_TAG_PUNKTLISTE = "custom.alkis.product.punktliste";
 //    private ImageIcon FORWARD_PRESSED;
 //    private ImageIcon FORWARD_SELECTED;
 //    private ImageIcon BACKWARD_PRESSED;
@@ -1564,16 +1566,24 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         btnForwardActionPerformed(null);
     }//GEN-LAST:event_lblForwMouseClicked
 
-    private void processProductLink(String productType) {
-        try {
-            String pointData = AlkisUtil.COMMONS.PRODUCTS.getPointDataForProduct(cidsBean);
-            AlkisUtil.COMMONS.PRODUCTS.productListenNachweis(pointData, productType);
-        } catch (Exception ex) {
-            ObjectRendererUtils.showExceptionWindowToUser(
-                    "Fehler beim Aufruf des Produkts",
-                    ex,
-                    AlkisPointRenderer.this);
-            log.error(ex);
+    private void showNoProductPermissionWarning() {
+        JOptionPane.showMessageDialog(this, "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
+    }
+
+    private void openProduct(String productType) {
+        if (ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE)) {
+            try {
+                String pointData = AlkisUtil.COMMONS.PRODUCTS.getPointDataForProduct(cidsBean);
+                AlkisUtil.COMMONS.PRODUCTS.productListenNachweis(pointData, productType);
+            } catch (Exception ex) {
+                ObjectRendererUtils.showExceptionWindowToUser(
+                        "Fehler beim Aufruf des Produkts",
+                        ex,
+                        AlkisPointRenderer.this);
+                log.error(ex);
+            }
+        } else {
+            showNoProductPermissionWarning();
         }
     }
 
@@ -1583,7 +1593,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      * @param  evt  DOCUMENT ME!
      */
     private void hlPunktlistePdfActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlPunktlistePdfActionPerformed
-        processProductLink(AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_PDF);
+        openProduct(AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_PDF);
     }//GEN-LAST:event_hlPunktlistePdfActionPerformed
 
     /**
@@ -1592,7 +1602,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      * @param  evt  DOCUMENT ME!
      */
     private void hlPunktlisteHtmlActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlPunktlisteHtmlActionPerformed
-        processProductLink(AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_HTML);
+        openProduct(AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_HTML);
     }//GEN-LAST:event_hlPunktlisteHtmlActionPerformed
 
     /**
@@ -1618,7 +1628,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      * @param  evt  DOCUMENT ME!
      */
     private void hlPunktlisteTxtActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlPunktlisteTxtActionPerformed
-        processProductLink(AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_TXT);
+        openProduct(AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_TXT);
     }//GEN-LAST:event_hlPunktlisteTxtActionPerformed
 
     @Override
