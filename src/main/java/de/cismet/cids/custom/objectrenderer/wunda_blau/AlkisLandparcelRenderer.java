@@ -116,7 +116,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
     private static final String PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM = "custom.alkis.product.flurstuecks_eigentumsnachweis_kom";
     private static final String PRODUCT_ACTION_TAG_KARTE = "custom.alkis.product.karte";
     //
-    private static final String BUCHUNGSBLATT_TABLE = "ALKIS_BUCHUNGSBLATT";
+    private static final String BUCHUNGSBLATT_TABLE = "alkis_buchungsblatt";
     private static final String DOMAIN = "WUNDA_BLAU";
     private final boolean buchungsblattPermission;
 

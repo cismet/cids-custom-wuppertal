@@ -556,18 +556,19 @@ public class ObjectRendererUtils {
     }
 
     public static boolean hasUserPermissionOnMetaClass(MetaClass mc, User user, PermissionType permissionToCheck) {
-        final PermissionHolder mcPermissions = mc.getPermissions();
-        final UserGroup group = user.getUserGroup();
-        switch (permissionToCheck) {
-            case READ:
-                return mcPermissions.hasReadPermission(group);
-            case WRITE:
-                return mcPermissions.hasWritePermission(group);
-            case READ_WRITE:
-                return mcPermissions.hasWritePermission(group) && mcPermissions.hasReadPermission(group);
-            default:
-                return false;
+        if (mc != null && user != null && permissionToCheck != null) {
+            final PermissionHolder mcPermissions = mc.getPermissions();
+            final UserGroup group = user.getUserGroup();
+            switch (permissionToCheck) {
+                case READ:
+                    return mcPermissions.hasReadPermission(group);
+                case WRITE:
+                    return mcPermissions.hasWritePermission(group);
+                case READ_WRITE:
+                    return mcPermissions.hasWritePermission(group) && mcPermissions.hasReadPermission(group);
+            }
         }
+        return false;
     }
 
     /**
