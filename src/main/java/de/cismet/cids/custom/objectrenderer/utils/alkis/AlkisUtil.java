@@ -648,8 +648,8 @@ public final class AlkisUtil {
          * @param  format      DOCUMENT ME!
          */
         public void productEinzelNachweis(final String objectID, final String productCode) {
-            final String url = COMMONS.EINZEL_NACHWEIS_SERVICE + "?" + IDENTIFICATION + "&product=" + productCode
-                    + "&id=" + objectID;
+            final String url = COMMONS.EINZEL_NACHWEIS_SERVICE +  "?product=" + productCode
+                    + "&id=" + objectID+"&"+IDENTIFICATION;
             log.info("Open product URL : " + url);
             ObjectRendererUtils.openURL(url);
         }
@@ -672,8 +672,8 @@ public final class AlkisUtil {
          * @param  format      DOCUMENT ME!
          */
         public void productListenNachweis(final String punktliste, final String productCode) {
-            final String url = COMMONS.LISTEN_NACHWEIS_SERVICE + "?" + IDENTIFICATION + "&product=" + productCode
-                    + "&ids=" + punktliste;
+            final String url = COMMONS.LISTEN_NACHWEIS_SERVICE + "?product=" + productCode
+                    + "&ids=" + punktliste+"&"+IDENTIFICATION;
             log.info("Open product URL : " + url);
             ObjectRendererUtils.openURL(url);
 
@@ -706,7 +706,7 @@ public final class AlkisUtil {
          * @param  parcelCode  DOCUMENT ME!
          */
         public void productKarte(final String parcelCode) {
-            final String url = COMMONS.LIEGENSCHAFTSKARTE_SERVICE + "?" + IDENTIFICATION + "&landparcel=" + parcelCode;
+            final String url = COMMONS.LIEGENSCHAFTSKARTE_SERVICE + "?landparcel=" + parcelCode+"&"+IDENTIFICATION;
             log.info("Open product URL : " + url);
             ObjectRendererUtils.openURL(url);
         }
@@ -730,7 +730,7 @@ public final class AlkisUtil {
                 final String zusText,
                 final String auftragsNr,
                 final boolean moreThanOneParcel) {
-            String url = COMMONS.LIEGENSCHAFTSKARTE_SERVICE + "?" + IDENTIFICATION + "&landparcel=" + parcelCode
+            String url = COMMONS.LIEGENSCHAFTSKARTE_SERVICE + "?landparcel=" + parcelCode
                     + "&angle=" + winkel
                     + "&product=" + produkt.getCode()
                     + "&centerx=" + centerX + "&centery=" + centerY;
@@ -743,7 +743,7 @@ public final class AlkisUtil {
             if (moreThanOneParcel) {
                 url += "&additionalLandparcel=true";
             }
-            url += "&";
+            url += "&" +IDENTIFICATION;
             log.info("Open product URL : " + url);
             ObjectRendererUtils.openURL(url);
         }
