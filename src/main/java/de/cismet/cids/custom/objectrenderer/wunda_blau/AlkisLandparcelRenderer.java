@@ -1020,7 +1020,9 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 5);
         panDescription.add(panMainInfo, gridBagConstraints);
 
@@ -1028,6 +1030,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         panFlurstueckMap.setLayout(new java.awt.BorderLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 5);
         panDescription.add(panFlurstueckMap, gridBagConstraints);
 
