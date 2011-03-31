@@ -765,6 +765,7 @@
                   <Image iconType="3" name="/de/cismet/cids/custom/icons/pdf.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Grundst&#xfc;cksnachweis (NRW)"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="hlGrundstuecksnachweisNrwPdfActionPerformed"/>
@@ -959,6 +960,7 @@
                   <Image iconType="3" name="/de/cismet/cids/custom/icons/text-html.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Grundst&#xfc;cksnachweis (NRW)"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="hlGrundstuecksnachweisNrwHtmlActionPerformed"/>

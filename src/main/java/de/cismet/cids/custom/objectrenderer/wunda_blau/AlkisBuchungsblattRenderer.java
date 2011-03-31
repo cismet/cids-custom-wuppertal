@@ -30,6 +30,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 
 import de.aedsicad.aaaweb.service.alkis.info.ALKISInfoServices;
 import de.aedsicad.aaaweb.service.util.Buchungsblatt;
+import de.aedsicad.aaaweb.service.util.Buchungsstelle;
 import de.aedsicad.aaaweb.service.util.Offices;
 import de.aedsicad.aaaweb.service.util.Owner;
 
@@ -867,6 +868,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 
         hlGrundstuecksnachweisNrwPdf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
         hlGrundstuecksnachweisNrwPdf.setText("Grundstücksnachweis (NRW)");
+        hlGrundstuecksnachweisNrwPdf.setEnabled(false);
         hlGrundstuecksnachweisNrwPdf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hlGrundstuecksnachweisNrwPdfActionPerformed(evt);
@@ -982,6 +984,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 
         hlGrundstuecksnachweisNrwHtml.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/text-html.png"))); // NOI18N
         hlGrundstuecksnachweisNrwHtml.setText("Grundstücksnachweis (NRW)");
+        hlGrundstuecksnachweisNrwHtml.setEnabled(false);
         hlGrundstuecksnachweisNrwHtml.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hlGrundstuecksnachweisNrwHtmlActionPerformed(evt);
@@ -1007,10 +1010,13 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private void openProduct(String product, String actionTag) {
         if (ObjectRendererUtils.checkActionTag(actionTag)) {
             try {
-                String buchungsblattCode = getCompleteBuchungsblattCode();
-                if (buchungsblattCode.length() > 0) {
-                    buchungsblattCode = AlkisUtil.escapeHtmlSpaces(buchungsblattCode);
-                    AlkisUtil.COMMONS.PRODUCTS.productEinzelNachweis(buchungsblattCode, product);
+                String queryID = getCompleteBuchungsblattCode();
+                if (queryID.length() > 0) {
+                    if (AlkisUtil.COMMONS.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_PDF.equals(product) || AlkisUtil.COMMONS.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_HTML.equals(product)) {
+                        queryID += getCompleteLaufendeNrCode();
+                    }
+                    queryID = AlkisUtil.escapeHtmlSpaces(queryID);
+                    AlkisUtil.COMMONS.PRODUCTS.productEinzelNachweis(queryID, product);
                 }
             } catch (Exception ex) {
                 ObjectRendererUtils.showExceptionWindowToUser(
@@ -1181,6 +1187,20 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         }
     }
 
+    public static String fixLaufendeNrCode(final String laufendeNrCode) {
+        if (laufendeNrCode != null) {
+            final StringBuffer laufendeNrCodeSB = new StringBuffer(laufendeNrCode);
+            // Fix SICAD-API-strangeness...
+            while (laufendeNrCodeSB.length() < 4) {
+                laufendeNrCodeSB.insert(0, '0');
+            }
+            laufendeNrCodeSB.insert(0, ' ');
+            return laufendeNrCodeSB.toString();
+        } else {
+            return "";
+        }
+    }
+
     /**
      * DOCUMENT ME!
      *
@@ -1191,6 +1211,19 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
             final Object buchungsblattCodeObj = cidsBean.getProperty("buchungsblattcode");
             if (buchungsblattCodeObj != null) {
                 return fixBuchungslattCode(buchungsblattCodeObj.toString());
+            }
+        }
+        return "";
+    }
+
+    private String getCompleteLaufendeNrCode() {        
+        if (buchungsblatt != null) {
+            Buchungsstelle[] stellen = buchungsblatt.getBuchungsstellen();
+            if (stellen != null && stellen.length > 0) {
+                Buchungsstelle first = stellen[0];
+                if (first != null) {
+                    return fixLaufendeNrCode(first.getSequentialNumber());
+                }
             }
         }
         return "";
@@ -1562,6 +1595,9 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                         }
                         ownerBuilder.append("</html>");
                         epOwner.setText(ownerBuilder.toString());
+                        //enable products that depend on soap info
+                        hlGrundstuecksnachweisNrwPdf.setEnabled(true);
+                        hlGrundstuecksnachweisNrwHtml.setEnabled(true);
                     }
                 }
             } catch (InterruptedException ex) {
