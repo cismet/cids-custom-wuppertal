@@ -53,10 +53,15 @@ public class JLoadDots extends JPanel implements Disposable {
         /*
          *Umgeheung des von Matisse automatisch erzeugten GroupLayouts
          */
+        removeAll();
         if(mgr instanceof GroupLayout){
             super.setLayout(new BorderLayout());
-            removeAll();
             this.add(BorderLayout.CENTER,busyLabel);
+        }
+        else{
+            super.setLayout(mgr);
+            if(busyLabel != null)
+                this.add(busyLabel);
         }
     }
 
