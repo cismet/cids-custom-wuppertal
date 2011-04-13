@@ -168,7 +168,7 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
     }
 
     private void disableSecondPageIfNoPermission() {
-        if (ObjectRendererUtils.checkActionTag(ACTION_TAG)) {
+        if (!ObjectRendererUtils.checkActionTag(ACTION_TAG)) {
             for (MouseListener l : lblForw.getMouseListeners()) {
                 lblForw.removeMouseListener(l);
             }
