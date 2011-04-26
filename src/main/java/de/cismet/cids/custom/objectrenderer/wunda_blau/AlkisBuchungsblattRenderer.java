@@ -134,6 +134,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     //
     private static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW = "custom.alkis.product.bestandsnachweis_nrw";
     private static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM = "custom.alkis.product.bestandsnachweis_kom";
+    private static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN = "custom.alkis.product.bestandsnachweis_kom_intern";
     private static final String PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW = "custom.alkis.product.grundstuecksnachweis_nrw";
     //~ Instance fields --------------------------------------------------------
 // private ImageIcon FORWARD_PRESSED;
@@ -167,6 +168,8 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private javax.swing.JButton btnForward;
     private javax.swing.JEditorPane epOwner;
     private org.jdesktop.swingx.JXHyperlink hlBestandsnachweisKomHtml;
+    private org.jdesktop.swingx.JXHyperlink hlBestandsnachweisKomInternHtml;
+    private org.jdesktop.swingx.JXHyperlink hlBestandsnachweisKomInternPdf;
     private org.jdesktop.swingx.JXHyperlink hlBestandsnachweisKomPdf;
     private org.jdesktop.swingx.JXHyperlink hlBestandsnachweisNrwHtml;
     private org.jdesktop.swingx.JXHyperlink hlBestandsnachweisNrwPdf;
@@ -368,6 +371,8 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         productPreviewImages.put(hlBestandsnachweisNrwHtml, BESTAND_NRW_HTML);
         productPreviewImages.put(hlBestandsnachweisKomPdf, BESTAND_KOM_PDF);
         productPreviewImages.put(hlBestandsnachweisKomHtml, BESTAND_KOM_HTML);
+        productPreviewImages.put(hlBestandsnachweisKomInternPdf, BESTAND_KOM_PDF);
+        productPreviewImages.put(hlBestandsnachweisKomInternHtml, BESTAND_KOM_HTML);
         productPreviewImages.put(hlGrundstuecksnachweisNrwPdf, GRUND_NRW_PDF);
         productPreviewImages.put(hlGrundstuecksnachweisNrwHtml, GRUND_NRW_HTML);
         final ProductLabelMouseAdaper productListener = new ProductLabelMouseAdaper();
@@ -375,6 +380,8 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         hlBestandsnachweisNrwPdf.addMouseListener(productListener);
         hlBestandsnachweisKomHtml.addMouseListener(productListener);
         hlBestandsnachweisKomPdf.addMouseListener(productListener);
+        hlBestandsnachweisKomInternHtml.addMouseListener(productListener);
+        hlBestandsnachweisKomInternPdf.addMouseListener(productListener);
         hlGrundstuecksnachweisNrwHtml.addMouseListener(productListener);
         hlGrundstuecksnachweisNrwPdf.addMouseListener(productListener);
     }
@@ -462,6 +469,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         lblHeadProdukte = new javax.swing.JLabel();
         hlBestandsnachweisKomPdf = new org.jdesktop.swingx.JXHyperlink();
         hlGrundstuecksnachweisNrwPdf = new org.jdesktop.swingx.JXHyperlink();
+        hlBestandsnachweisKomInternPdf = new org.jdesktop.swingx.JXHyperlink();
         jPanel9 = new javax.swing.JPanel();
         panProductPreview = new RoundedPanel();
         lblProductPreview = new javax.swing.JLabel();
@@ -475,6 +483,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         jPanel10 = new javax.swing.JPanel();
         hlBestandsnachweisKomHtml = new org.jdesktop.swingx.JXHyperlink();
         hlGrundstuecksnachweisNrwHtml = new org.jdesktop.swingx.JXHyperlink();
+        hlBestandsnachweisKomInternHtml = new org.jdesktop.swingx.JXHyperlink();
 
         panTitle.setOpaque(false);
         panTitle.setLayout(new java.awt.GridBagLayout());
@@ -833,7 +842,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         jPanel8.setOpaque(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.weightx = 1.0;
         panProduktePDF.add(jPanel8, gridBagConstraints);
 
@@ -876,10 +885,24 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 5);
         panProduktePDF.add(hlGrundstuecksnachweisNrwPdf, gridBagConstraints);
+
+        hlBestandsnachweisKomInternPdf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
+        hlBestandsnachweisKomInternPdf.setText("Bestandsnachweis (kommunal, intern)");
+        hlBestandsnachweisKomInternPdf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hlBestandsnachweisKomInternPdfActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 5);
+        panProduktePDF.add(hlBestandsnachweisKomInternPdf, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -965,7 +988,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         jPanel10.setOpaque(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         panProdukteHTML.add(jPanel10, gridBagConstraints);
 
         hlBestandsnachweisKomHtml.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/text-html.png"))); // NOI18N
@@ -992,10 +1015,24 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 5);
         panProdukteHTML.add(hlGrundstuecksnachweisNrwHtml, gridBagConstraints);
+
+        hlBestandsnachweisKomInternHtml.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/text-html.png"))); // NOI18N
+        hlBestandsnachweisKomInternHtml.setText("Bestandsnachweis (kommunal, intern)");
+        hlBestandsnachweisKomInternHtml.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hlBestandsnachweisKomInternHtmlActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 5);
+        panProdukteHTML.add(hlBestandsnachweisKomInternHtml, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1167,6 +1204,13 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         openProduct(AlkisUtil.COMMONS.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_HTML, PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW);
     }//GEN-LAST:event_hlGrundstuecksnachweisNrwHtmlActionPerformed
 
+    private void hlBestandsnachweisKomInternPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlBestandsnachweisKomInternPdfActionPerformed
+        openProduct(AlkisUtil.COMMONS.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_INTERN_PDF, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN);    }//GEN-LAST:event_hlBestandsnachweisKomInternPdfActionPerformed
+
+    private void hlBestandsnachweisKomInternHtmlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlBestandsnachweisKomInternHtmlActionPerformed
+        openProduct(AlkisUtil.COMMONS.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_INTERN_HTML, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN);
+    }//GEN-LAST:event_hlBestandsnachweisKomInternHtmlActionPerformed
+
     /**
      * DOCUMENT ME!
      *
@@ -1216,7 +1260,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         return "";
     }
 
-    private String getCompleteLaufendeNrCode() {        
+    private String getCompleteLaufendeNrCode() {
         if (buchungsblatt != null) {
             Buchungsstelle[] stellen = buchungsblatt.getBuchungsstellen();
             if (stellen != null && stellen.length > 0) {

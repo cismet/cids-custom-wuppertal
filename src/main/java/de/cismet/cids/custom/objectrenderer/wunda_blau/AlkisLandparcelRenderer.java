@@ -114,6 +114,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
     private static final String PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS = "custom.alkis.product.flurstuecksnachweis";
     private static final String PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW = "custom.alkis.product.flurstuecks_eigentumsnachweis_nrw";
     private static final String PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM = "custom.alkis.product.flurstuecks_eigentumsnachweis_kom";
+    private static final String PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN = "custom.alkis.product.flurstuecks_eigentumsnachweis_kom_intern";
     private static final String PRODUCT_ACTION_TAG_KARTE = "custom.alkis.product.karte";
     //
     private static final String BUCHUNGSBLATT_TABLE = "alkis_buchungsblatt";
@@ -204,6 +205,8 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
     private javax.swing.JEditorPane epInhaltBuchungsblatt;
     private javax.swing.JEditorPane epLage;
     private org.jdesktop.swingx.JXHyperlink hlFlurstuecksEigentumsnachweisKomHtml;
+    private org.jdesktop.swingx.JXHyperlink hlFlurstuecksEigentumsnachweisKomInternHtml;
+    private org.jdesktop.swingx.JXHyperlink hlFlurstuecksEigentumsnachweisKomInternPdf;
     private org.jdesktop.swingx.JXHyperlink hlFlurstuecksEigentumsnachweisKomPdf;
     private org.jdesktop.swingx.JXHyperlink hlFlurstuecksEigentumsnachweisNrwHtml;
     private org.jdesktop.swingx.JXHyperlink hlFlurstuecksEigentumsnachweisNrwPdf;
@@ -352,7 +355,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
             btnForward.setEnabled(false);
             lblForw.setEnabled(false);
         }
-        if(!buchungsblattPermission) {
+        if (!buchungsblattPermission) {
             panBuchungEigentum.setVisible(false);
         }
     }
@@ -452,8 +455,10 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
     private void initProductPreviewImages() {
         productPreviewImages.put(hlFlurstuecksEigentumsnachweisNrwPdf, BUCH_EIG_NRW_PDF);
         productPreviewImages.put(hlFlurstuecksEigentumsnachweisKomPdf, BUCH_EIG_KOM_PDF);
+        productPreviewImages.put(hlFlurstuecksEigentumsnachweisKomInternPdf, BUCH_EIG_KOM_PDF);
         productPreviewImages.put(hlFlurstuecksEigentumsnachweisNrwHtml, BUCH_EIG_NRW_HTML);
         productPreviewImages.put(hlFlurstuecksEigentumsnachweisKomHtml, BUCH_EIG_KOM_HTML);
+        productPreviewImages.put(hlFlurstuecksEigentumsnachweisKomInternHtml, BUCH_EIG_KOM_HTML);
         productPreviewImages.put(hlFlurstuecksnachweisHtml, BUCH_HTML);
         productPreviewImages.put(hlFlurstuecksnachweisPdf, BUCH_PDF);
         productPreviewImages.put(hlKarte, KARTE_PDF);
@@ -462,6 +467,8 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         hlFlurstuecksEigentumsnachweisKomPdf.addMouseListener(productListener);
         hlFlurstuecksEigentumsnachweisNrwHtml.addMouseListener(productListener);
         hlFlurstuecksEigentumsnachweisKomHtml.addMouseListener(productListener);
+        hlFlurstuecksEigentumsnachweisKomInternPdf.addMouseListener(productListener);
+        hlFlurstuecksEigentumsnachweisKomInternHtml.addMouseListener(productListener);
         hlFlurstuecksnachweisHtml.addMouseListener(productListener);
         hlFlurstuecksnachweisPdf.addMouseListener(productListener);
         hlKarte.addMouseListener(productListener);
@@ -639,6 +646,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         semiRoundedPanel4 = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel4 = new javax.swing.JLabel();
         hlFlurstuecksEigentumsnachweisKomPdf = new org.jdesktop.swingx.JXHyperlink();
+        hlFlurstuecksEigentumsnachweisKomInternPdf = new org.jdesktop.swingx.JXHyperlink();
         panHtmlProducts = new RoundedPanel();
         hlFlurstuecksEigentumsnachweisKomHtml = new org.jdesktop.swingx.JXHyperlink();
         hlFlurstuecksnachweisHtml = new org.jdesktop.swingx.JXHyperlink();
@@ -646,6 +654,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         semiRoundedPanel5 = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel5 = new javax.swing.JLabel();
         hlFlurstuecksEigentumsnachweisNrwHtml = new org.jdesktop.swingx.JXHyperlink();
+        hlFlurstuecksEigentumsnachweisKomInternHtml = new org.jdesktop.swingx.JXHyperlink();
         panSpacing = new javax.swing.JPanel();
         panProductPreview = new RoundedPanel();
         lblProductPreview = new javax.swing.JLabel();
@@ -1051,7 +1060,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 10, 7);
         panPdfProducts.add(hlKarte, gridBagConstraints);
@@ -1087,7 +1096,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         jPanel1.setOpaque(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         panPdfProducts.add(jPanel1, gridBagConstraints);
@@ -1119,6 +1128,20 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panPdfProducts.add(hlFlurstuecksEigentumsnachweisKomPdf, gridBagConstraints);
+
+        hlFlurstuecksEigentumsnachweisKomInternPdf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
+        hlFlurstuecksEigentumsnachweisKomInternPdf.setText("Flurstücks- und Eigentumsnachweis (kommunal, intern)");
+        hlFlurstuecksEigentumsnachweisKomInternPdf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hlFlurstuecksEigentumsnachweisKomInternPdfActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
+        panPdfProducts.add(hlFlurstuecksEigentumsnachweisKomInternPdf, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -1160,7 +1183,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         jPanel2.setOpaque(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         panHtmlProducts.add(jPanel2, gridBagConstraints);
@@ -1192,6 +1215,20 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 10, 7);
         panHtmlProducts.add(hlFlurstuecksEigentumsnachweisNrwHtml, gridBagConstraints);
+
+        hlFlurstuecksEigentumsnachweisKomInternHtml.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/text-html.png"))); // NOI18N
+        hlFlurstuecksEigentumsnachweisKomInternHtml.setText("Flurstücks- und Eigentumsnachweis (kommunal,intern)");
+        hlFlurstuecksEigentumsnachweisKomInternHtml.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hlFlurstuecksEigentumsnachweisKomInternHtmlActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(7, 7, 10, 7);
+        panHtmlProducts.add(hlFlurstuecksEigentumsnachweisKomInternHtml, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1380,6 +1417,14 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
     private void hlFlurstuecksEigentumsnachweisNrwHtmlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlFlurstuecksEigentumsnachweisNrwHtmlActionPerformed
         openEinzelnachweisProduct(AlkisUtil.COMMONS.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_HTML, PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW);
     }//GEN-LAST:event_hlFlurstuecksEigentumsnachweisNrwHtmlActionPerformed
+
+    private void hlFlurstuecksEigentumsnachweisKomInternPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlFlurstuecksEigentumsnachweisKomInternPdfActionPerformed
+        openEinzelnachweisProduct(AlkisUtil.COMMONS.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_PDF, PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN);
+    }//GEN-LAST:event_hlFlurstuecksEigentumsnachweisKomInternPdfActionPerformed
+
+    private void hlFlurstuecksEigentumsnachweisKomInternHtmlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlFlurstuecksEigentumsnachweisKomInternHtmlActionPerformed
+        openEinzelnachweisProduct(AlkisUtil.COMMONS.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_HTML, PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN);
+    }//GEN-LAST:event_hlFlurstuecksEigentumsnachweisKomInternHtmlActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
