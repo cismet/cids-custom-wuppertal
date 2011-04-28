@@ -103,6 +103,8 @@ import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.TitleComponentProvider;
+import java.util.Comparator;
+import java.util.HashMap;
 import javax.swing.JOptionPane;
 
 /**
@@ -1050,10 +1052,14 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                 String queryID = getCompleteBuchungsblattCode();
                 if (queryID.length() > 0) {
                     if (AlkisUtil.COMMONS.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_PDF.equals(product) || AlkisUtil.COMMONS.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_HTML.equals(product)) {
-                        queryID += getCompleteLaufendeNrCode();
+                        String anhang = getCompleteLaufendeNrCode();
+                        if (anhang != null) {
+                            queryID += anhang;
+                            queryID = AlkisUtil.escapeHtmlSpaces(queryID);
+                            AlkisUtil.COMMONS.PRODUCTS.productEinzelNachweis(queryID, product);
+                        }
                     }
-                    queryID = AlkisUtil.escapeHtmlSpaces(queryID);
-                    AlkisUtil.COMMONS.PRODUCTS.productEinzelNachweis(queryID, product);
+
                 }
             } catch (Exception ex) {
                 ObjectRendererUtils.showExceptionWindowToUser(
@@ -1264,13 +1270,44 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         if (buchungsblatt != null) {
             Buchungsstelle[] stellen = buchungsblatt.getBuchungsstellen();
             if (stellen != null && stellen.length > 0) {
-                Buchungsstelle first = stellen[0];
-                if (first != null) {
-                    return fixLaufendeNrCode(first.getSequentialNumber());
+                if (stellen.length == 1) {
+                    Buchungsstelle first = stellen[0];
+                    if (first != null) {
+                        return fixLaufendeNrCode(first.getSequentialNumber());
+                    }
+                } else {
+                    //mehr als eins deswegen nachfragen
+                    final HashMap<String, Buchungsstelle> stellenLookup = new HashMap<String, Buchungsstelle>(stellen.length);
+                    for (Buchungsstelle b : stellen) {
+                        //gehe davon aus dass hier immer nur ein flurstueck drin sein kann #bugrisk
+                        if (b.getLandParcel() != null && b.getLandParcel().length > 0) {
+                            String code = b.getLandParcel()[0].getLandParcelCode();
+                            stellenLookup.put(code, b);
+                        }
+                    }
+                    String[] flurstuecke = stellenLookup.keySet().toArray(new String[0]);
+                    Arrays.sort(flurstuecke);
+
+                    String s = (String) JOptionPane.showInputDialog(
+                            this,
+                            "Auf welches Flurstück soll sich der Grundstücksnachweis beziehen?",
+                            "Flurstückauswahl",
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,//icon
+                            flurstuecke,
+                            null);
+                    if (s != null) {
+                        Buchungsstelle b = stellenLookup.get(s);
+                        return fixLaufendeNrCode(b.getSequentialNumber());
+                    } else {
+                        return null;
+                    }
                 }
+
             }
+
         }
-        return "";
+        return null;
     }
 
     @Override
