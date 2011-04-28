@@ -767,10 +767,10 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
 
         panBuchungEigentum.setLayout(new java.awt.GridBagLayout());
 
-        scpBuchungsblaetter.setMaximumSize(new java.awt.Dimension(100, 200));
-        scpBuchungsblaetter.setMinimumSize(new java.awt.Dimension(100, 200));
+        scpBuchungsblaetter.setMaximumSize(new java.awt.Dimension(150, 200));
+        scpBuchungsblaetter.setMinimumSize(new java.awt.Dimension(150, 200));
         scpBuchungsblaetter.setOpaque(false);
-        scpBuchungsblaetter.setPreferredSize(new java.awt.Dimension(100, 200));
+        scpBuchungsblaetter.setPreferredSize(new java.awt.Dimension(150, 200));
 
         lstBuchungsblaetter.setOpaque(false);
 
