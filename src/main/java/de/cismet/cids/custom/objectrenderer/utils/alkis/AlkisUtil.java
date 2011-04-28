@@ -75,7 +75,7 @@ public final class AlkisUtil {
             //
             PRODUCTS = new Products(USER, PASSWORD, SERVICE);
 
-            
+
         } catch (Exception ex) {
 //            log.error("AlkisCommons Error!", ex);
             throw new RuntimeException(ex);
@@ -87,7 +87,9 @@ public final class AlkisUtil {
     public final String PASSWORD;
     public final String SERVICE;
     public final String SERVER;
-    public final static String MLESSNUMBER="nmless=5061756C612030352E31322E32303035204A75737475732032352E30372E323030382054616E6A612030362E31302E31393734";;
+    public final static String MLESSNUMBER = "nmless=5061756C612030352E31322E32303035204A75737475732032352E30372E323030382054616E6A612030362E31302E31393734";
+
+    ;
     public final String CATALOG_SERVICE;
     public final String INFO_SERVICE;
     public final String SEARCH_SERVICE;
@@ -467,8 +469,12 @@ public final class AlkisUtil {
             if ((elements != null) && (elements.length == 2)) {
                 String zaehler = elements[0];
                 String nenner = elements[1];
-                zaehler = zaehler.substring(0, zaehler.lastIndexOf("."));
-                nenner = nenner.substring(0, nenner.lastIndexOf("."));
+                if (zaehler.lastIndexOf(".") != -1) {
+                    zaehler = zaehler.substring(0, zaehler.lastIndexOf("."));
+                }
+                if (nenner.lastIndexOf(".") != -1) {
+                    nenner = nenner.substring(0, nenner.lastIndexOf("."));
+                }
                 return zaehler + "/" + nenner;
             }
         }
@@ -660,9 +666,9 @@ public final class AlkisUtil {
          * @param  format      DOCUMENT ME!
          */
         public void productEinzelNachweis(final String objectID, final String productCode) {
-            final String url = COMMONS.EINZEL_NACHWEIS_SERVICE +  "?"+ AlkisUtil.MLESSNUMBER
+            final String url = COMMONS.EINZEL_NACHWEIS_SERVICE + "?" + AlkisUtil.MLESSNUMBER
                     + "&product=" + productCode
-                    + "&id=" + objectID+"&"+IDENTIFICATION;
+                    + "&id=" + objectID + "&" + IDENTIFICATION;
             log.info("Open product URL : " + url);
             ObjectRendererUtils.openURL(url);
         }
@@ -685,9 +691,9 @@ public final class AlkisUtil {
          * @param  format      DOCUMENT ME!
          */
         public void productListenNachweis(final String punktliste, final String productCode) {
-            final String url = COMMONS.LISTEN_NACHWEIS_SERVICE +  "?"+ AlkisUtil.MLESSNUMBER 
+            final String url = COMMONS.LISTEN_NACHWEIS_SERVICE + "?" + AlkisUtil.MLESSNUMBER
                     + "&product=" + productCode
-                    + "&ids=" + punktliste+"&"+IDENTIFICATION;
+                    + "&ids=" + punktliste + "&" + IDENTIFICATION;
             log.info("Open product URL : " + url);
             ObjectRendererUtils.openURL(url);
 
@@ -720,8 +726,8 @@ public final class AlkisUtil {
          * @param  parcelCode  DOCUMENT ME!
          */
         public void productKarte(final String parcelCode) {
-            final String url = COMMONS.LIEGENSCHAFTSKARTE_SERVICE +  "?"+ AlkisUtil.MLESSNUMBER 
-                    + "&landparcel=" + parcelCode+"&"+IDENTIFICATION;
+            final String url = COMMONS.LIEGENSCHAFTSKARTE_SERVICE + "?" + AlkisUtil.MLESSNUMBER
+                    + "&landparcel=" + parcelCode + "&" + IDENTIFICATION;
             log.info("Open product URL : " + url);
             ObjectRendererUtils.openURL(url);
         }
@@ -745,7 +751,7 @@ public final class AlkisUtil {
                 final String zusText,
                 final String auftragsNr,
                 final boolean moreThanOneParcel) {
-            String url = COMMONS.LIEGENSCHAFTSKARTE_SERVICE +  "?"+ AlkisUtil.MLESSNUMBER
+            String url = COMMONS.LIEGENSCHAFTSKARTE_SERVICE + "?" + AlkisUtil.MLESSNUMBER
                     + "&landparcel=" + parcelCode
                     + "&angle=" + winkel
                     + "&product=" + produkt.getCode()
@@ -759,7 +765,7 @@ public final class AlkisUtil {
             if (moreThanOneParcel) {
                 url += "&additionalLandparcel=true";
             }
-            url += "&" +IDENTIFICATION;
+            url += "&" + IDENTIFICATION;
             log.info("Open product URL : " + url);
             ObjectRendererUtils.openURL(url);
         }
