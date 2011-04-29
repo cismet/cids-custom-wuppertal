@@ -11,7 +11,7 @@
  */
 package de.cismet.cids.custom.wunda_blau.res;
 
-import de.cismet.cids.custom.objectrenderer.utils.PropertyReader;
+import de.cismet.tools.PropertyReader;
 
 /**
  * DOCUMENT ME!

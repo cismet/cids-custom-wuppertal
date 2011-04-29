@@ -29,8 +29,8 @@ import java.beans.PropertyChangeListener;
 import java.util.Collection;
 import java.util.List;
 
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDescription;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtil;
+import de.cismet.cids.custom.utils.alkis.AlkisProductDescription;
+import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 
 import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.CrsTransformer;
@@ -59,7 +59,7 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
     //~ Static fields/initializers ---------------------------------------------
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisPrintListener.class);
     //
-    private static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory(new PrecisionModel(PrecisionModel.FLOATING), CrsTransformer.extractSridFromCrs(AlkisUtil.COMMONS.SRS_SERVICE));
+    private static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory(new PrecisionModel(PrecisionModel.FLOATING), CrsTransformer.extractSridFromCrs(AlkisConstants.COMMONS.SRS_SERVICE));
     private static final AlkisPrintingToolTip PRINTING_TOOLTIP = new AlkisPrintingToolTip();
     public static final String WIDTH = "WIDTH";
     public static final String HEIGHT = "HEIGHT";
@@ -119,7 +119,7 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
      */
     public void init(final AlkisProductDescription product, final Geometry geom, final boolean findOptimalRotation) {
         //translate from alkis db geom srid to alkis service srid
-        final Geometry serviceConformGeometry = CrsTransformer.transformToGivenCrs(geom, AlkisUtil.COMMONS.SRS_SERVICE);
+        final Geometry serviceConformGeometry = CrsTransformer.transformToGivenCrs(geom, AlkisConstants.COMMONS.SRS_SERVICE);
         final String currentInteractionMode = mappingComponent.getInteractionMode();
         final double massstab = Double.parseDouble(product.getMassstab());
         final double realWorldWidth = FormatToRealWordCalculator.toRealWorldValue(product.getWidth(), massstab);
@@ -248,7 +248,7 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
                 center.getX()
                 + halfDiagonal,
                 center.getY()
-                + halfDiagonal, AlkisUtil.COMMONS.SRS_SERVICE, true);
+                + halfDiagonal, AlkisConstants.COMMONS.SRS_SERVICE, true);
         mappingComponent.gotoBoundingBoxWithHistory(gotoBB);
     }
 

@@ -7,6 +7,7 @@
 ****************************************************/
 package de.cismet.cids.custom.wunda_blau.search;
 
+import de.cismet.cids.custom.wunda_blau.search.server.CustomStrassenSearchStatement;
 import Sirius.server.middleware.interfaces.domainserver.MetaService;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObjectNode;

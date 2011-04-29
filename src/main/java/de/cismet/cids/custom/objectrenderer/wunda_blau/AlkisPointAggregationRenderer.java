@@ -49,7 +49,8 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtil;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -246,15 +247,15 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
             final String format = cbProducts.getSelectedItem().toString();
             final String code;
             if (PDF.equals(format)) {
-                code = AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_PDF;
+                code = AlkisUtils.PRODUCTS.PUNKTLISTE_PDF;
             } else if (HTML.equals(format)) {
-                code = AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_HTML;
+                code = AlkisUtils.PRODUCTS.PUNKTLISTE_HTML;
             } else {
-                code = AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_TXT;
+                code = AlkisUtils.PRODUCTS.PUNKTLISTE_TXT;
             }
             final String punktListenString = getPunktlistenStringForChosenPoints();
             if (punktListenString.length() > 3) {
-                AlkisUtil.COMMONS.PRODUCTS.productListenNachweis(punktListenString, code);
+                AlkisUtils.PRODUCTS.productListenNachweis(punktListenString, code);
             }
         } else {
             JOptionPane.showMessageDialog(this, "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
@@ -297,7 +298,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                 if (punktListeString.length() > 0) {
                     punktListeString.append(",");
                 }
-                punktListeString.append(AlkisUtil.COMMONS.PRODUCTS.getPointDataForProduct(selectedBean));
+                punktListeString.append(AlkisUtils.PRODUCTS.getPointDataForProduct(selectedBean));
             }
         }
         return punktListeString.toString();
@@ -384,16 +385,16 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
     private void initMap() {
         try {
             final ActiveLayerModel mappingModel = new ActiveLayerModel();
-            mappingModel.setSrs(AlkisUtil.COMMONS.SRS_GEOM);
+            mappingModel.setSrs(AlkisConstants.COMMONS.SRS_GEOM);
             final BoundingBox box = boundingBoxFromPointList(cidsBeans);
             mappingModel.addHome(new XBoundingBox(
                     box.getX1(),
                     box.getY1(),
                     box.getX2(),
                     box.getY2(),
-                    AlkisUtil.COMMONS.SRS_GEOM,
+                    AlkisConstants.COMMONS.SRS_GEOM,
                     true));
-            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisUtil.COMMONS.MAP_CALL_STRING));
+            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisConstants.COMMONS.MAP_CALL_STRING));
             swms.setName("Alkis_Points");
             mappingModel.addLayer(swms);
             mappingComponent.setMappingModel(mappingModel);

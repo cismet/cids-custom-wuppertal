@@ -54,9 +54,10 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtil;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisSOAPWorkerService;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.SOAPAccessProvider;
+import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.utils.alkis.AlkisSOAPWorkerService;
+import de.cismet.cids.custom.utils.alkis.SOAPAccessProvider;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -396,7 +397,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         retrieveableLabels.add(lblTxtLand);
         retrieveableLabels.add(lblTxtDienststelle);
         retrieveableLabels.add(lblTxtAnlass);
-        if (!AlkisUtil.validateUserHasAlkisProductAccess()) {
+        if (!AlkisUtils.validateUserHasAlkisProductAccess()) {
             // disable Product page if user does not have the right to see it.
             btnForward.setEnabled(false);
             lblForw.setEnabled(false);
@@ -1573,8 +1574,8 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
     private void openProduct(String productType) {
         if (ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE)) {
             try {
-                String pointData = AlkisUtil.COMMONS.PRODUCTS.getPointDataForProduct(cidsBean);
-                AlkisUtil.COMMONS.PRODUCTS.productListenNachweis(pointData, productType);
+                String pointData = AlkisUtils.PRODUCTS.getPointDataForProduct(cidsBean);
+                AlkisUtils.PRODUCTS.productListenNachweis(pointData, productType);
             } catch (Exception ex) {
                 ObjectRendererUtils.showExceptionWindowToUser(
                         "Fehler beim Aufruf des Produkts",
@@ -1593,7 +1594,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      * @param  evt  DOCUMENT ME!
      */
     private void hlPunktlistePdfActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlPunktlistePdfActionPerformed
-        openProduct(AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_PDF);
+        openProduct(AlkisUtils.PRODUCTS.PUNKTLISTE_PDF);
     }//GEN-LAST:event_hlPunktlistePdfActionPerformed
 
     /**
@@ -1602,7 +1603,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      * @param  evt  DOCUMENT ME!
      */
     private void hlPunktlisteHtmlActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlPunktlisteHtmlActionPerformed
-        openProduct(AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_HTML);
+        openProduct(AlkisUtils.PRODUCTS.PUNKTLISTE_HTML);
     }//GEN-LAST:event_hlPunktlisteHtmlActionPerformed
 
     /**
@@ -1628,7 +1629,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      * @param  evt  DOCUMENT ME!
      */
     private void hlPunktlisteTxtActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlPunktlisteTxtActionPerformed
-        openProduct(AlkisUtil.COMMONS.PRODUCTS.PUNKTLISTE_TXT);
+        openProduct(AlkisUtils.PRODUCTS.PUNKTLISTE_TXT);
     }//GEN-LAST:event_hlPunktlisteTxtActionPerformed
 
     @Override

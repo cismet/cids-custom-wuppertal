@@ -23,15 +23,13 @@
  */
 package de.cismet.cids.custom.objectrenderer.utils.alkis.print;
 
-import Sirius.navigator.connection.SessionManager;
-import Sirius.navigator.exception.ConnectionException;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 
 import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JButton;
 
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtil;
 
 import de.cismet.cismap.commons.gui.ToolbarComponentDescription;
 import de.cismet.cismap.commons.gui.ToolbarComponentsProvider;
@@ -74,7 +72,7 @@ public class AlkisToobarPluginComponentProvider implements ToolbarComponentsProv
 
     @Override
     public List<ToolbarComponentDescription> getToolbarComponents() {
-        if (AlkisUtil.validateUserHasAlkisPrintAccess()) {
+        if (AlkisUtils.validateUserHasAlkisPrintAccess()) {
             return toolbarComponents;
         } else {
             return Collections.emptyList();

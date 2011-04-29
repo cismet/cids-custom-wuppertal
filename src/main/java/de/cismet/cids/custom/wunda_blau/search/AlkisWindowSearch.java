@@ -12,6 +12,8 @@
  */
 package de.cismet.cids.custom.wunda_blau.search;
 
+import de.cismet.cids.custom.wunda_blau.search.server.AlkisSearchInfo;
+import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 import Sirius.navigator.actiontag.ActionTagProtected;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.method.MethodManager;
@@ -261,7 +263,8 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     @Override
     public CidsServerSearch getServerSearch() {
         final AlkisSearchInfo bsi = getAlkisInfoFromGUI();
-        return new CidsAlkisSearchStatement(bsi);
+        final MetaClass mc = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "ALKIS_LANDPARCEL");
+        return new CidsAlkisSearchStatement(bsi,mc);
     }
 
     @Override

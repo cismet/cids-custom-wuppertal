@@ -27,6 +27,7 @@ import Sirius.server.newuser.User;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import de.aedsicad.aaaweb.client.alkis.AlkisUtil;
 
 import de.aedsicad.aaaweb.service.alkis.info.ALKISInfoServices;
 import de.aedsicad.aaaweb.service.util.Buchungsblatt;
@@ -78,9 +79,10 @@ import javax.swing.text.html.StyleSheet;
 
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtil;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisSOAPWorkerService;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.SOAPAccessProvider;
+import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.utils.alkis.AlkisSOAPWorkerService;
+import de.cismet.cids.custom.utils.alkis.SOAPAccessProvider;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -103,7 +105,6 @@ import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.TitleComponentProvider;
-import java.util.Comparator;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
 
@@ -275,7 +276,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                 lstLandparcels);
         landparcelListBinding.setSourceNullValue(null);
         landparcelListBinding.setSourceUnreadableValue(null);
-        if (!AlkisUtil.validateUserHasAlkisProductAccess()) {
+        if (!AlkisUtils.validateUserHasAlkisProductAccess()) {
             // disable Product page if user does not have the right to see it.
             btnForward.setEnabled(false);
             lblForw.setEnabled(false);
@@ -1051,7 +1052,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
             try {
                 String queryID = getCompleteBuchungsblattCode();
                 if (queryID.length() > 0) {
-                    if (AlkisUtil.COMMONS.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_PDF.equals(product) || AlkisUtil.COMMONS.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_HTML.equals(product)) {
+                    if (AlkisUtils.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_PDF.equals(product) || AlkisUtils.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_HTML.equals(product)) {
                         String anhang = getCompleteLaufendeNrCode();
                         if (anhang != null) {
                             queryID += anhang;
@@ -1060,8 +1061,8 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                             return;
                         }
                     }
-                    queryID = AlkisUtil.escapeHtmlSpaces(queryID);
-                    AlkisUtil.COMMONS.PRODUCTS.productEinzelNachweis(queryID, product);
+                    queryID = AlkisUtils.escapeHtmlSpaces(queryID);
+                    AlkisUtils.PRODUCTS.productEinzelNachweis(queryID, product);
 
                 }
             } catch (Exception ex) {
@@ -1082,7 +1083,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      * @param  evt  DOCUMENT ME!
      */
     private void hlBestandsnachweisNrwHtmlActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlBestandsnachweisNrwHtmlActionPerformed
-        openProduct(AlkisUtil.COMMONS.PRODUCTS.BESTANDSNACHWEIS_NRW_HTML, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW);
+        openProduct(AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_NRW_HTML, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW);
     }//GEN-LAST:event_hlBestandsnachweisNrwHtmlActionPerformed
 
     /**
@@ -1091,7 +1092,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      * @param  evt  DOCUMENT ME!
      */
     private void hlBestandsnachweisNrwPdfActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlBestandsnachweisNrwPdfActionPerformed
-        openProduct(AlkisUtil.COMMONS.PRODUCTS.BESTANDSNACHWEIS_NRW_PDF, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW);
+        openProduct(AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_NRW_PDF, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW);
     }//GEN-LAST:event_hlBestandsnachweisNrwPdfActionPerformed
 
     /**
@@ -1198,26 +1199,27 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     }//GEN-LAST:event_lblForwMouseClicked
 
     private void hlBestandsnachweisKomPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlBestandsnachweisKomPdfActionPerformed
-        openProduct(AlkisUtil.COMMONS.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_PDF, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM);
+        openProduct(AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_PDF, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM);
     }//GEN-LAST:event_hlBestandsnachweisKomPdfActionPerformed
 
     private void hlGrundstuecksnachweisNrwPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlGrundstuecksnachweisNrwPdfActionPerformed
-        openProduct(AlkisUtil.COMMONS.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_PDF, PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW);
+        openProduct(AlkisUtils.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_PDF, PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW);
     }//GEN-LAST:event_hlGrundstuecksnachweisNrwPdfActionPerformed
 
     private void hlBestandsnachweisKomHtmlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlBestandsnachweisKomHtmlActionPerformed
-        openProduct(AlkisUtil.COMMONS.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_HTML, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM);
+        openProduct(AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_HTML, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM);
     }//GEN-LAST:event_hlBestandsnachweisKomHtmlActionPerformed
 
     private void hlGrundstuecksnachweisNrwHtmlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlGrundstuecksnachweisNrwHtmlActionPerformed
-        openProduct(AlkisUtil.COMMONS.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_HTML, PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW);
+        openProduct(AlkisUtils.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_HTML, PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW);
     }//GEN-LAST:event_hlGrundstuecksnachweisNrwHtmlActionPerformed
 
     private void hlBestandsnachweisKomInternPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlBestandsnachweisKomInternPdfActionPerformed
-        openProduct(AlkisUtil.COMMONS.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_INTERN_PDF, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN);    }//GEN-LAST:event_hlBestandsnachweisKomInternPdfActionPerformed
+        openProduct(AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_INTERN_PDF, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN);
+        }//GEN-LAST:event_hlBestandsnachweisKomInternPdfActionPerformed
 
     private void hlBestandsnachweisKomInternHtmlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlBestandsnachweisKomInternHtmlActionPerformed
-        openProduct(AlkisUtil.COMMONS.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_INTERN_HTML, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN);
+        openProduct(AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_INTERN_HTML, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN);
     }//GEN-LAST:event_hlBestandsnachweisKomInternHtmlActionPerformed
 
     /**
@@ -1385,7 +1387,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         if (landParcelList.size() > 0) {
             try {
                 final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                mappingModel.setSrs(AlkisUtil.COMMONS.SRS_GEOM);
+                mappingModel.setSrs(AlkisConstants.COMMONS.SRS_GEOM);
                 // TODO: do we need an swsw for every class?
                 final BoundingBox box = boundingBoxFromLandparcelList(landParcelList);
                 mappingModel.addHome(new XBoundingBox(
@@ -1393,9 +1395,9 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                         box.getY1(),
                         box.getX2(),
                         box.getY2(),
-                        AlkisUtil.COMMONS.SRS_GEOM,
+                        AlkisConstants.COMMONS.SRS_GEOM,
                         true));
-                final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisUtil.COMMONS.MAP_CALL_STRING));
+                final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisConstants.COMMONS.MAP_CALL_STRING));
                 swms.setName("Buchungsblatt");
                 mappingModel.addLayer(swms);
                 map.setMappingModel(mappingModel);
@@ -1496,12 +1498,12 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 //            buchungsblatt.getBuchungsstellen()[0].getLandParcel()[0].getAdministrativeDistricts().get;
             if (offices != null) {
                 lblAmtgericht.setText(surroundWithHTMLTags(
-                        AlkisUtil.arrayToSeparatedString(offices.getDistrictCourtName(), "<br>")));
+                        AlkisUtils.arrayToSeparatedString(offices.getDistrictCourtName(), "<br>")));
                 lblKatasteramt.setText(surroundWithHTMLTags(
-                        AlkisUtil.arrayToSeparatedString(offices.getLandRegistryOfficeName(), "<br>")));
+                        AlkisUtils.arrayToSeparatedString(offices.getLandRegistryOfficeName(), "<br>")));
             }
             lblBlattart.setText(buchungsblatt.getBlattart());
-            lblBuchungsart.setText(AlkisUtil.getBuchungsartFromBuchungsblatt(buchungsblatt));
+            lblBuchungsart.setText(AlkisUtils.getBuchungsartFromBuchungsblatt(buchungsblatt));
         }
     }
 
@@ -1675,7 +1677,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 //                    final StringBuilder ownerBuilder = new StringBuilder("<html>");
                         final StringBuilder ownerBuilder = new StringBuilder("<html>");
                         for (final Owner owner : owners) {
-                            ownerBuilder.append(AlkisUtil.ownerToString(owner, ""));
+                            ownerBuilder.append(AlkisUtils.ownerToString(owner, ""));
                         }
                         ownerBuilder.append("</html>");
                         epOwner.setText(ownerBuilder.toString());

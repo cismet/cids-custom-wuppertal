@@ -12,6 +12,9 @@
  */
 package de.cismet.cids.custom.wunda_blau.search;
 
+import de.cismet.cids.custom.wunda_blau.search.server.FlurstueckInfo;
+import de.cismet.cids.custom.wunda_blau.search.server.BaulastSearchInfo;
+import de.cismet.cids.custom.wunda_blau.search.server.CidsBaulastSearchStatement;
 import Sirius.navigator.actiontag.ActionTagProtected;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
@@ -573,7 +576,11 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
                 log.error("Can not parse information from Flurstueck bean: " + fsBean, ex);
             }
         }
-        return new CidsBaulastSearchStatement(bsi);
+        MetaClass mc = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "ALB_BAULAST");
+        final int baulastClassID = mc.getID();
+        mc = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "ALB_BAULASTBLATT");
+        final int baulastblattClassID = mc.getID();
+        return new CidsBaulastSearchStatement(bsi,baulastClassID,baulastblattClassID);
     }
 
     @Override
