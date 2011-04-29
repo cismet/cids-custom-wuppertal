@@ -1055,10 +1055,13 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                         String anhang = getCompleteLaufendeNrCode();
                         if (anhang != null) {
                             queryID += anhang;
-                            queryID = AlkisUtil.escapeHtmlSpaces(queryID);
-                            AlkisUtil.COMMONS.PRODUCTS.productEinzelNachweis(queryID, product);
+
+                        } else {
+                            return;
                         }
                     }
+                    queryID = AlkisUtil.escapeHtmlSpaces(queryID);
+                    AlkisUtil.COMMONS.PRODUCTS.productEinzelNachweis(queryID, product);
 
                 }
             } catch (Exception ex) {
