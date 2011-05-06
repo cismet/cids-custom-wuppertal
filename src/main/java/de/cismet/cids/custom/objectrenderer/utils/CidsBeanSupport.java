@@ -116,6 +116,6 @@ public final class CidsBeanSupport {
      */
     public static boolean checkWritePermission(final CidsBean bean) {
         final User user = SessionManager.getSession().getUser();
-        return bean.getHasWritePermission(user);
+        return bean.getHasWritePermission(user)&&bean.hasObjectWritePermission(user);
     }
 }
