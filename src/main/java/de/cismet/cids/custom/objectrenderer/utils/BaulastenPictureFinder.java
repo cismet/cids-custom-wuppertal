@@ -42,6 +42,7 @@ public final class BaulastenPictureFinder {
      */
     public static List<File> findPlanPicture(final String picture) {
         final String picturePath = StaticProperties.ALB_PLAN_URL_PREFIX + picture + ".";
+        log.debug("findPlanPicture: "+picturePath);
         return probeForRightSuffix(picturePath);
     }
 
@@ -54,6 +55,7 @@ public final class BaulastenPictureFinder {
      */
     public static List<File> findTextblattPicture(final String picture) {
         final String picturePath = StaticProperties.ALB_TEXTBLATT_URL_PREFIX + picture + ".";
+        log.debug("findTextblattPicture: "+picturePath);
         return probeForRightSuffix(picturePath);
     }
 
