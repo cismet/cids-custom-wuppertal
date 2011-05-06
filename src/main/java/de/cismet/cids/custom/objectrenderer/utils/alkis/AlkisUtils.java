@@ -16,6 +16,7 @@
  */
 package de.cismet.cids.custom.objectrenderer.utils.alkis;
 
+import de.cismet.cids.custom.utils.alkis.AlkisProducts;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
@@ -428,7 +429,7 @@ public class AlkisUtils {
         try {
             return SessionManager.getConnection().getConfigAttr(SessionManager.getSession().getUser(), "navigator.alkis.print") != null;
         } catch (ConnectionException ex) {
-            log.error("Could not validate action tag for Alkis Print Dialoge!", ex);
+            log.error("Could not validate action tag for Alkis Print Dialog!", ex);
         }
         return false;
     }
