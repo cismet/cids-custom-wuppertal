@@ -383,12 +383,17 @@ public class AlkisUtils {
             final Buchungsstelle ersteBuchungsstelle = buchungsstellen[0];
             if (ersteBuchungsstelle != null) {
                 final StringBuilder result = new StringBuilder();
-                final String prettyFration = prettyPrintFration(ersteBuchungsstelle.getFraction());
+                //final String prettyFration = prettyPrintFration(ersteBuchungsstelle.getFraction());
+                final String prettyFration = ersteBuchungsstelle.getFraction();
                 result.append(prettyFration);
                 if (prettyFration.length() > 0) {
                     result.append(" ");
                 }
                 result.append(ersteBuchungsstelle.getBuchungsart());
+                String number=ersteBuchungsstelle.getNumber();
+                if (!(number==null || number.trim().length()>0)){
+                    result.append(", Aufteilungsplan Nr. ").append(number);
+                }
                 return result.toString();
             }
         }
