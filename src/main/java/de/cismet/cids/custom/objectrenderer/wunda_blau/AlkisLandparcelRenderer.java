@@ -91,6 +91,7 @@ import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.TitleComponentProvider;
 import javax.swing.JOptionPane;
+import org.jdesktop.observablecollections.ObservableList;
 
 /**
  * DOCUMENT ME!
@@ -1439,8 +1440,20 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
             initMap();
             initLage();
             initGotoBeanMap();
+
+            List<CidsBean> buchungsblaetter=cidsBean.getBeanCollectionProperty("buchungsblaetter");
+            Collections.sort(buchungsblaetter,new Comparator<CidsBean>(){
+
+                @Override
+                public int compare(CidsBean t, CidsBean t1) {
+                    return t.toString().compareTo(t1.toString());
+                }
+
+            });
+
             bindingGroup.bind();
             final int anzahlBuchungsblaetter = lstBuchungsblaetter.getModel().getSize();
+
             if (anzahlBuchungsblaetter < 5) {
                 lblBuchungsblaetter.setVisible(false);
                 scpBuchungsblaetter.setVisible(false);
