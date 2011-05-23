@@ -386,7 +386,7 @@ public class AlkisUtils {
                 //final String prettyFration = prettyPrintFration(ersteBuchungsstelle.getFraction());
                 final String prettyFration = ersteBuchungsstelle.getFraction();
                 result.append(prettyFration);
-                if (prettyFration.length() > 0) {
+                if (prettyFration!=null && prettyFration.length() > 0) {
                     result.append(" ");
                 }
                 result.append(ersteBuchungsstelle.getBuchungsart());

@@ -27,11 +27,11 @@ import Sirius.server.newuser.User;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryFactory;
-import de.aedsicad.aaaweb.client.alkis.AlkisUtil;
 
 import de.aedsicad.aaaweb.service.alkis.info.ALKISInfoServices;
 import de.aedsicad.aaaweb.service.util.Buchungsblatt;
 import de.aedsicad.aaaweb.service.util.Buchungsstelle;
+import de.aedsicad.aaaweb.service.util.LandParcel;
 import de.aedsicad.aaaweb.service.util.Offices;
 import de.aedsicad.aaaweb.service.util.Owner;
 
@@ -1286,8 +1286,10 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                     for (Buchungsstelle b : stellen) {
                         //gehe davon aus dass hier immer nur ein flurstueck drin sein kann #bugrisk
                         if (b.getLandParcel() != null && b.getLandParcel().length > 0) {
-                            String code = b.getLandParcel()[0].getLandParcelCode();
-                            stellenLookup.put(code, b);
+                            for (LandParcel lp : b.getLandParcel()) {
+                                String code = lp.getLandParcelCode();
+                                stellenLookup.put(code, b);
+                            }
                         }
                     }
                     String[] flurstuecke = stellenLookup.keySet().toArray(new String[0]);
