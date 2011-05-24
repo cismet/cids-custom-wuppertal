@@ -105,6 +105,7 @@ import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.TitleComponentProvider;
+import java.util.Comparator;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
 
@@ -1345,6 +1346,14 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                 for (final CidsBean buchungsblattLandparcelBean : buchungsblattLandparcelList) {
                     landParcelList.add(new LightweightLandParcel(buchungsblattLandparcelBean));
                 }
+                Collections.sort(landParcelList,new Comparator<LightweightLandParcel>(){
+
+                    @Override
+                    public int compare(LightweightLandParcel t, LightweightLandParcel t1) {
+                        return t.toString().compareTo(t1.toString());
+                    }
+
+                });
             }
             final Runnable edtRunner = new Runnable() {
 
