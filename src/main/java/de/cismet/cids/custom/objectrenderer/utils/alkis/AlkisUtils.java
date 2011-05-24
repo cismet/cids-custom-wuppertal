@@ -35,6 +35,9 @@ import java.util.List;
 
 
 import de.cismet.cids.dynamics.CidsBean;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  *
@@ -380,7 +383,20 @@ public class AlkisUtils {
     public static String getBuchungsartFromBuchungsblatt(final Buchungsblatt blatt) {
         final Buchungsstelle[] buchungsstellen = blatt.getBuchungsstellen();
         if ((buchungsstellen != null) && (buchungsstellen.length > 0)) {
-            final Buchungsstelle ersteBuchungsstelle = buchungsstellen[0];
+            
+            ArrayList<Buchungsstelle> alleStellen=new ArrayList<Buchungsstelle>();
+            alleStellen.addAll(Arrays.asList(buchungsstellen));
+            Collections.sort(alleStellen, new Comparator<Buchungsstelle>(){
+
+                @Override
+                public int compare(Buchungsstelle t, Buchungsstelle t1) {
+                    return t.getBuchungsartCode().compareTo(t1.getBuchungsartCode());
+                }
+
+            });
+
+
+            final Buchungsstelle ersteBuchungsstelle = alleStellen.get(alleStellen.size()-1);
             if (ersteBuchungsstelle != null) {
                 final StringBuilder result = new StringBuilder();
                 final String prettyFration = prettyPrintFration(ersteBuchungsstelle.getFraction());
