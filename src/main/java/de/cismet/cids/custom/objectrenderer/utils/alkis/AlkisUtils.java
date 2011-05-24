@@ -383,8 +383,7 @@ public class AlkisUtils {
             final Buchungsstelle ersteBuchungsstelle = buchungsstellen[0];
             if (ersteBuchungsstelle != null) {
                 final StringBuilder result = new StringBuilder();
-                //final String prettyFration = prettyPrintFration(ersteBuchungsstelle.getFraction());
-                final String prettyFration = ersteBuchungsstelle.getFraction();
+                final String prettyFration = prettyPrintFration(ersteBuchungsstelle.getFraction());
                 result.append(prettyFration);
                 if (prettyFration!=null && prettyFration.length() > 0) {
                     result.append(" ");
@@ -409,18 +408,19 @@ public class AlkisUtils {
      */
     public static String prettyPrintFration(final String fraction) {
         if (fraction != null) {
-            final String[] elements = fraction.split("/");
-            if ((elements != null) && (elements.length == 2)) {
-                String zaehler = elements[0];
-                String nenner = elements[1];
-                if (zaehler.lastIndexOf(".") != -1) {
-                    zaehler = zaehler.substring(0, zaehler.lastIndexOf("."));
-                }
-                if (nenner.lastIndexOf(".") != -1) {
-                    nenner = nenner.substring(0, nenner.lastIndexOf("."));
-                }
-                return zaehler + "/" + nenner;
-            }
+//            final String[] elements = fraction.split("/");
+//            if ((elements != null) && (elements.length == 2)) {
+//                String zaehler = elements[0];
+//                String nenner = elements[1];
+//                if (zaehler.lastIndexOf(".") != -1) {
+//                    zaehler = zaehler.substring(0, zaehler.lastIndexOf("."));
+//                }
+//                if (nenner.lastIndexOf(".") != -1) {
+//                    nenner = nenner.substring(0, nenner.lastIndexOf("."));
+//                }
+//                return zaehler + "/" + nenner;
+//            }
+            return fraction;
         }
         return "";
     }
