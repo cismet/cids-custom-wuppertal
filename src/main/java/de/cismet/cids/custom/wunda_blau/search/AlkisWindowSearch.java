@@ -12,7 +12,7 @@
  */
 package de.cismet.cids.custom.wunda_blau.search;
 
-import de.cismet.cids.custom.wunda_blau.search.server.AlkisSearchInfo;
+
 import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 import Sirius.navigator.actiontag.ActionTagProtected;
 import Sirius.navigator.connection.SessionManager;
@@ -41,9 +41,8 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
 
 
-
 import de.cismet.tools.CismetThreadPool;
-
+import java.awt.CardLayout;
 
 /**
  * DOCUMENT ME!
@@ -61,16 +60,48 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     private final MetaClass mc;
     private final ImageIcon icon;
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup bgrNach;
+    private javax.swing.ButtonGroup bgrOwner;
+    private javax.swing.ButtonGroup bgrUeber;
     private javax.swing.JButton btnSearch;
-    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JCheckBox chkGeburtsnameExakt;
+    private javax.swing.JCheckBox chkNameExakt;
+    private javax.swing.JCheckBox chkVornameExakt;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private org.jdesktop.swingx.JXBusyLabel lblBusy;
+    private javax.swing.JRadioButton optEigIstFirma;
+    private javax.swing.JRadioButton optEigIstMaennlich;
+    private javax.swing.JRadioButton optEigIstUnbekannt;
+    private javax.swing.JRadioButton optEigIstWeiblich;
+    private javax.swing.JRadioButton optSucheNachFlurstuecke;
+    private javax.swing.JRadioButton optSucheNachGrundbuchblaetter;
+    private javax.swing.JRadioButton optSucheUeberEigentuemer;
+    private javax.swing.JRadioButton optSucheUeberFlurstueck;
+    private javax.swing.JRadioButton optSucheUeberGrundbuchblatt;
     private javax.swing.JPanel panCommand;
+    private javax.swing.JPanel panEingabe;
+    private javax.swing.JPanel panEingabeEigentuemer;
+    private javax.swing.JPanel panEingabeFlurstueck;
+    private javax.swing.JPanel panEingabeGrundbuchblatt;
     private javax.swing.JPanel panSearch;
+    private javax.swing.JPanel panSucheNach;
+    private javax.swing.JPanel panSucheUeber;
+    private javax.swing.JTextField txtFlurstuecksnummer;
+    private javax.swing.JTextField txtGeburtsdatum;
+    private javax.swing.JTextField txtGeburtsname;
+    private javax.swing.JTextField txtGrundbuchblattnummer;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtVorname;
     // End of variables declaration//GEN-END:variables
@@ -83,6 +114,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "ALKIS_LANDPARCEL");
         icon = new ImageIcon(mc.getIconData());
         initComponents();
+        ((CardLayout) panEingabe.getLayout()).show(panEingabe, "eigentuemer");
 
     }
 
@@ -96,18 +128,50 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
+        bgrUeber = new javax.swing.ButtonGroup();
+        bgrNach = new javax.swing.ButtonGroup();
+        bgrOwner = new javax.swing.ButtonGroup();
         panSearch = new javax.swing.JPanel();
         panCommand = new javax.swing.JPanel();
         lblBusy = new org.jdesktop.swingx.JXBusyLabel();
         btnSearch = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
+        panSucheNach = new javax.swing.JPanel();
+        optSucheNachFlurstuecke = new javax.swing.JRadioButton();
+        optSucheNachGrundbuchblaetter = new javax.swing.JRadioButton();
         jPanel2 = new javax.swing.JPanel();
-        txtVorname = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        txtName = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
+        panSucheUeber = new javax.swing.JPanel();
+        optSucheUeberEigentuemer = new javax.swing.JRadioButton();
+        optSucheUeberFlurstueck = new javax.swing.JRadioButton();
+        optSucheUeberGrundbuchblatt = new javax.swing.JRadioButton();
+        jPanel3 = new javax.swing.JPanel();
+        panEingabe = new javax.swing.JPanel();
+        panEingabeGrundbuchblatt = new javax.swing.JPanel();
+        txtGrundbuchblattnummer = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        panEingabeFlurstueck = new javax.swing.JPanel();
+        txtFlurstuecksnummer = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        panEingabeEigentuemer = new javax.swing.JPanel();
+        txtVorname = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        txtName = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        optEigIstMaennlich = new javax.swing.JRadioButton();
+        optEigIstWeiblich = new javax.swing.JRadioButton();
+        optEigIstFirma = new javax.swing.JRadioButton();
+        optEigIstUnbekannt = new javax.swing.JRadioButton();
+        chkNameExakt = new javax.swing.JCheckBox();
+        chkGeburtsnameExakt = new javax.swing.JCheckBox();
+        chkVornameExakt = new javax.swing.JCheckBox();
+        jLabel1 = new javax.swing.JLabel();
+        txtGeburtsname = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        txtGeburtsdatum = new javax.swing.JTextField();
+        jCheckBox1 = new javax.swing.JCheckBox();
 
         setMaximumSize(new java.awt.Dimension(325, 460));
         setMinimumSize(new java.awt.Dimension(325, 460));
@@ -119,6 +183,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         panSearch.setPreferredSize(new java.awt.Dimension(400, 150));
         panSearch.setLayout(new java.awt.GridBagLayout());
 
+        panCommand.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
         panCommand.add(lblBusy);
 
         btnSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom.gif"))); // NOI18N
@@ -131,34 +196,92 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         });
         panCommand.add(btnSearch);
 
-        jPanel1.setMaximumSize(new java.awt.Dimension(26, 26));
-        jPanel1.setMinimumSize(new java.awt.Dimension(26, 26));
-        jPanel1.setPreferredSize(new java.awt.Dimension(26, 26));
-        panCommand.add(jPanel1);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSearch.add(panCommand, gridBagConstraints);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Eigentümer"));
-        jPanel2.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel2.add(txtVorname, gridBagConstraints);
+        panSucheNach.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Suche nach"), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        panSucheNach.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setText("Vorname:");
+        bgrNach.add(optSucheNachFlurstuecke);
+        optSucheNachFlurstuecke.setSelected(true);
+        optSucheNachFlurstuecke.setText("Flurstücken");
+        panSucheNach.add(optSucheNachFlurstuecke, new java.awt.GridBagConstraints());
+
+        bgrNach.add(optSucheNachGrundbuchblaetter);
+        optSucheNachGrundbuchblaetter.setText("Grundbuchblättern");
+        panSucheNach.add(optSucheNachGrundbuchblaetter, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        panSucheNach.add(jPanel2, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel2.add(jLabel1, gridBagConstraints);
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(15, 15, 15, 15);
+        panSearch.add(panSucheNach, gridBagConstraints);
+
+        jPanel6.setOpaque(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.weighty = 1.0;
+        panSearch.add(jPanel6, gridBagConstraints);
+
+        panSucheUeber.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Suche über"), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        panSucheUeber.setLayout(new java.awt.GridBagLayout());
+
+        bgrUeber.add(optSucheUeberEigentuemer);
+        optSucheUeberEigentuemer.setSelected(true);
+        optSucheUeberEigentuemer.setText("Eigentümer");
+        optSucheUeberEigentuemer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                optSucheUeberEigentuemerActionPerformed(evt);
+            }
+        });
+        panSucheUeber.add(optSucheUeberEigentuemer, new java.awt.GridBagConstraints());
+
+        bgrUeber.add(optSucheUeberFlurstueck);
+        optSucheUeberFlurstueck.setText("Flurstück");
+        optSucheUeberFlurstueck.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                optSucheUeberFlurstueckActionPerformed(evt);
+            }
+        });
+        panSucheUeber.add(optSucheUeberFlurstueck, new java.awt.GridBagConstraints());
+
+        bgrUeber.add(optSucheUeberGrundbuchblatt);
+        optSucheUeberGrundbuchblatt.setText("Grundbuchblatt");
+        optSucheUeberGrundbuchblatt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                optSucheUeberGrundbuchblattActionPerformed(evt);
+            }
+        });
+        panSucheUeber.add(optSucheUeberGrundbuchblatt, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        panSucheUeber.add(jPanel3, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 15);
+        panSearch.add(panSucheUeber, gridBagConstraints);
+
+        panEingabe.setLayout(new java.awt.CardLayout());
+
+        panEingabeGrundbuchblatt.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Grundbuchblatt Suchmaske"), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        panEingabeGrundbuchblatt.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -166,30 +289,224 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel2.add(txtName, gridBagConstraints);
+        panEingabeGrundbuchblatt.add(txtGrundbuchblattnummer, gridBagConstraints);
 
-        jLabel2.setText("Name:");
+        jLabel12.setText("Grundbuchblattnummer:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel2.add(jLabel2, gridBagConstraints);
+        panEingabeGrundbuchblatt.add(jLabel12, gridBagConstraints);
 
+        panEingabe.add(panEingabeGrundbuchblatt, "grundbuchblatt");
+
+        panEingabeFlurstueck.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Flurstück Suchmaske"), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        panEingabeFlurstueck.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panEingabeFlurstueck.add(txtFlurstuecksnummer, gridBagConstraints);
+
+        jLabel9.setText("Flurstücksnummer:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panEingabeFlurstueck.add(jLabel9, gridBagConstraints);
+
+        panEingabe.add(panEingabeFlurstueck, "flurstueck");
+
+        panEingabeEigentuemer.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Eigentümer Suchmaske"), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        panEingabeEigentuemer.setLayout(new java.awt.GridBagLayout());
+
+        txtVorname.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtVornameActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panSearch.add(jPanel2, gridBagConstraints);
+        panEingabeEigentuemer.add(txtVorname, gridBagConstraints);
 
-        jPanel6.setOpaque(false);
+        jLabel7.setText("Vorname:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panEingabeEigentuemer.add(jLabel7, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panEingabeEigentuemer.add(txtName, gridBagConstraints);
+
+        jLabel8.setText("Name:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panEingabeEigentuemer.add(jLabel8, gridBagConstraints);
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Eigentümer ist"), javax.swing.BorderFactory.createEmptyBorder(4, 4, 4, 4)));
+        jPanel4.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel4.add(jPanel5, gridBagConstraints);
+
+        bgrOwner.add(optEigIstMaennlich);
+        optEigIstMaennlich.setText("männlich");
+        optEigIstMaennlich.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                optEigIstMaennlichActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        jPanel4.add(optEigIstMaennlich, gridBagConstraints);
+
+        bgrOwner.add(optEigIstWeiblich);
+        optEigIstWeiblich.setText("weiblich");
+        optEigIstWeiblich.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                optEigIstWeiblichActionPerformed(evt);
+            }
+        });
+        jPanel4.add(optEigIstWeiblich, new java.awt.GridBagConstraints());
+
+        bgrOwner.add(optEigIstFirma);
+        optEigIstFirma.setText("Firma");
+        optEigIstFirma.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                optEigIstFirmaActionPerformed(evt);
+            }
+        });
+        jPanel4.add(optEigIstFirma, new java.awt.GridBagConstraints());
+
+        bgrOwner.add(optEigIstUnbekannt);
+        optEigIstUnbekannt.setSelected(true);
+        optEigIstUnbekannt.setText("unbekannt");
+        optEigIstUnbekannt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                optEigIstUnbekanntActionPerformed(evt);
+            }
+        });
+        jPanel4.add(optEigIstUnbekannt, new java.awt.GridBagConstraints());
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        panEingabeEigentuemer.add(jPanel4, gridBagConstraints);
+
+        chkNameExakt.setEnabled(false);
+        chkNameExakt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkNameExaktActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        panEingabeEigentuemer.add(chkNameExakt, gridBagConstraints);
+
+        chkGeburtsnameExakt.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 5;
+        panEingabeEigentuemer.add(chkGeburtsnameExakt, gridBagConstraints);
+
+        chkVornameExakt.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 3;
+        panEingabeEigentuemer.add(chkVornameExakt, gridBagConstraints);
+
+        jLabel1.setText("exakt?");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        panEingabeEigentuemer.add(jLabel1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panEingabeEigentuemer.add(txtGeburtsname, gridBagConstraints);
+
+        jLabel13.setText("Geburtsname:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panEingabeEigentuemer.add(jLabel13, gridBagConstraints);
+
+        jLabel14.setText("Geburtsdatum:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.weighty = 1.0;
-        panSearch.add(jPanel6, gridBagConstraints);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panEingabeEigentuemer.add(jLabel14, gridBagConstraints);
+
+        txtGeburtsdatum.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtGeburtsdatumActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panEingabeEigentuemer.add(txtGeburtsdatum, gridBagConstraints);
+
+        panEingabe.add(panEingabeEigentuemer, "eigentuemer");
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(15, 15, 15, 15);
+        panSearch.add(panEingabe, gridBagConstraints);
+
+        jCheckBox1.setText("nur im aktuellen Kartenausschnitt suchen");
+        jCheckBox1.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 17, 0, 0);
+        panSearch.add(jCheckBox1, gridBagConstraints);
 
         add(panSearch, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
@@ -202,6 +519,55 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     private void btnSearchActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         performSearch();
     }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void optSucheUeberEigentuemerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optSucheUeberEigentuemerActionPerformed
+        ((CardLayout) panEingabe.getLayout()).show(panEingabe, "eigentuemer");
+    }//GEN-LAST:event_optSucheUeberEigentuemerActionPerformed
+
+    private void chkNameExaktActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkNameExaktActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chkNameExaktActionPerformed
+
+    private void txtVornameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtVornameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtVornameActionPerformed
+
+    private void txtGeburtsdatumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGeburtsdatumActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtGeburtsdatumActionPerformed
+
+    private void optEigIstMaennlichActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optEigIstMaennlichActionPerformed
+        txtVorname.setEnabled(true);
+        txtGeburtsname.setEnabled(true);
+        txtGeburtsdatum.setEnabled(true);
+
+    }//GEN-LAST:event_optEigIstMaennlichActionPerformed
+
+    private void optEigIstUnbekanntActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optEigIstUnbekanntActionPerformed
+        txtVorname.setEnabled(true);
+        txtGeburtsname.setEnabled(true);
+        txtGeburtsdatum.setEnabled(true);
+    }//GEN-LAST:event_optEigIstUnbekanntActionPerformed
+
+    private void optEigIstFirmaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optEigIstFirmaActionPerformed
+        txtVorname.setEnabled(false);
+        txtGeburtsname.setEnabled(false);
+        txtGeburtsdatum.setEnabled(false);
+    }//GEN-LAST:event_optEigIstFirmaActionPerformed
+
+    private void optEigIstWeiblichActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optEigIstWeiblichActionPerformed
+        txtVorname.setEnabled(true);
+        txtGeburtsname.setEnabled(true);
+        txtGeburtsdatum.setEnabled(true);
+    }//GEN-LAST:event_optEigIstWeiblichActionPerformed
+
+    private void optSucheUeberFlurstueckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optSucheUeberFlurstueckActionPerformed
+        ((CardLayout) panEingabe.getLayout()).show(panEingabe, "flurstueck");
+    }//GEN-LAST:event_optSucheUeberFlurstueckActionPerformed
+
+    private void optSucheUeberGrundbuchblattActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optSucheUeberGrundbuchblattActionPerformed
+        ((CardLayout) panEingabe.getLayout()).show(panEingabe, "grundbuchblatt");
+    }//GEN-LAST:event_optSucheUeberGrundbuchblattActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -250,21 +616,50 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         return this;
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private AlkisSearchInfo getAlkisInfoFromGUI() {
-        final AlkisSearchInfo asi = new AlkisSearchInfo(txtName.getText(), txtVorname.getText());
-        return asi;
-    }
-
     @Override
     public CidsServerSearch getServerSearch() {
-        final AlkisSearchInfo bsi = getAlkisInfoFromGUI();
-        final MetaClass mc = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "ALKIS_LANDPARCEL");
-        return new CidsAlkisSearchStatement(bsi,mc);
+        CidsAlkisSearchStatement.Resulttyp resulttype = null;
+        if (optSucheNachFlurstuecke.isSelected()) {
+            resulttype = CidsAlkisSearchStatement.Resulttyp.FLURSTUECK;
+        } else {
+            resulttype = CidsAlkisSearchStatement.Resulttyp.BUCHUNGSBLATT;
+        }
+        if (optSucheUeberEigentuemer.isSelected()) {
+            CidsAlkisSearchStatement.Personentyp ptyp=null;
+            if (optEigIstFirma.isSelected()){
+                ptyp= CidsAlkisSearchStatement.Personentyp.FIRMA;
+            }
+            else if(optEigIstMaennlich.isSelected())
+            {
+                ptyp= CidsAlkisSearchStatement.Personentyp.MANN;
+            }
+            else if(optEigIstWeiblich.isSelected())
+            {
+                ptyp= CidsAlkisSearchStatement.Personentyp.FRAU;
+            }
+
+            String name=txtName.getText().trim();
+            String vorname=txtVorname.getText().trim();
+            String geburtsname=txtGeburtsname.getText().trim();
+            String geburtsdatum=txtGeburtsdatum.getText().trim();
+            if (!chkNameExakt.isSelected()&&name.length()>0){
+                name=CidsAlkisSearchStatement.WILDCARD+name+CidsAlkisSearchStatement.WILDCARD;
+            }
+            if (!chkVornameExakt.isSelected()&&vorname.length()>0){
+                vorname=CidsAlkisSearchStatement.WILDCARD+vorname+CidsAlkisSearchStatement.WILDCARD;
+            }
+            if (!chkGeburtsnameExakt.isSelected()&&geburtsname.length()>0){
+                geburtsname=CidsAlkisSearchStatement.WILDCARD+geburtsname+CidsAlkisSearchStatement.WILDCARD;
+            }
+            return new CidsAlkisSearchStatement(resulttype,name,vorname,geburtsname,geburtsdatum,ptyp);
+        } else if (optSucheUeberFlurstueck.isSelected()) {
+            return new CidsAlkisSearchStatement(resulttype,CidsAlkisSearchStatement.SucheUeber.FLURSTUECKSNUMMER,txtFlurstuecksnummer.getText());
+        } else {
+            return new CidsAlkisSearchStatement(resulttype,CidsAlkisSearchStatement.SucheUeber.BUCHUNGSBLATTNUMMER,txtGrundbuchblattnummer.getText());
+        }
+
+
+        
     }
 
     @Override
