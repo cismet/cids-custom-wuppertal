@@ -12,7 +12,6 @@
  */
 package de.cismet.cids.custom.wunda_blau.search;
 
-
 import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 import Sirius.navigator.actiontag.ActionTagProtected;
 import Sirius.navigator.connection.SessionManager;
@@ -21,11 +20,11 @@ import Sirius.navigator.method.MethodManager;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.Node;
 import Sirius.server.search.CidsServerSearch;
+import com.vividsolutions.jts.geom.Geometry;
 
 
 
 import java.util.Collection;
-import java.util.concurrent.ExecutionException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -39,6 +38,9 @@ import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
+import de.cismet.cismap.commons.CrsTransformer;
+import de.cismet.cismap.commons.XBoundingBox;
+import de.cismet.cismap.commons.interaction.CismapBroker;
 
 
 import de.cismet.tools.CismetThreadPool;
@@ -65,9 +67,9 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     private javax.swing.ButtonGroup bgrUeber;
     private javax.swing.JButton btnSearch;
     private javax.swing.JCheckBox chkGeburtsnameExakt;
+    private javax.swing.JCheckBox chkGeomFilter;
     private javax.swing.JCheckBox chkNameExakt;
     private javax.swing.JCheckBox chkVornameExakt;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
@@ -171,7 +173,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         txtGeburtsdatum = new javax.swing.JTextField();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        chkGeomFilter = new javax.swing.JCheckBox();
 
         setMaximumSize(new java.awt.Dimension(325, 460));
         setMinimumSize(new java.awt.Dimension(325, 460));
@@ -209,7 +211,9 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         bgrNach.add(optSucheNachFlurstuecke);
         optSucheNachFlurstuecke.setSelected(true);
         optSucheNachFlurstuecke.setText("Flurstücken");
-        panSucheNach.add(optSucheNachFlurstuecke, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        panSucheNach.add(optSucheNachFlurstuecke, gridBagConstraints);
 
         bgrNach.add(optSucheNachGrundbuchblaetter);
         optSucheNachGrundbuchblaetter.setText("Grundbuchblättern");
@@ -255,7 +259,9 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
                 optSucheUeberFlurstueckActionPerformed(evt);
             }
         });
-        panSucheUeber.add(optSucheUeberFlurstueck, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+        panSucheUeber.add(optSucheUeberFlurstueck, gridBagConstraints);
 
         bgrUeber.add(optSucheUeberGrundbuchblatt);
         optSucheUeberGrundbuchblatt.setText("Grundbuchblatt");
@@ -392,7 +398,9 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
                 optEigIstWeiblichActionPerformed(evt);
             }
         });
-        jPanel4.add(optEigIstWeiblich, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+        jPanel4.add(optEigIstWeiblich, gridBagConstraints);
 
         bgrOwner.add(optEigIstFirma);
         optEigIstFirma.setText("Firma");
@@ -401,7 +409,9 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
                 optEigIstFirmaActionPerformed(evt);
             }
         });
-        jPanel4.add(optEigIstFirma, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        jPanel4.add(optEigIstFirma, gridBagConstraints);
 
         bgrOwner.add(optEigIstUnbekannt);
         optEigIstUnbekannt.setSelected(true);
@@ -499,14 +509,13 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         gridBagConstraints.insets = new java.awt.Insets(15, 15, 15, 15);
         panSearch.add(panEingabe, gridBagConstraints);
 
-        jCheckBox1.setText("nur im aktuellen Kartenausschnitt suchen");
-        jCheckBox1.setEnabled(false);
+        chkGeomFilter.setText("nur im aktuellen Kartenausschnitt suchen");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 17, 0, 0);
-        panSearch.add(jCheckBox1, gridBagConstraints);
+        panSearch.add(chkGeomFilter, gridBagConstraints);
 
         add(panSearch, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
@@ -580,6 +589,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
             @Override
             protected Void doInBackground() throws Exception {
                 final Collection<Node> r = SessionManager.getProxy().customServerSearch(SessionManager.getSession().getUser(), getServerSearch());
+                log.info("server done " + r.size() + "results");
                 MethodManager.getManager().showSearchResults(r.toArray(new Node[r.size()]), false);
                 return null;
             }
@@ -590,7 +600,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
                     get();
                 } catch (InterruptedException ex) {
                     log.warn(ex, ex);
-                } catch (ExecutionException ex) {
+                } catch (Exception ex) {
                     log.error(ex, ex);
                 } finally {
                     lblBusy.setBusy(false);
@@ -618,6 +628,15 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
 
     @Override
     public CidsServerSearch getServerSearch() {
+        Geometry searchgeom = null;
+        if (chkGeomFilter.isSelected()) {
+            Geometry g = ((XBoundingBox) CismapBroker.getInstance().getMappingComponent().getCurrentBoundingBox()).getGeometry();
+            Geometry transformed = CrsTransformer.transformToDefaultCrs(g);
+            // Damits auch mit -1 funzt:
+            transformed.setSRID(CismapBroker.getInstance().getDefaultCrsAlias());
+            searchgeom = transformed;
+        }
+
         CidsAlkisSearchStatement.Resulttyp resulttype = null;
         if (optSucheNachFlurstuecke.isSelected()) {
             resulttype = CidsAlkisSearchStatement.Resulttyp.FLURSTUECK;
@@ -625,41 +644,37 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
             resulttype = CidsAlkisSearchStatement.Resulttyp.BUCHUNGSBLATT;
         }
         if (optSucheUeberEigentuemer.isSelected()) {
-            CidsAlkisSearchStatement.Personentyp ptyp=null;
-            if (optEigIstFirma.isSelected()){
-                ptyp= CidsAlkisSearchStatement.Personentyp.FIRMA;
-            }
-            else if(optEigIstMaennlich.isSelected())
-            {
-                ptyp= CidsAlkisSearchStatement.Personentyp.MANN;
-            }
-            else if(optEigIstWeiblich.isSelected())
-            {
-                ptyp= CidsAlkisSearchStatement.Personentyp.FRAU;
+            CidsAlkisSearchStatement.Personentyp ptyp = null;
+            if (optEigIstFirma.isSelected()) {
+                ptyp = CidsAlkisSearchStatement.Personentyp.FIRMA;
+            } else if (optEigIstMaennlich.isSelected()) {
+                ptyp = CidsAlkisSearchStatement.Personentyp.MANN;
+            } else if (optEigIstWeiblich.isSelected()) {
+                ptyp = CidsAlkisSearchStatement.Personentyp.FRAU;
             }
 
-            String name=txtName.getText().trim();
-            String vorname=txtVorname.getText().trim();
-            String geburtsname=txtGeburtsname.getText().trim();
-            String geburtsdatum=txtGeburtsdatum.getText().trim();
-            if (!chkNameExakt.isSelected()&&name.length()>0){
-                name=CidsAlkisSearchStatement.WILDCARD+name+CidsAlkisSearchStatement.WILDCARD;
+            String name = txtName.getText().trim();
+            String vorname = txtVorname.getText().trim();
+            String geburtsname = txtGeburtsname.getText().trim();
+            String geburtsdatum = txtGeburtsdatum.getText().trim();
+            if (!chkNameExakt.isSelected() && name.length() > 0) {
+                name = CidsAlkisSearchStatement.WILDCARD + name + CidsAlkisSearchStatement.WILDCARD;
             }
-            if (!chkVornameExakt.isSelected()&&vorname.length()>0){
-                vorname=CidsAlkisSearchStatement.WILDCARD+vorname+CidsAlkisSearchStatement.WILDCARD;
+            if (!chkVornameExakt.isSelected() && vorname.length() > 0) {
+                vorname = CidsAlkisSearchStatement.WILDCARD + vorname + CidsAlkisSearchStatement.WILDCARD;
             }
-            if (!chkGeburtsnameExakt.isSelected()&&geburtsname.length()>0){
-                geburtsname=CidsAlkisSearchStatement.WILDCARD+geburtsname+CidsAlkisSearchStatement.WILDCARD;
+            if (!chkGeburtsnameExakt.isSelected() && geburtsname.length() > 0) {
+                geburtsname = CidsAlkisSearchStatement.WILDCARD + geburtsname + CidsAlkisSearchStatement.WILDCARD;
             }
-            return new CidsAlkisSearchStatement(resulttype,name,vorname,geburtsname,geburtsdatum,ptyp);
+            return new CidsAlkisSearchStatement(resulttype, name, vorname, geburtsname, geburtsdatum, ptyp,searchgeom);
         } else if (optSucheUeberFlurstueck.isSelected()) {
-            return new CidsAlkisSearchStatement(resulttype,CidsAlkisSearchStatement.SucheUeber.FLURSTUECKSNUMMER,txtFlurstuecksnummer.getText());
+            return new CidsAlkisSearchStatement(resulttype, CidsAlkisSearchStatement.SucheUeber.FLURSTUECKSNUMMER, txtFlurstuecksnummer.getText(),searchgeom);
         } else {
-            return new CidsAlkisSearchStatement(resulttype,CidsAlkisSearchStatement.SucheUeber.BUCHUNGSBLATTNUMMER,txtGrundbuchblattnummer.getText());
+            return new CidsAlkisSearchStatement(resulttype, CidsAlkisSearchStatement.SucheUeber.BUCHUNGSBLATTNUMMER, txtGrundbuchblattnummer.getText(),searchgeom);
         }
 
 
-        
+
     }
 
     @Override
