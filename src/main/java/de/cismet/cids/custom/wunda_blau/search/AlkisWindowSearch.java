@@ -74,6 +74,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -173,6 +174,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         txtGeburtsdatum = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
         chkGeomFilter = new javax.swing.JCheckBox();
 
         setMaximumSize(new java.awt.Dimension(325, 460));
@@ -498,6 +500,14 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panEingabeEigentuemer.add(txtGeburtsdatum, gridBagConstraints);
+
+        jLabel2.setFont(new java.awt.Font("Lucida Grande", 2, 13)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel2.setText("Bsp.: 18.01.1974");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 4;
+        panEingabeEigentuemer.add(jLabel2, gridBagConstraints);
 
         panEingabe.add(panEingabeEigentuemer, "eigentuemer");
 
