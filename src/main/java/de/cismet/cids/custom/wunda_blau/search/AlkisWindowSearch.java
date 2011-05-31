@@ -75,6 +75,8 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -152,9 +154,11 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         panEingabeGrundbuchblatt = new javax.swing.JPanel();
         txtGrundbuchblattnummer = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         panEingabeFlurstueck = new javax.swing.JPanel();
         txtFlurstuecksnummer = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         panEingabeEigentuemer = new javax.swing.JPanel();
         txtVorname = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
@@ -307,6 +311,15 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panEingabeGrundbuchblatt.add(jLabel12, gridBagConstraints);
 
+        jLabel4.setText("<html> <p>Beispiel: 053001-003117</p><br><p>Platzhaltersymbole:</p><p>&nbsp;<b>%</b>&nbsp;&nbsp;&nbsp;&nbsp;eine beliebige Anzahl von Zeichen</p> <p>&nbsp;<b>_</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ein einzelnes Zeichen</p> </html>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 12, 5, 5);
+        panEingabeGrundbuchblatt.add(jLabel4, gridBagConstraints);
+
         panEingabe.add(panEingabeGrundbuchblatt, "grundbuchblatt");
 
         panEingabeFlurstueck.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Flurstück Suchmaske"), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
@@ -327,6 +340,15 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panEingabeFlurstueck.add(jLabel9, gridBagConstraints);
+
+        jLabel3.setText("<html> <p>Beispiel: 053001-117-00058</p><br><p>Platzhaltersymbole:</p><p>&nbsp;<b>%</b>&nbsp;&nbsp;&nbsp;&nbsp;eine beliebige Anzahl von Zeichen</p> <p>&nbsp;<b>_</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ein einzelnes Zeichen</p> </html>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 12, 5, 5);
+        panEingabeFlurstueck.add(jLabel3, gridBagConstraints);
 
         panEingabe.add(panEingabeFlurstueck, "flurstueck");
 
@@ -433,6 +455,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         gridBagConstraints.weightx = 1.0;
         panEingabeEigentuemer.add(jPanel4, gridBagConstraints);
 
+        chkNameExakt.setToolTipText("z.Zt. vom Alkis-Dienst nicht unterstützt");
         chkNameExakt.setEnabled(false);
         chkNameExakt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -444,12 +467,14 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         gridBagConstraints.gridy = 2;
         panEingabeEigentuemer.add(chkNameExakt, gridBagConstraints);
 
+        chkGeburtsnameExakt.setToolTipText("z.Zt. vom Alkis-Dienst nicht unterstützt");
         chkGeburtsnameExakt.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 5;
         panEingabeEigentuemer.add(chkGeburtsnameExakt, gridBagConstraints);
 
+        chkVornameExakt.setToolTipText("z.Zt. vom Alkis-Dienst nicht unterstützt");
         chkVornameExakt.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -487,6 +512,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panEingabeEigentuemer.add(jLabel14, gridBagConstraints);
 
+        txtGeburtsdatum.setToolTipText("Bsp.: 18.01.1974");
         txtGeburtsdatum.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtGeburtsdatumActionPerformed(evt);
@@ -501,12 +527,13 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panEingabeEigentuemer.add(txtGeburtsdatum, gridBagConstraints);
 
-        jLabel2.setFont(new java.awt.Font("Lucida Grande", 2, 13)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel2.setText("Bsp.: 18.01.1974");
+        jLabel2.setText("<html><br><p>Platzhaltersymbole:</p><p>&nbsp;<b>%</b>&nbsp;&nbsp;&nbsp;&nbsp;eine beliebige Anzahl von Zeichen</p> <p>&nbsp;<b>_</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ein einzelnes Zeichen</p> </html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 12, 5, 5);
         panEingabeEigentuemer.add(jLabel2, gridBagConstraints);
 
         panEingabe.add(panEingabeEigentuemer, "eigentuemer");
