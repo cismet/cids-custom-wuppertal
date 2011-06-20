@@ -91,6 +91,7 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.commons.BoundingBox;
+import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.features.DefaultStyledFeature;
 import de.cismet.cismap.commons.features.StyledFeature;
@@ -1361,6 +1362,10 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                     if (AlkisUtils.validateUserHasAlkisBuchungsblattAccess()) {
                         AlkisSOAPWorkerService.execute(retrieveWorker);
                     }
+                    else {
+                        panEigentuemer.setVisible(false);
+                        setWaiting(false);
+                    }
 //                    CismetThreadPool.execute(retrieveWorker);
                     landparcelListBinding.bind();
                     initMap();
@@ -1389,7 +1394,9 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         final GeometryCollection geoCollection = new GeometryCollection(allGeomList.toArray(
                 new Geometry[allGeomList.size()]),
                 new GeometryFactory());
-        return new BoundingBox(geoCollection);
+        Geometry extent=CrsTransformer.transformToGivenCrs(geoCollection.getEnvelope(),AlkisConstants.COMMONS.SRS_SERVICE);
+
+        return new BoundingBox(extent);
     }
 
     /**
@@ -1399,7 +1406,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         if (landParcelList.size() > 0) {
             try {
                 final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                mappingModel.setSrs(AlkisConstants.COMMONS.SRS_GEOM);
+                mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
                 // TODO: do we need an swsw for every class?
                 final BoundingBox box = boundingBoxFromLandparcelList(landParcelList);
                 mappingModel.addHome(new XBoundingBox(
@@ -1407,7 +1414,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                         box.getY1(),
                         box.getX2(),
                         box.getY2(),
-                        AlkisConstants.COMMONS.SRS_GEOM,
+                        AlkisConstants.COMMONS.SRS_SERVICE,
                         true));
                 final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisConstants.COMMONS.MAP_CALL_STRING));
                 swms.setName("Buchungsblatt");
@@ -1666,13 +1673,15 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
          */
         public RetrieveWorker(final CidsBean bean) {
             this.bean = bean;
-            setWaiting(true);
-            epOwner.setText("Wird geladen...");
+            
+            
         }
 
         //~ Methods ------------------------------------------------------------
         @Override
         protected Buchungsblatt doInBackground() throws Exception {
+            setWaiting(true);
+            epOwner.setText("Wird geladen...");
             return infoService.getBuchungsblatt(soapProvider.getIdentityCard(),
                     soapProvider.getService(),
                     fixBuchungslattCode(String.valueOf(bean.getProperty("buchungsblattcode"))));

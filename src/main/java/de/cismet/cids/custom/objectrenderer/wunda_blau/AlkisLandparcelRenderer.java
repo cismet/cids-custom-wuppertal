@@ -76,6 +76,7 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.cismap.commons.BoundingBox;
+import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.features.DefaultStyledFeature;
 import de.cismet.cismap.commons.features.StyledFeature;
@@ -1600,7 +1601,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
     private void initMap() {
         final Object geoObj = cidsBean.getProperty("geometrie.geo_field");
         if (geoObj instanceof Geometry) {
-            final Geometry pureGeom = (Geometry) geoObj;
+            final Geometry pureGeom = CrsTransformer.transformToGivenCrs((Geometry) geoObj,AlkisConstants.COMMONS.SRS_SERVICE);
             final BoundingBox box = new BoundingBox(pureGeom.getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER));
 
             final Runnable mapRunnable = new Runnable() {
@@ -1608,13 +1609,13 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
                 @Override
                 public void run() {
                     final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                    mappingModel.setSrs(AlkisConstants.COMMONS.SRS_GEOM);
+                    mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
                     mappingModel.addHome(new XBoundingBox(
                             box.getX1(),
                             box.getY1(),
                             box.getX2(),
                             box.getY2(),
-                            AlkisConstants.COMMONS.SRS_GEOM,
+                            AlkisConstants.COMMONS.SRS_SERVICE,
                             true));
                     final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisConstants.COMMONS.MAP_CALL_STRING));
                     swms.setName("Flurstueck");
