@@ -83,6 +83,7 @@ import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
+import de.cismet.tools.StaticDebuggingTools;
 
 import de.cismet.tools.collections.TypeSafeCollections;
 
@@ -117,7 +118,12 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
     private static final String PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM = "custom.alkis.product.flurstuecks_eigentumsnachweis_kom";
     private static final String PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN = "custom.alkis.product.flurstuecks_eigentumsnachweis_kom_intern";
     private static final String PRODUCT_ACTION_TAG_KARTE = "custom.alkis.product.karte";
+    
+
     //
+
+
+
     private static final String BUCHUNGSBLATT_TABLE = "alkis_buchungsblatt";
     private static final String DOMAIN = "WUNDA_BLAU";
     private final boolean buchungsblattPermission;
@@ -292,7 +298,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
      * Creates new form Alkis_pointRenderer.
      */
     public AlkisLandparcelRenderer() {
-        buchungsblattPermission = ObjectRendererUtils.hasCurrentUserPermissionOnMetaClass(BUCHUNGSBLATT_TABLE, DOMAIN, ObjectRendererUtils.PermissionType.READ);
+        buchungsblattPermission = AlkisUtils.validateUserHasAlkisBuchungsblattAccess();
         buchungsblaetter = TypeSafeCollections.newConcurrentHashMap();
         productPreviewImages = TypeSafeCollections.newHashMap();
         gotoBeanMap = TypeSafeCollections.newHashMap();
@@ -486,18 +492,23 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
      */
     private Buchungsblatt getBuchungsblatt(final CidsBean buchungsblattBean) throws Exception {
         Buchungsblatt buchungsblatt = null;
+
         if (buchungsblattBean != null) {
             buchungsblatt = buchungsblaetter.get(buchungsblattBean);
             if (buchungsblatt == null) {
                 final String buchungsblattcode = String.valueOf(buchungsblattBean.getProperty("buchungsblattcode"));
                 if ((buchungsblattcode != null) && (buchungsblattcode.length() > 5)) {
+                    if (!StaticDebuggingTools.checkHomeForFile("demoMode")){
                     buchungsblatt = infoService.getBuchungsblatt(soapProvider.getIdentityCard(),
                             soapProvider.getService(),
                             AlkisBuchungsblattRenderer.fixBuchungslattCode(buchungsblattcode));
+                    }
+                    
                     buchungsblaetter.put(buchungsblattBean, buchungsblatt);
                 }
             }
         }
+
         return buchungsblatt;
     }
 

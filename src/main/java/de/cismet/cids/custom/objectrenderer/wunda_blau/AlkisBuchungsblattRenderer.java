@@ -1346,20 +1346,21 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                 for (final CidsBean buchungsblattLandparcelBean : buchungsblattLandparcelList) {
                     landParcelList.add(new LightweightLandParcel(buchungsblattLandparcelBean));
                 }
-                Collections.sort(landParcelList,new Comparator<LightweightLandParcel>(){
+                Collections.sort(landParcelList, new Comparator<LightweightLandParcel>() {
 
                     @Override
                     public int compare(LightweightLandParcel t, LightweightLandParcel t1) {
                         return t.toString().compareTo(t1.toString());
                     }
-
                 });
             }
             final Runnable edtRunner = new Runnable() {
 
                 @Override
                 public void run() {
-                    AlkisSOAPWorkerService.execute(retrieveWorker);
+                    if (AlkisUtils.validateUserHasAlkisBuchungsblattAccess()) {
+                        AlkisSOAPWorkerService.execute(retrieveWorker);
+                    }
 //                    CismetThreadPool.execute(retrieveWorker);
                     landparcelListBinding.bind();
                     initMap();

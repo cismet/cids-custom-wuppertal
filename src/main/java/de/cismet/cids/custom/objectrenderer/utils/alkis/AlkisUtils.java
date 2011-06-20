@@ -468,4 +468,13 @@ public class AlkisUtils {
         }
         return false;
     }
+
+    public static boolean validateUserHasAlkisBuchungsblattAccess() {
+        try {
+            return SessionManager.getConnection().getConfigAttr(SessionManager.getSession().getUser(), "custom.alkis.buchungsblatt") != null;
+        } catch (ConnectionException ex) {
+            log.error("Could not validate action tag for Alkis Buchungsblatt!", ex);
+        }
+        return false;
+    }
 }
