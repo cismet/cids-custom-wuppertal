@@ -605,7 +605,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
                 }
             }
             if(url != null) {
-                final Download download = new Download(url, "", "produkte", downloadTitle, product, ".pdf");
+                final Download download = new Download(url, "", "flurstueck", downloadTitle, product, ".pdf");
                 
                 DownloadManagerDialog.show(StaticSwingTools.getParentFrame(this));
                 
