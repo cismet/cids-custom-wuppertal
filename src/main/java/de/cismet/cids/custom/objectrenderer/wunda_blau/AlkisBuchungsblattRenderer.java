@@ -99,6 +99,8 @@ import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
+import de.cismet.tools.BrowserLauncher;
+import de.cismet.tools.StaticDebuggingTools;
 
 import de.cismet.tools.collections.TypeSafeCollections;
 
@@ -171,6 +173,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private final CardLayout cardLayout;
     private final Map<Object, ImageIcon> productPreviewImages;
     private boolean continueInBackground = false;
+    private final boolean demoMode = StaticDebuggingTools.checkHomeForFile("demoMode");
 //    private List<MetaObject> realLandParcelMetaObjectsCache = null;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXBusyLabel blWait;
@@ -1083,7 +1086,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
             showNoProductPermissionWarning();
         }
     }
-    
+
     private void downloadProduct(String downloadTitle, String product, String actionTag) {
         if (ObjectRendererUtils.checkActionTag(actionTag)) {
             try {
@@ -1100,7 +1103,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                     }
                     queryID = AlkisUtils.escapeHtmlSpaces(queryID);
                     final URL url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(queryID, product);
-                    
+
                     if (url != null) {
                         if (!DownloadManagerDialog.showAskingForUserTitle(StaticSwingTools.getParentFrame(this))) {
                             return;
@@ -1109,7 +1112,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                         if (jobname == null || jobname.trim().length() <= 0) {
                             return;
                         }
-                        
+
                         final SingleDownload download = new SingleDownload(url, "", jobname, downloadTitle, product, ".pdf");
                         DownloadManager.instance().add(download);
                     }
@@ -1133,7 +1136,11 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      * @param  evt  DOCUMENT ME!
      */
     private void hlBestandsnachweisNrwHtmlActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlBestandsnachweisNrwHtmlActionPerformed
-        openProduct(AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_NRW_HTML, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW);
+        if (!demoMode) {
+            openProduct(AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_NRW_HTML, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW);
+        } else {
+            BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL + "bestandsnachweis_nrw.html");
+        }
     }//GEN-LAST:event_hlBestandsnachweisNrwHtmlActionPerformed
 
     /**
@@ -1142,7 +1149,11 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      * @param  evt  DOCUMENT ME!
      */
     private void hlBestandsnachweisNrwPdfActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlBestandsnachweisNrwPdfActionPerformed
-        downloadProduct(hlBestandsnachweisNrwPdf.getText(), AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_NRW_PDF, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW);
+        if (!demoMode) {
+            downloadProduct(hlBestandsnachweisNrwPdf.getText(), AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_NRW_PDF, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW);
+        } else {
+            BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL + "bestandsnachweis_nrw.pdf");
+        }
     }//GEN-LAST:event_hlBestandsnachweisNrwPdfActionPerformed
 
     /**
@@ -1249,7 +1260,11 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     }//GEN-LAST:event_lblForwMouseClicked
 
     private void hlBestandsnachweisKomPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlBestandsnachweisKomPdfActionPerformed
-        downloadProduct(hlBestandsnachweisKomPdf.getText(), AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_PDF, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM);
+        if (!demoMode) {
+            downloadProduct(hlBestandsnachweisKomPdf.getText(), AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_PDF, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM);
+        } else {
+            BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL + "bestandsnachweis_kommunal.pdf");
+        }
     }//GEN-LAST:event_hlBestandsnachweisKomPdfActionPerformed
 
     private void hlGrundstuecksnachweisNrwPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlGrundstuecksnachweisNrwPdfActionPerformed
@@ -1257,19 +1272,32 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     }//GEN-LAST:event_hlGrundstuecksnachweisNrwPdfActionPerformed
 
     private void hlBestandsnachweisKomHtmlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlBestandsnachweisKomHtmlActionPerformed
-        openProduct(AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_HTML, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM);
+        if (!demoMode) {
+            openProduct(AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_HTML, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM);
+        } else {
+            BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL + "bestandsnachweis_kommunal.html");
+        }
     }//GEN-LAST:event_hlBestandsnachweisKomHtmlActionPerformed
 
     private void hlGrundstuecksnachweisNrwHtmlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlGrundstuecksnachweisNrwHtmlActionPerformed
         openProduct(AlkisUtils.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_HTML, PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW);
+
     }//GEN-LAST:event_hlGrundstuecksnachweisNrwHtmlActionPerformed
 
     private void hlBestandsnachweisKomInternPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlBestandsnachweisKomInternPdfActionPerformed
-        downloadProduct(hlBestandsnachweisKomInternPdf.getText(), AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_INTERN_PDF, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN);
+        if (!demoMode) {
+            downloadProduct(hlBestandsnachweisKomInternPdf.getText(), AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_INTERN_PDF, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN);
+        } else {
+            BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL + "bestandsnachweis_kommunal_intern.pdf");
+        }
         }//GEN-LAST:event_hlBestandsnachweisKomInternPdfActionPerformed
 
     private void hlBestandsnachweisKomInternHtmlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlBestandsnachweisKomInternHtmlActionPerformed
-        openProduct(AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_INTERN_HTML, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN);
+        if (!demoMode) {
+            openProduct(AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_INTERN_HTML, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN);
+        } else {
+            BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL + "bestandsnachweis_kommunal_intern.html");
+        }
     }//GEN-LAST:event_hlBestandsnachweisKomInternHtmlActionPerformed
 
     /**
@@ -1407,10 +1435,9 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 
                 @Override
                 public void run() {
-                    if (AlkisUtils.validateUserHasAlkisBuchungsblattAccess()) {
+                    if (AlkisUtils.validateUserHasAlkisBuchungsblattAccess() && !demoMode) {
                         AlkisSOAPWorkerService.execute(retrieveWorker);
-                    }
-                    else {
+                    } else {
                         panEigentuemer.setVisible(false);
                         setWaiting(false);
                     }
@@ -1442,7 +1469,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         final GeometryCollection geoCollection = new GeometryCollection(allGeomList.toArray(
                 new Geometry[allGeomList.size()]),
                 new GeometryFactory());
-        Geometry extent=CrsTransformer.transformToGivenCrs(geoCollection.getEnvelope(),AlkisConstants.COMMONS.SRS_SERVICE);
+        Geometry extent = CrsTransformer.transformToGivenCrs(geoCollection.getEnvelope(), AlkisConstants.COMMONS.SRS_SERVICE);
 
         return new BoundingBox(extent);
     }
@@ -1721,8 +1748,8 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
          */
         public RetrieveWorker(final CidsBean bean) {
             this.bean = bean;
-            
-            
+
+
         }
 
         //~ Methods ------------------------------------------------------------
