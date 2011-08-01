@@ -47,6 +47,7 @@ public class AlkisUtils {
     public final static AlkisProducts PRODUCTS  = new AlkisProducts(AlkisConstants.COMMONS.USER, AlkisConstants.COMMONS.PASSWORD, AlkisConstants.COMMONS.SERVICE);;
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisUtils.class);
     //~ Methods ----------------------------------------------------------------
+    //--
 
     /**
      * DOCUMENT ME!
