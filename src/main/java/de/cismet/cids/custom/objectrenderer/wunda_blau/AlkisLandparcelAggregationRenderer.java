@@ -45,22 +45,23 @@ import de.cismet.tools.gui.downloadmanager.MultipleDownload;
 import de.cismet.tools.gui.downloadmanager.SingleDownload;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import org.apache.log4j.Logger;
 import org.openide.util.NbBundle;
@@ -78,15 +79,20 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
     private static final String PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN = "custom.alkis.product.flurstuecks_eigentumsnachweis_kom_intern";
     private static final String PRODUCT_ACTION_TAG_KARTE = "custom.alkis.product.karte";
     
-    private static final Color COLOR_FEATURE_DEFAULT = new Color(1, 0, 0, 0.5f);
-    private static final Color COLOR_FEATURE_HIGHLIGHTED = new Color(0, 1, 0, 0.5f);
+    private static final Color[] COLORS = new Color[]{
+        new Color(247, 150, 70),
+        new Color(155, 187, 89),
+        new Color(128, 100, 162),
+        new Color(75, 172, 198),
+        new Color(192, 80, 77)
+    };
     
+    private static volatile boolean initialisedMap = false;
     
-    private Collection<CidsBean> cidsBeans;
+    private List<CidsBeanWrapper> cidsBeanWrappers;
     private LandparcelTableModel tableModel;
     private MappingComponent map;
-    private CidsBean selectedCidsBean;
-    private Map<CidsBean, StyledFeature> features;
+    private CidsBeanWrapper selectedCidsBeanWrapper;
     private Thread mapThread;
     
 
@@ -97,15 +103,16 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
         
         map = new MappingComponent();
         pnlMap.add(map, BorderLayout.CENTER);
+        tblLandparcels.setDefaultRenderer(Color.class, new ColorRenderer());
         tblLandparcels.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 ListSelectionModel lsm = (ListSelectionModel)e.getSource();
                 
                 if(lsm.isSelectionEmpty()) {
-                    selectedCidsBean = null;
+                    selectedCidsBeanWrapper = null;
                 } else {
-                    selectedCidsBean = tableModel.get(lsm.getLeadSelectionIndex());
+                    selectedCidsBeanWrapper = tableModel.get(lsm.getLeadSelectionIndex());
                 }
                 changeMap();
             }
@@ -296,19 +303,19 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
     }// </editor-fold>//GEN-END:initComponents
 
     private void jxlFlurstuecksnachweisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlFlurstuecksnachweisActionPerformed
-        downloadEinzelnachweisProduct(tableModel.getSelectedCidsBeans(), jxlFlurstuecksnachweis.getText(), AlkisUtils.PRODUCTS.FLURSTUECKSNACHWEIS_PDF, PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS);
+        downloadEinzelnachweisProduct(jxlFlurstuecksnachweis.getText(), AlkisUtils.PRODUCTS.FLURSTUECKSNACHWEIS_PDF, PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS);
     }//GEN-LAST:event_jxlFlurstuecksnachweisActionPerformed
 
     private void jxlNachweisNRWActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlNachweisNRWActionPerformed
-        downloadEinzelnachweisProduct(tableModel.getSelectedCidsBeans(), jxlNachweisNRW.getText(), AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF, PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW);
+        downloadEinzelnachweisProduct(jxlNachweisNRW.getText(), AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF, PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW);
     }//GEN-LAST:event_jxlNachweisNRWActionPerformed
 
     private void jxlNachweisKommunalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlNachweisKommunalActionPerformed
-        downloadEinzelnachweisProduct(tableModel.getSelectedCidsBeans(), jxlNachweisKommunal.getText(), AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF, PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM);
+        downloadEinzelnachweisProduct(jxlNachweisKommunal.getText(), AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF, PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM);
     }//GEN-LAST:event_jxlNachweisKommunalActionPerformed
 
     private void jxlNachweisKommunalInternActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlNachweisKommunalInternActionPerformed
-        downloadEinzelnachweisProduct(tableModel.getSelectedCidsBeans(), jxlNachweisKommunalIntern.getText(), AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_PDF, PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN);
+        downloadEinzelnachweisProduct(jxlNachweisKommunalIntern.getText(), AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_PDF, PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN);
     }//GEN-LAST:event_jxlNachweisKommunalInternActionPerformed
 
     private void jxlKarteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlKarteActionPerformed
@@ -334,20 +341,42 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
 
     @Override
     public Collection<CidsBean> getCidsBeans() {
-        return cidsBeans;
+        final Collection<CidsBean> result = new LinkedList<CidsBean>();
+        
+        for(CidsBeanWrapper wrapper : cidsBeanWrappers) {
+            result.add(wrapper.getCidsBean());
+        }
+        
+        return result;
     }
 
     @Override
-    public void setCidsBeans(Collection<CidsBean> beans) {
-        if(beans != null) {
-            cidsBeans = beans;
-            tableModel.setCidsBeans(cidsBeans);
+    public void setCidsBeans(Collection<CidsBean> cidsBeans) {
+        if(cidsBeans != null) {
+            int colorIndex = 0;
+            cidsBeanWrappers = new LinkedList<CidsBeanWrapper>();
+            
+            for(CidsBean cidsBean : cidsBeans) {
+                cidsBeanWrappers.add(new CidsBeanWrapper(cidsBean, true));
+            }
+            Collections.sort(cidsBeanWrappers);
+            for(CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
+                cidsBeanWrapper.setColor(COLORS[colorIndex]);
+                colorIndex = (colorIndex + 1) % COLORS.length;
+            }
+            
+            tableModel.setCidsBeans(cidsBeanWrappers);
+            
             initMap();
             
             if(tblLandparcels != null && tblLandparcels.getColumnModel() != null) {
-                final TableColumn column = tblLandparcels.getColumnModel().getColumn(0);
+                TableColumn column = tblLandparcels.getColumnModel().getColumn(0);
                 if(column != null) {
                     column.setPreferredWidth(20);
+                }
+                column = tblLandparcels.getColumnModel().getColumn(3);
+                if(column != null) {
+                    column.setPreferredWidth(15);
                 }
             }
         }
@@ -360,7 +389,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
 
     @Override
     public String getTitle() {
-        return NbBundle.getMessage(AlkisLandparcelAggregationRenderer.class, "AlkisLandparcelAggregationRenderer.title", (cidsBeans != null ? cidsBeans.size() : "0"));
+        return NbBundle.getMessage(AlkisLandparcelAggregationRenderer.class, "AlkisLandparcelAggregationRenderer.title", (cidsBeanWrappers != null ? cidsBeanWrappers.size() : "0"));
     }
 
     @Override
@@ -369,17 +398,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
     }
     
     private void initMap() {
-        Map<CidsBean, Geometry> geometries = new HashMap<CidsBean, Geometry>(cidsBeans.size());
-
-        for (final CidsBean landparcel : cidsBeans) {
-            final Object geometry = landparcel.getProperty("geometrie.geo_field");
-            if (geometry instanceof Geometry) {
-                final Geometry transformedGeometry = CrsTransformer.transformToGivenCrs((Geometry) geometry, AlkisConstants.COMMONS.SRS_SERVICE);
-                geometries.put(landparcel, transformedGeometry);
-            }
-        }
-
-        mapThread = new Thread(new InitialiseMapRunnable(geometries));
+        mapThread = new Thread(new InitialiseMapRunnable());
         if (EventQueue.isDispatchThread()) {
             mapThread.start();
         } else {
@@ -392,16 +411,16 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
     
     private void changeMap() {
         if(mapThread != null && mapThread.isAlive()) {
-            if(features == null) {
-                //Initialising the map is still running. Don't change the map now.
-                return;
-            } else {
+            if(initialisedMap) {
                 //Map is initialised. Can be changed.
                 mapThread.interrupt();
+            } else {
+                //Initialising the map is still running. Don't change the map now.
+                return;
             }
         }
         
-        mapThread = new Thread(new ChangeMapRunnable(tableModel.getSelectedCidsBeans(), selectedCidsBean));
+        mapThread = new Thread(new ChangeMapRunnable());
         if (EventQueue.isDispatchThread()) {
             mapThread.start();
         } else {
@@ -420,10 +439,10 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
         jxlKarte.setEnabled(enable);
     }
     
-    private void downloadEinzelnachweisProduct(Collection<CidsBean> cidsBeans, String downloadTitle, String product, String actionTag) {
+    private void downloadEinzelnachweisProduct(String downloadTitle, String product, String actionTag) {
         if(!ObjectRendererUtils.checkActionTag(actionTag)) {
             showNoProductPermissionWarning();
-            //return;
+            return;
         }
         
         if(!DownloadManagerDialog.showAskingForUserTitle(StaticSwingTools.getParentFrame(this))) {
@@ -436,8 +455,12 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
         
         List<SingleDownload> downloads = new LinkedList<SingleDownload>();
         
-        for(CidsBean landparcel : cidsBeans) {
-            final String parcelCode = AlkisUtils.getLandparcelCodeFromParcelBeanObject(landparcel);
+        for(CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
+            if(!cidsBeanWrapper.isSelected()) {
+                continue;
+            }
+            
+            final String parcelCode = AlkisUtils.getLandparcelCodeFromParcelBeanObject(cidsBeanWrapper.getCidsBean());
             URL url = null;
             
             if (parcelCode != null && parcelCode.length() > 0) {
@@ -468,7 +491,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
     private void downloadKarteProduct(final String downloadTitle) {
         if (!ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_KARTE)) {
             showNoProductPermissionWarning();
-            //return;
+            return;
         }
         
         if(!DownloadManagerDialog.showAskingForUserTitle(StaticSwingTools.getParentFrame(this))) {
@@ -481,8 +504,12 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
         
         List<SingleDownload> downloads = new LinkedList<SingleDownload>();
 
-        for (CidsBean landparcel : tableModel.getSelectedCidsBeans()) {
-            final String parcelCode = AlkisUtils.getLandparcelCodeFromParcelBeanObject(landparcel);
+        for (CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
+            if(!cidsBeanWrapper.isSelected()) {
+                continue;
+            }
+            
+            final String parcelCode = AlkisUtils.getLandparcelCodeFromParcelBeanObject(cidsBeanWrapper.getCidsBean());
             URL url = null;
             
             if (parcelCode.length() > 0) {
@@ -514,31 +541,32 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
     }
     
     private class LandparcelTableModel extends AbstractTableModel {
-        private List<CidsBean> selectedCidsBeans;
-        private List<CidsBean> cidsBeansToShow;
+        private int selectedCidsBeans = 0;
         
         @Override
         public int getRowCount() {
-            if(cidsBeansToShow == null) {
+            if(cidsBeanWrappers == null) {
                 return 0;
             }
             
-            return cidsBeansToShow.size();
+            return cidsBeanWrappers.size();
         }
 
         @Override
         public int getColumnCount() {
-            if(cidsBeansToShow == null) {
+            if(cidsBeanWrappers == null) {
                 return 0;
             }
             
-            return 3;
+            return 4;
         }
 
         @Override
         public Class<?> getColumnClass(int columnIndex) {
             if(columnIndex == 0) {
                 return Boolean.class;
+            } else if(columnIndex == 3) {
+                return Color.class;
             } else {
                 return String.class;
             }
@@ -551,17 +579,19 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
         
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
-            if(cidsBeansToShow == null) {
+            if(cidsBeanWrappers == null) {
                 return null;
             }
             
-            CidsBean landparcel = cidsBeansToShow.get(rowIndex);
+            CidsBeanWrapper cidsBeanWrapper = cidsBeanWrappers.get(rowIndex);
             if(columnIndex == 0) {
-                return selectedCidsBeans.contains(landparcel);
+                return cidsBeanWrapper.isSelected();
             } else if(columnIndex == 1) {
-                return landparcel.getProperty("gemarkung").toString();
+                return cidsBeanWrapper.getGemarkung();
+            } else if (columnIndex == 2) {
+                return cidsBeanWrapper.getBezeichnung();
             } else {
-                return landparcel.getProperty("bezeichnung").toString();
+                return cidsBeanWrapper.getColor();
             }
         }
         
@@ -570,17 +600,11 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             return column == 0;
         }
         
-        public void setCidsBeans(Collection<CidsBean> cidsBeans) {
+        public void setCidsBeans(Collection<CidsBeanWrapper> cidsBeans) {
             if(cidsBeans != null) {
-                cidsBeansToShow = new LinkedList<CidsBean>(cidsBeans);
-                Collections.sort(cidsBeansToShow, new LandparcelComparator());
-                selectedCidsBeans = new LinkedList<CidsBean>(cidsBeansToShow);
+                selectedCidsBeans = cidsBeanWrappers.size();
                 fireTableStructureChanged();
             }
-        }
-    
-        public List<CidsBean> getSelectedCidsBeans() {
-            return selectedCidsBeans;
         }
 
         @Override
@@ -589,67 +613,36 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
                 return;
             }
             
-            CidsBean cidsBean = cidsBeansToShow.get(row);
-            if(selectedCidsBeans.contains(cidsBean)) {
-                selectedCidsBeans.remove(cidsBean);
+            CidsBeanWrapper cidsBeanWrapper = cidsBeanWrappers.get(row);
+            cidsBeanWrapper.setSelected(!cidsBeanWrapper.isSelected());
+            if(cidsBeanWrapper.isSelected()) {
+                selectedCidsBeans++;
             } else {
-                selectedCidsBeans.add(cidsBean);
-                Collections.sort(selectedCidsBeans, new LandparcelComparator());
+                selectedCidsBeans--;
             }
             
             fireTableRowsUpdated(row, row);
             changeMap();
-            changeButtonAvailability(selectedCidsBeans.size() > 0);
+            changeButtonAvailability(selectedCidsBeans > 0);
         }
         
-        public CidsBean get(int index) {
-            return cidsBeansToShow.get(index);
+        public CidsBeanWrapper get(int index) {
+            return cidsBeanWrappers.get(index);
         }
-    }
-    
-    private class LandparcelComparator implements Comparator<CidsBean> {
-
-        @Override
-        public int compare(CidsBean cidsBean1, CidsBean cidsBean2) {
-            if(cidsBean1 == null && cidsBean2 == null) {
-                return 0;
-            } else if(cidsBean1 == null) {
-                return -1;
-            } else if(cidsBean2 == null) {
-                return 1;
-            }
-            
-            int districtComparison = cidsBean1.getProperty("gemarkung").toString().compareTo(cidsBean2.getProperty("gemarkung").toString());
-            
-            if(districtComparison != 0) {
-                return districtComparison;
-            } else {
-                return cidsBean1.getProperty("bezeichnung").toString().compareTo(cidsBean2.getProperty("bezeichnung").toString());
-            }
-        }
-        
     }
     
     private class InitialiseMapRunnable implements Runnable {
-        private Map<CidsBean, Geometry> geometries;
-
-        public InitialiseMapRunnable(Map<CidsBean, Geometry> geometries) {
-            this.geometries = geometries;
-            if(features == null) {
-                features = new HashMap<CidsBean, StyledFeature>(this.geometries.size());
-            }
-        }
-
         @Override
         public void run() {
+            initialisedMap = false;
+            
             final ActiveLayerModel mappingModel = new ActiveLayerModel();
             mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
-            mappingModel.addHome(getBoundingBox(geometries.values()));
+            mappingModel.addHome(getBoundingBox());
             
             final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisConstants.COMMONS.MAP_CALL_STRING));
             swms.setName("Flurstueck");
 
-            
             // add the raster layer to the model
             mappingModel.addLayer(swms);
             // set the model
@@ -664,20 +657,20 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             map.unlock();
             map.setInteractionMode("MUTE");
             
-            for(Entry<CidsBean, Geometry> entry : geometries.entrySet()) {
-                final StyledFeature dsf = new DefaultStyledFeature();
-                dsf.setGeometry(entry.getValue());
-                dsf.setFillingPaint(new Color(1, 0, 0, 0.5f));
-                features.put(entry.getKey(), dsf);
-                map.getFeatureCollection().addFeature(dsf);
+            for(CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
+                map.getFeatureCollection().addFeature(cidsBeanWrapper.getFeature());
             }
             
             map.setAnimationDuration(duration);
+            
+            initialisedMap = true;
         }
         
-        private XBoundingBox getBoundingBox(Collection<Geometry> geometries) {
+        private XBoundingBox getBoundingBox() {
             XBoundingBox result = null;
-            for(Geometry geometry : geometries) {
+            for(CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
+                Geometry geometry = cidsBeanWrapper.getGeometry();
+                
                 if(result == null) {
                     result = new XBoundingBox(geometry.getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER));
                     result.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
@@ -707,34 +700,129 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
     }
     
     private class ChangeMapRunnable implements Runnable {
-        private Collection<CidsBean> cidsBeans;
-        private CidsBean cidsBeanToHighlight;
-        
-        public ChangeMapRunnable(final Collection<CidsBean> cidsBeans, final CidsBean cidsBeanToHighlight) {
-            this.cidsBeans = cidsBeans;
-            this.cidsBeanToHighlight = cidsBeanToHighlight;
-        }
-        
         @Override
         public void run() {
             final FeatureCollection featureCollection = map.getFeatureCollection();
             
-            featureCollection.removeAllFeatures();
-            
-            for(CidsBean cidsBean : cidsBeans) {
-                final StyledFeature feature = features.get(cidsBean);
+            for(CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
+                final StyledFeature currentFeature = cidsBeanWrapper.getFeature();
                 
-                if(cidsBean.equals(cidsBeanToHighlight)) {
-                    if(feature.getFillingPaint().equals(COLOR_FEATURE_DEFAULT)) {
-                        feature.setFillingPaint(COLOR_FEATURE_HIGHLIGHTED);
-                    }
+                if(selectedCidsBeanWrapper != null && selectedCidsBeanWrapper.getCidsBean().equals(cidsBeanWrapper.getCidsBean())) {
+                    featureCollection.select(currentFeature);
                 } else {
-                    if(feature.getFillingPaint().equals(COLOR_FEATURE_HIGHLIGHTED)) {
-                        feature.setFillingPaint(COLOR_FEATURE_DEFAULT);
-                    }
+                    featureCollection.unselect(currentFeature);
                 }
                 
-                featureCollection.addFeature(feature);
+                if(cidsBeanWrapper.isSelected() && !featureCollection.contains(currentFeature)) {
+                    featureCollection.addFeature(currentFeature);
+                } else if (!cidsBeanWrapper.isSelected() && featureCollection.contains(currentFeature)) {
+                    featureCollection.removeFeature(currentFeature);
+                }
+            }
+            
+            map.revalidate();
+            map.repaint();
+        }
+    }
+    
+    private class ColorRenderer extends JLabel implements TableCellRenderer {
+        public ColorRenderer() {
+            setOpaque(true);
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(
+                JTable table, Object color,
+                boolean isSelected, boolean hasFocus,
+                int row, int column) {
+            
+            Color newColor = (Color) color;
+            setBackground(newColor);
+            
+            return this;
+        }
+    }
+    
+    private class CidsBeanWrapper implements Comparable<CidsBeanWrapper> {
+        private CidsBean cidsBean;
+        private boolean selected;
+        private Color color;
+        private String gemarkung;
+        private String bezeichnung;
+        private Geometry geometry;
+        private StyledFeature feature;
+        
+        public CidsBeanWrapper(final CidsBean cidsBean, final boolean selected) {
+            this.cidsBean = cidsBean;
+            this.selected = selected;
+            this.gemarkung = cidsBean.getProperty("gemarkung").toString();
+            this.bezeichnung = cidsBean.getProperty("bezeichnung").toString();
+            if(cidsBean.getProperty("geometrie.geo_field") instanceof Geometry) {
+                this.geometry = CrsTransformer.transformToGivenCrs((Geometry) cidsBean.getProperty("geometrie.geo_field"), AlkisConstants.COMMONS.SRS_SERVICE);
+            }
+            
+            final StyledFeature dsf = new DefaultStyledFeature();
+            dsf.setGeometry(this.geometry);
+            
+            this.feature = dsf;
+        }
+        
+        public CidsBean getCidsBean() {
+            return cidsBean;
+        }
+
+        public Color getColor() {
+            return color;
+        }
+
+        public void setColor(Color color) {
+            this.color = color;
+            feature.setFillingPaint(this.color);
+        }
+
+        public boolean isSelected() {
+            return selected;
+        }
+
+        public void setSelected(boolean selected) {
+            this.selected = selected;
+        }
+        
+        public String getGemarkung() {
+            return gemarkung;
+        }
+        
+        public String getBezeichnung() {
+            return bezeichnung;
+        }
+        
+        public Geometry getGeometry() {
+            return geometry;
+        }
+
+        public StyledFeature getFeature() {
+            return feature;
+        }
+        
+        @Override
+        public int compareTo(CidsBeanWrapper o) {
+            final CidsBean cidsBean1 = cidsBean;
+            final CidsBean cidsBean2 = o.cidsBean;
+            
+            if(cidsBean1 == null && cidsBean2 == null) {
+                return 0;
+            } else if(cidsBean1 == null) {
+                return -1;
+            } else if(cidsBean2 == null) {
+                return 1;
+            }
+            
+            int districtComparison = cidsBean1.getProperty("gemarkung").toString().compareTo(cidsBean2.getProperty("gemarkung").toString());
+            
+            if(districtComparison != 0) {
+                return districtComparison;
+            } else {
+                return cidsBean1.getProperty("bezeichnung").toString().compareTo(cidsBean2.getProperty("bezeichnung").toString());
             }
         }
     }
