@@ -61,10 +61,12 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     //~ Instance fields --------------------------------------------------------
     private final MetaClass mc;
     private final ImageIcon icon;
+    private SwingWorker<Void, Void> searchWorker;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrNach;
     private javax.swing.ButtonGroup bgrOwner;
     private javax.swing.ButtonGroup bgrUeber;
+    private javax.swing.JButton btnAbort;
     private javax.swing.JButton btnSearch;
     private javax.swing.JCheckBox chkGeburtsnameExakt;
     private javax.swing.JCheckBox chkGeomFilter;
@@ -140,6 +142,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         panCommand = new javax.swing.JPanel();
         lblBusy = new org.jdesktop.swingx.JXBusyLabel();
         btnSearch = new javax.swing.JButton();
+        btnAbort = new javax.swing.JButton();
         panSucheNach = new javax.swing.JPanel();
         optSucheNachFlurstuecke = new javax.swing.JRadioButton();
         optSucheNachGrundbuchblaetter = new javax.swing.JRadioButton();
@@ -203,6 +206,17 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
             }
         });
         panCommand.add(btnSearch);
+
+        btnAbort.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/cancel.png"))); // NOI18N
+        btnAbort.setText("Abbrechen");
+        btnAbort.setToolTipText("Suche abbrechen");
+        btnAbort.setEnabled(false);
+        btnAbort.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAbortActionPerformed(evt);
+            }
+        });
+        panCommand.add(btnAbort);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -615,32 +629,44 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         ((CardLayout) panEingabe.getLayout()).show(panEingabe, "grundbuchblatt");
     }//GEN-LAST:event_optSucheUeberGrundbuchblattActionPerformed
 
+    private void btnAbortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbortActionPerformed
+        if(searchWorker != null) {
+            searchWorker.cancel(true);
+        }
+    }//GEN-LAST:event_btnAbortActionPerformed
+
     /**
      * DOCUMENT ME!
      */
     private void performSearch() {
         btnSearch.setEnabled(false);
+        btnAbort.setEnabled(true);
         lblBusy.setBusy(true);
-        final SwingWorker<Void, Void> searchWorker = new SwingWorker<Void, Void>() {
+        searchWorker = new SwingWorker<Void, Void>() {
 
             @Override
             protected Void doInBackground() throws Exception {
                 final Collection<Node> r = SessionManager.getProxy().customServerSearch(SessionManager.getSession().getUser(), getServerSearch());
                 log.info("server done " + r.size() + "results");
-                MethodManager.getManager().showSearchResults(r.toArray(new Node[r.size()]), false);
+                if(!Thread.currentThread().isInterrupted()) {
+                    MethodManager.getManager().showSearchResults(r.toArray(new Node[r.size()]), false);
+                }
                 return null;
             }
 
             @Override
             protected void done() {
                 try {
-                    get();
+                    if(!isCancelled()) {
+                        get();
+                    }
                 } catch (InterruptedException ex) {
                     log.warn(ex, ex);
                 } catch (Exception ex) {
                     log.error(ex, ex);
                 } finally {
                     lblBusy.setBusy(false);
+                    btnAbort.setEnabled(false);
                     btnSearch.setEnabled(true);
                 }
             }
