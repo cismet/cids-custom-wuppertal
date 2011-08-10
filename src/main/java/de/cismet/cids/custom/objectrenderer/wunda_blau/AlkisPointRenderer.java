@@ -70,6 +70,11 @@ import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
+import de.cismet.tools.gui.downloadmanager.DownloadManager;
+import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
+import de.cismet.tools.gui.downloadmanager.SingleDownload;
+import java.net.MalformedURLException;
+import java.net.URL;
 import javax.swing.JOptionPane;
 
 /**
@@ -1330,6 +1335,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
 
         hlPunktlistePdf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
         hlPunktlistePdf.setText("Punktliste");
+        hlPunktlistePdf.setEnabled(DownloadManager.instance().isEnabled());
         hlPunktlistePdf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hlPunktlistePdfActionPerformed(evt);
@@ -1587,6 +1593,40 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
             showNoProductPermissionWarning();
         }
     }
+    
+    private void downloadProduct(String productType) {
+        if (!ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE)) {
+            showNoProductPermissionWarning();
+            return;
+        }
+
+        final String pointData = AlkisUtils.PRODUCTS.getPointDataForProduct(cidsBean);
+        URL url = null;
+        if (pointData != null && pointData.length() > 0) {
+            try {
+                url = AlkisUtils.PRODUCTS.productListenNachweisUrl(pointData, productType);
+            } catch (MalformedURLException ex) {
+                ObjectRendererUtils.showExceptionWindowToUser(
+                        "Fehler beim Aufruf des Produkts: " + productType,
+                        ex,
+                        AlkisPointRenderer.this);
+                log.error("The URL to download product '" + productType + "' (actionTag: " + PRODUCT_ACTION_TAG_PUNKTLISTE + ") could not be constructed.", ex);
+            }
+        }
+
+        if (url != null) {
+            if (!DownloadManagerDialog.showAskingForUserTitle(StaticSwingTools.getParentFrame(this))) {
+                return;
+            }
+            final String jobname = DownloadManagerDialog.getJobname();
+            if (jobname == null || jobname.trim().length() <= 0) {
+                return;
+            }
+
+            final SingleDownload download = new SingleDownload(url, "", jobname, "Punktliste", productType, ".pdf");
+            DownloadManager.instance().add(download);
+        }
+    }
 
     /**
      * DOCUMENT ME!
@@ -1594,7 +1634,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      * @param  evt  DOCUMENT ME!
      */
     private void hlPunktlistePdfActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlPunktlistePdfActionPerformed
-        openProduct(AlkisUtils.PRODUCTS.PUNKTLISTE_PDF);
+        downloadProduct(AlkisUtils.PRODUCTS.PUNKTLISTE_PDF);
     }//GEN-LAST:event_hlPunktlistePdfActionPerformed
 
     /**

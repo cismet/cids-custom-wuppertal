@@ -783,6 +783,11 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                 lstLandparcelsValueChanged(evt);
             }
         });
+        lstLandparcels.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                lstLandparcelsFocusLost(evt);
+            }
+        });
         scpLandparcels.setViewportView(lstLandparcels);
 
         jPanel4.add(scpLandparcels, java.awt.BorderLayout.CENTER);
@@ -832,6 +837,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 
         hlBestandsnachweisNrwPdf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
         hlBestandsnachweisNrwPdf.setText("Bestandsnachweis (NRW)");
+        hlBestandsnachweisNrwPdf.setEnabled(DownloadManager.instance().isEnabled());
         hlBestandsnachweisNrwPdf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hlBestandsnachweisNrwPdfActionPerformed(evt);
@@ -876,6 +882,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 
         hlBestandsnachweisKomPdf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
         hlBestandsnachweisKomPdf.setText("Bestandsnachweis (kommunal)");
+        hlBestandsnachweisKomPdf.setEnabled(DownloadManager.instance().isEnabled());
         hlBestandsnachweisKomPdf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hlBestandsnachweisKomPdfActionPerformed(evt);
@@ -905,6 +912,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 
         hlBestandsnachweisKomInternPdf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
         hlBestandsnachweisKomInternPdf.setText("Bestandsnachweis (kommunal, intern)");
+        hlBestandsnachweisKomInternPdf.setEnabled(DownloadManager.instance().isEnabled());
         hlBestandsnachweisKomInternPdf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hlBestandsnachweisKomInternPdfActionPerformed(evt);
@@ -1299,6 +1307,11 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
             BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL + "bestandsnachweis_kommunal_intern.html");
         }
     }//GEN-LAST:event_hlBestandsnachweisKomInternHtmlActionPerformed
+
+    private void lstLandparcelsFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_lstLandparcelsFocusLost
+        map.gotoInitialBoundingBox();
+        lstLandparcels.clearSelection();
+    }//GEN-LAST:event_lstLandparcelsFocusLost
 
     /**
      * DOCUMENT ME!
@@ -1778,7 +1791,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                         ownerBuilder.append("</html>");
                         epOwner.setText(ownerBuilder.toString());
                         //enable products that depend on soap info
-                        hlGrundstuecksnachweisNrwPdf.setEnabled(true);
+                        hlGrundstuecksnachweisNrwPdf.setEnabled(DownloadManager.instance().isEnabled());
                         hlGrundstuecksnachweisNrwHtml.setEnabled(true);
                     }
                 }

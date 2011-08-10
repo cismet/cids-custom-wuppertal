@@ -576,6 +576,7 @@
                       <Events>
                         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lstLandparcelsMouseClicked"/>
                         <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="lstLandparcelsValueChanged"/>
+                        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="lstLandparcelsFocusLost"/>
                       </Events>
                     </Component>
                   </SubComponents>
@@ -677,6 +678,9 @@
                   <Image iconType="3" name="/de/cismet/cids/custom/icons/pdf.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Bestandsnachweis (NRW)"/>
+                <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="DownloadManager.instance().isEnabled()" type="code"/>
+                </Property>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="hlBestandsnachweisNrwPdfActionPerformed"/>
@@ -749,6 +753,9 @@
                   <Image iconType="3" name="/de/cismet/cids/custom/icons/pdf.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Bestandsnachweis (kommunal)"/>
+                <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="DownloadManager.instance().isEnabled()" type="code"/>
+                </Property>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="hlBestandsnachweisKomPdfActionPerformed"/>
@@ -782,6 +789,9 @@
                   <Image iconType="3" name="/de/cismet/cids/custom/icons/pdf.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Bestandsnachweis (kommunal, intern)"/>
+                <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="DownloadManager.instance().isEnabled()" type="code"/>
+                </Property>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="hlBestandsnachweisKomInternPdfActionPerformed"/>

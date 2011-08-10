@@ -31,7 +31,6 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.features.DefaultStyledFeature;
-import de.cismet.cismap.commons.features.FeatureCollection;
 import de.cismet.cismap.commons.features.StyledFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
@@ -57,7 +56,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
@@ -282,6 +280,11 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
         tblLandparcels.setModel(tableModel);
         tblLandparcels.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tblLandparcels.setShowVerticalLines(false);
+        tblLandparcels.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tblLandparcelsFocusLost(evt);
+            }
+        });
         scpLandparcels.setViewportView(tblLandparcels);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -321,6 +324,11 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
     private void jxlKarteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlKarteActionPerformed
         downloadKarteProduct(jxlKarte.getText());
     }//GEN-LAST:event_jxlKarteActionPerformed
+
+    private void tblLandparcelsFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblLandparcelsFocusLost
+        map.gotoInitialBoundingBox();
+        tblLandparcels.clearSelection();
+    }//GEN-LAST:event_tblLandparcelsFocusLost
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXHyperlink jxlFlurstuecksnachweis;
@@ -379,6 +387,8 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
                     column.setPreferredWidth(15);
                 }
             }
+            
+            changeButtonAvailability(cidsBeanWrappers.size() > 0);
         }
     }
 
@@ -432,11 +442,19 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
     }
     
     private void changeButtonAvailability(final boolean enable) {
-        jxlFlurstuecksnachweis.setEnabled(enable);
-        jxlNachweisNRW.setEnabled(enable);
-        jxlNachweisKommunal.setEnabled(enable);
-        jxlNachweisKommunalIntern.setEnabled(enable);
-        jxlKarte.setEnabled(enable);
+        if(!DownloadManager.instance().isEnabled()) {
+            jxlFlurstuecksnachweis.setEnabled(false);
+            jxlNachweisNRW.setEnabled(false);
+            jxlNachweisKommunal.setEnabled(false);
+            jxlNachweisKommunalIntern.setEnabled(false);
+            jxlKarte.setEnabled(false);
+        } else {
+            jxlFlurstuecksnachweis.setEnabled(enable);
+            jxlNachweisNRW.setEnabled(enable);
+            jxlNachweisKommunal.setEnabled(enable);
+            jxlNachweisKommunalIntern.setEnabled(enable);
+            jxlKarte.setEnabled(enable);
+        }
     }
     
     private void downloadEinzelnachweisProduct(String downloadTitle, String product, String actionTag) {
@@ -477,7 +495,6 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             
             if(url != null) {
                 downloads.add(new SingleDownload(url, "", jobname, downloadTitle, product, ".pdf"));
-                
             }
         }
     
@@ -702,26 +719,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
     private class ChangeMapRunnable implements Runnable {
         @Override
         public void run() {
-            final FeatureCollection featureCollection = map.getFeatureCollection();
-            
-            for(CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
-                final StyledFeature currentFeature = cidsBeanWrapper.getFeature();
-                
-                if(selectedCidsBeanWrapper != null && selectedCidsBeanWrapper.getCidsBean().equals(cidsBeanWrapper.getCidsBean())) {
-                    featureCollection.select(currentFeature);
-                } else {
-                    featureCollection.unselect(currentFeature);
-                }
-                
-                if(cidsBeanWrapper.isSelected() && !featureCollection.contains(currentFeature)) {
-                    featureCollection.addFeature(currentFeature);
-                } else if (!cidsBeanWrapper.isSelected() && featureCollection.contains(currentFeature)) {
-                    featureCollection.removeFeature(currentFeature);
-                }
-            }
-            
-            map.revalidate();
-            map.repaint();
+            map.gotoBoundingBox(new XBoundingBox(selectedCidsBeanWrapper.getGeometry()), false, true, 500);
         }
     }
     

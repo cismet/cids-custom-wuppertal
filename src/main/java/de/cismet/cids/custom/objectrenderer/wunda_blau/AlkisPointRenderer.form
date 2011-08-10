@@ -1094,6 +1094,9 @@
                   <Image iconType="3" name="/de/cismet/cids/custom/icons/pdf.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Punktliste"/>
+                <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="DownloadManager.instance().isEnabled()" type="code"/>
+                </Property>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="hlPunktlistePdfActionPerformed"/>

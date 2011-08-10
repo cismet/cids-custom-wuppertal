@@ -67,7 +67,17 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 
 import de.cismet.tools.collections.TypeSafeCollections;
+import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.downloadmanager.DownloadManager;
+import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
+import de.cismet.tools.gui.downloadmanager.SingleDownload;
+import java.awt.event.ActionEvent;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.NumberFormat;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 /**
@@ -106,6 +116,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
     private Collection<CidsBean> pureSelectionCidsBeans = null;
     private String title = "";
     private PointTableModel tableModel;
+    private Map<CidsBean, CidsFeature> features;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreate;
     private javax.swing.JButton btnRelease;
@@ -156,6 +167,11 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         setLayout(new java.awt.BorderLayout());
 
         tblAggregation.setOpaque(false);
+        tblAggregation.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tblAggregationFocusLost(evt);
+            }
+        });
         scpAggregationTable.setViewportView(tblAggregation);
 
         add(scpAggregationTable, java.awt.BorderLayout.CENTER);
@@ -164,6 +180,11 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         panProdukte.setLayout(new java.awt.GridBagLayout());
 
         cbProducts.setModel(PRODUCT_FORMATS_MODEL);
+        cbProducts.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbProductsActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
@@ -243,22 +264,50 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
      * @param  evt  DOCUMENT ME!
      */
     private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
-        if (ObjectRendererUtils.checkActionTag(AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE)) {
-            final String format = cbProducts.getSelectedItem().toString();
-            final String code;
+        if (!ObjectRendererUtils.checkActionTag(AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE)) {
+            JOptionPane.showMessageDialog(this, "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
+            return;
+        }
+        
+        final String punktListenString = getPunktlistenStringForChosenPoints();
+        final String format = cbProducts.getSelectedItem().toString();
+        final String code;
+        if (PDF.equals(format)) {
+            code = AlkisUtils.PRODUCTS.PUNKTLISTE_PDF;
+        } else if (HTML.equals(format)) {
+            code = AlkisUtils.PRODUCTS.PUNKTLISTE_HTML;
+        } else {
+            code = AlkisUtils.PRODUCTS.PUNKTLISTE_TXT;
+        }
+        if (punktListenString.length() > 3) {
             if (PDF.equals(format)) {
-                code = AlkisUtils.PRODUCTS.PUNKTLISTE_PDF;
-            } else if (HTML.equals(format)) {
-                code = AlkisUtils.PRODUCTS.PUNKTLISTE_HTML;
+                URL url = null;
+                if (code != null && code.length() > 0) {
+                    try {
+                        url = AlkisUtils.PRODUCTS.productListenNachweisUrl(punktListenString, code);
+                    } catch (MalformedURLException ex) {
+                        ObjectRendererUtils.showExceptionWindowToUser(
+                                "Fehler beim Aufruf des Produkts: " + code,
+                                ex,
+                                AlkisPointAggregationRenderer.this);
+                        log.error("The URL to download product '" + code + "' (actionTag: " + AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE + ") could not be constructed.", ex);
+                    }
+                }
+                if (url != null) {
+                    if (!DownloadManagerDialog.showAskingForUserTitle(StaticSwingTools.getParentFrame(this))) {
+                        return;
+                    }
+                    final String jobname = DownloadManagerDialog.getJobname();
+                    if (jobname == null || jobname.trim().length() <= 0) {
+                        return;
+                    }
+
+                    final SingleDownload download = new SingleDownload(url, "", jobname, "Punktnachweis", code, ".pdf");
+                    DownloadManager.instance().add(download);
+                }
             } else {
-                code = AlkisUtils.PRODUCTS.PUNKTLISTE_TXT;
-            }
-            final String punktListenString = getPunktlistenStringForChosenPoints();
-            if (punktListenString.length() > 3) {
                 AlkisUtils.PRODUCTS.productListenNachweis(punktListenString, code);
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
         }
     }//GEN-LAST:event_btnCreateActionPerformed
 
@@ -282,6 +331,21 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         gehaltenePunkte.addAll(cidsBeans);
         btnRelease.setEnabled(true);
     }//GEN-LAST:event_btnRememberActionPerformed
+
+    private void cbProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbProductsActionPerformed
+        if(evt != null && evt.getSource() instanceof JComboBox && evt.getSource().equals(cbProducts)) {
+            if(cbProducts.getSelectedItem().equals(PDF)) {
+                btnCreate.setEnabled(DownloadManager.instance().isEnabled());
+            } else {
+                btnCreate.setEnabled(true);
+            }
+        }
+    }//GEN-LAST:event_cbProductsActionPerformed
+
+    private void tblAggregationFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblAggregationFocusLost
+        mappingComponent.gotoInitialBoundingBox();
+        tblAggregation.clearSelection();
+    }//GEN-LAST:event_tblAggregationFocusLost
 
     /**
      * DOCUMENT ME!
@@ -334,6 +398,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
             } else {
                 this.cidsBeans = (List<CidsBean>) beans;
             }
+            features = new HashMap<CidsBean, CidsFeature>(beans.size());
             initMap();
             final List<Object[]> tableData = TypeSafeCollections.newArrayList();
             for (final CidsBean punktBean : cidsBeans) {
@@ -348,6 +413,10 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
             ObjectRendererUtils.decorateTableWithSorter(tblAggregation);
         }
         setTitle(null);
+        
+        if(PDF.equals(cbProducts.getSelectedItem())) {
+            btnCreate.setEnabled(DownloadManager.instance().isEnabled());
+        }
     }
 
     /**
@@ -385,26 +454,26 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
     private void initMap() {
         try {
             final ActiveLayerModel mappingModel = new ActiveLayerModel();
-            mappingModel.setSrs(AlkisConstants.COMMONS.SRS_GEOM);
+            mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
             final BoundingBox box = boundingBoxFromPointList(cidsBeans);
             mappingModel.addHome(new XBoundingBox(
                     box.getX1(),
                     box.getY1(),
                     box.getX2(),
                     box.getY2(),
-                    AlkisConstants.COMMONS.SRS_GEOM,
+                    AlkisConstants.COMMONS.SRS_SERVICE,
                     true));
             final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisConstants.COMMONS.MAP_CALL_STRING));
             swms.setName("Alkis_Points");
             mappingModel.addLayer(swms);
             mappingComponent.setMappingModel(mappingModel);
-            mappingComponent.gotoInitialBoundingBox();
-            mappingComponent.unlock();
             final int duration = mappingComponent.getAnimationDuration();
             mappingComponent.setAnimationDuration(0);
+            mappingComponent.gotoInitialBoundingBox();
             mappingComponent.setInteractionMode(MappingComponent.ZOOM);
+            mappingComponent.unlock();
             // finally when all configurations are done ...
-            mappingComponent.setInteractionMode(MappingComponent.PAN);
+            mappingComponent.setInteractionMode("MUTE");
 //            mappingComponent.addCustomInputListener("MUTE", new PBasicInputEventHandler() {
 //
 //                @Override
@@ -423,6 +492,11 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
 //                }
 //            });
 //            mappingComponent.setInteractionMode("MUTE");
+            for(final CidsBean cidsBean : cidsBeans) {
+                final CidsFeature feature = new CidsFeature(cidsBean.getMetaObject());
+                features.put(cidsBean, feature);
+            }
+            mappingComponent.getFeatureCollection().addFeatures(features.values());
             mappingComponent.setAnimationDuration(duration);
         } catch (Throwable t) {
             log.fatal(t, t);
@@ -436,8 +510,10 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
      *
      * @return  DOCUMENT ME!
      */
-    private BoundingBox boundingBoxFromPointList(final Collection<CidsBean> lpList) {
+    private XBoundingBox boundingBoxFromPointList(final Collection<CidsBean> lpList) {
+        XBoundingBox result = null;
         final List<Geometry> allGeomList = TypeSafeCollections.newArrayList();
+        
         for (final CidsBean parcel : lpList) {
             try {
                 allGeomList.add((Geometry) parcel.getProperty("geom.geo_field"));
@@ -448,7 +524,15 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         final GeometryCollection geoCollection = new GeometryCollection(allGeomList.toArray(
                 new Geometry[allGeomList.size()]),
                 new GeometryFactory());
-        return new BoundingBox(geoCollection);
+        
+        result = new XBoundingBox(geoCollection);
+        
+        result.setX1(result.getX1() - 0.05 * result.getWidth());
+        result.setX2(result.getX2() + 0.05 * result.getWidth());
+        result.setY1(result.getY1() - 0.10 * result.getHeight());
+        result.setY2(result.getY2() + 0.05 * result.getHeight());
+        
+        return result;
     }
 
     @Override
@@ -470,16 +554,18 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
             if (!e.getValueIsAdjusting() && (cidsBeans != null)) {
                 final int[] indexes = tblAggregation.getSelectedRows();
                 final FeatureCollection mapFC = mappingComponent.getFeatureCollection();
-                mapFC.removeAllFeatures();
+                //mapFC.removeAllFeatures();
                 if ((indexes != null) && (indexes.length > 0)) {
                     for (final int viewIdx : indexes) {
                         final int modelIdx = tblAggregation.getRowSorter().convertRowIndexToModel(viewIdx);
                         if ((modelIdx > -1) && (modelIdx < cidsBeans.size())) {
                             final CidsBean selectedBean = cidsBeans.get(modelIdx);
-                            mapFC.addFeature(new CidsFeature(selectedBean.getMetaObject()));
+                            //mapFC.addFeature(new CidsFeature(selectedBean.getMetaObject()));
+                            mappingComponent.gotoBoundingBox(new XBoundingBox(features.get(selectedBean).getGeometry()), false, true, 500);
+                            break;
                         }
                     }
-                    mappingComponent.zoomToFeatureCollection();
+                    //mappingComponent.zoomToFeatureCollection();
                 }
             }
         }

@@ -23,11 +23,14 @@
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryCollection;
+import com.vividsolutions.jts.geom.GeometryFactory;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
+import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.features.DefaultStyledFeature;
@@ -237,6 +240,11 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
         tblBuchungsblaetter.setModel(tableModel);
         tblBuchungsblaetter.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tblBuchungsblaetter.setShowVerticalLines(false);
+        tblBuchungsblaetter.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tblBuchungsblaetterFocusLost(evt);
+            }
+        });
         scpBuchungsblaetter.setViewportView(tblBuchungsblaetter);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -282,6 +290,11 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
     private void jxlBestandsnachweisKommunalInternActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlBestandsnachweisKommunalInternActionPerformed
         downloadEinzelnachweisProduct(jxlBestandsnachweisKommunalIntern.getText(), AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_INTERN_PDF, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN);
 }//GEN-LAST:event_jxlBestandsnachweisKommunalInternActionPerformed
+
+    private void tblBuchungsblaetterFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblBuchungsblaetterFocusLost
+        map.gotoInitialBoundingBox();
+        tblBuchungsblaetter.clearSelection();
+    }//GEN-LAST:event_tblBuchungsblaetterFocusLost
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXHyperlink jxlBestandsnachweisKommunal;
@@ -337,6 +350,8 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
                     column.setPreferredWidth(15);
                 }
             }
+            
+            changeButtonAvailability(cidsBeanWrappers.size() > 0);
         }
     }
 
@@ -390,9 +405,15 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
     }
     
     private void changeButtonAvailability(final boolean enable) {
-        jxlBestandsnachweisNRW.setEnabled(enable);
-        jxlBestandsnachweisKommunal.setEnabled(enable);
-        jxlBestandsnachweisKommunalIntern.setEnabled(enable);
+        if(!DownloadManager.instance().isEnabled()) {
+            jxlBestandsnachweisNRW.setEnabled(false);
+            jxlBestandsnachweisKommunal.setEnabled(false);
+            jxlBestandsnachweisKommunalIntern.setEnabled(false);
+        } else {
+            jxlBestandsnachweisNRW.setEnabled(enable);
+            jxlBestandsnachweisKommunal.setEnabled(enable);
+            jxlBestandsnachweisKommunalIntern.setEnabled(enable);
+        }
     }
     
     private void downloadEinzelnachweisProduct(String downloadTitle, String product, String actionTag) {
@@ -645,27 +666,10 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
     private class ChangeMapRunnable implements Runnable {
         @Override
         public void run() {
-            final FeatureCollection featureCollection = map.getFeatureCollection();
-            featureCollection.unselectAll();
-            
-            for(CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
-                for(final StyledFeature currentFeature : cidsBeanWrapper.getFeatures()) {
-                    if(selectedCidsBeanWrapper != null && selectedCidsBeanWrapper.getCidsBean().equals(cidsBeanWrapper.getCidsBean())) {
-                        featureCollection.addToSelection(currentFeature);
-                    } else {
-                        featureCollection.unselect(currentFeature);
-                    }
-
-                    if(cidsBeanWrapper.isSelected()) {
-                        featureCollection.addFeature(currentFeature);
-                    } else if (!cidsBeanWrapper.isSelected()) {
-                        featureCollection.removeFeature(currentFeature);
-                    }
-                }
-            }
-            
-            map.revalidate();
-            map.repaint();
+            final GeometryCollection geoCollection = new GeometryCollection(selectedCidsBeanWrapper.getGeometries().toArray(
+                        new Geometry[selectedCidsBeanWrapper.getGeometries().size()]),
+                        new GeometryFactory());
+            map.gotoBoundingBox(new XBoundingBox(geoCollection), false, true, 500);
         }
     }
     
