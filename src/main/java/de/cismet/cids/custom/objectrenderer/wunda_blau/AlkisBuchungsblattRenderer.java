@@ -799,7 +799,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         srpHeadGrundstuecke.setLayout(new java.awt.GridBagLayout());
 
         lblHeadFlurstuecke.setForeground(new java.awt.Color(255, 255, 255));
-        lblHeadFlurstuecke.setText("Flurstücke");
+        lblHeadFlurstuecke.setText("Grundstücke und Flurstücke");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         srpHeadGrundstuecke.add(lblHeadFlurstuecke, gridBagConstraints);
@@ -1433,6 +1433,21 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
             final Object buchungsblattLandparcelListObj = cidsBean.getProperty("landparcels");
             if (buchungsblattLandparcelListObj instanceof List) {
                 final List<CidsBean> buchungsblattLandparcelList = (List<CidsBean>) buchungsblattLandparcelListObj;
+                Collections.sort(buchungsblattLandparcelList, new Comparator<CidsBean>() {
+
+                    @Override
+                    public int compare(CidsBean t, CidsBean t1) {
+                        try {
+                            String s = String.valueOf(t.getProperty("lfn")) + String.valueOf(t.getProperty("landparcelcode"));
+                            String s1 = String.valueOf(t1.getProperty("lfn")) + String.valueOf(t1.getProperty("landparcelcode"));
+                            return s.compareTo(s1);
+                        } catch (Exception e) {
+                            log.warn("error while sorting", e);
+                            return 0;
+                        }
+                    }
+                });
+
                 for (final CidsBean buchungsblattLandparcelBean : buchungsblattLandparcelList) {
                     landParcelList.add(new LightweightLandParcel(buchungsblattLandparcelBean));
                 }
@@ -1793,6 +1808,11 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                         //enable products that depend on soap info
                         hlGrundstuecksnachweisNrwPdf.setEnabled(DownloadManager.instance().isEnabled());
                         hlGrundstuecksnachweisNrwHtml.setEnabled(true);
+
+//                        Buchungsstelle[] bsts=buchungsblatt.getBuchungsstellen();
+//                        for (Buchungsstelle bst:bsts){
+//                            LandParcel[] lpa=bst.getLandParcel();
+//                        }
                     }
                 }
             } catch (InterruptedException ex) {
@@ -1824,6 +1844,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         private final Color color;
         private final Geometry geometry;
         private final int fullObjectID;
+        private final String lfn;
 
         //~ Constructors -------------------------------------------------------
         /**
@@ -1834,6 +1855,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         public LightweightLandParcel(final CidsBean buchungsBlattLandparcelBean) {
             this.landparcelCode = String.valueOf(buchungsBlattLandparcelBean.getProperty("landparcelcode"));
             final Object geoObj = buchungsBlattLandparcelBean.getProperty("geometrie.geo_field");
+            this.lfn = String.valueOf(buchungsBlattLandparcelBean.getProperty("lfn"));
             if (geoObj instanceof Geometry) {
                 this.geometry = (Geometry) geoObj;
             } else {
@@ -1883,7 +1905,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 
         @Override
         public String toString() {
-            return String.valueOf(landparcelCode);
+            return String.valueOf(lfn) + "  " + String.valueOf(landparcelCode);
         }
 
         /**
