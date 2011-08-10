@@ -426,9 +426,6 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
             return;
         }
         final String jobname = DownloadManagerDialog.getJobname();
-        if(jobname == null || jobname.trim().length() <= 0) {
-            return;
-        }
         
         List<SingleDownload> downloads = new LinkedList<SingleDownload>();
         

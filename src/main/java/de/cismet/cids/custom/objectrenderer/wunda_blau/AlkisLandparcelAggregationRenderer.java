@@ -467,9 +467,6 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             return;
         }
         final String jobname = DownloadManagerDialog.getJobname();
-        if(jobname == null || jobname.trim().length() <= 0) {
-            return;
-        }
         
         List<SingleDownload> downloads = new LinkedList<SingleDownload>();
         

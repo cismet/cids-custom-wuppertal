@@ -1065,76 +1065,51 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         add(panProducts, "CARD_2");
     }// </editor-fold>//GEN-END:initComponents
 
-    private void openProduct(String product, String actionTag) {
-        if (ObjectRendererUtils.checkActionTag(actionTag)) {
-            try {
-                String queryID = getCompleteBuchungsblattCode();
-                if (queryID.length() > 0) {
-                    if (AlkisUtils.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_PDF.equals(product) || AlkisUtils.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_HTML.equals(product)) {
-                        String anhang = getCompleteLaufendeNrCode();
-                        if (anhang != null) {
-                            queryID += anhang;
-
-                        } else {
-                            return;
-                        }
-                    }
-                    queryID = AlkisUtils.escapeHtmlSpaces(queryID);
-                    AlkisUtils.PRODUCTS.productEinzelNachweis(queryID, product);
-
-                }
-            } catch (Exception ex) {
-                ObjectRendererUtils.showExceptionWindowToUser(
-                        "Fehler beim Aufruf des Produkts: " + product,
-                        ex,
-                        AlkisBuchungsblattRenderer.this);
-                log.error(ex);
-            }
-        } else {
+    private void downloadProduct(final String downloadTitle, final String product, final String actionTag) {
+        if (!ObjectRendererUtils.checkActionTag(actionTag)) {
             showNoProductPermissionWarning();
+            return;
         }
-    }
+        
+        String extension = ".pdf";
+        if(AlkisUtils.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_HTML.equals(product)
+                || AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_HTML.equals(product)
+                || AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_INTERN_HTML.equals(product)
+                || AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_NRW_HTML.equals(product)) {
+            extension = ".html";
+        }
+        
+        try {
+            String queryID = getCompleteBuchungsblattCode();
+            if (queryID.length() > 0) {
+                if (AlkisUtils.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_PDF.equals(product) || AlkisUtils.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_HTML.equals(product)) {
+                    String anhang = getCompleteLaufendeNrCode();
+                    if (anhang != null) {
+                        queryID += anhang;
 
-    private void downloadProduct(String downloadTitle, String product, String actionTag) {
-        if (ObjectRendererUtils.checkActionTag(actionTag)) {
-            try {
-                String queryID = getCompleteBuchungsblattCode();
-                if (queryID.length() > 0) {
-                    if (AlkisUtils.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_PDF.equals(product) || AlkisUtils.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_HTML.equals(product)) {
-                        String anhang = getCompleteLaufendeNrCode();
-                        if (anhang != null) {
-                            queryID += anhang;
-
-                        } else {
-                            return;
-                        }
+                    } else {
+                        return;
                     }
-                    queryID = AlkisUtils.escapeHtmlSpaces(queryID);
-                    final URL url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(queryID, product);
-
-                    if (url != null) {
-                        if (!DownloadManagerDialog.showAskingForUserTitle(StaticSwingTools.getParentFrame(this))) {
-                            return;
-                        }
-                        final String jobname = DownloadManagerDialog.getJobname();
-                        if (jobname == null || jobname.trim().length() <= 0) {
-                            return;
-                        }
-
-                        final SingleDownload download = new SingleDownload(url, "", jobname, downloadTitle, product, ".pdf");
-                        DownloadManager.instance().add(download);
-                    }
-
                 }
-            } catch (Exception ex) {
-                ObjectRendererUtils.showExceptionWindowToUser(
-                        "Fehler beim Aufruf des Produkts: " + product,
-                        ex,
-                        AlkisBuchungsblattRenderer.this);
-                log.error(ex);
+                queryID = AlkisUtils.escapeHtmlSpaces(queryID);
+                final URL url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(queryID, product);
+
+                if (url != null) {
+                    if (!DownloadManagerDialog.showAskingForUserTitle(StaticSwingTools.getParentFrame(this))) {
+                        return;
+                    }
+                    
+                    final SingleDownload download = new SingleDownload(url, "", DownloadManagerDialog.getJobname(), downloadTitle, product, extension);
+                    DownloadManager.instance().add(download);
+                }
+
             }
-        } else {
-            showNoProductPermissionWarning();
+        } catch (Exception ex) {
+            ObjectRendererUtils.showExceptionWindowToUser(
+                    "Fehler beim Aufruf des Produkts: " + product,
+                    ex,
+                    AlkisBuchungsblattRenderer.this);
+            log.error(ex);
         }
     }
 
@@ -1145,7 +1120,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      */
     private void hlBestandsnachweisNrwHtmlActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlBestandsnachweisNrwHtmlActionPerformed
         if (!demoMode) {
-            openProduct(AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_NRW_HTML, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW);
+            downloadProduct(hlBestandsnachweisNrwHtml.getText(), AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_NRW_HTML, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW);
         } else {
             BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL + "bestandsnachweis_nrw.html");
         }
@@ -1281,14 +1256,14 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 
     private void hlBestandsnachweisKomHtmlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlBestandsnachweisKomHtmlActionPerformed
         if (!demoMode) {
-            openProduct(AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_HTML, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM);
+            downloadProduct(hlBestandsnachweisKomHtml.getText(), AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_HTML, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM);
         } else {
             BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL + "bestandsnachweis_kommunal.html");
         }
     }//GEN-LAST:event_hlBestandsnachweisKomHtmlActionPerformed
 
     private void hlGrundstuecksnachweisNrwHtmlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlGrundstuecksnachweisNrwHtmlActionPerformed
-        openProduct(AlkisUtils.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_HTML, PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW);
+        downloadProduct(hlGrundstuecksnachweisNrwHtml.getText(), AlkisUtils.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_HTML, PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW);
 
     }//GEN-LAST:event_hlGrundstuecksnachweisNrwHtmlActionPerformed
 
@@ -1302,7 +1277,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 
     private void hlBestandsnachweisKomInternHtmlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlBestandsnachweisKomInternHtmlActionPerformed
         if (!demoMode) {
-            openProduct(AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_INTERN_HTML, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN);
+            downloadProduct(hlBestandsnachweisKomInternHtml.getText(), AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_INTERN_HTML, PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN);
         } else {
             BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL + "bestandsnachweis_kommunal_intern.html");
         }

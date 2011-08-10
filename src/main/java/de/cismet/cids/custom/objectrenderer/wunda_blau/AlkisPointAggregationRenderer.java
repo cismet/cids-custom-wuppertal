@@ -297,12 +297,8 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                     if (!DownloadManagerDialog.showAskingForUserTitle(StaticSwingTools.getParentFrame(this))) {
                         return;
                     }
-                    final String jobname = DownloadManagerDialog.getJobname();
-                    if (jobname == null || jobname.trim().length() <= 0) {
-                        return;
-                    }
 
-                    final SingleDownload download = new SingleDownload(url, "", jobname, "Punktnachweis", code, ".pdf");
+                    final SingleDownload download = new SingleDownload(url, "", DownloadManagerDialog.getJobname(), "Punktnachweis", code, ".pdf");
                     DownloadManager.instance().add(download);
                 }
             } else {

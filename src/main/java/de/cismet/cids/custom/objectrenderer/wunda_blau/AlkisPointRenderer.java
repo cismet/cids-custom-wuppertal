@@ -1599,6 +1599,11 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
             showNoProductPermissionWarning();
             return;
         }
+        
+        String extension = ".pdf";
+        if(AlkisUtils.PRODUCTS.PUNKTLISTE_HTML.equals(productType)) {
+            extension = ".html";
+        }
 
         final String pointData = AlkisUtils.PRODUCTS.getPointDataForProduct(cidsBean);
         URL url = null;
@@ -1618,12 +1623,8 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
             if (!DownloadManagerDialog.showAskingForUserTitle(StaticSwingTools.getParentFrame(this))) {
                 return;
             }
-            final String jobname = DownloadManagerDialog.getJobname();
-            if (jobname == null || jobname.trim().length() <= 0) {
-                return;
-            }
 
-            final SingleDownload download = new SingleDownload(url, "", jobname, "Punktliste", productType, ".pdf");
+            final SingleDownload download = new SingleDownload(url, "", DownloadManagerDialog.getJobname(), "Punktliste", productType, extension);
             DownloadManager.instance().add(download);
         }
     }
@@ -1643,7 +1644,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      * @param  evt  DOCUMENT ME!
      */
     private void hlPunktlisteHtmlActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlPunktlisteHtmlActionPerformed
-        openProduct(AlkisUtils.PRODUCTS.PUNKTLISTE_HTML);
+        downloadProduct(AlkisUtils.PRODUCTS.PUNKTLISTE_HTML);
     }//GEN-LAST:event_hlPunktlisteHtmlActionPerformed
 
     /**
