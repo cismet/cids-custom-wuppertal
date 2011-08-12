@@ -1682,7 +1682,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         final Object geoObj = cidsBean.getProperty("geometrie.geo_field");
         if (geoObj instanceof Geometry) {
             final Geometry pureGeom = CrsTransformer.transformToGivenCrs((Geometry) geoObj, AlkisConstants.COMMONS.SRS_SERVICE);
-            final BoundingBox box = new BoundingBox(pureGeom.getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER));
+            final XBoundingBox box = new XBoundingBox(pureGeom.getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER));
 
             final Runnable mapRunnable = new Runnable() {
 

@@ -716,7 +716,12 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
     private class ChangeMapRunnable implements Runnable {
         @Override
         public void run() {
-            map.gotoBoundingBox(new XBoundingBox(selectedCidsBeanWrapper.getGeometry()), false, true, 500);
+            final XBoundingBox boxToGoto = new XBoundingBox(selectedCidsBeanWrapper.getGeometry().getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER));
+            boxToGoto.setX1(boxToGoto.getX1() - AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth());
+            boxToGoto.setX2(boxToGoto.getX2() + AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth());
+            boxToGoto.setY1(boxToGoto.getY1() - AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight());
+            boxToGoto.setY2(boxToGoto.getY2() + AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight());
+            map.gotoBoundingBox(boxToGoto, false, true, 500);
         }
     }
     

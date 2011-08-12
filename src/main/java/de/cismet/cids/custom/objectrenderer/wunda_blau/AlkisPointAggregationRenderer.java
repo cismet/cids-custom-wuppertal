@@ -268,41 +268,42 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
             JOptionPane.showMessageDialog(this, "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
             return;
         }
-        
+
         final String punktListenString = getPunktlistenStringForChosenPoints();
         final String format = cbProducts.getSelectedItem().toString();
         final String code;
+        String extension = "";
         if (PDF.equals(format)) {
             code = AlkisUtils.PRODUCTS.PUNKTLISTE_PDF;
+            extension = ".pdf";
         } else if (HTML.equals(format)) {
             code = AlkisUtils.PRODUCTS.PUNKTLISTE_HTML;
+            extension = ".html";
         } else {
             code = AlkisUtils.PRODUCTS.PUNKTLISTE_TXT;
+            extension = ".plst";
         }
-        if (punktListenString.length() > 3) {
-            if (PDF.equals(format)) {
-                URL url = null;
-                if (code != null && code.length() > 0) {
-                    try {
-                        url = AlkisUtils.PRODUCTS.productListenNachweisUrl(punktListenString, code);
-                    } catch (MalformedURLException ex) {
-                        ObjectRendererUtils.showExceptionWindowToUser(
-                                "Fehler beim Aufruf des Produkts: " + code,
-                                ex,
-                                AlkisPointAggregationRenderer.this);
-                        log.error("The URL to download product '" + code + "' (actionTag: " + AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE + ") could not be constructed.", ex);
-                    }
-                }
-                if (url != null) {
-                    if (!DownloadManagerDialog.showAskingForUserTitle(StaticSwingTools.getParentFrame(this))) {
-                        return;
-                    }
 
-                    final SingleDownload download = new SingleDownload(url, "", DownloadManagerDialog.getJobname(), "Punktnachweis", code, ".pdf");
-                    DownloadManager.instance().add(download);
+        if (punktListenString.length() > 3) {
+            URL url = null;
+            if (code != null && code.length() > 0) {
+                try {
+                    url = AlkisUtils.PRODUCTS.productListenNachweisUrl(punktListenString, code);
+                } catch (MalformedURLException ex) {
+                    ObjectRendererUtils.showExceptionWindowToUser(
+                            "Fehler beim Aufruf des Produkts: " + code,
+                            ex,
+                            AlkisPointAggregationRenderer.this);
+                    log.error("The URL to download product '" + code + "' (actionTag: " + AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE + ") could not be constructed.", ex);
                 }
-            } else {
-                AlkisUtils.PRODUCTS.productListenNachweis(punktListenString, code);
+            }
+            if (url != null) {
+                if (!DownloadManagerDialog.showAskingForUserTitle(StaticSwingTools.getParentFrame(this))) {
+                    return;
+                }
+
+                final SingleDownload download = new SingleDownload(url, "", DownloadManagerDialog.getJobname(), "Punktnachweis", code, extension);
+                DownloadManager.instance().add(download);
             }
         }
     }//GEN-LAST:event_btnCreateActionPerformed
@@ -330,11 +331,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
 
     private void cbProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbProductsActionPerformed
         if(evt != null && evt.getSource() instanceof JComboBox && evt.getSource().equals(cbProducts)) {
-            if(cbProducts.getSelectedItem().equals(PDF)) {
-                btnCreate.setEnabled(DownloadManager.instance().isEnabled());
-            } else {
-                btnCreate.setEnabled(true);
-            }
+            btnCreate.setEnabled(DownloadManager.instance().isEnabled());
         }
     }//GEN-LAST:event_cbProductsActionPerformed
 
@@ -451,7 +448,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         try {
             final ActiveLayerModel mappingModel = new ActiveLayerModel();
             mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
-            final BoundingBox box = boundingBoxFromPointList(cidsBeans);
+            final XBoundingBox box = boundingBoxFromPointList(cidsBeans);
             mappingModel.addHome(new XBoundingBox(
                     box.getX1(),
                     box.getY1(),
@@ -507,7 +504,6 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
      * @return  DOCUMENT ME!
      */
     private XBoundingBox boundingBoxFromPointList(final Collection<CidsBean> lpList) {
-        XBoundingBox result = null;
         final List<Geometry> allGeomList = TypeSafeCollections.newArrayList();
         
         for (final CidsBean parcel : lpList) {
@@ -521,14 +517,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                 new Geometry[allGeomList.size()]),
                 new GeometryFactory());
         
-        result = new XBoundingBox(geoCollection);
-        
-        result.setX1(result.getX1() - 0.05 * result.getWidth());
-        result.setX2(result.getX2() + 0.05 * result.getWidth());
-        result.setY1(result.getY1() - 0.10 * result.getHeight());
-        result.setY2(result.getY2() + 0.05 * result.getHeight());
-        
-        return result;
+        return new XBoundingBox(geoCollection.getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER));
     }
 
     @Override
@@ -549,15 +538,18 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         public void valueChanged(final ListSelectionEvent e) {
             if (!e.getValueIsAdjusting() && (cidsBeans != null)) {
                 final int[] indexes = tblAggregation.getSelectedRows();
-                final FeatureCollection mapFC = mappingComponent.getFeatureCollection();
-                //mapFC.removeAllFeatures();
+                
                 if ((indexes != null) && (indexes.length > 0)) {
                     for (final int viewIdx : indexes) {
                         final int modelIdx = tblAggregation.getRowSorter().convertRowIndexToModel(viewIdx);
                         if ((modelIdx > -1) && (modelIdx < cidsBeans.size())) {
                             final CidsBean selectedBean = cidsBeans.get(modelIdx);
-                            //mapFC.addFeature(new CidsFeature(selectedBean.getMetaObject()));
-                            mappingComponent.gotoBoundingBox(new XBoundingBox(features.get(selectedBean).getGeometry()), false, true, 500);
+                            final XBoundingBox boxToGoto = new XBoundingBox(features.get(selectedBean).getGeometry().getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER));
+                            boxToGoto.setX1(boxToGoto.getX1() - AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth());
+                            boxToGoto.setX2(boxToGoto.getX2() + AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth());
+                            boxToGoto.setY1(boxToGoto.getY1() - AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight());
+                            boxToGoto.setY2(boxToGoto.getY2() + AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight());
+                            mappingComponent.gotoBoundingBox(boxToGoto, false, true, 500);
                             break;
                         }
                     }

@@ -1577,23 +1577,6 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         JOptionPane.showMessageDialog(this, "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
     }
 
-    private void openProduct(String productType) {
-        if (ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE)) {
-            try {
-                String pointData = AlkisUtils.PRODUCTS.getPointDataForProduct(cidsBean);
-                AlkisUtils.PRODUCTS.productListenNachweis(pointData, productType);
-            } catch (Exception ex) {
-                ObjectRendererUtils.showExceptionWindowToUser(
-                        "Fehler beim Aufruf des Produkts",
-                        ex,
-                        AlkisPointRenderer.this);
-                log.error(ex);
-            }
-        } else {
-            showNoProductPermissionWarning();
-        }
-    }
-    
     private void downloadProduct(String productType) {
         if (!ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE)) {
             showNoProductPermissionWarning();
@@ -1603,6 +1586,8 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         String extension = ".pdf";
         if(AlkisUtils.PRODUCTS.PUNKTLISTE_HTML.equals(productType)) {
             extension = ".html";
+        } else if(AlkisUtils.PRODUCTS.PUNKTLISTE_TXT.equals(productType)) {
+            extension = ".plst";
         }
 
         final String pointData = AlkisUtils.PRODUCTS.getPointDataForProduct(cidsBean);
@@ -1670,7 +1655,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      * @param  evt  DOCUMENT ME!
      */
     private void hlPunktlisteTxtActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hlPunktlisteTxtActionPerformed
-        openProduct(AlkisUtils.PRODUCTS.PUNKTLISTE_TXT);
+        downloadProduct(AlkisUtils.PRODUCTS.PUNKTLISTE_TXT);
     }//GEN-LAST:event_hlPunktlisteTxtActionPerformed
 
     @Override

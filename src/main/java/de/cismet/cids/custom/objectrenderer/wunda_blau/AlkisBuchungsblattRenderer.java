@@ -1187,11 +1187,18 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 //                    }
                     }
                 }
-                final GeometryCollection geoCollection = new GeometryCollection(allSelectedGeoms.toArray(
-                        new Geometry[allSelectedGeoms.size()]),
-                        new GeometryFactory());
-                map.gotoBoundingBox(new BoundingBox(geoCollection), true, true, 500);
-//                map.gotoBoundingBoxWithoutHistory(new BoundingBox(geoCollection));
+                
+                if (allSelectedGeoms.size() > 0) {
+                    final GeometryCollection geoCollection = new GeometryCollection(allSelectedGeoms.toArray(
+                            new Geometry[allSelectedGeoms.size()]),
+                            new GeometryFactory());
+                    final XBoundingBox boxToGoto = new XBoundingBox(geoCollection.getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER));
+                    boxToGoto.setX1(boxToGoto.getX1() - AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth());
+                    boxToGoto.setX2(boxToGoto.getX2() + AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth());
+                    boxToGoto.setY1(boxToGoto.getY1() - AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight());
+                    boxToGoto.setY2(boxToGoto.getY2() + AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight());
+                    map.gotoBoundingBox(boxToGoto, true, true, 500);
+                }
             } catch (Error t) {
                 log.fatal(t, t);
             }
@@ -1464,7 +1471,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      *
      * @return  DOCUMENT ME!
      */
-    private BoundingBox boundingBoxFromLandparcelList(final List<LightweightLandParcel> lpList) {
+    private XBoundingBox boundingBoxFromLandparcelList(final List<LightweightLandParcel> lpList) {
         final List<Geometry> allGeomList = TypeSafeCollections.newArrayList();
         for (final LightweightLandParcel parcel : lpList) {
             allGeomList.add(parcel.geometry);
@@ -1474,7 +1481,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                 new GeometryFactory());
         Geometry extent = CrsTransformer.transformToGivenCrs(geoCollection.getEnvelope(), AlkisConstants.COMMONS.SRS_SERVICE);
 
-        return new BoundingBox(extent);
+        return new XBoundingBox(extent.buffer(AlkisConstants.COMMONS.GEO_BUFFER));
     }
 
     /**
@@ -1486,7 +1493,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                 final ActiveLayerModel mappingModel = new ActiveLayerModel();
                 mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
                 // TODO: do we need an swsw for every class?
-                final BoundingBox box = boundingBoxFromLandparcelList(landParcelList);
+                final XBoundingBox box = boundingBoxFromLandparcelList(landParcelList);
                 mappingModel.addHome(new XBoundingBox(
                         box.getX1(),
                         box.getY1(),
