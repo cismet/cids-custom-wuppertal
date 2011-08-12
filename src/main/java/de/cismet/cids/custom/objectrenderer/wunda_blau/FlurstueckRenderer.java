@@ -149,7 +149,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
         panTitle.setOpaque(false);
         panTitle.setLayout(new java.awt.GridBagLayout());
 
-        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18));
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblTitle.setText(org.openide.util.NbBundle.getMessage(FlurstueckRenderer.class, "FlurstueckRenderer.lblTitle.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -181,7 +181,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
         gridBagConstraints.insets = new java.awt.Insets(5, 6, 5, 10);
         panMainInfo.add(lblFlurstueck, gridBagConstraints);
 
-        lblDescFlurstueck.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblDescFlurstueck.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblDescFlurstueck.setText(org.openide.util.NbBundle.getMessage(FlurstueckRenderer.class, "FlurstueckRenderer.lblDescFlurstueck.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -190,7 +190,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panMainInfo.add(lblDescFlurstueck, gridBagConstraints);
 
-        lblDescFlur.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblDescFlur.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblDescFlur.setText(org.openide.util.NbBundle.getMessage(FlurstueckRenderer.class, "FlurstueckRenderer.lblDescFlur.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -212,7 +212,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
         gridBagConstraints.insets = new java.awt.Insets(5, 6, 5, 10);
         panMainInfo.add(lblFlur, gridBagConstraints);
 
-        lblDescGemarkung.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblDescGemarkung.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblDescGemarkung.setText(org.openide.util.NbBundle.getMessage(FlurstueckRenderer.class, "FlurstueckRenderer.lblDescGemarkung.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -234,7 +234,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
         gridBagConstraints.insets = new java.awt.Insets(10, 6, 5, 10);
         panMainInfo.add(lblGemarkung, gridBagConstraints);
 
-        lblDescHist.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblDescHist.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblDescHist.setText(org.openide.util.NbBundle.getMessage(FlurstueckRenderer.class, "FlurstueckRenderer.lblDescHist.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -243,7 +243,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panMainInfo.add(lblDescHist, gridBagConstraints);
 
-        lblDescFortfuehrungsnummer.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblDescFortfuehrungsnummer.setFont(new java.awt.Font("Tahoma", 1, 11));
         lblDescFortfuehrungsnummer.setText(org.openide.util.NbBundle.getMessage(FlurstueckRenderer.class, "FlurstueckRenderer.lblDescFortfuehrungsnummer.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
