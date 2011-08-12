@@ -1,685 +1,475 @@
-/***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+/*
+ *  Copyright (C) 2011 thorsten
+ * 
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ * 
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ * 
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/*
+ * FlurstueckRenderer.java
+ *
+ * Created on 11.08.2011, 14:48:28
+ */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import com.vividsolutions.jts.geom.Geometry;
-
-import org.apache.log4j.Logger;
-
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-
-import java.util.Vector;
-
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-import de.cismet.cids.annotations.AggregationRenderer;
-import de.cismet.cids.annotations.CidsAttribute;
-import de.cismet.cids.annotations.CidsAttributeVector;
-
-import de.cismet.cids.custom.deprecated.IndentLabel;
-import de.cismet.cids.custom.deprecated.JLoadDots;
-
-import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
-
-import de.cismet.tools.BrowserLauncher;
-
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
+import de.cismet.cids.dynamics.CidsBean;
+import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+import de.cismet.cismap.commons.BoundingBox;
+import de.cismet.cismap.commons.CrsTransformer;
+import de.cismet.cismap.commons.XBoundingBox;
+import de.cismet.cismap.commons.features.DefaultStyledFeature;
+import de.cismet.cismap.commons.features.StyledFeature;
+import de.cismet.cismap.commons.gui.MappingComponent;
+import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
+import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
+import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
+import de.cismet.tools.gui.BorderProvider;
+import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.RoundedPanel;
+import de.cismet.tools.gui.TitleComponentProvider;
+import de.cismet.tools.gui.downloadmanager.DownloadManager;
+import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
+import de.cismet.tools.gui.downloadmanager.SingleDownload;
+import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
+import edu.umd.cs.piccolo.event.PInputEvent;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import javax.swing.JComponent;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 
 /**
- * de.cismet.cids.objectrenderer.CoolFlurstueckRenderer.
  *
- * @author   nh
- * @version  $Revision$, $Date$
+ * @author thorsten
  */
-@AggregationRenderer
-public class FlurstueckRenderer extends CoolPanel {
+public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProvider,
+        CidsBeanRenderer,
+        TitleComponentProvider, FooterComponentProvider {
 
-    //~ Static fields/initializers ---------------------------------------------
+    private CidsBean cidsBean;
+    private String title;
+    private final MappingComponent map;
+    private final transient org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
 
-    private static final String TITLE = "Flurst\u00FCck";
-    private static final String TITLE_AGR = "Flurst\u00FCcke";
-
-    //~ Instance fields --------------------------------------------------------
-
-    @CidsAttribute("GEMARKUNGS_NR.NAME")
-    public String gemarkungsName = "";
-
-    @CidsAttribute("FLUR")
-    public String flur = "";
-
-    @CidsAttribute("FSTNR_Z")
-    public Integer zaehler;
-
-    @CidsAttribute("FSTNR_N")
-    public Integer nenner;
-
-    @CidsAttribute("X")
-    public Float x;
-
-    @CidsAttribute("Y")
-    public Float y;
-
-    @CidsAttribute("FLAECHE_ALB")
-    public Float flaecheALB;
-
-    @CidsAttribute("FLAECHE_ALK")
-    public Float flaecheALK;
-
-    @CidsAttribute("GRUNDBUCH")
-    public Integer grundbuch;
-
-    @CidsAttribute("VERW_DIENST")
-    public Integer dienststelle;
-
-    @CidsAttribute("LOCATION")
-    public String location = "";
-
-    @CidsAttribute("Georeferenz.GEO_STRING")
-    public Geometry geometry = null;
-
-    // Aggregation-Zuweisungen
-    @CidsAttributeVector("GEMARKUNGS_NR.NAME")
-    public Vector<String> nameAgr = new Vector();
-
-    @CidsAttributeVector("FLUR")
-    public Vector<String> flurAgr = new Vector();
-
-    @CidsAttributeVector("FSTNR_Z")
-    public Vector<Integer> zaehlerAgr = new Vector();
-
-    @CidsAttributeVector("FSTNR_N")
-    public Vector<Integer> nennerAgr = new Vector();
-
-    @CidsAttributeVector("FLAECHE_ALB")
-    public Vector<Float> albAgr = new Vector();
-
-    @CidsAttributeVector("FLAECHE_ALK")
-    public Vector<Float> alkAgr = new Vector();
-
-    @CidsAttributeVector("Grundbuch")
-    public Vector<Integer> grundbuchAgr = new Vector();
-
-    @CidsAttributeVector("Georeferenz.GEO_STRING")
-    public Vector<Geometry> geoAgr = new Vector();
-    public Geometry allGeom;
-    private final Logger log = Logger.getLogger(this.getClass());
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    private org.jdesktop.swingx.JXHyperlink jxhALB;
-    private javax.swing.JLabel lblALB;
-    private javax.swing.JLabel lblALK;
-    private javax.swing.JLabel lblAgrTitle;
-    private javax.swing.JLabel lblDienststelle;
-    private javax.swing.JLabel lblFlur;
-    private javax.swing.JLabel lblGrundbuch;
-    private javax.swing.JLabel lblLocation;
-    private javax.swing.JLabel lblTitle;
-    private javax.swing.JLabel lblX;
-    private javax.swing.JLabel lblY;
-    private javax.swing.JLabel lblZaehlerNenner;
-    private javax.swing.JPanel panAggregation;
-    private javax.swing.JPanel panAgrContent;
-    private javax.swing.JPanel panAgrTitle;
-    private javax.swing.JPanel panContent;
-    private javax.swing.JPanel panInter;
-    private javax.swing.JPanel panMap;
-    private javax.swing.JPanel panSpinner;
-    private javax.swing.JPanel panTitle;
-    // End of variables declaration//GEN-END:variables
-
-    //~ Constructors -----------------------------------------------------------
-
-    /**
-     * Creates new form CoolFlurstueckRenderer.
-     */
+    /** Creates new form FlurstueckRenderer */
     public FlurstueckRenderer() {
         initComponents();
-        setPanContent(panContent);
-        setPanInter(panInter);
-        setPanMap(panMap);
-        setPanTitle(panTitle);
-        setSpinner(panSpinner);
-        extraAggregationRendererComponent = panAggregation;
-        allGeom = null;
+        map = new MappingComponent();
+        panFlurstueckMap.add(map, BorderLayout.CENTER);
     }
 
-    //~ Methods ----------------------------------------------------------------
-
     @Override
-    public void assignSingle() {
-        if (geometry != null) {
-            setGeometry(geometry);
-        }
+    public void setCidsBean(final CidsBean cb) {
+        bindingGroup.unbind();
+        if (cb != null) {
+            this.cidsBean = cb;
+            initMap();
+            bindingGroup.bind();
+            String z = String.valueOf(cb.getProperty("fstnr_z"));
+            String n = String.valueOf(cb.getProperty("fstnr_n"));
 
-        if (gemarkungsName != null) {
-            lblTitle.setText(TITLE + " (" + gemarkungsName + ")");
-        } else {
-            lblTitle.setText(TITLE);
-        }
-
-        if (flur != null) {
-            if (gemarkungsName != null) {
-                lblTitle.setText(TITLE + " (" + gemarkungsName + ")" + " - " + flur);
-            } else {
-                lblTitle.setText(TITLE + " - " + flur);
+            String result = z;
+            if (n != null && !n.trim().equals("0") && !(n.trim().length() == 0)) {
+                result += "/" + n;
             }
-            lblFlur.setText(flur);
-        } else {
-            jLabel1.setVisible(false);
-            lblFlur.setVisible(false);
-        }
+            lblFlurstueck.setText(result);
 
-        if ((zaehler != null) && (nenner != null)) {
-            lblZaehlerNenner.setText(zaehler + " / " + nenner);
-        } else {
-            jLabel2.setVisible(false);
-            lblZaehlerNenner.setVisible(false);
-        }
+            String fnr = String.valueOf(cidsBean.getProperty("fortfuehrungsnummer"));
+            if (cidsBean.getProperty("fortfuehrungsnummer") != null && fnr != null && fnr.trim().length() > 0) {
+                try {
+                    String f = fnr.substring(0, 6) + "-" + fnr.substring(6, fnr.length());
+                    jxhFortfuehrungsnummer.setText(f);
+                } catch (Exception e) {
+                    log.warn("fnr problem: " + fnr, e);
+                    jxhFortfuehrungsnummer.setText(fnr);
+                }
 
-        if (x != null) {
-            lblX.setText(x.toString());
-        } else {
-            jLabel3.setVisible(false);
-            lblX.setVisible(false);
-        }
+            }
 
-        if (y != null) {
-            lblY.setText(y.toString());
-        } else {
-            jLabel4.setVisible(false);
-            lblY.setVisible(false);
-        }
 
-        if (flaecheALB != null) {
-            lblALB.setText(flaecheALB.toString());
-        } else {
-            jLabel5.setVisible(false);
-            lblALB.setVisible(false);
-        }
 
-        if (flaecheALK != null) {
-            lblALK.setText(flaecheALK.toString());
-        } else {
-            jLabel6.setVisible(false);
-            lblALK.setVisible(false);
-        }
 
-        if (grundbuch != null) {
-            lblGrundbuch.setText(grundbuch.toString());
-        } else {
-            jLabel7.setVisible(false);
-            lblGrundbuch.setVisible(false);
-        }
-
-        if (dienststelle != null) {
-            lblDienststelle.setText(dienststelle.toString());
-        } else {
-            jLabel8.setVisible(false);
-            lblDienststelle.setVisible(false);
-        }
-
-        if (location != null) {
-            lblLocation.setText(location);
-        } else {
-            jLabel9.setVisible(false);
-            lblLocation.setVisible(false);
         }
     }
 
     @Override
-    public void assignAggregation() {
-        // GridLayout der Anzahl Objekte anpassen
-        if ((nameAgr.size() % 3) == 0) {
-            ((GridLayout)panAgrContent.getLayout()).setRows(nameAgr.size() / 3);
-        } else if ((nameAgr.size() % 3) == 1) {
-            ((GridLayout)panAgrContent.getLayout()).setRows((nameAgr.size() + 2) / 3);
-        } else {
-            ((GridLayout)panAgrContent.getLayout()).setRows((nameAgr.size() + 1) / 3);
-        }
-
-        lblAgrTitle.setText(nameAgr.size() + " " + TITLE_AGR);
-
-        // Im Schleife alle Objekte erzeugen und einfuegen
-        for (int i = 0; i < nameAgr.size(); i++) {
-            if ((allGeom != null) && (geoAgr.get(i) != null)) {
-                allGeom = allGeom.union(geoAgr.get(i));
-            } else if ((allGeom == null) && (geoAgr.get(i) != null)) {
-                allGeom = geoAgr.get(i);
-            }
-            final Font bold = new Font("Tahoma", Font.BOLD, 11);
-            final JLabel jLabel10 = new JLabel("Gemarkungsnr.:");
-            jLabel10.setFont(bold);
-            final JLabel jLabel11 = new JLabel("Flur:");
-            jLabel11.setFont(bold);
-            final JLabel jLabel12 = new JLabel("Z\u00E4hler / Nenner:");
-            jLabel12.setFont(bold);
-            final JLabel jLabel13 = new JLabel("Fl\u00E4che (ALB):");
-            jLabel13.setFont(bold);
-            final JLabel jLabel14 = new JLabel("Fl\u00E4che (ALK):");
-            jLabel14.setFont(bold);
-            final JLabel jLabel15 = new JLabel("Grundbuch:");
-            jLabel15.setFont(bold);
-
-            final int index = i;
-
-            final Thread t = new Thread(new Runnable() {
-
-//            EventQueue.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            final RoundedPanel rnd = new RoundedPanel(new BorderLayout());
-                            rnd.setLayout(new BorderLayout());
-
-                            final JPanel panTemp = new JPanel();
-                            panTemp.setLayout(new GridBagLayout());
-                            panTemp.setOpaque(false);
-
-                            panTemp.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 5, 5, 5));
-
-                            final GridBagConstraints c = new GridBagConstraints();
-                            c.anchor = GridBagConstraints.NORTHWEST;
-                            c.insets = new Insets(0, 0, 5, 30);
-                            panTemp.add(jLabel10, c);
-
-                            c.gridx = 0;
-                            c.gridy = 1;
-                            panTemp.add(jLabel11, c);
-
-                            c.gridx = 0;
-                            c.gridy = 2;
-                            panTemp.add(jLabel12, c);
-
-                            c.gridx = 0;
-                            c.gridy = 3;
-                            panTemp.add(jLabel13, c);
-
-                            c.gridx = 0;
-                            c.gridy = 4;
-                            panTemp.add(jLabel14, c);
-
-                            c.gridx = 0;
-                            c.gridy = 5;
-                            panTemp.add(jLabel15, c);
-
-                            final JLabel lblNameAgr = new JLabel(nameAgr.get(index));
-                            c.gridx = 1;
-                            c.gridy = 0;
-                            c.insets = new java.awt.Insets(0, 0, 5, 0);
-                            panTemp.add(lblNameAgr, c);
-
-                            final JLabel lblFlurAgr = new JLabel(flurAgr.get(index));
-                            c.gridx = 1;
-                            c.gridy = 1;
-                            panTemp.add(lblFlurAgr, c);
-
-                            final JLabel lblZNAgr = new JLabel(zaehlerAgr.get(index) + " / " + nennerAgr.get(index));
-                            c.gridx = 1;
-                            c.gridy = 2;
-                            panTemp.add(lblZNAgr, c);
-
-                            if (albAgr.get(index) != null) {
-                                final JLabel lblFlALBAgr = new JLabel(albAgr.get(index).toString());
-                                c.gridx = 1;
-                                c.gridy = 3;
-                                panTemp.add(lblFlALBAgr, c);
-                            }
-
-                            if (alkAgr.get(index) != null) {
-                                final JLabel lblFlALKAgr = new JLabel(alkAgr.get(index).toString());
-                                c.gridx = 1;
-                                c.gridy = 4;
-                                panTemp.add(lblFlALKAgr, c);
-                            }
-
-                            if (grundbuchAgr.get(index) != null) {
-                                final JLabel lblGrundbuchAgr = new JLabel(grundbuchAgr.get(index).toString());
-                                c.gridx = 1;
-                                c.gridy = 5;
-                                panTemp.add(lblGrundbuchAgr, c);
-                            }
-
-                            rnd.add(panTemp, BorderLayout.CENTER);
-                            final JPanel finalPan = rnd;
-
-                            EventQueue.invokeLater(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-                                        panAgrContent.add(finalPan);
-                                        panAgrContent.validate();
-                                    }
-                                });
-                        }
-                    });
-            t.start();
-        }
-        ((CoolPanel)panAggregation).setGeometry(allGeom);
+    public CidsBean getCidsBean() {
+        return cidsBean;
     }
 
-    /**
-     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
-     * content of this method is always regenerated by the Form Editor.
+    /** This method is called from within the constructor to
+     * initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is
+     * always regenerated by the Form Editor.
      */
+    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        panAggregation = new CoolPanel();
-        panAgrTitle = new javax.swing.JPanel();
-        lblAgrTitle = new IndentLabel();
-        panAgrContent = new javax.swing.JPanel();
         panTitle = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
-        panContent = new javax.swing.JPanel();
+        panFooter = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
+        panDescription = new javax.swing.JPanel();
+        panMainInfo = new RoundedPanel();
+        lblFlurstueck = new javax.swing.JLabel();
+        lblDescFlurstueck = new javax.swing.JLabel();
+        lblDescFlur = new javax.swing.JLabel();
         lblFlur = new javax.swing.JLabel();
-        lblZaehlerNenner = new javax.swing.JLabel();
-        lblX = new javax.swing.JLabel();
-        lblY = new javax.swing.JLabel();
-        lblALB = new javax.swing.JLabel();
-        lblALK = new javax.swing.JLabel();
-        lblGrundbuch = new javax.swing.JLabel();
-        lblDienststelle = new javax.swing.JLabel();
-        lblLocation = new javax.swing.JLabel();
-        panInter = new javax.swing.JPanel();
-        jxhALB = new org.jdesktop.swingx.JXHyperlink();
-        panMap = new javax.swing.JPanel();
-        panSpinner = new JLoadDots();
+        lblDescGemarkung = new javax.swing.JLabel();
+        lblGemarkung = new javax.swing.JLabel();
+        lblDescHist = new javax.swing.JLabel();
+        lblDescFortfuehrungsnummer = new javax.swing.JLabel();
+        semiRoundedPanel2 = new de.cismet.tools.gui.SemiRoundedPanel();
+        jLabel6 = new javax.swing.JLabel();
+        lblHist = new javax.swing.JLabel();
+        jxhFortfuehrungsnummer = new org.jdesktop.swingx.JXHyperlink();
+        panFlurstueckMap = new javax.swing.JPanel();
 
-        panAggregation.setOpaque(false);
-        panAggregation.setLayout(new java.awt.BorderLayout());
+        panTitle.setOpaque(false);
+        panTitle.setLayout(new java.awt.GridBagLayout());
 
-        panAgrTitle.setOpaque(false);
+        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lblTitle.setForeground(new java.awt.Color(255, 255, 255));
+        lblTitle.setText(org.openide.util.NbBundle.getMessage(FlurstueckRenderer.class, "FlurstueckRenderer.lblTitle.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        panTitle.add(lblTitle, gridBagConstraints);
 
-        lblAgrTitle.setFont(new java.awt.Font("Tahoma", 1, 18));
-        lblAgrTitle.setForeground(new java.awt.Color(51, 51, 51));
-        lblAgrTitle.setText("5 Flurst\u00FCcke");
+        panFooter.setOpaque(false);
+        panFooter.setLayout(new java.awt.BorderLayout());
 
-        final javax.swing.GroupLayout panAgrTitleLayout = new javax.swing.GroupLayout(panAgrTitle);
-        panAgrTitle.setLayout(panAgrTitleLayout);
-        panAgrTitleLayout.setHorizontalGroup(
-            panAgrTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                panAgrTitleLayout.createSequentialGroup().addContainerGap().addComponent(
-                    lblAgrTitle,
-                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                    319,
-                    Short.MAX_VALUE).addContainerGap()));
-        panAgrTitleLayout.setVerticalGroup(
-            panAgrTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                panAgrTitleLayout.createSequentialGroup().addComponent(
-                    lblAgrTitle,
-                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                    33,
-                    Short.MAX_VALUE).addContainerGap()));
-
-        panAggregation.add(panAgrTitle, java.awt.BorderLayout.NORTH);
-
-        panAgrContent.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 15, 15, 15));
-        panAgrContent.setOpaque(false);
-        panAgrContent.setLayout(new java.awt.GridLayout(1, 3, 10, 10));
-        panAggregation.add(panAgrContent, java.awt.BorderLayout.CENTER);
+        jLabel1.setText(org.openide.util.NbBundle.getMessage(FlurstueckRenderer.class, "FlurstueckRenderer.jLabel1.text")); // NOI18N
+        panFooter.add(jLabel1, java.awt.BorderLayout.CENTER);
 
         setLayout(new java.awt.BorderLayout());
 
-        panTitle.setOpaque(false);
-        panTitle.setLayout(new java.awt.BorderLayout());
+        panDescription.setOpaque(false);
+        panDescription.setLayout(new java.awt.GridBagLayout());
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 15, 10, 15));
-        jPanel1.setOpaque(false);
-        jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
+        panMainInfo.setLayout(new java.awt.GridBagLayout());
 
-        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18));
-        lblTitle.setForeground(new java.awt.Color(255, 255, 255));
-        lblTitle.setText("Flurst\u00FCck - Barmen (3001) - 10");
-        jPanel1.add(lblTitle);
-
-        panTitle.add(jPanel1, java.awt.BorderLayout.CENTER);
-
-        add(panTitle, java.awt.BorderLayout.NORTH);
-
-        panContent.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 15, 10, 20));
-        panContent.setOpaque(false);
-        panContent.setLayout(new java.awt.GridBagLayout());
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
-        jLabel1.setText("Flurnummer:");
+        lblFlurstueck.setText(org.openide.util.NbBundle.getMessage(FlurstueckRenderer.class, "FlurstueckRenderer.lblFlurstueck.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
-        panContent.add(jLabel1, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 6, 5, 10);
+        panMainInfo.add(lblFlurstueck, gridBagConstraints);
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11));
-        jLabel2.setText("Flurst\u00FCckz\u00E4hler / -nenner:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
-        panContent.add(jLabel2, gridBagConstraints);
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11));
-        jLabel3.setText("X-Koordinate:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
-        panContent.add(jLabel3, gridBagConstraints);
-
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11));
-        jLabel4.setText("Y-Koordinate:");
+        lblDescFlurstueck.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblDescFlurstueck.setText(org.openide.util.NbBundle.getMessage(FlurstueckRenderer.class, "FlurstueckRenderer.lblDescFlurstueck.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
-        panContent.add(jLabel4, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        panMainInfo.add(lblDescFlurstueck, gridBagConstraints);
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11));
-        jLabel5.setText("Fl\u00E4che (ALB):");
+        lblDescFlur.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblDescFlur.setText(org.openide.util.NbBundle.getMessage(FlurstueckRenderer.class, "FlurstueckRenderer.lblDescFlur.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
-        panContent.add(jLabel5, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        panMainInfo.add(lblDescFlur, gridBagConstraints);
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11));
-        jLabel6.setText("Fl\u00E4che (ALK):");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
-        panContent.add(jLabel6, gridBagConstraints);
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.flur}"), lblFlur, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("----");
+        binding.setSourceUnreadableValue("----");
+        bindingGroup.addBinding(binding);
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 11));
-        jLabel7.setText("Grundbuch:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
-        panContent.add(jLabel7, gridBagConstraints);
-
-        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 11));
-        jLabel8.setText("Verwaltende Dienststelle:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
-        panContent.add(jLabel8, gridBagConstraints);
-
-        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 11));
-        jLabel9.setText("Location:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
-        panContent.add(jLabel9, gridBagConstraints);
-
-        lblFlur.setText("10");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        panContent.add(lblFlur, gridBagConstraints);
-
-        lblZaehlerNenner.setText("100 / 0");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        panContent.add(lblZaehlerNenner, gridBagConstraints);
-
-        lblX.setText("2582490.0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        panContent.add(lblX, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 6, 5, 10);
+        panMainInfo.add(lblFlur, gridBagConstraints);
 
-        lblY.setText("5685030.0");
+        lblDescGemarkung.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblDescGemarkung.setText(org.openide.util.NbBundle.getMessage(FlurstueckRenderer.class, "FlurstueckRenderer.lblDescGemarkung.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 5);
+        panMainInfo.add(lblDescGemarkung, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.gemarkungs_nr.name}"), lblGemarkung, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("----");
+        binding.setSourceUnreadableValue("----");
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        panContent.add(lblY, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(10, 6, 5, 10);
+        panMainInfo.add(lblGemarkung, gridBagConstraints);
 
-        lblALB.setText("4335.0");
+        lblDescHist.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblDescHist.setText(org.openide.util.NbBundle.getMessage(FlurstueckRenderer.class, "FlurstueckRenderer.lblDescHist.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        panMainInfo.add(lblDescHist, gridBagConstraints);
+
+        lblDescFortfuehrungsnummer.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblDescFortfuehrungsnummer.setText(org.openide.util.NbBundle.getMessage(FlurstueckRenderer.class, "FlurstueckRenderer.lblDescFortfuehrungsnummer.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        panMainInfo.add(lblDescFortfuehrungsnummer, gridBagConstraints);
+
+        semiRoundedPanel2.setBackground(java.awt.Color.darkGray);
+        semiRoundedPanel2.setLayout(new java.awt.GridBagLayout());
+
+        jLabel6.setText(org.openide.util.NbBundle.getMessage(FlurstueckRenderer.class, "FlurstueckRenderer.jLabel6.text")); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        semiRoundedPanel2.add(jLabel6, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panMainInfo.add(semiRoundedPanel2, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.historisch}"), lblHist, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("----");
+        binding.setSourceUnreadableValue("----");
+        binding.setConverter(new de.cismet.cids.custom.objectrenderer.converter.SQLDateToStringConverter());
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        panContent.add(lblALB, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 6, 5, 10);
+        panMainInfo.add(lblHist, gridBagConstraints);
 
-        lblALK.setText("4345.96");
+        jxhFortfuehrungsnummer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jxhFortfuehrungsnummerActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        panContent.add(lblALK, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 30);
+        panMainInfo.add(jxhFortfuehrungsnummer, gridBagConstraints);
 
-        lblGrundbuch.setText("5462");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        panContent.add(lblGrundbuch, gridBagConstraints);
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 5);
+        panDescription.add(panMainInfo, gridBagConstraints);
 
-        lblDienststelle.setText("0");
+        panFlurstueckMap.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        panFlurstueckMap.setLayout(new java.awt.BorderLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        panContent.add(lblDienststelle, gridBagConstraints);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 5);
+        panDescription.add(panFlurstueckMap, gridBagConstraints);
 
-        lblLocation.setText("136800002001a4da6");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        panContent.add(lblLocation, gridBagConstraints);
+        add(panDescription, java.awt.BorderLayout.CENTER);
 
-        add(panContent, java.awt.BorderLayout.WEST);
+        bindingGroup.bind();
+    }// </editor-fold>//GEN-END:initComponents
 
-        panInter.setOpaque(false);
-        panInter.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 20, 10));
-
-        jxhALB.setForeground(new java.awt.Color(255, 255, 255));
-        jxhALB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/html.png"))); // NOI18N
-        jxhALB.setText("Flurst\u00FCck im ALB \u00F6ffnen");
-        jxhALB.setClickedColor(new java.awt.Color(204, 204, 204));
-        jxhALB.setFocusPainted(false);
-        jxhALB.setUnclickedColor(new java.awt.Color(255, 255, 255));
-        jxhALB.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jxhALBActionPerformed(evt);
+    private void jxhFortfuehrungsnummerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxhFortfuehrungsnummerActionPerformed
+        String fnr = String.valueOf(cidsBean.getProperty("fortfuehrungsnummer"));
+        if (cidsBean.getProperty("fortfuehrungsnummer") != null && fnr != null && fnr.trim().length() > 0) {
+            try {
+                java.sql.Date d = (java.sql.Date) cidsBean.getProperty("historisch");
+                SimpleDateFormat formater = new SimpleDateFormat("yyyy");
+                String year = formater.format(d);
+                String laufendeNr = fnr.substring(6, fnr.length());
+                String documentName = "FN_" + year + "_" + cidsBean.getProperty("gemarkungs_nr") + "_" + laufendeNr;
+                String prefix=StaticProperties.FORTFUEHRUNGSNACHWEISE_URL_PREFIX;
+                if (prefix==null){
+                    prefix="file://///S102gs/_102-alkis-dokumente/Echtfortführungen/Fortführungsnachweise/";
                 }
-            });
-        panInter.add(jxhALB);
+                URL url = new URL( prefix + documentName+".pdf");
+                final SingleDownload download = new SingleDownload(url, "", DownloadManagerDialog.getJobname(), "Fortfuehrungsnachweis: " + documentName, "fortfuehrungsnachweis_" + documentName, "pdf");
+                DownloadManager.instance().add(download);
+            } catch (Exception e) {
+                log.error("Hier muss noch ne Messagebox hin",e);
+            }
+        }
 
-        add(panInter, java.awt.BorderLayout.SOUTH);
-
-        panMap.setOpaque(false);
-        panMap.setLayout(new java.awt.GridBagLayout());
-
-        panSpinner.setMaximumSize(new java.awt.Dimension(100, 100));
-        panSpinner.setMinimumSize(new java.awt.Dimension(100, 100));
-        panSpinner.setOpaque(false);
-        panSpinner.setPreferredSize(new java.awt.Dimension(100, 100));
-        panSpinner.setRequestFocusEnabled(false);
-
-        final javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
-        panSpinner.setLayout(panSpinnerLayout);
-        panSpinnerLayout.setHorizontalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                100,
-                Short.MAX_VALUE));
-        panSpinnerLayout.setVerticalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                100,
-                Short.MAX_VALUE));
-
-        panMap.add(panSpinner, new java.awt.GridBagConstraints());
-
-        add(panMap, java.awt.BorderLayout.CENTER);
-    } // </editor-fold>//GEN-END:initComponents
+    }//GEN-LAST:event_jxhFortfuehrungsnummerActionPerformed
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel6;
+    private org.jdesktop.swingx.JXHyperlink jxhFortfuehrungsnummer;
+    private javax.swing.JLabel lblDescFlur;
+    private javax.swing.JLabel lblDescFlurstueck;
+    private javax.swing.JLabel lblDescFortfuehrungsnummer;
+    private javax.swing.JLabel lblDescGemarkung;
+    private javax.swing.JLabel lblDescHist;
+    private javax.swing.JLabel lblFlur;
+    private javax.swing.JLabel lblFlurstueck;
+    private javax.swing.JLabel lblGemarkung;
+    private javax.swing.JLabel lblHist;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JPanel panDescription;
+    private javax.swing.JPanel panFlurstueckMap;
+    private javax.swing.JPanel panFooter;
+    private javax.swing.JPanel panMainInfo;
+    private javax.swing.JPanel panTitle;
+    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel2;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
+    // End of variables declaration//GEN-END:variables
 
     /**
      * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
      */
-    private void jxhALBActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxhALBActionPerformed
-        try {
-            BrowserLauncher.openURL("http://kif/web/alb/ALB.htm");
-        } catch (Exception e) {
-            log.error("Konnte Flurst\u00FCck nicht im ALB-Browser \u00F6ffnen", e);
+    private void initMap() {
+        final Object geoObj = cidsBean.getProperty("umschreibendes_rechteck.geo_field");
+        if (geoObj instanceof Geometry) {
+            final Geometry pureGeom = CrsTransformer.transformToGivenCrs((Geometry) geoObj, AlkisConstants.COMMONS.SRS_SERVICE);
+            final BoundingBox box = new BoundingBox(pureGeom.getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER));
+
+            final Runnable mapRunnable = new Runnable() {
+
+                @Override
+                public void run() {
+                    final ActiveLayerModel mappingModel = new ActiveLayerModel();
+                    mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                    mappingModel.addHome(new XBoundingBox(
+                            box.getX1(),
+                            box.getY1(),
+                            box.getX2(),
+                            box.getY2(),
+                            AlkisConstants.COMMONS.SRS_SERVICE,
+                            true));
+                    final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(AlkisConstants.COMMONS.MAP_CALL_STRING));
+                    swms.setName("Flurstueck");
+                    final StyledFeature dsf = new DefaultStyledFeature();
+                    dsf.setGeometry(pureGeom);
+                    dsf.setFillingPaint(new Color(1, 0, 0, 0.5f));
+                    // add the raster layer to the model
+                    mappingModel.addLayer(swms);
+                    // set the model
+                    map.setMappingModel(mappingModel);
+                    // initial positioning of the map
+                    final int duration = map.getAnimationDuration();
+                    map.setAnimationDuration(0);
+                    map.gotoInitialBoundingBox();
+                    // interaction mode
+                    map.setInteractionMode(MappingComponent.ZOOM);
+                    // finally when all configurations are done ...
+                    map.unlock();
+                    map.addCustomInputListener("MUTE", new PBasicInputEventHandler() {
+
+                        @Override
+                        public void mouseClicked(final PInputEvent evt) {
+                            if (evt.getClickCount() > 1) {
+                                final CidsBean bean = cidsBean;
+                                ObjectRendererUtils.switchToCismapMap();
+                                ObjectRendererUtils.addBeanGeomAsFeatureToCismapMap(bean, false);
+                            }
+                        }
+                    });
+                    map.setInteractionMode("MUTE");
+                    map.getFeatureCollection().addFeature(dsf);
+                    map.setAnimationDuration(duration);
+                }
+            };
+            if (EventQueue.isDispatchThread()) {
+                mapRunnable.run();
+            } else {
+                EventQueue.invokeLater(mapRunnable);
+            }
         }
-    }                                                                          //GEN-LAST:event_jxhALBActionPerformed
+    }
+
+    @Override
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
+    public void setTitle(String title) {
+        if (title == null) {
+            title = "<Error>";
+        } else {
+            this.title = title;
+        }
+        this.title = title;
+        lblTitle.setText(this.title);
+    }
+
+    @Override
+    public Border getTitleBorder() {
+        return new EmptyBorder(10, 10, 10, 10);
+    }
+
+    @Override
+    public Border getFooterBorder() {
+        return new EmptyBorder(5, 5, 5, 5);
+    }
+
+    @Override
+    public Border getCenterrBorder() {
+        return new EmptyBorder(5, 5, 5, 5);
+    }
+
+    @Override
+    public void dispose() {
+        bindingGroup.unbind();
+//        if (!continueInBackground) {
+//            AlkisSOAPWorkerService.cancel(retrieveBuchungsblaetterWorker);
+//            setWaiting(false);
+//        }
+        map.dispose();
+    }
+
+    @Override
+    public JComponent getTitleComponent() {
+        return panTitle;
+    }
+
+    @Override
+    public JComponent getFooterComponent() {
+        return panFooter;
+    }
 }

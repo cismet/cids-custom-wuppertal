@@ -35,6 +35,7 @@ public final class StaticProperties {
     public static final String POI_LOCATIONTYPE_URL_SUFFIX;
     public static final String ALB_PLAN_URL_PREFIX;
     public static final String ALB_TEXTBLATT_URL_PREFIX;
+    public static final String FORTFUEHRUNGSNACHWEISE_URL_PREFIX;
 
     // --------------
     static {
@@ -48,6 +49,7 @@ public final class StaticProperties {
         POI_LOCATIONTYPE_URL_SUFFIX = propReader.getProperty("poi_locationtype_url_suffix");
         ALB_PLAN_URL_PREFIX = propReader.getProperty("alb_plan_url_prefix");
         ALB_TEXTBLATT_URL_PREFIX = propReader.getProperty("alb_textblatt_url_prefix");
+        FORTFUEHRUNGSNACHWEISE_URL_PREFIX = propReader.getProperty("fortfuehrungsnachweise_url_prefix");
     }
 
     //~ Constructors -----------------------------------------------------------
