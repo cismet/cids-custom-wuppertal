@@ -322,7 +322,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
                 SimpleDateFormat formater = new SimpleDateFormat("yyyy");
                 String year = formater.format(d);
                 String laufendeNr = fnr.substring(6, fnr.length());
-                String documentName = "FN_" + year + "_" + cidsBean.getProperty("gemarkungs_nr") + "_" + laufendeNr;
+                String documentName = "FN_" + year + "_" + cidsBean.getProperty("gemarkungs_nr.gemarkungsnummer") + "_" + laufendeNr;
                 String prefix=StaticProperties.FORTFUEHRUNGSNACHWEISE_URL_PREFIX;
                 if (prefix==null){
                     prefix="file://///S102gs/_102-alkis-dokumente/Echtfortführungen/Fortführungsnachweise/";
