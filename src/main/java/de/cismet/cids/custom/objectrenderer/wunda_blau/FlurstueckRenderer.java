@@ -37,6 +37,7 @@ import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
+import de.cismet.tools.BrowserLauncher;
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.RoundedPanel;
@@ -327,9 +328,11 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
                 if (prefix==null){
                     prefix="file://///S102gs/_102-alkis-dokumente/Echtfortführungen/Fortführungsnachweise/";
                 }
-                URL url = new URL( prefix + documentName+".pdf");
-                final SingleDownload download = new SingleDownload(url, "", DownloadManagerDialog.getJobname(), "Fortfuehrungsnachweis: " + documentName, "fortfuehrungsnachweis_" + documentName, "pdf");
-                DownloadManager.instance().add(download);
+                BrowserLauncher.openURLorFile(prefix + documentName+".pdf");
+//                
+//                URL url = new URL( prefix + documentName+".pdf");
+//                final SingleDownload download = new SingleDownload(url, "", DownloadManagerDialog.getJobname(), "Fortfuehrungsnachweis: " + documentName, "fortfuehrungsnachweis_" + documentName, "pdf");
+//                DownloadManager.instance().add(download);
             } catch (Exception e) {
                 log.error("Hier muss noch ne Messagebox hin",e);
             }
