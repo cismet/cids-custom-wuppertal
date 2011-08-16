@@ -104,10 +104,8 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
                 }
 
             }
-
-
-
-
+            title="Flurstück " + lblFlurstueck;
+            lblTitle.setText(this.title);
         }
     }
 
@@ -432,13 +430,13 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
 
     @Override
     public void setTitle(String title) {
-        if (title == null) {
-            title = "<Error>";
-        } else {
-            this.title = title;
-        }
-        this.title = title;
-        lblTitle.setText(this.title);
+//        if (title == null) {
+//            title = "<Error>";
+//        } else {
+//            this.title = title;
+//        }
+//        this.title = title;
+//        lblTitle.setText(this.title);
     }
 
     @Override
