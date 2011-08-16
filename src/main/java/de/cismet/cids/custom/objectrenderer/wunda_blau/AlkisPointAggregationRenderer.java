@@ -180,11 +180,6 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         panProdukte.setLayout(new java.awt.GridBagLayout());
 
         cbProducts.setModel(PRODUCT_FORMATS_MODEL);
-        cbProducts.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbProductsActionPerformed(evt);
-            }
-        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
@@ -289,21 +284,22 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
             if (code != null && code.length() > 0) {
                 try {
                     url = AlkisUtils.PRODUCTS.productListenNachweisUrl(punktListenString, code);
-                } catch (MalformedURLException ex) {
+                    
+                    if (url != null) {
+                        if (!DownloadManagerDialog.showAskingForUserTitle(StaticSwingTools.getParentFrame(this))) {
+                            return;
+                        }
+
+                        final SingleDownload download = new SingleDownload(url, "", DownloadManagerDialog.getJobname(), "Punktnachweis", code, extension);
+                        DownloadManager.instance().add(download);
+                    }
+                } catch (Exception ex) {
                     ObjectRendererUtils.showExceptionWindowToUser(
                             "Fehler beim Aufruf des Produkts: " + code,
                             ex,
                             AlkisPointAggregationRenderer.this);
                     log.error("The URL to download product '" + code + "' (actionTag: " + AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE + ") could not be constructed.", ex);
                 }
-            }
-            if (url != null) {
-                if (!DownloadManagerDialog.showAskingForUserTitle(StaticSwingTools.getParentFrame(this))) {
-                    return;
-                }
-
-                final SingleDownload download = new SingleDownload(url, "", DownloadManagerDialog.getJobname(), "Punktnachweis", code, extension);
-                DownloadManager.instance().add(download);
             }
         }
     }//GEN-LAST:event_btnCreateActionPerformed
@@ -328,12 +324,6 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         gehaltenePunkte.addAll(cidsBeans);
         btnRelease.setEnabled(true);
     }//GEN-LAST:event_btnRememberActionPerformed
-
-    private void cbProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbProductsActionPerformed
-        if(evt != null && evt.getSource() instanceof JComboBox && evt.getSource().equals(cbProducts)) {
-            btnCreate.setEnabled(DownloadManager.instance().isEnabled());
-        }
-    }//GEN-LAST:event_cbProductsActionPerformed
 
     private void tblAggregationFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblAggregationFocusLost
         mappingComponent.gotoInitialBoundingBox();
@@ -406,10 +396,6 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
             ObjectRendererUtils.decorateTableWithSorter(tblAggregation);
         }
         setTitle(null);
-        
-        if(PDF.equals(cbProducts.getSelectedItem())) {
-            btnCreate.setEnabled(DownloadManager.instance().isEnabled());
-        }
     }
 
     /**

@@ -837,7 +837,6 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 
         hlBestandsnachweisNrwPdf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
         hlBestandsnachweisNrwPdf.setText("Bestandsnachweis (NRW)");
-        hlBestandsnachweisNrwPdf.setEnabled(DownloadManager.instance().isEnabled());
         hlBestandsnachweisNrwPdf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hlBestandsnachweisNrwPdfActionPerformed(evt);
@@ -882,7 +881,6 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 
         hlBestandsnachweisKomPdf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
         hlBestandsnachweisKomPdf.setText("Bestandsnachweis (kommunal)");
-        hlBestandsnachweisKomPdf.setEnabled(DownloadManager.instance().isEnabled());
         hlBestandsnachweisKomPdf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hlBestandsnachweisKomPdfActionPerformed(evt);
@@ -912,7 +910,6 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 
         hlBestandsnachweisKomInternPdf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
         hlBestandsnachweisKomInternPdf.setText("Bestandsnachweis (kommunal, intern)");
-        hlBestandsnachweisKomInternPdf.setEnabled(DownloadManager.instance().isEnabled());
         hlBestandsnachweisKomInternPdf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hlBestandsnachweisKomInternPdfActionPerformed(evt);
@@ -1788,7 +1785,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                         ownerBuilder.append("</html>");
                         epOwner.setText(ownerBuilder.toString());
                         //enable products that depend on soap info
-                        hlGrundstuecksnachweisNrwPdf.setEnabled(DownloadManager.instance().isEnabled());
+                        hlGrundstuecksnachweisNrwPdf.setEnabled(true);
                         hlGrundstuecksnachweisNrwHtml.setEnabled(true);
 
 //                        Buchungsstelle[] bsts=buchungsblatt.getBuchungsstellen();

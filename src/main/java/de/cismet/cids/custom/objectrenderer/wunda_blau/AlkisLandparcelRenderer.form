@@ -690,9 +690,6 @@
                   <Image iconType="3" name="/de/cismet/cids/custom/icons/pdf.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Karte"/>
-                <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="DownloadManager.instance().isEnabled()" type="code"/>
-                </Property>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="hlKarteActionPerformed"/>
@@ -709,9 +706,6 @@
                   <Image iconType="3" name="/de/cismet/cids/custom/icons/pdf.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Flurst&#xfc;cks- und Eigentumsnachweis (NRW)"/>
-                <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="DownloadManager.instance().isEnabled()" type="code"/>
-                </Property>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="hlFlurstuecksEigentumsnachweisNrwPdfActionPerformed"/>
@@ -728,9 +722,6 @@
                   <Image iconType="3" name="/de/cismet/cids/custom/icons/pdf.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Flurst&#xfc;cksnachweis"/>
-                <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="DownloadManager.instance().isEnabled()" type="code"/>
-                </Property>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="hlFlurstuecksnachweisPdfActionPerformed"/>
@@ -788,9 +779,6 @@
                   <Image iconType="3" name="/de/cismet/cids/custom/icons/pdf.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Flurst&#xfc;cks- und Eigentumsnachweis (kommunal)"/>
-                <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="DownloadManager.instance().isEnabled()" type="code"/>
-                </Property>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="hlFlurstuecksEigentumsnachweisKomPdfActionPerformed"/>
@@ -807,9 +795,6 @@
                   <Image iconType="3" name="/de/cismet/cids/custom/icons/pdf.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Flurst&#xfc;cks- und Eigentumsnachweis (kommunal, intern)"/>
-                <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="DownloadManager.instance().isEnabled()" type="code"/>
-                </Property>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="hlFlurstuecksEigentumsnachweisKomInternPdfActionPerformed"/>

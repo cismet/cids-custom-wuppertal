@@ -590,21 +590,22 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         if (parcelCode != null && parcelCode.length() > 0) {
             try {
                 url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(parcelCode, product);
-            } catch (MalformedURLException ex) {
+                
+                if (url != null) {
+                    if (!DownloadManagerDialog.showAskingForUserTitle(StaticSwingTools.getParentFrame(this))) {
+                        return;
+                    }
+
+                    final SingleDownload download = new SingleDownload(url, "", DownloadManagerDialog.getJobname(), downloadTitle, product, extension);
+                    DownloadManager.instance().add(download);
+                }
+            } catch (Exception ex) {
                 ObjectRendererUtils.showExceptionWindowToUser(
                         "Fehler beim Aufruf des Produkts: " + product,
                         ex,
                         AlkisLandparcelRenderer.this);
                 log.error("The URL to download product '" + product + "' (actionTag: " + actionTag + ") could not be constructed.", ex);
             }
-        }
-        if (url != null) {
-            if (!DownloadManagerDialog.showAskingForUserTitle(StaticSwingTools.getParentFrame(this))) {
-                return;
-            }
-
-            final SingleDownload download = new SingleDownload(url, "", DownloadManagerDialog.getJobname(), downloadTitle, product, extension);
-            DownloadManager.instance().add(download);
         }
     }
 
@@ -1103,7 +1104,6 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
 
         hlKarte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
         hlKarte.setText("Karte");
-        hlKarte.setEnabled(DownloadManager.instance().isEnabled());
         hlKarte.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hlKarteActionPerformed(evt);
@@ -1118,7 +1118,6 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
 
         hlFlurstuecksEigentumsnachweisNrwPdf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
         hlFlurstuecksEigentumsnachweisNrwPdf.setText("Flurstücks- und Eigentumsnachweis (NRW)");
-        hlFlurstuecksEigentumsnachweisNrwPdf.setEnabled(DownloadManager.instance().isEnabled());
         hlFlurstuecksEigentumsnachweisNrwPdf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hlFlurstuecksEigentumsnachweisNrwPdfActionPerformed(evt);
@@ -1133,7 +1132,6 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
 
         hlFlurstuecksnachweisPdf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
         hlFlurstuecksnachweisPdf.setText("Flurstücksnachweis");
-        hlFlurstuecksnachweisPdf.setEnabled(DownloadManager.instance().isEnabled());
         hlFlurstuecksnachweisPdf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hlFlurstuecksnachweisPdfActionPerformed(evt);
@@ -1170,7 +1168,6 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
 
         hlFlurstuecksEigentumsnachweisKomPdf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
         hlFlurstuecksEigentumsnachweisKomPdf.setText("Flurstücks- und Eigentumsnachweis (kommunal)");
-        hlFlurstuecksEigentumsnachweisKomPdf.setEnabled(DownloadManager.instance().isEnabled());
         hlFlurstuecksEigentumsnachweisKomPdf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hlFlurstuecksEigentumsnachweisKomPdfActionPerformed(evt);
@@ -1185,7 +1182,6 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
 
         hlFlurstuecksEigentumsnachweisKomInternPdf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
         hlFlurstuecksEigentumsnachweisKomInternPdf.setText("Flurstücks- und Eigentumsnachweis (kommunal, intern)");
-        hlFlurstuecksEigentumsnachweisKomInternPdf.setEnabled(DownloadManager.instance().isEnabled());
         hlFlurstuecksEigentumsnachweisKomInternPdf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hlFlurstuecksEigentumsnachweisKomInternPdfActionPerformed(evt);

@@ -442,19 +442,11 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
     }
     
     private void changeButtonAvailability(final boolean enable) {
-        if(!DownloadManager.instance().isEnabled()) {
-            jxlFlurstuecksnachweis.setEnabled(false);
-            jxlNachweisNRW.setEnabled(false);
-            jxlNachweisKommunal.setEnabled(false);
-            jxlNachweisKommunalIntern.setEnabled(false);
-            jxlKarte.setEnabled(false);
-        } else {
-            jxlFlurstuecksnachweis.setEnabled(enable);
-            jxlNachweisNRW.setEnabled(enable);
-            jxlNachweisKommunal.setEnabled(enable);
-            jxlNachweisKommunalIntern.setEnabled(enable);
-            jxlKarte.setEnabled(enable);
-        }
+        jxlFlurstuecksnachweis.setEnabled(enable);
+        jxlNachweisNRW.setEnabled(enable);
+        jxlNachweisKommunal.setEnabled(enable);
+        jxlNachweisKommunalIntern.setEnabled(enable);
+        jxlKarte.setEnabled(enable);
     }
     
     private void downloadEinzelnachweisProduct(String downloadTitle, String product, String actionTag) {
@@ -481,7 +473,17 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             if (parcelCode != null && parcelCode.length() > 0) {
                 try {
                     url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(parcelCode, product);
-                } catch (MalformedURLException ex) {
+                    
+                    if(url != null) {
+                        downloads.add(new SingleDownload(url, "", jobname, downloadTitle, product, ".pdf"));
+                    }
+                    
+                    if(downloads.size() > 1) {
+                        DownloadManager.instance().add(new MultipleDownload(downloads, jobname));
+                    } else if(downloads.size() == 1) {
+                        DownloadManager.instance().add(downloads.get(0));
+                    }
+                } catch (Exception ex) {
                     ObjectRendererUtils.showExceptionWindowToUser(
                         "Fehler beim Aufruf des Produkts: " + product,
                         ex,
@@ -489,16 +491,6 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
                     LOG.error("The URL to download product '" + product + "' (actionTag: " + actionTag + ") could not be constructed.", ex);
                 }
             }
-            
-            if(url != null) {
-                downloads.add(new SingleDownload(url, "", jobname, downloadTitle, product, ".pdf"));
-            }
-        }
-    
-        if(downloads.size() > 1) {
-            DownloadManager.instance().add(new MultipleDownload(downloads, jobname));
-        } else if(downloads.size() == 1) {
-            DownloadManager.instance().add(downloads.get(0));
         }
     }
     

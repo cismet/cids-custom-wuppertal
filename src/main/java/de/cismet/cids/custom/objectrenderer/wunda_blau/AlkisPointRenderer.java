@@ -1335,7 +1335,6 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
 
         hlPunktlistePdf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
         hlPunktlistePdf.setText("Punktliste");
-        hlPunktlistePdf.setEnabled(DownloadManager.instance().isEnabled());
         hlPunktlistePdf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hlPunktlistePdfActionPerformed(evt);
@@ -1595,22 +1594,22 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         if (pointData != null && pointData.length() > 0) {
             try {
                 url = AlkisUtils.PRODUCTS.productListenNachweisUrl(pointData, productType);
-            } catch (MalformedURLException ex) {
+                
+                if (url != null) {
+                    if (!DownloadManagerDialog.showAskingForUserTitle(StaticSwingTools.getParentFrame(this))) {
+                        return;
+                    }
+
+                    final SingleDownload download = new SingleDownload(url, "", DownloadManagerDialog.getJobname(), "Punktliste", productType, extension);
+                    DownloadManager.instance().add(download);
+                }
+            } catch (Exception ex) {
                 ObjectRendererUtils.showExceptionWindowToUser(
                         "Fehler beim Aufruf des Produkts: " + productType,
                         ex,
                         AlkisPointRenderer.this);
                 log.error("The URL to download product '" + productType + "' (actionTag: " + PRODUCT_ACTION_TAG_PUNKTLISTE + ") could not be constructed.", ex);
             }
-        }
-
-        if (url != null) {
-            if (!DownloadManagerDialog.showAskingForUserTitle(StaticSwingTools.getParentFrame(this))) {
-                return;
-            }
-
-            final SingleDownload download = new SingleDownload(url, "", DownloadManagerDialog.getJobname(), "Punktliste", productType, extension);
-            DownloadManager.instance().add(download);
         }
     }
 

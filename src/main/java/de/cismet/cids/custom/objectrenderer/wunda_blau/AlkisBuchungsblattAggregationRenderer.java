@@ -405,15 +405,9 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
     }
     
     private void changeButtonAvailability(final boolean enable) {
-        if(!DownloadManager.instance().isEnabled()) {
-            jxlBestandsnachweisNRW.setEnabled(false);
-            jxlBestandsnachweisKommunal.setEnabled(false);
-            jxlBestandsnachweisKommunalIntern.setEnabled(false);
-        } else {
-            jxlBestandsnachweisNRW.setEnabled(enable);
-            jxlBestandsnachweisKommunal.setEnabled(enable);
-            jxlBestandsnachweisKommunalIntern.setEnabled(enable);
-        }
+        jxlBestandsnachweisNRW.setEnabled(enable);
+        jxlBestandsnachweisKommunal.setEnabled(enable);
+        jxlBestandsnachweisKommunalIntern.setEnabled(enable);
     }
     
     private void downloadEinzelnachweisProduct(String downloadTitle, String product, String actionTag) {
@@ -445,23 +439,23 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
             
             try {
                 url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(queryID, product);
-            } catch (MalformedURLException ex) {
+                
+                if (url != null) {
+                    downloads.add(new SingleDownload(url, "", jobname, downloadTitle, product, ".pdf"));
+                }
+                
+                if(downloads.size() > 1) {
+                    DownloadManager.instance().add(new MultipleDownload(downloads, jobname));
+                } else if(downloads.size() == 1) {
+                    DownloadManager.instance().add(downloads.get(0));
+                }
+            } catch (Exception ex) {
                 ObjectRendererUtils.showExceptionWindowToUser(
                         "Fehler beim Aufruf des Produkts: " + product,
                         ex,
                         AlkisBuchungsblattAggregationRenderer.this);
                 LOG.error("The URL to download product '" + product + "' (actionTag: " + actionTag + ") could not be constructed.", ex);
             }
-            
-            if (url != null) {
-                downloads.add(new SingleDownload(url, "", jobname, downloadTitle, product, ".pdf"));
-            }
-        }
-    
-        if(downloads.size() > 1) {
-            DownloadManager.instance().add(new MultipleDownload(downloads, jobname));
-        } else if(downloads.size() == 1) {
-            DownloadManager.instance().add(downloads.get(0));
         }
     }
     
