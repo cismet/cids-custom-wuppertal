@@ -36,7 +36,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
-import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.utils.alkis.AlkisProductDescription;
 
@@ -55,6 +55,10 @@ import de.cismet.cismap.navigatorplugin.CidsFeature;
 import de.cismet.tools.collections.TypeSafeCollections;
 
 import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.downloadmanager.DownloadManager;
+import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
+import de.cismet.tools.gui.downloadmanager.SingleDownload;
+import java.net.URL;
 
 /**
  * DOCUMENT ME!
@@ -789,6 +793,49 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                     taAdditionalText.getText(),
                     txtAuftragsnummer.getText(),
                     false);
+        }
+    }
+    
+    /**
+     * Adds the selected product to the DownloadManager.
+     *
+     * @param  center         DOCUMENT ME!
+     * @param  rotationAngle  DOCUMENT ME!
+     */
+    public void downloadProduct(final Point center, final double rotationAngle) {
+        if(flurstueckListModel.size() <= 0) {
+            return;
+        }
+
+        final String landParcelCode = AlkisUtils.getLandparcelCodeFromParcelBeanObject(flurstueckListModel.get(
+                0));
+        final AlkisProductDescription selectedProduct = getSelectedProduct();
+        URL url = null;
+        try {
+            url = AlkisUtils.PRODUCTS.productKarteUrl(
+                landParcelCode,
+                selectedProduct,
+                toInt(rotationAngle),
+                toInt(center.getX()),
+                toInt(center.getY()),
+                taAdditionalText.getText(),
+                txtAuftragsnummer.getText(),
+                false);
+            
+            if (url != null) {
+                if (!DownloadManagerDialog.showAskingForUserTitle(StaticSwingTools.getParentFrame(this))) {
+                    return;
+                }
+
+                final SingleDownload download = new SingleDownload(url, "", DownloadManagerDialog.getJobname(), "ALKIS-Druck", landParcelCode.replaceAll("\\/", "-"), ".pdf");
+                DownloadManager.instance().add(download);
+            }
+        } catch(Exception e) {
+            ObjectRendererUtils.showExceptionWindowToUser(
+                    "Fehler beim Aufruf des Produkts: " + selectedProduct,
+                    e,
+                    AlkisPrintingSettingsWidget.this);
+            log.error(e);
         }
     }
 

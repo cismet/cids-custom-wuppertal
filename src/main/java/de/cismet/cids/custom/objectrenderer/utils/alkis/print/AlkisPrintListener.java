@@ -303,7 +303,7 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
         if ((event.getClickCount() > 1) && event.isLeftMouseButton()) {
             final double rotationAngle = calculateRotationAngle();
             final Point templateCenter = getTemplateCenter();
-            printWidget.createProduct(templateCenter, rotationAngle);
+            printWidget.downloadProduct(templateCenter, rotationAngle);
             cleanUpAndRestoreFeatures();
         }
     }
