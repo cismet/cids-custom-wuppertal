@@ -400,7 +400,7 @@ private void jXHyperlink1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
                         final MetaClass mc = ClassCacheMultiple.getMetaClass(mon.getDomain(), mon.getClassId());
                         if (mc != null) {
                             
-                            ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObject(mc, mon.getObjectId(), "");
+                            ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObject(mc, mon.getObjectId(), fString);
                         } else {
                             log.error("Could not find MetaClass for " + tabname);
                         }
