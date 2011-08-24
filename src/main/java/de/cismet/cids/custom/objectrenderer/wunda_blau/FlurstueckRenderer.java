@@ -22,11 +22,20 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.method.MethodManager;
+
+import Sirius.navigator.ui.ComponentRegistry;
+import Sirius.server.middleware.types.MetaClass;
+import Sirius.server.middleware.types.MetaObjectNode;
+import Sirius.server.middleware.types.Node;
 import com.vividsolutions.jts.geom.Geometry;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
+import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 import de.cismet.cids.dynamics.CidsBean;
+import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.CrsTransformer;
@@ -38,22 +47,21 @@ import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 import de.cismet.tools.BrowserLauncher;
+import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.TitleComponentProvider;
-import de.cismet.tools.gui.downloadmanager.DownloadManager;
-import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
-import de.cismet.tools.gui.downloadmanager.SingleDownload;
 import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
 import edu.umd.cs.piccolo.event.PInputEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
@@ -75,6 +83,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
         initComponents();
         map = new MappingComponent();
         panFlurstueckMap.add(map, BorderLayout.CENTER);
+        jXHyperlink1.setVisible(false);
     }
 
     @Override
@@ -104,8 +113,14 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
                 }
 
             }
-            title="Flurstück " + lblFlurstueck;
+            title = "Flurstück " + lblFlurstueck.getText();
             lblTitle.setText(this.title);
+
+
+        }
+
+        if (lblHist.getText().trim().equals("----")) {
+            jXHyperlink1.setVisible(true);
         }
     }
 
@@ -128,7 +143,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
         panTitle = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
         panFooter = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        jXHyperlink1 = new org.jdesktop.swingx.JXHyperlink();
         panDescription = new javax.swing.JPanel();
         panMainInfo = new RoundedPanel();
         lblFlurstueck = new javax.swing.JLabel();
@@ -148,7 +163,7 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
         panTitle.setOpaque(false);
         panTitle.setLayout(new java.awt.GridBagLayout());
 
-        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18));
+        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblTitle.setText(org.openide.util.NbBundle.getMessage(FlurstueckRenderer.class, "FlurstueckRenderer.lblTitle.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -158,11 +173,19 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panTitle.add(lblTitle, gridBagConstraints);
 
+        panFooter.setBorder(javax.swing.BorderFactory.createEmptyBorder(7, 7, 7, 7));
         panFooter.setOpaque(false);
-        panFooter.setLayout(new java.awt.BorderLayout());
+        panFooter.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setText(org.openide.util.NbBundle.getMessage(FlurstueckRenderer.class, "FlurstueckRenderer.jLabel1.text")); // NOI18N
-        panFooter.add(jLabel1, java.awt.BorderLayout.CENTER);
+        jXHyperlink1.setBorder(javax.swing.BorderFactory.createEmptyBorder(4, 4, 4, 4));
+        jXHyperlink1.setForeground(new java.awt.Color(204, 204, 204));
+        jXHyperlink1.setText(org.openide.util.NbBundle.getMessage(FlurstueckRenderer.class, "FlurstueckRenderer.jXHyperlink1.text")); // NOI18N
+        jXHyperlink1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jXHyperlink1ActionPerformed(evt);
+            }
+        });
+        panFooter.add(jXHyperlink1, new java.awt.GridBagConstraints());
 
         setLayout(new java.awt.BorderLayout());
 
@@ -322,24 +345,87 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
                 String year = formater.format(d);
                 String laufendeNr = fnr.substring(6, fnr.length());
                 String documentName = "FN_" + year + "_" + cidsBean.getProperty("gemarkungs_nr.gemarkungsnummer") + "_" + laufendeNr;
-                String prefix=StaticProperties.FORTFUEHRUNGSNACHWEISE_URL_PREFIX;
-                if (prefix==null){
-                    prefix="file://///S102gs/_102-alkis-dokumente/Echtfortführungen/Fortführungsnachweise/";
+                String prefix = StaticProperties.FORTFUEHRUNGSNACHWEISE_URL_PREFIX;
+                if (prefix == null) {
+                    prefix = "file://///S102gs/_102-alkis-dokumente/Echtfortführungen/Fortführungsnachweise/";
                 }
-                BrowserLauncher.openURLorFile(prefix + documentName+".pdf");
+                BrowserLauncher.openURLorFile(prefix + documentName + ".pdf");
 //                
 //                URL url = new URL( prefix + documentName+".pdf");
 //                final SingleDownload download = new SingleDownload(url, "", DownloadManagerDialog.getJobname(), "Fortfuehrungsnachweis: " + documentName, "fortfuehrungsnachweis_" + documentName, "pdf");
 //                DownloadManager.instance().add(download);
             } catch (Exception e) {
-                log.error("Hier muss noch ne Messagebox hin",e);
+                log.error("Hier muss noch ne Messagebox hin", e);
             }
         }
 
     }//GEN-LAST:event_jxhFortfuehrungsnummerActionPerformed
+
+private void jXHyperlink1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink1ActionPerformed
+    String z = String.valueOf(cidsBean.getProperty("fstnr_z"));
+    String n = String.valueOf(cidsBean.getProperty("fstnr_n"));
+    
+    String zf=String.format("%05d", new Integer(z));
+    String nf=String.format("%04d", new Integer(n));
+    String f=zf;
+    if (!nf.equals("0000")){
+        f=f+"/"+nf;
+    }
+    
+    final String fString = "05" + cidsBean.getProperty("gemarkungs_nr.gemarkungsnummer") + "-" + lblFlur.getText() + "-" + f;
+    log.fatal(fString);
+    final CidsAlkisSearchStatement stmnt = new CidsAlkisSearchStatement(CidsAlkisSearchStatement.Resulttyp.FLURSTUECK, CidsAlkisSearchStatement.SucheUeber.FLURSTUECKSNUMMER, fString, null);
+
+
+    
+
+    final SwingWorker<Collection<Node>, Void> searchWorker;
+    searchWorker = new SwingWorker<Collection<Node>, Void>() {
+
+        @Override
+        protected Collection<Node> doInBackground() throws Exception {
+            return SessionManager.getProxy().customServerSearch(SessionManager.getSession().getUser(), stmnt);
+        }
+
+        @Override
+        protected void done() {
+            try {
+                if (!isCancelled()) {
+                    Collection<Node> nodes = get();
+                    for (Node n : nodes) {
+
+                        MetaObjectNode mon=(MetaObjectNode)n;
+                        
+                        final String tabname = "alkis_landparcel";
+                        final MetaClass mc = ClassCacheMultiple.getMetaClass(mon.getDomain(), mon.getClassId());
+                        if (mc != null) {
+                            
+                            ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObject(mc, mon.getObjectId(), "");
+                        } else {
+                            log.error("Could not find MetaClass for " + tabname);
+                        }
+                    }
+
+                }
+            } catch (InterruptedException ex) {
+                log.warn(ex, ex);
+            } catch (Exception ex) {
+                log.error(ex, ex);
+            } finally {
+//                    lblBusy.setBusy(false);
+//                    btnAbort.setEnabled(false);
+//                    btnSearch.setEnabled(true);
+            }
+        }
+    };
+    CismetThreadPool.execute(searchWorker);
+
+
+
+}//GEN-LAST:event_jXHyperlink1ActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel6;
+    private org.jdesktop.swingx.JXHyperlink jXHyperlink1;
     private org.jdesktop.swingx.JXHyperlink jxhFortfuehrungsnummer;
     private javax.swing.JLabel lblDescFlur;
     private javax.swing.JLabel lblDescFlurstueck;
