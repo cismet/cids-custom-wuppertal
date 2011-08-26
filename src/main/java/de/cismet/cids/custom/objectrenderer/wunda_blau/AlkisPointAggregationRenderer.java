@@ -56,9 +56,7 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 
-import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.XBoundingBox;
-import de.cismet.cismap.commons.features.FeatureCollection;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
@@ -71,13 +69,10 @@ import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import de.cismet.tools.gui.downloadmanager.SingleDownload;
-import java.awt.event.ActionEvent;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 /**

@@ -444,11 +444,6 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
                     downloads.add(new SingleDownload(url, "", jobname, downloadTitle, product, ".pdf"));
                 }
                 
-                if(downloads.size() > 1) {
-                    DownloadManager.instance().add(new MultipleDownload(downloads, jobname));
-                } else if(downloads.size() == 1) {
-                    DownloadManager.instance().add(downloads.get(0));
-                }
             } catch (Exception ex) {
                 ObjectRendererUtils.showExceptionWindowToUser(
                         "Fehler beim Aufruf des Produkts: " + product,
@@ -456,6 +451,12 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
                         AlkisBuchungsblattAggregationRenderer.this);
                 LOG.error("The URL to download product '" + product + "' (actionTag: " + actionTag + ") could not be constructed.", ex);
             }
+        }
+        
+        if(downloads.size() > 1) {
+            DownloadManager.instance().add(new MultipleDownload(downloads, jobname));
+        } else if(downloads.size() == 1) {
+            DownloadManager.instance().add(downloads.get(0));
         }
     }
     
