@@ -257,6 +257,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
         add(pnlMap, gridBagConstraints);
 
         pnlLandparcels.setOpaque(false);
+        pnlLandparcels.setPreferredSize(new java.awt.Dimension(270, 376));
         pnlLandparcels.setLayout(new java.awt.GridBagLayout());
 
         srpHeaderLandparcels.setBackground(java.awt.Color.darkGray);
