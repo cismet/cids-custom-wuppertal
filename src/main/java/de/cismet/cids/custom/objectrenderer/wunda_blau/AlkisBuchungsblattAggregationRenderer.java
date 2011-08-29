@@ -216,7 +216,7 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
 
         pnlBuchungsblaetter.setMinimumSize(new java.awt.Dimension(309, 67));
         pnlBuchungsblaetter.setOpaque(false);
-        pnlBuchungsblaetter.setPreferredSize(new java.awt.Dimension(309, 446));
+        pnlBuchungsblaetter.setPreferredSize(new java.awt.Dimension(309, 346));
         pnlBuchungsblaetter.setLayout(new java.awt.GridBagLayout());
 
         srpHeaderBuchungsblaetter.setBackground(java.awt.Color.darkGray);
