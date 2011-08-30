@@ -57,7 +57,7 @@ import de.cismet.tools.collections.TypeSafeCollections;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
-import de.cismet.tools.gui.downloadmanager.SingleDownload;
+import de.cismet.tools.gui.downloadmanager.HttpDownload;
 import java.net.URL;
 
 /**
@@ -827,7 +827,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                     return;
                 }
 
-                final SingleDownload download = new SingleDownload(url, "", DownloadManagerDialog.getJobname(), "ALKIS-Druck", landParcelCode.replaceAll("\\/", "-"), ".pdf");
+                final HttpDownload download = new HttpDownload(url, "", DownloadManagerDialog.getJobname(), "ALKIS-Druck", landParcelCode.replaceAll("\\/", "-"), ".pdf");
                 DownloadManager.instance().add(download);
             }
         } catch(Exception e) {

@@ -96,7 +96,7 @@ import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
-import de.cismet.tools.gui.downloadmanager.SingleDownload;
+import de.cismet.tools.gui.downloadmanager.HttpDownload;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import java.net.URL;
@@ -596,7 +596,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
                         return;
                     }
 
-                    final SingleDownload download = new SingleDownload(url, "", DownloadManagerDialog.getJobname(), downloadTitle, product, extension);
+                    final HttpDownload download = new HttpDownload(url, "", DownloadManagerDialog.getJobname(), downloadTitle, product, extension);
                     DownloadManager.instance().add(download);
                 }
             } catch (Exception ex) {
@@ -629,7 +629,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
                 return;
             }
 
-            final SingleDownload download = new SingleDownload(url, "", DownloadManagerDialog.getJobname(), downloadTitle, parcelCode.replace('/', '_'), ".pdf");
+            final HttpDownload download = new HttpDownload(url, "", DownloadManagerDialog.getJobname(), downloadTitle, parcelCode.replace('/', '_'), ".pdf");
             DownloadManager.instance().add(download);
         }
     }

@@ -109,7 +109,7 @@ import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
-import de.cismet.tools.gui.downloadmanager.SingleDownload;
+import de.cismet.tools.gui.downloadmanager.HttpDownload;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import java.net.URL;
@@ -1096,7 +1096,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                         return;
                     }
                     
-                    final SingleDownload download = new SingleDownload(url, "", DownloadManagerDialog.getJobname(), downloadTitle, product, extension);
+                    final HttpDownload download = new HttpDownload(url, "", DownloadManagerDialog.getJobname(), downloadTitle, product, extension);
                     DownloadManager.instance().add(download);
                 }
 

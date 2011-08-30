@@ -72,7 +72,7 @@ import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
-import de.cismet.tools.gui.downloadmanager.SingleDownload;
+import de.cismet.tools.gui.downloadmanager.HttpDownload;
 import java.net.MalformedURLException;
 import java.net.URL;
 import javax.swing.JOptionPane;
@@ -1600,7 +1600,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                         return;
                     }
 
-                    final SingleDownload download = new SingleDownload(url, "", DownloadManagerDialog.getJobname(), "Punktliste", productType, extension);
+                    final HttpDownload download = new HttpDownload(url, "", DownloadManagerDialog.getJobname(), "Punktliste", productType, extension);
                     DownloadManager.instance().add(download);
                 }
             } catch (Exception ex) {

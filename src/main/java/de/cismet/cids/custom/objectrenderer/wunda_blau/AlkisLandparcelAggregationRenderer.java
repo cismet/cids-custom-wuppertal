@@ -41,7 +41,7 @@ import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import de.cismet.tools.gui.downloadmanager.MultipleDownload;
-import de.cismet.tools.gui.downloadmanager.SingleDownload;
+import de.cismet.tools.gui.downloadmanager.HttpDownload;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -461,7 +461,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
         }
         final String jobname = DownloadManagerDialog.getJobname();
         
-        List<SingleDownload> downloads = new LinkedList<SingleDownload>();
+        List<HttpDownload> downloads = new LinkedList<HttpDownload>();
         
         for(CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
             if(!cidsBeanWrapper.isSelected()) {
@@ -476,7 +476,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
                     url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(parcelCode, product);
                     
                     if(url != null) {
-                        downloads.add(new SingleDownload(url, "", jobname, downloadTitle, product, ".pdf"));
+                        downloads.add(new HttpDownload(url, "", jobname, downloadTitle, product, ".pdf"));
                     }
                 } catch (Exception ex) {
                     ObjectRendererUtils.showExceptionWindowToUser(
@@ -506,7 +506,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
         }
         final String jobname = DownloadManagerDialog.getJobname();
         
-        List<SingleDownload> downloads = new LinkedList<SingleDownload>();
+        List<HttpDownload> downloads = new LinkedList<HttpDownload>();
 
         for (CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
             if(!cidsBeanWrapper.isSelected()) {
@@ -529,7 +529,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             }
 
             if (url != null) {
-                downloads.add(new SingleDownload(url, "", jobname, downloadTitle, parcelCode.replace('/', '_'), ".pdf"));
+                downloads.add(new HttpDownload(url, "", jobname, downloadTitle, parcelCode.replace('/', '_'), ".pdf"));
             }
         }
         

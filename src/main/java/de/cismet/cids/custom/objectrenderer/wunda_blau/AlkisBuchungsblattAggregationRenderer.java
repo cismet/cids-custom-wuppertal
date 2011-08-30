@@ -45,7 +45,7 @@ import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import de.cismet.tools.gui.downloadmanager.MultipleDownload;
-import de.cismet.tools.gui.downloadmanager.SingleDownload;
+import de.cismet.tools.gui.downloadmanager.HttpDownload;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -421,7 +421,7 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
         }
         final String jobname = DownloadManagerDialog.getJobname();
         
-        List<SingleDownload> downloads = new LinkedList<SingleDownload>();
+        List<HttpDownload> downloads = new LinkedList<HttpDownload>();
         
         for(CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
             if(!cidsBeanWrapper.isSelected()) {
@@ -441,7 +441,7 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
                 url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(queryID, product);
                 
                 if (url != null) {
-                    downloads.add(new SingleDownload(url, "", jobname, downloadTitle, product, ".pdf"));
+                    downloads.add(new HttpDownload(url, "", jobname, downloadTitle, product, ".pdf"));
                 }
                 
             } catch (Exception ex) {

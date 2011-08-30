@@ -68,7 +68,7 @@ import de.cismet.tools.collections.TypeSafeCollections;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
-import de.cismet.tools.gui.downloadmanager.SingleDownload;
+import de.cismet.tools.gui.downloadmanager.HttpDownload;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.HashMap;
@@ -285,7 +285,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                             return;
                         }
 
-                        final SingleDownload download = new SingleDownload(url, "", DownloadManagerDialog.getJobname(), "Punktnachweis", code, extension);
+                        final HttpDownload download = new HttpDownload(url, "", DownloadManagerDialog.getJobname(), "Punktnachweis", code, extension);
                         DownloadManager.instance().add(download);
                     }
                 } catch (Exception ex) {
