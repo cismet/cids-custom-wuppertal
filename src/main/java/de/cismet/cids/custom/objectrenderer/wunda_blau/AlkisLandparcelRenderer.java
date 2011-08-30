@@ -18,6 +18,7 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import Sirius.navigator.ui.ComponentRegistry;
 
+import Sirius.navigator.ui.RequestsFullSizeComponent;
 import com.vividsolutions.jts.geom.Geometry;
 
 import de.aedsicad.aaaweb.service.alkis.info.ALKISInfoServices;
@@ -77,7 +78,6 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
-import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.features.DefaultStyledFeature;
@@ -111,7 +111,8 @@ import javax.swing.JOptionPane;
 public class AlkisLandparcelRenderer extends javax.swing.JPanel implements BorderProvider,
         CidsBeanRenderer,
         TitleComponentProvider,
-        FooterComponentProvider {
+        FooterComponentProvider,
+        RequestsFullSizeComponent {
 
     //~ Static fields/initializers ---------------------------------------------
     private static final String ICON_RES_PACKAGE = "/de/cismet/cids/custom/wunda_blau/res/";
@@ -1697,7 +1698,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
                     swms.setName("Flurstueck");
                     final StyledFeature dsf = new DefaultStyledFeature();
                     dsf.setGeometry(pureGeom);
-                    dsf.setFillingPaint(new Color(1, 0, 0, 0.5f));
+                    dsf.setFillingPaint(new Color(1, 0, 0, 0.75F));
                     // add the raster layer to the model
                     mappingModel.addLayer(swms);
                     // set the model

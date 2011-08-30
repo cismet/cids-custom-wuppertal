@@ -28,6 +28,7 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.ui.RequestsFullSizeComponent;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -81,7 +82,7 @@ import javax.swing.JOptionPane;
  * @author   srichter
  * @version  $Revision$, $Date$
  */
-public final class AlkisPointAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer {
+public final class AlkisPointAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer, RequestsFullSizeComponent {
 
     //~ Static fields/initializers ---------------------------------------------
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(

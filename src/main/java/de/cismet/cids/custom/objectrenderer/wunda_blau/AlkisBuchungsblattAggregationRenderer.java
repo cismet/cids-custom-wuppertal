@@ -22,6 +22,7 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.ui.RequestsFullSizeComponent;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -30,11 +31,9 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
-import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.features.DefaultStyledFeature;
-import de.cismet.cismap.commons.features.FeatureCollection;
 import de.cismet.cismap.commons.features.StyledFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
@@ -50,7 +49,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
@@ -72,7 +70,7 @@ import org.openide.util.NbBundle;
  *
  * @author jweintraut
  */
-public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer {
+public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer, RequestsFullSizeComponent {
     private static final Logger LOG = Logger.getLogger(AlkisBuchungsblattAggregationRenderer.class);
 
     private static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW = "custom.alkis.product.bestandsnachweis_nrw";
@@ -80,11 +78,11 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
     private static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN = "custom.alkis.product.bestandsnachweis_kom_intern";
     
     private static final Color[] COLORS = new Color[]{
-        new Color(247, 150, 70),
-        new Color(155, 187, 89),
-        new Color(128, 100, 162),
-        new Color(75, 172, 198),
-        new Color(192, 80, 77)
+        new Color(247, 150, 70, 192),
+        new Color(155, 187, 89, 192),
+        new Color(128, 100, 162, 192),
+        new Color(75, 172, 198, 192),
+        new Color(192, 80, 77, 192)
     };
     
     private static volatile boolean initialisedMap = false;
@@ -214,9 +212,8 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 10);
         add(pnlButtons, gridBagConstraints);
 
-        pnlBuchungsblaetter.setMinimumSize(new java.awt.Dimension(309, 67));
+        pnlBuchungsblaetter.setMinimumSize(new java.awt.Dimension(228, 132));
         pnlBuchungsblaetter.setOpaque(false);
-        pnlBuchungsblaetter.setPreferredSize(new java.awt.Dimension(309, 346));
         pnlBuchungsblaetter.setLayout(new java.awt.GridBagLayout());
 
         srpHeaderBuchungsblaetter.setBackground(java.awt.Color.darkGray);

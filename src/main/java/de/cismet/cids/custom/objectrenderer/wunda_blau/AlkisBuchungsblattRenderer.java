@@ -20,6 +20,7 @@ import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.ComponentRegistry;
 
+import Sirius.navigator.ui.RequestsFullSizeComponent;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.newuser.User;
@@ -90,7 +91,6 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
-import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.features.DefaultStyledFeature;
@@ -126,7 +126,8 @@ import javax.swing.JOptionPane;
 public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements CidsBeanRenderer,
         BorderProvider,
         TitleComponentProvider,
-        FooterComponentProvider {
+        FooterComponentProvider,
+        RequestsFullSizeComponent{
 
     //~ Static fields/initializers ---------------------------------------------
     private static final Color[] COLORS = new Color[]{
@@ -1509,7 +1510,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                     final Color lpColorWithAlpha = new Color(lpColor.getRed(),
                             lpColor.getGreen(),
                             lpColor.getBlue(),
-                            168);
+                            192);
                     dsf.setFillingPaint(lpColorWithAlpha);
                     map.getFeatureCollection().addFeature(dsf);
                 }

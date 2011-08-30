@@ -22,6 +22,7 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.ui.RequestsFullSizeComponent;
 import com.vividsolutions.jts.geom.Geometry;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
@@ -68,7 +69,7 @@ import org.openide.util.NbBundle;
  *
  * @author jweintraut
  */
-public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer {
+public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer, RequestsFullSizeComponent {
     private static final Logger LOG = Logger.getLogger(AlkisLandparcelAggregationRenderer.class);
     
     private static final String PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS = "custom.alkis.product.flurstuecksnachweis";
@@ -78,11 +79,11 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
     private static final String PRODUCT_ACTION_TAG_KARTE = "custom.alkis.product.karte";
     
     private static final Color[] COLORS = new Color[]{
-        new Color(247, 150, 70),
-        new Color(155, 187, 89),
-        new Color(128, 100, 162),
-        new Color(75, 172, 198),
-        new Color(192, 80, 77)
+        new Color(247, 150, 70, 192),
+        new Color(155, 187, 89, 192),
+        new Color(128, 100, 162, 192),
+        new Color(75, 172, 198, 192),
+        new Color(192, 80, 77, 192)
     };
     
     private static volatile boolean initialisedMap = false;
@@ -256,8 +257,8 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         add(pnlMap, gridBagConstraints);
 
+        pnlLandparcels.setMinimumSize(new java.awt.Dimension(309, 207));
         pnlLandparcels.setOpaque(false);
-        pnlLandparcels.setPreferredSize(new java.awt.Dimension(270, 276));
         pnlLandparcels.setLayout(new java.awt.GridBagLayout());
 
         srpHeaderLandparcels.setBackground(java.awt.Color.darkGray);
@@ -753,6 +754,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             
             final StyledFeature dsf = new DefaultStyledFeature();
             dsf.setGeometry(this.geometry);
+            dsf.setTransparency(0.8F);
             
             this.feature = dsf;
         }
