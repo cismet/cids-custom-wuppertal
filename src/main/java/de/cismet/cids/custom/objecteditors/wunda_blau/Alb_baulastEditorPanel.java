@@ -63,6 +63,10 @@ import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 import de.cismet.cids.editors.DefaultBindableDateChooser;
 
 import de.cismet.tools.CismetThreadPool;
+import de.cismet.tools.gui.AlphaContainer;
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+import javax.swing.JPanel;
 
 /**
  * DOCUMENT ME!
@@ -94,6 +98,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                 throw new UnsupportedOperationException("Not supported yet.");
             }
         };
+    
+    private static final Color COLOR_DATE_VALID = new Color(0, 255, 0, 130);
+    private static final Color COLOR_DATE_INVALID = new Color(255, 0, 0, 130);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -215,7 +222,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                 gridBagConstraints.gridy = 1;
                 gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
                 gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
-                rpInfo.add(lblGeprueft, gridBagConstraints);
+                rpInfo.add(new AlphaContainer(lblGeprueft), gridBagConstraints);
                 editableComponent.setBorder(null);
                 if (editableComponent instanceof JTextField) {
                     ((JTextField)editableComponent).setEditable(false);
@@ -365,7 +372,6 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         dlgAddBaulastArt.getContentPane().add(panAddBaulastArt, java.awt.BorderLayout.CENTER);
 
         lblGeprueft.setText("<Error>");
-        lblGeprueft.setOpaque(true);
 
         setOpaque(false);
         setLayout(new java.awt.BorderLayout());
@@ -1114,13 +1120,16 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                 } else {
                     final Object geprueftObj = cidsBean.getProperty("geprueft");
                     if ((geprueftObj instanceof Boolean) && ((Boolean)geprueftObj)) {
-                        lblGeprueft.setBackground(new Color(0, 255, 0, 130));
                         final Object dateObj = cidsBean.getProperty("pruefdatum");
                         if (dateObj instanceof Date) {
+                            lblGeprueft.setBackground(COLOR_DATE_VALID);
                             lblGeprueft.setText(DateFormat.getDateInstance().format((Date)dateObj));
+                        } else {
+                            lblGeprueft.setBackground(COLOR_DATE_INVALID);
+                            lblGeprueft.setText("Ungültige Daten");
                         }
                     } else {
-                        lblGeprueft.setBackground(new Color(255, 0, 0, 130));
+                        lblGeprueft.setBackground(COLOR_DATE_INVALID);
                         lblGeprueft.setText("       ---       ");
                     }
                 }
