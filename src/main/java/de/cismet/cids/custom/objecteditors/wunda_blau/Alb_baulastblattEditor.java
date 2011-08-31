@@ -989,12 +989,16 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                     protected void processSimpleProperty(final CidsBean beanToInit,
                             final String propertyName,
                             final Object simpleValueToProcess) throws Exception {
-                        // if (!propertyName.startsWith("laufen")) {
+                        if ("geprueft".equalsIgnoreCase(propertyName)
+                                || "pruefdatum".equalsIgnoreCase(propertyName)
+                                || "geprueft_von".equalsIgnoreCase(propertyName)) {
+                            return;
+                        }
+                        
                         final Object curVal = beanToInit.getProperty(propertyName);
                         if ((curVal == null) || "".equals(curVal.toString())) {
                             super.processSimpleProperty(beanToInit, propertyName, simpleValueToProcess);
                         }
-                        // }
                     }
 
                     @Override
