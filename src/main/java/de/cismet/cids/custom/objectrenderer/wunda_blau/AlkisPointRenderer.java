@@ -285,8 +285,6 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JLabel lblBack;
     private javax.swing.JLabel lblDescAnlass;
@@ -578,8 +576,6 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         lblDescPLObjektart = new javax.swing.JLabel();
         lblTxtPLObjektart = new javax.swing.JLabel();
         lblTxtKartendarstellung = new javax.swing.JLabel();
-        jPanel5 = new javax.swing.JPanel();
-        jPanel6 = new javax.swing.JPanel();
         panProducts = new javax.swing.JPanel();
         panPdfProducts = new RoundedPanel();
         hlPunktlistePdf = new org.jdesktop.swingx.JXHyperlink();
@@ -965,6 +961,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(15, 15, 15, 15);
         panInfo.add(panPointInfo, gridBagConstraints);
 
@@ -1306,21 +1303,12 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         panLocationInfos.add(lblTxtKartendarstellung, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(15, 15, 15, 15);
         panInfo.add(panLocationInfos, gridBagConstraints);
-
-        jPanel5.setOpaque(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.weightx = 1.0;
-        panInfo.add(jPanel5, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.weighty = 1.0;
-        panInfo.add(jPanel6, gridBagConstraints);
 
         add(panInfo, "CARD_1");
 
