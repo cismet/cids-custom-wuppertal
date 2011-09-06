@@ -79,14 +79,23 @@ public class AlkisUtils {
      *
      * @return  DOCUMENT ME!
      */
-    public static String buchungsblattToString(final Buchungsblatt buchungsblatt, final CidsBean buchungsblattBean) {
+    public static String buchungsblattToString(final CidsBean originatingFlurstueck, final Buchungsblatt buchungsblatt, final CidsBean buchungsblattBean) {
+        String alkisId=(String)originatingFlurstueck.getProperty("alkis_id");
+        String pos="";
+        List<CidsBean> alleFSaufBB=buchungsblattBean.getBeanCollectionProperty("landparcels");
+        for (CidsBean lp:alleFSaufBB){
+            if (lp.getProperty("landparcelcode").equals(alkisId)){
+                pos=String.valueOf(lp.getProperty("lfn"));
+            }
+        }
+        
         final List<Owner> owners = Arrays.asList(buchungsblatt.getOwners());
         if ((owners != null) && (owners.size() > 0)) {
             final StringBuilder infoBuilder = new StringBuilder();
             infoBuilder.append(
                     "<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"left\" valign=\"top\">");
 //            infoBuilder.append("<tr><td width=\"200\"><b><a href=\"").append(generateBuchungsblattLinkInfo(buchungsblatt)).append("\">").append(buchungsblatt.getBuchungsblattCode()).append("</a></b></td><td>");
-            infoBuilder.append("<tr><td width=\"200\"><b>").append(generateLinkFromCidsBean(buchungsblattBean, buchungsblatt.getBuchungsblattCode())).append("</b></td><td>");
+            infoBuilder.append("<tr><td width=\"200\">Nr. "+pos+" auf <b>").append(generateLinkFromCidsBean(buchungsblattBean, buchungsblatt.getBuchungsblattCode())).append("</b></td><td>");
             final Iterator<Owner> ownerIterator = owners.iterator();
 //            if (ownerIterator.hasNext()) {
 //                infoBuilder.append(ownerToString(ownerIterator.next(), ""));

@@ -946,7 +946,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -1035,7 +1035,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         panMainInfo.add(lblGroesse, gridBagConstraints);
 
-        lblDescGroesse.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblDescGroesse.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblDescGroesse.setText("Größe:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1539,7 +1539,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
                     return t.toString().compareTo(t1.toString());
                 }
             });
-
+            
             bindingGroup.bind();
             final int anzahlBuchungsblaetter = lstBuchungsblaetter.getModel().getSize();
 
@@ -1791,7 +1791,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
                             stelle.getFraction();
                         }
                     }
-                    currentInfoText.append(AlkisUtils.buchungsblattToString(buchungsblatt, buchungsblattBean));
+                    currentInfoText.append(AlkisUtils.buchungsblattToString(AlkisLandparcelRenderer.this.cidsBean,buchungsblatt, buchungsblattBean));
                     if (isCancelled()) {
                         return currentInfoText.toString();
                     }
