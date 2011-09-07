@@ -17,6 +17,7 @@ import Sirius.navigator.actiontag.ActionTagProtected;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.method.MethodManager;
 
+import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.Node;
 import Sirius.server.search.CidsServerSearch;
@@ -45,6 +46,9 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.tools.CismetThreadPool;
 import java.awt.CardLayout;
+import java.util.concurrent.ExecutionException;
+import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.error.ErrorInfo;
 
 /**
  * DOCUMENT ME!
@@ -630,7 +634,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     }//GEN-LAST:event_optSucheUeberGrundbuchblattActionPerformed
 
     private void btnAbortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbortActionPerformed
-        if(searchWorker != null) {
+        if (searchWorker != null) {
             searchWorker.cancel(true);
         }
     }//GEN-LAST:event_btnAbortActionPerformed
@@ -648,7 +652,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
             protected Void doInBackground() throws Exception {
                 final Collection<Node> r = SessionManager.getProxy().customServerSearch(SessionManager.getSession().getUser(), getServerSearch());
                 log.info("server done " + r.size() + "results");
-                if(!Thread.currentThread().isInterrupted()) {
+                if (!Thread.currentThread().isInterrupted()) {
                     MethodManager.getManager().showSearchResults(r.toArray(new Node[r.size()]), false);
                 }
                 return null;
@@ -657,9 +661,20 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
             @Override
             protected void done() {
                 try {
-                    if(!isCancelled()) {
+                    if (!isCancelled()) {
                         get();
                     }
+                } catch (ExecutionException ee) {
+                    JXErrorPane.showDialog(
+                            ComponentRegistry.getRegistry().getNavigator(),
+                            new ErrorInfo(
+                            "ALKIS Suche",
+                            "Der ALKIS-Dienst meldet einen Fehler.",
+                            null,
+                            "",
+                            ee,
+                            null,
+                            null));
                 } catch (InterruptedException ex) {
                     log.warn(ex, ex);
                 } catch (Exception ex) {
@@ -729,11 +744,11 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
             if (!chkGeburtsnameExakt.isSelected() && geburtsname.length() > 0) {
                 geburtsname = CidsAlkisSearchStatement.WILDCARD + geburtsname + CidsAlkisSearchStatement.WILDCARD;
             }
-            return new CidsAlkisSearchStatement(resulttype, name, vorname, geburtsname, geburtsdatum, ptyp,searchgeom);
+            return new CidsAlkisSearchStatement(resulttype, name, vorname, geburtsname, geburtsdatum, ptyp, searchgeom);
         } else if (optSucheUeberFlurstueck.isSelected()) {
-            return new CidsAlkisSearchStatement(resulttype, CidsAlkisSearchStatement.SucheUeber.FLURSTUECKSNUMMER, txtFlurstuecksnummer.getText(),searchgeom);
+            return new CidsAlkisSearchStatement(resulttype, CidsAlkisSearchStatement.SucheUeber.FLURSTUECKSNUMMER, txtFlurstuecksnummer.getText(), searchgeom);
         } else {
-            return new CidsAlkisSearchStatement(resulttype, CidsAlkisSearchStatement.SucheUeber.BUCHUNGSBLATTNUMMER, txtGrundbuchblattnummer.getText(),searchgeom);
+            return new CidsAlkisSearchStatement(resulttype, CidsAlkisSearchStatement.SucheUeber.BUCHUNGSBLATTNUMMER, txtGrundbuchblattnummer.getText(), searchgeom);
         }
 
 
