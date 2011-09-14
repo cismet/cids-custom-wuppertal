@@ -773,28 +773,6 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         }
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  center         DOCUMENT ME!
-     * @param  rotationAngle  DOCUMENT ME!
-     */
-    public void createProduct(final Point center, final double rotationAngle) {
-        if (flurstueckListModel.size() > 0) {
-            final String landParcelCode = AlkisUtils.getLandparcelCodeFromParcelBeanObject(flurstueckListModel.get(
-                    0));
-            final AlkisProductDescription selectedProduct = getSelectedProduct();
-            AlkisUtils.PRODUCTS.productKarte(
-                    landParcelCode,
-                    selectedProduct,
-                    toInt(rotationAngle),
-                    toInt(center.getX()),
-                    toInt(center.getY()),
-                    taAdditionalText.getText(),
-                    txtAuftragsnummer.getText(),
-                    false);
-        }
-    }
     
     /**
      * Adds the selected product to the DownloadManager.
@@ -819,7 +797,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                 toInt(center.getX()),
                 toInt(center.getY()),
                 taAdditionalText.getText(),
-                txtAuftragsnummer.getText(),
+                txtAuftragsnummer.getText().replaceAll("\\?", ""),
                 false);
             
             if (url != null) {
