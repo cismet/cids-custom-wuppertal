@@ -97,6 +97,7 @@ import de.cismet.cismap.commons.features.DefaultStyledFeature;
 import de.cismet.cismap.commons.features.StyledFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
+import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 import de.cismet.tools.BrowserLauncher;
@@ -1148,8 +1149,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                 final Object selection = lstLandparcels.getSelectedValue();
                 if (selection instanceof LightweightLandParcel) {
                     final LightweightLandParcel lwParcel = (LightweightLandParcel) selection;
-                    final MetaClass mc = ClassCacheMultiple.getMetaClass(SessionManager.getSession().getUser().getDomain(),
-                            "ALKIS_LANDPARCEL");
+                    final MetaClass mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "ALKIS_LANDPARCEL");
                     continueInBackground = true;
                     ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObject(mc, lwParcel.getFullObjectID(), "");
                 }
@@ -1190,7 +1190,13 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                     final GeometryCollection geoCollection = new GeometryCollection(allSelectedGeoms.toArray(
                             new Geometry[allSelectedGeoms.size()]),
                             new GeometryFactory());
-                    final XBoundingBox boxToGoto = new XBoundingBox(geoCollection.getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER));
+                    final Geometry extendGeom = geoCollection.getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER);
+
+                    extendGeom.setSRID(allSelectedGeoms.get(0).getSRID());
+                    final Geometry transformedGeom = CrsTransformer.transformToDefaultCrs(extendGeom);
+                    transformedGeom.setSRID(CismapBroker.getInstance().getDefaultCrsAlias());
+
+                    final XBoundingBox boxToGoto = new XBoundingBox(transformedGeom);
                     boxToGoto.setX1(boxToGoto.getX1() - AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth());
                     boxToGoto.setX2(boxToGoto.getX2() + AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth());
                     boxToGoto.setY1(boxToGoto.getY1() - AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight());
@@ -1477,9 +1483,15 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         final GeometryCollection geoCollection = new GeometryCollection(allGeomList.toArray(
                 new Geometry[allGeomList.size()]),
                 new GeometryFactory());
-        Geometry extent = CrsTransformer.transformToGivenCrs(geoCollection.getEnvelope(), AlkisConstants.COMMONS.SRS_SERVICE);
+        final Geometry extentGeom = geoCollection.getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER);
 
-        return new XBoundingBox(extent.buffer(AlkisConstants.COMMONS.GEO_BUFFER));
+        if (!allGeomList.isEmpty()) {
+            geoCollection.setSRID(allGeomList.get(0).getSRID());
+        }
+        final Geometry transformedGeom = CrsTransformer.transformToDefaultCrs(extentGeom);
+        transformedGeom.setSRID(CismapBroker.getInstance().getDefaultCrsAlias());
+
+        return new XBoundingBox(transformedGeom);
     }
 
     /**
