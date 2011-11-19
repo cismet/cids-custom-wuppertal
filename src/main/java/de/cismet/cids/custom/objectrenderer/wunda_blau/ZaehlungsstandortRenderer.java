@@ -47,7 +47,10 @@ import javax.swing.table.DefaultTableModel;
 
 import de.cismet.cids.annotations.CidsAttribute;
 
+import de.cismet.cids.client.tools.ReportLookupButton;
+import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
+import java.util.ArrayList;
 
 /**
  * de.cismet.cids.objectrenderer.CoolPassantenfrequenzRenderer.
@@ -133,6 +136,8 @@ public class ZaehlungsstandortRenderer extends CoolPanel {
     private TreeMap<Date, String> tmWetter = new TreeMap<Date, String>();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JButton cmdPrint;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -140,6 +145,7 @@ public class ZaehlungsstandortRenderer extends CoolPanel {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
@@ -185,16 +191,15 @@ public class ZaehlungsstandortRenderer extends CoolPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         panInter = new javax.swing.JPanel();
         panInhalt = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabFrequenzen = new JTable() {
-
-                @Override
-                public boolean isCellEditable(final int x, final int y) {
-                    return false;
-                }
-            };
+            public boolean isCellEditable(int x, int y) {
+                return false;
+            }
+        };
         lblChart = new javax.swing.JLabel();
         panLegend = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -213,24 +218,24 @@ public class ZaehlungsstandortRenderer extends CoolPanel {
         jPanel14 = new javax.swing.JPanel();
         panTitle = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
+        cmdPrint = new  ReportLookupButton("PFZReport");
+        jPanel1 = new javax.swing.JPanel();
         panMap = new javax.swing.JPanel();
 
         setLayout(new java.awt.BorderLayout());
 
         panInter.setOpaque(false);
 
-        final javax.swing.GroupLayout panInterLayout = new javax.swing.GroupLayout(panInter);
+        javax.swing.GroupLayout panInterLayout = new javax.swing.GroupLayout(panInter);
         panInter.setLayout(panInterLayout);
         panInterLayout.setHorizontalGroup(
-            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                514,
-                Short.MAX_VALUE));
+            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 878, Short.MAX_VALUE)
+        );
         panInterLayout.setVerticalGroup(
-            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                14,
-                Short.MAX_VALUE));
+            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 14, Short.MAX_VALUE)
+        );
 
         add(panInter, java.awt.BorderLayout.SOUTH);
 
@@ -241,24 +246,28 @@ public class ZaehlungsstandortRenderer extends CoolPanel {
         jScrollPane1.setPreferredSize(new java.awt.Dimension(200, 200));
 
         tabFrequenzen.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][] {
-                    { null, null }
-                },
-                new String[] { "Datum", "Anzahl" }) {
+            new Object [][] {
+                {null, null}
+            },
+            new String [] {
+                "Datum", "Anzahl"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
 
-                Class[] types = new Class[] { java.lang.String.class, java.lang.Integer.class };
-                boolean[] canEdit = new boolean[] { false, false };
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
-                @Override
-                public Class getColumnClass(final int columnIndex) {
-                    return types[columnIndex];
-                }
-
-                @Override
-                public boolean isCellEditable(final int rowIndex, final int columnIndex) {
-                    return canEdit[columnIndex];
-                }
-            });
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tabFrequenzen.setGridColor(new java.awt.Color(153, 153, 153));
         tabFrequenzen.setSelectionBackground(new java.awt.Color(153, 204, 255));
         tabFrequenzen.getTableHeader().setReorderingAllowed(false);
@@ -342,12 +351,16 @@ public class ZaehlungsstandortRenderer extends CoolPanel {
         jPanel8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
         jPanel8.setMaximumSize(new java.awt.Dimension(10, 10));
 
-        final javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 8, Short.MAX_VALUE));
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 8, Short.MAX_VALUE)
+        );
         jPanel8Layout.setVerticalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 8, Short.MAX_VALUE));
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 8, Short.MAX_VALUE)
+        );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -359,12 +372,16 @@ public class ZaehlungsstandortRenderer extends CoolPanel {
         jPanel9.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
         jPanel9.setMaximumSize(new java.awt.Dimension(10, 10));
 
-        final javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 8, Short.MAX_VALUE));
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 8, Short.MAX_VALUE)
+        );
         jPanel9Layout.setVerticalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 8, Short.MAX_VALUE));
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 8, Short.MAX_VALUE)
+        );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -376,18 +393,16 @@ public class ZaehlungsstandortRenderer extends CoolPanel {
         jPanel10.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
         jPanel10.setMaximumSize(new java.awt.Dimension(10, 10));
 
-        final javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                8,
-                Short.MAX_VALUE));
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 8, Short.MAX_VALUE)
+        );
         jPanel10Layout.setVerticalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                8,
-                Short.MAX_VALUE));
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 8, Short.MAX_VALUE)
+        );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -399,18 +414,16 @@ public class ZaehlungsstandortRenderer extends CoolPanel {
         jPanel11.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
         jPanel11.setMaximumSize(new java.awt.Dimension(10, 10));
 
-        final javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
-            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                8,
-                Short.MAX_VALUE));
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 8, Short.MAX_VALUE)
+        );
         jPanel11Layout.setVerticalGroup(
-            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                8,
-                Short.MAX_VALUE));
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 8, Short.MAX_VALUE)
+        );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -422,18 +435,16 @@ public class ZaehlungsstandortRenderer extends CoolPanel {
         jPanel12.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
         jPanel12.setMaximumSize(new java.awt.Dimension(10, 10));
 
-        final javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
+        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
         jPanel12Layout.setHorizontalGroup(
-            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                8,
-                Short.MAX_VALUE));
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 8, Short.MAX_VALUE)
+        );
         jPanel12Layout.setVerticalGroup(
-            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                8,
-                Short.MAX_VALUE));
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 8, Short.MAX_VALUE)
+        );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
@@ -445,18 +456,16 @@ public class ZaehlungsstandortRenderer extends CoolPanel {
         jPanel13.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
         jPanel13.setMaximumSize(new java.awt.Dimension(10, 10));
 
-        final javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
+        javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
         jPanel13Layout.setHorizontalGroup(
-            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                8,
-                Short.MAX_VALUE));
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 8, Short.MAX_VALUE)
+        );
         jPanel13Layout.setVerticalGroup(
-            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                8,
-                Short.MAX_VALUE));
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 8, Short.MAX_VALUE)
+        );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
@@ -468,18 +477,16 @@ public class ZaehlungsstandortRenderer extends CoolPanel {
         jPanel14.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
         jPanel14.setMaximumSize(new java.awt.Dimension(10, 10));
 
-        final javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
+        javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
         jPanel14.setLayout(jPanel14Layout);
         jPanel14Layout.setHorizontalGroup(
-            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                8,
-                Short.MAX_VALUE));
+            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 8, Short.MAX_VALUE)
+        );
         jPanel14Layout.setVerticalGroup(
-            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                8,
-                Short.MAX_VALUE));
+            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 8, Short.MAX_VALUE)
+        );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
@@ -498,36 +505,76 @@ public class ZaehlungsstandortRenderer extends CoolPanel {
         add(panInhalt, java.awt.BorderLayout.CENTER);
 
         panTitle.setOpaque(false);
+        panTitle.setLayout(new java.awt.GridBagLayout());
 
-        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18));
+        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblTitle.setText("Passantenfrequenzzählung");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 20, 20, 0);
+        panTitle.add(lblTitle, gridBagConstraints);
 
-        final javax.swing.GroupLayout panTitleLayout = new javax.swing.GroupLayout(panTitle);
-        panTitle.setLayout(panTitleLayout);
-        panTitleLayout.setHorizontalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addContainerGap(
-                    247,
-                    Short.MAX_VALUE)));
-        panTitleLayout.setVerticalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addContainerGap(
-                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                    Short.MAX_VALUE)));
+        cmdPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/printer.png"))); // NOI18N
+        cmdPrint.setBorderPainted(false);
+        cmdPrint.setContentAreaFilled(false);
+        cmdPrint.setFocusPainted(false);
+        cmdPrint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdPrintActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 22);
+        panTitle.add(cmdPrint, gridBagConstraints);
+
+        jPanel1.setMaximumSize(new java.awt.Dimension(10, 10));
+        jPanel1.setMinimumSize(new java.awt.Dimension(10, 10));
+        jPanel1.setOpaque(false);
+        jPanel1.setPreferredSize(new java.awt.Dimension(10, 10));
+        jPanel1.setSize(new java.awt.Dimension(10, 10));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 551, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 10, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        panTitle.add(jPanel1, gridBagConstraints);
 
         add(panTitle, java.awt.BorderLayout.NORTH);
 
         panMap.setOpaque(false);
         panMap.setLayout(new java.awt.GridBagLayout());
         add(panMap, java.awt.BorderLayout.EAST);
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void cmdPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdPrintActionPerformed
+
+    }//GEN-LAST:event_cmdPrintActionPerformed
     @Override
     public void assignSingle() {
         if (geom != null) {
             setGeometry(geom);
         }
-
+        
+        CidsBean bean=MetaObject.getBean();
+        ((ReportLookupButton)(cmdPrint)).setBean(bean);
+        
         if ((stadtteil != null) && !stadtteil.equals("")) {
             lblTitle.setText(lblTitle.getText() + " - " + stadtteil);
         }
