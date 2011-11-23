@@ -516,6 +516,11 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     public String getName() {
         return "Baulast Suche";
     }
+    
+    @Override
+    public String getHint() {
+        return "Baulast Suche";
+    }
 
     @Override
     public JComponent getSearchWindowComponent() {

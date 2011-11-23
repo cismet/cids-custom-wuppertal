@@ -58,6 +58,11 @@ public class FullTextToolbarSearch implements CidsToolbarSearch {
     public String getName() {
         return "Volltextsuche";
     }
+    
+    @Override
+    public String getHint() {
+        return "Suchtext";
+    }
 
     @Override
     public CidsServerSearch getServerSearch() {

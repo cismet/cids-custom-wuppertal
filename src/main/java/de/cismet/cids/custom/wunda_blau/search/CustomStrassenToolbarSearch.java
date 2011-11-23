@@ -75,6 +75,11 @@ public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
     public String getName() {
         return mc.getName();
     }
+    
+    @Override
+    public String getHint() {
+        return "Strassenname";
+    }
 
     @Override
     public void setSearchParameter(final String toolbarSearchString) {

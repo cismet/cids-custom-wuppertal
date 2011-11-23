@@ -698,6 +698,11 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     public String getName() {
         return "Alkis Suche";
     }
+    
+    @Override
+    public String getHint() {
+        return "Alkis Suche";
+    }
 
     @Override
     public JComponent getSearchWindowComponent() {
