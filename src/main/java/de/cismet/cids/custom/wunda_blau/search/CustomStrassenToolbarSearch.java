@@ -8,28 +8,22 @@
 package de.cismet.cids.custom.wunda_blau.search;
 
 import de.cismet.cids.custom.wunda_blau.search.server.CustomStrassenSearchStatement;
-import Sirius.server.middleware.interfaces.domainserver.MetaService;
 import Sirius.server.middleware.types.MetaClass;
-import Sirius.server.middleware.types.MetaObjectNode;
-import Sirius.server.middleware.types.Node;
-import Sirius.server.newuser.permission.Policy;
 import Sirius.server.search.CidsServerSearch;
 
-import com.explodingpixels.macwidgets.HudWindow;
 
-import java.io.Serializable;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.tools.search.clientstuff.CidsToolbarSearch;
+import de.cismet.cids.tools.search.clientstuff.Modifier;
 
 /**
  * DOCUMENT ME!
@@ -48,6 +42,7 @@ public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
     //~ Instance fields --------------------------------------------------------
 
     private String searchString;
+    private Collection<? extends Modifier> modifiers;
     private final MetaClass mc;
     private final ImageIcon icon;
     private Collection<MetaClass> classCol;
@@ -84,6 +79,11 @@ public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
     @Override
     public void setSearchParameter(final String toolbarSearchString) {
         this.searchString = toolbarSearchString;
+    }
+    
+    @Override
+    public void applyModifiers(final Collection<? extends Modifier> modifiers) {
+        this.modifiers = modifiers;
     }
 
     @Override

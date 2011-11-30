@@ -16,13 +16,14 @@
  */
 package de.cismet.cids.custom.wunda_blau.search;
 
+import Sirius.navigator.search.HereModifier;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.search.CidsServerSearch;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.wunda_blau.search.server.CustomAlkisPointSearchStatement;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.cids.tools.search.clientstuff.CidsToolbarSearch;
-import java.util.ArrayList;
+import de.cismet.cids.tools.search.clientstuff.Modifier;
 import java.util.Collection;
 import javax.swing.ImageIcon;
 
@@ -37,9 +38,9 @@ public class CustomAlkisPointToolbarSearch implements CidsToolbarSearch {
             CustomAlkisPointToolbarSearch.class);
 
     private String searchString;
+    private Collection<? extends Modifier> modifiers;
     private final MetaClass metaClass;
     private final ImageIcon icon;
-    private Collection<MetaClass> metaClasses;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -49,8 +50,6 @@ public class CustomAlkisPointToolbarSearch implements CidsToolbarSearch {
     public CustomAlkisPointToolbarSearch() {
         metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, CIDSCLASS);
         icon = new ImageIcon(metaClass.getIconData());
-        metaClasses = new ArrayList<MetaClass>(1);
-        metaClasses.add(metaClass);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -74,9 +73,23 @@ public class CustomAlkisPointToolbarSearch implements CidsToolbarSearch {
     public void setSearchParameter(final String searchString) {
         this.searchString = searchString;
     }
+    
+    @Override
+    public void applyModifiers(final Collection<? extends Modifier> modifiers) {
+        this.modifiers = modifiers;
+    }
 
     @Override
     public CidsServerSearch getServerSearch() {
-        return new CustomAlkisPointSearchStatement(searchString);
+        String geometry = "";
+        
+        for(final Modifier modifier : modifiers) {
+            if(modifier instanceof HereModifier) {
+                geometry = modifier.getValue();
+                break;
+            }
+        }
+        
+        return new CustomAlkisPointSearchStatement(searchString, geometry);
     }
 }

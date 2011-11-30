@@ -111,7 +111,7 @@ public class FullTextSearchStatement extends CidsServerSearch {
                 getLog().debug("search started");
             }
 
-            final MetaService ms = (MetaService)getActiveLoaclServers().get("WUNDA_BLAU");
+            final MetaService ms = (MetaService)getActiveLocalServers().get("WUNDA_BLAU");
 
             final ArrayList<ArrayList> result = ms.performCustomSearch(sql);
 

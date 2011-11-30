@@ -28,6 +28,8 @@ import Sirius.server.search.CidsServerSearch;
 import javax.swing.ImageIcon;
 
 import de.cismet.cids.tools.search.clientstuff.CidsToolbarSearch;
+import de.cismet.cids.tools.search.clientstuff.Modifier;
+import java.util.Collection;
 
 /**
  * DOCUMENT ME!
@@ -41,12 +43,18 @@ public class FullTextToolbarSearch implements CidsToolbarSearch {
     //~ Instance fields --------------------------------------------------------
 
     String input;
+    private Collection<? extends Modifier> modifiers;
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
     public void setSearchParameter(final String toolbarSearchString) {
         input = toolbarSearchString;
+    }
+    
+    @Override
+    public void applyModifiers(final Collection<? extends Modifier> modifiers) {
+        this.modifiers = modifiers;
     }
 
     @Override
@@ -63,7 +71,7 @@ public class FullTextToolbarSearch implements CidsToolbarSearch {
     public String getHint() {
         return "Suchtext";
     }
-
+    
     @Override
     public CidsServerSearch getServerSearch() {
         return new FullTextSearchStatement(input);
