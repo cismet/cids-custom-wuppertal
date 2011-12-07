@@ -7,6 +7,8 @@
 ****************************************************/
 package de.cismet.cids.custom.wunda_blau.search;
 
+import Sirius.navigator.search.CaseSensitiveModifier;
+import Sirius.navigator.search.HereModifier;
 import de.cismet.cids.custom.wunda_blau.search.server.CustomStrassenSearchStatement;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.search.CidsServerSearch;
@@ -93,7 +95,18 @@ public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
 //        hud.getJDialog().setLocationRelativeTo(null);
 //        hud.getJDialog().setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 //        hud.getJDialog().setVisible(true);
+        
+        boolean caseSensitive = false;
+        String geometry = "";
+        
+        for(final Modifier modifier : modifiers) {
+            if(modifier instanceof CaseSensitiveModifier) {
+                caseSensitive = true;
+            } else if(modifier instanceof HereModifier) {
+                geometry = modifier.getValue();
+            }
+        }
 
-        return new CustomStrassenSearchStatement(searchString);
+        return new CustomStrassenSearchStatement(searchString, geometry, caseSensitive);
     }
 }

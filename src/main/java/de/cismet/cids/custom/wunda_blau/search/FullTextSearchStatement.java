@@ -24,7 +24,6 @@
 package de.cismet.cids.custom.wunda_blau.search;
 
 import Sirius.server.middleware.interfaces.domainserver.MetaService;
-import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObjectNode;
 import Sirius.server.middleware.types.Node;
 import Sirius.server.search.CidsServerSearch;
@@ -43,6 +42,8 @@ public class FullTextSearchStatement extends CidsServerSearch {
     //~ Instance fields --------------------------------------------------------
 
     private String searchString;
+    private String geometry;
+    private boolean caseSensitive;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -51,8 +52,10 @@ public class FullTextSearchStatement extends CidsServerSearch {
      *
      * @param  searchString  DOCUMENT ME!
      */
-    public FullTextSearchStatement(final String searchString) {
+    public FullTextSearchStatement(final String searchString, final String geometry, final boolean caseSensitive) {
         this.searchString = searchString;
+        this.geometry = geometry;
+        this.caseSensitive = caseSensitive;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -61,6 +64,10 @@ public class FullTextSearchStatement extends CidsServerSearch {
     public Collection performServerSearch() {
         try {
             final String classes = "6";
+            String condition = "AND lower(string_val) LIKE lower('%" + searchString + "%') ";
+            if(caseSensitive) {
+                condition = "AND string_val LIKE '%" + searchString + "%' ";
+            }
 
             final String sql = ""
                         + "WITH recursive derived_index(ocid,oid,acid,aid,depth) AS "
@@ -89,7 +96,7 @@ public class FullTextSearchStatement extends CidsServerSearch {
                         + "              SELECT DISTINCT father "
                         + "              FROM            derived_child "
                         + "              LIMIT           100 ) "
-                        + "AND             lower(string_val) LIKE '%" + searchString + "%' "
+                        + condition
                         + " "
                         + "UNION ALL "
                         + " "

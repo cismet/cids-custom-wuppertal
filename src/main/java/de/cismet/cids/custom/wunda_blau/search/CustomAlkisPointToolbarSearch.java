@@ -16,6 +16,7 @@
  */
 package de.cismet.cids.custom.wunda_blau.search;
 
+import Sirius.navigator.search.CaseSensitiveModifier;
 import Sirius.navigator.search.HereModifier;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.search.CidsServerSearch;
@@ -82,6 +83,7 @@ public class CustomAlkisPointToolbarSearch implements CidsToolbarSearch {
     @Override
     public CidsServerSearch getServerSearch() {
         String geometry = "";
+        boolean caseSensitive = false;
         
         for(final Modifier modifier : modifiers) {
             if(modifier instanceof HereModifier) {

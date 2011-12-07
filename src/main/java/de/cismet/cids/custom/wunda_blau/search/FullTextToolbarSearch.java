@@ -23,6 +23,8 @@
  */
 package de.cismet.cids.custom.wunda_blau.search;
 
+import Sirius.navigator.search.CaseSensitiveModifier;
+import Sirius.navigator.search.HereModifier;
 import Sirius.server.search.CidsServerSearch;
 
 import javax.swing.ImageIcon;
@@ -74,6 +76,17 @@ public class FullTextToolbarSearch implements CidsToolbarSearch {
     
     @Override
     public CidsServerSearch getServerSearch() {
-        return new FullTextSearchStatement(input);
+        boolean caseSensitive = false;
+        String geometry = "";
+        
+        for(final Modifier modifier : modifiers) {
+            if(modifier instanceof CaseSensitiveModifier) {
+                caseSensitive = true;
+            } else if(modifier instanceof HereModifier) {
+                geometry = modifier.getValue();
+            }
+        }
+        
+        return new FullTextSearchStatement(input, geometry, caseSensitive);
     }
 }
