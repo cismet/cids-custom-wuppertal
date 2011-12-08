@@ -25,6 +25,7 @@ import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.Node;
 import Sirius.server.search.CidsServerSearch;
 
+import com.sun.codemodel.internal.JOp;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 
@@ -59,6 +60,7 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 
 import de.cismet.tools.CismetThreadPool;
+import javax.swing.JOptionPane;
 
 /**
  * DOCUMENT ME!
@@ -478,6 +480,19 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
      * DOCUMENT ME!
      */
     private void performSearch() {
+        BaulastSearchInfo bsi=getBaulastInfoFromGUI();
+        boolean keineBlattNummer=bsi.getBlattnummer()==null||bsi.getBlattnummer().trim().length()==0;
+        boolean keineArt=bsi.getArt()==null||bsi.getArt().trim().length()==0;
+        boolean keinFlurstueck=lstFlurstueck.getModel().getSize()==0;
+        boolean keinKartenausschnitt=!chkKartenausschnitt.isSelected();
+        
+        
+        if (keineBlattNummer&&keinKartenausschnitt&&keineArt&&keineBlattNummer){
+            JOptionPane.showMessageDialog(this,"Ihre Suchanfrage ist nicht plausibel. Bitte präzisieren Sie die Suchanfrage durch weitere Angaben im Attribut- und Flurstücksfilter.","Plausibilitätskontrolle",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        
         btnSearch.setEnabled(false);
         lblBusy.setBusy(true);
         final SwingWorker<Void, Void> searchWorker = new SwingWorker<Void, Void>() {
