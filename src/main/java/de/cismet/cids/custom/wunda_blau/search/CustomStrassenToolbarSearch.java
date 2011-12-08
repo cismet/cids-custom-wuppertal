@@ -7,25 +7,24 @@
 ****************************************************/
 package de.cismet.cids.custom.wunda_blau.search;
 
-import de.cismet.cids.custom.wunda_blau.search.server.CustomStrassenSearchStatement;
-import Sirius.server.middleware.interfaces.domainserver.MetaService;
 import Sirius.server.middleware.types.MetaClass;
-import Sirius.server.middleware.types.MetaObjectNode;
-import Sirius.server.middleware.types.Node;
-import Sirius.server.newuser.permission.Policy;
 import Sirius.server.search.CidsServerSearch;
 
+import com.explodingpixels.macwidgets.HudWidgetFactory;
 import com.explodingpixels.macwidgets.HudWindow;
 
-import java.io.Serializable;
+import java.awt.FlowLayout;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JTextField;
 
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
+import de.cismet.cids.custom.wunda_blau.search.server.CustomStrassenSearchStatement;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
@@ -83,11 +82,23 @@ public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
 
     @Override
     public CidsServerSearch getServerSearch() {
-//        HudWindow hud = new HudWindow("Window");
-//        hud.getJDialog().setSize(300, 350);
-//        hud.getJDialog().setLocationRelativeTo(null);
-//        hud.getJDialog().setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//        hud.getJDialog().setVisible(true);
+        if (searchString.startsWith("str ")) {
+            searchString = searchString.substring(4);
+            final HudWindow hud = new HudWindow("Straßensuche");
+            hud.getJDialog().setSize(300, 60);
+            hud.getJDialog().setResizable(true);
+            hud.getJDialog().setAlwaysOnTop(true);
+            hud.getContentPane().setLayout(new FlowLayout());
+            hud.getContentPane().add(HudWidgetFactory.createHudLabel("Strasse  "));
+            final JTextField t = HudWidgetFactory.createHudTextField(searchString);
+            t.setColumns(15);
+            hud.getContentPane().add(t);
+            final JButton s = HudWidgetFactory.createHudButton("Suche");
+            hud.getContentPane().add(s);
+            hud.getJDialog().setLocationRelativeTo(null);
+            hud.getJDialog().setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            hud.getJDialog().setVisible(true);
+        }
 
         return new CustomStrassenSearchStatement(searchString);
     }

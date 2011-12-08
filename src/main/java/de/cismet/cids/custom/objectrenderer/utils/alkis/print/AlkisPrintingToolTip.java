@@ -17,7 +17,7 @@ import java.awt.Font;
 import java.awt.geom.RoundRectangle2D;
 
 /**
- * Tooltip that gives
+ * Tooltip that gives.
  *
  * @author   thorsten.hell@cismet.de
  * @version  $Revision$, $Date$

@@ -108,9 +108,10 @@ public class FullTextSearchStatement extends CidsServerSearch {
                         + "WHERE  ocid IN (" + classes + ") "
                         + "LIMIT  1000;";
             if (getLog().isDebugEnabled()) {
-                getLog().debug("search started");
+                getLog().debug("search started ");
             }
 
+            getLog().fatal(sql);
             final MetaService ms = (MetaService)getActiveLoaclServers().get("WUNDA_BLAU");
 
             final ArrayList<ArrayList> result = ms.performCustomSearch(sql);

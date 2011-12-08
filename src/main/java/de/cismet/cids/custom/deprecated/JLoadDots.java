@@ -1,22 +1,24 @@
 /***************************************************
- *
- * cismet GmbH, Saarbruecken, Germany
- *
- *              ... and it just works.
- *
- ****************************************************/
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.cids.custom.deprecated;
 
-import de.cismet.cids.dynamics.Disposable;
+import org.jdesktop.swingx.JXBusyLabel;
+import org.jdesktop.swingx.painter.BusyPainter;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
-import javax.swing.GroupLayout;
 
+import javax.swing.GroupLayout;
 import javax.swing.JPanel;
-import org.jdesktop.swingx.JXBusyLabel;
-import org.jdesktop.swingx.painter.BusyPainter;
+
+import de.cismet.cids.dynamics.Disposable;
 
 /**
  * Der JLoadSpinner erzeugt einen zeitlich unbestimmten Ladeanzeiger im Mac-Stil. Wird z.B. in Renderern beim Laden
@@ -27,41 +29,42 @@ import org.jdesktop.swingx.painter.BusyPainter;
  */
 public class JLoadDots extends JPanel implements Disposable {
 
-    //~ Static fields/initializers ---------------------------------------------
     //~ Instance fields --------------------------------------------------------
+
     private JXBusyLabel busyLabel;
 
     //~ Constructors -----------------------------------------------------------
+
     /**
      * Erzeugt einen neuen JLoadSpinner.
      */
     public JLoadDots() {
-
         busyLabel = new JXBusyLabel(new Dimension(100, 100));
         this.add(busyLabel);
-        BusyPainter painter = new BusyPainter(100);
+        final BusyPainter painter = new BusyPainter(100);
         painter.setBaseColor(Color.lightGray.darker());
         painter.setPaintCentered(true);
 
         busyLabel.setBusyPainter(painter);
         busyLabel.setBusy(true);
-
     }
 
+    //~ Methods ----------------------------------------------------------------
+
     @Override
-    public void setLayout(LayoutManager mgr) {
+    public void setLayout(final LayoutManager mgr) {
         /*
          *Umgeheung des von Matisse automatisch erzeugten GroupLayouts
          */
         removeAll();
-        if(mgr instanceof GroupLayout){
+        if (mgr instanceof GroupLayout) {
             super.setLayout(new BorderLayout());
-            this.add(BorderLayout.CENTER,busyLabel);
-        }
-        else{
+            this.add(BorderLayout.CENTER, busyLabel);
+        } else {
             super.setLayout(mgr);
-            if(busyLabel != null)
+            if (busyLabel != null) {
                 this.add(busyLabel);
+            }
         }
     }
 
@@ -81,6 +84,4 @@ public class JLoadDots extends JPanel implements Disposable {
     public void dispose() {
         busyLabel.setBusy(false);
     }
-
-
 }

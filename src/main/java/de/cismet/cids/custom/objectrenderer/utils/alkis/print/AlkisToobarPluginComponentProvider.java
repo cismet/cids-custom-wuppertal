@@ -23,13 +23,12 @@
  */
 package de.cismet.cids.custom.objectrenderer.utils.alkis.print;
 
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
-
 import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JButton;
 
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 
 import de.cismet.cismap.commons.gui.ToolbarComponentDescription;
 import de.cismet.cismap.commons.gui.ToolbarComponentsProvider;
@@ -38,8 +37,7 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.tools.collections.TypeSafeCollections;
 
 /**
- * ToolbarComponentsProvider that delivers a Button for Alkis Print to integrate
- * into the Navigator Toolbar.
+ * ToolbarComponentsProvider that delivers a Button for Alkis Print to integrate into the Navigator Toolbar.
  *
  * @author   srichter
  * @version  $Revision$, $Date$
@@ -133,6 +131,5 @@ final class AlkisPrintJButton extends JButton {
                     printWidget.pack();
                 }
             });
-
     }
 }
