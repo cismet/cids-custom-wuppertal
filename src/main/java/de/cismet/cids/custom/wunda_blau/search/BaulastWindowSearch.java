@@ -498,10 +498,11 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         final boolean keinFlurstueck = lstFlurstueck.getModel().getSize() == 0;
         final boolean keinKartenausschnitt = !chkKartenausschnitt.isSelected();
 
-        if (keineBlattNummer && keinKartenausschnitt && keineArt && keineBlattNummer) {
+        if (keineBlattNummer && keinKartenausschnitt && keineArt && keinFlurstueck) {
             JOptionPane.showMessageDialog(
                 this,
-                "Ihre Suchanfrage ist nicht plausibel. Bitte präzisieren Sie die Suchanfrage durch weitere Angaben im Attribut- und Flurstücksfilter.",
+                "Ihre Suchanfrage ist nicht plausibel. Bitte präzisieren Sie die\n"
+                        + "Suchanfrage durch weitere Angaben im Attribut- und Flurstücksfilter.",
                 "Plausibilitätskontrolle",
                 JOptionPane.WARNING_MESSAGE);
             return;
