@@ -218,7 +218,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSearch.add(panCommand, gridBagConstraints);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Attribut Filter"));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Attributfilter"));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
         chkGeloescht.setSelected(true);
@@ -280,7 +280,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSearch.add(jPanel2, gridBagConstraints);
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Flurstück Filter"));
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Flurstückfilter"));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         jScrollPane1.setMaximumSize(new java.awt.Dimension(200, 100));

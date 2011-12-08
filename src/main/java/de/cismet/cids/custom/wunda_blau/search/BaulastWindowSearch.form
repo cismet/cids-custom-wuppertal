@@ -95,7 +95,7 @@
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                <TitledBorder title="Attribut Filter"/>
+                <TitledBorder title="Attributfilter"/>
               </Border>
             </Property>
           </Properties>
@@ -175,7 +175,7 @@
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                <TitledBorder title="Flurst&#xfc;ck Filter"/>
+                <TitledBorder title="Flurst&#xfc;ckfilter"/>
               </Border>
             </Property>
           </Properties>
