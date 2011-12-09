@@ -137,6 +137,7 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
                     super.done();
 //                cbParcels1.actionPerformed(null);
                     cboGemarkung.setSelectedIndex(0);
+                    
                     cboGemarkung.requestFocusInWindow();
                     ObjectRendererUtils.selectAllTextInEditableCombobox(cboGemarkung);
                 }
@@ -347,7 +348,7 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboGemarkungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboGemarkungActionPerformed
+    private void cboGemarkungActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboGemarkungActionPerformed
         final Object selection = cboGemarkung.getSelectedItem();
         cboFlurstck.setEnabled(false);
         btnFlurstueckAddMenOk.setEnabled(false);
@@ -401,24 +402,24 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
             }
         }
         checkOkEnableState();
-    } //GEN-LAST:event_cboGemarkungActionPerformed
+    }//GEN-LAST:event_cboGemarkungActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnFlurstueckAddMenCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFlurstueckAddMenCancelActionPerformed
+    private void btnFlurstueckAddMenCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFlurstueckAddMenCancelActionPerformed
         setVisible(false);
         cancelHook();
-    }                                                                                             //GEN-LAST:event_btnFlurstueckAddMenCancelActionPerformed
+    }//GEN-LAST:event_btnFlurstueckAddMenCancelActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnFlurstueckAddMenOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFlurstueckAddMenOkActionPerformed
+    private void btnFlurstueckAddMenOkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFlurstueckAddMenOkActionPerformed
         final Object selection = cboFlurstck.getSelectedItem();
         if (selection instanceof LightweightMetaObject) {
             final CidsBean selectedBean = ((LightweightMetaObject)selection).getBean();
@@ -459,7 +460,7 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
         }
         setVisible(false);
         okHook();
-    }                                                                                         //GEN-LAST:event_btnFlurstueckAddMenOkActionPerformed
+    }//GEN-LAST:event_btnFlurstueckAddMenOkActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -485,7 +486,7 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboFlurActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboFlurActionPerformed
+    private void cboFlurActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboFlurActionPerformed
         final Object selection = cboFlur.getSelectedItem();
         if (selection instanceof MetaObject) {
             final String selGem = String.valueOf(cboGemarkung.getSelectedItem());
@@ -531,14 +532,14 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
             }
         }
         checkOkEnableState();
-    } //GEN-LAST:event_cboFlurActionPerformed
+    }//GEN-LAST:event_cboFlurActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboFlurstckActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboFlurstckActionPerformed
+    private void cboFlurstckActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboFlurstckActionPerformed
         btnFlurstueckAddMenOk.setEnabled(checkFlurstueckSelectionComplete());
         if (CB_EDITED_ACTION_COMMAND.equals(evt.getActionCommand())) {
             btnFlurstueckAddMenOk.requestFocusInWindow();
@@ -566,7 +567,7 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
                 cboFlurstck.setSelectedIndex(foundBeanIndex);
             }
         }
-    }                                                                               //GEN-LAST:event_cboFlurstckActionPerformed
+    }//GEN-LAST:event_cboFlurstckActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -691,7 +692,9 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
                 log.error(ex, ex);
             } finally {
                 box.setEnabled(true);
+                box.setSelectedIndex(0);
                 ObjectRendererUtils.selectAllTextInEditableCombobox(box);
+                
                 checkOkEnableState();
             }
         }
