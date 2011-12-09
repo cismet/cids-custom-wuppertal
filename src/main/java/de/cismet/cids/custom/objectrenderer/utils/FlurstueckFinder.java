@@ -36,6 +36,7 @@ public class FlurstueckFinder {
     public static final String FLURSTUECK_FLUR = "flur";
     public static final String FLURSTUECK_ZAEHLER = "zaehler";
     public static final String FLURSTUECK_NENNER = "nenner";
+    public static final String SEP = " - ";
     //
     private static final String STMNT_LANDPARCELS = "select id," + FLURSTUECK_GEMARKUNG + "," + FLURSTUECK_FLUR + ","
                 + FLURSTUECK_ZAEHLER + "," + FLURSTUECK_NENNER + " from " + FLURSTUECK_TABLE_NAME + " order by "
@@ -93,7 +94,7 @@ public class FlurstueckFinder {
      * @return  DOCUMENT ME!
      */
     public static final MetaObject[] getLWGemarkungen() {
-        return ObjectRendererUtils.getLightweightMetaObjectsForQuery(
+        final MetaObject[] moa = ObjectRendererUtils.getLightweightMetaObjectsForQuery(
                 FLURSTUECK_TABLE_NAME,
                 "select min(id) as id, "
                         + FLURSTUECK_GEMARKUNG
@@ -121,6 +122,7 @@ public class FlurstueckFinder {
                         return String.valueOf(getAttribute(FLURSTUECK_GEMARKUNG));
                     }
                 });
+        return moa;
     }
 
     /**
@@ -132,6 +134,7 @@ public class FlurstueckFinder {
      */
     public static final MetaObject[] getLWFlure(final String gemarkungsnummer) {
         final MetaObject[] result = ObjectRendererUtils.getLightweightMetaObjectsForQuery(
+
                 FLURSTUECK_TABLE_NAME,
                 "select min(id) as id, "
                         + FLURSTUECK_FLUR

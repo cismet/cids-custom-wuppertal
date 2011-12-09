@@ -22,8 +22,6 @@ import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.Node;
 import Sirius.server.search.CidsServerSearch;
 
-import com.sun.codemodel.internal.JOp;
-
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import java.util.ArrayList;
@@ -37,6 +35,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
+
+import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objecteditors.wunda_blau.FlurstueckSelectionDialoge;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
@@ -633,5 +633,22 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
             log.error("Can not validate ActionTag for Baulasten Suche!", ex);
             return false;
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   args  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public static void main(final String[] args) throws Exception {
+        DevelopmentTools.initSessionManagerFromRMIConnectionOnLocalhost(
+            "WUNDA_BLAU",
+            "Administratoren",
+            "admin",
+            "krissenich");
+        final BaulastWindowSearch bws = new BaulastWindowSearch();
+        DevelopmentTools.showTestFrame(bws, 800, 600);
     }
 }
