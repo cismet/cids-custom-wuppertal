@@ -1,23 +1,28 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  *  Copyright (C) 2011 thorsten
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package de.cismet.cids.custom.objectrenderer.utils.alkis;
 
-import de.cismet.cids.custom.utils.alkis.AlkisProducts;
-import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 
@@ -26,28 +31,36 @@ import de.aedsicad.aaaweb.service.util.Buchungsblatt;
 import de.aedsicad.aaaweb.service.util.Buchungsstelle;
 import de.aedsicad.aaaweb.service.util.Owner;
 
-
-
-
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.utils.alkis.AlkisProducts;
 
 import de.cismet.cids.dynamics.CidsBean;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 /**
+ * DOCUMENT ME!
  *
- * @author thorsten
+ * @author   thorsten
+ * @version  $Revision$, $Date$
  */
 public class AlkisUtils {
-    public final static AlkisProducts PRODUCTS  = new AlkisProducts(AlkisConstants.COMMONS.USER, AlkisConstants.COMMONS.PASSWORD, AlkisConstants.COMMONS.SERVICE);;
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    public static final AlkisProducts PRODUCTS = new AlkisProducts(
+            AlkisConstants.COMMONS.USER,
+            AlkisConstants.COMMONS.PASSWORD,
+            AlkisConstants.COMMONS.SERVICE);
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisUtils.class);
+    // --
+
     //~ Methods ----------------------------------------------------------------
-    //--
 
     /**
      * DOCUMENT ME!
@@ -62,7 +75,9 @@ public class AlkisUtils {
             final int objectID = bean.getMetaObject().getId();
             final StringBuilder result = new StringBuilder("<a href=\"");
 //            result.append(bean.getMetaObject().getMetaClass().getID()).append(LINK_SEPARATOR_TOKEN).append(objectID);
-            result.append(bean.getMetaObject().getMetaClass().getID()).append(AlkisConstants.LINK_SEPARATOR_TOKEN).append(objectID);
+            result.append(bean.getMetaObject().getMetaClass().getID())
+                    .append(AlkisConstants.LINK_SEPARATOR_TOKEN)
+                    .append(objectID);
             result.append("\">");
             result.append(description);
             result.append("</a>");
@@ -74,34 +89,39 @@ public class AlkisUtils {
     /**
      * DOCUMENT ME!
      *
-     * @param   buchungsblatt      DOCUMENT ME!
-     * @param   buchungsblattBean  DOCUMENT ME!
+     * @param   originatingFlurstueck  DOCUMENT ME!
+     * @param   buchungsblatt          DOCUMENT ME!
+     * @param   buchungsblattBean      DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static String buchungsblattToString(final CidsBean originatingFlurstueck, final Buchungsblatt buchungsblatt, final CidsBean buchungsblattBean) {
-        String alkisId=(String)originatingFlurstueck.getProperty("alkis_id");
-        String pos="";
-        List<CidsBean> alleFSaufBB=buchungsblattBean.getBeanCollectionProperty("landparcels");
-        for (CidsBean lp:alleFSaufBB){
-            if (lp.getProperty("landparcelcode").equals(alkisId)){
-                pos=String.valueOf(lp.getProperty("lfn"));
+    public static String buchungsblattToString(final CidsBean originatingFlurstueck,
+            final Buchungsblatt buchungsblatt,
+            final CidsBean buchungsblattBean) {
+        final String alkisId = (String)originatingFlurstueck.getProperty("alkis_id");
+        String pos = "";
+        final List<CidsBean> alleFSaufBB = buchungsblattBean.getBeanCollectionProperty("landparcels");
+        for (final CidsBean lp : alleFSaufBB) {
+            if (lp.getProperty("landparcelcode").equals(alkisId)) {
+                pos = String.valueOf(lp.getProperty("lfn"));
             }
         }
-        
+
         final List<Owner> owners = Arrays.asList(buchungsblatt.getOwners());
         if ((owners != null) && (owners.size() > 0)) {
             final StringBuilder infoBuilder = new StringBuilder();
             infoBuilder.append(
-                    "<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"left\" valign=\"top\">");
+                "<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"left\" valign=\"top\">");
 //            infoBuilder.append("<tr><td width=\"200\"><b><a href=\"").append(generateBuchungsblattLinkInfo(buchungsblatt)).append("\">").append(buchungsblatt.getBuchungsblattCode()).append("</a></b></td><td>");
-            infoBuilder.append("<tr><td width=\"200\">Nr. "+pos+" auf  <b>").append(generateLinkFromCidsBean(buchungsblattBean, buchungsblatt.getBuchungsblattCode())).append("</b></td><td>");
+            infoBuilder.append("<tr><td width=\"200\">Nr. " + pos + " auf  <b>")
+                    .append(generateLinkFromCidsBean(buchungsblattBean, buchungsblatt.getBuchungsblattCode()))
+                    .append("</b></td><td>");
             final Iterator<Owner> ownerIterator = owners.iterator();
 //            if (ownerIterator.hasNext()) {
 //                infoBuilder.append(ownerToString(ownerIterator.next(), ""));
 //            }
             infoBuilder.append(
-                    "<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"left\" valign=\"top\">");
+                "<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"left\" valign=\"top\">");
             while (ownerIterator.hasNext()) {
                 infoBuilder.append(ownerToString(ownerIterator.next(), ""));
 //                infoBuilder.append(ownerToString(ownerIterator.next(), "</td><td>"));
@@ -161,7 +181,7 @@ public class AlkisUtils {
      */
     public static String getLandparcelCodeFromParcelBeanObject(final Object landParcel) {
         if (landParcel instanceof CidsBean) {
-            final CidsBean cidsBean = (CidsBean) landParcel;
+            final CidsBean cidsBean = (CidsBean)landParcel;
             final Object parcelCodeObj = cidsBean.getProperty("alkis_id");
             if (parcelCodeObj != null) {
                 return parcelCodeObj.toString();
@@ -208,8 +228,7 @@ public class AlkisUtils {
     public static String arrayToSeparatedString(final String[] strings, final String separator) {
         if (strings != null) {
             final StringBuilder result = new StringBuilder();
-            for (int i = 0; i < strings.length; /**incremented in loop**/
-                    ) {
+            for (int i = 0; i < strings.length; /**incremented in loop**/) {
                 result.append(strings[i]);
                 if (++i < strings.length) {
                     result.append(separator);
@@ -325,7 +344,9 @@ public class AlkisUtils {
      */
     private static String generateBuchungsblattLinkInfo(final Buchungsblatt buchungsblatt) {
         // TODO: Should return metaclassID::objectID instead of metaclassID::BuchungsblattCode...
-        return new StringBuilder("ALKIS_BUCHUNGSBLATT").append(AlkisConstants.LINK_SEPARATOR_TOKEN).append(buchungsblatt.getBuchungsblattCode()).toString();
+        return new StringBuilder("ALKIS_BUCHUNGSBLATT").append(AlkisConstants.LINK_SEPARATOR_TOKEN)
+                    .append(buchungsblatt.getBuchungsblattCode())
+                    .toString();
     }
 
     /**
@@ -393,30 +414,27 @@ public class AlkisUtils {
     public static String getBuchungsartFromBuchungsblatt(final Buchungsblatt blatt) {
         final Buchungsstelle[] buchungsstellen = blatt.getBuchungsstellen();
         if ((buchungsstellen != null) && (buchungsstellen.length > 0)) {
-            
-            ArrayList<Buchungsstelle> alleStellen=new ArrayList<Buchungsstelle>();
+            final ArrayList<Buchungsstelle> alleStellen = new ArrayList<Buchungsstelle>();
             alleStellen.addAll(Arrays.asList(buchungsstellen));
-            Collections.sort(alleStellen, new Comparator<Buchungsstelle>(){
+            Collections.sort(alleStellen, new Comparator<Buchungsstelle>() {
 
-                @Override
-                public int compare(Buchungsstelle t, Buchungsstelle t1) {
-                    return t.getBuchungsartCode().compareTo(t1.getBuchungsartCode());
-                }
+                    @Override
+                    public int compare(final Buchungsstelle t, final Buchungsstelle t1) {
+                        return t.getBuchungsartCode().compareTo(t1.getBuchungsartCode());
+                    }
+                });
 
-            });
-
-
-            final Buchungsstelle ersteBuchungsstelle = alleStellen.get(alleStellen.size()-1);
+            final Buchungsstelle ersteBuchungsstelle = alleStellen.get(alleStellen.size() - 1);
             if (ersteBuchungsstelle != null) {
                 final StringBuilder result = new StringBuilder();
                 final String prettyFration = prettyPrintFration(ersteBuchungsstelle.getFraction());
                 result.append(prettyFration);
-                if (prettyFration!=null && prettyFration.length() > 0) {
+                if ((prettyFration != null) && (prettyFration.length() > 0)) {
                     result.append(" ");
                 }
                 result.append(ersteBuchungsstelle.getBuchungsart());
-                String number=ersteBuchungsstelle.getNumber();
-                if (!(number==null || number.trim().length()>0)){
+                final String number = ersteBuchungsstelle.getNumber();
+                if (!((number == null) || (number.trim().length() > 0))) {
                     result.append(", Aufteilungsplan Nr. ").append(number);
                 }
                 return result.toString();
@@ -458,7 +476,8 @@ public class AlkisUtils {
      */
     public static boolean validateUserHasAlkisPrintAccess() {
         try {
-            return SessionManager.getConnection().getConfigAttr(SessionManager.getSession().getUser(), "navigator.alkis.print") != null;
+            return SessionManager.getConnection()
+                        .getConfigAttr(SessionManager.getSession().getUser(), "navigator.alkis.print") != null;
         } catch (ConnectionException ex) {
             log.error("Could not validate action tag for Alkis Print Dialog!", ex);
         }
@@ -472,16 +491,23 @@ public class AlkisUtils {
      */
     public static boolean validateUserHasAlkisProductAccess() {
         try {
-            return SessionManager.getConnection().getConfigAttr(SessionManager.getSession().getUser(), "navigator.alkis.products") != null;
+            return SessionManager.getConnection()
+                        .getConfigAttr(SessionManager.getSession().getUser(), "navigator.alkis.products") != null;
         } catch (ConnectionException ex) {
             log.error("Could not validate action tag for Alkis Products!", ex);
         }
         return false;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public static boolean validateUserHasAlkisBuchungsblattAccess() {
         try {
-            return SessionManager.getConnection().getConfigAttr(SessionManager.getSession().getUser(), "custom.alkis.buchungsblatt") != null;
+            return SessionManager.getConnection()
+                        .getConfigAttr(SessionManager.getSession().getUser(), "custom.alkis.buchungsblatt") != null;
         } catch (ConnectionException ex) {
             log.error("Could not validate action tag for Alkis Buchungsblatt!", ex);
         }

@@ -12,21 +12,25 @@
  */
 package de.cismet.cids.custom.wunda_blau.search;
 
-import de.cismet.cids.custom.wunda_blau.search.server.FlurstueckInfo;
-import de.cismet.cids.custom.wunda_blau.search.server.BaulastSearchInfo;
-import de.cismet.cids.custom.wunda_blau.search.server.CidsBaulastSearchStatement;
 import Sirius.navigator.actiontag.ActionTagProtected;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.method.MethodManager;
+import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.middleware.types.Node;
 import Sirius.server.search.CidsServerSearch;
 
+import com.vividsolutions.jts.geom.Geometry;
+
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
+import java.awt.EventQueue;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,10 +41,16 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
+
+import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objecteditors.wunda_blau.FlurstueckSelectionDialoge;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
+import de.cismet.cids.custom.wunda_blau.search.server.BaulastSearchInfo;
+import de.cismet.cids.custom.wunda_blau.search.server.CidsBaulastSearchStatement;
+import de.cismet.cids.custom.wunda_blau.search.server.FlurstueckInfo;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -52,7 +62,8 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
 
-import de.cismet.cismap.commons.BoundingBox;
+import de.cismet.cismap.commons.CrsTransformer;
+import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.features.Feature;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
@@ -81,11 +92,11 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     private final ImageIcon icon;
     private final FlurstueckSelectionDialoge fsSelectionDialoge;
     private final DefaultListModel model;
+    private SwingWorker<Collection<Node>, Void> searchWorker = null;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddFS;
     private javax.swing.JButton btnFromMapFS;
     private javax.swing.JButton btnRemoveFS;
-    private javax.swing.JButton btnSearch;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox cbArt;
     private javax.swing.JCheckBox chkBeguenstigt;
@@ -93,6 +104,8 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     private javax.swing.JCheckBox chkGeloescht;
     private javax.swing.JCheckBox chkGueltig;
     private javax.swing.JCheckBox chkKartenausschnitt;
+    private javax.swing.JButton cmdAbort;
+    private javax.swing.JButton cmdSearch;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
@@ -144,6 +157,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         new CidsBeanDropTarget(this);
         fsSelectionDialoge.pack();
         fsSelectionDialoge.setLocationRelativeTo(this);
+        cmdAbort.setVisible(false);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -161,7 +175,8 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         panSearch = new javax.swing.JPanel();
         panCommand = new javax.swing.JPanel();
         lblBusy = new org.jdesktop.swingx.JXBusyLabel();
-        btnSearch = new javax.swing.JButton();
+        cmdSearch = new javax.swing.JButton();
+        cmdAbort = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         chkGeloescht = new javax.swing.JCheckBox();
@@ -178,12 +193,12 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         btnFromMapFS = new javax.swing.JButton();
         chkBeguenstigt = new javax.swing.JCheckBox();
         chkBelastet = new javax.swing.JCheckBox();
-        chkKartenausschnitt = new javax.swing.JCheckBox();
         jPanel4 = new javax.swing.JPanel();
         rbBaulastBlaetter = new javax.swing.JRadioButton();
         rbBaulasten = new javax.swing.JRadioButton();
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
+        chkKartenausschnitt = new javax.swing.JCheckBox();
 
         setMaximumSize(new java.awt.Dimension(325, 460));
         setMinimumSize(new java.awt.Dimension(325, 460));
@@ -197,15 +212,31 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
 
         panCommand.add(lblBusy);
 
-        btnSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom.gif"))); // NOI18N
-        btnSearch.setText("Suchen");
-        btnSearch.setToolTipText("Suche starten");
-        btnSearch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSearchActionPerformed(evt);
-            }
-        });
-        panCommand.add(btnSearch);
+        cmdSearch.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom.gif"))); // NOI18N
+        cmdSearch.setText("Suchen");
+        cmdSearch.setToolTipText("Suche starten");
+        cmdSearch.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cmdSearchActionPerformed(evt);
+                }
+            });
+        panCommand.add(cmdSearch);
+
+        cmdAbort.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/cancel.png"))); // NOI18N
+        cmdAbort.setText("Abbrechen");
+        cmdAbort.setToolTipText("Suche abbrechen");
+        cmdAbort.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cmdAbortActionPerformed(evt);
+                }
+            });
+        panCommand.add(cmdAbort);
 
         jPanel1.setMaximumSize(new java.awt.Dimension(26, 26));
         jPanel1.setMinimumSize(new java.awt.Dimension(26, 26));
@@ -213,12 +244,12 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         panCommand.add(jPanel1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSearch.add(panCommand, gridBagConstraints);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Attribut Filter"));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Attributfilter"));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
         chkGeloescht.setSelected(true);
@@ -274,13 +305,14 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSearch.add(jPanel2, gridBagConstraints);
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Flurstück Filter"));
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Flurstückfilter"));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         jScrollPane1.setMaximumSize(new java.awt.Dimension(200, 100));
@@ -299,13 +331,16 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(jScrollPane1, gridBagConstraints);
 
-        btnAddFS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit-add.png"))); // NOI18N
+        btnAddFS.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit-add.png"))); // NOI18N
         btnAddFS.setToolTipText("Flurstück hinzufügen");
         btnAddFS.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddFSActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnAddFSActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -313,13 +348,16 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(btnAddFS, gridBagConstraints);
 
-        btnRemoveFS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit-delete.png"))); // NOI18N
+        btnRemoveFS.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit-delete.png"))); // NOI18N
         btnRemoveFS.setToolTipText("Ausgewählte Flurstücke entfernen");
         btnRemoveFS.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemoveFSActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnRemoveFSActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
@@ -327,13 +365,16 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(btnRemoveFS, gridBagConstraints);
 
-        btnFromMapFS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/bookmark-new.png"))); // NOI18N
+        btnFromMapFS.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/bookmark-new.png"))); // NOI18N
         btnFromMapFS.setToolTipText("Selektierte Flurstücke aus Karte hinzufügen");
         btnFromMapFS.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFromMapFSActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnFromMapFSActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
@@ -358,18 +399,10 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel3.add(chkBelastet, gridBagConstraints);
 
-        chkKartenausschnitt.setText("Nur im aktuellen Kartenausschnitt suchen");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel3.add(chkKartenausschnitt, gridBagConstraints);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSearch.add(jPanel3, gridBagConstraints);
@@ -416,47 +449,53 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.weighty = 1.0;
         panSearch.add(jPanel6, gridBagConstraints);
 
+        chkKartenausschnitt.setText("<html>Nur im aktuellen<br>Kartenausschnitt suchen</html>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        panSearch.add(chkKartenausschnitt, gridBagConstraints);
+
         add(panSearch, java.awt.BorderLayout.CENTER);
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddFSActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddFSActionPerformed
+    private void btnAddFSActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddFSActionPerformed
         final List<CidsBean> result = new ArrayList<CidsBean>(1);
         fsSelectionDialoge.setCurrentListToAdd(result);
         fsSelectionDialoge.setVisible(true);
-    }//GEN-LAST:event_btnAddFSActionPerformed
+    }                                                                            //GEN-LAST:event_btnAddFSActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveFSActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveFSActionPerformed
+    private void btnRemoveFSActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveFSActionPerformed
         final Object[] selection = lstFlurstueck.getSelectedValues();
         for (final Object o : selection) {
             model.removeElement(o);
         }
-    }//GEN-LAST:event_btnRemoveFSActionPerformed
+    }                                                                               //GEN-LAST:event_btnRemoveFSActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnSearchActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+    private void cmdSearchActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdSearchActionPerformed
         performSearch();
-    }//GEN-LAST:event_btnSearchActionPerformed
+    }                                                                             //GEN-LAST:event_cmdSearchActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnFromMapFSActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFromMapFSActionPerformed
+    private void btnFromMapFSActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFromMapFSActionPerformed
         final Collection<Feature> selFeatures = CismapBroker.getInstance()
                     .getMappingComponent()
                     .getFeatureCollection()
@@ -472,39 +511,153 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
                 }
             }
         }
-    }//GEN-LAST:event_btnFromMapFSActionPerformed
+    }                                                                                //GEN-LAST:event_btnFromMapFSActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cmdAbortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdAbortActionPerformed
+
+        if (searchWorker != null) {
+            searchWorker.cancel(true);
+            searchWorker = null;
+            ComponentRegistry.getRegistry().getSearchResultsTree().cancelNodeLoading();
+            lblBusy.setBusy(false);
+            cmdAbort.setVisible(false);
+            cmdSearch.setVisible(true);
+        }
+    } //GEN-LAST:event_cmdAbortActionPerformed
 
     /**
      * DOCUMENT ME!
      */
     private void performSearch() {
-        btnSearch.setEnabled(false);
-        lblBusy.setBusy(true);
-        final SwingWorker<Void, Void> searchWorker = new SwingWorker<Void, Void>() {
+        final BaulastSearchInfo bsi = getBaulastInfoFromGUI();
+        final boolean keineBlattNummer = (bsi.getBlattnummer() == null) || (bsi.getBlattnummer().trim().length() == 0);
+        final boolean keineArt = (bsi.getArt() == null) || (bsi.getArt().trim().length() == 0);
+        final boolean keinFlurstueck = lstFlurstueck.getModel().getSize() == 0;
+        final boolean keinKartenausschnitt = !chkKartenausschnitt.isSelected();
 
-                @Override
-                protected Void doInBackground() throws Exception {
-                    final Collection<Node> r = SessionManager.getProxy()
-                                .customServerSearch(SessionManager.getSession().getUser(), getServerSearch());
-                    MethodManager.getManager().showSearchResults(r.toArray(new Node[r.size()]), false);
-                    return null;
-                }
+        if (keineBlattNummer && keinKartenausschnitt && keineArt && keinFlurstueck) {
+            JOptionPane.showMessageDialog(
+                this,
+                "Ihre Suchanfrage ist nicht plausibel. Bitte präzisieren Sie die\n"
+                        + "Suchanfrage durch weitere Angaben im Attribut- und Flurstücksfilter.",
+                "Plausibilitätskontrolle",
+                JOptionPane.WARNING_MESSAGE);
+        } else {
+            searchWorker = new SwingWorker<Collection<Node>, Void>() {
 
-                @Override
-                protected void done() {
-                    try {
-                        get();
-                    } catch (InterruptedException ex) {
-                        log.warn(ex, ex);
-                    } catch (ExecutionException ex) {
-                        log.error(ex, ex);
-                    } finally {
-                        lblBusy.setBusy(false);
-                        btnSearch.setEnabled(true);
+                    @Override
+                    protected Collection<Node> doInBackground() throws Exception {
+                        final Collection<Node> r = SessionManager.getProxy()
+                                    .customServerSearch(SessionManager.getSession().getUser(), getServerSearch());
+
+                        return r;
                     }
-                }
-            };
-        CismetThreadPool.execute(searchWorker);
+
+                    @Override
+                    protected void done() {
+                        try {
+                            final Collection<Node> r = get();
+                            MethodManager.getManager().showSearchResults(r.toArray(new Node[r.size()]), false);
+//                            de.cismet.tools.CismetThreadPool.execute(new javax.swing.SwingWorker<Void, Void>() {
+//
+//                                    @Override
+//                                    protected Void doInBackground() throws Exception {
+//                                        Thread.sleep(100);
+//                                        return null;
+//                                    }
+//
+//                                    @Override
+//                                    protected void done() {
+//                                        try {
+//                                            ComponentRegistry.getRegistry()
+//                                                    .getSearchResultsTree()
+//                                                    .getNodeLoadingWorker()
+//                                                    .addPropertyChangeListener(new PropertyChangeListener() {
+//
+//                                                            @Override
+//                                                            public void propertyChange(final PropertyChangeEvent evt) {
+//                                                                if (evt.getPropertyName().equalsIgnoreCase("state")) {
+//                                                                    if (evt.getNewValue().equals(StateValue.DONE)) {
+//                                                                        if ((ComponentRegistry.getRegistry()
+//                                                                                .getSearchResultsTree()
+//                                                                                .getNodeLoadingWorker() != null)
+//                                                                            && !ComponentRegistry.getRegistry()
+//                                                                            .getSearchResultsTree()
+//                                                                            .getNodeLoadingWorker().isCancelled()) {
+//                                                                            if ((r != null) && (r.size() > 0)) {
+//                                                                                txtBlattnummer.setText("");
+//                                                                                cbArt.setSelectedItem(null);
+//                                                                                chkKartenausschnitt.setSelected(false);
+//                                                                            }
+//                                                                        }
+//                                                                        lblBusy.setBusy(false);
+//                                                                        cmdAbort.setVisible(false);
+//                                                                        cmdSearch.setVisible(true);
+//                                                                    }
+//                                                                }
+//                                                            }
+//                                                        });
+//                                        } catch (Exception e) {
+//                                            log.error("Exception in Background Thread", e);
+//                                        }
+//                                    }
+//                                });
+
+                            EventQueue.invokeLater(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            ComponentRegistry.getRegistry()
+                                                    .getSearchResultsTree()
+                                                    .getNodeLoadingWorker()
+                                                    .addPropertyChangeListener(new PropertyChangeListener() {
+
+                                                            @Override
+                                                            public void propertyChange(final PropertyChangeEvent evt) {
+                                                                if (evt.getPropertyName().equalsIgnoreCase("state")) {
+                                                                    if (evt.getNewValue().equals(StateValue.DONE)) {
+                                                                        if ((ComponentRegistry.getRegistry()
+                                                                                .getSearchResultsTree()
+                                                                                .getNodeLoadingWorker() != null)
+                                                                            && !ComponentRegistry.getRegistry()
+                                                                            .getSearchResultsTree()
+                                                                            .getNodeLoadingWorker().isCancelled()) {
+                                                                            if ((r != null) && (r.size() > 0)) {
+                                                                                txtBlattnummer.setText("");
+                                                                                cbArt.setSelectedItem(null);
+                                                                                chkKartenausschnitt.setSelected(false);
+                                                                            }
+                                                                        }
+                                                                        lblBusy.setBusy(false);
+                                                                        cmdAbort.setVisible(false);
+                                                                        cmdSearch.setVisible(true);
+                                                                    }
+                                                                }
+                                                            }
+                                                        });
+                                        } catch (Exception e) {
+                                            log.error("Exception in Background Thread", e);
+                                        }
+                                    }
+                                });
+                        } catch (InterruptedException ex) {
+                            log.warn(ex, ex);
+                        } catch (ExecutionException ex) {
+                            log.error(ex, ex);
+                        }
+                    }
+                };
+            cmdSearch.setVisible(false);
+            cmdAbort.setVisible(true);
+            lblBusy.setBusy(true);
+            CismetThreadPool.execute(searchWorker);
+        }
     }
 
     @Override
@@ -537,8 +690,10 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         bsi.setResult(rbBaulastBlaetter.isSelected() ? CidsBaulastSearchStatement.Result.BAULASTBLATT
                                                      : CidsBaulastSearchStatement.Result.BAULAST);
         if (chkKartenausschnitt.isSelected()) {
-            final BoundingBox bb = CismapBroker.getInstance().getMappingComponent().getCurrentBoundingBox();
-            bsi.setBounds(bb.getGeometryFromTextLineString());
+            final XBoundingBox bb = (XBoundingBox)CismapBroker.getInstance().getMappingComponent()
+                        .getCurrentBoundingBox();
+            final Geometry g = CrsTransformer.transformToDefaultCrs(bb.getGeometry());
+            bsi.setBounds(g.toText());
         }
         bsi.setBelastet(chkBelastet.isSelected());
         bsi.setBeguenstigt(chkBeguenstigt.isSelected());
@@ -585,7 +740,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         final int baulastClassID = mc.getID();
         mc = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "ALB_BAULASTBLATT");
         final int baulastblattClassID = mc.getID();
-        return new CidsBaulastSearchStatement(bsi,baulastClassID,baulastblattClassID);
+        return new CidsBaulastSearchStatement(bsi, baulastClassID, baulastblattClassID);
     }
 
     @Override
@@ -608,5 +763,22 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
             log.error("Can not validate ActionTag for Baulasten Suche!", ex);
             return false;
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   args  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public static void main(final String[] args) throws Exception {
+        DevelopmentTools.initSessionManagerFromRMIConnectionOnLocalhost(
+            "WUNDA_BLAU",
+            "Administratoren",
+            "admin",
+            "krissenich");
+        final BaulastWindowSearch bws = new BaulastWindowSearch();
+        DevelopmentTools.showTestFrame(bws, 800, 600);
     }
 }

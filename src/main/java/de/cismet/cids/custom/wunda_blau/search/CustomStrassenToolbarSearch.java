@@ -9,10 +9,8 @@ package de.cismet.cids.custom.wunda_blau.search;
 
 import Sirius.navigator.search.CaseSensitiveModifier;
 import Sirius.navigator.search.HereModifier;
-import de.cismet.cids.custom.wunda_blau.search.server.CustomStrassenSearchStatement;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.search.CidsServerSearch;
-
 
 
 import java.util.ArrayList;
@@ -21,6 +19,7 @@ import java.util.Collection;
 import javax.swing.ImageIcon;
 
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
+import de.cismet.cids.custom.wunda_blau.search.server.CustomStrassenSearchStatement;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
@@ -90,12 +89,6 @@ public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
 
     @Override
     public CidsServerSearch getServerSearch() {
-//        HudWindow hud = new HudWindow("Window");
-//        hud.getJDialog().setSize(300, 350);
-//        hud.getJDialog().setLocationRelativeTo(null);
-//        hud.getJDialog().setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//        hud.getJDialog().setVisible(true);
-        
         boolean caseSensitive = false;
         String geometry = "";
         

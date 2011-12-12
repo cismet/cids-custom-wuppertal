@@ -1,10 +1,10 @@
 /***************************************************
- *
- * cismet GmbH, Saarbruecken, Germany
- *
- *              ... and it just works.
- *
- ****************************************************/
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * CoolThemaRenderer.java
  *
@@ -16,11 +16,13 @@ import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaObject;
-import de.cismet.cids.editors.EditorClosedEvent;
 
 import org.apache.log4j.Logger;
 
 import java.awt.CardLayout;
+import java.awt.event.MouseListener;
+
+import java.sql.Date;
 
 import java.util.Collection;
 
@@ -31,20 +33,19 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import de.cismet.cids.annotations.AggregationRenderer;
-import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 
+import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
-import java.awt.event.MouseListener;
-import java.sql.Date;
 
 /**
  * de.cismet.cids.objectrenderer.CoolThemaRenderer.
@@ -56,18 +57,20 @@ import java.sql.Date;
  */
 @AggregationRenderer
 public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore,
-        TitleComponentProvider,
-        FooterComponentProvider,
-        BorderProvider,
-        RequestsFullSizeComponent,
-        EditorSaveListener {
+    TitleComponentProvider,
+    FooterComponentProvider,
+    BorderProvider,
+    RequestsFullSizeComponent,
+    EditorSaveListener {
 
     //~ Static fields/initializers ---------------------------------------------
+
     private static final Logger LOG = Logger.getLogger(Alb_baulastEditor.class);
     public static final String TITLE_AGR_PREFIX = "Baulasten";
     private static final String ACTION_TAG = "custom.baulast.document";
 
     //~ Instance fields --------------------------------------------------------
+
     private final boolean editable;
     private CidsBean cidsBean;
     private final CardLayout cardLayout;
@@ -88,6 +91,7 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
+
     /**
      * Creates new form CoolThemaRenderer.
      */
@@ -104,14 +108,21 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         this.editable = editable;
         this.initComponents();
         initFooterElements();
-        cardLayout = (CardLayout) getLayout();
+        cardLayout = (CardLayout)getLayout();
     }
 
-    public static void addPruefungsInfoToBean(CidsBean cidsBean) {
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cidsBean  DOCUMENT ME!
+     */
+    public static void addPruefungsInfoToBean(final CidsBean cidsBean) {
         try {
-            if (cidsBean != null && cidsBean.getMetaObject().getStatus() == MetaObject.MODIFIED) {
-                Object geprueftObj = cidsBean.getProperty("geprueft");
-                if (geprueftObj instanceof Boolean && ((Boolean) geprueftObj)) {
+            if ((cidsBean != null) && (cidsBean.getMetaObject().getStatus() == MetaObject.MODIFIED)) {
+                final Object geprueftObj = cidsBean.getProperty("geprueft");
+                if ((geprueftObj instanceof Boolean) && ((Boolean)geprueftObj)) {
                     cidsBean.setProperty("geprueft_von", SessionManager.getSession().getUser().getName());
                     cidsBean.setProperty("pruefdatum", new Date(System.currentTimeMillis()));
                 } else {
@@ -123,22 +134,20 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
             LOG.error("Can not set Pruefunfsinfo for Bean!", ex);
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
     /**
      * DOCUMENT ME!
      */
     private void initFooterElements() {
         ObjectRendererUtils.decorateJLabelAndButtonSynced(
-                lblForw,
-                btnForward,
-                ObjectRendererUtils.FORWARD_SELECTED,
-                ObjectRendererUtils.FORWARD_PRESSED);
+            lblForw,
+            btnForward,
+            ObjectRendererUtils.FORWARD_SELECTED,
+            ObjectRendererUtils.FORWARD_PRESSED);
         ObjectRendererUtils.decorateJLabelAndButtonSynced(
-                lblBack,
-                btnBack,
-                ObjectRendererUtils.BACKWARD_SELECTED,
-                ObjectRendererUtils.BACKWARD_PRESSED);
+            lblBack,
+            btnBack,
+            ObjectRendererUtils.BACKWARD_SELECTED,
+            ObjectRendererUtils.BACKWARD_PRESSED);
     }
 
     @Override
@@ -168,14 +177,17 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     private void disableSecondPageIfNoPermission() {
         if (!ObjectRendererUtils.checkActionTag(ACTION_TAG)) {
-            for (MouseListener l : lblForw.getMouseListeners()) {
+            for (final MouseListener l : lblForw.getMouseListeners()) {
                 lblForw.removeMouseListener(l);
             }
             lblForw.setEnabled(false);
             btnForward.setEnabled(false);
-            for (MouseListener l : lblBack.getMouseListeners()) {
+            for (final MouseListener l : lblBack.getMouseListeners()) {
                 lblBack.removeMouseListener(l);
             }
             lblBack.setEnabled(false);
@@ -244,13 +256,16 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         lblBack.setText("Info");
         lblBack.setEnabled(false);
         lblBack.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblBackMouseClicked(evt);
-            }
-        });
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblBackMouseClicked(evt);
+                }
+            });
         panFooterLeft.add(lblBack);
 
-        btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left.png"))); // NOI18N
+        btnBack.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left.png"))); // NOI18N
         btnBack.setBorder(null);
         btnBack.setBorderPainted(false);
         btnBack.setContentAreaFilled(false);
@@ -260,10 +275,12 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         btnBack.setMinimumSize(new java.awt.Dimension(30, 30));
         btnBack.setPreferredSize(new java.awt.Dimension(30, 30));
         btnBack.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBackActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnBackActionPerformed(evt);
+                }
+            });
         panFooterLeft.add(btnBack);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -274,7 +291,8 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         panFooterRight.setOpaque(false);
         panFooterRight.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 5));
 
-        btnForward.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-right.png"))); // NOI18N
+        btnForward.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-right.png"))); // NOI18N
         btnForward.setBorder(null);
         btnForward.setBorderPainted(false);
         btnForward.setContentAreaFilled(false);
@@ -283,20 +301,24 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         btnForward.setMinimumSize(new java.awt.Dimension(30, 30));
         btnForward.setPreferredSize(new java.awt.Dimension(30, 30));
         btnForward.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnForwardActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnForwardActionPerformed(evt);
+                }
+            });
         panFooterRight.add(btnForward);
 
         lblForw.setFont(new java.awt.Font("Tahoma", 1, 14));
         lblForw.setForeground(new java.awt.Color(255, 255, 255));
         lblForw.setText("Dokumente");
         lblForw.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblForwMouseClicked(evt);
-            }
-        });
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblForwMouseClicked(evt);
+                }
+            });
         panFooterRight.add(lblForw);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -311,36 +333,36 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         panMain.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
         add(panMain, "card1");
         add(alb_picturePanel, "card2");
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblBackMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBackMouseClicked
+    private void lblBackMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblBackMouseClicked
         btnBackActionPerformed(null);
-    }//GEN-LAST:event_lblBackMouseClicked
+    }                                                                       //GEN-LAST:event_lblBackMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBackActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+    private void btnBackActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBackActionPerformed
         cardLayout.show(this, "card1");
         btnBack.setEnabled(false);
         btnForward.setEnabled(true);
         lblBack.setEnabled(false);
         lblForw.setEnabled(true);
-    }//GEN-LAST:event_btnBackActionPerformed
+    }                                                                           //GEN-LAST:event_btnBackActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnForwardActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnForwardActionPerformed
+    private void btnForwardActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnForwardActionPerformed
         cardLayout.show(this, "card2");
         btnBack.setEnabled(true);
         btnForward.setEnabled(false);
@@ -350,22 +372,22 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         final String fileCollisionWarning = alb_picturePanel.getCollisionWarning();
         if (fileCollisionWarning.length() > 0) {
             JOptionPane.showMessageDialog(
-                    this,
-                    fileCollisionWarning,
-                    "Unterschiedliche Dateiformate",
-                    JOptionPane.WARNING_MESSAGE);
+                this,
+                fileCollisionWarning,
+                "Unterschiedliche Dateiformate",
+                JOptionPane.WARNING_MESSAGE);
         }
         alb_picturePanel.clearCollisionWarning();
-    }//GEN-LAST:event_btnForwardActionPerformed
+    }                                                                              //GEN-LAST:event_btnForwardActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblForwMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblForwMouseClicked
+    private void lblForwMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblForwMouseClicked
         btnForwardActionPerformed(null);
-    }//GEN-LAST:event_lblForwMouseClicked
+    }                                                                       //GEN-LAST:event_lblForwMouseClicked
 
     @Override
     public JComponent getTitleComponent() {
@@ -398,9 +420,8 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         alb_picturePanel.dispose();
     }
 
-
     @Override
-    public void editorClosed(EditorClosedEvent event) {        
+    public void editorClosed(final EditorClosedEvent event) {
     }
 
     @Override
@@ -413,24 +434,24 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
                     cidsBean.getMetaObject().getID());
             if (!unique) {
                 JOptionPane.showMessageDialog(
-                        this,
-                        "Die Laufende Nummer "
-                        + laufendeNrObj
-                        + " existiert bereits unter Baulastblatt "
-                        + blattNrObj
-                        + "! Bitte geben Sie eine andere Nummer ein.");
+                    this,
+                    "Die Laufende Nummer "
+                            + laufendeNrObj
+                            + " existiert bereits unter Baulastblatt "
+                            + blattNrObj
+                            + "! Bitte geben Sie eine andere Nummer ein.");
                 return false;
             }
             if (!Alb_Constraints.checkBaulastHasBelastetesFlurstueck(cidsBean)) {
                 JOptionPane.showMessageDialog(
-                        this,
-                        "Der Baulast ist noch kein belastetes Flurstück zugeordnet!\nBitte ordnen Sie mind. ein belastetes Flurstück zu, erst dann kann der Datensatz gespeichert werden.");
+                    this,
+                    "Der Baulast ist noch kein belastetes Flurstück zugeordnet!\nBitte ordnen Sie mind. ein belastetes Flurstück zu, erst dann kann der Datensatz gespeichert werden.");
                 return false;
             }
             if (!Alb_Constraints.checkBaulastDates(cidsBean)) {
                 JOptionPane.showMessageDialog(
-                        this,
-                        "Sie haben unplausible Datumsangaben vorgenommen (Eingabedatum fehlt oder liegt nach dem Lösch- Schließ oder Befristungsdatum).\nBitte korrigieren Sie die fehlerhaften Datumsangaben, erst dann kann der Datensatz gespeichert werden.");
+                    this,
+                    "Sie haben unplausible Datumsangaben vorgenommen (Eingabedatum fehlt oder liegt nach dem Lösch- Schließ oder Befristungsdatum).\nBitte korrigieren Sie die fehlerhaften Datumsangaben, erst dann kann der Datensatz gespeichert werden.");
                 return false;
             }
 

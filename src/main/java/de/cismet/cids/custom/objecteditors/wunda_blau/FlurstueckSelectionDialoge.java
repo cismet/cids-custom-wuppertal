@@ -25,9 +25,13 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
@@ -63,13 +67,12 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFlurstueckAddMenCancel;
     private javax.swing.JButton btnFlurstueckAddMenOk;
-    private javax.swing.JComboBox cbParcels1;
-    private javax.swing.JComboBox cbParcels2;
-    private javax.swing.JComboBox cbParcels3;
+    private javax.swing.JComboBox cboFlur;
+    private javax.swing.JComboBox cboFlurstck;
+    private javax.swing.JComboBox cboGemarkung;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblFlur;
     private javax.swing.JLabel lblFlurstueck;
-    private javax.swing.JLabel lblFlurstueckAuswaehlen;
     private javax.swing.JLabel lblGemarkung;
     private javax.swing.JLabel lblGemarkungsname;
     private javax.swing.JPanel panAddLandParcel1;
@@ -92,8 +95,37 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
      */
     public FlurstueckSelectionDialoge(final boolean createEnabled) {
         this.createEnabled = createEnabled;
+        setTitle("Bitte Flurstück auswählen");
         initComponents();
-        CismetThreadPool.execute(new AbstractFlurstueckComboModelWorker(cbParcels1, true) {
+        setSize(419, 144);
+
+        final ListCellRenderer lcr = new ListCellRenderer() {
+
+                DefaultListCellRenderer dlcr = new DefaultListCellRenderer();
+
+                @Override
+                public Component getListCellRendererComponent(final JList list,
+                        final Object value,
+                        final int index,
+                        final boolean isSelected,
+                        final boolean cellHasFocus) {
+                    final JLabel ret = (JLabel)dlcr.getListCellRendererComponent(
+                            list,
+                            value,
+                            index,
+                            isSelected,
+                            cellHasFocus);
+                    if (value instanceof LightweightMetaObject) {
+                        final LightweightMetaObject mo = (LightweightMetaObject)value;
+                        ret.setText(String.valueOf(mo.getLWAttribute(FlurstueckFinder.FLURSTUECK_GEMARKUNG)) + " - "
+                                    + String.valueOf(mo.getLWAttribute(FlurstueckFinder.GEMARKUNG_NAME)));
+                    }
+                    return ret;
+                }
+            };
+        cboGemarkung.setRenderer(lcr);
+
+        CismetThreadPool.execute(new AbstractFlurstueckComboModelWorker(cboGemarkung, true) {
 
                 @Override
                 protected ComboBoxModel doInBackground() throws Exception {
@@ -104,9 +136,10 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
                 protected void done() {
                     super.done();
 //                cbParcels1.actionPerformed(null);
-                    cbParcels1.setSelectedIndex(0);
-                    cbParcels1.requestFocusInWindow();
-                    ObjectRendererUtils.selectAllTextInEditableCombobox(cbParcels1);
+                    cboGemarkung.setSelectedIndex(0);
+
+                    cboGemarkung.requestFocusInWindow();
+                    ObjectRendererUtils.selectAllTextInEditableCombobox(cboGemarkung);
                 }
             });
     }
@@ -115,7 +148,7 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
 
     @Override
     public void setVisible(final boolean b) {
-        btnFlurstueckAddMenOk.setEnabled(false);
+        checkOkEnableState();
         super.setVisible(b);
     }
 
@@ -147,48 +180,43 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
         java.awt.GridBagConstraints gridBagConstraints;
 
         panAddLandParcel1 = new javax.swing.JPanel();
-        lblFlurstueckAuswaehlen = new javax.swing.JLabel();
-        cbParcels1 = new javax.swing.JComboBox();
+        cboGemarkung = new javax.swing.JComboBox();
         panMenButtons2 = new javax.swing.JPanel();
         btnFlurstueckAddMenCancel = new javax.swing.JButton();
         btnFlurstueckAddMenOk = new javax.swing.JButton();
-        cbParcels2 = new javax.swing.JComboBox(NO_SELECTION_MODEL);
-        cbParcels3 = new javax.swing.JComboBox(NO_SELECTION_MODEL);
+        cboFlur = new javax.swing.JComboBox(NO_SELECTION_MODEL);
+        cboFlurstck = new javax.swing.JComboBox(NO_SELECTION_MODEL);
         lblGemarkung = new javax.swing.JLabel();
         lblFlur = new javax.swing.JLabel();
         lblFlurstueck = new javax.swing.JLabel();
         lblGemarkungsname = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
 
+        setMinimumSize(new java.awt.Dimension(419, 154));
+
         panAddLandParcel1.setMaximumSize(new java.awt.Dimension(250, 180));
         panAddLandParcel1.setMinimumSize(new java.awt.Dimension(250, 180));
         panAddLandParcel1.setPreferredSize(new java.awt.Dimension(250, 180));
         panAddLandParcel1.setLayout(new java.awt.GridBagLayout());
 
-        lblFlurstueckAuswaehlen.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblFlurstueckAuswaehlen.setText("Bitte Flurstück auswählen:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.insets = new java.awt.Insets(15, 10, 20, 10);
-        panAddLandParcel1.add(lblFlurstueckAuswaehlen, gridBagConstraints);
-
-        cbParcels1.setEditable(true);
-        cbParcels1.setMaximumSize(new java.awt.Dimension(100, 18));
-        cbParcels1.setMinimumSize(new java.awt.Dimension(100, 18));
-        cbParcels1.setPreferredSize(new java.awt.Dimension(100, 18));
-        cbParcels1.addActionListener(new java.awt.event.ActionListener() {
+        cboGemarkung.setEditable(true);
+        cboGemarkung.setMaximumSize(new java.awt.Dimension(100, 18));
+        cboGemarkung.setMinimumSize(new java.awt.Dimension(100, 18));
+        cboGemarkung.setPreferredSize(new java.awt.Dimension(100, 18));
+        cboGemarkung.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    cbParcels1ActionPerformed(evt);
+                    cboGemarkungActionPerformed(evt);
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.weightx = 0.33;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 2.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panAddLandParcel1.add(cbParcels1, gridBagConstraints);
+        panAddLandParcel1.add(cboGemarkung, gridBagConstraints);
 
         panMenButtons2.setLayout(new java.awt.GridBagLayout());
 
@@ -229,51 +257,58 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 2.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panAddLandParcel1.add(panMenButtons2, gridBagConstraints);
 
-        cbParcels2.setEditable(true);
-        cbParcels2.setEnabled(false);
-        cbParcels2.setMaximumSize(new java.awt.Dimension(100, 18));
-        cbParcels2.setMinimumSize(new java.awt.Dimension(100, 18));
-        cbParcels2.setPreferredSize(new java.awt.Dimension(100, 18));
-        cbParcels2.addActionListener(new java.awt.event.ActionListener() {
+        cboFlur.setEditable(true);
+        cboFlur.setEnabled(false);
+        cboFlur.setMaximumSize(new java.awt.Dimension(100, 18));
+        cboFlur.setMinimumSize(new java.awt.Dimension(100, 18));
+        cboFlur.setPreferredSize(new java.awt.Dimension(100, 18));
+        cboFlur.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    cbParcels2ActionPerformed(evt);
+                    cboFlurActionPerformed(evt);
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.weightx = 0.33;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panAddLandParcel1.add(cbParcels2, gridBagConstraints);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
+        panAddLandParcel1.add(cboFlur, gridBagConstraints);
 
-        cbParcels3.setEditable(true);
-        cbParcels3.setEnabled(false);
-        cbParcels3.setMaximumSize(new java.awt.Dimension(100, 18));
-        cbParcels3.setMinimumSize(new java.awt.Dimension(100, 18));
-        cbParcels3.setPreferredSize(new java.awt.Dimension(100, 18));
-        cbParcels3.addActionListener(new java.awt.event.ActionListener() {
+        cboFlurstck.setEditable(true);
+        cboFlurstck.setEnabled(false);
+        cboFlurstck.setMaximumSize(new java.awt.Dimension(100, 18));
+        cboFlurstck.setMinimumSize(new java.awt.Dimension(100, 18));
+        cboFlurstck.setPreferredSize(new java.awt.Dimension(100, 18));
+        cboFlurstck.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    cbParcels3ActionPerformed(evt);
+                    cboFlurstckActionPerformed(evt);
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.weightx = 0.33;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panAddLandParcel1.add(cbParcels3, gridBagConstraints);
+        panAddLandParcel1.add(cboFlurstck, gridBagConstraints);
 
         lblGemarkung.setText("Gemarkung");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 2.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panAddLandParcel1.add(lblGemarkung, gridBagConstraints);
 
@@ -313,15 +348,15 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbParcels1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbParcels1ActionPerformed
-        final Object selection = cbParcels1.getSelectedItem();
-        cbParcels3.setEnabled(false);
+    private void cboGemarkungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboGemarkungActionPerformed
+        final Object selection = cboGemarkung.getSelectedItem();
+        cboFlurstck.setEnabled(false);
         btnFlurstueckAddMenOk.setEnabled(false);
         if (selection instanceof LightweightMetaObject) {
             final LightweightMetaObject lwmo = (LightweightMetaObject)selection;
             final String selGemarkungsNr = String.valueOf(selection);
             CismetThreadPool.execute(new AbstractFlurstueckComboModelWorker(
-                    cbParcels2,
+                    cboFlur,
                     CB_EDITED_ACTION_COMMAND.equals(evt.getActionCommand())) {
 
                     @Override
@@ -332,41 +367,42 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
 
             final String gemarkungsname = String.valueOf(lwmo.getLWAttribute(FlurstueckFinder.GEMARKUNG_NAME));
             lblGemarkungsname.setText("(" + gemarkungsname + ")");
-            cbParcels1.getEditor().getEditorComponent().setBackground(Color.WHITE);
+            cboGemarkung.getEditor().getEditorComponent().setBackground(Color.WHITE);
         } else {
             final int foundBeanIndex = ObjectRendererUtils.findComboBoxItemForString(
-                    cbParcels1,
+                    cboGemarkung,
                     String.valueOf(selection));
             if (foundBeanIndex < 0) {
                 if (createEnabled) {
-                    cbParcels2.setModel(new DefaultComboBoxModel());
+                    cboFlur.setModel(new DefaultComboBoxModel());
                     try {
                         Integer.parseInt(String.valueOf(selection));
-                        cbParcels1.getEditor().getEditorComponent().setBackground(Color.YELLOW);
-                        cbParcels2.setEnabled(true);
+                        cboGemarkung.getEditor().getEditorComponent().setBackground(Color.YELLOW);
+                        cboFlur.setEnabled(true);
                         if (CB_EDITED_ACTION_COMMAND.equals(evt.getActionCommand())) {
-                            cbParcels2.requestFocusInWindow();
+                            cboFlur.requestFocusInWindow();
                         }
                     } catch (Exception notANumberEx) {
                         if (log.isDebugEnabled()) {
                             log.debug(selection + " is not a number!", notANumberEx);
                         }
-                        cbParcels2.setEnabled(false);
-                        cbParcels1.getEditor().getEditorComponent().setBackground(Color.RED);
+                        cboFlur.setEnabled(false);
+                        cboGemarkung.getEditor().getEditorComponent().setBackground(Color.RED);
                         lblGemarkungsname.setText("(Ist keine Zahl)");
                     }
                     lblGemarkungsname.setText(" ");
                 } else {
-                    cbParcels1.getEditor().getEditorComponent().setBackground(Color.RED);
-                    cbParcels2.setEnabled(false);
+                    cboGemarkung.getEditor().getEditorComponent().setBackground(Color.RED);
+                    cboFlur.setEnabled(false);
                 }
             } else {
-                cbParcels1.setSelectedIndex(foundBeanIndex);
-                cbParcels2.getEditor().getEditorComponent().setBackground(Color.WHITE);
-                cbParcels3.getEditor().getEditorComponent().setBackground(Color.WHITE);
+                cboGemarkung.setSelectedIndex(foundBeanIndex);
+                cboFlur.getEditor().getEditorComponent().setBackground(Color.WHITE);
+                cboFlurstck.getEditor().getEditorComponent().setBackground(Color.WHITE);
             }
         }
-    } //GEN-LAST:event_cbParcels1ActionPerformed
+        checkOkEnableState();
+    } //GEN-LAST:event_cboGemarkungActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -384,7 +420,7 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
      * @param  evt  DOCUMENT ME!
      */
     private void btnFlurstueckAddMenOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFlurstueckAddMenOkActionPerformed
-        final Object selection = cbParcels3.getSelectedItem();
+        final Object selection = cboFlurstck.getSelectedItem();
         if (selection instanceof LightweightMetaObject) {
             final CidsBean selectedBean = ((LightweightMetaObject)selection).getBean();
             if (currentListToAdd != null) {
@@ -431,6 +467,7 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
      */
     public void okHook() {
     }
+
     /**
      * DOCUMENT ME!
      */
@@ -439,21 +476,28 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
 
     /**
      * DOCUMENT ME!
+     */
+    private void checkOkEnableState() {
+        btnFlurstueckAddMenOk.setEnabled(cboFlurstck.getSelectedItem() instanceof MetaObject);
+    }
+
+    /**
+     * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbParcels2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbParcels2ActionPerformed
-        final Object selection = cbParcels2.getSelectedItem();
+    private void cboFlurActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboFlurActionPerformed
+        final Object selection = cboFlur.getSelectedItem();
         if (selection instanceof MetaObject) {
-            final String selGem = String.valueOf(cbParcels1.getSelectedItem());
-            final StringBuffer selFlurNr = new StringBuffer(String.valueOf(cbParcels2.getSelectedItem()));
+            final String selGem = String.valueOf(cboGemarkung.getSelectedItem());
+            final StringBuffer selFlurNr = new StringBuffer(String.valueOf(cboFlur.getSelectedItem()));
             while (selFlurNr.length() < 3) {
                 selFlurNr.insert(0, 0);
             }
             btnFlurstueckAddMenOk.setEnabled(false);
-            cbParcels2.getEditor().getEditorComponent().setBackground(Color.WHITE);
+            cboFlur.getEditor().getEditorComponent().setBackground(Color.WHITE);
             CismetThreadPool.execute(new AbstractFlurstueckComboModelWorker(
-                    cbParcels3,
+                    cboFlurstck,
                     CB_EDITED_ACTION_COMMAND.equals(evt.getActionCommand())) {
 
                     @Override
@@ -467,42 +511,44 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
             while (selString.length() < 3) {
                 selString = "0" + selString;
             }
-            final int foundBeanIndex = ObjectRendererUtils.findComboBoxItemForString(cbParcels2, selString);
+            final int foundBeanIndex = ObjectRendererUtils.findComboBoxItemForString(cboFlur, selString);
             if (foundBeanIndex < 0) {
                 if (createEnabled) {
-                    cbParcels2.getEditor().getEditorComponent().setBackground(Color.YELLOW);
-                    cbParcels3.setModel(new DefaultComboBoxModel());
-                    cbParcels3.setEnabled(true);
+                    cboFlur.getEditor().getEditorComponent().setBackground(Color.YELLOW);
+                    cboFlurstck.setModel(new DefaultComboBoxModel());
+                    cboFlurstck.setEnabled(true);
                     if (CB_EDITED_ACTION_COMMAND.equals(evt.getActionCommand())) {
-                        cbParcels3.requestFocusInWindow();
+                        cboFlurstck.requestFocusInWindow();
+                        cboFlurstck.setSelectedIndex(0);
                     }
                 } else {
-                    cbParcels2.getEditor().getEditorComponent().setBackground(Color.RED);
-                    cbParcels3.setModel(new DefaultComboBoxModel());
-                    cbParcels3.setEnabled(false);
+                    cboFlur.getEditor().getEditorComponent().setBackground(Color.RED);
+                    cboFlurstck.setModel(new DefaultComboBoxModel());
+                    cboFlurstck.setEnabled(false);
                 }
             } else {
-                cbParcels2.setSelectedIndex(foundBeanIndex);
-                cbParcels3.getEditor().getEditorComponent().setBackground(Color.WHITE);
+                cboFlur.setSelectedIndex(foundBeanIndex);
+                cboFlurstck.getEditor().getEditorComponent().setBackground(Color.WHITE);
             }
         }
-    } //GEN-LAST:event_cbParcels2ActionPerformed
+        checkOkEnableState();
+    } //GEN-LAST:event_cboFlurActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbParcels3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbParcels3ActionPerformed
+    private void cboFlurstckActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboFlurstckActionPerformed
         btnFlurstueckAddMenOk.setEnabled(checkFlurstueckSelectionComplete());
         if (CB_EDITED_ACTION_COMMAND.equals(evt.getActionCommand())) {
             btnFlurstueckAddMenOk.requestFocusInWindow();
         }
-        final Component editor = cbParcels3.getEditor().getEditorComponent();
-        if (cbParcels3.getSelectedItem() instanceof MetaObject) {
+        final Component editor = cboFlurstck.getEditor().getEditorComponent();
+        if (cboFlurstck.getSelectedItem() instanceof MetaObject) {
             editor.setBackground(Color.WHITE);
         } else {
-            String parcelNo = String.valueOf(cbParcels3.getSelectedItem());
+            String parcelNo = String.valueOf(cboFlurstck.getSelectedItem());
             if (!parcelNo.contains("/")) {
                 parcelNo += "/0";
                 if (editor instanceof JTextField) {
@@ -510,18 +556,18 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
                     textEditor.setText(parcelNo);
                 }
             }
-            final int foundBeanIndex = ObjectRendererUtils.findComboBoxItemForString(cbParcels3, parcelNo);
+            final int foundBeanIndex = ObjectRendererUtils.findComboBoxItemForString(cboFlurstck, parcelNo);
             if (foundBeanIndex < 0) {
                 if (createEnabled) {
-                    cbParcels3.getEditor().getEditorComponent().setBackground(Color.YELLOW);
+                    cboFlurstck.getEditor().getEditorComponent().setBackground(Color.YELLOW);
                 } else {
-                    cbParcels3.getEditor().getEditorComponent().setBackground(Color.RED);
+                    cboFlurstck.getEditor().getEditorComponent().setBackground(Color.RED);
                 }
             } else {
-                cbParcels3.setSelectedIndex(foundBeanIndex);
+                cboFlurstck.setSelectedIndex(foundBeanIndex);
             }
         }
-    }                                                                              //GEN-LAST:event_cbParcels3ActionPerformed
+    }                                                                               //GEN-LAST:event_cboFlurstckActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -529,9 +575,9 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
      * @return  DOCUMENT ME!
      */
     private boolean checkFlurstueckSelectionComplete() {
-        if (cbParcels2.isEnabled() && cbParcels3.isEnabled()) {
-            final Object sel2 = cbParcels2.getSelectedItem();
-            final Object sel3 = cbParcels3.getSelectedItem();
+        if (cboFlur.isEnabled() && cboFlurstck.isEnabled()) {
+            final Object sel2 = cboFlur.getSelectedItem();
+            final Object sel3 = cboFlurstck.getSelectedItem();
             if ((sel2 != null) && (sel3 != null)) {
                 if (createEnabled || (sel3 instanceof MetaObject)) {
                     if ((sel2.toString().length() > 0) && (sel3.toString().length() > 0)) {
@@ -554,8 +600,8 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
         int result = JOptionPane.YES_OPTION;
         try {
             final Map<String, Object> newLandParcelProperties = TypeSafeCollections.newHashMap();
-            final String gemarkung = String.valueOf(cbParcels1.getSelectedItem());
-            final String flur = String.valueOf(cbParcels2.getSelectedItem());
+            final String gemarkung = String.valueOf(cboGemarkung.getSelectedItem());
+            final String flur = String.valueOf(cboFlur.getSelectedItem());
             if (flur.length() != 3) {
                 result = JOptionPane.showConfirmDialog(
                         this,
@@ -646,7 +692,10 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
                 log.error(ex, ex);
             } finally {
                 box.setEnabled(true);
+                box.setSelectedIndex(0);
                 ObjectRendererUtils.selectAllTextInEditableCombobox(box);
+
+                checkOkEnableState();
             }
         }
     }

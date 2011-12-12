@@ -149,9 +149,9 @@ public class ThemaAggregationRenderer extends javax.swing.JPanel implements Cids
         // panAggregationRenderer.add(layerAgr, java.awt.BorderLayout.CENTER); lockTblAgr.setLocked(true);
     } // </editor-fold>//GEN-END:initComponents
 
-    // should be static!
-
     //~ Instance fields --------------------------------------------------------
+
+    // should be static!
 
     // </editor-fold>//GEN-END:initComponents
 
