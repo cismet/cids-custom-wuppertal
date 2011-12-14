@@ -65,35 +65,6 @@
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout">
             <Property name="alignment" type="int" value="2"/>
           </Layout>
-          <SubComponents>
-            <Component class="org.jdesktop.swingx.JXBusyLabel" name="lblBusy">
-            </Component>
-            <Component class="javax.swing.JButton" name="btnSearch">
-              <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/de/cismet/cids/custom/wunda_blau/res/zoom.gif"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Suchen"/>
-                <Property name="toolTipText" type="java.lang.String" value="Suche starten"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSearchActionPerformed"/>
-              </Events>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnAbort">
-              <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/de/cismet/cids/custom/wunda_blau/res/cancel.png"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Abbrechen"/>
-                <Property name="toolTipText" type="java.lang.String" value="Suche abbrechen"/>
-                <Property name="enabled" type="boolean" value="false"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAbortActionPerformed"/>
-              </Events>
-            </Component>
-          </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="panSucheNach">
           <Properties>

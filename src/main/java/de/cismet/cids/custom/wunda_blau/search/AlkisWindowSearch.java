@@ -13,9 +13,8 @@
 package de.cismet.cids.custom.wunda_blau.search;
 
 import Sirius.navigator.actiontag.ActionTagProtected;
-import Sirius.navigator.connection.SessionManager;
-import Sirius.navigator.method.MethodManager;
-import Sirius.navigator.ui.ComponentRegistry;
+import Sirius.navigator.search.dynamic.SearchControlListener;
+import Sirius.navigator.search.dynamic.SearchControlPanel;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.Node;
@@ -23,17 +22,10 @@ import Sirius.server.search.CidsServerSearch;
 
 import com.vividsolutions.jts.geom.Geometry;
 
-import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.error.ErrorInfo;
-
 import java.awt.CardLayout;
-
-import java.util.Collection;
-import java.util.concurrent.ExecutionException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
@@ -47,8 +39,6 @@ import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
-import de.cismet.tools.CismetThreadPool;
-
 /**
  * DOCUMENT ME!
  *
@@ -56,7 +46,9 @@ import de.cismet.tools.CismetThreadPool;
  * @version  $Revision$, $Date$
  */
 @org.openide.util.lookup.ServiceProvider(service = CidsWindowSearch.class)
-public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowSearch, ActionTagProtected {
+public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowSearch,
+    ActionTagProtected,
+    SearchControlListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -67,13 +59,11 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
 
     private final MetaClass mc;
     private final ImageIcon icon;
-    private SwingWorker<Void, Void> searchWorker;
+    private SearchControlPanel pnlSearchCancel;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrNach;
     private javax.swing.ButtonGroup bgrOwner;
     private javax.swing.ButtonGroup bgrUeber;
-    private javax.swing.JButton btnAbort;
-    private javax.swing.JButton btnSearch;
     private javax.swing.JCheckBox chkGeburtsnameExakt;
     private javax.swing.JCheckBox chkGeomFilter;
     private javax.swing.JCheckBox chkNameExakt;
@@ -93,7 +83,6 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private org.jdesktop.swingx.JXBusyLabel lblBusy;
     private javax.swing.JRadioButton optEigIstFirma;
     private javax.swing.JRadioButton optEigIstMaennlich;
     private javax.swing.JRadioButton optEigIstUnbekannt;
@@ -129,6 +118,8 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         icon = new ImageIcon(mc.getIconData());
         initComponents();
         ((CardLayout)panEingabe.getLayout()).show(panEingabe, "eigentuemer");
+        pnlSearchCancel = new SearchControlPanel(this);
+        panCommand.add(pnlSearchCancel);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -147,9 +138,6 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         bgrOwner = new javax.swing.ButtonGroup();
         panSearch = new javax.swing.JPanel();
         panCommand = new javax.swing.JPanel();
-        lblBusy = new org.jdesktop.swingx.JXBusyLabel();
-        btnSearch = new javax.swing.JButton();
-        btnAbort = new javax.swing.JButton();
         panSucheNach = new javax.swing.JPanel();
         optSucheNachFlurstuecke = new javax.swing.JRadioButton();
         optSucheNachGrundbuchblaetter = new javax.swing.JRadioButton();
@@ -202,35 +190,6 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         panSearch.setLayout(new java.awt.GridBagLayout());
 
         panCommand.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
-        panCommand.add(lblBusy);
-
-        btnSearch.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom.gif"))); // NOI18N
-        btnSearch.setText("Suchen");
-        btnSearch.setToolTipText("Suche starten");
-        btnSearch.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnSearchActionPerformed(evt);
-                }
-            });
-        panCommand.add(btnSearch);
-
-        btnAbort.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/cancel.png"))); // NOI18N
-        btnAbort.setText("Abbrechen");
-        btnAbort.setToolTipText("Suche abbrechen");
-        btnAbort.setEnabled(false);
-        btnAbort.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnAbortActionPerformed(evt);
-                }
-            });
-        panCommand.add(btnAbort);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -624,15 +583,6 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnSearchActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnSearchActionPerformed
-        performSearch();
-    }                                                                             //GEN-LAST:event_btnSearchActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
     private void optSucheUeberEigentuemerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_optSucheUeberEigentuemerActionPerformed
         ((CardLayout)panEingabe.getLayout()).show(panEingabe, "eigentuemer");
     }                                                                                            //GEN-LAST:event_optSucheUeberEigentuemerActionPerformed
@@ -726,68 +676,6 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         ((CardLayout)panEingabe.getLayout()).show(panEingabe, "grundbuchblatt");
     }                                                                                               //GEN-LAST:event_optSucheUeberGrundbuchblattActionPerformed
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void btnAbortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAbortActionPerformed
-        if (searchWorker != null) {
-            searchWorker.cancel(true);
-        }
-    }                                                                            //GEN-LAST:event_btnAbortActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     */
-    private void performSearch() {
-        btnSearch.setEnabled(false);
-        btnAbort.setEnabled(true);
-        lblBusy.setBusy(true);
-        searchWorker = new SwingWorker<Void, Void>() {
-
-                @Override
-                protected Void doInBackground() throws Exception {
-                    final Collection<Node> r = SessionManager.getProxy()
-                                .customServerSearch(SessionManager.getSession().getUser(), getServerSearch());
-                    log.info("server done " + r.size() + "results");
-                    if (!Thread.currentThread().isInterrupted()) {
-                        MethodManager.getManager().showSearchResults(r.toArray(new Node[r.size()]), false);
-                    }
-                    return null;
-                }
-
-                @Override
-                protected void done() {
-                    try {
-                        if (!isCancelled()) {
-                            get();
-                        }
-                    } catch (ExecutionException ee) {
-                        JXErrorPane.showDialog(
-                            ComponentRegistry.getRegistry().getNavigator(),
-                            new ErrorInfo(
-                                "ALKIS Suche",
-                                "Der ALKIS-Dienst meldet einen Fehler.",
-                                null,
-                                "",
-                                ee,
-                                null,
-                                null));
-                    } catch (InterruptedException ex) {
-                        log.warn(ex, ex);
-                    } catch (Exception ex) {
-                        log.error(ex, ex);
-                    } finally {
-                        lblBusy.setBusy(false);
-                        btnAbort.setEnabled(false);
-                        btnSearch.setEnabled(true);
-                    }
-                }
-            };
-        CismetThreadPool.execute(searchWorker);
-    }
-
     @Override
     public ImageIcon getIcon() {
         return icon;
@@ -879,4 +767,26 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
 //            return false;
 //        }
 //    }
+
+    @Override
+    public CidsServerSearch assembleSearch() {
+        return getServerSearch();
+    }
+
+    @Override
+    public void searchStarted() {
+    }
+
+    @Override
+    public void searchDone(final Node[] result) {
+    }
+
+    @Override
+    public void searchCancelled() {
+    }
+
+    @Override
+    public boolean displaysEmptyResultMessage() {
+        return true;
+    }
 }

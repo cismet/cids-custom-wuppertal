@@ -25,6 +25,7 @@ import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -1163,51 +1164,59 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
     public boolean prepareForSave() {
         correctBlattnummer();
         try {
+            final ArrayList<String> errors = new ArrayList<String>();
             final String blattnummer = txtBlattnummer.getText();
             final boolean unique = Alb_Constraints.checkUniqueBlattNummer(
                     blattnummer,
                     getCidsBean().getMetaObject().getID());
             if (!unique) {
-                JOptionPane.showMessageDialog(
-                    this,
+                errors.add(
                     "Die Blattnummer "
                             + blattnummer
                             + " existiert bereits! Bitte geben Sie eine andere Blattnummer ein.");
-                return false;
             }
             final List<String> alleLastenOhneBelastetesFS = Alb_Constraints
                         .getBaulastenOhneBelastestesFlurstueckFromBlatt(cidsBean);
             if (alleLastenOhneBelastetesFS.size() > 0) {
-                JOptionPane.showMessageDialog(
-                    this,
+                errors.add(
                     "Folgende Baulasten haben kein belastetes Flurstück:\n"
                             + alleLastenOhneBelastetesFS
                             + "\nBitte ordnen Sie diesen laufenden Nummern belastete Flurstücke zu, erst dann kann der Datensatz gespeichert werden.");
-                return false;
             }
             final List<String> incorrectBaulasteDates = Alb_Constraints.getIncorrectBaulastDates(cidsBean);
             if (incorrectBaulasteDates.size() > 0) {
-                JOptionPane.showMessageDialog(
-                    this,
+                errors.add(
                     "Sie haben bei den folgenden laufenden Nummern des aktuell bearbeiteten Baulastblattes unplausible Datumsangaben vorgenommen (Eingabedatum fehlt oder liegt nach dem Lösch- Schließ oder Befristungsdatum):\n"
                             + incorrectBaulasteDates
                             + "\nBitte korrigieren Sie die fehlerhaften Datumsangaben, erst dann kann der Datensatz gespeichert werden.");
-                return false;
             }
             final Set<String> laufendeNummerCheck = new HashSet<String>();
             for (final CidsBean last : baulastenBeans) {
                 final String lastString = String.valueOf(last);
                 if (!laufendeNummerCheck.add(lastString)) {
-                    JOptionPane.showMessageDialog(
-                        this,
+                    errors.add(
                         "Die laufende Nummer "
                                 + lastString
                                 + " ist mehrfach vergeben. Bitte ordnen Sie jeder Baulaste eine eindeutige laufende Nummer zu.");
-                    return false;
                 }
             }
-            fillBaulastQualityAttributes();
-            return true;
+
+            if (errors.size() > 0) {
+                String errorOutput = "";
+                for (final String s : errors) {
+                    errorOutput += s + "\n";
+                }
+                errorOutput = errorOutput.substring(0, errorOutput.length() - 1);
+                JOptionPane.showMessageDialog(
+                    this,
+                    errorOutput,
+                    "Fehler aufgetreten",
+                    JOptionPane.WARNING_MESSAGE);
+                return false;
+            } else {
+                fillBaulastQualityAttributes();
+                return true;
+            }
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Speichern", ex, this);
             throw new RuntimeException(ex);
