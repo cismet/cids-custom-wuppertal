@@ -1,10 +1,10 @@
 /***************************************************
- *
- * cismet GmbH, Saarbruecken, Germany
- *
- *              ... and it just works.
- *
- ****************************************************/
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * CoolThemaRenderer.java
  *
@@ -24,6 +24,7 @@ import java.awt.event.MouseListener;
 
 import java.sql.Date;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.swing.JComponent;
@@ -45,7 +46,6 @@ import de.cismet.cids.editors.EditorSaveListener;
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
-import java.util.ArrayList;
 
 /**
  * de.cismet.cids.objectrenderer.CoolThemaRenderer.
@@ -57,17 +57,20 @@ import java.util.ArrayList;
  */
 @AggregationRenderer
 public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore,
-        TitleComponentProvider,
-        FooterComponentProvider,
-        BorderProvider,
-        RequestsFullSizeComponent,
-        EditorSaveListener {
+    TitleComponentProvider,
+    FooterComponentProvider,
+    BorderProvider,
+    RequestsFullSizeComponent,
+    EditorSaveListener {
 
     //~ Static fields/initializers ---------------------------------------------
+
     private static final Logger LOG = Logger.getLogger(Alb_baulastEditor.class);
     public static final String TITLE_AGR_PREFIX = "Baulasten";
     private static final String ACTION_TAG = "custom.baulast.document";
+
     //~ Instance fields --------------------------------------------------------
+
     private final boolean editable;
     private CidsBean cidsBean;
     private final CardLayout cardLayout;
@@ -88,6 +91,7 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
+
     /**
      * Creates new form CoolThemaRenderer.
      */
@@ -104,10 +108,11 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         this.editable = editable;
         this.initComponents();
         initFooterElements();
-        cardLayout = (CardLayout) getLayout();
+        cardLayout = (CardLayout)getLayout();
     }
 
     //~ Methods ----------------------------------------------------------------
+
     /**
      * DOCUMENT ME!
      *
@@ -117,7 +122,7 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         try {
             if ((cidsBean != null) && (cidsBean.getMetaObject().getStatus() == MetaObject.MODIFIED)) {
                 final Object geprueftObj = cidsBean.getProperty("geprueft");
-                if ((geprueftObj instanceof Boolean) && ((Boolean) geprueftObj)) {
+                if ((geprueftObj instanceof Boolean) && ((Boolean)geprueftObj)) {
                     cidsBean.setProperty("geprueft_von", SessionManager.getSession().getUser().getName());
                     cidsBean.setProperty("pruefdatum", new Date(System.currentTimeMillis()));
                 } else {
@@ -135,15 +140,15 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
      */
     private void initFooterElements() {
         ObjectRendererUtils.decorateJLabelAndButtonSynced(
-                lblForw,
-                btnForward,
-                ObjectRendererUtils.FORWARD_SELECTED,
-                ObjectRendererUtils.FORWARD_PRESSED);
+            lblForw,
+            btnForward,
+            ObjectRendererUtils.FORWARD_SELECTED,
+            ObjectRendererUtils.FORWARD_PRESSED);
         ObjectRendererUtils.decorateJLabelAndButtonSynced(
-                lblBack,
-                btnBack,
-                ObjectRendererUtils.BACKWARD_SELECTED,
-                ObjectRendererUtils.BACKWARD_PRESSED);
+            lblBack,
+            btnBack,
+            ObjectRendererUtils.BACKWARD_SELECTED,
+            ObjectRendererUtils.BACKWARD_PRESSED);
     }
 
     @Override
@@ -336,29 +341,29 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblBackMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBackMouseClicked
+    private void lblBackMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblBackMouseClicked
         btnBackActionPerformed(null);
-    }//GEN-LAST:event_lblBackMouseClicked
+    }                                                                       //GEN-LAST:event_lblBackMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBackActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+    private void btnBackActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBackActionPerformed
         cardLayout.show(this, "card1");
         btnBack.setEnabled(false);
         btnForward.setEnabled(true);
         lblBack.setEnabled(false);
         lblForw.setEnabled(true);
-    }//GEN-LAST:event_btnBackActionPerformed
+    }                                                                           //GEN-LAST:event_btnBackActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnForwardActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnForwardActionPerformed
+    private void btnForwardActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnForwardActionPerformed
         cardLayout.show(this, "card2");
         btnBack.setEnabled(true);
         btnForward.setEnabled(false);
@@ -368,22 +373,22 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         final String fileCollisionWarning = alb_picturePanel.getCollisionWarning();
         if (fileCollisionWarning.length() > 0) {
             JOptionPane.showMessageDialog(
-                    this,
-                    fileCollisionWarning,
-                    "Unterschiedliche Dateiformate",
-                    JOptionPane.WARNING_MESSAGE);
+                this,
+                fileCollisionWarning,
+                "Unterschiedliche Dateiformate",
+                JOptionPane.WARNING_MESSAGE);
         }
         alb_picturePanel.clearCollisionWarning();
-    }//GEN-LAST:event_btnForwardActionPerformed
+    }                                                                              //GEN-LAST:event_btnForwardActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblForwMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblForwMouseClicked
+    private void lblForwMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblForwMouseClicked
         btnForwardActionPerformed(null);
-    }//GEN-LAST:event_lblForwMouseClicked
+    }                                                                       //GEN-LAST:event_lblForwMouseClicked
 
     @Override
     public JComponent getTitleComponent() {
@@ -423,7 +428,7 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
     @Override
     public boolean prepareForSave() {
         try {
-            ArrayList<String> errors = new ArrayList<String>();
+            final ArrayList<String> errors = new ArrayList<String>();
 
             final Object laufendeNrObj = cidsBean.getProperty("laufende_nummer");
             final Object blattNrObj = cidsBean.getProperty("blattnummer");
@@ -432,33 +437,34 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
                     cidsBean.getMetaObject().getID());
             if (!unique) {
                 errors.add(
-                        "Die Laufende Nummer "
-                        + laufendeNrObj
-                        + " existiert bereits unter Baulastblatt "
-                        + blattNrObj
-                        + "! Bitte geben Sie eine andere Nummer ein.");
+                    "Die Laufende Nummer "
+                            + laufendeNrObj
+                            + " existiert bereits unter Baulastblatt "
+                            + blattNrObj
+                            + "! Bitte geben Sie eine andere Nummer ein.");
             }
             if (!Alb_Constraints.checkBaulastHasBelastetesFlurstueck(cidsBean)) {
                 errors.add(
-                        "Der Baulast ist noch kein belastetes Flurstück zugeordnet!\n"
-                        + "Bitte ordnen Sie mind. ein belastetes Flurstück zu, erst dann kann der Datensatz gespeichert werden.");
-
+                    "Der Baulast ist noch kein belastetes Flurstück zugeordnet!\n"
+                            + "Bitte ordnen Sie mind. ein belastetes Flurstück zu, erst dann kann der Datensatz gespeichert werden.");
             }
             if (!Alb_Constraints.checkBaulastDates(cidsBean)) {
                 errors.add(
-                        "Sie haben unplausible Datumsangaben vorgenommen (Eingabedatum fehlt oder liegt nach dem Lösch- Schließ oder Befristungsdatum).\n"
-                        + "Bitte korrigieren Sie die fehlerhaften Datumsangaben, erst dann kann der Datensatz gespeichert werden.");
+                    "Sie haben unplausible Datumsangaben vorgenommen (Eingabedatum fehlt oder liegt nach dem Lösch- Schließ oder Befristungsdatum).\n"
+                            + "Bitte korrigieren Sie die fehlerhaften Datumsangaben, erst dann kann der Datensatz gespeichert werden.");
             }
 
             if (errors.size() > 0) {
-
                 String errorOutput = "";
-                for (String s : errors) {
+                for (final String s : errors) {
                     errorOutput += s + "\n";
                 }
                 errorOutput = errorOutput.substring(0, errorOutput.length() - 1);
                 JOptionPane.showMessageDialog(
-                        this, errorOutput, "Fehler aufgetreten", JOptionPane.WARNING_MESSAGE);
+                    this,
+                    errorOutput,
+                    "Fehler aufgetreten",
+                    JOptionPane.WARNING_MESSAGE);
                 return false;
             } else {
                 addPruefungsInfoToBean(cidsBean);

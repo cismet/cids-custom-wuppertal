@@ -180,7 +180,6 @@ public class Alb_Constraints {
         }
         throw new RuntimeException("Unbekannter Fehler beim Speichern!");
     }
-    
 
     /**
      * DOCUMENT ME!
@@ -224,6 +223,4 @@ public class Alb_Constraints {
         }
         return false;
     }
-    
-    
 }
