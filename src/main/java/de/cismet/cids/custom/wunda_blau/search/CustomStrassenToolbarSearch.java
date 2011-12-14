@@ -9,9 +9,9 @@ package de.cismet.cids.custom.wunda_blau.search;
 
 import Sirius.navigator.search.CaseSensitiveModifier;
 import Sirius.navigator.search.HereModifier;
+
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.search.CidsServerSearch;
-
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -71,7 +71,7 @@ public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
     public String getName() {
         return mc.getName();
     }
-    
+
     @Override
     public String getHint() {
         return "Strassenname";
@@ -81,7 +81,7 @@ public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
     public void setSearchParameter(final String toolbarSearchString) {
         this.searchString = toolbarSearchString;
     }
-    
+
     @Override
     public void applyModifiers(final Collection<? extends Modifier> modifiers) {
         this.modifiers = modifiers;
@@ -91,11 +91,11 @@ public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
     public CidsServerSearch getServerSearch() {
         boolean caseSensitive = false;
         String geometry = "";
-        
-        for(final Modifier modifier : modifiers) {
-            if(modifier instanceof CaseSensitiveModifier) {
+
+        for (final Modifier modifier : modifiers) {
+            if (modifier instanceof CaseSensitiveModifier) {
                 caseSensitive = true;
-            } else if(modifier instanceof HereModifier) {
+            } else if (modifier instanceof HereModifier) {
                 geometry = modifier.getValue();
             }
         }

@@ -25,13 +25,15 @@ package de.cismet.cids.custom.wunda_blau.search;
 
 import Sirius.navigator.search.CaseSensitiveModifier;
 import Sirius.navigator.search.HereModifier;
+
 import Sirius.server.search.CidsServerSearch;
+
+import java.util.Collection;
 
 import javax.swing.ImageIcon;
 
 import de.cismet.cids.tools.search.clientstuff.CidsToolbarSearch;
 import de.cismet.cids.tools.search.clientstuff.Modifier;
-import java.util.Collection;
 
 /**
  * DOCUMENT ME!
@@ -53,7 +55,7 @@ public class FullTextToolbarSearch implements CidsToolbarSearch {
     public void setSearchParameter(final String toolbarSearchString) {
         input = toolbarSearchString;
     }
-    
+
     @Override
     public void applyModifiers(final Collection<? extends Modifier> modifiers) {
         this.modifiers = modifiers;
@@ -68,25 +70,25 @@ public class FullTextToolbarSearch implements CidsToolbarSearch {
     public String getName() {
         return "Volltextsuche";
     }
-    
+
     @Override
     public String getHint() {
         return "Suchtext";
     }
-    
+
     @Override
     public CidsServerSearch getServerSearch() {
         boolean caseSensitive = false;
         String geometry = "";
-        
-        for(final Modifier modifier : modifiers) {
-            if(modifier instanceof CaseSensitiveModifier) {
+
+        for (final Modifier modifier : modifiers) {
+            if (modifier instanceof CaseSensitiveModifier) {
                 caseSensitive = true;
-            } else if(modifier instanceof HereModifier) {
+            } else if (modifier instanceof HereModifier) {
                 geometry = modifier.getValue();
             }
         }
-        
+
         return new FullTextSearchStatement(input, geometry, caseSensitive);
     }
 }

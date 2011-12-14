@@ -50,7 +50,9 @@ public class FullTextSearchStatement extends CidsServerSearch {
     /**
      * Creates a new FullTextSearchStatement object.
      *
-     * @param  searchString  DOCUMENT ME!
+     * @param  searchString   DOCUMENT ME!
+     * @param  geometry       DOCUMENT ME!
+     * @param  caseSensitive  DOCUMENT ME!
      */
     public FullTextSearchStatement(final String searchString, final String geometry, final boolean caseSensitive) {
         this.searchString = searchString;
@@ -65,7 +67,7 @@ public class FullTextSearchStatement extends CidsServerSearch {
         try {
             final String classes = "6";
             String condition = "AND lower(string_val) LIKE lower('%" + searchString + "%') ";
-            if(caseSensitive) {
+            if (caseSensitive) {
                 condition = "AND string_val LIKE '%" + searchString + "%' ";
             }
 
