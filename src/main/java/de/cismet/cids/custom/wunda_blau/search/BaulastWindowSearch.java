@@ -27,6 +27,8 @@ import com.vividsolutions.jts.geom.Geometry;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
+import java.awt.EventQueue;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -613,7 +615,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     public void searchDone(final Node[] result) {
         if ((result != null) && (result.length > 0)) {
             txtBlattnummer.setText("");
-            cbArt.setSelectedItem(null);
+            cbArt.setSelectedIndex(0);
             chkKartenausschnitt.setSelected(false);
         }
     }

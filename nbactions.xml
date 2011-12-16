@@ -9,8 +9,8 @@
         <properties>
             <jalopy.skip>true</jalopy.skip>
             <exec.classpathScope>runtime</exec.classpathScope>
-            <exec.workingdir>${de.cismet.cids.navigator.workingDir}</exec.workingdir>
-            <exec.args>-Ddirectory.extension=WUNDA -Xms256m -Xmx1024m -Duser.country=DE -Duser.language=de -classpath ${de.cismet.cids.classpath} Sirius.navigator.Navigator ${de.cismet.cids.navigator.workingDir}/config/log4j.debug.properties ${de.cismet.cids.navigator.workingDir}/config/navigator.cfg ${de.cismet.cids.navigator.workingDir} ${de.cismet.cids.navigator.workingDir}/plugins ${de.cismet.cids.navigator.workingDir}/search ${de.cismet.cids.navigator.workingDir}/profiles</exec.args>
+            <exec.workingdir>${de.cismet.cids.navigator.workingDir.wunda}</exec.workingdir>
+            <exec.args>-Ddirectory.extension=WUNDA -Xms256m -Xmx1024m -Duser.country=DE -Duser.language=de -classpath ${de.cismet.cids.classpath} Sirius.navigator.Navigator ${de.cismet.cids.navigator.workingDir.wunda}/config/log4j.properties ${de.cismet.cids.navigator.workingDir.wunda}/config/navigator.cfg ${de.cismet.cids.navigator.workingDir.wunda} ${de.cismet.cids.navigator.workingDir.wunda}/plugins ${de.cismet.cids.navigator.workingDir.wunda}/search ${de.cismet.cids.navigator.workingDir.wunda}/profiles</exec.args>
             <exec.executable>java</exec.executable>
         </properties>
     </action>
@@ -23,8 +23,8 @@
         <properties>
             <jalopy.skip>true</jalopy.skip>
             <exec.classpathScope>runtime</exec.classpathScope>
-            <exec.workingdir>${de.cismet.cids.navigator.workingDir}</exec.workingdir>
-            <exec.args>-Ddirectory.extension=WUNDA -Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -Xms256m -Xmx1024m -Duser.country=DE -Duser.language=de -classpath ${de.cismet.cids.classpath} Sirius.navigator.Navigator ${de.cismet.cids.navigator.workingDir}/config/log4j.debug.properties ${de.cismet.cids.navigator.workingDir}/config/navigator.cfg ${de.cismet.cids.navigator.workingDir} ${de.cismet.cids.navigator.workingDir}/plugins ${de.cismet.cids.navigator.workingDir}/search ${de.cismet.cids.navigator.workingDir}/profiles</exec.args>
+            <exec.workingdir>${de.cismet.cids.navigator.workingDir.wunda}</exec.workingdir>
+            <exec.args>-Ddirectory.extension=WUNDA -Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -Xms256m -Xmx1024m -Duser.country=DE -Duser.language=de -classpath ${de.cismet.cids.classpath} Sirius.navigator.Navigator ${de.cismet.cids.navigator.workingDir.wunda}/config/log4j.debug.properties ${de.cismet.cids.navigator.workingDir.wunda}/config/navigator.cfg ${de.cismet.cids.navigator.workingDir.wunda} ${de.cismet.cids.navigator.workingDir.wunda}/plugins ${de.cismet.cids.navigator.workingDir.wunda}/search ${de.cismet.cids.navigator.workingDir.wunda}/profiles</exec.args>
             <jpda.listen>true</jpda.listen>
             <exec.executable>java</exec.executable>
         </properties>
@@ -36,8 +36,8 @@
             <goal>org.codehaus.mojo:exec-maven-plugin:1.1.1:exec</goal>
         </goals>
         <properties>
-            <exec.args>${profiler.args} -Ddirectory.extension=WUNDA -Xms256m -Xmx1024m -Duser.country=DE -Duser.language=de -classpath ${de.cismet.cids.classpath} Sirius.navigator.Navigator ${de.cismet.cids.navigator.workingDir}/config/log4j.debug.properties ${de.cismet.cids.navigator.workingDir}/config/navigator.cfg ${de.cismet.cids.navigator.workingDir} ${de.cismet.cids.navigator.workingDir}/plugins ${de.cismet.cids.navigator.workingDir}/search ${de.cismet.cids.navigator.workingDir}/profiles</exec.args>
-            <exec.workingdir>${de.cismet.cids.navigator.workingDir}</exec.workingdir>
+            <exec.args>${profiler.args} -Ddirectory.extension=WUNDA -Xms256m -Xmx1024m -Duser.country=DE -Duser.language=de -classpath ${de.cismet.cids.classpath} Sirius.navigator.Navigator ${de.cismet.cids.navigator.workingDir.wunda}/config/log4j.debug.properties ${de.cismet.cids.navigator.workingDir.wunda}/config/navigator.cfg ${de.cismet.cids.navigator.workingDir.wunda} ${de.cismet.cids.navigator.workingDir.wunda}/plugins ${de.cismet.cids.navigator.workingDir.wunda}/search ${de.cismet.cids.navigator.workingDir.wunda}/profiles</exec.args>
+            <exec.workingdir>${de.cismet.cids.navigator.workingDir.wunda}</exec.workingdir>
             <profiler.action>profile</profiler.action>
             <exec.executable>${profiler.java}</exec.executable>
         </properties>
@@ -54,4 +54,31 @@
             <activatedProfile>deploy-public</activatedProfile>
         </activatedProfiles>
     </action>
+    <action>
+            <actionName>debug.single.main</actionName>
+            <goals>
+                <goal>process-classes</goal>
+                <goal>org.codehaus.mojo:exec-maven-plugin:1.2:exec</goal>
+            </goals>
+            <properties>
+                <jalopy.skip>true</jalopy.skip>
+                <exec.classpathScope>${classPathScope}</exec.classpathScope>
+                <jpda.listen>true</jpda.listen>
+                <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath ${packageClassName}</exec.args>
+                <exec.executable>java</exec.executable>
+            </properties>
+        </action>
+    <action>
+            <actionName>run.single.main</actionName>
+            <goals>
+                <goal>process-classes</goal>
+                <goal>org.codehaus.mojo:exec-maven-plugin:1.2:exec</goal>
+            </goals>
+            <properties>
+                <exec.classpathScope>${classPathScope}</exec.classpathScope>
+                <exec.args>-classpath %classpath ${packageClassName}</exec.args>
+                <jalopy.skip>true</jalopy.skip>
+                <exec.executable>java</exec.executable>
+            </properties>
+        </action>
 </actions>
