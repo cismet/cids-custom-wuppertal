@@ -369,6 +369,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         pnlSearchFor.setLayout(new java.awt.GridBagLayout());
 
         buttonGroup1.add(rbBaulastBlaetter);
+        rbBaulastBlaetter.setSelected(true);
         rbBaulastBlaetter.setText("Baulastblätter");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
