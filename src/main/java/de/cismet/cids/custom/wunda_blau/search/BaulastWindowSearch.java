@@ -144,6 +144,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         model = new DefaultListModel();
         lstFlurstueck.setModel(model);
         AutoCompleteDecorator.decorate(cbArt);
+
         new CidsBeanDropTarget(this);
         fsSelectionDialoge.pack();
         fsSelectionDialoge.setLocationRelativeTo(this);
@@ -615,7 +616,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     public void searchDone(final Node[] result) {
         if ((result != null) && (result.length > 0)) {
             txtBlattnummer.setText("");
-            cbArt.setSelectedIndex(0);
+            cbArt.setSelectedItem("");
             chkKartenausschnitt.setSelected(false);
         }
     }
