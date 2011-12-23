@@ -439,8 +439,9 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
                 String prefix = StaticProperties.FORTFUEHRUNGSNACHWEISE_URL_PREFIX;
                 if (prefix == null) {
                     prefix = "file://///S102gs/_102-alkis-dokumente/Echtfortführungen/Fortführungsnachweise/";
+                    prefix = "file://///S102gs/_102-alkis-dokumente/Fortführungsnachweise/";
                 }
-                BrowserLauncher.openURLorFile(prefix + documentName + ".pdf");
+                BrowserLauncher.openURLorFile(prefix + year + "/" + documentName + ".pdf");
 //
 //                URL url = new URL( prefix + documentName+".pdf");
 //                final SingleDownload download = new SingleDownload(url, "", DownloadManagerDialog.getJobname(), "Fortfuehrungsnachweis: " + documentName, "fortfuehrungsnachweis_" + documentName, "pdf");
