@@ -27,7 +27,7 @@ import de.cismet.cids.annotations.CidsAttribute;
 
 import de.cismet.cids.custom.deprecated.JLoadDots;
 
-import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
+import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
 
 import de.cismet.tools.gui.RoundedPanel;
 
@@ -37,7 +37,7 @@ import de.cismet.tools.gui.RoundedPanel;
  * @author   nh
  * @version  $Revision$, $Date$
  */
-public class AltstandortRenderer extends CoolPanel {
+public class AltstandortRenderer extends BlurredMapObjectRenderer {
 
     //~ Static fields/initializers ---------------------------------------------
 

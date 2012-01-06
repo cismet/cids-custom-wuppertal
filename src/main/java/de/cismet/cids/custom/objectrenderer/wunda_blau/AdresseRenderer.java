@@ -13,7 +13,7 @@ import de.cismet.cids.annotations.CidsAttribute;
 
 import de.cismet.cids.custom.deprecated.JLoadDots;
 
-import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
+import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
 
 /**
  * de.cismet.cids.objectrenderer.CoolAdressenRenderer.
@@ -22,7 +22,7 @@ import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
  * @author   nh
  * @version  $Revision$, $Date$
  */
-public class AdresseRenderer extends CoolPanel {
+public class AdresseRenderer extends BlurredMapObjectRenderer {
 
     //~ Instance fields --------------------------------------------------------
 

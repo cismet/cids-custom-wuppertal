@@ -15,7 +15,7 @@ import de.cismet.cids.annotations.CidsAttribute;
 
 import de.cismet.cids.custom.deprecated.JLoadDots;
 
-import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
+import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
 
 /**
  * de.cismet.cids.objectrenderer.CoolKehrbezirkRenderer.
@@ -23,7 +23,7 @@ import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
  * @author   nh
  * @version  $Revision$, $Date$
  */
-public class KehrbezirkRenderer extends CoolPanel {
+public class KehrbezirkRenderer extends BlurredMapObjectRenderer {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -123,6 +123,7 @@ public class KehrbezirkRenderer extends CoolPanel {
         panInter.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 20, 10));
         add(panInter, java.awt.BorderLayout.SOUTH);
 
+        panMap.setMinimumSize(new java.awt.Dimension(100, 230));
         panMap.setOpaque(false);
         panMap.setLayout(new java.awt.GridBagLayout());
 

@@ -15,7 +15,7 @@ import de.cismet.cids.annotations.CidsAttribute;
 
 import de.cismet.cids.custom.deprecated.JLoadDots;
 
-import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
+import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
 
 /**
  * de.cismet.cids.objectrenderer.CoolStraKoRenderer.
@@ -23,7 +23,7 @@ import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
  * @author   nh
  * @version  $Revision$, $Date$
  */
-public class StrakoRenderer extends CoolPanel {
+public class StrakoRenderer extends BlurredMapObjectRenderer {
 
     //~ Instance fields --------------------------------------------------------
 

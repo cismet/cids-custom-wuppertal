@@ -4,7 +4,7 @@
   <NonVisualComponents>
     <Container class="javax.swing.JPanel" name="panAggregation">
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new CoolPanel();"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer();"/>
       </AuxValues>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>

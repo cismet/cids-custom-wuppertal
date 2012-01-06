@@ -61,7 +61,7 @@ import de.cismet.cids.custom.deprecated.JBreakLabel;
 import de.cismet.cids.custom.deprecated.JLoadDots;
 import de.cismet.cids.custom.objectrenderer.utils.PrintingWaitDialog;
 
-import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
+import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
@@ -75,7 +75,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @version  $Revision$, $Date$
  */
 @AggregationRenderer
-public class LuftbildschraegaufnahmenRenderer extends CoolPanel {
+public class LuftbildschraegaufnahmenRenderer extends BlurredMapObjectRenderer {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -384,7 +384,7 @@ public class LuftbildschraegaufnahmenRenderer extends CoolPanel {
                     });
             t.start();
         }
-        ((CoolPanel)panAggregation).setGeometry(allGeom);
+        ((BlurredMapObjectRenderer)panAggregation).setGeometry(allGeom);
     }
 
     @Override
@@ -606,7 +606,7 @@ public class LuftbildschraegaufnahmenRenderer extends CoolPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        panAggregation = new CoolPanel();
+        panAggregation = new BlurredMapObjectRenderer();
         panAgrTitle = new javax.swing.JPanel();
         jxhAgrPrint = new org.jdesktop.swingx.JXHyperlink();
         lblAgrTitle = new javax.swing.JLabel();

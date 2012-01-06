@@ -35,7 +35,7 @@ import de.cismet.cids.custom.deprecated.JBreakLabel;
 import de.cismet.cids.custom.deprecated.JLoadDots;
 import de.cismet.cids.custom.deprecated.TabbedPaneUITransparent;
 
-import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
+import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
 
 import de.cismet.tools.BrowserLauncher;
 
@@ -46,7 +46,7 @@ import de.cismet.tools.BrowserLauncher;
  * @version  $Revision$, $Date$
  */
 //de.cismet.cids.objectrenderer.CoolMauerRenderer
-public class MauerRenderer extends CoolPanel {
+public class MauerRenderer extends BlurredMapObjectRenderer {
 
     //~ Static fields/initializers ---------------------------------------------
 

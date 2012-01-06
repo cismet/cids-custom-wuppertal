@@ -24,7 +24,7 @@ import de.cismet.cids.custom.deprecated.JBreakLabel;
 import de.cismet.cids.custom.deprecated.JLoadDots;
 import de.cismet.cids.custom.deprecated.TabbedPaneUITransparent;
 
-import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
+import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
 
 /**
  * de.cismet.cids.objectrenderer.CoolBplanVerfahrenRenderrer.java.
@@ -32,7 +32,7 @@ import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
  * @author   verkennis
  * @version  $Revision$, $Date$
  */
-public class Bplan_verfahrenRenderer extends CoolPanel implements ChangeListener {
+public class Bplan_verfahrenRenderer extends BlurredMapObjectRenderer implements ChangeListener {
 
     //~ Static fields/initializers ---------------------------------------------
 

@@ -13,7 +13,7 @@ import de.cismet.cids.annotations.CidsAttribute;
 
 import de.cismet.cids.custom.deprecated.JLoadDots;
 
-import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
+import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
 
 /**
  * de.cismet.cids.objectrenderer.CoolStrassenRenderer.
@@ -21,7 +21,7 @@ import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
  * @author   cschmidt
  * @version  $Revision$, $Date$
  */
-public class StrasseRenderer extends CoolPanel {
+public class StrasseRenderer extends BlurredMapObjectRenderer {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -168,20 +168,21 @@ public class StrasseRenderer extends CoolPanel {
         panMap.setOpaque(false);
         panMap.setLayout(new java.awt.GridBagLayout());
 
-        panSpinner.setMinimumSize(new java.awt.Dimension(80, 80));
+        panSpinner.setMinimumSize(new java.awt.Dimension(100, 100));
         panSpinner.setOpaque(false);
+        panSpinner.setPreferredSize(new java.awt.Dimension(100, 100));
 
         final javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
         panSpinner.setLayout(panSpinnerLayout);
         panSpinnerLayout.setHorizontalGroup(
             panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                80,
+                100,
                 Short.MAX_VALUE));
         panSpinnerLayout.setVerticalGroup(
             panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                80,
+                100,
                 Short.MAX_VALUE));
 
         panMap.add(panSpinner, new java.awt.GridBagConstraints());

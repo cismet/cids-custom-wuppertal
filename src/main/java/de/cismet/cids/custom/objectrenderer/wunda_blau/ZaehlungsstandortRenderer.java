@@ -52,7 +52,7 @@ import de.cismet.cids.client.tools.ReportLookupButton;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
+import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
 
 /**
  * de.cismet.cids.objectrenderer.CoolPassantenfrequenzRenderer.
@@ -60,7 +60,7 @@ import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
  * @author   nh
  * @version  $Revision$, $Date$
  */
-public class ZaehlungsstandortRenderer extends CoolPanel {
+public class ZaehlungsstandortRenderer extends BlurredMapObjectRenderer {
 
     //~ Static fields/initializers ---------------------------------------------
 

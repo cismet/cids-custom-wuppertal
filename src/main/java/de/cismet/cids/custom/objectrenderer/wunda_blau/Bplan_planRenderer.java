@@ -25,7 +25,7 @@ import de.cismet.cids.annotations.CidsRendererTitle;
 
 import de.cismet.cids.custom.deprecated.IndentLabel;
 
-import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
+import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
 
 /**
  * de.cismet.cids.objectrenderer.CoolBplaeneRenderer.
@@ -33,7 +33,7 @@ import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
  * @author   nh
  * @version  $Revision$, $Date$
  */
-public class Bplan_planRenderer extends CoolPanel {
+public class Bplan_planRenderer extends BlurredMapObjectRenderer {
 
     //~ Instance fields --------------------------------------------------------
 
