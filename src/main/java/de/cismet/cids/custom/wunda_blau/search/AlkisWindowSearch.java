@@ -773,7 +773,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     }
 
     @Override
-    public void searchDone(final Node[] result) {
+    public void searchDone(final int results) {
     }
 
     @Override

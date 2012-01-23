@@ -17,6 +17,7 @@ import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.search.dynamic.SearchControlListener;
 import Sirius.navigator.search.dynamic.SearchControlPanel;
+import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
@@ -27,6 +28,7 @@ import com.vividsolutions.jts.geom.Geometry;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
+import java.awt.Component;
 import java.awt.EventQueue;
 
 import java.util.ArrayList;
@@ -614,8 +616,8 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     }
 
     @Override
-    public void searchDone(final Node[] result) {
-        if ((result != null) && (result.length > 0)) {
+    public void searchDone(final int results) {
+        if (results > 0) {
             txtBlattnummer.setText("");
             cbArt.setSelectedItem("");
             chkKartenausschnitt.setSelected(false);
