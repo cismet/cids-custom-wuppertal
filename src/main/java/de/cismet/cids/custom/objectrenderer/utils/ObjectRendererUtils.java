@@ -309,9 +309,6 @@ public class ObjectRendererUtils {
             final String query,
             final String[] fields,
             AbstractAttributeRepresentationFormater formatter) {
-        if (log.isDebugEnabled()) {
-            log.debug("getLightweightMetaObjectsForQuery: " + query);
-        }
         if (formatter == null) {
             formatter = new AbstractAttributeRepresentationFormater() {
 
