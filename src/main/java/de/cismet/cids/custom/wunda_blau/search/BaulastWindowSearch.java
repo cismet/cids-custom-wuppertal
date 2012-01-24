@@ -87,7 +87,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     private final MetaClass mc;
     private final ImageIcon icon;
     private final FlurstueckSelectionDialoge fsSelectionDialoge;
-    private final DefaultListModel model;
+    private final DefaultListModel flurstuecksFilterModel;
     private SearchControlPanel pnlSearchCancel;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddFS;
@@ -130,7 +130,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
                 public void okHook() {
                     final List<CidsBean> result = getCurrentListToAdd();
                     if (result.size() > 0) {
-                        model.addElement(result.get(0));
+                        flurstuecksFilterModel.addElement(result.get(0));
                     }
                 }
             };
@@ -143,8 +143,8 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         } catch (Exception ex) {
             log.error(ex, ex);
         }
-        model = new DefaultListModel();
-        lstFlurstueck.setModel(model);
+        flurstuecksFilterModel = new DefaultListModel();
+        lstFlurstueck.setModel(flurstuecksFilterModel);
         AutoCompleteDecorator.decorate(cbArt);
 
         new CidsBeanDropTarget(this);
@@ -438,7 +438,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     private void btnRemoveFSActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveFSActionPerformed
         final Object[] selection = lstFlurstueck.getSelectedValues();
         for (final Object o : selection) {
-            model.removeElement(o);
+            flurstuecksFilterModel.removeElement(o);
         }
     }                                                                               //GEN-LAST:event_btnRemoveFSActionPerformed
 
@@ -464,7 +464,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
                 final String tableName = mo.getMetaClass().getTableName();
                 if ("FLURSTUECK".equalsIgnoreCase(tableName) || "ALB_FLURSTUECK_KICKER".equalsIgnoreCase(tableName)) {
 //                if ("FLURSTUECK".equalsIgnoreCase(tableName) || "ALB_FLURSTUECK_KICKER".equalsIgnoreCase(tableName) || "ALKIS_LANDPARCEL".equalsIgnoreCase(tableName)) {
-                    model.addElement(mo.getBean());
+                    flurstuecksFilterModel.addElement(mo.getBean());
                 }
             }
         }
@@ -515,8 +515,8 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     @Override
     public CidsServerSearch getServerSearch() {
         final BaulastSearchInfo bsi = getBaulastInfoFromGUI();
-        for (int i = 0; i < model.size(); ++i) {
-            final CidsBean fsBean = (CidsBean)model.getElementAt(i);
+        for (int i = 0; i < flurstuecksFilterModel.size(); ++i) {
+            final CidsBean fsBean = (CidsBean)flurstuecksFilterModel.getElementAt(i);
             try {
                 if ("ALB_FLURSTUECK_KICKER".equalsIgnoreCase(fsBean.getMetaObject().getMetaClass().getTableName())) {
                     final FlurstueckInfo fi = new FlurstueckInfo((Integer)fsBean.getProperty("gemarkung"),
@@ -553,7 +553,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         for (final CidsBean bean : beans) {
             if ("FLURSTUECK".equalsIgnoreCase(bean.getMetaObject().getMetaClass().getTableName())) {
 //            if ("FLURSTUECK".equalsIgnoreCase(bean.getMetaObject().getMetaClass().getTableName()) || "ALKIS_LANDPARCEL".equalsIgnoreCase(bean.getMetaObject().getMetaClass().getTableName())) {
-                model.addElement(bean);
+                flurstuecksFilterModel.addElement(bean);
             }
             lstFlurstueck.repaint();
         }

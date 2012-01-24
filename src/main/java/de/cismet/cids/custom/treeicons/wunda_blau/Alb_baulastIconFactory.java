@@ -187,7 +187,7 @@ public class Alb_baulastIconFactory implements CidsTreeObjectIconFactory {
                         }
                     }
                 } else {
-                    //evtl log meldungen
+                    // evtl log meldungen
                 }
             }
             return fallback;
