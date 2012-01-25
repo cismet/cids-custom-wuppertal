@@ -777,11 +777,11 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     }
 
     @Override
-    public void searchCancelled() {
+    public void searchCanceled() {
     }
 
     @Override
-    public boolean displaysEmptyResultMessage() {
-        return true;
+    public boolean suppressEmptyResultMessage() {
+        return false;
     }
 }
