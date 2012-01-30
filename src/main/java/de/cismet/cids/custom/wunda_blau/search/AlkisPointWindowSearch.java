@@ -79,6 +79,7 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
     private javax.swing.JCheckBox chkAufnahmepunkte;
     private javax.swing.JCheckBox chkBesondereBauwerkspunkte;
     private javax.swing.JCheckBox chkBesondereGebaeudepunkte;
+    private javax.swing.JCheckBox chkBesondereTopographischePunkte;
     private javax.swing.JCheckBox chkGrenzpunkte;
     private javax.swing.JCheckBox chkSearchInCismap;
     private javax.swing.JCheckBox chkSonstigeVermessungspunkte;
@@ -164,6 +165,7 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
         chkGrenzpunkte = new javax.swing.JCheckBox();
         chkBesondereGebaeudepunkte = new javax.swing.JCheckBox();
         chkBesondereBauwerkspunkte = new javax.swing.JCheckBox();
+        chkBesondereTopographischePunkte = new javax.swing.JCheckBox();
         pnlFilterGST = new javax.swing.JPanel();
         rdoFilterGSTLE2 = new javax.swing.JRadioButton();
         rdoFilterGSTLE3 = new javax.swing.JRadioButton();
@@ -265,6 +267,9 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
                 "AlkisPointWindowSearch.btnAllePunkte.text")); // NOI18N
         btnAllePunkte.setActionCommand(ACTION_POINTTYPE_ALLE);
         btnAllePunkte.setFocusPainted(false);
+        btnAllePunkte.setMaximumSize(new java.awt.Dimension(85, 25));
+        btnAllePunkte.setMinimumSize(new java.awt.Dimension(85, 25));
+        btnAllePunkte.setPreferredSize(new java.awt.Dimension(85, 25));
         btnAllePunkte.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -275,7 +280,7 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 3, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 4, 5);
         pnlPointtypeButtons.add(btnAllePunkte, gridBagConstraints);
 
         btnAnschlusspunkte.setText(org.openide.util.NbBundle.getMessage(
@@ -283,6 +288,9 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
                 "AlkisPointWindowSearch.btnAnschlusspunkte.text")); // NOI18N
         btnAnschlusspunkte.setActionCommand(ACTION_POINTTYPE_ANSCHLUSS);
         btnAnschlusspunkte.setFocusPainted(false);
+        btnAnschlusspunkte.setMaximumSize(new java.awt.Dimension(112, 25));
+        btnAnschlusspunkte.setMinimumSize(new java.awt.Dimension(112, 25));
+        btnAnschlusspunkte.setPreferredSize(new java.awt.Dimension(112, 25));
         btnAnschlusspunkte.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -295,7 +303,7 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
+        gridBagConstraints.insets = new java.awt.Insets(4, 5, 4, 5);
         pnlPointtypeButtons.add(btnAnschlusspunkte, gridBagConstraints);
 
         btnGrenzUndGebaudepunkte.setText(org.openide.util.NbBundle.getMessage(
@@ -303,6 +311,9 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
                 "AlkisPointWindowSearch.btnGrenzUndGebaudepunkte.text")); // NOI18N
         btnGrenzUndGebaudepunkte.setActionCommand(ACTION_POINTTYPE_GRENZUNDGEBAEUDE);
         btnGrenzUndGebaudepunkte.setFocusPainted(false);
+        btnGrenzUndGebaudepunkte.setMaximumSize(new java.awt.Dimension(150, 25));
+        btnGrenzUndGebaudepunkte.setMinimumSize(new java.awt.Dimension(150, 25));
+        btnGrenzUndGebaudepunkte.setPreferredSize(new java.awt.Dimension(150, 25));
         btnGrenzUndGebaudepunkte.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -315,7 +326,7 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
+        gridBagConstraints.insets = new java.awt.Insets(4, 5, 4, 5);
         pnlPointtypeButtons.add(btnGrenzUndGebaudepunkte, gridBagConstraints);
 
         btnGebaeudeUndBauwerkspunkte.setText(org.openide.util.NbBundle.getMessage(
@@ -323,6 +334,9 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
                 "AlkisPointWindowSearch.btnGebaeudeUndBauwerkspunkte.text")); // NOI18N
         btnGebaeudeUndBauwerkspunkte.setActionCommand(ACTION_POINTTYPE_GEBAEUDEUNDBAUWERK);
         btnGebaeudeUndBauwerkspunkte.setFocusPainted(false);
+        btnGebaeudeUndBauwerkspunkte.setMaximumSize(new java.awt.Dimension(168, 25));
+        btnGebaeudeUndBauwerkspunkte.setMinimumSize(new java.awt.Dimension(168, 25));
+        btnGebaeudeUndBauwerkspunkte.setPreferredSize(new java.awt.Dimension(168, 25));
         btnGebaeudeUndBauwerkspunkte.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -335,7 +349,7 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(3, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(4, 5, 5, 5);
         pnlPointtypeButtons.add(btnGebaeudeUndBauwerkspunkte, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -359,7 +373,7 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(1, 5, 2, 5);
+        gridBagConstraints.insets = new java.awt.Insets(1, 5, 1, 5);
         pnlPointtypeCheckboxes.add(chkAufnahmepunkte, gridBagConstraints);
 
         chkSonstigeVermessungspunkte.setSelected(true);
@@ -377,7 +391,7 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(2, 5, 2, 5);
+        gridBagConstraints.insets = new java.awt.Insets(1, 5, 1, 5);
         pnlPointtypeCheckboxes.add(chkSonstigeVermessungspunkte, gridBagConstraints);
 
         chkGrenzpunkte.setSelected(true);
@@ -395,7 +409,7 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(2, 5, 2, 5);
+        gridBagConstraints.insets = new java.awt.Insets(1, 5, 1, 5);
         pnlPointtypeCheckboxes.add(chkGrenzpunkte, gridBagConstraints);
 
         chkBesondereGebaeudepunkte.setSelected(true);
@@ -413,7 +427,7 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(2, 5, 2, 5);
+        gridBagConstraints.insets = new java.awt.Insets(1, 5, 1, 5);
         pnlPointtypeCheckboxes.add(chkBesondereGebaeudepunkte, gridBagConstraints);
 
         chkBesondereBauwerkspunkte.setSelected(true);
@@ -431,8 +445,26 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(2, 5, 1, 5);
+        gridBagConstraints.insets = new java.awt.Insets(1, 5, 1, 5);
         pnlPointtypeCheckboxes.add(chkBesondereBauwerkspunkte, gridBagConstraints);
+
+        chkBesondereTopographischePunkte.setSelected(true);
+        chkBesondereTopographischePunkte.setText(org.openide.util.NbBundle.getMessage(
+                AlkisPointWindowSearch.class,
+                "AlkisPointWindowSearch.chkBesondereTopographischePunkte.text")); // NOI18N
+        chkBesondereTopographischePunkte.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    chkBesondereTopographischePunkteActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(1, 5, 1, 5);
+        pnlPointtypeCheckboxes.add(chkBesondereTopographischePunkte, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
@@ -625,6 +657,15 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
     /**
      * DOCUMENT ME!
      *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void chkBesondereTopographischePunkteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_chkBesondereTopographischePunkteActionPerformed
+        changeEnabledStateOfSearchButtons();
+    }                                                                                                    //GEN-LAST:event_chkBesondereTopographischePunkteActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param  actionCommand  DOCUMENT ME!
      */
     protected void changeFilterPointtype(final String actionCommand) {
@@ -634,24 +675,28 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
             chkGrenzpunkte.setSelected(true);
             chkBesondereGebaeudepunkte.setSelected(true);
             chkBesondereBauwerkspunkte.setSelected(true);
+            chkBesondereTopographischePunkte.setSelected(true);
         } else if (ACTION_POINTTYPE_ANSCHLUSS.equals(actionCommand)) {
             chkAufnahmepunkte.setSelected(true);
             chkSonstigeVermessungspunkte.setSelected(true);
             chkGrenzpunkte.setSelected(false);
             chkBesondereGebaeudepunkte.setSelected(false);
             chkBesondereBauwerkspunkte.setSelected(false);
+            chkBesondereTopographischePunkte.setSelected(false);
         } else if (ACTION_POINTTYPE_GRENZUNDGEBAEUDE.equals(actionCommand)) {
             chkAufnahmepunkte.setSelected(false);
             chkSonstigeVermessungspunkte.setSelected(false);
             chkGrenzpunkte.setSelected(true);
             chkBesondereGebaeudepunkte.setSelected(true);
             chkBesondereBauwerkspunkte.setSelected(true);
+            chkBesondereTopographischePunkte.setSelected(false);
         } else if (ACTION_POINTTYPE_GEBAEUDEUNDBAUWERK.equals(actionCommand)) {
             chkAufnahmepunkte.setSelected(false);
             chkSonstigeVermessungspunkte.setSelected(false);
             chkGrenzpunkte.setSelected(false);
             chkBesondereGebaeudepunkte.setSelected(true);
             chkBesondereBauwerkspunkte.setSelected(true);
+            chkBesondereTopographischePunkte.setSelected(false);
         }
 
         changeEnabledStateOfSearchButtons();
@@ -668,6 +713,7 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
         enableSearchButtons |= chkGrenzpunkte.isSelected();
         enableSearchButtons |= chkBesondereGebaeudepunkte.isSelected();
         enableSearchButtons |= chkBesondereBauwerkspunkte.isSelected();
+        enableSearchButtons |= chkBesondereTopographischePunkte.isSelected();
 
         pnlSearchCancel.setEnabled(enableSearchButtons);
     }
@@ -695,6 +741,9 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
         }
         if (chkBesondereBauwerkspunkte.isSelected()) {
             pointtypes.add(Pointtype.BESONDERE_BAUWERKSPUNKTE);
+        }
+        if (chkBesondereTopographischePunkte.isSelected()) {
+            pointtypes.add(Pointtype.BESONDERE_TOPOGRAPHISCHE_PUNKTE);
         }
 
         GST gst = null;
