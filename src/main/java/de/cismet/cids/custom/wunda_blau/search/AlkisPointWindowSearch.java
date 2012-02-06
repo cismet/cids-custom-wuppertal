@@ -8,26 +8,42 @@
 package de.cismet.cids.custom.wunda_blau.search;
 
 import Sirius.navigator.actiontag.ActionTagProtected;
+import Sirius.navigator.search.CidsSearchExecutor;
 import Sirius.navigator.search.dynamic.SearchControlListener;
 import Sirius.navigator.search.dynamic.SearchControlPanel;
+import Sirius.navigator.types.treenode.DefaultMetaTreeNode;
+import Sirius.navigator.types.treenode.ObjectTreeNode;
+import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.MetaClass;
+import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.search.CidsServerSearch;
 
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryCollection;
+import com.vividsolutions.jts.geom.GeometryFactory;
 
 import org.apache.log4j.Logger;
 
 import org.openide.util.NbBundle;
 
+import java.awt.Dimension;
+import java.awt.EventQueue;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import java.net.URL;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Vector;
 
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
@@ -41,8 +57,20 @@ import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
 
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
+import de.cismet.cismap.commons.features.DefaultFeatureCollection;
+import de.cismet.cismap.commons.features.PureNewFeature;
+import de.cismet.cismap.commons.features.SearchFeature;
+import de.cismet.cismap.commons.gui.MappingComponent;
+import de.cismet.cismap.commons.gui.piccolo.PFeature;
+import de.cismet.cismap.commons.gui.piccolo.eventlistener.CreateSearchGeometryListener;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.jtsgeometryfactories.PostGisGeometryFactory;
+
+import de.cismet.cismap.navigatorplugin.CidsFeature;
+
+import de.cismet.cismap.tools.gui.CidsBeanDropJPopupMenuButton;
+
+import de.cismet.tools.gui.JPopupMenuButton;
 
 /**
  * DOCUMENT ME!
@@ -53,13 +81,13 @@ import de.cismet.cismap.commons.jtsgeometryfactories.PostGisGeometryFactory;
 @org.openide.util.lookup.ServiceProvider(service = CidsWindowSearch.class)
 public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWindowSearch,
     ActionTagProtected,
-    SearchControlListener {
+    SearchControlListener,
+    PropertyChangeListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(AlkisPointWindowSearch.class);
     private static final String ACTION_TAG = "custom.alkis.windowsearch";
-
     private static final String ACTION_POINTTYPE_ALLE = "cmdAllePunkte";
     private static final String ACTION_POINTTYPE_ANSCHLUSS = "cmdAnschlussPunkte";
     private static final String ACTION_POINTTYPE_GRENZUNDGEBAEUDE = "cmdGrenzUndGebaeudePunkte";
@@ -69,7 +97,15 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
 
     private final MetaClass metaClass;
     private final ImageIcon icon;
+    private final MappingComponent mappingComponent;
     private SearchControlPanel pnlSearchCancel;
+    private CidsBeanDropJPopupMenuButton btnGeoSearch;
+
+    private ImageIcon icoPluginRectangle;
+    private ImageIcon icoPluginPolygon;
+    private ImageIcon icoPluginEllipse;
+    private ImageIcon icoPluginPolyline;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrFilterGST;
     private javax.swing.JButton btnAllePunkte;
@@ -88,6 +124,14 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
     private javax.swing.JLabel lblPointcodeWildcardPercent;
     private javax.swing.JLabel lblPointcodeWildcardUnderline;
     private javax.swing.JLabel lblPointcodeWildcards;
+    private javax.swing.JMenuItem mniSearchBuffer;
+    private javax.swing.JRadioButtonMenuItem mniSearchCidsFeature;
+    private javax.swing.JRadioButtonMenuItem mniSearchEllipse;
+    private javax.swing.JRadioButtonMenuItem mniSearchPolygon;
+    private javax.swing.JRadioButtonMenuItem mniSearchPolyline;
+    private javax.swing.JRadioButtonMenuItem mniSearchRectangle;
+    private javax.swing.JMenuItem mniSearchRedo;
+    private javax.swing.JMenuItem mniSearchShowLastFeature;
     private javax.swing.JPanel pnlButtons;
     private javax.swing.JPanel pnlFilterGST;
     private javax.swing.JPanel pnlFilterPointcode;
@@ -95,11 +139,13 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
     private javax.swing.JPanel pnlPointcodeWildcards;
     private javax.swing.JPanel pnlPointtypeButtons;
     private javax.swing.JPanel pnlPointtypeCheckboxes;
+    private javax.swing.JPopupMenu popMenSearch;
     private javax.swing.JRadioButton rdoFilterGSTAll;
     private javax.swing.JRadioButton rdoFilterGSTLE10;
     private javax.swing.JRadioButton rdoFilterGSTLE2;
     private javax.swing.JRadioButton rdoFilterGSTLE3;
     private javax.swing.JRadioButton rdoFilterGSTLE6;
+    private javax.swing.JSeparator sepSearchGeometries;
     private javax.swing.JTextField txtPointcode;
     // End of variables declaration//GEN-END:variables
 
@@ -109,6 +155,7 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
      * Creates new form AlkisPointWindowSearch.
      */
     public AlkisPointWindowSearch() {
+        mappingComponent = CismapBroker.getInstance().getMappingComponent();
         metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "ALKIS_POINT");
         final byte[] iconDataFromMetaclass = metaClass.getIconData();
 
@@ -126,12 +173,55 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
             }
         }
 
+        icoPluginRectangle = new ImageIcon(getClass().getResource("/images/pluginSearchRectangle.png"));
+        icoPluginPolygon = new ImageIcon(getClass().getResource("/images/pluginSearchPolygon.png"));
+        icoPluginEllipse = new ImageIcon(getClass().getResource("/images/pluginSearchEllipse.png"));
+        icoPluginPolyline = new ImageIcon(getClass().getResource("/images/pluginSearchPolyline.png"));
+
         initComponents();
 
+        final CreateAlkisPointSearchGeometryListener createAlkisPointSearchGeometryListener =
+            new CreateAlkisPointSearchGeometryListener(mappingComponent, new AlkisPointSearchTooltip(icon));
+        createAlkisPointSearchGeometryListener.addPropertyChangeListener(this);
+
         pnlSearchCancel = new SearchControlPanel(this);
+        final Dimension max = pnlSearchCancel.getMaximumSize();
+        final Dimension min = pnlSearchCancel.getMinimumSize();
+        final Dimension pre = pnlSearchCancel.getPreferredSize();
+        pnlSearchCancel.setMaximumSize(new java.awt.Dimension(
+                new Double(max.getWidth()).intValue(),
+                new Double(max.getHeight() + 6).intValue()));
+        pnlSearchCancel.setMinimumSize(new java.awt.Dimension(
+                new Double(min.getWidth()).intValue(),
+                new Double(min.getHeight() + 6).intValue()));
+        pnlSearchCancel.setPreferredSize(new java.awt.Dimension(
+                new Double(pre.getWidth() + 6).intValue(),
+                new Double(pre.getHeight() + 6).intValue()));
         pnlButtons.add(pnlSearchCancel);
-//        pnlButtons.add(Box.createHorizontalStrut(5));
-//        pnlButtons.add(new javax.swing.JButton("Geo-Suchen-Dummy"));
+
+        pnlButtons.add(Box.createHorizontalStrut(5));
+
+        btnGeoSearch = new CidsBeanDropJPopupMenuButton(
+                CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY,
+                mappingComponent,
+                null);
+        btnGeoSearch.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnGeoSearchActionPerformed(evt);
+                }
+            });
+        btnGeoSearch.setToolTipText(org.openide.util.NbBundle.getMessage(
+                AlkisPointWindowSearch.class,
+                "AlkisPointWindowSearch.btnGeoSearch.toolTipText"));
+        ((JPopupMenuButton)btnGeoSearch).setPopupMenu(popMenSearch);
+        btnGeoSearch.setFocusPainted(false);
+        pnlButtons.add(btnGeoSearch);
+
+        visualizeSearchMode((CreateSearchGeometryListener)mappingComponent.getInputListener(
+                MappingComponent.CREATE_SEARCH_POLYGON));
+        mappingComponent.getInteractionButtonGroup().add(btnGeoSearch);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -146,6 +236,16 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
         java.awt.GridBagConstraints gridBagConstraints;
 
         bgrFilterGST = new javax.swing.ButtonGroup();
+        popMenSearch = new javax.swing.JPopupMenu();
+        mniSearchRectangle = new javax.swing.JRadioButtonMenuItem();
+        mniSearchPolygon = new javax.swing.JRadioButtonMenuItem();
+        mniSearchEllipse = new javax.swing.JRadioButtonMenuItem();
+        mniSearchPolyline = new javax.swing.JRadioButtonMenuItem();
+        sepSearchGeometries = new javax.swing.JSeparator();
+        mniSearchCidsFeature = new javax.swing.JRadioButtonMenuItem();
+        mniSearchShowLastFeature = new javax.swing.JMenuItem();
+        mniSearchRedo = new javax.swing.JMenuItem();
+        mniSearchBuffer = new javax.swing.JMenuItem();
         pnlFilterPointcode = new javax.swing.JPanel();
         lblPointcode = new javax.swing.JLabel();
         txtPointcode = new javax.swing.JTextField();
@@ -177,6 +277,119 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
         gluFiller = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
+
+        mniSearchRectangle.setSelected(true);
+        mniSearchRectangle.setText(org.openide.util.NbBundle.getMessage(
+                AlkisPointWindowSearch.class,
+                "AlkisPointWindowSearch.mniSearchRectangle.text"));                                             // NOI18N
+        mniSearchRectangle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/rectangle.png"))); // NOI18N
+        mniSearchRectangle.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    mniSearchRectangleActionPerformed(evt);
+                }
+            });
+        popMenSearch.add(mniSearchRectangle);
+
+        mniSearchPolygon.setText(org.openide.util.NbBundle.getMessage(
+                AlkisPointWindowSearch.class,
+                "AlkisPointWindowSearch.mniSearchPolygon.text"));                                           // NOI18N
+        mniSearchPolygon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/polygon.png"))); // NOI18N
+        mniSearchPolygon.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    mniSearchPolygonActionPerformed(evt);
+                }
+            });
+        popMenSearch.add(mniSearchPolygon);
+
+        mniSearchEllipse.setText(org.openide.util.NbBundle.getMessage(
+                AlkisPointWindowSearch.class,
+                "AlkisPointWindowSearch.mniSearchEllipse.text"));                                           // NOI18N
+        mniSearchEllipse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/ellipse.png"))); // NOI18N
+        mniSearchEllipse.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    mniSearchEllipseActionPerformed(evt);
+                }
+            });
+        popMenSearch.add(mniSearchEllipse);
+
+        mniSearchPolyline.setText(org.openide.util.NbBundle.getMessage(
+                AlkisPointWindowSearch.class,
+                "AlkisPointWindowSearch.mniSearchPolyline.text"));                                            // NOI18N
+        mniSearchPolyline.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/polyline.png"))); // NOI18N
+        mniSearchPolyline.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    mniSearchPolylineActionPerformed(evt);
+                }
+            });
+        popMenSearch.add(mniSearchPolyline);
+        popMenSearch.add(sepSearchGeometries);
+
+        mniSearchCidsFeature.setText(org.openide.util.NbBundle.getMessage(
+                AlkisPointWindowSearch.class,
+                "AlkisPointWindowSearch.mniSearchCidsFeature.text"));                                           // NOI18N
+        mniSearchCidsFeature.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/polygon.png"))); // NOI18N
+        mniSearchCidsFeature.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    mniSearchCidsFeatureActionPerformed(evt);
+                }
+            });
+        popMenSearch.add(mniSearchCidsFeature);
+
+        mniSearchShowLastFeature.setText(org.openide.util.NbBundle.getMessage(
+                AlkisPointWindowSearch.class,
+                "AlkisPointWindowSearch.mniSearchShowLastFeature.text"));        // NOI18N
+        mniSearchShowLastFeature.setToolTipText(org.openide.util.NbBundle.getMessage(
+                AlkisPointWindowSearch.class,
+                "AlkisPointWindowSearch.mniSearchShowLastFeature.toolTipText")); // NOI18N
+        mniSearchShowLastFeature.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    mniSearchShowLastFeatureActionPerformed(evt);
+                }
+            });
+        popMenSearch.add(mniSearchShowLastFeature);
+
+        mniSearchRedo.setText(org.openide.util.NbBundle.getMessage(
+                AlkisPointWindowSearch.class,
+                "AlkisPointWindowSearch.mniSearchRedo.text"));        // NOI18N
+        mniSearchRedo.setToolTipText(org.openide.util.NbBundle.getMessage(
+                AlkisPointWindowSearch.class,
+                "AlkisPointWindowSearch.mniSearchRedo.toolTipText")); // NOI18N
+        mniSearchRedo.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    mniSearchRedoActionPerformed(evt);
+                }
+            });
+        popMenSearch.add(mniSearchRedo);
+
+        mniSearchBuffer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/buffer.png"))); // NOI18N
+        mniSearchBuffer.setText(org.openide.util.NbBundle.getMessage(
+                AlkisPointWindowSearch.class,
+                "AlkisPointWindowSearch.mniSearchBuffer.text"));                                          // NOI18N
+        mniSearchBuffer.setToolTipText(org.openide.util.NbBundle.getMessage(
+                AlkisPointWindowSearch.class,
+                "AlkisPointWindowSearch.mniSearchBuffer.toolTipText"));                                   // NOI18N
+        mniSearchBuffer.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    mniSearchBufferActionPerformed(evt);
+                }
+            });
+        popMenSearch.add(mniSearchBuffer);
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -666,6 +879,291 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
     /**
      * DOCUMENT ME!
      *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnGeoSearchActionPerformed(final java.awt.event.ActionEvent evt) {
+        EventQueue.invokeLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    mappingComponent.setInteractionMode(
+                        CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY);
+                }
+            });
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void mniSearchRectangleActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchRectangleActionPerformed
+        btnGeoSearch.setIcon(icoPluginRectangle);
+
+        EventQueue.invokeLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    ((CreateSearchGeometryListener)mappingComponent.getInputListener(
+                            CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY)).setMode(
+                        CreateSearchGeometryListener.RECTANGLE);
+                    mappingComponent.setInteractionMode(
+                        CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY);
+                }
+            });
+    } //GEN-LAST:event_mniSearchRectangleActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void mniSearchPolygonActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchPolygonActionPerformed
+        btnGeoSearch.setIcon(icoPluginPolygon);
+
+        EventQueue.invokeLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    ((CreateSearchGeometryListener)mappingComponent.getInputListener(
+                            CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY)).setMode(
+                        CreateSearchGeometryListener.POLYGON);
+                    mappingComponent.setInteractionMode(
+                        CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY);
+                }
+            });
+    } //GEN-LAST:event_mniSearchPolygonActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void mniSearchEllipseActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchEllipseActionPerformed
+        btnGeoSearch.setIcon(icoPluginEllipse);
+
+        EventQueue.invokeLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    ((CreateSearchGeometryListener)mappingComponent.getInputListener(
+                            CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY)).setMode(
+                        CreateSearchGeometryListener.ELLIPSE);
+                    mappingComponent.setInteractionMode(
+                        CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY);
+                }
+            });
+    } //GEN-LAST:event_mniSearchEllipseActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void mniSearchPolylineActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchPolylineActionPerformed
+        btnGeoSearch.setIcon(icoPluginPolyline);
+
+        EventQueue.invokeLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    ((CreateSearchGeometryListener)mappingComponent.getInputListener(
+                            CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY)).setMode(
+                        CreateSearchGeometryListener.LINESTRING);
+                    mappingComponent.setInteractionMode(
+                        CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY);
+                }
+            });
+    } //GEN-LAST:event_mniSearchPolylineActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void mniSearchCidsFeatureActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchCidsFeatureActionPerformed
+        EventQueue.invokeLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    mappingComponent.setInteractionMode(
+                        CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY);
+                    final CreateSearchGeometryListener searchListener = ((CreateSearchGeometryListener)
+                            mappingComponent.getInputListener(
+                                CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY));
+
+                    de.cismet.tools.CismetThreadPool.execute(
+                        new javax.swing.SwingWorker<SearchFeature, Void>() {
+
+                            @Override
+                            protected SearchFeature doInBackground() throws Exception {
+                                final DefaultMetaTreeNode[] nodes = ComponentRegistry.getRegistry()
+                                                .getActiveCatalogue()
+                                                .getSelectedNodesArray();
+                                final Collection<Geometry> searchGeoms = new ArrayList<Geometry>();
+
+                                for (final DefaultMetaTreeNode dmtn : nodes) {
+                                    if (dmtn instanceof ObjectTreeNode) {
+                                        final MetaObject mo = ((ObjectTreeNode)dmtn).getMetaObject();
+                                        final CidsFeature cf = new CidsFeature(mo);
+                                        searchGeoms.add(cf.getGeometry());
+                                    }
+                                }
+
+                                final Geometry[] searchGeomsArr = searchGeoms.toArray(new Geometry[0]);
+                                final GeometryCollection coll =
+                                    new GeometryFactory().createGeometryCollection(searchGeomsArr);
+
+                                final Geometry newG = coll.buffer(0.1d);
+                                if (LOG.isDebugEnabled()) {
+                                    LOG.debug("SearchGeom " + newG.toText());
+                                }
+
+                                final SearchFeature sf = new SearchFeature(newG);
+                                sf.setGeometryType(PureNewFeature.geomTypes.MULTIPOLYGON);
+                                return sf;
+                            }
+
+                            @Override
+                            protected void done() {
+                                try {
+                                    final SearchFeature search = get();
+                                    if (search != null) {
+                                        searchListener.search(search);
+                                    }
+                                } catch (Exception e) {
+                                    LOG.error("Exception in Background Thread", e);
+                                }
+                            }
+                        });
+                }
+            });
+    } //GEN-LAST:event_mniSearchCidsFeatureActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void mniSearchShowLastFeatureActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchShowLastFeatureActionPerformed
+        java.awt.EventQueue.invokeLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    final CreateSearchGeometryListener searchListener = (CreateSearchGeometryListener)
+                        mappingComponent.getInputListener(
+                            CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY);
+                    searchListener.showLastFeature();
+                }
+            });
+    } //GEN-LAST:event_mniSearchShowLastFeatureActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void mniSearchRedoActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchRedoActionPerformed
+        java.awt.EventQueue.invokeLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    final CreateSearchGeometryListener searchListener = (CreateSearchGeometryListener)
+                        mappingComponent.getInputListener(
+                            CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY);
+                    searchListener.redoLastSearch();
+                }
+            });
+    } //GEN-LAST:event_mniSearchRedoActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void mniSearchBufferActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchBufferActionPerformed
+        java.awt.EventQueue.invokeLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    final String s = (String)JOptionPane.showInputDialog(
+                            null,
+                            "Geben Sie den Abstand des zu erzeugenden\n"       // NOI18N
+                                    + "Puffers der letzten Suchgeometrie an.", // NOI18N
+                            "Puffer",                                          // NOI18N
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            null,
+                            "");                                               // NOI18N
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug(s);
+                    }
+
+                    // , statt . ebenfalls erlauben
+                    if (s.matches("\\d*,\\d*")) { // NOI18N
+                        s.replace(",", ".");      // NOI18N
+                    }
+
+                    try {
+                        final float buffer = Float.valueOf(s);
+
+                        final CreateSearchGeometryListener searchListener = (CreateSearchGeometryListener)
+                            mappingComponent.getInputListener(
+                                CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY);
+                        final PureNewFeature lastFeature = searchListener.getLastSearchFeature();
+
+                        if (lastFeature != null) {
+                            // Geometrie-Daten holen
+                            final Geometry geom = lastFeature.getGeometry();
+
+                            // Puffer-Geometrie holen
+                            final Geometry bufferGeom = geom.buffer(buffer);
+
+                            // und setzen
+                            lastFeature.setGeometry(bufferGeom);
+
+                            // Geometrie ist jetzt eine Polygon (keine Linie, Ellipse, oder
+                            // �hnliches mehr)
+                            lastFeature.setGeometryType(PureNewFeature.geomTypes.POLYGON);
+
+                            for (final Object feature : mappingComponent.getFeatureCollection().getAllFeatures()) {
+                                final PFeature sel = (PFeature)mappingComponent.getPFeatureHM().get(feature);
+
+                                if (sel.getFeature().equals(lastFeature)) {
+                                    // Koordinaten der Puffer-Geometrie als Feature-Koordinaten
+                                    // setzen
+                                    sel.setCoordArr(bufferGeom.getCoordinates());
+
+                                    // refresh
+                                    sel.syncGeometry();
+
+                                    final Vector v = new Vector();
+                                    v.add(sel.getFeature());
+                                    ((DefaultFeatureCollection)mappingComponent.getFeatureCollection())
+                                            .fireFeaturesChanged(v);
+                                }
+                            }
+
+                            searchListener.search(lastFeature);
+                        }
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(
+                            null,
+                            "The given value was not a floating point value.!",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE); // NOI18N
+                    } catch (Exception ex) {
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("", ex);          // NOI18N
+                        }
+                    }
+                }
+            });
+    }                                                   //GEN-LAST:event_mniSearchBufferActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param  actionCommand  DOCUMENT ME!
      */
     protected void changeFilterPointtype(final String actionCommand) {
@@ -716,6 +1214,90 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
         enableSearchButtons |= chkBesondereTopographischePunkte.isSelected();
 
         pnlSearchCancel.setEnabled(enableSearchButtons);
+        btnGeoSearch.setEnabled(enableSearchButtons);
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    protected void visualizeSearchMode() {
+        visualizeSearchMode((CreateSearchGeometryListener)mappingComponent.getInputListener(
+                CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY));
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  searchListener  DOCUMENT ME!
+     */
+    protected void visualizeSearchMode(final CreateSearchGeometryListener searchListener) {
+        final String searchMode = searchListener.getMode();
+        final PureNewFeature lastGeometry = searchListener.getLastSearchFeature();
+
+        if (CreateSearchGeometryListener.RECTANGLE.equals(searchMode)) {
+            btnGeoSearch.setIcon(icoPluginRectangle);
+        } else if (CreateSearchGeometryListener.POLYGON.equals(searchMode)) {
+            btnGeoSearch.setIcon(icoPluginPolygon);
+        } else if (CreateSearchGeometryListener.ELLIPSE.equals(searchMode)) {
+            btnGeoSearch.setIcon(icoPluginEllipse);
+        } else if (CreateSearchGeometryListener.LINESTRING.equals(searchMode)) {
+            btnGeoSearch.setIcon(icoPluginPolyline);
+        }
+
+        mniSearchRectangle.setSelected(CreateSearchGeometryListener.RECTANGLE.equals(searchMode));
+        mniSearchPolygon.setSelected(CreateSearchGeometryListener.POLYGON.equals(searchMode));
+        mniSearchEllipse.setSelected(CreateSearchGeometryListener.ELLIPSE.equals(searchMode));
+        mniSearchPolyline.setSelected(CreateSearchGeometryListener.LINESTRING.equals(searchMode));
+
+        if (lastGeometry == null) {
+            mniSearchShowLastFeature.setIcon(null);
+            mniSearchShowLastFeature.setEnabled(false);
+            mniSearchRedo.setIcon(null);
+            mniSearchRedo.setEnabled(false);
+            mniSearchBuffer.setEnabled(false);
+        } else {
+            switch (lastGeometry.getGeometryType()) {
+                case ELLIPSE: {
+                    mniSearchRedo.setIcon(mniSearchEllipse.getIcon());
+                    break;
+                }
+
+                case LINESTRING: {
+                    mniSearchRedo.setIcon(mniSearchPolyline.getIcon());
+                    break;
+                }
+
+                case POLYGON: {
+                    mniSearchRedo.setIcon(mniSearchPolygon.getIcon());
+                    break;
+                }
+
+                case RECTANGLE: {
+                    mniSearchRedo.setIcon(mniSearchRectangle.getIcon());
+                    break;
+                }
+            }
+
+            mniSearchRedo.setEnabled(true);
+            mniSearchShowLastFeature.setIcon(mniSearchRedo.getIcon());
+            mniSearchShowLastFeature.setEnabled(true);
+            mniSearchBuffer.setEnabled(true);
+        }
+    }
+
+    @Override
+    public void propertyChange(final PropertyChangeEvent evt) {
+        if (CreateSearchGeometryListener.PROPERTY_FORGUI_LAST_FEATURE.equals(evt.getPropertyName())
+                    || CreateSearchGeometryListener.PROPERTY_FORGUI_MODE.equals(evt.getPropertyName())) {
+            visualizeSearchMode();
+        }
+
+        if (CreateAlkisPointSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
+            if ((evt.getNewValue() != null) && (evt.getNewValue() instanceof Geometry)) {
+                final CidsServerSearch cidsServerSearch = getServerSearch((Geometry)evt.getNewValue());
+                CidsSearchExecutor.searchAndDisplayResultsWithDialog(cidsServerSearch);
+            }
+        }
     }
 
     @Override
@@ -725,6 +1307,17 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
 
     @Override
     public CidsServerSearch getServerSearch() {
+        return getServerSearch(null);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   geometry  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public CidsServerSearch getServerSearch(final Geometry geometry) {
         final Collection<Pointtype> pointtypes = new LinkedList<Pointtype>();
 
         if (chkAufnahmepunkte.isSelected()) {
@@ -757,16 +1350,25 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
             gst = GST.LE10;
         }
 
-        String geometry = null;
-        if (chkSearchInCismap.isSelected()) {
-            final XBoundingBox boundingBox = (XBoundingBox)CismapBroker.getInstance().getMappingComponent()
-                        .getCurrentBoundingBox();
-            final Geometry transformedBoundingBox = CrsTransformer.transformToDefaultCrs(boundingBox.getGeometry());
-            transformedBoundingBox.setSRID(CismapBroker.getInstance().getDefaultCrsAlias());
-            geometry = PostGisGeometryFactory.getPostGisCompliantDbString(transformedBoundingBox);
+        Geometry geometryToSearchFor = null;
+        if (geometry != null) {
+            geometryToSearchFor = geometry;
+        } else {
+            if (chkSearchInCismap.isSelected()) {
+                geometryToSearchFor =
+                    ((XBoundingBox)CismapBroker.getInstance().getMappingComponent().getCurrentBoundingBox())
+                            .getGeometry();
+            }
         }
 
-        return new CidsAlkisPointSearchStatement(txtPointcode.getText(), pointtypes, gst, geometry);
+        String geometryString = null;
+        if (geometryToSearchFor != null) {
+            final Geometry transformedBoundingBox = CrsTransformer.transformToDefaultCrs(geometryToSearchFor);
+            transformedBoundingBox.setSRID(CismapBroker.getInstance().getDefaultCrsAlias());
+            geometryString = PostGisGeometryFactory.getPostGisCompliantDbString(transformedBoundingBox);
+        }
+
+        return new CidsAlkisPointSearchStatement(txtPointcode.getText(), pointtypes, gst, geometryString);
     }
 
     @Override
