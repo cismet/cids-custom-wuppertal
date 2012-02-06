@@ -1054,6 +1054,8 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
                         mappingComponent.getInputListener(
                             CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY);
                     searchListener.showLastFeature();
+                    mappingComponent.setInteractionMode(
+                        CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY);
                 }
             });
     } //GEN-LAST:event_mniSearchShowLastFeatureActionPerformed
@@ -1072,6 +1074,8 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
                         mappingComponent.getInputListener(
                             CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY);
                     searchListener.redoLastSearch();
+                    mappingComponent.setInteractionMode(
+                        CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY);
                 }
             });
     } //GEN-LAST:event_mniSearchRedoActionPerformed
@@ -1145,6 +1149,8 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
                             }
 
                             searchListener.search(lastFeature);
+                            mappingComponent.setInteractionMode(
+                                CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY);
                         }
                     } catch (NumberFormatException ex) {
                         JOptionPane.showMessageDialog(
