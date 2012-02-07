@@ -15,7 +15,6 @@ import org.apache.log4j.Logger;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Paint;
 import java.awt.image.BufferedImage;
 
@@ -117,8 +116,8 @@ public class AlkisPointFeatureRenderer extends CustomCidsFeatureRenderer {
 
         if ((alkisPointIcon != null) && (alkisPointIcon != null)) {
             result = new FeatureAnnotationSymbol(alkisPointIcon.getImage());
-            result.setSweetSpotX(0.5);
-            result.setSweetSpotY(1.0);
+            result.setSweetSpotX(0.46D);
+            result.setSweetSpotY(0.9D);
         } else {
             final int fallbackSymbolSize = 8;
             final BufferedImage bufferedImage = new BufferedImage(
