@@ -51,6 +51,7 @@ import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisPointSearchStatem
 import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisPointSearchStatement.GST;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisPointSearchStatement.Pointtype;
 
+import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
@@ -100,12 +101,10 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
     private final MappingComponent mappingComponent;
     private SearchControlPanel pnlSearchCancel;
     private CidsBeanDropJPopupMenuButton btnGeoSearch;
-
     private ImageIcon icoPluginRectangle;
     private ImageIcon icoPluginPolygon;
     private ImageIcon icoPluginEllipse;
     private ImageIcon icoPluginPolyline;
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrFilterGST;
     private javax.swing.JButton btnAllePunkte;
@@ -222,6 +221,7 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
         visualizeSearchMode((CreateSearchGeometryListener)mappingComponent.getInputListener(
                 MappingComponent.CREATE_SEARCH_POLYGON));
         mappingComponent.getInteractionButtonGroup().add(btnGeoSearch);
+        new CidsBeanDropTarget(btnGeoSearch);
     }
 
     //~ Methods ----------------------------------------------------------------
