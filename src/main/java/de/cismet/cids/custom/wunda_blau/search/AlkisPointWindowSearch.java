@@ -222,6 +222,9 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
                 MappingComponent.CREATE_SEARCH_POLYGON));
         mappingComponent.getInteractionButtonGroup().add(btnGeoSearch);
         new CidsBeanDropTarget(btnGeoSearch);
+
+        ((CidsBeanDropJPopupMenuButton)btnGeoSearch).setTargetIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/images/pluginSearchTarget.png")));
     }
 
     //~ Methods ----------------------------------------------------------------
