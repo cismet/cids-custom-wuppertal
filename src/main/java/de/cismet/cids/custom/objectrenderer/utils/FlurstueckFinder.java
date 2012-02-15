@@ -28,14 +28,14 @@ public class FlurstueckFinder {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    public static final String FLURSTUECK_TABLE_NAME = "flurstueck";
+    public static final String FLURSTUECK_TABLE_NAME = "alb_flurstueck_kicker";
     public static final String GEMARKUNG_TABLE_NAME = "gemarkung";
     public static final String GEMARKUNG_ID = "gemarkungsnummer";
     public static final String GEMARKUNG_NAME = "name";
-    public static final String FLURSTUECK_GEMARKUNG = "gemarkungs_nr";
+    public static final String FLURSTUECK_GEMARKUNG = "gemarkung";
     public static final String FLURSTUECK_FLUR = "flur";
-    public static final String FLURSTUECK_ZAEHLER = "fstnr_z";
-    public static final String FLURSTUECK_NENNER = "fstnr_n";
+    public static final String FLURSTUECK_ZAEHLER = "zaehler";
+    public static final String FLURSTUECK_NENNER = "nenner";
     public static final String SEP = " - ";
     //
     private static final String STMNT_LANDPARCELS = "select id," + FLURSTUECK_GEMARKUNG + "," + FLURSTUECK_FLUR + ","
