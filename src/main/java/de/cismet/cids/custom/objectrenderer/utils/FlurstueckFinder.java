@@ -28,7 +28,9 @@ public class FlurstueckFinder {
 
     //~ Static fields/initializers ---------------------------------------------
 
+    public static final String FLURSTUECK_KICKER_TABLE_NAME_VIEW = "alb_flurstueck_kicker_nur_gueltige";
     public static final String FLURSTUECK_KICKER_TABLE_NAME = "alb_flurstueck_kicker";
+
     public static final String GEMARKUNG_TABLE_NAME = "gemarkung";
     public static final String GEMARKUNG_ID = "gemarkungsnummer";
     public static final String GEMARKUNG_NAME = "name";
@@ -39,7 +41,8 @@ public class FlurstueckFinder {
     public static final String SEP = " - ";
     //
     private static final String STMNT_LANDPARCELS = "select id," + FLURSTUECK_GEMARKUNG + "," + FLURSTUECK_FLUR + ","
-                + FLURSTUECK_ZAEHLER + "," + FLURSTUECK_NENNER + " from " + FLURSTUECK_KICKER_TABLE_NAME + " order by "
+                + FLURSTUECK_ZAEHLER + "," + FLURSTUECK_NENNER + " from " + FLURSTUECK_KICKER_TABLE_NAME_VIEW
+                + " order by "
                 + FLURSTUECK_GEMARKUNG + ", " + FLURSTUECK_FLUR + ", " + FLURSTUECK_ZAEHLER + ", " + FLURSTUECK_NENNER;
     private static final Comparator<MetaObject> ZAEHLER_NENNER_COMPARATOR = new Comparator<MetaObject>() {
 
@@ -103,7 +106,7 @@ public class FlurstueckFinder {
                         + ") as "
                         + GEMARKUNG_NAME
                         + " from "
-                        + FLURSTUECK_KICKER_TABLE_NAME
+                        + FLURSTUECK_KICKER_TABLE_NAME_VIEW
                         + " join "
                         + GEMARKUNG_TABLE_NAME
                         + " on "
@@ -139,7 +142,7 @@ public class FlurstueckFinder {
                 "select min(id) as id, "
                         + FLURSTUECK_FLUR
                         + " from "
-                        + FLURSTUECK_KICKER_TABLE_NAME
+                        + FLURSTUECK_KICKER_TABLE_NAME_VIEW
                         + " where "
                         + FLURSTUECK_GEMARKUNG
                         + " = "
@@ -183,7 +186,7 @@ public class FlurstueckFinder {
                         + ", "
                         + FLURSTUECK_NENNER
                         + " from "
-                        + FLURSTUECK_KICKER_TABLE_NAME
+                        + FLURSTUECK_KICKER_TABLE_NAME_VIEW
                         + " where "
                         + FLURSTUECK_GEMARKUNG
                         + " = "
@@ -233,7 +236,7 @@ public class FlurstueckFinder {
                 "select min(id) as id, "
                         + FLURSTUECK_ZAEHLER
                         + " from "
-                        + FLURSTUECK_KICKER_TABLE_NAME
+                        + FLURSTUECK_KICKER_TABLE_NAME_VIEW
                         + " where "
                         + FLURSTUECK_GEMARKUNG
                         + " = "
@@ -271,7 +274,7 @@ public class FlurstueckFinder {
                 "select id, "
                         + FLURSTUECK_NENNER
                         + " from "
-                        + FLURSTUECK_KICKER_TABLE_NAME
+                        + FLURSTUECK_KICKER_TABLE_NAME_VIEW
                         + " where "
                         + FLURSTUECK_GEMARKUNG
                         + " = "
@@ -321,7 +324,7 @@ public class FlurstueckFinder {
                         + ","
                         + FLURSTUECK_NENNER
                         + " from "
-                        + FLURSTUECK_KICKER_TABLE_NAME
+                        + FLURSTUECK_KICKER_TABLE_NAME_VIEW
                         + " where "
                         + FLURSTUECK_GEMARKUNG
                         + " = "
