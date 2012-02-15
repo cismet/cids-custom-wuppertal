@@ -632,7 +632,7 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
 //                    CidsBean newBean = unpersistedHistoricLandparcels.get(compountParcelData);
 //                    if (newBean == null) {
                     final CidsBean newBean = CidsBeanSupport.createNewCidsBeanFromTableName(
-                            FlurstueckFinder.FLURSTUECK_TABLE_NAME,
+                            FlurstueckFinder.FLURSTUECK_KICKER_TABLE_NAME,
                             newLandParcelProperties);
 //                        unpersistedHistoricLandparcels.put(compountParcelData, newBean);
 //                    }
