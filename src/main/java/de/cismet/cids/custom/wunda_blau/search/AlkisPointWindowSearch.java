@@ -63,7 +63,10 @@ import de.cismet.cismap.commons.features.PureNewFeature;
 import de.cismet.cismap.commons.features.SearchFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.piccolo.PFeature;
+import de.cismet.cismap.commons.gui.piccolo.eventlistener.AbstractCreateSearchGeometryListener;
+import de.cismet.cismap.commons.gui.piccolo.eventlistener.CreateGeometryListenerInterface;
 import de.cismet.cismap.commons.gui.piccolo.eventlistener.CreateSearchGeometryListener;
+import de.cismet.cismap.commons.gui.piccolo.eventlistener.MetaSearchCreateSearchGeometryListener;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.jtsgeometryfactories.PostGisGeometryFactory;
 
@@ -218,7 +221,7 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
         btnGeoSearch.setFocusPainted(false);
         pnlButtons.add(btnGeoSearch);
 
-        visualizeSearchMode((CreateSearchGeometryListener)mappingComponent.getInputListener(
+        visualizeSearchMode((MetaSearchCreateSearchGeometryListener)mappingComponent.getInputListener(
                 MappingComponent.CREATE_SEARCH_POLYGON));
         mappingComponent.getInteractionButtonGroup().add(btnGeoSearch);
         new CidsBeanDropTarget(btnGeoSearch);
@@ -907,9 +910,9 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
 
                 @Override
                 public void run() {
-                    ((CreateSearchGeometryListener)mappingComponent.getInputListener(
+                    ((CreateAlkisPointSearchGeometryListener)mappingComponent.getInputListener(
                             CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY)).setMode(
-                        CreateSearchGeometryListener.RECTANGLE);
+                        CreateGeometryListenerInterface.RECTANGLE);
                     mappingComponent.setInteractionMode(
                         CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY);
                 }
@@ -928,9 +931,9 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
 
                 @Override
                 public void run() {
-                    ((CreateSearchGeometryListener)mappingComponent.getInputListener(
+                    ((CreateAlkisPointSearchGeometryListener)mappingComponent.getInputListener(
                             CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY)).setMode(
-                        CreateSearchGeometryListener.POLYGON);
+                        CreateGeometryListenerInterface.POLYGON);
                     mappingComponent.setInteractionMode(
                         CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY);
                 }
@@ -949,9 +952,9 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
 
                 @Override
                 public void run() {
-                    ((CreateSearchGeometryListener)mappingComponent.getInputListener(
+                    ((CreateAlkisPointSearchGeometryListener)mappingComponent.getInputListener(
                             CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY)).setMode(
-                        CreateSearchGeometryListener.ELLIPSE);
+                        CreateGeometryListenerInterface.ELLIPSE);
                     mappingComponent.setInteractionMode(
                         CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY);
                 }
@@ -970,9 +973,9 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
 
                 @Override
                 public void run() {
-                    ((CreateSearchGeometryListener)mappingComponent.getInputListener(
+                    ((CreateAlkisPointSearchGeometryListener)mappingComponent.getInputListener(
                             CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY)).setMode(
-                        CreateSearchGeometryListener.LINESTRING);
+                        CreateGeometryListenerInterface.LINESTRING);
                     mappingComponent.setInteractionMode(
                         CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY);
                 }
@@ -991,8 +994,8 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
                 public void run() {
                     mappingComponent.setInteractionMode(
                         CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY);
-                    final CreateSearchGeometryListener searchListener = ((CreateSearchGeometryListener)
-                            mappingComponent.getInputListener(
+                    final CreateAlkisPointSearchGeometryListener searchListener =
+                        ((CreateAlkisPointSearchGeometryListener)mappingComponent.getInputListener(
                                 CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY));
 
                     de.cismet.tools.CismetThreadPool.execute(
@@ -1053,8 +1056,8 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
 
                 @Override
                 public void run() {
-                    final CreateSearchGeometryListener searchListener = (CreateSearchGeometryListener)
-                        mappingComponent.getInputListener(
+                    final CreateAlkisPointSearchGeometryListener searchListener =
+                        (CreateAlkisPointSearchGeometryListener)mappingComponent.getInputListener(
                             CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY);
                     searchListener.showLastFeature();
                     mappingComponent.setInteractionMode(
@@ -1073,8 +1076,8 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
 
                 @Override
                 public void run() {
-                    final CreateSearchGeometryListener searchListener = (CreateSearchGeometryListener)
-                        mappingComponent.getInputListener(
+                    final CreateAlkisPointSearchGeometryListener searchListener =
+                        (CreateAlkisPointSearchGeometryListener)mappingComponent.getInputListener(
                             CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY);
                     searchListener.redoLastSearch();
                     mappingComponent.setInteractionMode(
@@ -1114,8 +1117,8 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
                     try {
                         final float buffer = Float.valueOf(s);
 
-                        final CreateSearchGeometryListener searchListener = (CreateSearchGeometryListener)
-                            mappingComponent.getInputListener(
+                        final CreateAlkisPointSearchGeometryListener searchListener =
+                            (CreateAlkisPointSearchGeometryListener)mappingComponent.getInputListener(
                                 CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY);
                         final PureNewFeature lastFeature = searchListener.getLastSearchFeature();
 
@@ -1230,7 +1233,7 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
      * DOCUMENT ME!
      */
     protected void visualizeSearchMode() {
-        visualizeSearchMode((CreateSearchGeometryListener)mappingComponent.getInputListener(
+        visualizeSearchMode((CreateAlkisPointSearchGeometryListener)mappingComponent.getInputListener(
                 CreateAlkisPointSearchGeometryListener.CREATE_ALKISPOINTSEARCH_GEOMETRY));
     }
 
@@ -1243,20 +1246,20 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
         final String searchMode = searchListener.getMode();
         final PureNewFeature lastGeometry = searchListener.getLastSearchFeature();
 
-        if (CreateSearchGeometryListener.RECTANGLE.equals(searchMode)) {
+        if (CreateGeometryListenerInterface.RECTANGLE.equals(searchMode)) {
             btnGeoSearch.setIcon(icoPluginRectangle);
-        } else if (CreateSearchGeometryListener.POLYGON.equals(searchMode)) {
+        } else if (CreateGeometryListenerInterface.POLYGON.equals(searchMode)) {
             btnGeoSearch.setIcon(icoPluginPolygon);
-        } else if (CreateSearchGeometryListener.ELLIPSE.equals(searchMode)) {
+        } else if (CreateGeometryListenerInterface.ELLIPSE.equals(searchMode)) {
             btnGeoSearch.setIcon(icoPluginEllipse);
-        } else if (CreateSearchGeometryListener.LINESTRING.equals(searchMode)) {
+        } else if (CreateGeometryListenerInterface.LINESTRING.equals(searchMode)) {
             btnGeoSearch.setIcon(icoPluginPolyline);
         }
 
-        mniSearchRectangle.setSelected(CreateSearchGeometryListener.RECTANGLE.equals(searchMode));
-        mniSearchPolygon.setSelected(CreateSearchGeometryListener.POLYGON.equals(searchMode));
-        mniSearchEllipse.setSelected(CreateSearchGeometryListener.ELLIPSE.equals(searchMode));
-        mniSearchPolyline.setSelected(CreateSearchGeometryListener.LINESTRING.equals(searchMode));
+        mniSearchRectangle.setSelected(CreateGeometryListenerInterface.RECTANGLE.equals(searchMode));
+        mniSearchPolygon.setSelected(CreateGeometryListenerInterface.POLYGON.equals(searchMode));
+        mniSearchEllipse.setSelected(CreateGeometryListenerInterface.ELLIPSE.equals(searchMode));
+        mniSearchPolyline.setSelected(CreateGeometryListenerInterface.LINESTRING.equals(searchMode));
 
         if (lastGeometry == null) {
             mniSearchShowLastFeature.setIcon(null);
@@ -1296,8 +1299,8 @@ public class AlkisPointWindowSearch extends javax.swing.JPanel implements CidsWi
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-        if (CreateSearchGeometryListener.PROPERTY_FORGUI_LAST_FEATURE.equals(evt.getPropertyName())
-                    || CreateSearchGeometryListener.PROPERTY_FORGUI_MODE.equals(evt.getPropertyName())) {
+        if (AbstractCreateSearchGeometryListener.PROPERTY_FORGUI_LAST_FEATURE.equals(evt.getPropertyName())
+                    || AbstractCreateSearchGeometryListener.PROPERTY_FORGUI_MODE.equals(evt.getPropertyName())) {
             visualizeSearchMode();
         }
 
