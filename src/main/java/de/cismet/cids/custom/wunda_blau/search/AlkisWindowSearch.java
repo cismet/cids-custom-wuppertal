@@ -57,9 +57,9 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
 
     //~ Instance fields --------------------------------------------------------
 
-    private final MetaClass mc;
-    private final ImageIcon icon;
-    private SearchControlPanel pnlSearchCancel;
+    private MetaClass mc = null;
+    private ImageIcon icon = null;
+    private SearchControlPanel pnlSearchCancel = null;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrNach;
     private javax.swing.ButtonGroup bgrOwner;
@@ -114,12 +114,16 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
      * Creates new form BaulastWindowSearch.
      */
     public AlkisWindowSearch() {
-        mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "ALKIS_LANDPARCEL");
-        icon = new ImageIcon(mc.getIconData());
-        initComponents();
-        ((CardLayout)panEingabe.getLayout()).show(panEingabe, "eigentuemer");
-        pnlSearchCancel = new SearchControlPanel(this);
-        panCommand.add(pnlSearchCancel);
+        try {
+            mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "ALKIS_LANDPARCEL");
+            icon = new ImageIcon(mc.getIconData());
+            initComponents();
+            ((CardLayout)panEingabe.getLayout()).show(panEingabe, "eigentuemer");
+            pnlSearchCancel = new SearchControlPanel(this);
+            panCommand.add(pnlSearchCancel);
+        } catch (Exception e) {
+            log.warn("Error in Constructor of AlkisWindowSearch", e);
+        }
     }
 
     //~ Methods ----------------------------------------------------------------

@@ -30,6 +30,7 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.HeadlessException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -84,10 +85,10 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
 
     //~ Instance fields --------------------------------------------------------
 
-    private final MetaClass mc;
-    private final ImageIcon icon;
-    private final FlurstueckSelectionDialoge fsSelectionDialoge;
-    private final DefaultListModel flurstuecksFilterModel;
+    private MetaClass mc = null;
+    private ImageIcon icon = null;
+    private FlurstueckSelectionDialoge fsSelectionDialoge = null;
+    private DefaultListModel flurstuecksFilterModel = null;
     private SearchControlPanel pnlSearchCancel;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddFS;
@@ -122,37 +123,42 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
      * Creates new form BaulastWindowSearch.
      */
     public BaulastWindowSearch() {
-        mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "ALB_BAULAST");
-        icon = new ImageIcon(mc.getIconData());
-        fsSelectionDialoge = new FlurstueckSelectionDialoge(false) {
-
-                @Override
-                public void okHook() {
-                    final List<CidsBean> result = getCurrentListToAdd();
-                    if (result.size() > 0) {
-                        flurstuecksFilterModel.addElement(result.get(0));
-                    }
-                }
-            };
-        initComponents();
-        final MetaClass artMC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "ALB_BAULAST_ART");
-        final DefaultComboBoxModel cbArtModel;
         try {
-            cbArtModel = DefaultBindableReferenceCombo.getModelByMetaClass(artMC, true);
-            cbArt.setModel(cbArtModel);
-        } catch (Exception ex) {
-            log.error(ex, ex);
-        }
-        flurstuecksFilterModel = new DefaultListModel();
-        lstFlurstueck.setModel(flurstuecksFilterModel);
-        AutoCompleteDecorator.decorate(cbArt);
+            mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "ALB_BAULAST");
+            icon = new ImageIcon(mc.getIconData());
+            fsSelectionDialoge = new FlurstueckSelectionDialoge(false) {
 
-        new CidsBeanDropTarget(this);
-        fsSelectionDialoge.pack();
-        fsSelectionDialoge.setLocationRelativeTo(this);
+                    @Override
+                    public void okHook() {
+                        final List<CidsBean> result = getCurrentListToAdd();
+                        if (result.size() > 0) {
+                            flurstuecksFilterModel.addElement(result.get(0));
+                        }
+                    }
+                };
+
+            initComponents();
+            final MetaClass artMC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "ALB_BAULAST_ART");
+            final DefaultComboBoxModel cbArtModel;
+            try {
+                cbArtModel = DefaultBindableReferenceCombo.getModelByMetaClass(artMC, true);
+                cbArt.setModel(cbArtModel);
+            } catch (Exception ex) {
+                log.error(ex, ex);
+            }
+            flurstuecksFilterModel = new DefaultListModel();
+            lstFlurstueck.setModel(flurstuecksFilterModel);
+            AutoCompleteDecorator.decorate(cbArt);
+
+            new CidsBeanDropTarget(this);
+            fsSelectionDialoge.pack();
+            fsSelectionDialoge.setLocationRelativeTo(this);
 //        cmdAbort.setVisible(false);
-        pnlSearchCancel = new SearchControlPanel(this);
-        panCommand.add(pnlSearchCancel);
+            pnlSearchCancel = new SearchControlPanel(this);
+            panCommand.add(pnlSearchCancel);
+        } catch (Exception exception) {
+            log.warn("Error in Constructor of BaulastWindowSearch", exception);
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
