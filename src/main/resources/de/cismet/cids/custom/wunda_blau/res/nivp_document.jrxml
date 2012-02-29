@@ -7,7 +7,7 @@
 		<fieldDescription><![CDATA[laufende_nummer]]></fieldDescription>
 	</field>
 	<detail>
-		<band height="750" splitType="Stretch">
+		<band height="750">
 			<image hAlign="Center" vAlign="Middle" onErrorType="Blank">
 				<reportElement x="5" y="5" width="545" height="740" isRemoveLineWhenBlank="true">
 					<printWhenExpression><![CDATA[$P{REPORT_SCRIPTLET}.isImageAvailable($F{dgk_blattnummer}, $F{laufende_nummer})]]></printWhenExpression>

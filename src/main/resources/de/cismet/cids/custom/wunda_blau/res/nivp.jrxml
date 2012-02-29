@@ -26,7 +26,7 @@
 		</band>
 	</background>
 	<title>
-		<band height="750" splitType="Stretch">
+		<band height="750">
 			<subreport>
 				<reportElement x="0" y="130" width="555" height="600"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{nivellementPunkte}, false)]]></dataSourceExpression>
@@ -97,7 +97,7 @@
 		</band>
 	</title>
 	<detail>
-		<band height="750" splitType="Stretch">
+		<band height="750">
 			<subreport>
 				<reportElement x="0" y="0" width="555" height="750"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{nivellementPunkte}, false)]]></dataSourceExpression>

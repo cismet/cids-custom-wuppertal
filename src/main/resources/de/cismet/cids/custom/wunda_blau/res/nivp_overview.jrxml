@@ -129,7 +129,7 @@ Nummer]]></text>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="20" splitType="Stretch">
+		<band height="20">
 			<textField>
 				<reportElement x="9" y="0" width="57" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
