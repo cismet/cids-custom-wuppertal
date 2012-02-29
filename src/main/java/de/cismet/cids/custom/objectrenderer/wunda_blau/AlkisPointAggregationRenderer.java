@@ -35,6 +35,11 @@ import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 
+import org.openide.util.Exceptions;
+
+import java.awt.EventQueue;
+import java.awt.geom.Rectangle2D;
+
 import java.net.URL;
 
 import java.text.DecimalFormat;
@@ -72,6 +77,8 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 
+import de.cismet.tools.CismetThreadPool;
+
 import de.cismet.tools.collections.TypeSafeCollections;
 
 import de.cismet.tools.gui.StaticSwingTools;
@@ -92,6 +99,9 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
 
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(
             AlkisPointAggregationRenderer.class);
+
+    private static final double BUFFER = 0.005;
+
     // Spaltenueberschriften
     private static final String[] AGR_COMLUMN_NAMES = new String[] {
             "Auswahl",
@@ -170,6 +180,19 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         panMap = new javax.swing.JPanel();
         mappingComponent = new de.cismet.cismap.commons.gui.MappingComponent();
 
+        addAncestorListener(new javax.swing.event.AncestorListener() {
+
+                @Override
+                public void ancestorMoved(final javax.swing.event.AncestorEvent evt) {
+                }
+                @Override
+                public void ancestorAdded(final javax.swing.event.AncestorEvent evt) {
+                    formAncestorAdded(evt);
+                }
+                @Override
+                public void ancestorRemoved(final javax.swing.event.AncestorEvent evt) {
+                }
+            });
         setLayout(new java.awt.BorderLayout());
 
         tblAggregation.setOpaque(false);
@@ -354,9 +377,35 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
      * @param  evt  DOCUMENT ME!
      */
     private void tblAggregationFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblAggregationFocusLost
-        mappingComponent.gotoInitialBoundingBox();
+        animateToOverview();
         tblAggregation.clearSelection();
     }                                                                           //GEN-LAST:event_tblAggregationFocusLost
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) { //GEN-FIRST:event_formAncestorAdded
+        CismetThreadPool.execute(new Runnable() {
+
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ex) {
+                        log.warn("Sleeping to wait for zooming to added features was interrupted.", ex);
+                    }
+                    EventQueue.invokeLater(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                animateToOverview();
+                            }
+                        });
+                }
+            });
+    } //GEN-LAST:event_formAncestorAdded
 
     /**
      * DOCUMENT ME!
@@ -474,7 +523,6 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
             swms.setName("Alkis_Points");
             mappingModel.addLayer(swms);
             mappingComponent.setMappingModel(mappingModel);
-            final int duration = mappingComponent.getAnimationDuration();
             mappingComponent.setAnimationDuration(0);
             mappingComponent.gotoInitialBoundingBox();
             mappingComponent.setInteractionMode(MappingComponent.ZOOM);
@@ -504,12 +552,26 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                 features.put(cidsBean, feature);
             }
             mappingComponent.getFeatureCollection().addFeatures(features.values());
-            mappingComponent.setAnimationDuration(duration);
         } catch (Throwable t) {
             log.fatal(t, t);
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     */
+    public void animateToOverview() {
+        mappingComponent.gotoInitialBoundingBox();
+        final Rectangle2D viewBounds = mappingComponent.getCamera().getViewBounds().getBounds2D();
+        final double scale = mappingComponent.getScaleDenominator();
+        final double newX = ((viewBounds.getX() / scale) - BUFFER) * scale;
+        final double newY = ((viewBounds.getY() / scale) - BUFFER) * scale;
+        final double newWidth = ((viewBounds.getWidth() / scale) + (BUFFER * 2)) * scale;
+        final double newHeight = ((viewBounds.getHeight() / scale) + (BUFFER * 2)) * scale;
+        viewBounds.setRect(newX, newY, newWidth, newHeight);
+        mappingComponent.getCamera()
+                .animateViewToCenterBounds(viewBounds, true, mappingComponent.getAnimationDuration());
+    }
     /**
      * DOCUMENT ME!
      *

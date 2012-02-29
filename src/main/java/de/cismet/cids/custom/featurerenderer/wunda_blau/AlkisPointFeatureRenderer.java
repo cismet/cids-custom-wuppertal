@@ -50,12 +50,12 @@ public class AlkisPointFeatureRenderer extends CustomCidsFeatureRenderer {
     private static final HashMap<String, Color> pointtypeColors = new HashMap<String, Color>(6);
 
     static {
-        pointtypeIcons.put("Aufnahmepunkt", PATH2ICONS + "pushpin_red.png");
-        pointtypeIcons.put("Sonstiger Vermessungspunkt", PATH2ICONS + "pushpin_orange.png");
-        pointtypeIcons.put("Grenzpunkt", PATH2ICONS + "pushpin_green.png");
-        pointtypeIcons.put("Besonderer Gebaeudepunkt", PATH2ICONS + "pushpin_yellow.png");
-        pointtypeIcons.put("Besonderer Bauwerkspunkt", PATH2ICONS + "pushpin_gray.png");
-        pointtypeIcons.put("Besonderer Topographischer Punkt", PATH2ICONS + "pushpin_sienna.png");
+        pointtypeIcons.put("Aufnahmepunkt", PATH2ICONS + "pointicon_red.png");
+        pointtypeIcons.put("Sonstiger Vermessungspunkt", PATH2ICONS + "pointicon_orange.png");
+        pointtypeIcons.put("Grenzpunkt", PATH2ICONS + "pointicon_green.png");
+        pointtypeIcons.put("Besonderer Gebaeudepunkt", PATH2ICONS + "pointicon_yellow.png");
+        pointtypeIcons.put("Besonderer Bauwerkspunkt", PATH2ICONS + "pointicon_gray.png");
+        pointtypeIcons.put("Besonderer Topographischer Punkt", PATH2ICONS + "pointicon_sienna.png");
 
         pointtypeColors.put("Aufnahmepunkt", new Color(0xFF, 0x00, 0x00));
         pointtypeColors.put("Sonstiger Vermessungspunkt", new Color(0xFF, 0x45, 0x00));
@@ -116,8 +116,8 @@ public class AlkisPointFeatureRenderer extends CustomCidsFeatureRenderer {
 
         if ((alkisPointIcon != null) && (alkisPointIcon != null)) {
             result = new FeatureAnnotationSymbol(alkisPointIcon.getImage());
-            result.setSweetSpotX(0.46D);
-            result.setSweetSpotY(0.9D);
+            result.setSweetSpotX(0.49D);
+            result.setSweetSpotY(0.93D);
         } else {
             final int fallbackSymbolSize = 8;
             final BufferedImage bufferedImage = new BufferedImage(
@@ -139,5 +139,10 @@ public class AlkisPointFeatureRenderer extends CustomCidsFeatureRenderer {
 
     @Override
     public void assign() {
+    }
+
+    @Override
+    public float getTransparency() {
+        return 0.9F;
     }
 }

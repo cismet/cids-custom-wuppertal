@@ -31,11 +31,11 @@ import javax.swing.ImageIcon;
  * @author   jweintraut
  * @version  $Revision$, $Date$
  */
-public class AlkisPointSearchTooltip extends PNode {
+public class MeasurementPointSearchTooltip extends PNode {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final Logger LOG = Logger.getLogger(AlkisPointSearchTooltip.class);
+    private static final Logger LOG = Logger.getLogger(MeasurementPointSearchTooltip.class);
 
     private static final Color COLOR_BACKGROUND = new Color(255, 255, 222, 200);
 
@@ -46,7 +46,7 @@ public class AlkisPointSearchTooltip extends PNode {
      *
      * @param  icoAlkisPoint  searchTopics DOCUMENT ME!
      */
-    public AlkisPointSearchTooltip(final ImageIcon icoAlkisPoint) {
+    public MeasurementPointSearchTooltip(final ImageIcon icoAlkisPoint) {
         double leftMargin = 5;
         double offsetX = leftMargin;
         double offsetY = 5;
@@ -68,8 +68,8 @@ public class AlkisPointSearchTooltip extends PNode {
         }
 
         final PText lblHeader = new PText(NbBundle.getMessage(
-                    AlkisPointSearchTooltip.class,
-                    "AlkisPointSearchTooltip.AlkisPointSearchTooltip(ImageIcon).lblHeader"));
+                    MeasurementPointSearchTooltip.class,
+                    "MeasurementPointSearchTooltip.MeasurementPointSearchTooltip(ImageIcon).lblHeader"));
         final Font defaultFont = lblHeader.getFont();
         final Font boldDefaultFont = new Font(defaultFont.getName(),
                 defaultFont.getStyle()
@@ -86,8 +86,8 @@ public class AlkisPointSearchTooltip extends PNode {
         nodesToAdd.add(lblHeader);
 
         final PText lblFilter = new PText(NbBundle.getMessage(
-                    AlkisPointSearchTooltip.class,
-                    "AlkisPointSearchTooltip.AlkisPointSearchTooltip(ImageIcon).lblFilter"));
+                    MeasurementPointSearchTooltip.class,
+                    "MeasurementPointSearchTooltip.MeasurementPointSearchTooltip(ImageIcon).lblFilter"));
         lblFilter.setOffset(offsetX, offsetY);
         totalWidth = Math.max(totalWidth, offsetX + lblFilter.getWidth());
         totalHeight = Math.max(totalHeight, offsetY + lblFilter.getHeight());

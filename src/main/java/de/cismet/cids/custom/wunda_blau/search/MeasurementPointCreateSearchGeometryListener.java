@@ -29,13 +29,13 @@ import de.cismet.cismap.commons.gui.piccolo.eventlistener.MetaSearchCreateSearch
  * @author   jweintraut
  * @version  $Revision$, $Date$
  */
-public class CreateAlkisPointSearchGeometryListener extends AbstractCreateSearchGeometryListener {
+public class MeasurementPointCreateSearchGeometryListener extends AbstractCreateSearchGeometryListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final Logger LOG = Logger.getLogger(CreateAlkisPointSearchGeometryListener.class);
+    private static final Logger LOG = Logger.getLogger(MeasurementPointCreateSearchGeometryListener.class);
 
-    public static final String CREATE_ALKISPOINTSEARCH_GEOMETRY = "CREATE_ALKISPOINTSEARCH_GEOMETRY";
+    public static final String MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY = "MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY";
     public static final String ACTION_SEARCH_STARTED = "ACTION_SEARCH_STARTED";
 
     //~ Instance fields --------------------------------------------------------
@@ -50,7 +50,7 @@ public class CreateAlkisPointSearchGeometryListener extends AbstractCreateSearch
      * @param  mappingComponent  DOCUMENT ME!
      * @param  toolTip           DOCUMENT ME!
      */
-    public CreateAlkisPointSearchGeometryListener(final MappingComponent mappingComponent, final PNode toolTip) {
+    public MeasurementPointCreateSearchGeometryListener(final MappingComponent mappingComponent, final PNode toolTip) {
         super(mappingComponent);
 
         registerOnMappingComponent();
@@ -71,8 +71,8 @@ public class CreateAlkisPointSearchGeometryListener extends AbstractCreateSearch
      * DOCUMENT ME!
      */
     private void registerOnMappingComponent() {
-        getMappingComponent().addCustomInputListener(CREATE_ALKISPOINTSEARCH_GEOMETRY, this);
-        getMappingComponent().putCursor(CREATE_ALKISPOINTSEARCH_GEOMETRY, new Cursor(Cursor.CROSSHAIR_CURSOR));
+        getMappingComponent().addCustomInputListener(MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY, this);
+        getMappingComponent().putCursor(MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY, new Cursor(Cursor.CROSSHAIR_CURSOR));
     }
 
     /**
@@ -105,13 +105,17 @@ public class CreateAlkisPointSearchGeometryListener extends AbstractCreateSearch
         final Object newValue = evt.getNewValue();
 
         if (MappingComponent.PROPERTY_MAP_INTERACTION_MODE.equals(propertyName)) {
-            if (CREATE_ALKISPOINTSEARCH_GEOMETRY.equals(newValue)) {
+            if (MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY.equals(newValue)) {
                 generateAndShowPointerAnnotation();
             }
         } else if (PROPERTY_LAST_FEATURE.equals(propertyName)) {
             setLastFeature((PureNewFeature)newValue);
         } else if (PROPERTY_MODE.equals(propertyName)) {
             super.setMode(newValue.toString());
+            // Yes, invoking super.setMode(String) fires a new PropertyChangeEvent for PROPERTY_MODE. And we don't need
+            // this new PropertyChangeEvent, we just want to set the new mode. But this new PropertyChangeEvent doesn't
+            // any damage, so it's okay. But we should consider a "bypassing" method
+            // AbstractCreateSearchGeometryListener.setReallyOnlyTheMode(String m) {super.setMode(m);}
             getPropertyChangeSupport().firePropertyChange(PROPERTY_FORGUI_MODE, evt.getOldValue(), evt.getNewValue());
         } else if (PROPERTY_HOLD_GEOMETRIES.equals(propertyName) && (newValue instanceof Boolean)) {
             setHoldGeometries((Boolean)newValue);
