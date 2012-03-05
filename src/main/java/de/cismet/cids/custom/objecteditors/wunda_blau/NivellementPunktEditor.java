@@ -616,7 +616,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         chkHistorisch.setText(org.openide.util.NbBundle.getMessage(
                 NivellementPunktEditor.class,
                 "NivellementPunktEditor.chkHistorisch.text")); // NOI18N
-        chkHistorisch.setOpaque(false);
+        chkHistorisch.setContentAreaFilled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
