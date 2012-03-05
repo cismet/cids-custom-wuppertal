@@ -141,6 +141,6 @@ public class NivellementPunktReportScriptlet extends JRDefaultScriptlet {
             }
         }
 
-        return Static2DTools.rotate(result, 270D, false, Color.WHITE);
+        return result;
     }
 }

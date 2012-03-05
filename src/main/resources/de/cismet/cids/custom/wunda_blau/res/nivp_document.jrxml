@@ -7,9 +7,9 @@
 		<fieldDescription><![CDATA[laufende_nummer]]></fieldDescription>
 	</field>
 	<detail>
-		<band height="750">
+		<band height="375">
 			<image hAlign="Center" vAlign="Middle" onErrorType="Blank">
-				<reportElement x="5" y="5" width="545" height="740" isRemoveLineWhenBlank="true">
+				<reportElement x="5" y="5" width="545" height="365" isRemoveLineWhenBlank="true">
 					<printWhenExpression><![CDATA[$P{REPORT_SCRIPTLET}.isImageAvailable($F{dgk_blattnummer}, $F{laufende_nummer})]]></printWhenExpression>
 				</reportElement>
 				<imageExpression class="java.awt.Image"><![CDATA[$P{REPORT_SCRIPTLET}.loadImage($F{dgk_blattnummer}, $F{laufende_nummer})]]></imageExpression>

@@ -54,7 +54,22 @@ public class NivellementPunktFeatureRenderer extends CustomCidsFeatureRenderer {
         super.setMetaObject(metaObject);
 
         if (cidsBean != null) {
-            final URL urlToIcon = getClass().getResource(PATH2ICONS + "pointicon_brass.png");
+            boolean historisch = false;
+            try {
+                historisch = (Boolean)cidsBean.getProperty("historisch");
+            } catch (ClassCastException ex) {
+                LOG.warn("Could not cast attribute 'historisch' to boolean. Assuming false as value.", ex);
+            }
+
+            URL urlToIcon = null;
+            if (!historisch) {
+                urlToIcon = getClass().getResource(PATH2ICONS + "pointicon_brass.png");
+                pointColor = new Color(0xB9, 0x90, 0x53);
+            } else {
+                urlToIcon = getClass().getResource(PATH2ICONS + "pointicon_silver.png");
+                pointColor = new Color(0xC0, 0xC0, 0xC0);
+            }
+
             if (urlToIcon != null) {
                 pointIcon = new ImageIcon(urlToIcon);
             }
@@ -75,7 +90,7 @@ public class NivellementPunktFeatureRenderer extends CustomCidsFeatureRenderer {
     public FeatureAnnotationSymbol getPointSymbol() {
         FeatureAnnotationSymbol result;
 
-        if ((pointIcon != null) && (pointIcon != null)) {
+        if (pointIcon != null) {
             result = new FeatureAnnotationSymbol(pointIcon.getImage());
             result.setSweetSpotX(0.49D);
             result.setSweetSpotY(0.93D);
