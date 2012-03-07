@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="nivp_overview" pageWidth="555" pageHeight="802" columnWidth="535" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<queryString>
+		<![CDATA[SELECT * FROM nivellement_punkt LIMIT 10]]>
+	</queryString>
+	<field name="pointtype.bezeichnung" class="java.lang.String">
+		<fieldDescription><![CDATA[pointtype.bezeichnung]]></fieldDescription>
+	</field>
+	<field name="pointcode" class="java.lang.String">
+		<fieldDescription><![CDATA[pointcode]]></fieldDescription>
+	</field>
+	<title>
+		<band height="50">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="37"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Enthaltene ALKIS-Punkte]]></text>
+			</staticText>
+			<line>
+				<reportElement x="5" y="37" width="545" height="1" forecolor="#C0C0C0"/>
+			</line>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="45">
+			<line>
+				<reportElement x="5" y="44" width="545" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="5" y="0" width="235" height="40"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Punktkennung]]></text>
+			</staticText>
+			<line>
+				<reportElement x="241" y="0" width="1" height="45"/>
+			</line>
+			<staticText>
+				<reportElement x="242" y="0" width="308" height="40"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Punktart]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<textField>
+				<reportElement x="9" y="0" width="227" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{pointcode}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="241" y="0" width="1" height="20"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="246" y="0" width="300" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{pointtype.bezeichnung}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
