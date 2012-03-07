@@ -27,6 +27,7 @@ import org.apache.log4j.Logger;
 
 import org.openide.util.NbBundle;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 
@@ -74,6 +75,7 @@ import de.cismet.cismap.navigatorplugin.CidsFeature;
 
 import de.cismet.cismap.tools.gui.CidsBeanDropJPopupMenuButton;
 
+import de.cismet.tools.gui.HighlightingRadioButtonMenuItem;
 import de.cismet.tools.gui.JPopupMenuButton;
 
 /**
@@ -246,10 +248,18 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
 
         bgrFilterGST = new javax.swing.ButtonGroup();
         popMenSearch = new javax.swing.JPopupMenu();
-        mniSearchRectangle = new javax.swing.JRadioButtonMenuItem();
-        mniSearchPolygon = new javax.swing.JRadioButtonMenuItem();
-        mniSearchEllipse = new javax.swing.JRadioButtonMenuItem();
-        mniSearchPolyline = new javax.swing.JRadioButtonMenuItem();
+        mniSearchRectangle = new HighlightingRadioButtonMenuItem(javax.swing.UIManager.getDefaults().getColor(
+                    "ProgressBar.foreground"),
+                Color.WHITE);
+        mniSearchPolygon = new HighlightingRadioButtonMenuItem(javax.swing.UIManager.getDefaults().getColor(
+                    "ProgressBar.foreground"),
+                Color.WHITE);
+        mniSearchEllipse = new HighlightingRadioButtonMenuItem(javax.swing.UIManager.getDefaults().getColor(
+                    "ProgressBar.foreground"),
+                Color.WHITE);
+        mniSearchPolyline = new HighlightingRadioButtonMenuItem(javax.swing.UIManager.getDefaults().getColor(
+                    "ProgressBar.foreground"),
+                Color.WHITE);
         sepSearchGeometries = new javax.swing.JSeparator();
         mniSearchCidsFeature = new javax.swing.JRadioButtonMenuItem();
         mniSearchShowLastFeature = new javax.swing.JMenuItem();

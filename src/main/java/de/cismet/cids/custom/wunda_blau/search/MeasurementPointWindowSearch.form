@@ -23,6 +23,9 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mniSearchRectangleActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new HighlightingRadioButtonMenuItem(javax.swing.UIManager.getDefaults().getColor(&quot;ProgressBar.foreground&quot;), Color.WHITE)"/>
+          </AuxValues>
         </MenuItem>
         <MenuItem class="javax.swing.JRadioButtonMenuItem" name="mniSearchPolygon">
           <Properties>
@@ -36,6 +39,9 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mniSearchPolygonActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new HighlightingRadioButtonMenuItem(javax.swing.UIManager.getDefaults().getColor(&quot;ProgressBar.foreground&quot;), Color.WHITE)"/>
+          </AuxValues>
         </MenuItem>
         <MenuItem class="javax.swing.JRadioButtonMenuItem" name="mniSearchEllipse">
           <Properties>
@@ -49,6 +55,9 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mniSearchEllipseActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new HighlightingRadioButtonMenuItem(javax.swing.UIManager.getDefaults().getColor(&quot;ProgressBar.foreground&quot;), Color.WHITE)"/>
+          </AuxValues>
         </MenuItem>
         <MenuItem class="javax.swing.JRadioButtonMenuItem" name="mniSearchPolyline">
           <Properties>
@@ -62,6 +71,9 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mniSearchPolylineActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new HighlightingRadioButtonMenuItem(javax.swing.UIManager.getDefaults().getColor(&quot;ProgressBar.foreground&quot;), Color.WHITE)"/>
+          </AuxValues>
         </MenuItem>
         <Component class="javax.swing.JSeparator" name="sepSearchGeometries">
         </Component>
