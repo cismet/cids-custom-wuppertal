@@ -210,9 +210,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         pnlTitle = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
         bgrControls = new javax.swing.ButtonGroup();
-        strFooter = new javax.swing.Box.Filler(new java.awt.Dimension(0, 22),
-                new java.awt.Dimension(0, 22),
-                new java.awt.Dimension(32767, 22));
+        strFooter = new javax.swing.Box.Filler(new java.awt.Dimension(0, 22), new java.awt.Dimension(0, 22), new java.awt.Dimension(32767, 22));
         pnlSimpleAttributes = new de.cismet.tools.gui.RoundedPanel();
         txtDGKBlattnummer = new javax.swing.JTextField();
         lblHoeheUeberNN = new javax.swing.JLabel();
@@ -231,20 +229,16 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         scpBemerkung = new javax.swing.JScrollPane();
         txaBemerkung = new javax.swing.JTextArea();
         lblGeometrie = new javax.swing.JLabel();
-        if (!readOnly) {
+        if(!readOnly) {
             cmbGeometrie = new DefaultCismapGeometryComboBoxEditor();
         }
         lblPunktnummerWUP = new javax.swing.JLabel();
         lblPunktnummerWUPSeparator = new javax.swing.JLabel();
-        gluFiller = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
+        gluFiller = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         txtLaufendeNummer = new javax.swing.JTextField();
         lblHistorisch = new javax.swing.JLabel();
         chkHistorisch = new javax.swing.JCheckBox();
-        gluFillDescription = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
+        gluFillDescription = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         pnlDocument = new de.cismet.tools.gui.RoundedPanel();
         pnlHeaderDocument = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeaderDocument = new javax.swing.JLabel();
@@ -257,18 +251,14 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         semiRoundedPanel4 = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel3 = new javax.swing.JLabel();
         btnOpen = new javax.swing.JButton();
-        gluFillerControls = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
+        gluFillerControls = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
 
         pnlTitle.setOpaque(false);
         pnlTitle.setLayout(new java.awt.GridBagLayout());
 
         lblTitle.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblTitle.setForeground(java.awt.Color.white);
-        lblTitle.setText(org.openide.util.NbBundle.getMessage(
-                NivellementPunktEditor.class,
-                "NivellementPunktEditor.lblTitle.text"));     // NOI18N
+        lblTitle.setText(org.openide.util.NbBundle.getMessage(NivellementPunktEditor.class, "NivellementPunktEditor.lblTitle.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 0.1;
@@ -284,25 +274,17 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         txtDGKBlattnummer.setMinimumSize(new java.awt.Dimension(100, 20));
         txtDGKBlattnummer.setPreferredSize(new java.awt.Dimension(100, 20));
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dgk_blattnummer}"),
-                txtDGKBlattnummer,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.dgk_blattnummer}"), txtDGKBlattnummer, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         txtDGKBlattnummer.addFocusListener(new java.awt.event.FocusAdapter() {
-
-                @Override
-                public void focusGained(final java.awt.event.FocusEvent evt) {
-                    txtDGKBlattnummerFocusGained(evt);
-                }
-                @Override
-                public void focusLost(final java.awt.event.FocusEvent evt) {
-                    txtDGKBlattnummerFocusLost(evt);
-                }
-            });
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtDGKBlattnummerFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtDGKBlattnummerFocusLost(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -312,9 +294,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlSimpleAttributes.add(txtDGKBlattnummer, gridBagConstraints);
 
-        lblHoeheUeberNN.setText(org.openide.util.NbBundle.getMessage(
-                NivellementPunktEditor.class,
-                "NivellementPunktEditor.lblHoeheUeberNN.text")); // NOI18N
+        lblHoeheUeberNN.setText(org.openide.util.NbBundle.getMessage(NivellementPunktEditor.class, "NivellementPunktEditor.lblHoeheUeberNN.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -323,12 +303,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlSimpleAttributes.add(lblHoeheUeberNN, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hoehe_ueber_nn}"),
-                txtHoeheUeberNN,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hoehe_ueber_nn}"), txtHoeheUeberNN, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setConverter(CONVERTER_HOEHE);
         bindingGroup.addBinding(binding);
 
@@ -341,9 +316,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlSimpleAttributes.add(txtHoeheUeberNN, gridBagConstraints);
 
-        lblFestlegungsart.setText(org.openide.util.NbBundle.getMessage(
-                NivellementPunktEditor.class,
-                "NivellementPunktEditor.lblFestlegungsart.text")); // NOI18N
+        lblFestlegungsart.setText(org.openide.util.NbBundle.getMessage(NivellementPunktEditor.class, "NivellementPunktEditor.lblFestlegungsart.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
@@ -352,12 +325,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlSimpleAttributes.add(lblFestlegungsart, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.festlegungsart}"),
-                cmbFestlegungsart,
-                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.festlegungsart}"), cmbFestlegungsart, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -369,9 +337,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlSimpleAttributes.add(cmbFestlegungsart, gridBagConstraints);
 
-        lblLagebezeichnung.setText(org.openide.util.NbBundle.getMessage(
-                NivellementPunktEditor.class,
-                "NivellementPunktEditor.lblLagebezeichnung.text")); // NOI18N
+        lblLagebezeichnung.setText(org.openide.util.NbBundle.getMessage(NivellementPunktEditor.class, "NivellementPunktEditor.lblLagebezeichnung.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -380,12 +346,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
         pnlSimpleAttributes.add(lblLagebezeichnung, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.lagebezeichnung}"),
-                txtLagebezeichnung,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.lagebezeichnung}"), txtLagebezeichnung, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -397,9 +358,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
         pnlSimpleAttributes.add(txtLagebezeichnung, gridBagConstraints);
 
-        lblLagegenauigkeit.setText(org.openide.util.NbBundle.getMessage(
-                NivellementPunktEditor.class,
-                "NivellementPunktEditor.lblLagegenauigkeit.text")); // NOI18N
+        lblLagegenauigkeit.setText(org.openide.util.NbBundle.getMessage(NivellementPunktEditor.class, "NivellementPunktEditor.lblLagegenauigkeit.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
@@ -408,12 +367,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlSimpleAttributes.add(lblLagegenauigkeit, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.lagegenauigkeit}"),
-                cmbLagegenauigkeit,
-                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.lagegenauigkeit}"), cmbLagegenauigkeit, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -425,9 +379,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlSimpleAttributes.add(cmbLagegenauigkeit, gridBagConstraints);
 
-        lblMessungsjahr.setText(org.openide.util.NbBundle.getMessage(
-                NivellementPunktEditor.class,
-                "NivellementPunktEditor.lblMessungsjahr.text")); // NOI18N
+        lblMessungsjahr.setText(org.openide.util.NbBundle.getMessage(NivellementPunktEditor.class, "NivellementPunktEditor.lblMessungsjahr.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -436,12 +388,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlSimpleAttributes.add(lblMessungsjahr, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.messungsjahr}"),
-                txtMessungsjahr,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.messungsjahr}"), txtMessungsjahr, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -453,9 +400,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlSimpleAttributes.add(txtMessungsjahr, gridBagConstraints);
 
-        lblPunktnummerNRW.setText(org.openide.util.NbBundle.getMessage(
-                NivellementPunktEditor.class,
-                "NivellementPunktEditor.lblPunktnummerNRW.text")); // NOI18N
+        lblPunktnummerNRW.setText(org.openide.util.NbBundle.getMessage(NivellementPunktEditor.class, "NivellementPunktEditor.lblPunktnummerNRW.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -464,12 +409,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlSimpleAttributes.add(lblPunktnummerNRW, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.punktnummer_nrw}"),
-                txtPunktnummerNRW,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.punktnummer_nrw}"), txtPunktnummerNRW, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -481,9 +421,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlSimpleAttributes.add(txtPunktnummerNRW, gridBagConstraints);
 
-        lblBemerkung.setText(org.openide.util.NbBundle.getMessage(
-                NivellementPunktEditor.class,
-                "NivellementPunktEditor.lblBemerkung.text")); // NOI18N
+        lblBemerkung.setText(org.openide.util.NbBundle.getMessage(NivellementPunktEditor.class, "NivellementPunktEditor.lblBemerkung.text")); // NOI18N
         lblBemerkung.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
@@ -497,12 +435,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         txaBemerkung.setColumns(20);
         txaBemerkung.setRows(5);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bemerkung}"),
-                txaBemerkung,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bemerkung}"), txaBemerkung, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         scpBemerkung.setViewportView(txaBemerkung);
@@ -516,9 +449,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlSimpleAttributes.add(scpBemerkung, gridBagConstraints);
 
-        lblGeometrie.setText(org.openide.util.NbBundle.getMessage(
-                NivellementPunktEditor.class,
-                "NivellementPunktEditor.lblGeometrie.text")); // NOI18N
+        lblGeometrie.setText(org.openide.util.NbBundle.getMessage(NivellementPunktEditor.class, "NivellementPunktEditor.lblGeometrie.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 7;
@@ -527,17 +458,14 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlSimpleAttributes.add(lblGeometrie, gridBagConstraints);
 
-        if (!readOnly) {
-            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                    org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                    this,
-                    org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geometrie}"),
-                    cmbGeometrie,
-                    org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        if(!readOnly) {
+
+            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geometrie}"), cmbGeometrie, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
             binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cmbGeometrie).getConverter());
             bindingGroup.addBinding(binding);
+
         }
-        if (!readOnly) {
+        if(!readOnly) {
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 5;
             gridBagConstraints.gridy = 7;
@@ -547,9 +475,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
             pnlSimpleAttributes.add(cmbGeometrie, gridBagConstraints);
         }
 
-        lblPunktnummerWUP.setText(org.openide.util.NbBundle.getMessage(
-                NivellementPunktEditor.class,
-                "NivellementPunktEditor.lblPunktnummerWUP.text")); // NOI18N
+        lblPunktnummerWUP.setText(org.openide.util.NbBundle.getMessage(NivellementPunktEditor.class, "NivellementPunktEditor.lblPunktnummerWUP.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -558,9 +484,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlSimpleAttributes.add(lblPunktnummerWUP, gridBagConstraints);
 
-        lblPunktnummerWUPSeparator.setText(org.openide.util.NbBundle.getMessage(
-                NivellementPunktEditor.class,
-                "NivellementPunktEditor.lblPunktnummerWUPSeparator.text")); // NOI18N
+        lblPunktnummerWUPSeparator.setText(org.openide.util.NbBundle.getMessage(NivellementPunktEditor.class, "NivellementPunktEditor.lblPunktnummerWUPSeparator.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
@@ -574,25 +498,17 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
 
         txtLaufendeNummer.setColumns(3);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.laufende_nummer}"),
-                txtLaufendeNummer,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.laufende_nummer}"), txtLaufendeNummer, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         txtLaufendeNummer.addFocusListener(new java.awt.event.FocusAdapter() {
-
-                @Override
-                public void focusGained(final java.awt.event.FocusEvent evt) {
-                    txtLaufendeNummerFocusGained(evt);
-                }
-                @Override
-                public void focusLost(final java.awt.event.FocusEvent evt) {
-                    txtLaufendeNummerFocusLost(evt);
-                }
-            });
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtLaufendeNummerFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtLaufendeNummerFocusLost(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
@@ -602,9 +518,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlSimpleAttributes.add(txtLaufendeNummer, gridBagConstraints);
 
-        lblHistorisch.setText(org.openide.util.NbBundle.getMessage(
-                NivellementPunktEditor.class,
-                "NivellementPunktEditor.lblHistorisch.text")); // NOI18N
+        lblHistorisch.setText(org.openide.util.NbBundle.getMessage(NivellementPunktEditor.class, "NivellementPunktEditor.lblHistorisch.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 2;
@@ -613,17 +527,10 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlSimpleAttributes.add(lblHistorisch, gridBagConstraints);
 
-        chkHistorisch.setText(org.openide.util.NbBundle.getMessage(
-                NivellementPunktEditor.class,
-                "NivellementPunktEditor.chkHistorisch.text")); // NOI18N
+        chkHistorisch.setText(org.openide.util.NbBundle.getMessage(NivellementPunktEditor.class, "NivellementPunktEditor.chkHistorisch.text")); // NOI18N
         chkHistorisch.setContentAreaFilled(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.historisch}"),
-                chkHistorisch,
-                org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.historisch}"), chkHistorisch, org.jdesktop.beansbinding.BeanProperty.create("selected"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -656,9 +563,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         pnlHeaderDocument.setLayout(new java.awt.GridBagLayout());
 
         lblHeaderDocument.setForeground(java.awt.Color.white);
-        lblHeaderDocument.setText(org.openide.util.NbBundle.getMessage(
-                NivellementPunktEditor.class,
-                "NivellementPunktEditor.lblHeaderDocument.text")); // NOI18N
+        lblHeaderDocument.setText(org.openide.util.NbBundle.getMessage(NivellementPunktEditor.class, "NivellementPunktEditor.lblHeaderDocument.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -678,11 +583,8 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
 
         lblMissingRasterdocument.setBackground(java.awt.Color.white);
         lblMissingRasterdocument.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblMissingRasterdocument.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/missingRasterdocument.png"))); // NOI18N
-        lblMissingRasterdocument.setText(org.openide.util.NbBundle.getMessage(
-                NivellementPunktEditor.class,
-                "NivellementPunktEditor.lblMissingRasterdocument.text"));                                              // NOI18N
+        lblMissingRasterdocument.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/missingRasterdocument.png"))); // NOI18N
+        lblMissingRasterdocument.setText(org.openide.util.NbBundle.getMessage(NivellementPunktEditor.class, "NivellementPunktEditor.lblMissingRasterdocument.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -704,24 +606,18 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         pnlControls.setLayout(new java.awt.GridBagLayout());
 
         bgrControls.add(togPan);
-        togPan.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/pan.gif"))); // NOI18N
+        togPan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/pan.gif"))); // NOI18N
         togPan.setSelected(true);
-        togPan.setText(org.openide.util.NbBundle.getMessage(
-                NivellementPunktEditor.class,
-                "NivellementPunktEditor.togPan.text"));                                    // NOI18N
-        togPan.setToolTipText(org.openide.util.NbBundle.getMessage(
-                NivellementPunktEditor.class,
-                "NivellementPunktEditor.togPan.toolTipText"));                             // NOI18N
+        togPan.setText(org.openide.util.NbBundle.getMessage(NivellementPunktEditor.class, "NivellementPunktEditor.togPan.text")); // NOI18N
+        togPan.setToolTipText(org.openide.util.NbBundle.getMessage(NivellementPunktEditor.class, "NivellementPunktEditor.togPan.toolTipText")); // NOI18N
         togPan.setEnabled(false);
+        togPan.setFocusPainted(false);
         togPan.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         togPan.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    togPanActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                togPanActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -730,23 +626,17 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         pnlControls.add(togPan, gridBagConstraints);
 
         bgrControls.add(togZoom);
-        togZoom.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom.gif"))); // NOI18N
-        togZoom.setText(org.openide.util.NbBundle.getMessage(
-                NivellementPunktEditor.class,
-                "NivellementPunktEditor.togZoom.text"));                                    // NOI18N
-        togZoom.setToolTipText(org.openide.util.NbBundle.getMessage(
-                NivellementPunktEditor.class,
-                "NivellementPunktEditor.togZoom.toolTipText"));                             // NOI18N
+        togZoom.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom.gif"))); // NOI18N
+        togZoom.setText(org.openide.util.NbBundle.getMessage(NivellementPunktEditor.class, "NivellementPunktEditor.togZoom.text")); // NOI18N
+        togZoom.setToolTipText(org.openide.util.NbBundle.getMessage(NivellementPunktEditor.class, "NivellementPunktEditor.togZoom.toolTipText")); // NOI18N
         togZoom.setEnabled(false);
+        togZoom.setFocusPainted(false);
         togZoom.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         togZoom.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    togZoomActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                togZoomActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -754,23 +644,17 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(2, 5, 3, 5);
         pnlControls.add(togZoom, gridBagConstraints);
 
-        btnHome.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/home.gif"))); // NOI18N
-        btnHome.setText(org.openide.util.NbBundle.getMessage(
-                NivellementPunktEditor.class,
-                "NivellementPunktEditor.btnHome.text"));                                    // NOI18N
-        btnHome.setToolTipText(org.openide.util.NbBundle.getMessage(
-                NivellementPunktEditor.class,
-                "NivellementPunktEditor.btnHome.toolTipText"));                             // NOI18N
+        btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/home.gif"))); // NOI18N
+        btnHome.setText(org.openide.util.NbBundle.getMessage(NivellementPunktEditor.class, "NivellementPunktEditor.btnHome.text")); // NOI18N
+        btnHome.setToolTipText(org.openide.util.NbBundle.getMessage(NivellementPunktEditor.class, "NivellementPunktEditor.btnHome.toolTipText")); // NOI18N
         btnHome.setEnabled(false);
+        btnHome.setFocusPainted(false);
         btnHome.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnHome.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnHomeActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHomeActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -782,9 +666,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         semiRoundedPanel4.setLayout(new java.awt.FlowLayout());
 
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText(org.openide.util.NbBundle.getMessage(
-                NivellementPunktEditor.class,
-                "NivellementPunktEditor.jLabel3.text")); // NOI18N
+        jLabel3.setText(org.openide.util.NbBundle.getMessage(NivellementPunktEditor.class, "NivellementPunktEditor.jLabel3.text")); // NOI18N
         semiRoundedPanel4.add(jLabel3);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -792,23 +674,17 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         gridBagConstraints.weightx = 1.0;
         pnlControls.add(semiRoundedPanel4, gridBagConstraints);
 
-        btnOpen.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/folder-image.png"))); // NOI18N
-        btnOpen.setText(org.openide.util.NbBundle.getMessage(
-                NivellementPunktEditor.class,
-                "NivellementPunktEditor.btnOpen.text"));                                            // NOI18N
-        btnOpen.setToolTipText(org.openide.util.NbBundle.getMessage(
-                NivellementPunktEditor.class,
-                "NivellementPunktEditor.btnOpen.toolTipText"));                                     // NOI18N
+        btnOpen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/folder-image.png"))); // NOI18N
+        btnOpen.setText(org.openide.util.NbBundle.getMessage(NivellementPunktEditor.class, "NivellementPunktEditor.btnOpen.text")); // NOI18N
+        btnOpen.setToolTipText(org.openide.util.NbBundle.getMessage(NivellementPunktEditor.class, "NivellementPunktEditor.btnOpen.toolTipText")); // NOI18N
         btnOpen.setEnabled(false);
+        btnOpen.setFocusPainted(false);
         btnOpen.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnOpen.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnOpenActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOpenActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
@@ -830,89 +706,94 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         add(gluFillerControls, gridBagConstraints);
 
         bindingGroup.bind();
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togPanActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togPanActionPerformed
+    private void togPanActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togPanActionPerformed
         measuringComponent.actionPan();
-    }                                                                          //GEN-LAST:event_togPanActionPerformed
+    }//GEN-LAST:event_togPanActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togZoomActionPerformed
+    private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togZoomActionPerformed
         measuringComponent.actionZoom();
-    }                                                                           //GEN-LAST:event_togZoomActionPerformed
+    }//GEN-LAST:event_togZoomActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnHomeActionPerformed
+    private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
         measuringComponent.actionOverview();
-    }                                                                           //GEN-LAST:event_btnHomeActionPerformed
+    }//GEN-LAST:event_btnHomeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
+    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
         if (urlOfDocument != null) {
-            try {
-                BrowserLauncher.openURL(urlOfDocument);
-            } catch (Exception ex) {
-                LOG.error("Could not open URL '" + urlOfDocument + "'.", ex);
-            }
+            CismetThreadPool.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        BrowserLauncher.openURL(urlOfDocument);
+                    } catch (Exception ex) {
+                        LOG.error("Could not open URL '" + urlOfDocument + "'.", ex);
+                    }
+                }
+            });
         }
-    }                                                                           //GEN-LAST:event_btnOpenActionPerformed
+    }//GEN-LAST:event_btnOpenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtDGKBlattnummerFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtDGKBlattnummerFocusLost
+    private void txtDGKBlattnummerFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDGKBlattnummerFocusLost
         if ((oldDgkBlattnummer != null) && !oldDgkBlattnummer.equals(txtDGKBlattnummer.getText())) {
             refreshImage();
         }
-    }                                                                              //GEN-LAST:event_txtDGKBlattnummerFocusLost
+    }//GEN-LAST:event_txtDGKBlattnummerFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtLaufendeNummerFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtLaufendeNummerFocusLost
+    private void txtLaufendeNummerFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLaufendeNummerFocusLost
         if ((oldLaufendeNummer != null) && !oldLaufendeNummer.equals(txtLaufendeNummer.getText())) {
             refreshImage();
         }
-    }                                                                              //GEN-LAST:event_txtLaufendeNummerFocusLost
+    }//GEN-LAST:event_txtLaufendeNummerFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtDGKBlattnummerFocusGained(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtDGKBlattnummerFocusGained
+    private void txtDGKBlattnummerFocusGained(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDGKBlattnummerFocusGained
         oldDgkBlattnummer = txtDGKBlattnummer.getText();
-    }                                                                                //GEN-LAST:event_txtDGKBlattnummerFocusGained
+    }//GEN-LAST:event_txtDGKBlattnummerFocusGained
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtLaufendeNummerFocusGained(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtLaufendeNummerFocusGained
+    private void txtLaufendeNummerFocusGained(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLaufendeNummerFocusGained
         oldLaufendeNummer = txtLaufendeNummer.getText();
-    }                                                                                //GEN-LAST:event_txtLaufendeNummerFocusGained
+    }//GEN-LAST:event_txtLaufendeNummerFocusGained
 
     /**
      * DOCUMENT ME!
@@ -1140,11 +1021,6 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
      * @version  $Revision$, $Date$
      */
     class RefreshDocumentWorker extends SwingWorker<BufferedImage, Object> {
-
-        //~ Static fields/initializers -----------------------------------------
-
-        private static final String PATH_TO_ERRORIMAGE =
-            "/de/cismet/cids/custom/objecteditors/wunda_blau/missingRasterdocument.png";
 
         //~ Methods ------------------------------------------------------------
 

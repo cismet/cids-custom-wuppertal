@@ -11,7 +11,6 @@ import net.sf.jasperreports.engine.JRDefaultScriptlet;
 
 import org.apache.log4j.Logger;
 
-import java.awt.Color;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
@@ -32,8 +31,6 @@ import de.cismet.security.exceptions.AccessMethodIsNotSupportedException;
 import de.cismet.security.exceptions.MissingArgumentException;
 import de.cismet.security.exceptions.NoHandlerForURLException;
 import de.cismet.security.exceptions.RequestFailedException;
-
-import de.cismet.tools.gui.Static2DTools;
 
 /**
  * DOCUMENT ME!
