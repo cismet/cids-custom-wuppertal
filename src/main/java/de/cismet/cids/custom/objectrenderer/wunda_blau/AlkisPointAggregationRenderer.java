@@ -134,7 +134,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
     private static final String PDF = "Punktliste (PDF)";
     private static final String HTML = "Punktliste (HTML)";
     private static final String TEXT = "Punktliste (TEXT)";
-    private static final String APMAP = "AP-Karten";
+    private static final String APMAP = "AP-Karten (PDF)";
     // Speichert Punkte ueber die Lebzeit eines Renderers hinaus
     private static final Set<CidsBean> gehaltenePunkte = TypeSafeCollections.newLinkedHashSet();
 
@@ -313,26 +313,41 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
             return;
         }
 
-        final Collection<CidsBean> selectedAlkisPoints = getSelectedAlkisPoints();
-
-        if (selectedAlkisPoints.isEmpty()) {
-            JOptionPane.showMessageDialog(
-                StaticSwingTools.getParentFrame(this),
-                NbBundle.getMessage(
-                    AlkisPointAggregationRenderer.class,
-                    "AlkisPointAggregationRenderer.btnCreateActionPerformed(ActionEvent).emptySelection.message"),
-                NbBundle.getMessage(
-                    AlkisPointAggregationRenderer.class,
-                    "AlkisPointAggregationRenderer.btnCreateActionPerformed(ActionEvent).emptySelection.title"),
-                JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
-
         final String format = cbProducts.getSelectedItem().toString();
 
         if (APMAP.equalsIgnoreCase(format)) {
+            final Collection<CidsBean> selectedAlkisPoints = getSelectedAlkisPointsContainingAPMap();
+
+            if (selectedAlkisPoints.isEmpty()) {
+                JOptionPane.showMessageDialog(
+                    StaticSwingTools.getParentFrame(this),
+                    NbBundle.getMessage(
+                        AlkisPointAggregationRenderer.class,
+                        "AlkisPointAggregationRenderer.btnCreateActionPerformed(ActionEvent).emptySelection_apmaps.message"),
+                    NbBundle.getMessage(
+                        AlkisPointAggregationRenderer.class,
+                        "AlkisPointAggregationRenderer.btnCreateActionPerformed(ActionEvent).emptySelection_apmaps.title"),
+                    JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+
             CismetThreadPool.execute(new GenerateAPMapReport(selectedAlkisPoints));
         } else {
+            final Collection<CidsBean> selectedAlkisPoints = getSelectedAlkisPoints();
+
+            if (selectedAlkisPoints.isEmpty()) {
+                JOptionPane.showMessageDialog(
+                    StaticSwingTools.getParentFrame(this),
+                    NbBundle.getMessage(
+                        AlkisPointAggregationRenderer.class,
+                        "AlkisPointAggregationRenderer.btnCreateActionPerformed(ActionEvent).emptySelection.message"),
+                    NbBundle.getMessage(
+                        AlkisPointAggregationRenderer.class,
+                        "AlkisPointAggregationRenderer.btnCreateActionPerformed(ActionEvent).emptySelection.title"),
+                    JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+
             CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
         }
     } //GEN-LAST:event_btnCreateActionPerformed
@@ -407,6 +422,27 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
             final Object includedObj = tableModel.getValueAt(i, 0);
             if ((includedObj instanceof Boolean) && (Boolean)includedObj) {
                 result.add(cidsBeans.get(i));
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private Collection<CidsBean> getSelectedAlkisPointsContainingAPMap() {
+        final Collection<CidsBean> result = new LinkedList<CidsBean>();
+
+        final TableModel tableModel = tblAggregation.getModel();
+        for (int i = 0; i < tableModel.getRowCount(); ++i) {
+            final Object includedObj = tableModel.getValueAt(i, 0);
+            if ((includedObj instanceof Boolean) && (Boolean)includedObj) {
+                if (AlkisPointRenderer.hasAPMap(cidsBeans.get(i))) {
+                    result.add(cidsBeans.get(i));
+                }
             }
         }
 

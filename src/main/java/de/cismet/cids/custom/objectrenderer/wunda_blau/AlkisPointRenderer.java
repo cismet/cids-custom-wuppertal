@@ -1570,7 +1570,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         hlPunktlistePdf.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
         hlPunktlistePdf.setText("Punktliste");
-        hlPunktlistePdf.setToolTipText("Punktliste im PDF-Format erzeugen");
+        hlPunktlistePdf.setToolTipText("Punktliste für Einzelpunkt (PDF)");
         hlPunktlistePdf.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -1622,7 +1622,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         hlPunktlisteHtml.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/icons/text-html.png"))); // NOI18N
         hlPunktlisteHtml.setText("Punktliste");
-        hlPunktlisteHtml.setToolTipText("Punktliste im HTML-Format erzeugen");
+        hlPunktlisteHtml.setToolTipText("Punktliste für Einzelpunkt (HTML)");
         hlPunktlisteHtml.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -1676,7 +1676,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         hlPunktlisteTxt.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/icons/text-plain.png"))); // NOI18N
         hlPunktlisteTxt.setText("Punktliste");
-        hlPunktlisteTxt.setToolTipText("Punktliste im TXT-Format erzeugen");
+        hlPunktlisteTxt.setToolTipText("Punktliste für Einzelpunkt (TEXT)");
         hlPunktlisteTxt.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -1859,7 +1859,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         pnlHeaderAPMap.setLayout(new java.awt.GridBagLayout());
 
         lblHeaderAPMap.setForeground(java.awt.Color.white);
-        lblHeaderAPMap.setText("AP-Karten");
+        lblHeaderAPMap.setText("AP-Karte");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -1946,6 +1946,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         btnForward.setEnabled(true);
         lblBack.setEnabled(false);
         lblForw.setEnabled(true);
+        lblTitle.setText(title);
     }                                                                           //GEN-LAST:event_btnBackActionPerformed
 
     /**
@@ -1959,6 +1960,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         btnForward.setEnabled(false);
         lblBack.setEnabled(true);
         lblForw.setEnabled(false);
+        lblTitle.setText("Produkte");
     }                                                                              //GEN-LAST:event_btnForwardActionPerformed
 
     /**

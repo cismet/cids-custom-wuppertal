@@ -16,7 +16,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Enthaltene ALKIS-Punkte]]></text>
+				<text><![CDATA[Enthaltene ALKIS-Anschlusspunkte]]></text>
 			</staticText>
 			<line>
 				<reportElement x="5" y="37" width="545" height="1" forecolor="#C0C0C0"/>

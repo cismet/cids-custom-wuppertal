@@ -1075,7 +1075,7 @@
                   <Image iconType="3" name="/de/cismet/cids/custom/icons/pdf.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Punktliste"/>
-                <Property name="toolTipText" type="java.lang.String" value="Punktliste im PDF-Format erzeugen"/>
+                <Property name="toolTipText" type="java.lang.String" value="Punktliste f&#xfc;r Einzelpunkt (PDF)"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="hlPunktlistePdfActionPerformed"/>
@@ -1159,7 +1159,7 @@
                   <Image iconType="3" name="/de/cismet/cids/custom/icons/text-html.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Punktliste"/>
-                <Property name="toolTipText" type="java.lang.String" value="Punktliste im HTML-Format erzeugen"/>
+                <Property name="toolTipText" type="java.lang.String" value="Punktliste f&#xfc;r Einzelpunkt (HTML)"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="hlPunktlisteHtmlActionPerformed"/>
@@ -1243,7 +1243,7 @@
                   <Image iconType="3" name="/de/cismet/cids/custom/icons/text-plain.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Punktliste"/>
-                <Property name="toolTipText" type="java.lang.String" value="Punktliste im TXT-Format erzeugen"/>
+                <Property name="toolTipText" type="java.lang.String" value="Punktliste f&#xfc;r Einzelpunkt (TEXT)"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="hlPunktlisteTxtActionPerformed"/>
@@ -1520,7 +1520,7 @@
                         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="ff" green="ff" id="white" palette="1" red="ff" type="palette"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="AP-Karten"/>
+                        <Property name="text" type="java.lang.String" value="AP-Karte"/>
                       </Properties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
