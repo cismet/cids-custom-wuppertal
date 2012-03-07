@@ -113,6 +113,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
     private ImageIcon icoPluginPolyline;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrFilterGST;
+    private javax.swing.ButtonGroup bgrSearch;
     private javax.swing.JButton btnAllePunkte;
     private javax.swing.JButton btnAnschlusspunkte;
     private javax.swing.JButton btnGebaeudeUndBauwerkspunkte;
@@ -265,6 +266,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
         mniSearchShowLastFeature = new javax.swing.JMenuItem();
         mniSearchRedo = new javax.swing.JMenuItem();
         mniSearchBuffer = new javax.swing.JMenuItem();
+        bgrSearch = new javax.swing.ButtonGroup();
         pnlFilterPointcode = new javax.swing.JPanel();
         lblPointcode = new javax.swing.JLabel();
         txtPointcode = new javax.swing.JTextField();
@@ -299,6 +301,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
 
+        bgrSearch.add(mniSearchRectangle);
         mniSearchRectangle.setSelected(true);
         mniSearchRectangle.setText(org.openide.util.NbBundle.getMessage(
                 MeasurementPointWindowSearch.class,
@@ -313,6 +316,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
             });
         popMenSearch.add(mniSearchRectangle);
 
+        bgrSearch.add(mniSearchPolygon);
         mniSearchPolygon.setText(org.openide.util.NbBundle.getMessage(
                 MeasurementPointWindowSearch.class,
                 "MeasurementPointWindowSearch.mniSearchPolygon.text"));                                     // NOI18N
@@ -326,6 +330,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
             });
         popMenSearch.add(mniSearchPolygon);
 
+        bgrSearch.add(mniSearchEllipse);
         mniSearchEllipse.setText(org.openide.util.NbBundle.getMessage(
                 MeasurementPointWindowSearch.class,
                 "MeasurementPointWindowSearch.mniSearchEllipse.text"));                                     // NOI18N
@@ -339,6 +344,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
             });
         popMenSearch.add(mniSearchEllipse);
 
+        bgrSearch.add(mniSearchPolyline);
         mniSearchPolyline.setText(org.openide.util.NbBundle.getMessage(
                 MeasurementPointWindowSearch.class,
                 "MeasurementPointWindowSearch.mniSearchPolyline.text"));                                      // NOI18N
@@ -957,6 +963,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
      */
     private void mniSearchRectangleActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchRectangleActionPerformed
         btnGeoSearch.setIcon(icoPluginRectangle);
+        btnGeoSearch.setSelectedIcon(icoPluginRectangle);
 
         EventQueue.invokeLater(new Runnable() {
 
@@ -979,6 +986,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
      */
     private void mniSearchPolygonActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchPolygonActionPerformed
         btnGeoSearch.setIcon(icoPluginPolygon);
+        btnGeoSearch.setSelectedIcon(icoPluginPolygon);
 
         EventQueue.invokeLater(new Runnable() {
 
@@ -1001,6 +1009,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
      */
     private void mniSearchEllipseActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchEllipseActionPerformed
         btnGeoSearch.setIcon(icoPluginEllipse);
+        btnGeoSearch.setSelectedIcon(icoPluginEllipse);
 
         EventQueue.invokeLater(new Runnable() {
 
@@ -1023,6 +1032,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
      */
     private void mniSearchPolylineActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchPolylineActionPerformed
         btnGeoSearch.setIcon(icoPluginPolyline);
+        btnGeoSearch.setSelectedIcon(icoPluginPolyline);
 
         EventQueue.invokeLater(new Runnable() {
 
@@ -1335,12 +1345,16 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
 
         if (CreateGeometryListenerInterface.RECTANGLE.equals(searchMode)) {
             btnGeoSearch.setIcon(icoPluginRectangle);
+            btnGeoSearch.setSelectedIcon(icoPluginRectangle);
         } else if (CreateGeometryListenerInterface.POLYGON.equals(searchMode)) {
             btnGeoSearch.setIcon(icoPluginPolygon);
+            btnGeoSearch.setSelectedIcon(icoPluginPolygon);
         } else if (CreateGeometryListenerInterface.ELLIPSE.equals(searchMode)) {
             btnGeoSearch.setIcon(icoPluginEllipse);
+            btnGeoSearch.setSelectedIcon(icoPluginEllipse);
         } else if (CreateGeometryListenerInterface.LINESTRING.equals(searchMode)) {
             btnGeoSearch.setIcon(icoPluginPolyline);
+            btnGeoSearch.setSelectedIcon(icoPluginPolyline);
         }
 
         mniSearchRectangle.setSelected(CreateGeometryListenerInterface.RECTANGLE.equals(searchMode));
