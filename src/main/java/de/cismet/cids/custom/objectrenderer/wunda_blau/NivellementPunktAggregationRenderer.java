@@ -374,7 +374,7 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
                                     NivellementPunktAggregationRenderer.class,
                                     "NivellementPunktAggregationRenderer.btnGenerateReportActionPerformed(ActionEvent).ErrorInfo.title"),   // NOI18N
                                 NbBundle.getMessage(
-                                    PrintingWidget.class,
+                                    NivellementPunktAggregationRenderer.class,
                                     "NivellementPunktAggregationRenderer.btnGenerateReportActionPerformed(ActionEvent).ErrorInfo.message"), // NOI18N
                                 null,
                                 null,
