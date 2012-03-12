@@ -63,6 +63,7 @@
         <Component class="javax.swing.JButton" name="btnCreate">
           <Properties>
             <Property name="text" type="java.lang.String" value="Erzeugen"/>
+            <Property name="focusPainted" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCreateActionPerformed"/>
@@ -86,6 +87,7 @@
         <Component class="javax.swing.JButton" name="btnRemember">
           <Properties>
             <Property name="text" type="java.lang.String" value="Merken"/>
+            <Property name="focusPainted" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRememberActionPerformed"/>
@@ -99,6 +101,7 @@
         <Component class="javax.swing.JButton" name="btnRelease">
           <Properties>
             <Property name="text" type="java.lang.String" value="Vergessen"/>
+            <Property name="focusPainted" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnReleaseActionPerformed"/>

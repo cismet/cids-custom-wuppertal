@@ -294,6 +294,7 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
         btnGenerateReport.setText(org.openide.util.NbBundle.getMessage(
                 NivellementPunktAggregationRenderer.class,
                 "NivellementPunktAggregationRenderer.btnGenerateReport.text")); // NOI18N
+        btnGenerateReport.setFocusPainted(false);
         btnGenerateReport.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -603,7 +604,8 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
                         "admin",
                         "sb",
                         "nivellement_punkt",
-                        4340)
+                        // 6818)
+                        6833)
                 };
 
 //            DevelopmentTools.createAggregationRendererInFrameFromRMIConnectionOnLocalhost(

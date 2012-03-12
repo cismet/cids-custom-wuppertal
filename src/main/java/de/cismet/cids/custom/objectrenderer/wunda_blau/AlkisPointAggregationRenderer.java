@@ -233,6 +233,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         panProdukte.add(cbProducts, gridBagConstraints);
 
         btnCreate.setText("Erzeugen");
+        btnCreate.setFocusPainted(false);
         btnCreate.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -254,6 +255,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         panProdukte.add(lblProductDescr, gridBagConstraints);
 
         btnRemember.setText("Merken");
+        btnRemember.setFocusPainted(false);
         btnRemember.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -268,6 +270,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         panProdukte.add(btnRemember, gridBagConstraints);
 
         btnRelease.setText("Vergessen");
+        btnRelease.setFocusPainted(false);
         btnRelease.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
