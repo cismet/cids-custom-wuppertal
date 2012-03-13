@@ -36,8 +36,12 @@
 	<field name="lagegenauigkeit" class="java.lang.String">
 		<fieldDescription><![CDATA[lagegenauigkeit]]></fieldDescription>
 	</field>
+	<variable name="HAS_ENTRIES_WO_RASTERDOCUMENTS" class="java.lang.Boolean" calculation="Sum">
+		<variableExpression><![CDATA[Boolean.valueOf($V{HAS_ENTRIES_WO_RASTERDOCUMENTS}.booleanValue() || Boolean.valueOf(!$P{REPORT_SCRIPTLET}.isImageAvailable($F{dgk_blattnummer}, $F{laufende_nummer}).booleanValue()).booleanValue())]]></variableExpression>
+		<initialValueExpression><![CDATA[Boolean.FALSE]]></initialValueExpression>
+	</variable>
 	<title>
-		<band height="50">
+		<band height="70">
 			<staticText>
 				<reportElement x="0" y="0" width="555" height="37"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -46,7 +50,17 @@
 				<text><![CDATA[Enthaltene Nivellement-Punkte im DHHN92]]></text>
 			</staticText>
 			<line>
-				<reportElement x="5" y="37" width="545" height="1" forecolor="#C0C0C0"/>
+				<reportElement x="5" y="57" width="545" height="1" forecolor="#C0C0C0"/>
+			</line>
+			<textField isStretchWithOverflow="true" evaluationTime="Report">
+				<reportElement x="9" y="42" width="541" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{HAS_ENTRIES_WO_RASTERDOCUMENTS}.booleanValue() ? "Für die grau hinterlegten Punkte ist kein Rasterdokument verfügbar." : ""]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="5" y="42" width="545" height="1" forecolor="#C0C0C0"/>
 			</line>
 		</band>
 	</title>
@@ -132,7 +146,7 @@ Nummer]]></text>
 		<band height="20">
 			<rectangle>
 				<reportElement x="5" y="1" width="545" height="18" backcolor="#C0C0C0">
-					<printWhenExpression><![CDATA[$P{REPORT_SCRIPTLET}.isImageAvailable($F{dgk_blattnummer}, $F{laufende_nummer})]]></printWhenExpression>
+					<printWhenExpression><![CDATA[Boolean.valueOf(!$P{REPORT_SCRIPTLET}.isImageAvailable($F{dgk_blattnummer}, $F{laufende_nummer}).booleanValue())]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.0"/>
