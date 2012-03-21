@@ -161,11 +161,19 @@ public class Alb_baulastIconFactory implements CidsTreeObjectIconFactory {
 
                                     @Override
                                     protected Void doInBackground() throws Exception {
-                                        if (!(node == null)
-                                                    && ComponentRegistry.getRegistry().getSearchResultsTree()
-                                                    .containsNode(
-                                                        node.getNode())) {
-                                            node.getMetaObject(true);
+                                        if (!(node == null)) {
+                                            if (node.getPath()[0].equals(
+                                                            ComponentRegistry.getRegistry().getSearchResultsTree()
+                                                                .getModel().getRoot())) {
+                                                // Searchtree
+                                                if (ComponentRegistry.getRegistry().getSearchResultsTree().containsNode(
+                                                                node.getNode())) {
+                                                    node.getMetaObject(true);
+                                                }
+                                            } else {
+                                                // normaler Baum
+                                                node.getMetaObject(true);
+                                            }
                                         }
                                         return null;
                                     }
@@ -177,8 +185,17 @@ public class Alb_baulastIconFactory implements CidsTreeObjectIconFactory {
                                                 listOfRetrievingObjectWorkers.remove(node);
                                             }
                                             final Void result = get();
-                                            ((DefaultTreeModel)ComponentRegistry.getRegistry().getSearchResultsTree()
-                                                        .getModel()).nodeChanged(node);
+                                            if (node.getPath()[0].equals(
+                                                            ComponentRegistry.getRegistry().getSearchResultsTree()
+                                                                .getModel().getRoot())) {
+                                                // Searchtree
+                                                ((DefaultTreeModel)ComponentRegistry.getRegistry()
+                                                            .getSearchResultsTree().getModel()).nodeChanged(node);
+                                            } else {
+                                                // normaler Baum
+                                                ((DefaultTreeModel)ComponentRegistry.getRegistry().getCatalogueTree()
+                                                            .getModel()).nodeChanged(node);
+                                            }
                                         } catch (Exception e) {
                                             log.error("Fehler beim Laden des MetaObjects", e);
                                         }
