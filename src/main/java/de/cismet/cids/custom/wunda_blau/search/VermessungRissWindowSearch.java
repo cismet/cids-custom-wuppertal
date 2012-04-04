@@ -105,7 +105,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     //~ Instance fields --------------------------------------------------------
 
     private final MetaClass metaClass;
-    private final ImageIcon icon;
+    private ImageIcon icon;
     private final MappingComponent mappingComponent;
     private SearchControlPanel pnlSearchCancel;
     private CidsBeanDropJPopupMenuButton btnGeoSearch;
@@ -169,13 +169,26 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     public VermessungRissWindowSearch() {
         mappingComponent = CismapBroker.getInstance().getMappingComponent();
         metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "vermessung_riss");
-        final byte[] iconDataFromMetaclass = metaClass.getIconData();
 
-        if (iconDataFromMetaclass.length > 0) {
-            LOG.info("Using icon from metaclass.");
-            icon = new ImageIcon(metaClass.getIconData());
-        } else {
-            LOG.warn("Metaclass icon is not set. Trying to load default icon.");
+        try {
+            final byte[] iconDataFromMetaclass = metaClass.getIconData();
+
+            if (iconDataFromMetaclass.length > 0) {
+                LOG.info("Using icon from metaclass.");
+                icon = new ImageIcon(metaClass.getIconData());
+            } else {
+                LOG.warn("Metaclass icon is not set. Trying to load default icon.");
+                final URL urlToIcon = getClass().getResource("/de/cismet/cids/custom/wunda_blau/search/search.png");
+
+                if (urlToIcon != null) {
+                    icon = new ImageIcon(urlToIcon);
+                } else {
+                    icon = new ImageIcon(new byte[] {});
+                }
+            }
+        } catch (Exception ex) {
+            LOG.error("Could not load icon data from meta class", ex);
+
             final URL urlToIcon = getClass().getResource("/de/cismet/cids/custom/wunda_blau/search/search.png");
 
             if (urlToIcon != null) {
@@ -840,7 +853,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void mniSearchRectangleActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchRectangleActionPerformed
+    private void mniSearchRectangleActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniSearchRectangleActionPerformed
         btnGeoSearch.setIcon(icoPluginRectangle);
         btnGeoSearch.setSelectedIcon(icoPluginRectangle);
 
@@ -855,14 +868,14 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                         VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY);
                 }
             });
-    } //GEN-LAST:event_mniSearchRectangleActionPerformed
+    }//GEN-LAST:event_mniSearchRectangleActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void mniSearchPolygonActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchPolygonActionPerformed
+    private void mniSearchPolygonActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniSearchPolygonActionPerformed
         btnGeoSearch.setIcon(icoPluginPolygon);
         btnGeoSearch.setSelectedIcon(icoPluginPolygon);
 
@@ -877,14 +890,14 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                         VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY);
                 }
             });
-    } //GEN-LAST:event_mniSearchPolygonActionPerformed
+    }//GEN-LAST:event_mniSearchPolygonActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void mniSearchEllipseActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchEllipseActionPerformed
+    private void mniSearchEllipseActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniSearchEllipseActionPerformed
         btnGeoSearch.setIcon(icoPluginEllipse);
         btnGeoSearch.setSelectedIcon(icoPluginEllipse);
 
@@ -899,14 +912,14 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                         VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY);
                 }
             });
-    } //GEN-LAST:event_mniSearchEllipseActionPerformed
+    }//GEN-LAST:event_mniSearchEllipseActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void mniSearchPolylineActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchPolylineActionPerformed
+    private void mniSearchPolylineActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniSearchPolylineActionPerformed
         btnGeoSearch.setIcon(icoPluginPolyline);
         btnGeoSearch.setSelectedIcon(icoPluginPolyline);
 
@@ -921,14 +934,14 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                         VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY);
                 }
             });
-    } //GEN-LAST:event_mniSearchPolylineActionPerformed
+    }//GEN-LAST:event_mniSearchPolylineActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void mniSearchCidsFeatureActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchCidsFeatureActionPerformed
+    private void mniSearchCidsFeatureActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniSearchCidsFeatureActionPerformed
         EventQueue.invokeLater(new Runnable() {
 
                 @Override
@@ -985,14 +998,14 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                         });
                 }
             });
-    } //GEN-LAST:event_mniSearchCidsFeatureActionPerformed
+    }//GEN-LAST:event_mniSearchCidsFeatureActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void mniSearchShowLastFeatureActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchShowLastFeatureActionPerformed
+    private void mniSearchShowLastFeatureActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniSearchShowLastFeatureActionPerformed
         java.awt.EventQueue.invokeLater(new Runnable() {
 
                 @Override
@@ -1005,14 +1018,14 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                         VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY);
                 }
             });
-    } //GEN-LAST:event_mniSearchShowLastFeatureActionPerformed
+    }//GEN-LAST:event_mniSearchShowLastFeatureActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void mniSearchRedoActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchRedoActionPerformed
+    private void mniSearchRedoActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniSearchRedoActionPerformed
         java.awt.EventQueue.invokeLater(new Runnable() {
 
                 @Override
@@ -1025,14 +1038,14 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                         VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY);
                 }
             });
-    } //GEN-LAST:event_mniSearchRedoActionPerformed
+    }//GEN-LAST:event_mniSearchRedoActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void mniSearchBufferActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchBufferActionPerformed
+    private void mniSearchBufferActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniSearchBufferActionPerformed
         java.awt.EventQueue.invokeLater(new Runnable() {
 
                 @Override
@@ -1112,14 +1125,14 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                     }
                 }
             });
-    }                                                   //GEN-LAST:event_mniSearchBufferActionPerformed
+    }//GEN-LAST:event_mniSearchBufferActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnFilterSchluesselAllActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFilterSchluesselAllActionPerformed
+    private void btnFilterSchluesselAllActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterSchluesselAllActionPerformed
         chkFilterSchluessel501.setSelected(true);
         chkFilterSchluessel502.setSelected(true);
         chkFilterSchluessel503.setSelected(true);
@@ -1129,41 +1142,41 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         chkFilterSchluessel507.setSelected(true);
         chkFilterSchluessel508.setSelected(true);
         chkFilterSchluessel600.setSelected(true);
-    }                                                                                          //GEN-LAST:event_btnFilterSchluesselAllActionPerformed
+    }//GEN-LAST:event_btnFilterSchluesselAllActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstFlurstueckeValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstFlurstueckeValueChanged
+    private void lstFlurstueckeValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstFlurstueckeValueChanged
         if (!evt.getValueIsAdjusting()) {
             btnRemoveFlurstueck.setEnabled(lstFlurstuecke.getSelectedIndex() > -1);
         }
-    }                                                                                         //GEN-LAST:event_lstFlurstueckeValueChanged
+    }//GEN-LAST:event_lstFlurstueckeValueChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddFlurstueckActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddFlurstueckActionPerformed
+    private void btnAddFlurstueckActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddFlurstueckActionPerformed
         final List<CidsBean> result = new ArrayList<CidsBean>(1);
         flurstueckDialog.setCurrentListToAdd(result);
         flurstueckDialog.setVisible(true);
-    }                                                                                    //GEN-LAST:event_btnAddFlurstueckActionPerformed
+    }//GEN-LAST:event_btnAddFlurstueckActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveFlurstueckActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveFlurstueckActionPerformed
+    private void btnRemoveFlurstueckActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveFlurstueckActionPerformed
         final Object[] selection = lstFlurstuecke.getSelectedValues();
         for (final Object flurstueck : selection) {
             flurstuecksvermessungFilterModel.removeElement(flurstueck);
         }
-    }                                                                                       //GEN-LAST:event_btnRemoveFlurstueckActionPerformed
+    }//GEN-LAST:event_btnRemoveFlurstueckActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1426,8 +1439,16 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
 
     @Override
     public boolean checkActionTag() {
-        return SessionManager.getSession().getUser().isAdmin();
+        boolean result = false;
+
+        try {
+            result = SessionManager.getSession().getUser().isAdmin();
+        } catch (Exception ex) {
+            LOG.warn("Could not determine if user is admin.", ex);
+        }
 //        return ObjectRendererUtils.checkActionTag(ACTION_TAG);
+
+        return result;
     }
 
     @Override
