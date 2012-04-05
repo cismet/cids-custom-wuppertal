@@ -92,6 +92,8 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 
+import de.cismet.security.WebAccessManager;
+
 import de.cismet.tools.CismetThreadPool;
 
 import de.cismet.tools.collections.TypeSafeCollections;
@@ -116,6 +118,12 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
             AlkisPointAggregationRenderer.class);
 
     private static final double BUFFER = 0.005;
+
+    public static final HashMap<String, String> POST_HEADER = new HashMap<String, String>();
+
+    static {
+        POST_HEADER.put(WebAccessManager.HEADER_CONTENTTYPE_KEY, WebAccessManager.HEADER_CONTENTTYPE_VALUE_POST);
+    }
 
     // Spaltenueberschriften
     private static final String[] AGR_COMLUMN_NAMES = new String[] {
@@ -839,24 +847,39 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
             }
 
             if (punktListenString.length() > 3) {
-                URL url = null;
                 if ((code != null) && (code.length() > 0)) {
                     try {
-                        url = AlkisUtils.PRODUCTS.productListenNachweisUrl(punktListenString, code);
-                        if (url != null) {
+                        final String url = AlkisUtils.PRODUCTS.productListenNachweisUrl(punktListenString, code);
+                        if ((url != null) && (url.trim().length() > 0)) {
                             if (
                                 !DownloadManagerDialog.showAskingForUserTitle(
                                             StaticSwingTools.getParentFrame(AlkisPointAggregationRenderer.this))) {
                                 return;
                             }
 
-                            final HttpDownload download = new HttpDownload(
-                                    url,
-                                    "",
-                                    DownloadManagerDialog.getJobname(),
-                                    "Punktnachweis",
-                                    code,
-                                    extension);
+                            HttpDownload download = null;
+                            final int parameterPosition = url.indexOf('?');
+
+                            if (parameterPosition < 0) {
+                                download = new HttpDownload(
+                                        new URL(url),
+                                        "",
+                                        DownloadManagerDialog.getJobname(),
+                                        "Punktnachweis",
+                                        code,
+                                        extension);
+                            } else {
+                                final String parameters = url.substring(parameterPosition + 1);
+                                download = new HttpDownload(
+                                        new URL(url.substring(0, parameterPosition)),
+                                        parameters,
+                                        POST_HEADER,
+                                        DownloadManagerDialog.getJobname(),
+                                        "Punktnachweis",
+                                        code,
+                                        extension);
+                            }
+
                             DownloadManager.instance().add(download);
                         }
                     } catch (Exception ex) {

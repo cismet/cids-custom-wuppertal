@@ -1998,23 +1998,57 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         }
 
         final String pointData = AlkisUtils.PRODUCTS.getPointDataForProduct(cidsBean);
-        URL url = null;
+//        URL url = null;
         if ((pointData != null) && (pointData.length() > 0)) {
             try {
-                url = AlkisUtils.PRODUCTS.productListenNachweisUrl(pointData, productType);
+//                url = AlkisUtils.PRODUCTS.productListenNachweisUrl(pointData, productType);
+//
+//                if (url != null) {
+//                    if (!DownloadManagerDialog.showAskingForUserTitle(StaticSwingTools.getParentFrame(this))) {
+//                        return;
+//                    }
+//
+//                    final HttpDownload download = new HttpDownload(
+//                            url,
+//                            "",
+//                            DownloadManagerDialog.getJobname(),
+//                            "Punktliste",
+//                            productType,
+//                            extension);
+//                    DownloadManager.instance().add(download);
+//                }
 
-                if (url != null) {
-                    if (!DownloadManagerDialog.showAskingForUserTitle(StaticSwingTools.getParentFrame(this))) {
+                final String url = AlkisUtils.PRODUCTS.productListenNachweisUrl(pointData, productType);
+                if ((url != null) && (url.trim().length() > 0)) {
+                    if (
+                        !DownloadManagerDialog.showAskingForUserTitle(
+                                    StaticSwingTools.getParentFrame(AlkisPointRenderer.this))) {
                         return;
                     }
 
-                    final HttpDownload download = new HttpDownload(
-                            url,
-                            "",
-                            DownloadManagerDialog.getJobname(),
-                            "Punktliste",
-                            productType,
-                            extension);
+                    HttpDownload download = null;
+                    final int parameterPosition = url.indexOf('?');
+
+                    if (parameterPosition < 0) {
+                        download = new HttpDownload(
+                                new URL(url),
+                                "",
+                                DownloadManagerDialog.getJobname(),
+                                "Punktnachweis",
+                                productType,
+                                extension);
+                    } else {
+                        final String parameters = url.substring(parameterPosition + 1);
+                        download = new HttpDownload(
+                                new URL(url.substring(0, parameterPosition)),
+                                parameters,
+                                AlkisPointAggregationRenderer.POST_HEADER,
+                                DownloadManagerDialog.getJobname(),
+                                "Punktnachweis",
+                                productType,
+                                extension);
+                    }
+
                     DownloadManager.instance().add(download);
                 }
             } catch (Exception ex) {
