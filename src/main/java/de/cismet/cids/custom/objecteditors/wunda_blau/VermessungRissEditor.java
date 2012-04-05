@@ -259,9 +259,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         java.awt.GridBagConstraints gridBagConstraints;
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        strFooter = new javax.swing.Box.Filler(new java.awt.Dimension(0, 22),
-                new java.awt.Dimension(0, 22),
-                new java.awt.Dimension(32767, 22));
+        strFooter = new javax.swing.Box.Filler(new java.awt.Dimension(0, 22), new java.awt.Dimension(0, 22), new java.awt.Dimension(32767, 22));
         pnlTitle = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
         bgrControls = new javax.swing.ButtonGroup();
@@ -281,13 +279,11 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         lblLetzteAenderungDatum = new javax.swing.JLabel();
         txtLetzteaenderungDatum = new javax.swing.JTextField();
         lblGeometrie = new javax.swing.JLabel();
-        if (!readOnly) {
+        if(!readOnly) {
             cmbGeometrie = new DefaultCismapGeometryComboBoxEditor();
         }
         btnCombineGeometries = new javax.swing.JButton();
-        gluGeneralInformationGap = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
+        gluGeneralInformationGap = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         lblGeometrieStatus = new javax.swing.JLabel();
         cmbGeometrieStatus = new DefaultBindableReferenceCombo();
         pnlLandparcels = new de.cismet.tools.gui.RoundedPanel();
@@ -321,18 +317,14 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         lblErrorWhileLoadingBild = new javax.swing.JLabel();
         lblErrorWhileLoadingGrenzniederschrift = new javax.swing.JLabel();
         lblMissingDocuments = new javax.swing.JLabel();
-        gluGapControls = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
+        gluGapControls = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
 
         pnlTitle.setOpaque(false);
         pnlTitle.setLayout(new java.awt.GridBagLayout());
 
         lblTitle.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblTitle.setForeground(java.awt.Color.white);
-        lblTitle.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.lblTitle.text"));       // NOI18N
+        lblTitle.setText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.lblTitle.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -352,9 +344,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         pnlHeaderGeneralInformation.setLayout(new java.awt.FlowLayout());
 
         lblGeneralInformation.setForeground(new java.awt.Color(255, 255, 255));
-        lblGeneralInformation.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.lblGeneralInformation.text")); // NOI18N
+        lblGeneralInformation.setText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.lblGeneralInformation.text")); // NOI18N
         pnlHeaderGeneralInformation.add(lblGeneralInformation);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -365,9 +355,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.weightx = 0.1;
         pnlGeneralInformation.add(pnlHeaderGeneralInformation, gridBagConstraints);
 
-        lblJahr.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.lblJahr.text")); // NOI18N
+        lblJahr.setText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.lblJahr.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -376,12 +364,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 5);
         pnlGeneralInformation.add(lblJahr, gridBagConstraints);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr}"),
-                txtJahr,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.jahr}"), txtJahr, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -393,9 +376,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 7);
         pnlGeneralInformation.add(txtJahr, gridBagConstraints);
 
-        lblKennziffer.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.lblKennziffer.text")); // NOI18N
+        lblKennziffer.setText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.lblKennziffer.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -404,12 +385,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         pnlGeneralInformation.add(lblKennziffer, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kennziffer}"),
-                txtKennziffer,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kennziffer}"), txtKennziffer, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -420,9 +396,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 7);
         pnlGeneralInformation.add(txtKennziffer, gridBagConstraints);
 
-        lblFormat.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.lblFormat.text")); // NOI18N
+        lblFormat.setText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.lblFormat.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -431,12 +405,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         pnlGeneralInformation.add(lblFormat, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.format}"),
-                cmbFormat,
-                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.format}"), cmbFormat, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -447,9 +416,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 7);
         pnlGeneralInformation.add(cmbFormat, gridBagConstraints);
 
-        lblLetzteAenderungName.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.lblLetzteAenderungName.text")); // NOI18N
+        lblLetzteAenderungName.setText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.lblLetzteAenderungName.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
@@ -460,12 +427,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
         txtLetzteaenderungName.setEditable(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.letzteaenderung_name}"),
-                txtLetzteaenderungName,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.letzteaenderung_name}"), txtLetzteaenderungName, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -477,9 +439,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 10);
         pnlGeneralInformation.add(txtLetzteaenderungName, gridBagConstraints);
 
-        lblLetzteAenderungDatum.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.lblLetzteAenderungDatum.text")); // NOI18N
+        lblLetzteAenderungDatum.setText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.lblLetzteAenderungDatum.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
@@ -490,12 +450,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
         txtLetzteaenderungDatum.setEditable(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.letzteaenderung_datum}"),
-                txtLetzteaenderungDatum,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.letzteaenderung_datum}"), txtLetzteaenderungDatum, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setConverter(new SqlDateToStringConverter());
         bindingGroup.addBinding(binding);
 
@@ -507,89 +462,70 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         pnlGeneralInformation.add(txtLetzteaenderungDatum, gridBagConstraints);
 
-        lblGeometrie.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.lblGeometrie.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 7, 5, 5);
-        pnlGeneralInformation.add(lblGeometrie, gridBagConstraints);
-
-        if (!readOnly) {
-            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                    org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                    this,
-                    org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geometrie}"),
-                    cmbGeometrie,
-                    org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-            binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cmbGeometrie).getConverter());
-            bindingGroup.addBinding(binding);
-        }
-        if (!readOnly) {
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 1;
-            gridBagConstraints.gridy = 4;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-            gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-            pnlGeneralInformation.add(cmbGeometrie, gridBagConstraints);
-        }
-
-        btnCombineGeometries.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wizard.png"))); // NOI18N
-        btnCombineGeometries.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.btnCombineGeometries.text"));                                     // NOI18N
-        btnCombineGeometries.setToolTipText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.btnCombineGeometries.toolTipText"));                              // NOI18N
-        btnCombineGeometries.setEnabled(false);
-        btnCombineGeometries.setFocusPainted(false);
-        btnCombineGeometries.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnCombineGeometriesActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 5);
-        pnlGeneralInformation.add(btnCombineGeometries, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 0.1;
-        pnlGeneralInformation.add(gluGeneralInformationGap, gridBagConstraints);
-
-        lblGeometrieStatus.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.lblGeometrieStatus.text")); // NOI18N
+        lblGeometrie.setText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.lblGeometrie.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlGeneralInformation.add(lblGeometrie, gridBagConstraints);
+
+        if(!readOnly) {
+
+            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geometrie}"), cmbGeometrie, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+            binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cmbGeometrie).getConverter());
+            bindingGroup.addBinding(binding);
+
+        }
+        if(!readOnly) {
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 3;
+            gridBagConstraints.gridy = 4;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+            gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+            pnlGeneralInformation.add(cmbGeometrie, gridBagConstraints);
+        }
+
+        btnCombineGeometries.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wizard.png"))); // NOI18N
+        btnCombineGeometries.setText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.btnCombineGeometries.text")); // NOI18N
+        btnCombineGeometries.setToolTipText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.btnCombineGeometries.toolTipText")); // NOI18N
+        btnCombineGeometries.setEnabled(false);
+        btnCombineGeometries.setFocusPainted(false);
+        btnCombineGeometries.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCombineGeometriesActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 10);
+        pnlGeneralInformation.add(btnCombineGeometries, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 0.1;
+        pnlGeneralInformation.add(gluGeneralInformationGap, gridBagConstraints);
+
+        lblGeometrieStatus.setText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.lblGeometrieStatus.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlGeneralInformation.add(lblGeometrieStatus, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geometrie_status}"),
-                cmbGeometrieStatus,
-                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geometrie_status}"), cmbGeometrieStatus, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
@@ -611,9 +547,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         pnlHeaderLandparcels.setLayout(new java.awt.FlowLayout());
 
         lblHeaderLandparcels.setForeground(new java.awt.Color(255, 255, 255));
-        lblHeaderLandparcels.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.lblHeaderLandparcels.text")); // NOI18N
+        lblHeaderLandparcels.setText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.lblHeaderLandparcels.text")); // NOI18N
         pnlHeaderLandparcels.add(lblHeaderLandparcels);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -629,30 +563,20 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
         lstLandparcels.setCellRenderer(new HighlightReferencingFlurstueckeCellRenderer());
 
-        final org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
-                "${cidsBean.flurstuecksvermessung}");
-        final org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings
-                    .createJListBinding(
-                        org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                        this,
-                        eLProperty,
-                        lstLandparcels);
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.flurstuecksvermessung}");
+        org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstLandparcels);
         bindingGroup.addBinding(jListBinding);
 
         lstLandparcels.addMouseListener(new java.awt.event.MouseAdapter() {
-
-                @Override
-                public void mouseClicked(final java.awt.event.MouseEvent evt) {
-                    lstLandparcelsMouseClicked(evt);
-                }
-            });
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lstLandparcelsMouseClicked(evt);
+            }
+        });
         lstLandparcels.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-
-                @Override
-                public void valueChanged(final javax.swing.event.ListSelectionEvent evt) {
-                    lstLandparcelsValueChanged(evt);
-                }
-            });
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstLandparcelsValueChanged(evt);
+            }
+        });
         scpLandparcels.setViewportView(lstLandparcels);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -664,25 +588,18 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.weighty = 0.1;
         pnlLandparcels.add(scpLandparcels, gridBagConstraints);
 
-        btnAddLandparcel.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
-        btnAddLandparcel.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.btnAddLandparcel.text"));                                                // NOI18N
-        btnAddLandparcel.setToolTipText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.btnAddLandparcel.toolTipText"));                                         // NOI18N
+        btnAddLandparcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddLandparcel.setText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.btnAddLandparcel.text")); // NOI18N
+        btnAddLandparcel.setToolTipText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.btnAddLandparcel.toolTipText")); // NOI18N
         btnAddLandparcel.setFocusPainted(false);
         btnAddLandparcel.setMaximumSize(new java.awt.Dimension(43, 25));
         btnAddLandparcel.setMinimumSize(new java.awt.Dimension(43, 25));
         btnAddLandparcel.setPreferredSize(new java.awt.Dimension(43, 25));
         btnAddLandparcel.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnAddLandparcelActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddLandparcelActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -691,26 +608,19 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 10, 2);
         pnlLandparcels.add(btnAddLandparcel, gridBagConstraints);
 
-        btnRemoveLandparcel.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
-        btnRemoveLandparcel.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.btnRemoveLandparcel.text"));                                                // NOI18N
-        btnRemoveLandparcel.setToolTipText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.btnRemoveLandparcel.toolTipText"));                                         // NOI18N
+        btnRemoveLandparcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveLandparcel.setText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.btnRemoveLandparcel.text")); // NOI18N
+        btnRemoveLandparcel.setToolTipText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.btnRemoveLandparcel.toolTipText")); // NOI18N
         btnRemoveLandparcel.setEnabled(false);
         btnRemoveLandparcel.setFocusPainted(false);
         btnRemoveLandparcel.setMaximumSize(new java.awt.Dimension(43, 25));
         btnRemoveLandparcel.setMinimumSize(new java.awt.Dimension(43, 25));
         btnRemoveLandparcel.setPreferredSize(new java.awt.Dimension(43, 25));
         btnRemoveLandparcel.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnRemoveLandparcelActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveLandparcelActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -739,25 +649,18 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         pnlControls.setLayout(new java.awt.GridBagLayout());
 
         bgrControls.add(togPan);
-        togPan.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/pan.gif"))); // NOI18N
+        togPan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/pan.gif"))); // NOI18N
         togPan.setSelected(true);
-        togPan.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.togPan.text"));                                      // NOI18N
-        togPan.setToolTipText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.togPan.toolTipText"));                               // NOI18N
+        togPan.setText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.togPan.text")); // NOI18N
+        togPan.setToolTipText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.togPan.toolTipText")); // NOI18N
         togPan.setEnabled(false);
         togPan.setFocusPainted(false);
         togPan.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         togPan.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    togPanActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                togPanActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -766,24 +669,17 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         pnlControls.add(togPan, gridBagConstraints);
 
         bgrControls.add(togZoom);
-        togZoom.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom.gif"))); // NOI18N
-        togZoom.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.togZoom.text"));                                      // NOI18N
-        togZoom.setToolTipText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.togZoom.toolTipText"));                               // NOI18N
+        togZoom.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom.gif"))); // NOI18N
+        togZoom.setText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.togZoom.text")); // NOI18N
+        togZoom.setToolTipText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.togZoom.toolTipText")); // NOI18N
         togZoom.setEnabled(false);
         togZoom.setFocusPainted(false);
         togZoom.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         togZoom.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    togZoomActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                togZoomActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -791,24 +687,17 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.insets = new java.awt.Insets(2, 10, 3, 10);
         pnlControls.add(togZoom, gridBagConstraints);
 
-        btnHome.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/home.gif"))); // NOI18N
-        btnHome.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.btnHome.text"));                                      // NOI18N
-        btnHome.setToolTipText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.btnHome.toolTipText"));                               // NOI18N
+        btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/home.gif"))); // NOI18N
+        btnHome.setText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.btnHome.text")); // NOI18N
+        btnHome.setToolTipText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.btnHome.toolTipText")); // NOI18N
         btnHome.setEnabled(false);
         btnHome.setFocusPainted(false);
         btnHome.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnHome.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnHomeActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHomeActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -820,9 +709,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         pnlHeaderControls.setLayout(new java.awt.FlowLayout());
 
         lblHeaderControls.setForeground(new java.awt.Color(255, 255, 255));
-        lblHeaderControls.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.lblHeaderControls.text")); // NOI18N
+        lblHeaderControls.setText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.lblHeaderControls.text")); // NOI18N
         pnlHeaderControls.add(lblHeaderControls);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -830,24 +717,17 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.weightx = 1.0;
         pnlControls.add(pnlHeaderControls, gridBagConstraints);
 
-        btnOpen.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/folder-image.png"))); // NOI18N
-        btnOpen.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.btnOpen.text"));                                              // NOI18N
-        btnOpen.setToolTipText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.btnOpen.toolTipText"));                                       // NOI18N
+        btnOpen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/folder-image.png"))); // NOI18N
+        btnOpen.setText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.btnOpen.text")); // NOI18N
+        btnOpen.setToolTipText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.btnOpen.toolTipText")); // NOI18N
         btnOpen.setEnabled(false);
         btnOpen.setFocusPainted(false);
         btnOpen.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnOpen.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnOpenActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOpenActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -869,9 +749,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         pnlHeaderDocuments.setLayout(new java.awt.FlowLayout());
 
         lblHeaderDocuments.setForeground(new java.awt.Color(255, 255, 255));
-        lblHeaderDocuments.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.lblHeaderDocuments.text")); // NOI18N
+        lblHeaderDocuments.setText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.lblHeaderDocuments.text")); // NOI18N
         pnlHeaderDocuments.add(lblHeaderDocuments);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -883,21 +761,17 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
         bgrDocument.add(togBild);
         togBild.setSelected(true);
-        togBild.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.togBild.text")); // NOI18N
+        togBild.setText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.togBild.text")); // NOI18N
         togBild.setEnabled(false);
         togBild.setFocusPainted(false);
         togBild.setMaximumSize(new java.awt.Dimension(49, 32));
         togBild.setMinimumSize(new java.awt.Dimension(49, 32));
         togBild.setPreferredSize(new java.awt.Dimension(49, 32));
         togBild.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    togBildActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                togBildActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -906,21 +780,17 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         pnlDocuments.add(togBild, gridBagConstraints);
 
         bgrDocument.add(togGrenzniederschrift);
-        togGrenzniederschrift.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.togGrenzniederschrift.text")); // NOI18N
+        togGrenzniederschrift.setText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.togGrenzniederschrift.text")); // NOI18N
         togGrenzniederschrift.setEnabled(false);
         togGrenzniederschrift.setFocusPainted(false);
         togGrenzniederschrift.setMaximumSize(new java.awt.Dimension(120, 32));
         togGrenzniederschrift.setMinimumSize(new java.awt.Dimension(120, 32));
         togGrenzniederschrift.setPreferredSize(new java.awt.Dimension(120, 32));
         togGrenzniederschrift.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    togGrenzniederschriftActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                togGrenzniederschriftActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -940,9 +810,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         pnlHeaderPages.setLayout(new java.awt.FlowLayout());
 
         lblHeaderPages.setForeground(new java.awt.Color(255, 255, 255));
-        lblHeaderPages.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.lblHeaderPages.text")); // NOI18N
+        lblHeaderPages.setText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.lblHeaderPages.text")); // NOI18N
         pnlHeaderPages.add(lblHeaderPages);
 
         pnlPages.add(pnlHeaderPages, java.awt.BorderLayout.PAGE_START);
@@ -956,12 +824,10 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         lstPages.setEnabled(false);
         lstPages.setFixedCellWidth(75);
         lstPages.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-
-                @Override
-                public void valueChanged(final javax.swing.event.ListSelectionEvent evt) {
-                    lstPagesValueChanged(evt);
-                }
-            });
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstPagesValueChanged(evt);
+            }
+        });
         scpPages.setViewportView(lstPages);
 
         pnlPages.add(scpPages, java.awt.BorderLayout.CENTER);
@@ -980,9 +846,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         pnlHeaderDocument.setLayout(new java.awt.GridBagLayout());
 
         lblHeaderDocument.setForeground(java.awt.Color.white);
-        lblHeaderDocument.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.lblHeaderDocument.text")); // NOI18N
+        lblHeaderDocument.setText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.lblHeaderDocument.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -1002,11 +866,8 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
         lblErrorWhileLoadingBild.setBackground(java.awt.Color.white);
         lblErrorWhileLoadingBild.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblErrorWhileLoadingBild.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/missingRasterdocument.png"))); // NOI18N
-        lblErrorWhileLoadingBild.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.lblErrorWhileLoadingBild.text"));                                                // NOI18N
+        lblErrorWhileLoadingBild.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/missingRasterdocument.png"))); // NOI18N
+        lblErrorWhileLoadingBild.setText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.lblErrorWhileLoadingBild.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1016,11 +877,8 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
         lblErrorWhileLoadingGrenzniederschrift.setBackground(java.awt.Color.white);
         lblErrorWhileLoadingGrenzniederschrift.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblErrorWhileLoadingGrenzniederschrift.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/missingRasterdocument.png"))); // NOI18N
-        lblErrorWhileLoadingGrenzniederschrift.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.lblErrorWhileLoadingGrenzniederschrift.text"));                                  // NOI18N
+        lblErrorWhileLoadingGrenzniederschrift.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/missingRasterdocument.png"))); // NOI18N
+        lblErrorWhileLoadingGrenzniederschrift.setText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.lblErrorWhileLoadingGrenzniederschrift.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1030,11 +888,8 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
         lblMissingDocuments.setBackground(java.awt.Color.white);
         lblMissingDocuments.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblMissingDocuments.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/missingRasterdocument.png"))); // NOI18N
-        lblMissingDocuments.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.lblMissingDocuments.text"));                                                     // NOI18N
+        lblMissingDocuments.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/missingRasterdocument.png"))); // NOI18N
+        lblMissingDocuments.setText(org.openide.util.NbBundle.getMessage(VermessungRissEditor.class, "VermessungRissEditor.lblMissingDocuments.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1059,41 +914,41 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         add(gluGapControls, gridBagConstraints);
 
         bindingGroup.bind();
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togPanActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togPanActionPerformed
+    private void togPanActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togPanActionPerformed
         measuringComponent.actionPan();
-    }                                                                          //GEN-LAST:event_togPanActionPerformed
+    }//GEN-LAST:event_togPanActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togZoomActionPerformed
+    private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togZoomActionPerformed
         measuringComponent.actionZoom();
-    }                                                                           //GEN-LAST:event_togZoomActionPerformed
+    }//GEN-LAST:event_togZoomActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnHomeActionPerformed
+    private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
         measuringComponent.actionOverview();
-    }                                                                           //GEN-LAST:event_btnHomeActionPerformed
+    }//GEN-LAST:event_btnHomeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
+    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
         if (currentDocument != NO_SELECTION) {
             CismetThreadPool.execute(new Runnable() {
 
@@ -1113,14 +968,14 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                     }
                 });
         }
-    } //GEN-LAST:event_btnOpenActionPerformed
+    }//GEN-LAST:event_btnOpenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstLandparcelsMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstLandparcelsMouseClicked
+    private void lstLandparcelsMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstLandparcelsMouseClicked
         if (evt.getClickCount() <= 1) {
             return;
         }
@@ -1135,14 +990,14 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObject(selMO, "");
             }
         }
-    } //GEN-LAST:event_lstLandparcelsMouseClicked
+    }//GEN-LAST:event_lstLandparcelsMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstPagesValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstPagesValueChanged
+    private void lstPagesValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstPagesValueChanged
         if (!evt.getValueIsAdjusting()) {
             final Object page = lstPages.getSelectedValue();
 
@@ -1150,44 +1005,44 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 loadPage(((Integer)page) - 1);
             }
         }
-    } //GEN-LAST:event_lstPagesValueChanged
+    }//GEN-LAST:event_lstPagesValueChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togBildActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togBildActionPerformed
+    private void togBildActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togBildActionPerformed
         loadBild();
-    }                                                                           //GEN-LAST:event_togBildActionPerformed
+    }//GEN-LAST:event_togBildActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togGrenzniederschriftActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togGrenzniederschriftActionPerformed
+    private void togGrenzniederschriftActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togGrenzniederschriftActionPerformed
         loadGrenzniederschrift();
-    }                                                                                         //GEN-LAST:event_togGrenzniederschriftActionPerformed
+    }//GEN-LAST:event_togGrenzniederschriftActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddLandparcelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddLandparcelActionPerformed
+    private void btnAddLandparcelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddLandparcelActionPerformed
         flurstueckDialog.setCurrentListToAdd(CidsBeanSupport.getBeanCollectionFromProperty(
                 cidsBean,
                 "flurstuecksvermessung"));
         flurstueckDialog.setVisible(true);
-    }                                                                                    //GEN-LAST:event_btnAddLandparcelActionPerformed
+    }//GEN-LAST:event_btnAddLandparcelActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveLandparcelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveLandparcelActionPerformed
+    private void btnRemoveLandparcelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveLandparcelActionPerformed
         final Object[] selection = lstLandparcels.getSelectedValues();
 
         if ((selection != null) && (selection.length > 0)) {
@@ -1215,25 +1070,25 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 }
             }
         }
-    } //GEN-LAST:event_btnRemoveLandparcelActionPerformed
+    }//GEN-LAST:event_btnRemoveLandparcelActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstLandparcelsValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstLandparcelsValueChanged
+    private void lstLandparcelsValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstLandparcelsValueChanged
         if (!evt.getValueIsAdjusting()) {
             btnRemoveLandparcel.setEnabled(!readOnly && (lstLandparcels.getSelectedIndex() > -1));
         }
-    }                                                                                         //GEN-LAST:event_lstLandparcelsValueChanged
+    }//GEN-LAST:event_lstLandparcelsValueChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCombineGeometriesActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCombineGeometriesActionPerformed
+    private void btnCombineGeometriesActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCombineGeometriesActionPerformed
         if (cidsBean == null) {
             return;
         }
@@ -1279,7 +1134,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             // TODO: Tell user about error.
             LOG.error("Could set new geometry: '" + union.toText() + "'.", ex);
         }
-    } //GEN-LAST:event_btnCombineGeometriesActionPerformed
+    }//GEN-LAST:event_btnCombineGeometriesActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
