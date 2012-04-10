@@ -193,6 +193,45 @@ public class AlkisUtils {
     /**
      * DOCUMENT ME!
      *
+     * @param   land       DOCUMENT ME!
+     * @param   gemarkung  DOCUMENT ME!
+     * @param   flur       DOCUMENT ME!
+     * @param   zaehler    DOCUMENT ME!
+     * @param   nenner     DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String generateLandparcelCode(final int land,
+            final int gemarkung,
+            final int flur,
+            final int zaehler,
+            final int nenner) {
+        final String withoutNenner = generateLandparcelCode(land, gemarkung, flur, zaehler);
+        final StringBuilder sb = new StringBuilder(withoutNenner);
+        sb.append(String.format("/%04d", nenner));
+        return sb.toString();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   land       DOCUMENT ME!
+     * @param   gemarkung  DOCUMENT ME!
+     * @param   flur       DOCUMENT ME!
+     * @param   zaehler    DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String generateLandparcelCode(final int land,
+            final int gemarkung,
+            final int flur,
+            final int zaehler) {
+        return String.format("%02d%04d-%03d-%05d", land, gemarkung, flur, zaehler);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param   fullLandparcelCode  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
