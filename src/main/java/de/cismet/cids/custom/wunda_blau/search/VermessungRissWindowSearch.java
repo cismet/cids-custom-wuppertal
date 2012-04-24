@@ -53,7 +53,6 @@ import javax.swing.JOptionPane;
 
 import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungFlurstueckSelectionDialog;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsVermessungRissSearchStatement;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -104,6 +103,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
 
     //~ Instance fields --------------------------------------------------------
 
+    private final boolean geoSearchEnabled;
     private final MetaClass metaClass;
     private ImageIcon icon;
     private final MappingComponent mappingComponent;
@@ -168,6 +168,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
      */
     public VermessungRissWindowSearch() {
         mappingComponent = CismapBroker.getInstance().getMappingComponent();
+        geoSearchEnabled = mappingComponent != null;
         metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "vermessung_riss");
 
         byte[] iconDataFromMetaclass = new byte[] {};
@@ -197,10 +198,6 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
 
         initComponents();
 
-        final VermessungRissCreateSearchGeometryListener vermessungRissCreateSearchGeometryListener =
-            new VermessungRissCreateSearchGeometryListener(mappingComponent, new VermessungRissSearchTooltip(icon));
-        vermessungRissCreateSearchGeometryListener.addPropertyChangeListener(this);
-
         pnlSearchCancel = new SearchControlPanel(this);
         final Dimension max = pnlSearchCancel.getMaximumSize();
         final Dimension min = pnlSearchCancel.getMinimumSize();
@@ -216,33 +213,41 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                 new Double(pre.getHeight() + 6).intValue()));
         pnlButtons.add(pnlSearchCancel);
 
-        pnlButtons.add(Box.createHorizontalStrut(5));
+        if (geoSearchEnabled) {
+            final VermessungRissCreateSearchGeometryListener vermessungRissCreateSearchGeometryListener =
+                new VermessungRissCreateSearchGeometryListener(mappingComponent, new VermessungRissSearchTooltip(icon));
+            vermessungRissCreateSearchGeometryListener.addPropertyChangeListener(this);
 
-        btnGeoSearch = new CidsBeanDropJPopupMenuButton(
-                VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY,
-                mappingComponent,
-                null);
-        btnGeoSearch.addActionListener(new java.awt.event.ActionListener() {
+            pnlButtons.add(Box.createHorizontalStrut(5));
 
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnGeoSearchActionPerformed(evt);
-                }
-            });
-        btnGeoSearch.setToolTipText(org.openide.util.NbBundle.getMessage(
-                VermessungRissWindowSearch.class,
-                "VermessungRissWindowSearch.btnGeoSearch.toolTipText"));
-        ((JPopupMenuButton)btnGeoSearch).setPopupMenu(popMenSearch);
-        btnGeoSearch.setFocusPainted(false);
-        pnlButtons.add(btnGeoSearch);
+            btnGeoSearch = new CidsBeanDropJPopupMenuButton(
+                    VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY,
+                    mappingComponent,
+                    null);
+            btnGeoSearch.addActionListener(new java.awt.event.ActionListener() {
 
-        visualizeSearchMode((MetaSearchCreateSearchGeometryListener)mappingComponent.getInputListener(
-                MappingComponent.CREATE_SEARCH_POLYGON));
-        mappingComponent.getInteractionButtonGroup().add(btnGeoSearch);
-        new CidsBeanDropTarget(btnGeoSearch);
+                    @Override
+                    public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                        btnGeoSearchActionPerformed(evt);
+                    }
+                });
+            btnGeoSearch.setToolTipText(org.openide.util.NbBundle.getMessage(
+                    VermessungRissWindowSearch.class,
+                    "VermessungRissWindowSearch.btnGeoSearch.toolTipText"));
+            ((JPopupMenuButton)btnGeoSearch).setPopupMenu(popMenSearch);
+            btnGeoSearch.setFocusPainted(false);
+            pnlButtons.add(btnGeoSearch);
 
-        ((CidsBeanDropJPopupMenuButton)btnGeoSearch).setTargetIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/images/pluginSearchTarget.png")));
+            visualizeSearchMode((MetaSearchCreateSearchGeometryListener)mappingComponent.getInputListener(
+                    MappingComponent.CREATE_SEARCH_POLYGON));
+            mappingComponent.getInteractionButtonGroup().add(btnGeoSearch);
+            new CidsBeanDropTarget(btnGeoSearch);
+
+            ((CidsBeanDropJPopupMenuButton)btnGeoSearch).setTargetIcon(new javax.swing.ImageIcon(
+                    getClass().getResource("/images/pluginSearchTarget.png")));
+        } else {
+            chkSearchInCismap.setVisible(false);
+        }
 
         flurstuecksvermessungFilterModel = new DefaultListModel();
         lstFlurstuecke.setModel(flurstuecksvermessungFilterModel);
@@ -1189,8 +1194,10 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
      * DOCUMENT ME!
      */
     protected void visualizeSearchMode() {
-        visualizeSearchMode((VermessungRissCreateSearchGeometryListener)mappingComponent.getInputListener(
-                VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY));
+        if (geoSearchEnabled) {
+            visualizeSearchMode((VermessungRissCreateSearchGeometryListener)mappingComponent.getInputListener(
+                    VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY));
+        }
     }
 
     /**

@@ -102,6 +102,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
 
     //~ Instance fields --------------------------------------------------------
 
+    private final boolean geoSearchEnabled;
     private final MetaClass metaClass;
     private final ImageIcon icon;
     private final MappingComponent mappingComponent;
@@ -164,6 +165,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
      */
     public MeasurementPointWindowSearch() {
         mappingComponent = CismapBroker.getInstance().getMappingComponent();
+        geoSearchEnabled = mappingComponent != null;
         metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "ALKIS_POINT");
         final byte[] iconDataFromMetaclass = metaClass.getIconData();
 
@@ -188,10 +190,6 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
 
         initComponents();
 
-        final MeasurementPointCreateSearchGeometryListener measurementPointCreateSearchGeometryListener =
-            new MeasurementPointCreateSearchGeometryListener(mappingComponent, new MeasurementPointSearchTooltip(icon));
-        measurementPointCreateSearchGeometryListener.addPropertyChangeListener(this);
-
         pnlSearchCancel = new SearchControlPanel(this);
         final Dimension max = pnlSearchCancel.getMaximumSize();
         final Dimension min = pnlSearchCancel.getMinimumSize();
@@ -207,33 +205,43 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
                 new Double(pre.getHeight() + 6).intValue()));
         pnlButtons.add(pnlSearchCancel);
 
-        pnlButtons.add(Box.createHorizontalStrut(5));
+        if (geoSearchEnabled) {
+            final MeasurementPointCreateSearchGeometryListener measurementPointCreateSearchGeometryListener =
+                new MeasurementPointCreateSearchGeometryListener(
+                    mappingComponent,
+                    new MeasurementPointSearchTooltip(icon));
+            measurementPointCreateSearchGeometryListener.addPropertyChangeListener(this);
 
-        btnGeoSearch = new CidsBeanDropJPopupMenuButton(
-                MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY,
-                mappingComponent,
-                null);
-        btnGeoSearch.addActionListener(new java.awt.event.ActionListener() {
+            pnlButtons.add(Box.createHorizontalStrut(5));
 
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnGeoSearchActionPerformed(evt);
-                }
-            });
-        btnGeoSearch.setToolTipText(org.openide.util.NbBundle.getMessage(
-                MeasurementPointWindowSearch.class,
-                "MeasurementPointWindowSearch.btnGeoSearch.toolTipText"));
-        ((JPopupMenuButton)btnGeoSearch).setPopupMenu(popMenSearch);
-        btnGeoSearch.setFocusPainted(false);
-        pnlButtons.add(btnGeoSearch);
+            btnGeoSearch = new CidsBeanDropJPopupMenuButton(
+                    MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY,
+                    mappingComponent,
+                    null);
+            btnGeoSearch.addActionListener(new java.awt.event.ActionListener() {
 
-        visualizeSearchMode((MetaSearchCreateSearchGeometryListener)mappingComponent.getInputListener(
-                MappingComponent.CREATE_SEARCH_POLYGON));
-        mappingComponent.getInteractionButtonGroup().add(btnGeoSearch);
-        new CidsBeanDropTarget(btnGeoSearch);
+                    @Override
+                    public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                        btnGeoSearchActionPerformed(evt);
+                    }
+                });
+            btnGeoSearch.setToolTipText(org.openide.util.NbBundle.getMessage(
+                    MeasurementPointWindowSearch.class,
+                    "MeasurementPointWindowSearch.btnGeoSearch.toolTipText"));
+            ((JPopupMenuButton)btnGeoSearch).setPopupMenu(popMenSearch);
+            btnGeoSearch.setFocusPainted(false);
+            pnlButtons.add(btnGeoSearch);
 
-        ((CidsBeanDropJPopupMenuButton)btnGeoSearch).setTargetIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/images/pluginSearchTarget.png")));
+            visualizeSearchMode((MetaSearchCreateSearchGeometryListener)mappingComponent.getInputListener(
+                    MappingComponent.CREATE_SEARCH_POLYGON));
+            mappingComponent.getInteractionButtonGroup().add(btnGeoSearch);
+            new CidsBeanDropTarget(btnGeoSearch);
+
+            ((CidsBeanDropJPopupMenuButton)btnGeoSearch).setTargetIcon(new javax.swing.ImageIcon(
+                    getClass().getResource("/images/pluginSearchTarget.png")));
+        } else {
+            chkSearchInCismap.setVisible(false);
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -1323,15 +1331,20 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
         enableSearchButtons |= chkNivellementPunkte.isSelected();
 
         pnlSearchCancel.setEnabled(enableSearchButtons);
-        btnGeoSearch.setEnabled(enableSearchButtons);
+
+        if (geoSearchEnabled) {
+            btnGeoSearch.setEnabled(enableSearchButtons);
+        }
     }
 
     /**
      * DOCUMENT ME!
      */
     protected void visualizeSearchMode() {
-        visualizeSearchMode((MeasurementPointCreateSearchGeometryListener)mappingComponent.getInputListener(
-                MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY));
+        if (geoSearchEnabled) {
+            visualizeSearchMode((MeasurementPointCreateSearchGeometryListener)mappingComponent.getInputListener(
+                    MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY));
+        }
     }
 
     /**
