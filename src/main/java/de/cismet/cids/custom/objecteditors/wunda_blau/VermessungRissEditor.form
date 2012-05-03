@@ -173,11 +173,6 @@
               </Constraints>
             </Component>
             <Component class="javax.swing.JComboBox" name="cmbFormat">
-              <Properties>
-                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="0"/>
-                </Property>
-              </Properties>
               <BindingProperties>
                 <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.format}" target="cmbFormat" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
               </BindingProperties>
@@ -338,9 +333,17 @@
               </Constraints>
             </Component>
             <Component class="javax.swing.JComboBox" name="cmbGeometrieStatus">
+              <Properties>
+                <Property name="renderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="new GeometrieStatusRenderer(cmbGeometrieStatus.getRenderer())" type="code"/>
+                </Property>
+              </Properties>
               <BindingProperties>
                 <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.geometrie_status}" target="cmbGeometrieStatus" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
               </BindingProperties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cmbGeometrieStatusActionPerformed"/>
+              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableReferenceCombo()"/>
               </AuxValues>

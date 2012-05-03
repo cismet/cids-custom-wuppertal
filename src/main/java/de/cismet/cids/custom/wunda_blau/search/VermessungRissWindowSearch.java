@@ -119,6 +119,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrSearch;
     private javax.swing.JButton btnAddFlurstueck;
+    private javax.swing.JButton btnFilterSchluessel505To508;
     private javax.swing.JButton btnFilterSchluesselAll;
     private javax.swing.JButton btnRemoveFlurstueck;
     private javax.swing.JCheckBox chkFilterSchluessel501;
@@ -152,6 +153,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     private javax.swing.JPanel pnlFilterRiss;
     private javax.swing.JPanel pnlFilterRissWildcards;
     private javax.swing.JPanel pnlFilterSchluessel;
+    private javax.swing.JPanel pnlFilterSchluesselControls;
     private javax.swing.JPopupMenu popMenSearch;
     private javax.swing.JScrollPane scpFlurstuecke;
     private javax.swing.JSeparator sepSearchGeometries;
@@ -320,7 +322,9 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         chkFilterSchluessel507 = new javax.swing.JCheckBox();
         chkFilterSchluessel508 = new javax.swing.JCheckBox();
         chkFilterSchluessel600 = new javax.swing.JCheckBox();
+        pnlFilterSchluesselControls = new javax.swing.JPanel();
         btnFilterSchluesselAll = new javax.swing.JButton();
+        btnFilterSchluessel505To508 = new javax.swing.JButton();
         pnlFilterFlurstuecke = new javax.swing.JPanel();
         scpFlurstuecke = new javax.swing.JScrollPane();
         lstFlurstuecke = new javax.swing.JList();
@@ -718,13 +722,26 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                     btnFilterSchluesselAllActionPerformed(evt);
                 }
             });
+        pnlFilterSchluesselControls.add(btnFilterSchluesselAll);
+
+        btnFilterSchluessel505To508.setText(org.openide.util.NbBundle.getMessage(
+                VermessungRissWindowSearch.class,
+                "VermessungRissWindowSearch.btnFilterSchluessel505To508.text")); // NOI18N
+        btnFilterSchluessel505To508.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnFilterSchluessel505To508ActionPerformed(evt);
+                }
+            });
+        pnlFilterSchluesselControls.add(btnFilterSchluessel505To508);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlFilterSchluessel.add(btnFilterSchluesselAll, gridBagConstraints);
+        pnlFilterSchluessel.add(pnlFilterSchluesselControls, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1174,6 +1191,23 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
             flurstuecksvermessungFilterModel.removeElement(flurstueck);
         }
     }                                                                                       //GEN-LAST:event_btnRemoveFlurstueckActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnFilterSchluessel505To508ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFilterSchluessel505To508ActionPerformed
+        chkFilterSchluessel501.setSelected(false);
+        chkFilterSchluessel502.setSelected(false);
+        chkFilterSchluessel503.setSelected(false);
+        chkFilterSchluessel504.setSelected(false);
+        chkFilterSchluessel505.setSelected(true);
+        chkFilterSchluessel506.setSelected(true);
+        chkFilterSchluessel507.setSelected(true);
+        chkFilterSchluessel508.setSelected(true);
+        chkFilterSchluessel600.setSelected(false);
+    }                                                                                               //GEN-LAST:event_btnFilterSchluessel505To508ActionPerformed
 
     /**
      * DOCUMENT ME!
