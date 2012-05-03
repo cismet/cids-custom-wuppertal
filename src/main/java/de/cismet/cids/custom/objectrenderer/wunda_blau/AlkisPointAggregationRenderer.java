@@ -55,8 +55,11 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -153,6 +156,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
     private String title = "";
     private PointTableModel tableModel;
     private Map<CidsBean, CidsFeature> features;
+    private Comparator<Integer> tableComparator;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreate;
     private javax.swing.JButton btnRelease;
@@ -175,6 +179,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         initComponents();
         scpAggregationTable.getViewport().setOpaque(false);
         tblAggregation.getSelectionModel().addListSelectionListener(new TableSelectionListener());
+        tableComparator = new TableModelIndexConvertingToViewIndexComparator((tblAggregation));
         btnRelease.setEnabled(gehaltenePunkte.size() > 0);
         btnRemember.setVisible(false);
         btnRelease.setVisible(false);
@@ -446,15 +451,22 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
      */
     private Collection<CidsBean> getSelectedAlkisPointsContainingAPMap() {
         final Collection<CidsBean> result = new LinkedList<CidsBean>();
+        final List<Integer> selectedIndexes = new ArrayList<Integer>();
 
         final TableModel tableModel = tblAggregation.getModel();
         for (int i = 0; i < tableModel.getRowCount(); ++i) {
             final Object includedObj = tableModel.getValueAt(i, 0);
             if ((includedObj instanceof Boolean) && (Boolean)includedObj) {
                 if (AlkisPointRenderer.hasAPMap(cidsBeans.get(i))) {
-                    result.add(cidsBeans.get(i));
+                    selectedIndexes.add(Integer.valueOf(i));
                 }
             }
+        }
+
+        Collections.sort(selectedIndexes, tableComparator);
+
+        for (final Integer selectedIndex : selectedIndexes) {
+            result.add(cidsBeans.get(selectedIndex));
         }
 
         return result;

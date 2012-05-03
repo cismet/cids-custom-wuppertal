@@ -31,8 +31,11 @@ import org.openide.util.NbBundle;
 import java.awt.EventQueue;
 import java.awt.geom.Rectangle2D;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -117,6 +120,7 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
     private String title = "";
     private PointTableModel tableModel;
     private Map<CidsBean, CidsFeature> features;
+    private Comparator<Integer> tableComparator;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGenerateReport;
@@ -142,6 +146,7 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
 
         scpPunkte.getViewport().setOpaque(false);
         tblPunkte.getSelectionModel().addListSelectionListener(new TableSelectionListener());
+        tableComparator = new TableModelIndexConvertingToViewIndexComparator((tblPunkte));
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -436,13 +441,20 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
      */
     protected Collection<CidsBean> getSelectedNivellementPunkte() {
         final Collection<CidsBean> result = new LinkedList<CidsBean>();
+        final List<Integer> selectedIndexes = new ArrayList<Integer>();
 
         final TableModel tableModel = tblPunkte.getModel();
         for (int i = 0; i < tableModel.getRowCount(); ++i) {
             final Object includedObj = tableModel.getValueAt(i, 0);
             if ((includedObj instanceof Boolean) && (Boolean)includedObj) {
-                result.add(cidsBeans.get(i));
+                selectedIndexes.add(Integer.valueOf(i));
             }
+        }
+
+        Collections.sort(selectedIndexes, tableComparator);
+
+        for (final Integer selectedIndex : selectedIndexes) {
+            result.add(cidsBeans.get(selectedIndex));
         }
 
         return result;
