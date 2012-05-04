@@ -101,17 +101,19 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             "Schlüssel",
             "Gemarkung",
             "Flur",
-            "Blatt"
+            "Blatt",
+            "Jahr"
         };
     // Namen der Properties -> Spalten
     private static final String[] AGR_PROPERTY_NAMES = new String[] {
             "schluessel",
             "gemarkung.name",
             "flur",
-            "blatt"
+            "blatt",
+            "jahr"
         };
 
-    private static final int[] AGR_COMLUMN_WIDTH = new int[] { 40, 100, 140, 100, 100 };
+    private static final int[] AGR_COMLUMN_WIDTH = new int[] { 40, 85, 125, 85, 85, 60 };
 
     //~ Instance fields --------------------------------------------------------
 
