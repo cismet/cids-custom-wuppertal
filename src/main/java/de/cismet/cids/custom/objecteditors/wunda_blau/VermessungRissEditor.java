@@ -29,12 +29,15 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 
 import java.io.File;
+import java.io.InputStream;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
 import java.sql.Date;
+
+import java.text.MessageFormat;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -80,6 +83,8 @@ import de.cismet.cismap.commons.Crs;
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.measuring.MeasuringComponent;
+
+import de.cismet.security.WebAccessManager;
 
 import de.cismet.tools.BrowserLauncher;
 import de.cismet.tools.CismetThreadPool;
@@ -150,7 +155,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     protected CidsBean cidsBean;
     protected boolean readOnly;
     // When Wupp decides to publish the correspoding files on a WebDAV server, switch documentURLs' type to URL[].
-    protected File[] documentURLs;
+    protected URL[] documentURLs;
     protected JToggleButton[] documentButtons;
     protected JToggleButton currentSelectedButton;
     protected PictureSelectWorker currentPictureSelectWorker = null;
@@ -245,7 +250,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     public VermessungRissEditor(final boolean readOnly) {
         this.readOnly = readOnly;
 
-        documentURLs = new File[2];
+        documentURLs = new URL[2];
         documentButtons = new JToggleButton[documentURLs.length];
         initComponents();
         documentButtons[DOCUMENT_BILD] = togBild;
@@ -1270,13 +1275,13 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                     @Override
                     public void run() {
                         try {
-//                            BrowserLauncher.openURL(documentURLs[currentDocument].toExternalForm());
-                            BrowserLauncher.openURL(documentURLs[currentDocument].getAbsolutePath());
+                            BrowserLauncher.openURL(documentURLs[currentDocument].toExternalForm());
+//                            BrowserLauncher.openURL(documentURLs[currentDocument].getAbsolutePath());
                         } catch (Exception ex) {
                             LOG.error(
                                 "Could not open URL '"
-                                        // + documentURLs[currentDocument].toExternalForm()
-                                        + documentURLs[currentDocument].getAbsolutePath()
+                                        + documentURLs[currentDocument].toExternalForm()
+                                        // + documentURLs[currentDocument].getAbsolutePath()
                                         + "'.",
                                 ex);
                         }
@@ -1614,7 +1619,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     /**
      * DOCUMENT ME!
      *
-     * @param   prefix      DOCUMENT ME!
+     * @param   host        prefix DOCUMENT ME!
      * @param   gemarkung   DOCUMENT ME!
      * @param   flur        DOCUMENT ME!
      * @param   schluessel  DOCUMENT ME!
@@ -1622,31 +1627,28 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      *
      * @return  DOCUMENT ME!
      */
-    public static Collection<URL> getCorrespondingURLs(final String prefix,
-            final String gemarkung,
+    public static Collection<URL> getCorrespondingURLs(final String host,
+            final Integer gemarkung,
             final String flur,
             final String schluessel,
             final String blatt) {
         final Collection<URL> validURLs = new LinkedList<URL>();
 
-        final StringBuilder urlBuilder = new StringBuilder(AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER);
-        urlBuilder.append('/');
-        urlBuilder.append(gemarkung);
-        urlBuilder.append('/');
-        urlBuilder.append(flur);
-        urlBuilder.append('/');
-        urlBuilder.append(schluessel);
-        urlBuilder.append('/');
-        urlBuilder.append(prefix);
-        urlBuilder.append(blatt);
-        urlBuilder.append('.');
+        final String urlString;
+        try {
+            urlString = MessageFormat.format(host, schluessel, gemarkung, flur, new Integer(Integer.parseInt(blatt)))
+                        + '.';
+        } catch (final Exception ex) {
+            LOG.warn("Can't build a valid URL for current measurement sketch.", ex);
+            return validURLs;
+        }
 
         for (final String suffix : SUFFIXES) {
             URL urlToTry = null;
             try {
-                urlToTry = new URL(urlBuilder.toString() + suffix);
+                urlToTry = new URL(urlString + suffix);
             } catch (MalformedURLException ex) {
-                LOG.warn("The URL '" + urlBuilder.toString() + suffix
+                LOG.warn("The URL '" + urlString.toString() + suffix
                             + "' is malformed. Can't load the corresponding picture.",
                     ex);
             }
@@ -1666,42 +1668,41 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     /**
      * DOCUMENT ME!
      *
-     * @param   host  DOCUMENT ME!
-     * @param   path  prefix DOCUMENT ME!
+     * @param   property  host DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static Collection<File> getCorrespondingFiles(final String host, final String path) {
-        final Collection<File> validFiles = new LinkedList<File>();
-
-        final StringBuilder urlBuilder = new StringBuilder(host);
-        urlBuilder.append('/');
-        urlBuilder.append(path);
-        urlBuilder.append('.');
-
-        for (final String suffix : SUFFIXES) {
-            final URL fileURL;
-            final File testFile;
-            try {
-                fileURL = new URL(urlBuilder.toString() + suffix);
-                testFile = new File(fileURL.toURI());
-
-                if (testFile.isFile()) {
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("Found picture in file: " + testFile.getAbsolutePath());
-                    }
-
-                    validFiles.add(testFile);
-                }
-            } catch (MalformedURLException ex) {
-                LOG.warn("Could not create URL object for '" + urlBuilder.toString() + suffix + "'.", ex);
-            } catch (URISyntaxException ex) {
-                LOG.warn("Could not create File object for '" + urlBuilder.toString() + suffix + "'.", ex);
-            }
-        }
-
-        return validFiles;
-    }
+// public static Collection<File> getCorrespondingFiles(final String host, final String path) {
+// final Collection<File> validFiles = new LinkedList<File>();
+//
+// final StringBuilder urlBuilder = new StringBuilder(host);
+// urlBuilder.append('/');
+// urlBuilder.append(path);
+// urlBuilder.append('.');
+//
+// for (final String suffix : SUFFIXES) {
+// final URL fileURL;
+// final File testFile;
+// try {
+// fileURL = new URL(urlBuilder.toString() + suffix);
+// testFile = new File(fileURL.toURI());
+//
+// if (testFile.isFile()) {
+// if (LOG.isDebugEnabled()) {
+// LOG.debug("Found picture in file: " + testFile.getAbsolutePath());
+// }
+//
+// validFiles.add(testFile);
+// }
+// } catch (MalformedURLException ex) {
+// LOG.warn("Could not create URL object for '" + urlBuilder.toString() + suffix + "'.", ex);
+// } catch (URISyntaxException ex) {
+// LOG.warn("Could not create File object for '" + urlBuilder.toString() + suffix + "'.", ex);
+// }
+// }
+//
+// return validFiles;
+// }
 
     /**
      * DOCUMENT ME!
@@ -1774,6 +1775,26 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         }
 
         return result.toString();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    protected Integer getGemarkungOfCurrentCidsBean() {
+        Integer result = Integer.valueOf(-1);
+
+        if (cidsBean != null) {
+            if (cidsBean.getProperty("gemarkung") != null) {
+                final Object gemarkung = cidsBean.getProperty("gemarkung.id");
+                if (gemarkung instanceof Integer) {
+                    result = (Integer)gemarkung;
+                }
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -1938,430 +1959,29 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
     //When Wupp decides to publish the correspoding files on a WebDAV server, use following three classes.
 
-//    /**
-//     * DOCUMENT ME!
-//     *
-//     * @version  $Revision$, $Date$
-//     */
-//    protected final class PictureReaderWorker extends SwingWorker<ListModel, Void> {
-//
-//        //~ Instance fields ----------------------------------------------------
-//
-//        private final URL url;
-//
-//        //~ Constructors -------------------------------------------------------
-//
-//        /**
-//         * Creates a new PictureReaderWorker object.
-//         *
-//         * @param  url  DOCUMENT ME!
-//         */
-//        public PictureReaderWorker(final URL url) {
-//            this.url = url;
-//
-//            if (LOG.isDebugEnabled()) {
-//                LOG.debug("Preparing picture reader for file " + this.url.toExternalForm());
-//            }
-//
-//            lstPages.setModel(MODEL_LOAD);
-//            measuringComponent.removeAllFeatures();
-//            setDocumentControlsEnabled(false);
-//        }
-//
-//        //~ Methods ------------------------------------------------------------
-//
-//        @Override
-//        protected ListModel doInBackground() throws Exception {
-//            final DefaultListModel model = new DefaultListModel();
-//
-//            closeReader();
-//
-//            try {
-//                pictureReader = new MultiPagePictureReader(url);
-//            } catch (Exception e) {
-//                LOG.error("Could not create a MultiPagePictureReader for URL '" + url.toExternalForm() + "'.", e);
-//                return model;
-//            }
-//
-//            final int numberOfPages = pictureReader.getNumberOfPages();
-//
-//            for (int i = 0; i < numberOfPages; ++i) {
-//                model.addElement(i + 1);
-//            }
-//
-//            return model;
-//        }
-//
-//        @Override
-//        protected void done() {
-//            boolean enableControls = true;
-//            try {
-//                final ListModel model = get();
-//                lstPages.setModel(model);
-//
-//                if (model.getSize() > 0) {
-//                    lstPages.setSelectedIndex(0);
-//                    enableControls = false;
-//                } else {
-//                    lstPages.setModel(new DefaultListModel());
-//                }
-//            } catch (InterruptedException ex) {
-//                setCurrentDocumentNull();
-//                displayErrorOrEnableControls(true);
-//                closeReader();
-//                LOG.warn("Reading found pictures was interrupted.", ex);
-//            } catch (ExecutionException ex) {
-//                setCurrentDocumentNull();
-//                displayErrorOrEnableControls(true);
-//                closeReader();
-//                LOG.error("Could not read found pictures.", ex);
-//            } finally {
-//                // We don't want to enable the controls if we set the selected index in lstPages. Calling
-//                // lstPages.setSelectedIndex(0)
-//                // invokes a PictureSelectWorker and thus disables the controls.
-//                if (enableControls) {
-//                    setDocumentControlsEnabled(true);
-//                }
-//            }
-//        }
-//    }
-//
-//    /**
-//     * DOCUMENT ME!
-//     *
-//     * @version  $Revision$, $Date$
-//     */
-//    protected final class PictureSelectWorker extends SwingWorker<BufferedImage, Void> {
-//
-//        //~ Instance fields ----------------------------------------------------
-//
-//        private final int pageNumber;
-//
-//        //~ Constructors -------------------------------------------------------
-//
-//        /**
-//         * Creates a new PictureSelectWorker object.
-//         *
-//         * @param  pageNumber  DOCUMENT ME!
-//         */
-//        public PictureSelectWorker(final int pageNumber) {
-//            this.pageNumber = pageNumber;
-//            setCurrentPageNull();
-//            setDocumentControlsEnabled(false);
-//            measuringComponent.reset();
-//            btnHome.setEnabled(false);
-//            btnOpen.setEnabled(false);
-//            togPan.setEnabled(false);
-//            togZoom.setEnabled(false);
-//            lstPages.setEnabled(false);
-//        }
-//
-//        //~ Methods ------------------------------------------------------------
-//
-//        @Override
-//        protected BufferedImage doInBackground() throws Exception {
-//            if (pictureReader != null) {
-//                return pictureReader.loadPage(pageNumber);
-//            }
-//            throw new IllegalStateException("PictureReader is null!");
-//        }
-//
-//        @Override
-//        protected void done() {
-//            try {
-//                if (!isCancelled()) {
-//                    currentPage = pageNumber;
-//                    measuringComponent.addImage(get());
-//                    togPan.setSelected(true);
-//                    measuringComponent.zoomToFeatureCollection();
-//                    displayErrorOrEnableControls(false);
-//                }
-//            } catch (InterruptedException ex) {
-//                setCurrentPageNull();
-//                displayErrorOrEnableControls(true);
-//                LOG.warn("Was interrupted while setting new image.", ex);
-//            } catch (Exception ex) {
-//                setCurrentPageNull();
-//                displayErrorOrEnableControls(true);
-//                LOG.error("Could not set new image.", ex);
-//            } finally {
-//                setDocumentControlsEnabled(true);
-//                currentPictureSelectWorker = null;
-//            }
-//        }
-//    }
-//
-//    /**
-//     * DOCUMENT ME!
-//     *
-//     * @version  $Revision$, $Date$
-//     */
-//    protected final class RefreshDocumentWorker extends SwingWorker<Void, Object> {
-//
-//        //~ Constructors -------------------------------------------------------
-//
-//        /**
-//         * Creates a new RefreshDocumentWorker object.
-//         */
-//        public RefreshDocumentWorker() {
-//            lblMissingDocuments.setVisible(false);
-//            lblErrorWhileLoadingBild.setVisible(false);
-//            lblErrorWhileLoadingGrenzniederschrift.setVisible(false);
-//            togBild.setEnabled(false);
-//            togGrenzniederschrift.setEnabled(false);
-//            lstPages.setModel(MODEL_LOAD);
-//            btnHome.setEnabled(false);
-//            btnOpen.setEnabled(false);
-//            togPan.setEnabled(false);
-//            togZoom.setEnabled(false);
-//            setCurrentDocumentNull();
-//        }
-//
-//        //~ Methods ------------------------------------------------------------
-//
-//        @Override
-//        protected Void doInBackground() throws Exception {
-//            documentURLs[DOCUMENT_BILD] = null;
-//            documentURLs[DOCUMENT_GRENZNIEDERSCHRIFT] = null;
-//
-//            final CidsBean cidsBean = getCidsBean();
-//            if (cidsBean == null) {
-//                return null;
-//            }
-//
-//            final Collection<URL> validBildURLs = getCorrespondingURLs(
-//                    AlkisConstants.COMMONS.VERMESSUNG_PREFIX_BILD,
-//                    getGemarkungOfCurrentCidsBean(),
-//                    getSimplePropertyOfCurrentCidsBean("flur"),
-//                    getSimplePropertyOfCurrentCidsBean("schluessel"),
-//                    getSimplePropertyOfCurrentCidsBean("blatt"));
-//            final Collection<URL> validGrenzniederschriftURLs = getCorrespondingURLs(
-//                    AlkisConstants.COMMONS.VERMESSUNG_PREFIX_GRENZNIEDERSCHRIFT,
-//                    getGemarkungOfCurrentCidsBean(),
-//                    getSimplePropertyOfCurrentCidsBean("flur"),
-//                    getSimplePropertyOfCurrentCidsBean("schluessel"),
-//                    getSimplePropertyOfCurrentCidsBean("blatt"));
-//
-//            InputStream streamToReadFrom = null;
-//            for (final URL url : validBildURLs) {
-//                try {
-//                    streamToReadFrom = WebAccessManager.getInstance().doRequest(url);
-//                    documentURLs[DOCUMENT_BILD] = url;
-//                    break;
-//                } catch (Exception ex) {
-//                    LOG.warn("An exception occurred while opening URL '" + url.toExternalForm()
-//                                + "'. Skipping this url.",
-//                        ex);
-//                } finally {
-//                    if (streamToReadFrom != null) {
-//                        streamToReadFrom.close();
-//                    }
-//                }
-//            }
-//
-//            streamToReadFrom = null;
-//            for (final URL url : validGrenzniederschriftURLs) {
-//                try {
-//                    streamToReadFrom = WebAccessManager.getInstance().doRequest(url);
-//                    documentURLs[DOCUMENT_GRENZNIEDERSCHRIFT] = url;
-//                    break;
-//                } catch (Exception ex) {
-//                    LOG.warn("An exception occurred while opening URL '" + url.toExternalForm()
-//                                + "'. Skipping this url.",
-//                        ex);
-//                } finally {
-//                    if (streamToReadFrom != null) {
-//                        streamToReadFrom.close();
-//                    }
-//                }
-//            }
-//
-//            return null;
-//        }
-//
-//        @Override
-//        protected void done() {
-//            try {
-//                if (!isCancelled()) {
-//                    get();
-//                }
-//            } catch (InterruptedException ex) {
-//                LOG.warn("Was interrupted while refreshing document.", ex);
-//            } catch (ExecutionException ex) {
-//                LOG.warn("There was an exception while refreshing document.", ex);
-//            }
-//
-//            if ((documentURLs[DOCUMENT_BILD] == null) && (documentURLs[DOCUMENT_GRENZNIEDERSCHRIFT] == null)) {
-//                measuringComponent.setVisible(false);
-//                lblMissingDocuments.setVisible(true);
-//                lstPages.setModel(new DefaultListModel());
-//                lstPages.setEnabled(false);
-//            } else {
-//                if (documentURLs[DOCUMENT_BILD] != null) {
-//                    togBild.setEnabled(true);
-//                    togBild.setSelected(true);
-//                    currentSelectedButton = togBild;
-//                    currentDocument = DOCUMENT_BILD;
-//                }
-//                if (documentURLs[DOCUMENT_GRENZNIEDERSCHRIFT] != null) {
-//                    togGrenzniederschrift.setEnabled(true);
-//
-//                    if (currentDocument == NO_SELECTION) {
-//                        togGrenzniederschrift.setSelected(true);
-//                        currentSelectedButton = togGrenzniederschrift;
-//                        currentDocument = DOCUMENT_GRENZNIEDERSCHRIFT;
-//                    }
-//                }
-//
-////                CismetThreadPool.execute(new PictureReaderWorker(documentURLs[currentDocument]));
-//                EventQueue.invokeLater(new PictureReaderWorker(documentURLs[currentDocument]));
-//            }
-//        }
-//    }
-
-    //J+
-
-    //J-
-    final class RefreshDocumentWorker extends SwingWorker<Collection[], Void> {
-
-        //~ Constructors -------------------------------------------------------
-        /**
-         * Creates a new FileSearchWorker object.
-         */
-        public RefreshDocumentWorker() {
-            lblMissingDocuments.setVisible(false);
-            lblErrorWhileLoadingBild.setVisible(false);
-            lblErrorWhileLoadingGrenzniederschrift.setVisible(false);
-            togBild.setEnabled(false);
-            togGrenzniederschrift.setEnabled(false);
-            lstPages.setModel(MODEL_LOAD);
-            btnHome.setEnabled(false);
-            btnOpen.setEnabled(false);
-            togPan.setEnabled(false);
-            togZoom.setEnabled(false);
-            setCurrentDocumentNull();
-
-//            measureComponent.reset();
-        }
-
-        //~ Methods ------------------------------------------------------------
-        @Override
-        protected Collection[] doInBackground() throws Exception {
-            final Collection[] result = new Collection[2];
-
-            final Object bild = getCidsBean().getProperty("bild");
-            final Object grenzniederschrift = getCidsBean().getProperty("grenzniederschrift");
-            LOG.info("Found bild property " + bild);
-            LOG.info("Found grenzniederschrift property " + grenzniederschrift);
-
-            if (bild != null) {
-                result[DOCUMENT_BILD] = getCorrespondingFiles(AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER, bild.toString().replaceAll("\\\\", "/"));
-            }
-            if (grenzniederschrift != null) {
-                result[DOCUMENT_GRENZNIEDERSCHRIFT] = getCorrespondingFiles(AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN, grenzniederschrift.toString().replaceAll("\\\\", "/"));
-            }
-
-            return result;
-        }
-
-        @Override
-        protected void done() {
-            try {
-                final Collection[] result = get();
-                final StringBuffer collisionLists = new StringBuffer();
-                for (int i = 0; i < result.length; ++i) {
-                    //cast!
-                    final Collection<File> current = result[i];
-                    if (current != null) {
-                        if (current.size() > 0) {
-                            if (current.size() > 1) {
-                                if (collisionLists.length() > 0) {
-                                    collisionLists.append(",\n");
-                                }
-                                collisionLists.append(current);
-                            }
-                            documentURLs[i] = current.iterator().next();
-                        }
-                    }
-                }
-                if (collisionLists.length() > 0) {
-                    final String collisionWarning =
-                            "Achtung: im Zielverzeichnis sind mehrere Dateien mit"
-                            + " demselben Namen in unterschiedlichen Dateiformaten "
-                            + "vorhanden.\n\nBitte löschen Sie die ungültigen Formate "
-                            + "und setzen Sie die Bearbeitung in WuNDa anschließend fort."
-                            + "\n\nDateien:\n"
-                            + collisionLists
-                            + "\n";
-                    EventQueue.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            JOptionPane.showMessageDialog(
-                                    VermessungRissEditor.this,
-                                    collisionWarning,
-                                    "Unterschiedliche Dateiformate",
-                                    JOptionPane.WARNING_MESSAGE);
-                        }
-                    });
-                    LOG.info(collisionWarning);
-                }
-            } catch (InterruptedException ex) {
-                LOG.warn("Was interrupted while refreshing document.", ex);
-            } catch (ExecutionException ex) {
-                LOG.warn("There was an exception while refreshing document.", ex);
-            } finally {
-                if ((documentURLs[DOCUMENT_BILD] == null) && (documentURLs[DOCUMENT_GRENZNIEDERSCHRIFT] == null)) {
-                    measuringComponent.setVisible(false);
-                    lblMissingDocuments.setVisible(true);
-                    lstPages.setModel(new DefaultListModel());
-                    lstPages.setEnabled(false);
-                } else {
-                    if (documentURLs[DOCUMENT_BILD] != null) {
-                        togBild.setEnabled(true);
-                        togBild.setSelected(true);
-                        currentSelectedButton = togBild;
-                        currentDocument = DOCUMENT_BILD;
-                    }
-                    if (documentURLs[DOCUMENT_GRENZNIEDERSCHRIFT] != null) {
-                        togGrenzniederschrift.setEnabled(true);
-
-                        if (currentDocument == NO_SELECTION) {
-                            togGrenzniederschrift.setSelected(true);
-                            currentSelectedButton = togGrenzniederschrift;
-                            currentDocument = DOCUMENT_GRENZNIEDERSCHRIFT;
-                        }
-                    }
-
-//                CismetThreadPool.execute(new PictureReaderWorker(documentURLs[currentDocument]));
-                    EventQueue.invokeLater(new PictureReaderWorker(documentURLs[currentDocument]));
-                }
-            }
-        }
-    }
-    //J+
-
     /**
      * DOCUMENT ME!
      *
      * @version  $Revision$, $Date$
      */
-    final class PictureReaderWorker extends SwingWorker<ListModel, Void> {
+    protected final class PictureReaderWorker extends SwingWorker<ListModel, Void> {
 
         //~ Instance fields ----------------------------------------------------
 
-        private final File pictureFile;
+        private final URL url;
 
         //~ Constructors -------------------------------------------------------
 
         /**
          * Creates a new PictureReaderWorker object.
          *
-         * @param  pictureFile  DOCUMENT ME!
+         * @param  url  DOCUMENT ME!
          */
-        public PictureReaderWorker(final File pictureFile) {
-            this.pictureFile = pictureFile;
+        public PictureReaderWorker(final URL url) {
+            this.url = url;
+
             if (LOG.isDebugEnabled()) {
-                LOG.debug("prepare picture reader for file " + this.pictureFile);
+                LOG.debug("Preparing picture reader for file " + this.url.toExternalForm());
             }
 
             lstPages.setModel(MODEL_LOAD);
@@ -2377,9 +1997,15 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
             closeReader();
 
-            pictureReader = new MultiPagePictureReader(pictureFile);
+            try {
+                pictureReader = new MultiPagePictureReader(url);
+            } catch (Exception e) {
+                LOG.error("Could not create a MultiPagePictureReader for URL '" + url.toExternalForm() + "'.", e);
+                return model;
+            }
 
             final int numberOfPages = pictureReader.getNumberOfPages();
+
             for (int i = 0; i < numberOfPages; ++i) {
                 model.addElement(i + 1);
             }
@@ -2426,7 +2052,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      *
      * @version  $Revision$, $Date$
      */
-    final class PictureSelectWorker extends SwingWorker<BufferedImage, Void> {
+    protected final class PictureSelectWorker extends SwingWorker<BufferedImage, Void> {
 
         //~ Instance fields ----------------------------------------------------
 
@@ -2458,7 +2084,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             if (pictureReader != null) {
                 return pictureReader.loadPage(pageNumber);
             }
-            throw new IllegalStateException("PictureReader is null!!");
+            throw new IllegalStateException("PictureReader is null!");
         }
 
         @Override
@@ -2485,6 +2111,402 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             }
         }
     }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    protected final class RefreshDocumentWorker extends SwingWorker<Void, Object> {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new RefreshDocumentWorker object.
+         */
+        public RefreshDocumentWorker() {
+            lblMissingDocuments.setVisible(false);
+            lblErrorWhileLoadingBild.setVisible(false);
+            lblErrorWhileLoadingGrenzniederschrift.setVisible(false);
+            togBild.setEnabled(false);
+            togGrenzniederschrift.setEnabled(false);
+            lstPages.setModel(MODEL_LOAD);
+            btnHome.setEnabled(false);
+            btnOpen.setEnabled(false);
+            togPan.setEnabled(false);
+            togZoom.setEnabled(false);
+            setCurrentDocumentNull();
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        protected Void doInBackground() throws Exception {
+            documentURLs[DOCUMENT_BILD] = null;
+            documentURLs[DOCUMENT_GRENZNIEDERSCHRIFT] = null;
+
+            final CidsBean cidsBean = getCidsBean();
+            if (cidsBean == null) {
+                return null;
+            }
+
+            final Collection<URL> validBildURLs = getCorrespondingURLs(
+                    AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER,
+                    getGemarkungOfCurrentCidsBean(),
+                    getSimplePropertyOfCurrentCidsBean("flur"),
+                    getSimplePropertyOfCurrentCidsBean("schluessel"),
+                    getSimplePropertyOfCurrentCidsBean("blatt"));
+            final Collection<URL> validGrenzniederschriftURLs = getCorrespondingURLs(
+                    AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN,
+                    getGemarkungOfCurrentCidsBean(),
+                    getSimplePropertyOfCurrentCidsBean("flur"),
+                    getSimplePropertyOfCurrentCidsBean("schluessel"),
+                    getSimplePropertyOfCurrentCidsBean("blatt"));
+
+            InputStream streamToReadFrom = null;
+            for (final URL url : validBildURLs) {
+                try {
+                    streamToReadFrom = WebAccessManager.getInstance().doRequest(url);
+                    documentURLs[DOCUMENT_BILD] = url;
+                    break;
+                } catch (Exception ex) {
+                    LOG.warn("An exception occurred while opening URL '" + url.toExternalForm()
+                                + "'. Skipping this url.",
+                        ex);
+                } finally {
+                    if (streamToReadFrom != null) {
+                        streamToReadFrom.close();
+                    }
+                }
+            }
+
+            streamToReadFrom = null;
+            for (final URL url : validGrenzniederschriftURLs) {
+                try {
+                    streamToReadFrom = WebAccessManager.getInstance().doRequest(url);
+                    documentURLs[DOCUMENT_GRENZNIEDERSCHRIFT] = url;
+                    break;
+                } catch (Exception ex) {
+                    LOG.warn("An exception occurred while opening URL '" + url.toExternalForm()
+                                + "'. Skipping this url.",
+                        ex);
+                } finally {
+                    if (streamToReadFrom != null) {
+                        streamToReadFrom.close();
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void done() {
+            try {
+                if (!isCancelled()) {
+                    get();
+                }
+            } catch (InterruptedException ex) {
+                LOG.warn("Was interrupted while refreshing document.", ex);
+            } catch (ExecutionException ex) {
+                LOG.warn("There was an exception while refreshing document.", ex);
+            }
+
+            if ((documentURLs[DOCUMENT_BILD] == null) && (documentURLs[DOCUMENT_GRENZNIEDERSCHRIFT] == null)) {
+                measuringComponent.setVisible(false);
+                lblMissingDocuments.setVisible(true);
+                lstPages.setModel(new DefaultListModel());
+                lstPages.setEnabled(false);
+            } else {
+                if (documentURLs[DOCUMENT_BILD] != null) {
+                    togBild.setEnabled(true);
+                    togBild.setSelected(true);
+                    currentSelectedButton = togBild;
+                    currentDocument = DOCUMENT_BILD;
+                }
+                if (documentURLs[DOCUMENT_GRENZNIEDERSCHRIFT] != null) {
+                    togGrenzniederschrift.setEnabled(true);
+
+                    if (currentDocument == NO_SELECTION) {
+                        togGrenzniederschrift.setSelected(true);
+                        currentSelectedButton = togGrenzniederschrift;
+                        currentDocument = DOCUMENT_GRENZNIEDERSCHRIFT;
+                    }
+                }
+
+//                CismetThreadPool.execute(new PictureReaderWorker(documentURLs[currentDocument]));
+                EventQueue.invokeLater(new PictureReaderWorker(documentURLs[currentDocument]));
+            }
+        }
+    }
+
+    //J+
+
+    //J-
+//    final class RefreshDocumentWorker extends SwingWorker<Collection[], Void> {
+//
+//        //~ Constructors -------------------------------------------------------
+//        /**
+//         * Creates a new FileSearchWorker object.
+//         */
+//        public RefreshDocumentWorker() {
+//            lblMissingDocuments.setVisible(false);
+//            lblErrorWhileLoadingBild.setVisible(false);
+//            lblErrorWhileLoadingGrenzniederschrift.setVisible(false);
+//            togBild.setEnabled(false);
+//            togGrenzniederschrift.setEnabled(false);
+//            lstPages.setModel(MODEL_LOAD);
+//            btnHome.setEnabled(false);
+//            btnOpen.setEnabled(false);
+//            togPan.setEnabled(false);
+//            togZoom.setEnabled(false);
+//            setCurrentDocumentNull();
+//
+////            measureComponent.reset();
+//        }
+//
+//        //~ Methods ------------------------------------------------------------
+//        @Override
+//        protected Collection[] doInBackground() throws Exception {
+//            final Collection[] result = new Collection[2];
+//
+//            final Object bild = getCidsBean().getProperty("bild");
+//            final Object grenzniederschrift = getCidsBean().getProperty("grenzniederschrift");
+//            LOG.info("Found bild property " + bild);
+//            LOG.info("Found grenzniederschrift property " + grenzniederschrift);
+//
+//            if (bild != null) {
+//                result[DOCUMENT_BILD] = getCorrespondingFiles(AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER, bild.toString().replaceAll("\\\\", "/"));
+//            }
+//            if (grenzniederschrift != null) {
+//                result[DOCUMENT_GRENZNIEDERSCHRIFT] = getCorrespondingFiles(AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN, grenzniederschrift.toString().replaceAll("\\\\", "/"));
+//            }
+//
+//            return result;
+//        }
+//
+//        @Override
+//        protected void done() {
+//            try {
+//                final Collection[] result = get();
+//                final StringBuffer collisionLists = new StringBuffer();
+//                for (int i = 0; i < result.length; ++i) {
+//                    //cast!
+//                    final Collection<File> current = result[i];
+//                    if (current != null) {
+//                        if (current.size() > 0) {
+//                            if (current.size() > 1) {
+//                                if (collisionLists.length() > 0) {
+//                                    collisionLists.append(",\n");
+//                                }
+//                                collisionLists.append(current);
+//                            }
+//                            documentURLs[i] = current.iterator().next();
+//                        }
+//                    }
+//                }
+//                if (collisionLists.length() > 0) {
+//                    final String collisionWarning =
+//                            "Achtung: im Zielverzeichnis sind mehrere Dateien mit"
+//                            + " demselben Namen in unterschiedlichen Dateiformaten "
+//                            + "vorhanden.\n\nBitte löschen Sie die ungültigen Formate "
+//                            + "und setzen Sie die Bearbeitung in WuNDa anschließend fort."
+//                            + "\n\nDateien:\n"
+//                            + collisionLists
+//                            + "\n";
+//                    EventQueue.invokeLater(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            JOptionPane.showMessageDialog(
+//                                    VermessungRissEditor.this,
+//                                    collisionWarning,
+//                                    "Unterschiedliche Dateiformate",
+//                                    JOptionPane.WARNING_MESSAGE);
+//                        }
+//                    });
+//                    LOG.info(collisionWarning);
+//                }
+//            } catch (InterruptedException ex) {
+//                LOG.warn("Was interrupted while refreshing document.", ex);
+//            } catch (ExecutionException ex) {
+//                LOG.warn("There was an exception while refreshing document.", ex);
+//            } finally {
+//                if ((documentURLs[DOCUMENT_BILD] == null) && (documentURLs[DOCUMENT_GRENZNIEDERSCHRIFT] == null)) {
+//                    measuringComponent.setVisible(false);
+//                    lblMissingDocuments.setVisible(true);
+//                    lstPages.setModel(new DefaultListModel());
+//                    lstPages.setEnabled(false);
+//                } else {
+//                    if (documentURLs[DOCUMENT_BILD] != null) {
+//                        togBild.setEnabled(true);
+//                        togBild.setSelected(true);
+//                        currentSelectedButton = togBild;
+//                        currentDocument = DOCUMENT_BILD;
+//                    }
+//                    if (documentURLs[DOCUMENT_GRENZNIEDERSCHRIFT] != null) {
+//                        togGrenzniederschrift.setEnabled(true);
+//
+//                        if (currentDocument == NO_SELECTION) {
+//                            togGrenzniederschrift.setSelected(true);
+//                            currentSelectedButton = togGrenzniederschrift;
+//                            currentDocument = DOCUMENT_GRENZNIEDERSCHRIFT;
+//                        }
+//                    }
+//
+////                CismetThreadPool.execute(new PictureReaderWorker(documentURLs[currentDocument]));
+//                    EventQueue.invokeLater(new PictureReaderWorker(documentURLs[currentDocument]));
+//                }
+//            }
+//        }
+//    }
+    //    //J+
+
+//
+// /**
+// * DOCUMENT ME!
+// *
+// * @version  $Revision$, $Date$
+// */
+// final class PictureReaderWorker extends SwingWorker<ListModel, Void> {
+//
+// //~ Instance fields ----------------------------------------------------
+//
+// private final File pictureFile;
+//
+// //~ Constructors -------------------------------------------------------
+//
+// /**
+// * Creates a new PictureReaderWorker object.
+// *
+// * @param  pictureFile  DOCUMENT ME!
+// */
+// public PictureReaderWorker(final File pictureFile) {
+// this.pictureFile = pictureFile;
+// if (LOG.isDebugEnabled()) {
+// LOG.debug("prepare picture reader for file " + this.pictureFile);
+// }
+//
+// lstPages.setModel(MODEL_LOAD);
+// measuringComponent.removeAllFeatures();
+// setDocumentControlsEnabled(false);
+// }
+//
+// //~ Methods ------------------------------------------------------------
+//
+// @Override
+// protected ListModel doInBackground() throws Exception {
+// final DefaultListModel model = new DefaultListModel();
+//
+// closeReader();
+//
+// pictureReader = new MultiPagePictureReader(pictureFile);
+//
+// final int numberOfPages = pictureReader.getNumberOfPages();
+// for (int i = 0; i < numberOfPages; ++i) {
+// model.addElement(i + 1);
+// }
+//
+// return model;
+// }
+//
+// @Override
+// protected void done() {
+// boolean enableControls = true;
+// try {
+// final ListModel model = get();
+// lstPages.setModel(model);
+//
+// if (model.getSize() > 0) {
+// lstPages.setSelectedIndex(0);
+// enableControls = false;
+// } else {
+// lstPages.setModel(new DefaultListModel());
+// }
+// } catch (InterruptedException ex) {
+// setCurrentDocumentNull();
+// displayErrorOrEnableControls(true);
+// closeReader();
+// LOG.warn("Reading found pictures was interrupted.", ex);
+// } catch (ExecutionException ex) {
+// setCurrentDocumentNull();
+// displayErrorOrEnableControls(true);
+// closeReader();
+// LOG.error("Could not read found pictures.", ex);
+// } finally {
+// // We don't want to enable the controls if we set the selected index in lstPages. Calling
+// // lstPages.setSelectedIndex(0)
+// // invokes a PictureSelectWorker and thus disables the controls.
+// if (enableControls) {
+// setDocumentControlsEnabled(true);
+// }
+// }
+// }
+// }
+//
+// /**
+// * DOCUMENT ME!
+// *
+// * @version  $Revision$, $Date$
+// */
+// final class PictureSelectWorker extends SwingWorker<BufferedImage, Void> {
+//
+// //~ Instance fields ----------------------------------------------------
+//
+// private final int pageNumber;
+//
+// //~ Constructors -------------------------------------------------------
+//
+// /**
+// * Creates a new PictureSelectWorker object.
+// *
+// * @param  pageNumber  DOCUMENT ME!
+// */
+// public PictureSelectWorker(final int pageNumber) {
+// this.pageNumber = pageNumber;
+// setCurrentPageNull();
+// setDocumentControlsEnabled(false);
+// measuringComponent.reset();
+// btnHome.setEnabled(false);
+// btnOpen.setEnabled(false);
+// togPan.setEnabled(false);
+// togZoom.setEnabled(false);
+// lstPages.setEnabled(false);
+// }
+//
+// //~ Methods ------------------------------------------------------------
+//
+// @Override
+// protected BufferedImage doInBackground() throws Exception {
+// if (pictureReader != null) {
+// return pictureReader.loadPage(pageNumber);
+// }
+// throw new IllegalStateException("PictureReader is null!!");
+// }
+//
+// @Override
+// protected void done() {
+// try {
+// if (!isCancelled()) {
+// currentPage = pageNumber;
+// measuringComponent.addImage(get());
+// togPan.setSelected(true);
+// measuringComponent.zoomToFeatureCollection();
+// displayErrorOrEnableControls(false);
+// }
+// } catch (InterruptedException ex) {
+// setCurrentPageNull();
+// displayErrorOrEnableControls(true);
+// LOG.warn("Was interrupted while setting new image.", ex);
+// } catch (Exception ex) {
+// setCurrentPageNull();
+// displayErrorOrEnableControls(true);
+// LOG.error("Could not set new image.", ex);
+// } finally {
+// setDocumentControlsEnabled(true);
+// currentPictureSelectWorker = null;
+// }
+// }
+// }
 
     /**
      * DOCUMENT ME!
@@ -2535,7 +2557,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 setForeground(list.getForeground());
             }
 
-            final String text = "Fehler beim Laden des Flurstücks";
+            final String errorWhileLoading = "Fehler beim Laden des Flurstücks";
 
             final StringBuilder result = new StringBuilder();
             if (value instanceof CidsBean) {
@@ -2578,7 +2600,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                         }
                     }
                 } else {
-                    result.append("Fehler beim Laden des Flurstücks.");
+                    result.append(errorWhileLoading);
                 }
 
                 if (vermessung.getProperty("veraenderungsart") != null) {
@@ -2594,7 +2616,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                     result.append(')');
                 }
             } else {
-                result.append("Fehler beim Laden des Flurstücks.");
+                result.append(errorWhileLoading);
             }
 
             setText(result.toString());

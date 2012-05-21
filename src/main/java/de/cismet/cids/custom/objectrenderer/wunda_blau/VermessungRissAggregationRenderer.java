@@ -371,11 +371,12 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                     Image[] grenzniederschriften = null;
                     for (final CidsBean vermessungsriss : selectedVermessungsrisse) {
                         try {
-                            if (vermessungsriss.getProperty("bild") instanceof String) {
-                                bilder = VermessungRissReportScriptlet.loadImages(
-                                        AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER,
-                                        vermessungsriss.getProperty("bild").toString());
-                            }
+                            bilder = VermessungRissReportScriptlet.loadImages(
+                                    AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER,
+                                    vermessungsriss.getProperty("schluessel").toString(),
+                                    (Integer)vermessungsriss.getProperty("gemarkung.id"),
+                                    vermessungsriss.getProperty("flur").toString(),
+                                    vermessungsriss.getProperty("blatt").toString());
                         } catch (final Exception ex) {
                             // TODO: User feedback?
                             LOG.warn("Could not include 'bild' for vermessungsriss '" + vermessungsriss.toJSONString()
@@ -384,11 +385,12 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         }
 
                         try {
-                            if (vermessungsriss.getProperty("grenzniederschrift") instanceof String) {
-                                grenzniederschriften = VermessungRissReportScriptlet.loadImages(
-                                        AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN,
-                                        vermessungsriss.getProperty("grenzniederschriften").toString());
-                            }
+                            grenzniederschriften = VermessungRissReportScriptlet.loadImages(
+                                    AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN,
+                                    vermessungsriss.getProperty("schluessel").toString(),
+                                    (Integer)vermessungsriss.getProperty("gemarkung.id"),
+                                    vermessungsriss.getProperty("flur").toString(),
+                                    vermessungsriss.getProperty("blatt").toString());
                         } catch (final Exception ex) {
                             LOG.warn("Could not include 'grenzniederschrift' for vermessungsriss '"
                                         + vermessungsriss.toJSONString() + "'.",

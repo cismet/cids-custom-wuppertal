@@ -30,10 +30,14 @@
 	<field name="grenzniederschrift" class="java.lang.String">
 		<fieldDescription><![CDATA[grenzniederschrift]]></fieldDescription>
 	</field>
+	<field name="gemarkung.id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[gemarkung.id]]></fieldDescription>
+	</field>
 	<variable name="HAS_ENTRIES_WO_RASTERDOCUMENTS" class="java.lang.Boolean" calculation="Sum">
 		<variableExpression><![CDATA[Boolean.valueOf($V{HAS_ENTRIES_WO_RASTERDOCUMENTS}.booleanValue()
-    || Boolean.valueOf(!$P{REPORT_SCRIPTLET}.isImageAvailable(de.cismet.cids.custom.utils.alkis.AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER, $F{bild}).booleanValue()).booleanValue()
-    || Boolean.valueOf(!$P{REPORT_SCRIPTLET}.isImageAvailable(de.cismet.cids.custom.utils.alkis.AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN, $F{grenzniederschrift}).booleanValue()).booleanValue())]]></variableExpression>
+    || !$P{REPORT_SCRIPTLET}.isImageAvailable(de.cismet.cids.custom.utils.alkis.AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER, $F{schluessel}, $F{gemarkung.id}, $F{flur}, $F{blatt}).booleanValue()
+    || !$P{REPORT_SCRIPTLET}.isImageAvailable(de.cismet.cids.custom.utils.alkis.AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN, $F{schluessel}, $F{gemarkung.id}, $F{flur}, $F{blatt}).booleanValue()
+    )]]></variableExpression>
 		<initialValueExpression><![CDATA[Boolean.FALSE]]></initialValueExpression>
 	</variable>
 	<title>
@@ -138,8 +142,8 @@
 		<band height="20">
 			<rectangle>
 				<reportElement x="5" y="1" width="545" height="18" backcolor="#C0C0C0">
-					<printWhenExpression><![CDATA[Boolean.valueOf(!$P{REPORT_SCRIPTLET}.isImageAvailable(de.cismet.cids.custom.utils.alkis.AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER, $F{bild}).booleanValue()
-&& !$P{REPORT_SCRIPTLET}.isImageAvailable(de.cismet.cids.custom.utils.alkis.AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN, $F{grenzniederschrift}).booleanValue())]]></printWhenExpression>
+					<printWhenExpression><![CDATA[Boolean.valueOf(!$P{REPORT_SCRIPTLET}.isImageAvailable(de.cismet.cids.custom.utils.alkis.AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER, $F{schluessel}, $F{gemarkung.id}, $F{flur}, $F{blatt}).booleanValue()
+&& !$P{REPORT_SCRIPTLET}.isImageAvailable(de.cismet.cids.custom.utils.alkis.AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN, $F{schluessel}, $F{gemarkung.id}, $F{flur}, $F{blatt}).booleanValue())]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.0"/>
