@@ -8,7 +8,6 @@
 package de.cismet.cids.custom.wunda_blau.search;
 
 import Sirius.navigator.actiontag.ActionTagProtected;
-import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.search.CidsSearchExecutor;
 import Sirius.navigator.search.dynamic.SearchControlListener;
 import Sirius.navigator.search.dynamic.SearchControlPanel;
@@ -53,6 +52,7 @@ import javax.swing.JOptionPane;
 
 import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungFlurstueckSelectionDialog;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsVermessungRissSearchStatement;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -1475,11 +1475,10 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         boolean result = false;
 
         try {
-            result = SessionManager.getSession().getUser().isAdmin();
+            result = ObjectRendererUtils.checkActionTag(ACTION_TAG);
         } catch (Exception ex) {
             LOG.warn("Could not determine if user is admin.", ex);
         }
-//        return ObjectRendererUtils.checkActionTag(ACTION_TAG);
 
         return result;
     }
