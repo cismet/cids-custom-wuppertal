@@ -28,11 +28,9 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 
-import java.io.File;
 import java.io.InputStream;
 
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 
 import java.sql.Date;
@@ -86,13 +84,16 @@ import de.cismet.cismap.commons.gui.measuring.MeasuringComponent;
 
 import de.cismet.security.WebAccessManager;
 
-import de.cismet.tools.BrowserLauncher;
 import de.cismet.tools.CismetThreadPool;
 
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.MultiPagePictureReader;
+import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
+import de.cismet.tools.gui.downloadmanager.DownloadManager;
+import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
+import de.cismet.tools.gui.downloadmanager.HttpDownload;
 
 /**
  * DOCUMENT ME!
@@ -111,7 +112,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
     private static final Logger LOG = Logger.getLogger(VermessungRissEditor.class);
 
-    public static final String[] SUFFIXES = new String[] { "tif", "jpg", "tiff", "jpeg" };
+    public static final String[] SUFFIXES = new String[] { "tif", "jpg", "tiff", "jpeg", "TIF", "JPG", "TIFF", "JPEG" };
 
     protected static final int DOCUMENT_BILD = 0;
     protected static final int DOCUMENT_GRENZNIEDERSCHRIFT = 1;
@@ -1274,16 +1275,21 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
                     @Override
                     public void run() {
-                        try {
-                            BrowserLauncher.openURL(documentURLs[currentDocument].toExternalForm());
-//                            BrowserLauncher.openURL(documentURLs[currentDocument].getAbsolutePath());
-                        } catch (Exception ex) {
-                            LOG.error(
-                                "Could not open URL '"
-                                        + documentURLs[currentDocument].toExternalForm()
-                                        // + documentURLs[currentDocument].getAbsolutePath()
-                                        + "'.",
-                                ex);
+                        if (DownloadManagerDialog.showAskingForUserTitle(
+                                        StaticSwingTools.getParentFrame(VermessungRissEditor.this))) {
+                            final String url = documentURLs[currentDocument].toExternalForm();
+                            final String filename = url.substring(url.lastIndexOf("/") + 1);
+
+                            DownloadManager.instance()
+                                    .add(
+                                        new HttpDownload(
+                                            documentURLs[currentDocument],
+                                            "",
+                                            DownloadManagerDialog.getJobname(),
+                                            (currentDocument == DOCUMENT_BILD) ? "Vermessungsriss"
+                                                                               : "Grenzniederschrift",
+                                            filename.substring(0, filename.lastIndexOf(".")),
+                                            filename.substring(filename.lastIndexOf("."))));
                         }
                     }
                 });

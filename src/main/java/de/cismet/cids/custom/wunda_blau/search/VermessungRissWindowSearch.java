@@ -1472,15 +1472,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
 
     @Override
     public boolean checkActionTag() {
-        boolean result = false;
-
-        try {
-            result = ObjectRendererUtils.checkActionTag(ACTION_TAG);
-        } catch (Exception ex) {
-            LOG.warn("Could not determine if user is admin.", ex);
-        }
-
-        return result;
+        return ObjectRendererUtils.checkActionTag(ACTION_TAG);
     }
 
     @Override

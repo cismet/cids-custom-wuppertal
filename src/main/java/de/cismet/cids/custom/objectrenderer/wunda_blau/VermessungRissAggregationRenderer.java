@@ -56,6 +56,7 @@ import javax.swing.table.TableRowSorter;
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.PrintingWaitDialog;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -122,6 +123,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
     private PointTableModel tableModel;
     private Map<CidsBean, CidsFeature> features;
     private Comparator<Integer> tableComparator;
+    private PrintingWaitDialog printingWaitDialog;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGenerateReport;
@@ -149,6 +151,8 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
         tblRisse.getSelectionModel().addListSelectionListener(new TableSelectionListener());
 
         tableComparator = new TableModelIndexConvertingToViewIndexComparator(tblRisse);
+
+        printingWaitDialog = new PrintingWaitDialog(StaticSwingTools.getParentFrame(this), true);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -363,6 +367,16 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
 
                 @Override
                 public void run() {
+                    EventQueue.invokeLater(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                printingWaitDialog.setLocationRelativeTo(
+                                    StaticSwingTools.getParentFrame(VermessungRissAggregationRenderer.this));
+                                printingWaitDialog.setVisible(true);
+                            }
+                        });
+
                     final Collection<VermessungRissReportBean> reportBeans = new LinkedList<VermessungRissReportBean>();
                     final Collection<VermessungRissImageReportBean> imageBeans =
                         new LinkedList<VermessungRissImageReportBean>();
@@ -438,11 +452,9 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                     parameters.put(PARAMETER_PROJECTNAME, txtProjectname.getText());
 
                     final JasperReport jasperReport;
-                    final JasperPrint jasperPrint;
                     try {
                         jasperReport = (JasperReport)JRLoader.loadObject(getClass().getResourceAsStream(
                                     "/de/cismet/cids/custom/wunda_blau/res/vermessungsrisse.jasper"));
-                        jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
                     } catch (JRException ex) {
                         LOG.error("Could not generate report for measurement sketches.", ex);
 
@@ -460,6 +472,14 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         JXErrorPane.showDialog(VermessungRissAggregationRenderer.this, ei);
 
                         return;
+                    } finally {
+                        EventQueue.invokeLater(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    printingWaitDialog.setVisible(false);
+                                }
+                            });
                     }
 
                     if (DownloadManagerDialog.showAskingForUserTitle(
@@ -471,7 +491,13 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         final String jobname = DownloadManagerDialog.getJobname();
 
                         DownloadManager.instance()
-                                .add(new JasperDownload(jasperPrint, jobname, projectname, "vermriss"));
+                                .add(new JasperDownload(
+                                        jasperReport,
+                                        parameters,
+                                        dataSource,
+                                        jobname,
+                                        projectname,
+                                        "vermriss"));
                     }
                 }
             };
