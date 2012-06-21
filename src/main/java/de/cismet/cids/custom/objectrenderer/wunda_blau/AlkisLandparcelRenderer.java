@@ -525,15 +525,15 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
                         final Owner o = new Owner();
                         o.setForeName("***");
                         o.setSurName("***");
-                        buchungsblatt = new Buchungsblatt(
-                                "*****",
-                                "*****",
-                                "*****",
-                                new Buchungsstelle[0],
-                                "****",
-                                "****",
-                                null,
-                                new Owner[] { o });
+                        buchungsblatt = new Buchungsblatt();
+                        buchungsblatt.setBlattart("****");
+                        buchungsblatt.setBlattartCode("****");
+                        buchungsblatt.setBuchungsblattCode("****");
+                        buchungsblatt.setBuchungsstellen(new Buchungsstelle[0]);
+                        buchungsblatt.setDescriptionOfRechtsgemeinschaft("****");
+                        buchungsblatt.setId("****");
+                        buchungsblatt.setOffices(null);
+                        buchungsblatt.setOwners(new Owner[] { o });
                         buchungsblatt.setBuchungsblattCode(buchungsblattcode);
                     }
 
