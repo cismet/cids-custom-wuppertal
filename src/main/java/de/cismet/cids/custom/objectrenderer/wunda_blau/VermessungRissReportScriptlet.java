@@ -11,6 +11,7 @@ import net.sf.jasperreports.engine.JRDefaultScriptlet;
 
 import org.apache.log4j.Logger;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
@@ -31,6 +32,7 @@ import de.cismet.security.exceptions.NoHandlerForURLException;
 import de.cismet.security.exceptions.RequestFailedException;
 
 import de.cismet.tools.gui.MultiPagePictureReader;
+import de.cismet.tools.gui.Static2DTools;
 
 /**
  * DOCUMENT ME!
@@ -139,6 +141,11 @@ public class VermessungRissReportScriptlet extends JRDefaultScriptlet {
 
                 for (int i = 0; i < reader.getNumberOfPages(); i++) {
                     result[i] = reader.loadPage(i);
+
+                    if ((result[i] instanceof BufferedImage)
+                                && (result[i].getWidth(null) > result[i].getHeight(null))) {
+                        result[i] = Static2DTools.rotate((BufferedImage)result[i], 90D, false, Color.white);
+                    }
                 }
             }
         } catch (IOException ex) {
@@ -195,6 +202,10 @@ public class VermessungRissReportScriptlet extends JRDefaultScriptlet {
         try {
             if (reader.getNumberOfPages() > 0) {
                 result = reader.loadPage(0);
+
+                if ((result instanceof BufferedImage) && (result.getWidth(null) > result.getHeight(null))) {
+                    result = Static2DTools.rotate((BufferedImage)result, 90D, false, Color.white);
+                }
             }
         } catch (IOException ex) {
             LOG.error("Could not load associated image. Host: '" + host + "', schluessel: '" + schluessel

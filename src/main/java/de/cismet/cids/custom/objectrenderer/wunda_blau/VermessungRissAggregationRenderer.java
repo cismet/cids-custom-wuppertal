@@ -14,8 +14,6 @@ import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
@@ -411,7 +409,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                 ex);
                         }
 
-                        final StringBuilder description = new StringBuilder("des Vermessungsrisses ");
+                        final StringBuilder description = new StringBuilder("Vermessungsriss ");
                         description.append(vermessungsriss.getProperty("schluessel"));
                         description.append(" - ");
                         description.append(vermessungsriss.getProperty("gemarkung.name"));
@@ -424,8 +422,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         if (bilder != null) {
                             for (int i = 0; i < bilder.length; i++) {
                                 imageBeans.add(new VermessungRissImageReportBean(
-                                        "Bild "
-                                                + description.toString()
+                                        description.toString()
                                                 + (i + 1),
                                         bilder[i]));
                             }
@@ -433,7 +430,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         if (grenzniederschriften != null) {
                             for (int i = 0; i < grenzniederschriften.length; i++) {
                                 imageBeans.add(new VermessungRissImageReportBean(
-                                        "Grenzniederschrift "
+                                        "Ergänzende Dokumente zum "
                                                 + description.toString()
                                                 + (i + 1),
                                         grenzniederschriften[i]));
@@ -482,8 +479,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                             });
                     }
 
-                    if (DownloadManagerDialog.showAskingForUserTitle(
-                                    StaticSwingTools.getParentFrame(VermessungRissAggregationRenderer.this))) {
+                    if (DownloadManagerDialog.showAskingForUserTitle(VermessungRissAggregationRenderer.this)) {
                         String projectname = txtProjectname.getText();
                         if ((projectname == null) || (projectname.trim().length() == 0)) {
                             projectname = "Vermessungsrisse";
