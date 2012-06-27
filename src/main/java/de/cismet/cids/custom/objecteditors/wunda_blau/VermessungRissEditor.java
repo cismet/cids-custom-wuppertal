@@ -1087,9 +1087,9 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 "VermessungRissEditor.togGrenzniederschrift.text")); // NOI18N
         togGrenzniederschrift.setEnabled(false);
         togGrenzniederschrift.setFocusPainted(false);
-        togGrenzniederschrift.setMaximumSize(new java.awt.Dimension(120, 32));
-        togGrenzniederschrift.setMinimumSize(new java.awt.Dimension(120, 32));
-        togGrenzniederschrift.setPreferredSize(new java.awt.Dimension(120, 32));
+        togGrenzniederschrift.setMaximumSize(new java.awt.Dimension(150, 32));
+        togGrenzniederschrift.setMinimumSize(new java.awt.Dimension(150, 32));
+        togGrenzniederschrift.setPreferredSize(new java.awt.Dimension(150, 32));
         togGrenzniederschrift.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
