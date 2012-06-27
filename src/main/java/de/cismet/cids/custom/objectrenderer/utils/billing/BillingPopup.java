@@ -405,16 +405,16 @@ public class BillingPopup extends javax.swing.JDialog {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtGBuchNrActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtGBuchNrActionPerformed
+    private void txtGBuchNrActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGBuchNrActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_txtGBuchNrActionPerformed
+    }//GEN-LAST:event_txtGBuchNrActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmdOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdOkActionPerformed
+    private void cmdOkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdOkActionPerformed
         if (txtGBuchNr.getText().trim().length() == 0) {
             JOptionPane.showMessageDialog(
                 this,
@@ -428,6 +428,7 @@ public class BillingPopup extends javax.swing.JDialog {
         try {
             final CidsBean cb = CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "Billing");
             cb.setProperty("username", SessionManager.getSession().getUser().toString());
+            cb.setProperty("ts", new java.sql.Timestamp(System.currentTimeMillis()));
             cb.setProperty("angeschaeftsbuch", Boolean.FALSE);
             cb.setProperty("modus", currentMode.getKey());
             cb.setProperty("produktkey", currentProduct.getId());
@@ -452,34 +453,34 @@ public class BillingPopup extends javax.swing.JDialog {
         }
         // the end
         setVisible(false);
-    } //GEN-LAST:event_cmdOkActionPerformed
+    }//GEN-LAST:event_cmdOkActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmdCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdCancelActionPerformed
+    private void cmdCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdCancelActionPerformed
         shouldGoOn = false;
         setVisible(false);
-    }                                                                             //GEN-LAST:event_cmdCancelActionPerformed
+    }//GEN-LAST:event_cmdCancelActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboUsageActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboUsageActionPerformed
+    private void cboUsageActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboUsageActionPerformed
         calculateEndPrice();
-    }                                                                            //GEN-LAST:event_cboUsageActionPerformed
+    }//GEN-LAST:event_cboUsageActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboUsagePropertyChange(final java.beans.PropertyChangeEvent evt) { //GEN-FIRST:event_cboUsagePropertyChange
-    }                                                                               //GEN-LAST:event_cboUsagePropertyChange
+    private void cboUsagePropertyChange(final java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_cboUsagePropertyChange
+    }//GEN-LAST:event_cboUsagePropertyChange
 
     /**
      * DOCUMENT ME!
@@ -590,7 +591,7 @@ public class BillingPopup extends javax.swing.JDialog {
 
         final Usage[] comboUsages = new Usage[validUsages.length];
         int i = 0;
-        // Check ob dazu überhaupt ein Preis vorliegt
+        // Check ob dazu überhaupt ein Discount vorliegt
         for (final String usage : validUsages) {
             if ((currentProduct.getDiscounts().get(usage) == null) || (usages.get(usage) == null)) {
                 throw new IllegalArgumentException("Usage " + usage + " not in the configured discounts for product "
@@ -598,9 +599,6 @@ public class BillingPopup extends javax.swing.JDialog {
             }
             comboUsages[i++] = usages.get(usage);
         }
-
-        // Anlegen einer neuen Bean
-        logEntry = CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "Billing");
 
         cboUsage.setModel(new DefaultComboBoxModel(comboUsages));
 
@@ -630,11 +628,6 @@ public class BillingPopup extends javax.swing.JDialog {
                 "request",
                 null,
                 new ProductGroupAmount("ea", 2),
-                new ProductGroupAmount("ea", 1),
-                new ProductGroupAmount("ea", 1),
-                new ProductGroupAmount("ea", 1),
-                new ProductGroupAmount("ea", 1),
-                new ProductGroupAmount("ea", 1),
                 new ProductGroupAmount("ea", 1),
                 new ProductGroupAmount("ea", 1),
                 new ProductGroupAmount("ea", 1));
