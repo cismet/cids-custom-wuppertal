@@ -500,7 +500,7 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
             // return;
         }
 
-        if (!DownloadManagerDialog.showAskingForUserTitle(StaticSwingTools.getParentFrame(this))) {
+        if (!DownloadManagerDialog.showAskingForUserTitle(this)) {
             return;
         }
         final String jobname = DownloadManagerDialog.getJobname();

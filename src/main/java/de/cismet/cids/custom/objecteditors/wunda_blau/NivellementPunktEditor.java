@@ -1007,8 +1007,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
                         return;
                     }
 
-                    if (DownloadManagerDialog.showAskingForUserTitle(
-                                    StaticSwingTools.getParentFrame(NivellementPunktEditor.this))) {
+                    if (DownloadManagerDialog.showAskingForUserTitle(NivellementPunktEditor.this)) {
                         final String jobname = DownloadManagerDialog.getJobname();
 
                         DownloadManager.instance()

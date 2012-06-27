@@ -566,7 +566,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             return;
         }
 
-        if (!DownloadManagerDialog.showAskingForUserTitle(StaticSwingTools.getParentFrame(this))) {
+        if (!DownloadManagerDialog.showAskingForUserTitle(this)) {
             return;
         }
         final String jobname = DownloadManagerDialog.getJobname();
@@ -619,7 +619,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             return;
         }
 
-        if (!DownloadManagerDialog.showAskingForUserTitle(StaticSwingTools.getParentFrame(this))) {
+        if (!DownloadManagerDialog.showAskingForUserTitle(this)) {
             return;
         }
         final String jobname = DownloadManagerDialog.getJobname();

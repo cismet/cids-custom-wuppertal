@@ -2020,9 +2020,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
 
                 final String url = AlkisUtils.PRODUCTS.productListenNachweisUrl(pointData, productType);
                 if ((url != null) && (url.trim().length() > 0)) {
-                    if (
-                        !DownloadManagerDialog.showAskingForUserTitle(
-                                    StaticSwingTools.getParentFrame(AlkisPointRenderer.this))) {
+                    if (!DownloadManagerDialog.showAskingForUserTitle(AlkisPointRenderer.this)) {
                         return;
                     }
 

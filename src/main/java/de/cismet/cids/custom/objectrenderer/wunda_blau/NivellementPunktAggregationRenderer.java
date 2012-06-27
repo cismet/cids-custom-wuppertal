@@ -392,8 +392,7 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
                         return;
                     }
 
-                    if (DownloadManagerDialog.showAskingForUserTitle(
-                                    StaticSwingTools.getParentFrame(NivellementPunktAggregationRenderer.this))) {
+                    if (DownloadManagerDialog.showAskingForUserTitle(NivellementPunktAggregationRenderer.this)) {
                         String projectname = txtProjectname.getText();
                         if ((projectname == null) || (projectname.trim().length() == 0)) {
                             projectname = "Nivellement-Punkte";

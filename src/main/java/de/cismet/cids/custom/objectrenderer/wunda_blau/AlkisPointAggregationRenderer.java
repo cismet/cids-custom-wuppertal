@@ -863,9 +863,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                     try {
                         final String url = AlkisUtils.PRODUCTS.productListenNachweisUrl(punktListenString, code);
                         if ((url != null) && (url.trim().length() > 0)) {
-                            if (
-                                !DownloadManagerDialog.showAskingForUserTitle(
-                                            StaticSwingTools.getParentFrame(AlkisPointAggregationRenderer.this))) {
+                            if (!DownloadManagerDialog.showAskingForUserTitle(AlkisPointAggregationRenderer.this)) {
                                 return;
                             }
 
@@ -965,8 +963,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                 return;
             }
 
-            if (DownloadManagerDialog.showAskingForUserTitle(
-                            StaticSwingTools.getParentFrame(AlkisPointAggregationRenderer.this))) {
+            if (DownloadManagerDialog.showAskingForUserTitle(AlkisPointAggregationRenderer.this)) {
                 final String jobname = DownloadManagerDialog.getJobname();
 
                 DownloadManager.instance().add(new JasperDownload(jasperPrint, jobname, "AP-Karten", "apkarten"));

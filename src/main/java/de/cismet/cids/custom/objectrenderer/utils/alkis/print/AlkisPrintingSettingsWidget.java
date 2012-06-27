@@ -818,7 +818,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                     false);
 
             if (url != null) {
-                if (!DownloadManagerDialog.showAskingForUserTitle(StaticSwingTools.getParentFrame(this))) {
+                if (!DownloadManagerDialog.showAskingForUserTitle(this)) {
                     return;
                 }
 

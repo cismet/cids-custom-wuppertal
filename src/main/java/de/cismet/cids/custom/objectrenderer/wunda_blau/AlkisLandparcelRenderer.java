@@ -624,7 +624,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
                 url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(parcelCode, product);
 
                 if (url != null) {
-                    if (!DownloadManagerDialog.showAskingForUserTitle(StaticSwingTools.getParentFrame(this))) {
+                    if (!DownloadManagerDialog.showAskingForUserTitle(this)) {
                         return;
                     }
 
@@ -671,7 +671,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         }
 
         if (url != null) {
-            if (!DownloadManagerDialog.showAskingForUserTitle(StaticSwingTools.getParentFrame(this))) {
+            if (!DownloadManagerDialog.showAskingForUserTitle(this)) {
                 return;
             }
 

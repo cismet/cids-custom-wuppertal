@@ -1155,7 +1155,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                 final URL url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(queryID, product);
 
                 if (url != null) {
-                    if (!DownloadManagerDialog.showAskingForUserTitle(StaticSwingTools.getParentFrame(this))) {
+                    if (!DownloadManagerDialog.showAskingForUserTitle(this)) {
                         return;
                     }
 
