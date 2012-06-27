@@ -1411,6 +1411,11 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
         if (AbstractCreateSearchGeometryListener.PROPERTY_FORGUI_LAST_FEATURE.equals(evt.getPropertyName())
@@ -1426,11 +1431,21 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getSearchWindowComponent() {
         return this;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public CidsServerSearch getServerSearch() {
         return getServerSearch(null);
@@ -1500,38 +1515,74 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
         return new CidsMeasurementPointSearchStatement(txtPointcode.getText(), pointtypes, gst, geometryString);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public ImageIcon getIcon() {
         return icon;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getName() {
         return NbBundle.getMessage(MeasurementPointWindowSearch.class, "MeasurementPointWindowSearch.name");
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public boolean checkActionTag() {
         return ObjectRendererUtils.checkActionTag(ACTION_TAG);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public CidsServerSearch assembleSearch() {
         return getServerSearch();
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void searchStarted() {
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  result  DOCUMENT ME!
+     */
     @Override
     public void searchDone(final int result) {
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void searchCanceled() {
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public boolean suppressEmptyResultMessage() {
         return false;

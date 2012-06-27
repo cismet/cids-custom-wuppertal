@@ -1218,12 +1218,15 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 
         //~ Methods ------------------------------------------------------------
 
-// private void updateMD5() throws Exception {
-// expectedMD5Values[currentDocument] = currentActualDocumentMD5;
-// cidsBean.setProperty(MD5_PROPERTY_NAMES[currentDocument], currentActualDocumentMD5);
-// log.debug("saving md5 value " + currentActualDocumentMD5);
-// persistBean();
-// }
+        /**
+         * private void updateMD5() throws Exception { expectedMD5Values[currentDocument] = currentActualDocumentMD5;
+         * cidsBean.setProperty(MD5_PROPERTY_NAMES[currentDocument], currentActualDocumentMD5); log.debug("saving md5
+         * value " + currentActualDocumentMD5); persistBean(); }.
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception  DOCUMENT ME!
+         */
         @Override
         protected ListModel doInBackground() throws Exception {
             final DefaultListModel model = new DefaultListModel();
@@ -1295,6 +1298,9 @@ public class Alb_picturePanel extends javax.swing.JPanel {
             }
         }
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         protected void done() {
             try {
@@ -1346,6 +1352,14 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception              DOCUMENT ME!
+         * @throws  IllegalStateException  DOCUMENT ME!
+         */
         @Override
         protected BufferedImage doInBackground() throws Exception {
             if (pictureReader != null) {
@@ -1354,6 +1368,9 @@ public class Alb_picturePanel extends javax.swing.JPanel {
             throw new IllegalStateException("PictureReader is null!!");
         }
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         protected void done() {
             try {
@@ -1394,6 +1411,11 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  fce  DOCUMENT ME!
+         */
         @Override
         public void featuresAdded(final FeatureCollectionEvent fce) {
             if (!togCalibrate.isEnabled()) {
@@ -1407,6 +1429,11 @@ public class Alb_picturePanel extends javax.swing.JPanel {
             refreshMeasurementsInStatus(fce.getEventFeatures());
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  fce  DOCUMENT ME!
+         */
         @Override
         public void featuresRemoved(final FeatureCollectionEvent fce) {
             if (togCalibrate.isEnabled()) {
@@ -1420,11 +1447,21 @@ public class Alb_picturePanel extends javax.swing.JPanel {
             }
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  fce  DOCUMENT ME!
+         */
         @Override
         public void allFeaturesRemoved(final FeatureCollectionEvent fce) {
             featuresRemoved(fce);
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  fce  DOCUMENT ME!
+         */
         @Override
         public void featuresChanged(final FeatureCollectionEvent fce) {
 //            if (map.getInteractionMode().equals(MY_MESSEN_MODE)) {
@@ -1434,6 +1471,11 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 //            }
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  fce  DOCUMENT ME!
+         */
         @Override
         public void featureSelectionChanged(final FeatureCollectionEvent fce) {
 //            refreshMeasurementsInStatus();

@@ -180,6 +180,9 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
         super.dispose();
@@ -901,6 +904,11 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cidsBean  DOCUMENT ME!
+     */
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         super.setCidsBean(cidsBean);
@@ -1154,11 +1162,21 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception  DOCUMENT ME!
+         */
         @Override
         protected DefaultComboBoxModel doInBackground() throws Exception {
             return initDialogeSuchwortCombobox();
         }
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         protected void done() {
             try {

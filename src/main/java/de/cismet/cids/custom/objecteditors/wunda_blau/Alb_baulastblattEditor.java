@@ -219,6 +219,11 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
             ObjectRendererUtils.BACKWARD_PRESSED);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
@@ -242,6 +247,11 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cidsBean  DOCUMENT ME!
+     */
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         try {
@@ -1111,31 +1121,59 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                         != null);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getTitleComponent() {
         return panTitle;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getFooterComponent() {
         return panFooter;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getTitleBorder() {
         return new EmptyBorder(10, 10, 10, 10);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getFooterBorder() {
         return new EmptyBorder(5, 5, 5, 5);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getCenterrBorder() {
         return new EmptyBorder(0, 5, 0, 5);
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
         bindingGroup.unbind();
@@ -1144,6 +1182,11 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         strongReferenceToWeakListener = null;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  event  DOCUMENT ME!
+     */
     @Override
     public void editorClosed(final EditorClosedEvent event) {
 //            log.fatal(status);
@@ -1160,6 +1203,13 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
 //        }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  RuntimeException  DOCUMENT ME!
+     */
     @Override
     public boolean prepareForSave() {
         correctBlattnummer();

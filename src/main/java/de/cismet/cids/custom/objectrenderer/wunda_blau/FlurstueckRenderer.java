@@ -138,6 +138,11 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cb  DOCUMENT ME!
+     */
     @Override
     public void setCidsBean(final CidsBean cb) {
         bindingGroup.unbind();
@@ -173,6 +178,11 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
@@ -582,11 +592,21 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getTitle() {
         return title;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  title  DOCUMENT ME!
+     */
     @Override
     public void setTitle(final String title) {
 //        if (title == null) {
@@ -598,21 +618,39 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
 //        lblTitle.setText(this.title);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getTitleBorder() {
         return new EmptyBorder(10, 10, 10, 10);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getFooterBorder() {
         return new EmptyBorder(5, 5, 5, 5);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getCenterrBorder() {
         return new EmptyBorder(5, 5, 5, 5);
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
         bindingGroup.unbind();
@@ -623,11 +661,21 @@ public class FlurstueckRenderer extends javax.swing.JPanel implements BorderProv
         map.dispose();
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getTitleComponent() {
         return panTitle;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getFooterComponent() {
         return panFooter;

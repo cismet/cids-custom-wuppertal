@@ -105,12 +105,20 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cidsBean  DOCUMENT ME!
+     */
     @Override
     public synchronized void setCidsBean(final CidsBean cidsBean) {
         super.setCidsBean(cidsBean);
         txtIconFocusLost(null);
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
         super.dispose();
@@ -667,6 +675,11 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getTitle() {
         if ((title == null) || (title.length() == 0)) {
@@ -675,6 +688,11 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         return title;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  title  DOCUMENT ME!
+     */
     @Override
     public void setTitle(final String title) {
         this.title = title;

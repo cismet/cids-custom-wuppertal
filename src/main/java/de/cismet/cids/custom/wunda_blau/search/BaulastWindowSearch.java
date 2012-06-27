@@ -476,16 +476,31 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         }
     }                                                                                //GEN-LAST:event_btnFromMapFSActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public ImageIcon getIcon() {
         return icon;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getName() {
         return "Baulast Suche";
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getSearchWindowComponent() {
         return this;
@@ -518,6 +533,11 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         return bsi;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public CidsServerSearch getServerSearch() {
         final BaulastSearchInfo bsi = getBaulastInfoFromGUI();
@@ -554,6 +574,11 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         return new CidsBaulastSearchStatement(bsi, baulastClassID, baulastblattClassID);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  beans  DOCUMENT ME!
+     */
     @Override
     public void beansDropped(final ArrayList<CidsBean> beans) {
         for (final CidsBean bean : beans) {
@@ -565,6 +590,11 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public boolean checkActionTag() {
         try {
@@ -593,6 +623,11 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         DevelopmentTools.showTestFrame(bws, 800, 600);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public CidsServerSearch assembleSearch() {
         CidsServerSearch result = null;
@@ -617,10 +652,18 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         return result;
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void searchStarted() {
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  results  DOCUMENT ME!
+     */
     @Override
     public void searchDone(final int results) {
         if (results > 0) {
@@ -630,10 +673,18 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void searchCanceled() {
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public boolean suppressEmptyResultMessage() {
         return false;

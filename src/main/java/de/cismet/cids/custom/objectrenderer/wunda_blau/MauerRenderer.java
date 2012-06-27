@@ -329,10 +329,16 @@ public class MauerRenderer extends BlurredMapObjectRenderer {
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void assignAggregation() {
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void assignSingle() {
         if (this.geometry != null) {

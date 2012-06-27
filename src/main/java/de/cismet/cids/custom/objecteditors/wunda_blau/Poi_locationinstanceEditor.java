@@ -139,6 +139,9 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
         super.dispose();
@@ -1142,6 +1145,11 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getTitle() {
         if ((title == null) || (title.length() == 0)) {
@@ -1150,6 +1158,11 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         return title;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  title  DOCUMENT ME!
+     */
     @Override
     public void setTitle(final String title) {
         this.title = title;

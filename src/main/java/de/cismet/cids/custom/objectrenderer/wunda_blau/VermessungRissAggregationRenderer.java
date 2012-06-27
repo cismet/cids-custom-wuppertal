@@ -553,11 +553,21 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
         return result;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Collection<CidsBean> getCidsBeans() {
         return cidsBeans;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  beans  DOCUMENT ME!
+     */
     @Override
     public void setCidsBeans(final Collection<CidsBean> beans) {
         if (beans instanceof List) {
@@ -590,16 +600,29 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
         setTitle(null);
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
         mappingComponent.dispose();
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getTitle() {
         return title;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  title  DOCUMENT ME!
+     */
     @Override
     public void setTitle(final String title) {
         String desc = "Vermessungsrisse";
@@ -753,6 +776,11 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  e  DOCUMENT ME!
+         */
         @Override
         public void valueChanged(final ListSelectionEvent e) {
             if (e.getValueIsAdjusting() || (cidsBeans == null)) {
@@ -815,11 +843,26 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   row     DOCUMENT ME!
+         * @param   column  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public boolean isCellEditable(final int row, final int column) {
             return column == 0;
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   columnIndex  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public Class<?> getColumnClass(final int columnIndex) {
             if (columnIndex == 0) {

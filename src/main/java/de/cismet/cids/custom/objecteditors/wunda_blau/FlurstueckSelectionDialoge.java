@@ -146,6 +146,11 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  b  DOCUMENT ME!
+     */
     @Override
     public void setVisible(final boolean b) {
         checkOkEnableState();
@@ -677,6 +682,9 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         protected void done() {
             try {

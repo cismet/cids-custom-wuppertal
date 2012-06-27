@@ -680,21 +680,41 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         ((CardLayout)panEingabe.getLayout()).show(panEingabe, "grundbuchblatt");
     }                                                                                               //GEN-LAST:event_optSucheUeberGrundbuchblattActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public ImageIcon getIcon() {
         return icon;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getName() {
         return "ALKIS-Suche";
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getSearchWindowComponent() {
         return this;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public CidsServerSearch getServerSearch() {
         Geometry searchgeom = null;
@@ -752,6 +772,11 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public boolean checkActionTag() {
         return ObjectRendererUtils.checkActionTag(ACTION_TAG);
@@ -767,23 +792,44 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
 //        }
 //    }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public CidsServerSearch assembleSearch() {
         return getServerSearch();
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void searchStarted() {
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  results  DOCUMENT ME!
+     */
     @Override
     public void searchDone(final int results) {
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void searchCanceled() {
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public boolean suppressEmptyResultMessage() {
         return false;

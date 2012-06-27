@@ -160,6 +160,9 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void assignSingle() {
         if (geom != null) {

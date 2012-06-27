@@ -1108,11 +1108,21 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         return result;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cidsBean  DOCUMENT ME!
+     */
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         bindingGroup.unbind();
@@ -1132,6 +1142,9 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
         bindingGroup.unbind();
@@ -1142,30 +1155,60 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getTitleComponent() {
         return pnlTitle;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getTitleBorder() {
         return new EmptyBorder(10, 10, 10, 10);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getFooterBorder() {
         return new EmptyBorder(5, 5, 5, 5);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getCenterrBorder() {
         return new EmptyBorder(0, 5, 0, 5);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  event  DOCUMENT ME!
+     */
     @Override
     public void editorClosed(final EditorClosedEvent event) {
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public boolean prepareForSave() {
         boolean save = true;
@@ -1188,6 +1231,11 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         return save;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getFooterComponent() {
         return strFooter;
@@ -1248,6 +1296,13 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception  DOCUMENT ME!
+         */
         @Override
         protected BufferedImage doInBackground() throws Exception {
             final Collection<URL> validURLs = getCorrespondingURLs(txtDGKBlattnummer.getText(),
@@ -1303,6 +1358,9 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
             return result;
         }
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         protected void done() {
             BufferedImage document = null;

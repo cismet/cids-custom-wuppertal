@@ -2154,6 +2154,11 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         }
     } //GEN-LAST:event_btnOpenActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
@@ -2180,6 +2185,11 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         return result;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cb  DOCUMENT ME!
+     */
     @Override
     public void setCidsBean(final CidsBean cb) {
         bindingGroup.unbind();
@@ -2201,11 +2211,21 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getTitle() {
         return title;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  title  DOCUMENT ME!
+     */
     @Override
     public void setTitle(String title) {
         if (title == null) {
@@ -2217,26 +2237,51 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         lblTitle.setText(this.title);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getTitleBorder() {
         return new EmptyBorder(10, 10, 10, 10);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getFooterBorder() {
         return new EmptyBorder(5, 5, 5, 5);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getCenterrBorder() {
         return new EmptyBorder(5, 5, 5, 5);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getTitleComponent() {
         return panTitle;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getFooterComponent() {
         return panFooter;
@@ -2278,6 +2323,9 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         this.pointLocations = pointLocations;
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
         bindingGroup.unbind();
@@ -2386,6 +2434,13 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception  DOCUMENT ME!
+         */
         @Override
         protected Point doInBackground() throws Exception {
             return infoService.getPoint(soapProvider.getIdentityCard(), soapProvider.getService(), pointCode);
@@ -2398,6 +2453,9 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
             btnRetrieve.setEnabled(true);
         }
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         protected void done() {
             setWait(false);
@@ -2456,6 +2514,17 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   list          DOCUMENT ME!
+         * @param   value         DOCUMENT ME!
+         * @param   index         DOCUMENT ME!
+         * @param   isSelected    DOCUMENT ME!
+         * @param   cellHasFocus  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public Component getListCellRendererComponent(final JList list,
                 final Object value,
@@ -2495,6 +2564,11 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  e  DOCUMENT ME!
+         */
         @Override
         public void mouseEntered(final MouseEvent e) {
             final Object srcObj = e.getSource();
@@ -2504,6 +2578,11 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
             }
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  e  DOCUMENT ME!
+         */
         @Override
         public void mouseExited(final MouseEvent e) {
             lblProductPreview.setIcon(null);
@@ -2534,6 +2613,13 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception  DOCUMENT ME!
+         */
         @Override
         protected BufferedImage doInBackground() throws Exception {
             BufferedImage result = null;
@@ -2603,6 +2689,9 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
             return result;
         }
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         protected void done() {
             BufferedImage document = null;

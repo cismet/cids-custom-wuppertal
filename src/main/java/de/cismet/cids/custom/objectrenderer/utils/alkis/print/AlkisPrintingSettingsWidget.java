@@ -148,6 +148,11 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  b  DOCUMENT ME!
+     */
     @Override
     public void setVisible(final boolean b) {
         flurstueckListModel.clear();
@@ -723,6 +728,11 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         cbScales.setModel(models[1]);
     }                                                                             //GEN-LAST:event_cbProductActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  beans  DOCUMENT ME!
+     */
     @Override
     public void beansDropped(final ArrayList<CidsBean> beans) {
         if (beans != null) {
@@ -940,6 +950,11 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public String toString() {
             return layoutDesc;

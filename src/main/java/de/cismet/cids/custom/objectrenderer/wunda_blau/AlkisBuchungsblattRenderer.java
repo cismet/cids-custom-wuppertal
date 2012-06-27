@@ -1532,6 +1532,11 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         return null;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
@@ -1546,6 +1551,11 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         return landParcelList;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cb  DOCUMENT ME!
+     */
     @Override
     public void setCidsBean(final CidsBean cb) {
         if (landparcelListBinding.isBound()) {
@@ -1775,11 +1785,21 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         return result.toString();
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getTitle() {
         return title;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  title  DOCUMENT ME!
+     */
     @Override
     public void setTitle(String title) {
         if (title == null) {
@@ -1791,11 +1811,21 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         lblTitle.setText(this.title);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getTitleComponent() {
         return panTitle;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getFooterComponent() {
         return panFooter;
@@ -1838,6 +1868,9 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         return blWait.isBusy();
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
         landparcelListBinding.unbind();
@@ -1847,43 +1880,37 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         }
         map.dispose();
     }
-
-//    final class GeomQueryWorker extends SwingWorker<List<MetaObject>, Void> {
-//
-//        @Override
-//        protected List<MetaObject> doInBackground() throws Exception {
-//            //set dummy to avoid multiple worker calls
-//            realLandParcelMetaObjectsCache = Collections.EMPTY_LIST;
-//            return queryForRealLandParcels();
-//        }
-//
-//        @Override
-//        protected void done() {
-//            try {
-//                if (!isCancelled()) {
-//                    realLandParcelMetaObjectsCache = get();
-//                    switchToMapAndShowGeometries();
-//                }
-//            } catch (InterruptedException ex) {
-//                log.warn(ex, ex);
-//                realLandParcelMetaObjectsCache = null;
-//            } catch (Exception ex) {
-//                ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Abrufen der Geometrien", ex, Alkis_buchungsblattRenderer.this);
-//                log.error(ex, ex);
-//                realLandParcelMetaObjectsCache = null;
-//            }
-//        }
-//    }
+    /**
+     * final class GeomQueryWorker extends SwingWorker<List<MetaObject>, Void> { @Override protected List<MetaObject>
+     * doInBackground() throws Exception { //set dummy to avoid multiple worker calls realLandParcelMetaObjectsCache =
+     * Collections.EMPTY_LIST; return queryForRealLandParcels(); } @Override protected void done() { try { if
+     * (!isCancelled()) { realLandParcelMetaObjectsCache = get(); switchToMapAndShowGeometries(); } } catch
+     * (InterruptedException ex) { log.warn(ex, ex); realLandParcelMetaObjectsCache = null; } catch (Exception ex) {
+     * ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Abrufen der Geometrien", ex,
+     * Alkis_buchungsblattRenderer.this); log.error(ex, ex); realLandParcelMetaObjectsCache = null; } } }.
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getTitleBorder() {
         return new EmptyBorder(10, 10, 10, 10);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getFooterBorder() {
         return new EmptyBorder(5, 5, 5, 5);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getCenterrBorder() {
         return new EmptyBorder(5, 5, 5, 5);
@@ -1915,6 +1942,13 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception  DOCUMENT ME!
+         */
         @Override
         protected Buchungsblatt doInBackground() throws Exception {
             setWaiting(true);
@@ -1924,6 +1958,9 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                     fixBuchungslattCode(String.valueOf(bean.getProperty("buchungsblattcode"))));
         }
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         protected void done() {
             try {
@@ -2042,6 +2079,11 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
             return fullObjectID;
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public String toString() {
             return String.valueOf(lfn) + "  " + String.valueOf(landparcelCode);
@@ -2066,6 +2108,11 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  e  DOCUMENT ME!
+         */
         @Override
         public void mouseEntered(final MouseEvent e) {
             final Object srcObj = e.getSource();
@@ -2075,6 +2122,11 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
             }
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  e  DOCUMENT ME!
+         */
         @Override
         public void mouseExited(final MouseEvent e) {
             lblProductPreview.setIcon(null);
@@ -2109,6 +2161,17 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   list          DOCUMENT ME!
+         * @param   value         DOCUMENT ME!
+         * @param   index         DOCUMENT ME!
+         * @param   isSelected    DOCUMENT ME!
+         * @param   cellHasFocus  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public Component getListCellRendererComponent(final JList list,
                 final Object value,
@@ -2126,6 +2189,11 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
             return comp;
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  g  DOCUMENT ME!
+         */
         @Override
         protected void paintComponent(final Graphics g) {
             final Graphics2D g2d = (Graphics2D)g;

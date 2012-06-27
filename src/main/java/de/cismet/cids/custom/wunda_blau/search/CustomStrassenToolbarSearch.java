@@ -65,21 +65,41 @@ public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public ImageIcon getIcon() {
         return icon;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getName() {
         return mc.getName();
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  toolbarSearchString  DOCUMENT ME!
+     */
     @Override
     public void setSearchParameter(final String toolbarSearchString) {
         this.searchString = toolbarSearchString;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public CidsServerSearch getServerSearch() {
         if (searchString.startsWith("str ")) {

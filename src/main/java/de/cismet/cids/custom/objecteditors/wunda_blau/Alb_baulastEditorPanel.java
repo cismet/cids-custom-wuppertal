@@ -1172,6 +1172,11 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
@@ -1186,6 +1191,11 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         this.allSelectedObjects = selection;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cidsBean  DOCUMENT ME!
+     */
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         try {
@@ -1237,6 +1247,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
         dlgAddBaulastArt.dispose();
@@ -1266,11 +1279,21 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception  DOCUMENT ME!
+         */
         @Override
         protected ComboBoxModel doInBackground() throws Exception {
             return new DefaultComboBoxModel(getLWBaulastarten());
         }
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         protected void done() {
             try {
@@ -1319,6 +1342,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         protected void done() {
             try {
@@ -1374,6 +1400,11 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  g  DOCUMENT ME!
+         */
         @Override
         public void paint(final Graphics g) {
             final Graphics2D g2d = (Graphics2D)g;

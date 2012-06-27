@@ -107,6 +107,11 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
         return new Object[0];
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  blattBeans  DOCUMENT ME!
+     */
     @Override
     public void setCidsBeans(final Collection<CidsBean> blattBeans) {
         if (blattBeans != null) {
@@ -128,6 +133,11 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
         setTitle(null);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Collection<CidsBean> getCidsBeans() {
         return cidsBeans;
@@ -171,11 +181,21 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
         add(scpAggregationTable, java.awt.BorderLayout.CENTER);
     } // </editor-fold>//GEN-END:initComponents
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getTitle() {
         return title;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  title  DOCUMENT ME!
+     */
     @Override
     public void setTitle(final String title) {
         String desc = "Punktliste";
@@ -186,6 +206,9 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
         this.title = desc;
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
     }
