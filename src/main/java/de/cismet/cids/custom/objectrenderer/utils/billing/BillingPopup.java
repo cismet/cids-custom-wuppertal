@@ -16,14 +16,13 @@ import com.vividsolutions.jts.geom.Geometry;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
-import java.awt.Color;
-
 import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.text.SimpleAttributeSet;
@@ -92,11 +91,12 @@ public class BillingPopup extends javax.swing.JDialog {
     Geometry geom = null;
     CidsBean logEntry = null;
     String berechnungPrefix = "";
+
+    private ImageIcon money = new javax.swing.ImageIcon(
+            getClass().getResource("/de/cismet/cids/custom/billing/money--exclamation.png"));
     private double rawPrice = 0;
     private double endPrice = 0;
-
     private boolean shouldGoOn = false;
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cboUsage;
     private javax.swing.JButton cmdCancel;
@@ -104,7 +104,6 @@ public class BillingPopup extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -114,7 +113,9 @@ public class BillingPopup extends javax.swing.JDialog {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTextPane jTextPane1;
+    private javax.swing.JLabel lblGebTitle;
     private javax.swing.JLabel lblGebuehr;
+    private javax.swing.JLabel lblMoneyWarn;
     private javax.swing.JPanel panControls;
     private javax.swing.JPanel panLower;
     private javax.swing.JPanel panUpper;
@@ -184,6 +185,7 @@ public class BillingPopup extends javax.swing.JDialog {
 
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
+        lblMoneyWarn = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         panUpper = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -197,8 +199,8 @@ public class BillingPopup extends javax.swing.JDialog {
         jLabel5 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         lblGebuehr = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
+        lblGebTitle = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         txtBerechnung = new javax.swing.JTextPane();
         panControls = new javax.swing.JPanel();
@@ -207,6 +209,12 @@ public class BillingPopup extends javax.swing.JDialog {
         jSeparator2 = new javax.swing.JSeparator();
 
         jScrollPane3.setViewportView(jTextPane1);
+
+        lblMoneyWarn.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/billing/money--exclamation.png"))); // NOI18N
+        lblMoneyWarn.setText(org.openide.util.NbBundle.getMessage(
+                BillingPopup.class,
+                "BillingPopup.lblMoneyWarn.text"));                                                // NOI18N
 
         setTitle(org.openide.util.NbBundle.getMessage(BillingPopup.class, "BillingPopup.title")); // NOI18N
         setAlwaysOnTop(true);
@@ -308,28 +316,30 @@ public class BillingPopup extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 0, 5);
         panLower.add(jLabel5, gridBagConstraints);
 
+        jPanel1.setMinimumSize(new java.awt.Dimension(101, 20));
+        jPanel1.setPreferredSize(new java.awt.Dimension(101, 20));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         lblGebuehr.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblGebuehr.setText(org.openide.util.NbBundle.getMessage(BillingPopup.class, "BillingPopup.lblGebuehr.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         jPanel1.add(lblGebuehr, gridBagConstraints);
-
-        jLabel4.setText(org.openide.util.NbBundle.getMessage(BillingPopup.class, "BillingPopup.jLabel4.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-        jPanel1.add(jLabel4, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         jPanel1.add(jPanel2, gridBagConstraints);
+
+        lblGebTitle.setText(org.openide.util.NbBundle.getMessage(BillingPopup.class, "BillingPopup.lblGebTitle.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        jPanel1.add(lblGebTitle, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -405,16 +415,16 @@ public class BillingPopup extends javax.swing.JDialog {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtGBuchNrActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGBuchNrActionPerformed
+    private void txtGBuchNrActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtGBuchNrActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtGBuchNrActionPerformed
+    } //GEN-LAST:event_txtGBuchNrActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmdOkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdOkActionPerformed
+    private void cmdOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdOkActionPerformed
         if (txtGBuchNr.getText().trim().length() == 0) {
             JOptionPane.showMessageDialog(
                 this,
@@ -453,34 +463,34 @@ public class BillingPopup extends javax.swing.JDialog {
         }
         // the end
         setVisible(false);
-    }//GEN-LAST:event_cmdOkActionPerformed
+    } //GEN-LAST:event_cmdOkActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmdCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdCancelActionPerformed
+    private void cmdCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdCancelActionPerformed
         shouldGoOn = false;
         setVisible(false);
-    }//GEN-LAST:event_cmdCancelActionPerformed
+    }                                                                             //GEN-LAST:event_cmdCancelActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboUsageActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboUsageActionPerformed
+    private void cboUsageActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboUsageActionPerformed
         calculateEndPrice();
-    }//GEN-LAST:event_cboUsageActionPerformed
+    }                                                                            //GEN-LAST:event_cboUsageActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboUsagePropertyChange(final java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_cboUsagePropertyChange
-    }//GEN-LAST:event_cboUsagePropertyChange
+    private void cboUsagePropertyChange(final java.beans.PropertyChangeEvent evt) { //GEN-FIRST:event_cboUsagePropertyChange
+    }                                                                               //GEN-LAST:event_cboUsagePropertyChange
 
     /**
      * DOCUMENT ME!
@@ -503,10 +513,10 @@ public class BillingPopup extends javax.swing.JDialog {
             txtBerechnung.setText(berechnungPrefix + "\n" + berechungUsageDependent);
 
             lblGebuehr.setText(endPrice + " €");
-            if (endPrice == 0) {
-                lblGebuehr.setForeground(Color.green);
+            if (endPrice > 0) {
+                lblGebTitle.setIcon(money);
             } else {
-                lblGebuehr.setForeground(Color.orange);
+                lblGebTitle.setIcon(null);
             }
         } else {
             currentUsage = null;

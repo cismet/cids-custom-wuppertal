@@ -41,7 +41,8 @@
         "key":"eigG",
         "description":"-"
     }],
-    "products":[{
+    "products":[
+        {
         "name":"Flurstücksnachweis",
         "id":"fsnw",
         "description":"none",
