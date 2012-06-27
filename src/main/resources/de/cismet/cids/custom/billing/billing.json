@@ -1,0 +1,71 @@
+{
+    "modi":[{
+        "key":"selbst_oebvi",
+        "name":"Selbstentnahme (ÖbVI)",
+        "discounts":"true"
+    },
+    {
+        "key":"selbst_extern",
+        "name":"Selbstentnahme (extern)",
+        "discounts":"true"
+    },
+    {
+        "key":"geodatenzentrum",
+        "name":"Kundenauftrag Geodatenzentrum",
+        "discounts":"false"
+    },
+    {
+        "key":"r102",
+        "name":"Datenentnahme durch einen Mitarbeiter der Vermessungsabteilung (102.1) im Zuge eines eigenen Projektes von R102",
+        "discounts":"false"
+    }],
+    "productGroups":[{
+        "key":"ea",
+        "description":"Stück"
+    }],
+    
+    "usages":[{
+        "name":"Vermessungsunterlagen (amtlicher Lageplan TS 3)",
+        "key":"VU aL",
+        "description":"-"
+    },{
+        "name":"Vermessungsunterlagen (hoheitliche Vermessung TS 4)",
+        "key":"VU hV",
+        "description":"-"
+    },{
+        "name":"Vermessungsunterlagen (sonstige)",
+        "key":"VU s",
+        "description":"-"
+    },{
+        "name":"eigener Gebrauch (einmalig)",
+        "key":"eigG",
+        "description":"-"
+    }],
+    "products":[{
+        "name":"Flurstücksnachweis",
+        "id":"fsnw",
+        "description":"none",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0
+        },
+        "prices":{
+            "ea":10.0
+        }
+    },{
+        "name":"Flurstücks- und Eigentumsnachweis (NRW)",
+        "id":"fsuenw",
+        "description":"none",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0
+        },
+        "prices":{
+            "ea":10.0
+        }
+    }]
+}
