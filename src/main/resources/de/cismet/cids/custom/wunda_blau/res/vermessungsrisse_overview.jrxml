@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="UebersichtVermessungsrisse" pageWidth="555" pageHeight="802" columnWidth="535" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" scriptletClass="de.cismet.cids.custom.objectrenderer.wunda_blau.VermessungRissReportScriptlet">
+	<parameter name="TYPE" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -35,29 +36,29 @@
 	</field>
 	<variable name="HAS_ENTRIES_WO_RASTERDOCUMENTS" class="java.lang.Boolean" calculation="Sum">
 		<variableExpression><![CDATA[Boolean.valueOf($V{HAS_ENTRIES_WO_RASTERDOCUMENTS}.booleanValue()
-    || !$P{REPORT_SCRIPTLET}.isImageAvailable(de.cismet.cids.custom.utils.alkis.AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER, $F{schluessel}, $F{gemarkung.id}, $F{flur}, $F{blatt}).booleanValue()
-    || !$P{REPORT_SCRIPTLET}.isImageAvailable(de.cismet.cids.custom.utils.alkis.AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN, $F{schluessel}, $F{gemarkung.id}, $F{flur}, $F{blatt}).booleanValue()
+    || !$P{REPORT_SCRIPTLET}.isImageAvailable(de.cismet.cids.custom.utils.alkis.AlkisConstants.COMMONS.VERMESSUNG_TYPE_VERMESSUNGSRISS, $F{schluessel}, $F{gemarkung.id}, $F{flur}, $F{blatt}).booleanValue()
+    || !$P{REPORT_SCRIPTLET}.isImageAvailable(de.cismet.cids.custom.utils.alkis.AlkisConstants.COMMONS.VERMESSUNG_TYPE_ERGAENZENDEDOKUMENTE, $F{schluessel}, $F{gemarkung.id}, $F{flur}, $F{blatt}).booleanValue()
     )]]></variableExpression>
 		<initialValueExpression><![CDATA[Boolean.FALSE]]></initialValueExpression>
 	</variable>
 	<title>
 		<band height="70">
-			<staticText>
+			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="0" width="555" height="37"/>
-				<textElement textAlignment="null" verticalAlignment="Middle">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Enthaltene Vermessungsrisse/ergänzende Dokumente]]></text>
-			</staticText>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{TYPE}.equalsIgnoreCase("vr") ? "Enthaltene Vermessungsrisse" : "Enthaltene ergänzende Dokumente"]]></textFieldExpression>
+			</textField>
 			<line>
 				<reportElement x="5" y="57" width="545" height="1" forecolor="#C0C0C0"/>
 			</line>
 			<textField isStretchWithOverflow="true" evaluationTime="Report">
 				<reportElement x="9" y="42" width="541" height="15"/>
-				<textElement verticalAlignment="Middle">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$V{HAS_ENTRIES_WO_RASTERDOCUMENTS}.booleanValue() ? "Für die grau hinterlegten Risse sind keine Rasterdokumente verfügbar." : ""]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{HAS_ENTRIES_WO_RASTERDOCUMENTS}.booleanValue() ? ($P{TYPE}.equalsIgnoreCase("vr") ? "Für die grau hinterlegten Risse sind keine Rasterdokumente verfügbar." : "Zu den grau hinterlegten Rissen sind keine ergänzenden Dokumente verfügbar.") : ""]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="5" y="42" width="545" height="1" forecolor="#C0C0C0"/>
@@ -80,61 +81,51 @@
 				<reportElement x="79" y="0" width="1" height="45"/>
 			</line>
 			<staticText>
-				<reportElement x="80" y="0" width="99" height="40"/>
+				<reportElement x="80" y="0" width="169" height="40"/>
 				<textElement verticalAlignment="Bottom">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Gemarkung]]></text>
 			</staticText>
 			<line>
-				<reportElement x="179" y="0" width="1" height="45"/>
+				<reportElement x="249" y="0" width="1" height="45"/>
 			</line>
 			<staticText>
-				<reportElement x="180" y="0" width="74" height="40"/>
+				<reportElement x="250" y="0" width="74" height="40"/>
 				<textElement verticalAlignment="Bottom">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Flur]]></text>
 			</staticText>
 			<line>
-				<reportElement x="254" y="0" width="1" height="45"/>
+				<reportElement x="324" y="0" width="1" height="45"/>
 			</line>
 			<staticText>
-				<reportElement x="255" y="0" width="74" height="40"/>
+				<reportElement x="325" y="0" width="74" height="40"/>
 				<textElement verticalAlignment="Bottom">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Blatt]]></text>
 			</staticText>
 			<line>
-				<reportElement x="329" y="0" width="1" height="45"/>
+				<reportElement x="399" y="0" width="1" height="45"/>
 			</line>
 			<staticText>
-				<reportElement x="330" y="0" width="74" height="40"/>
+				<reportElement x="400" y="0" width="74" height="40"/>
 				<textElement verticalAlignment="Bottom">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Jahr]]></text>
 			</staticText>
 			<line>
-				<reportElement x="404" y="0" width="1" height="45"/>
+				<reportElement x="474" y="0" width="1" height="45"/>
 			</line>
 			<staticText>
-				<reportElement x="405" y="0" width="74" height="40"/>
+				<reportElement x="475" y="0" width="74" height="40"/>
 				<textElement verticalAlignment="Bottom">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Format]]></text>
-			</staticText>
-			<line>
-				<reportElement x="479" y="0" width="1" height="45"/>
-			</line>
-			<staticText>
-				<reportElement x="480" y="0" width="69" height="40"/>
-				<textElement verticalAlignment="Bottom">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Kennziffer]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -142,8 +133,8 @@
 		<band height="20">
 			<rectangle>
 				<reportElement x="5" y="1" width="545" height="18" backcolor="#C0C0C0">
-					<printWhenExpression><![CDATA[Boolean.valueOf(!$P{REPORT_SCRIPTLET}.isImageAvailable(de.cismet.cids.custom.utils.alkis.AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER, $F{schluessel}, $F{gemarkung.id}, $F{flur}, $F{blatt}).booleanValue()
-&& !$P{REPORT_SCRIPTLET}.isImageAvailable(de.cismet.cids.custom.utils.alkis.AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN, $F{schluessel}, $F{gemarkung.id}, $F{flur}, $F{blatt}).booleanValue())]]></printWhenExpression>
+					<printWhenExpression><![CDATA[Boolean.valueOf(!$P{REPORT_SCRIPTLET}.isImageAvailable(de.cismet.cids.custom.utils.alkis.AlkisConstants.COMMONS.VERMESSUNG_TYPE_VERMESSUNGSRISS, $F{schluessel}, $F{gemarkung.id}, $F{flur}, $F{blatt}).booleanValue()
+&& !$P{REPORT_SCRIPTLET}.isImageAvailable(de.cismet.cids.custom.utils.alkis.AlkisConstants.COMMONS.VERMESSUNG_TYPE_ERGAENZENDEDOKUMENTE, $F{schluessel}, $F{gemarkung.id}, $F{flur}, $F{blatt}).booleanValue())]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.0"/>
@@ -160,53 +151,43 @@
 				<reportElement x="79" y="0" width="1" height="20"/>
 			</line>
 			<textField>
-				<reportElement x="84" y="0" width="91" height="20"/>
+				<reportElement x="84" y="0" width="161" height="20"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{gemarkung.name}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="179" y="0" width="1" height="20"/>
+				<reportElement x="249" y="0" width="1" height="20"/>
 			</line>
 			<textField isBlankWhenNull="true">
-				<reportElement x="184" y="0" width="66" height="20"/>
+				<reportElement x="254" y="0" width="66" height="20"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{flur}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="254" y="0" width="1" height="20"/>
+				<reportElement x="324" y="0" width="1" height="20"/>
 			</line>
 			<textField>
-				<reportElement x="259" y="0" width="66" height="20"/>
+				<reportElement x="329" y="0" width="66" height="20"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{blatt}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="329" y="0" width="1" height="20"/>
+				<reportElement x="399" y="0" width="1" height="20"/>
 			</line>
 			<textField isBlankWhenNull="true">
-				<reportElement x="334" y="0" width="66" height="20"/>
+				<reportElement x="404" y="0" width="66" height="20"/>
 				<textElement verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{jahr}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="404" y="0" width="1" height="20"/>
+				<reportElement x="474" y="0" width="1" height="20"/>
 			</line>
 			<textField isBlankWhenNull="true">
-				<reportElement x="409" y="0" width="66" height="20"/>
+				<reportElement x="479" y="0" width="66" height="20"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{format.name}]]></textFieldExpression>
-			</textField>
-			<line>
-				<reportElement x="479" y="0" width="1" height="20"/>
-			</line>
-			<textField>
-				<reportElement x="484" y="0" width="61" height="20">
-					<printWhenExpression><![CDATA[new Boolean($F{kennziffer} != null)]]></printWhenExpression>
-				</reportElement>
-				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[new DecimalFormat("0.0").format($F{kennziffer})]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

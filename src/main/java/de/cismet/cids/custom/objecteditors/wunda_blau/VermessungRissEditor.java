@@ -89,7 +89,6 @@ import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.MultiPagePictureReader;
-import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
@@ -1624,7 +1623,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     /**
      * DOCUMENT ME!
      *
-     * @param   host        prefix DOCUMENT ME!
+     * @param   type        prefix DOCUMENT ME!
      * @param   gemarkung   DOCUMENT ME!
      * @param   flur        DOCUMENT ME!
      * @param   schluessel  DOCUMENT ME!
@@ -1632,16 +1631,22 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      *
      * @return  DOCUMENT ME!
      */
-    public static Collection<URL> getCorrespondingURLs(final String host,
+    public static Collection<URL> getCorrespondingURLs(final String type,
             final Integer gemarkung,
             final String flur,
             final String schluessel,
             final String blatt) {
         final Collection<URL> validURLs = new LinkedList<URL>();
 
-        final String urlString;
+        String urlString = AlkisConstants.COMMONS.VERMESSUNG_HOST + AlkisConstants.COMMONS.VERMESSUNG_FILESCHEME;
         try {
-            urlString = MessageFormat.format(host, schluessel, gemarkung, flur, new Integer(Integer.parseInt(blatt)))
+            urlString = MessageFormat.format(
+                    urlString,
+                    type,
+                    schluessel,
+                    gemarkung,
+                    flur,
+                    new Integer(Integer.parseInt(blatt)))
                         + '.';
         } catch (final Exception ex) {
             LOG.warn("Can't build a valid URL for current measurement sketch.", ex);
@@ -1807,7 +1812,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      */
     protected void loadBild() {
         currentSelectedButton = togBild;
-        lblHeaderDocument.setText("Bild");
+        lblHeaderDocument.setText("Vermessungsriss");
         currentDocument = DOCUMENT_BILD;
         CismetThreadPool.execute(new PictureReaderWorker(documentURLs[currentDocument]));
     }
@@ -1817,7 +1822,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      */
     protected void loadGrenzniederschrift() {
         currentSelectedButton = togGrenzniederschrift;
-        lblHeaderDocument.setText("Grenzniederschrift");
+        lblHeaderDocument.setText("Ergänzende Dokumente");
         currentDocument = DOCUMENT_GRENZNIEDERSCHRIFT;
 //        CismetThreadPool.execute(new PictureReaderWorker(documentURLs[currentDocument]));
         EventQueue.invokeLater(new PictureReaderWorker(documentURLs[currentDocument]));
@@ -2156,13 +2161,13 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             }
 
             final Collection<URL> validBildURLs = getCorrespondingURLs(
-                    AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER,
+                    AlkisConstants.COMMONS.VERMESSUNG_TYPE_VERMESSUNGSRISS,
                     getGemarkungOfCurrentCidsBean(),
                     getSimplePropertyOfCurrentCidsBean("flur"),
                     getSimplePropertyOfCurrentCidsBean("schluessel"),
                     getSimplePropertyOfCurrentCidsBean("blatt"));
             final Collection<URL> validGrenzniederschriftURLs = getCorrespondingURLs(
-                    AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN,
+                    AlkisConstants.COMMONS.VERMESSUNG_TYPE_ERGAENZENDEDOKUMENTE,
                     getGemarkungOfCurrentCidsBean(),
                     getSimplePropertyOfCurrentCidsBean("flur"),
                     getSimplePropertyOfCurrentCidsBean("schluessel"),

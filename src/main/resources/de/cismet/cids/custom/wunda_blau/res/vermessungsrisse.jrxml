@@ -5,6 +5,7 @@
 	</parameter>
 	<parameter name="JOBNUMBER" class="java.lang.String"/>
 	<parameter name="PROJECTNAME" class="java.lang.String"/>
+	<parameter name="TYPE" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -35,6 +36,9 @@
 		<band height="750">
 			<subreport>
 				<reportElement x="0" y="130" width="555" height="600"/>
+				<subreportParameter name="TYPE">
+					<subreportParameterExpression><![CDATA[$P{TYPE}]]></subreportParameterExpression>
+				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{vermessungsrisse}, false)]]></dataSourceExpression>
 				<subreportExpression class="java.lang.String"><![CDATA["de/cismet/cids/custom/wunda_blau/res/vermessungsrisse_overview.jasper"]]></subreportExpression>
 			</subreport>
@@ -50,13 +54,13 @@
 					</textElement>
 					<text><![CDATA[Ressort Vermessung, Katasteramt und Geodaten (R102)]]></text>
 				</staticText>
-				<staticText>
+				<textField isBlankWhenNull="true">
 					<reportElement x="307" y="3" width="240" height="42"/>
 					<textElement textAlignment="Right">
 						<font fontName="sansserif" size="16" isBold="true" pdfFontName="Helvetica" isPdfEmbedded="true"/>
 					</textElement>
-					<text><![CDATA[Vermessungsrisse und ergänzende Dokumente]]></text>
-				</staticText>
+					<textFieldExpression class="java.lang.String"><![CDATA[$P{TYPE}.equalsIgnoreCase("vr") ? "Vermessungsrisse" : "Ergänzende Dokumente"]]></textFieldExpression>
+				</textField>
 				<staticText>
 					<reportElement x="110" y="3" width="158" height="21"/>
 					<textElement>
@@ -111,6 +115,9 @@
 		<band height="750">
 			<subreport>
 				<reportElement x="0" y="0" width="555" height="750"/>
+				<subreportParameter name="TYPE">
+					<subreportParameterExpression><![CDATA[$P{TYPE}]]></subreportParameterExpression>
+				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{images}, false)]]></dataSourceExpression>
 				<subreportExpression class="java.lang.String"><![CDATA["de/cismet/cids/custom/wunda_blau/res/vermessungsrisse_document.jasper"]]></subreportExpression>
 			</subreport>
