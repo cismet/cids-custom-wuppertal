@@ -9,6 +9,8 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
+import Sirius.server.middleware.types.MetaObject;
+
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -79,10 +81,10 @@ import de.cismet.tools.CismetThreadPool;
 
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
-import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
+import de.cismet.tools.gui.downloadmanager.HttpDownload;
 
 /**
  * DOCUMENT ME!
@@ -908,14 +910,29 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
      */
     private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
         if (urlOfDocument != null) {
+            final URL url;
+            try {
+                url = new URL(urlOfDocument);
+            } catch (MalformedURLException ex) {
+                LOG.info("Couldn't download nivellement point from '" + urlOfDocument + "'.", ex);
+                return;
+            }
+
             CismetThreadPool.execute(new Runnable() {
 
                     @Override
                     public void run() {
-                        try {
-                            BrowserLauncher.openURL(urlOfDocument);
-                        } catch (Exception ex) {
-                            LOG.error("Could not open URL '" + urlOfDocument + "'.", ex);
+                        if (DownloadManagerDialog.showAskingForUserTitle(NivellementPunktEditor.this)) {
+                            final String filename = urlOfDocument.substring(urlOfDocument.lastIndexOf("/") + 1);
+                            DownloadManager.instance()
+                                    .add(
+                                        new HttpDownload(
+                                            url,
+                                            "",
+                                            DownloadManagerDialog.getJobname(),
+                                            "NivP-Beschreibung",
+                                            filename.substring(0, filename.lastIndexOf(".")),
+                                            filename.substring(filename.lastIndexOf("."))));
                         }
                     }
                 });
@@ -1097,15 +1114,19 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
      * @return  DOCUMENT ME!
      */
     protected static String getFormattedLaufendeNummer(final String laufendeNummer) {
-        String result = laufendeNummer;
+        final StringBuilder result;
 
-        if (laufendeNummer.trim().length() == 1) {
-            result = "00" + laufendeNummer;
-        } else if (laufendeNummer.trim().length() == 2) {
-            result = "0" + laufendeNummer;
+        if (laufendeNummer == null) {
+            result = new StringBuilder("000");
+        } else {
+            result = new StringBuilder(laufendeNummer);
         }
 
-        return result;
+        while (result.length() < 3) {
+            result.insert(0, "0");
+        }
+
+        return result.toString();
     }
 
     @Override
@@ -1119,6 +1140,18 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
 
         if (cidsBean != null) {
             this.cidsBean = cidsBean;
+
+            if (MetaObject.NEW == this.cidsBean.getMetaObject().getStatus()) {
+                try {
+                    this.cidsBean.setProperty("dgk_blattnummer", "0000");
+                    this.cidsBean.setProperty("laufende_nummer", "000");
+                    this.cidsBean.setProperty("historisch", "false");
+                    this.cidsBean.setProperty("hoehe_ueber_nn", Double.valueOf(0D));
+                } catch (Exception ex) {
+                    LOG.warn("Could not set initial properties to new NivellementPunkt", ex);
+                }
+            }
+
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
                 this.cidsBean);
@@ -1181,6 +1214,24 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
             JOptionPane.showMessageDialog(
                 this,
                 "Die angegebene Höhe ist ungültig.",
+                "Fehler aufgetreten",
+                JOptionPane.WARNING_MESSAGE);
+        }
+
+        if ((txtDGKBlattnummer.getText() == null) || (txtDGKBlattnummer.getText().trim().length() <= 0)) {
+            save = false;
+            JOptionPane.showMessageDialog(
+                this,
+                "Die angegebene DGK-Blattnummer ist ungültig.",
+                "Fehler aufgetreten",
+                JOptionPane.WARNING_MESSAGE);
+        }
+
+        if ((txtLaufendeNummer.getText() == null) || (txtLaufendeNummer.getText().trim().length() <= 0)) {
+            save = false;
+            JOptionPane.showMessageDialog(
+                this,
+                "Die angegebene laufende Nummer ist ungültig.",
                 "Fehler aufgetreten",
                 JOptionPane.WARNING_MESSAGE);
         }
