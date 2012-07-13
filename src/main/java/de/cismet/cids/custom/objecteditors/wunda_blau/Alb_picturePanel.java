@@ -32,6 +32,9 @@ import java.beans.PropertyChangeListener;
 
 import java.io.File;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -64,6 +67,9 @@ import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.StaticDecimalTools;
 
 import de.cismet.tools.gui.MultiPagePictureReader;
+import de.cismet.tools.gui.downloadmanager.DownloadManager;
+import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
+import de.cismet.tools.gui.downloadmanager.HttpDownload;
 
 /**
  * DOCUMENT ME!
@@ -450,7 +456,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 5, 5, 5);
         rpMessdaten.add(lblDistance, gridBagConstraints);
 
-        lblTxtDistance.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblTxtDistance.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblTxtDistance.setText("Länge/Umfang:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -460,7 +466,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 3, 5);
         rpMessdaten.add(lblTxtDistance, gridBagConstraints);
 
-        lblTxtArea.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblTxtArea.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblTxtArea.setText("Fläche:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -504,6 +510,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         togPan.setSelected(true);
         togPan.setText("Verschieben");
         togPan.setToolTipText("Verschieben");
+        togPan.setFocusPainted(false);
         togPan.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         togPan.addActionListener(new java.awt.event.ActionListener() {
 
@@ -524,6 +531,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                 getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom.gif"))); // NOI18N
         togZoom.setText("Zoomen");
         togZoom.setToolTipText("Zoomen");
+        togZoom.setFocusPainted(false);
         togZoom.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         togZoom.addActionListener(new java.awt.event.ActionListener() {
 
@@ -544,6 +552,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                 getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/newLinestring.png"))); // NOI18N
         togMessenLine.setText("Messlinie");
         togMessenLine.setToolTipText("Messen (Linie)");
+        togMessenLine.setFocusPainted(false);
         togMessenLine.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         togMessenLine.addActionListener(new java.awt.event.ActionListener() {
 
@@ -564,6 +573,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                 getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/newPolygon.png"))); // NOI18N
         togMessenPoly.setText("Messfläche");
         togMessenPoly.setToolTipText("Messen (Polygon)");
+        togMessenPoly.setFocusPainted(false);
         togMessenPoly.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         togMessenPoly.addActionListener(new java.awt.event.ActionListener() {
 
@@ -585,6 +595,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         togCalibrate.setText("Kalibrieren");
         togCalibrate.setToolTipText("Kalibrieren");
         togCalibrate.setEnabled(false);
+        togCalibrate.setFocusPainted(false);
         togCalibrate.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         togCalibrate.addActionListener(new java.awt.event.ActionListener() {
 
@@ -604,6 +615,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                 getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/home.gif"))); // NOI18N
         btnHome.setText("Übersicht");
         btnHome.setToolTipText("Übersicht");
+        btnHome.setFocusPainted(false);
         btnHome.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnHome.addActionListener(new java.awt.event.ActionListener() {
 
@@ -634,7 +646,8 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         btnOpen.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/folder-image.png"))); // NOI18N
         btnOpen.setText("Öffnen");
-        btnOpen.setToolTipText("Extern öffnen");
+        btnOpen.setToolTipText("Download zum Öffnen in externer Anwendung");
+        btnOpen.setFocusPainted(false);
         btnOpen.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnOpen.addActionListener(new java.awt.event.ActionListener() {
 
@@ -803,13 +816,35 @@ public class Alb_picturePanel extends javax.swing.JPanel {
      */
     private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
         final File current = documentFiles[currentDocument];
+        final String path = current.getAbsolutePath();
+
+        final URL url;
         try {
-            log.fatal("opening: " + current.toURL().toString());
-            BrowserLauncher.openURL(current.toURL().toString());
-        } catch (Exception ex) {
-            log.error(ex, ex);
+            url = current.toURI().toURL();
+        } catch (MalformedURLException ex) {
+            log.info("Couldn't download baulast from '" + path + "'.", ex);
+            return;
         }
-    }                                                                           //GEN-LAST:event_btnOpenActionPerformed
+
+        CismetThreadPool.execute(new Runnable() {
+
+                @Override
+                public void run() {
+                    if (DownloadManagerDialog.showAskingForUserTitle(Alb_picturePanel.this)) {
+                        final String filename = path.substring(path.lastIndexOf("/") + 1);
+                        DownloadManager.instance()
+                                .add(
+                                    new HttpDownload(
+                                        url,
+                                        "",
+                                        DownloadManagerDialog.getJobname(),
+                                        "Baulast",
+                                        filename.substring(0, filename.lastIndexOf(".")),
+                                        filename.substring(filename.lastIndexOf("."))));
+                    }
+                }
+            });
+    } //GEN-LAST:event_btnOpenActionPerformed
 
     /**
      * DOCUMENT ME!
