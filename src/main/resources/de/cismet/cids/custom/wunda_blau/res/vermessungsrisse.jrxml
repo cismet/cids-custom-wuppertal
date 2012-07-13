@@ -6,6 +6,7 @@
 	<parameter name="JOBNUMBER" class="java.lang.String"/>
 	<parameter name="PROJECTNAME" class="java.lang.String"/>
 	<parameter name="TYPE" class="java.lang.String"/>
+	<parameter name="STARTINGPAGES" class="java.util.Map"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -36,6 +37,9 @@
 		<band height="750">
 			<subreport>
 				<reportElement x="0" y="130" width="555" height="600"/>
+				<subreportParameter name="STARTINGPAGES">
+					<subreportParameterExpression><![CDATA[$P{STARTINGPAGES}]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="TYPE">
 					<subreportParameterExpression><![CDATA[$P{TYPE}]]></subreportParameterExpression>
 				</subreportParameter>

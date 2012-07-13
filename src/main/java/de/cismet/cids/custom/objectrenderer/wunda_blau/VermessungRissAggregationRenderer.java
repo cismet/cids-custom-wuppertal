@@ -99,6 +99,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
     private static final String PARAMETER_JOBNUMBER = "JOBNUMBER";
     private static final String PARAMETER_PROJECTNAME = "PROJECTNAME";
     private static final String PARAMETER_TYPE = "TYPE";
+    private static final String PARAMETER_STARTINGPAGES = "STARTINGPAGES";
 
     // Spaltenueberschriften
     private static final String[] AGR_COMLUMN_NAMES = new String[] {
@@ -366,17 +367,17 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblRisseFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblRisseFocusLost
+    private void tblRisseFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblRisseFocusLost
         tblRisse.clearSelection();
         animateToOverview();
-    }                                                                     //GEN-LAST:event_tblRisseFocusLost
+    }//GEN-LAST:event_tblRisseFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnGenerateReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnGenerateReportActionPerformed
+    private void btnGenerateReportActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateReportActionPerformed
         final Collection<CidsBean> selectedVermessungsrisse = getSelectedVermessungsrisse();
 
         if (selectedVermessungsrisse.isEmpty()) {
@@ -420,10 +421,25 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                     final Collection<VermessungRissImageReportBean> imageBeans =
                         new LinkedList<VermessungRissImageReportBean>();
 
-                    Image[] bilder = null;
+                    // Not the most elegant way, but it works. We have to calculate on which page an image will appear.
+                    // This can't be easily done with JasperReports. In order to let JasperReports calculate which page
+                    // an image appears on, we have to know how many pages the overview will take. And that is not
+                    // possible in JasperReports itself. Whether we evaluate the page calculation "Now" - which means at
+                    // the time one row is written -: Then we only get the current page count, not the future page
+                    // count. Or we evaluate the page calculation "Report", that means after the rest of the reportwas
+                    // created: Then the page count has a fix value for every row. The first page can contain 27 rows,
+                    // the following pages are able to hold 37 rows. The first image will appear on page 2 if there are
+                    // less than 27 rows to write.
+                    final Map startingPages = new HashMap();
+                    int startingPage = 2;
+                    if (selectedVermessungsrisse.size() > 27) {
+                        startingPage += Math.ceil((selectedVermessungsrisse.size() - 27D) / 37D);
+                    }
+
+                    Image[] images = null;
                     for (final CidsBean vermessungsriss : selectedVermessungsrisse) {
                         try {
-                            bilder = VermessungRissReportScriptlet.loadImages(
+                            images = VermessungRissReportScriptlet.loadImages(
                                     type,
                                     vermessungsriss.getProperty("schluessel").toString(),
                                     (Integer)vermessungsriss.getProperty("gemarkung.id"),
@@ -431,9 +447,11 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                     vermessungsriss.getProperty("blatt").toString());
                         } catch (final Exception ex) {
                             // TODO: User feedback?
-                            LOG.warn("Could not include 'bild' for vermessungsriss '" + vermessungsriss.toJSONString()
+                            LOG.warn("Could not include raster document for vermessungsriss '"
+                                        + vermessungsriss.toJSONString()
                                         + "'.",
                                 ex);
+                            continue;
                         }
 
                         final StringBuilder description;
@@ -451,16 +469,17 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         description.append(vermessungsriss.getProperty("blatt"));
                         description.append(" - Seite ");
 
-                        if (bilder != null) {
-                            for (int i = 0; i < bilder.length; i++) {
+                        if (images != null) {
+                            for (int i = 0; i < images.length; i++) {
                                 imageBeans.add(new VermessungRissImageReportBean(
                                         description.toString()
                                                 + (i + 1),
-                                        bilder[i]));
+                                        images[i]));
                             }
-                        }
 
-                        bilder = null;
+                            startingPages.put(vermessungsriss.getProperty("id"), new Integer(startingPage));
+                            startingPage += images.length;
+                        }
                     }
 
                     reportBeans.add(new VermessungRissReportBean(selectedVermessungsrisse, imageBeans));
@@ -470,6 +489,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                     parameters.put(PARAMETER_JOBNUMBER, txtJobnumber.getText());
                     parameters.put(PARAMETER_PROJECTNAME, txtProjectname.getText());
                     parameters.put(PARAMETER_TYPE, type);
+                    parameters.put(PARAMETER_STARTINGPAGES, startingPages);
 
                     final JasperReport jasperReport;
                     try {
@@ -522,14 +542,14 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             };
 
         CismetThreadPool.execute(runnable);
-    } //GEN-LAST:event_btnGenerateReportActionPerformed
+    }//GEN-LAST:event_btnGenerateReportActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) { //GEN-FIRST:event_formAncestorAdded
+    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_formAncestorAdded
         CismetThreadPool.execute(new Runnable() {
 
                 @Override
@@ -548,7 +568,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         });
                 }
             });
-    } //GEN-LAST:event_formAncestorAdded
+    }//GEN-LAST:event_formAncestorAdded
 
     /**
      * DOCUMENT ME!
