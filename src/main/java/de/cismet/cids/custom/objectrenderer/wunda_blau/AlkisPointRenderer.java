@@ -1804,7 +1804,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         btnOpen.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/folder-image.png"))); // NOI18N
         btnOpen.setText("Öffnen");
-        btnOpen.setToolTipText("Extern öffnen");
+        btnOpen.setToolTipText("Download zum Öffnen in externer Anwendung");
         btnOpen.setEnabled(false);
         btnOpen.setFocusPainted(false);
         btnOpen.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -2140,14 +2140,29 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      */
     private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
         if (urlOfAPMap != null) {
+            final URL url;
+            try {
+                url = new URL(urlOfAPMap);
+            } catch (MalformedURLException ex) {
+                log.info("Couldn't download AP map from '" + urlOfAPMap + "'.", ex);
+                return;
+            }
+
             CismetThreadPool.execute(new Runnable() {
 
                     @Override
                     public void run() {
-                        try {
-                            BrowserLauncher.openURL(urlOfAPMap);
-                        } catch (Exception ex) {
-                            log.error("Could not open URL '" + urlOfAPMap + "'.", ex);
+                        if (DownloadManagerDialog.showAskingForUserTitle(AlkisPointRenderer.this)) {
+                            final String filename = urlOfAPMap.substring(urlOfAPMap.lastIndexOf("/") + 1);
+                            DownloadManager.instance()
+                                    .add(
+                                        new HttpDownload(
+                                            url,
+                                            "",
+                                            DownloadManagerDialog.getJobname(),
+                                            "AP-Karte",
+                                            filename.substring(0, filename.lastIndexOf(".")),
+                                            filename.substring(filename.lastIndexOf("."))));
                         }
                     }
                 });

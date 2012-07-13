@@ -1403,7 +1403,7 @@
                   <Image iconType="3" name="/de/cismet/cids/custom/wunda_blau/res/folder-image.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="&#xd6;ffnen"/>
-                <Property name="toolTipText" type="java.lang.String" value="Extern &#xf6;ffnen"/>
+                <Property name="toolTipText" type="java.lang.String" value="Download zum &#xd6;ffnen in externer Anwendung"/>
                 <Property name="enabled" type="boolean" value="false"/>
                 <Property name="focusPainted" type="boolean" value="false"/>
                 <Property name="horizontalAlignment" type="int" value="2"/>

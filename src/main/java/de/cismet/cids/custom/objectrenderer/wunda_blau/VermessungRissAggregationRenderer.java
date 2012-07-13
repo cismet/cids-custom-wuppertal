@@ -26,6 +26,7 @@ import org.jdesktop.swingx.error.ErrorInfo;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Image;
 import java.awt.geom.Rectangle2D;
@@ -41,9 +42,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.ListCellRenderer;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
+import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -93,6 +98,8 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
 
     private static final String PARAMETER_JOBNUMBER = "JOBNUMBER";
     private static final String PARAMETER_PROJECTNAME = "PROJECTNAME";
+    private static final String PARAMETER_TYPE = "TYPE";
+    private static final String PARAMETER_STARTINGPAGES = "STARTINGPAGES";
 
     // Spaltenueberschriften
     private static final String[] AGR_COMLUMN_NAMES = new String[] {
@@ -125,9 +132,11 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGenerateReport;
+    private javax.swing.JComboBox cmbType;
     private javax.swing.Box.Filler flrGap;
     private javax.swing.JLabel lblJobnumber;
     private javax.swing.JLabel lblProjectname;
+    private javax.swing.JLabel lblType;
     private de.cismet.cismap.commons.gui.MappingComponent mappingComponent;
     private javax.swing.JPanel panMap;
     private javax.swing.JPanel pnlReport;
@@ -144,6 +153,9 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      */
     public VermessungRissAggregationRenderer() {
         initComponents();
+
+        cmbType.addItem(AlkisConstants.COMMONS.VERMESSUNG_TYPE_VERMESSUNGSRISS);
+        cmbType.addItem(AlkisConstants.COMMONS.VERMESSUNG_TYPE_ERGAENZENDEDOKUMENTE);
 
         scpRisse.getViewport().setOpaque(false);
         tblRisse.getSelectionModel().addListSelectionListener(new TableSelectionListener());
@@ -193,6 +205,8 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
         lblJobnumber = new javax.swing.JLabel();
         txtJobnumber = new javax.swing.JTextField();
         btnGenerateReport = new javax.swing.JButton();
+        cmbType = new javax.swing.JComboBox();
+        lblType = new javax.swing.JLabel();
 
         addAncestorListener(new javax.swing.event.AncestorListener() {
 
@@ -315,11 +329,29 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
         pnlReport.add(btnGenerateReport, gridBagConstraints);
+
+        cmbType.setRenderer(new TypeRenderer());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 0);
+        pnlReport.add(cmbType, gridBagConstraints);
+
+        lblType.setText(org.openide.util.NbBundle.getMessage(
+                VermessungRissAggregationRenderer.class,
+                "VermessungRissAggregationRenderer.lblType.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(6, 12, 6, 6);
+        pnlReport.add(lblType, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -361,6 +393,16 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             return;
         }
 
+        final Object typeObj = cmbType.getSelectedItem();
+        final String type;
+        if (typeObj instanceof String) {
+            type = (String)typeObj;
+        } else {
+            // TODO: User feedback?!
+            LOG.info("Unknown type '" + typeObj + "' encountered. Skipping report generation.");
+            return;
+        }
+
         final Runnable runnable = new Runnable() {
 
                 @Override
@@ -379,37 +421,45 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                     final Collection<VermessungRissImageReportBean> imageBeans =
                         new LinkedList<VermessungRissImageReportBean>();
 
-                    Image[] bilder = null;
-                    Image[] grenzniederschriften = null;
+                    // Not the most elegant way, but it works. We have to calculate on which page an image will appear.
+                    // This can't be easily done with JasperReports. In order to let JasperReports calculate which page
+                    // an image appears on, we have to know how many pages the overview will take. And that is not
+                    // possible in JasperReports itself. Whether we evaluate the page calculation "Now" - which means at
+                    // the time one row is written -: Then we only get the current page count, not the future page
+                    // count. Or we evaluate the page calculation "Report", that means after the rest of the reportwas
+                    // created: Then the page count has a fix value for every row. The first page can contain 27 rows,
+                    // the following pages are able to hold 37 rows. The first image will appear on page 2 if there are
+                    // less than 27 rows to write.
+                    final Map startingPages = new HashMap();
+                    int startingPage = 2;
+                    if (selectedVermessungsrisse.size() > 27) {
+                        startingPage += Math.ceil((selectedVermessungsrisse.size() - 27D) / 37D);
+                    }
+
+                    Image[] images = null;
                     for (final CidsBean vermessungsriss : selectedVermessungsrisse) {
                         try {
-                            bilder = VermessungRissReportScriptlet.loadImages(
-                                    AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER,
+                            images = VermessungRissReportScriptlet.loadImages(
+                                    type,
                                     vermessungsriss.getProperty("schluessel").toString(),
                                     (Integer)vermessungsriss.getProperty("gemarkung.id"),
                                     vermessungsriss.getProperty("flur").toString(),
                                     vermessungsriss.getProperty("blatt").toString());
                         } catch (final Exception ex) {
                             // TODO: User feedback?
-                            LOG.warn("Could not include 'bild' for vermessungsriss '" + vermessungsriss.toJSONString()
+                            LOG.warn("Could not include raster document for vermessungsriss '"
+                                        + vermessungsriss.toJSONString()
                                         + "'.",
                                 ex);
+                            continue;
                         }
 
-                        try {
-                            grenzniederschriften = VermessungRissReportScriptlet.loadImages(
-                                    AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN,
-                                    vermessungsriss.getProperty("schluessel").toString(),
-                                    (Integer)vermessungsriss.getProperty("gemarkung.id"),
-                                    vermessungsriss.getProperty("flur").toString(),
-                                    vermessungsriss.getProperty("blatt").toString());
-                        } catch (final Exception ex) {
-                            LOG.warn("Could not include 'grenzniederschrift' for vermessungsriss '"
-                                        + vermessungsriss.toJSONString() + "'.",
-                                ex);
+                        final StringBuilder description;
+                        if (AlkisConstants.COMMONS.VERMESSUNG_TYPE_VERMESSUNGSRISS.equalsIgnoreCase(type)) {
+                            description = new StringBuilder("Vermessungsriss ");
+                        } else {
+                            description = new StringBuilder("Ergänzende Dokumente zum Vermessungsriss ");
                         }
-
-                        final StringBuilder description = new StringBuilder("Vermessungsriss ");
                         description.append(vermessungsriss.getProperty("schluessel"));
                         description.append(" - ");
                         description.append(vermessungsriss.getProperty("gemarkung.name"));
@@ -419,26 +469,17 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         description.append(vermessungsriss.getProperty("blatt"));
                         description.append(" - Seite ");
 
-                        if (bilder != null) {
-                            for (int i = 0; i < bilder.length; i++) {
+                        if (images != null) {
+                            for (int i = 0; i < images.length; i++) {
                                 imageBeans.add(new VermessungRissImageReportBean(
                                         description.toString()
                                                 + (i + 1),
-                                        bilder[i]));
+                                        images[i]));
                             }
-                        }
-                        if (grenzniederschriften != null) {
-                            for (int i = 0; i < grenzniederschriften.length; i++) {
-                                imageBeans.add(new VermessungRissImageReportBean(
-                                        "Ergänzende Dokumente zum "
-                                                + description.toString()
-                                                + (i + 1),
-                                        grenzniederschriften[i]));
-                            }
-                        }
 
-                        bilder = null;
-                        grenzniederschriften = null;
+                            startingPages.put(vermessungsriss.getProperty("id"), new Integer(startingPage));
+                            startingPage += images.length;
+                        }
                     }
 
                     reportBeans.add(new VermessungRissReportBean(selectedVermessungsrisse, imageBeans));
@@ -447,6 +488,8 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                     final HashMap parameters = new HashMap();
                     parameters.put(PARAMETER_JOBNUMBER, txtJobnumber.getText());
                     parameters.put(PARAMETER_PROJECTNAME, txtProjectname.getText());
+                    parameters.put(PARAMETER_TYPE, type);
+                    parameters.put(PARAMETER_STARTINGPAGES, startingPages);
 
                     final JasperReport jasperReport;
                     try {
@@ -963,6 +1006,55 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
          */
         public Image getImage() {
             return image;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class TypeRenderer extends JLabel implements ListCellRenderer {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new TypeRenderer object.
+         */
+        public TypeRenderer() {
+            setOpaque(true);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Component getListCellRendererComponent(final JList list,
+                final Object value,
+                final int index,
+                final boolean isSelected,
+                final boolean cellHasFocus) {
+            if (isSelected) {
+                setBackground(UIManager.getDefaults().getColor("List.selectionBackground")); // NOI18N
+                setForeground(UIManager.getDefaults().getColor("List.selectionForeground")); // NOI18N
+            } else {
+                setBackground(UIManager.getDefaults().getColor("List.background"));          // NOI18N
+                setForeground(UIManager.getDefaults().getColor("List.foreground"));          // NOI18N
+            }
+
+            if (value instanceof String) {
+                if (AlkisConstants.COMMONS.VERMESSUNG_TYPE_VERMESSUNGSRISS.equalsIgnoreCase((String)value)) {
+                    setText("Vermessungsriss");
+                } else if (AlkisConstants.COMMONS.VERMESSUNG_TYPE_ERGAENZENDEDOKUMENTE.equalsIgnoreCase(
+                                (String)value)) {
+                    setText("Ergänzende Dokumente");
+                } else {
+                    setText("Unbekannter Reporttyp");
+                }
+            } else {
+                setText("Unbekannter Reporttyp");
+            }
+
+            return this;
         }
     }
 }
