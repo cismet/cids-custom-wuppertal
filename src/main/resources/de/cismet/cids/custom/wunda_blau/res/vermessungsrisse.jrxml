@@ -50,7 +50,7 @@
 				<reportElement x="0" y="749" width="100" height="1"/>
 			</break>
 			<frame>
-				<reportElement mode="null" x="1" y="1" width="554" height="110" backcolor="#EBEBEB"/>
+				<reportElement x="1" y="1" width="554" height="110" backcolor="#EBEBEB"/>
 				<staticText>
 					<reportElement x="110" y="24" width="197" height="35"/>
 					<textElement>

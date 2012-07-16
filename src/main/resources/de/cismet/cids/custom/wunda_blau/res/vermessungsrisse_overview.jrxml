@@ -59,7 +59,7 @@
 			</line>
 			<textField isStretchWithOverflow="true" evaluationTime="Report">
 				<reportElement x="9" y="42" width="541" height="15"/>
-				<textElement textAlignment="null" verticalAlignment="Middle">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$V{HAS_ENTRIES_WO_RASTERDOCUMENTS}.booleanValue() ? ($P{TYPE}.equalsIgnoreCase("Vermessungsriss") ? "Für die grau hinterlegten Risse sind keine Rasterdokumente verfügbar." : "Zu den grau hinterlegten Rissen sind keine ergänzenden Dokumente verfügbar.") : ""]]></textFieldExpression>
