@@ -51,8 +51,8 @@ public class VermessungRissReportScriptlet extends JRDefaultScriptlet {
     /**
      * DOCUMENT ME!
      *
-     * @param   type        laufendeNummer DOCUMENT ME!
-     * @param   schluessel  path DOCUMENT ME!
+     * @param   host        DOCUMENT ME!
+     * @param   schluessel  DOCUMENT ME!
      * @param   gemarkung   DOCUMENT ME!
      * @param   flur        DOCUMENT ME!
      * @param   blatt       DOCUMENT ME!
@@ -101,7 +101,7 @@ public class VermessungRissReportScriptlet extends JRDefaultScriptlet {
      * DOCUMENT ME!
      *
      * @param   type        DOCUMENT ME!
-     * @param   schluessel  path DOCUMENT ME!
+     * @param   schluessel  DOCUMENT ME!
      * @param   gemarkung   DOCUMENT ME!
      * @param   flur        DOCUMENT ME!
      * @param   blatt       DOCUMENT ME!
@@ -165,7 +165,7 @@ public class VermessungRissReportScriptlet extends JRDefaultScriptlet {
      * DOCUMENT ME!
      *
      * @param   type        DOCUMENT ME!
-     * @param   schluessel  path DOCUMENT ME!
+     * @param   schluessel  DOCUMENT ME!
      * @param   gemarkung   DOCUMENT ME!
      * @param   flur        DOCUMENT ME!
      * @param   blatt       DOCUMENT ME!

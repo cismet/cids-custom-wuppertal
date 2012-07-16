@@ -185,8 +185,8 @@
         </Component>
         <Component class="javax.swing.JComboBox" name="cmbType">
           <Properties>
-            <Property name="renderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="new TypeRenderer()" type="code"/>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new DefaultComboBoxModel(TYPES)" type="code"/>
             </Property>
           </Properties>
           <Constraints>

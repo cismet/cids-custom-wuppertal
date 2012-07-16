@@ -34,7 +34,10 @@ import java.awt.geom.Rectangle2D;
 import java.util.*;
 import java.util.logging.Level;
 
-import javax.swing.*;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -88,6 +91,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
     private static final String PARAMETER_PROJECTNAME = "PROJECTNAME";
     private static final String PARAMETER_TYPE = "TYPE";
     private static final String PARAMETER_STARTINGPAGES = "STARTINGPAGES";
+    private static final String[] TYPES = new String[] { "Vermessungsriss", "Ergänzende Dokumente" };
 
     // Spaltenueberschriften
     private static final String[] AGR_COMLUMN_NAMES = new String[] {
@@ -141,9 +145,6 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      */
     public VermessungRissAggregationRenderer() {
         initComponents();
-
-        cmbType.addItem(AlkisConstants.COMMONS.VERMESSUNG_TYPE_VERMESSUNGSRISS);
-        cmbType.addItem(AlkisConstants.COMMONS.VERMESSUNG_TYPE_ERGAENZENDEDOKUMENTE);
 
         scpRisse.getViewport().setOpaque(false);
         tblRisse.getSelectionModel().addListSelectionListener(new TableSelectionListener());
@@ -323,7 +324,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
         pnlReport.add(btnGenerateReport, gridBagConstraints);
 
-        cmbType.setRenderer(new TypeRenderer());
+        cmbType.setModel(new DefaultComboBoxModel(TYPES));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
@@ -355,17 +356,17 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblRisseFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblRisseFocusLost
+    private void tblRisseFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblRisseFocusLost
         tblRisse.clearSelection();
         animateToOverview();
-    }                                                                     //GEN-LAST:event_tblRisseFocusLost
+    }//GEN-LAST:event_tblRisseFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnGenerateReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnGenerateReportActionPerformed
+    private void btnGenerateReportActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateReportActionPerformed
         final Collection<CidsBean> selectedVermessungsrisse = getSelectedVermessungsrisse();
 
         if (selectedVermessungsrisse.isEmpty()) {
@@ -387,21 +388,21 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             type = (String)typeObj;
 
             try {
-                if (type.equalsIgnoreCase(AlkisConstants.COMMONS.VERMESSUNG_TYPE_VERMESSUNGSRISS)) {
+                if (type.equalsIgnoreCase(TYPES[0])) {
                     if (BillingPopup.doBilling(
                                     "vrpdf",
                                     "no.yet",
                                     (Geometry)null,
                                     new ProductGroupAmount("ea", selectedVermessungsrisse.size()))) {
-                        downloadProducts(selectedVermessungsrisse, type);
+                        downloadProducts(selectedVermessungsrisse, type, AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER);
                     }
-                } else if (type.equalsIgnoreCase(AlkisConstants.COMMONS.VERMESSUNG_TYPE_ERGAENZENDEDOKUMENTE)) {
+                } else if (type.equalsIgnoreCase(TYPES[1])) {
                     if (BillingPopup.doBilling(
                                     "doklapdf",
                                     "no.yet",
                                     (Geometry)null,
                                     new ProductGroupAmount("ea", selectedVermessungsrisse.size()))) {
-                        downloadProducts(selectedVermessungsrisse, type);
+                        downloadProducts(selectedVermessungsrisse, type, AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN);
                     }
                 }
             } catch (Exception e) {
@@ -413,7 +414,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             LOG.info("Unknown type '" + typeObj + "' encountered. Skipping report generation.");
             return;
         }
-    } //GEN-LAST:event_btnGenerateReportActionPerformed
+    }//GEN-LAST:event_btnGenerateReportActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -421,7 +422,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      * @param  selectedVermessungsrisse  DOCUMENT ME!
      * @param  type                      DOCUMENT ME!
      */
-    private void downloadProducts(final Collection<CidsBean> selectedVermessungsrisse, final String type) {
+    private void downloadProducts(final Collection<CidsBean> selectedVermessungsrisse, final String type, final String host) {
         final Runnable runnable = new Runnable() {
 
                 @Override
@@ -459,7 +460,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                     for (final CidsBean vermessungsriss : selectedVermessungsrisse) {
                         try {
                             images = VermessungRissReportScriptlet.loadImages(
-                                    type,
+                                    host,
                                     vermessungsriss.getProperty("schluessel").toString(),
                                     (Integer)vermessungsriss.getProperty("gemarkung.id"),
                                     vermessungsriss.getProperty("flur").toString(),
@@ -474,7 +475,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         }
 
                         final StringBuilder description;
-                        if (AlkisConstants.COMMONS.VERMESSUNG_TYPE_VERMESSUNGSRISS.equalsIgnoreCase(type)) {
+                        if (TYPES[0].equalsIgnoreCase(type)) {
                             description = new StringBuilder("Vermessungsriss ");
                         } else {
                             description = new StringBuilder("Ergänzende Dokumente zum Vermessungsriss ");
@@ -544,7 +545,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                     if (DownloadManagerDialog.showAskingForUserTitle(VermessungRissAggregationRenderer.this)) {
                         String projectname = txtProjectname.getText();
                         if ((projectname == null) || (projectname.trim().length() == 0)) {
-                            projectname = "Vermessungsrisse";
+                            projectname = type;
                         }
                         final String jobname = DownloadManagerDialog.getJobname();
 
@@ -568,7 +569,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) { //GEN-FIRST:event_formAncestorAdded
+    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_formAncestorAdded
         CismetThreadPool.execute(new Runnable() {
 
                 @Override
@@ -587,7 +588,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         });
                 }
             });
-    } //GEN-LAST:event_formAncestorAdded
+    }//GEN-LAST:event_formAncestorAdded
 
     /**
      * DOCUMENT ME!
@@ -1025,55 +1026,6 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
          */
         public Image getImage() {
             return image;
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    private class TypeRenderer extends JLabel implements ListCellRenderer {
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new TypeRenderer object.
-         */
-        public TypeRenderer() {
-            setOpaque(true);
-        }
-
-        //~ Methods ------------------------------------------------------------
-
-        @Override
-        public Component getListCellRendererComponent(final JList list,
-                final Object value,
-                final int index,
-                final boolean isSelected,
-                final boolean cellHasFocus) {
-            if (isSelected) {
-                setBackground(UIManager.getDefaults().getColor("List.selectionBackground")); // NOI18N
-                setForeground(UIManager.getDefaults().getColor("List.selectionForeground")); // NOI18N
-            } else {
-                setBackground(UIManager.getDefaults().getColor("List.background"));          // NOI18N
-                setForeground(UIManager.getDefaults().getColor("List.foreground"));          // NOI18N
-            }
-
-            if (value instanceof String) {
-                if (AlkisConstants.COMMONS.VERMESSUNG_TYPE_VERMESSUNGSRISS.equalsIgnoreCase((String)value)) {
-                    setText("Vermessungsriss");
-                } else if (AlkisConstants.COMMONS.VERMESSUNG_TYPE_ERGAENZENDEDOKUMENTE.equalsIgnoreCase(
-                                (String)value)) {
-                    setText("Ergänzende Dokumente");
-                } else {
-                    setText("Unbekannter Reporttyp");
-                }
-            } else {
-                setText("Unbekannter Reporttyp");
-            }
-
-            return this;
         }
     }
 }
