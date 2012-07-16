@@ -356,17 +356,17 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblRisseFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblRisseFocusLost
+    private void tblRisseFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblRisseFocusLost
         tblRisse.clearSelection();
         animateToOverview();
-    }//GEN-LAST:event_tblRisseFocusLost
+    }                                                                     //GEN-LAST:event_tblRisseFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnGenerateReportActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateReportActionPerformed
+    private void btnGenerateReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnGenerateReportActionPerformed
         final Collection<CidsBean> selectedVermessungsrisse = getSelectedVermessungsrisse();
 
         if (selectedVermessungsrisse.isEmpty()) {
@@ -388,12 +388,28 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             type = (String)typeObj;
 
             try {
+                int dinA3Orless = 0;
+                int dinA2Orbigger = 0;
+                for (final CidsBean selectedVermessungsriss : selectedVermessungsrisse) {
+                    final CidsBean format = (CidsBean)selectedVermessungsriss.getProperty("format");
+                    if (format != null) {
+                        if (format.getProperty("name").equals("2")) {
+                            dinA2Orbigger++;
+                        } else {
+                            dinA3Orless++;
+                        }
+                    } else {
+                        dinA3Orless++;
+                    }
+                }
+
                 if (type.equalsIgnoreCase(TYPES[0])) {
                     if (BillingPopup.doBilling(
                                     "vrpdf",
                                     "no.yet",
                                     (Geometry)null,
-                                    new ProductGroupAmount("ea", selectedVermessungsrisse.size()))) {
+                                    new ProductGroupAmount("eadoc_a3", dinA3Orless),
+                                    new ProductGroupAmount("eadoc_a2-a0", dinA2Orbigger))) {
                         downloadProducts(selectedVermessungsrisse, type, AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER);
                     }
                 } else if (type.equalsIgnoreCase(TYPES[1])) {
@@ -401,8 +417,12 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                     "doklapdf",
                                     "no.yet",
                                     (Geometry)null,
-                                    new ProductGroupAmount("ea", selectedVermessungsrisse.size()))) {
-                        downloadProducts(selectedVermessungsrisse, type, AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN);
+                                    new ProductGroupAmount("eadoc_a3", dinA3Orless),
+                                    new ProductGroupAmount("eadoc_a2-a0", dinA2Orbigger))) {
+                        downloadProducts(
+                            selectedVermessungsrisse,
+                            type,
+                            AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN);
                     }
                 }
             } catch (Exception e) {
@@ -414,15 +434,18 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             LOG.info("Unknown type '" + typeObj + "' encountered. Skipping report generation.");
             return;
         }
-    }//GEN-LAST:event_btnGenerateReportActionPerformed
+    } //GEN-LAST:event_btnGenerateReportActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  selectedVermessungsrisse  DOCUMENT ME!
      * @param  type                      DOCUMENT ME!
+     * @param  host                      DOCUMENT ME!
      */
-    private void downloadProducts(final Collection<CidsBean> selectedVermessungsrisse, final String type, final String host) {
+    private void downloadProducts(final Collection<CidsBean> selectedVermessungsrisse,
+            final String type,
+            final String host) {
         final Runnable runnable = new Runnable() {
 
                 @Override
@@ -569,7 +592,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_formAncestorAdded
+    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) { //GEN-FIRST:event_formAncestorAdded
         CismetThreadPool.execute(new Runnable() {
 
                 @Override
@@ -588,7 +611,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         });
                 }
             });
-    }//GEN-LAST:event_formAncestorAdded
+    } //GEN-LAST:event_formAncestorAdded
 
     /**
      * DOCUMENT ME!

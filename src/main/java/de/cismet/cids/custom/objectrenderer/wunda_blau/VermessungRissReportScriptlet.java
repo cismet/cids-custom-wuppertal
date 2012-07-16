@@ -51,7 +51,7 @@ public class VermessungRissReportScriptlet extends JRDefaultScriptlet {
     /**
      * DOCUMENT ME!
      *
-     * @param   host        DOCUMENT ME!
+     * @param   type        host DOCUMENT ME!
      * @param   schluessel  DOCUMENT ME!
      * @param   gemarkung   DOCUMENT ME!
      * @param   flur        DOCUMENT ME!
