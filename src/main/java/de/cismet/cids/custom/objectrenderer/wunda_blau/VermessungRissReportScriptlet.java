@@ -51,21 +51,21 @@ public class VermessungRissReportScriptlet extends JRDefaultScriptlet {
     /**
      * DOCUMENT ME!
      *
-     * @param   type        laufendeNummer DOCUMENT ME!
-     * @param   schluessel  path DOCUMENT ME!
+     * @param   host        DOCUMENT ME!
+     * @param   schluessel  DOCUMENT ME!
      * @param   gemarkung   DOCUMENT ME!
      * @param   flur        DOCUMENT ME!
      * @param   blatt       DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static Boolean isImageAvailable(final String type,
+    public static Boolean isImageAvailable(final String host,
             final String schluessel,
             final Integer gemarkung,
             final String flur,
             final String blatt) {
         final Collection<URL> validURLs = VermessungRissEditor.getCorrespondingURLs(
-                type,
+                host,
                 gemarkung,
                 flur,
                 schluessel,
@@ -100,22 +100,22 @@ public class VermessungRissReportScriptlet extends JRDefaultScriptlet {
     /**
      * DOCUMENT ME!
      *
-     * @param   type        DOCUMENT ME!
-     * @param   schluessel  path DOCUMENT ME!
+     * @param   host        DOCUMENT ME!
+     * @param   schluessel  DOCUMENT ME!
      * @param   gemarkung   DOCUMENT ME!
      * @param   flur        DOCUMENT ME!
      * @param   blatt       DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static Image[] loadImages(final String type,
+    public static Image[] loadImages(final String host,
             final String schluessel,
             final Integer gemarkung,
             final String flur,
             final String blatt) {
         Image[] result = new Image[0];
         final Collection<URL> validURLs = VermessungRissEditor.getCorrespondingURLs(
-                type,
+                host,
                 gemarkung,
                 flur,
                 schluessel,
@@ -149,7 +149,7 @@ public class VermessungRissReportScriptlet extends JRDefaultScriptlet {
                 }
             }
         } catch (IOException ex) {
-            LOG.error("Could not load associated images. Host: '" + type + "', schluessel: '" + schluessel
+            LOG.error("Could not load associated images. Host: '" + host + "', schluessel: '" + schluessel
                         + "', gemarkung: '" + gemarkung + "', flur: '" + flur + "', blatt: '" + blatt + "'.",
                 ex);
         } finally {
@@ -164,21 +164,21 @@ public class VermessungRissReportScriptlet extends JRDefaultScriptlet {
     /**
      * DOCUMENT ME!
      *
-     * @param   type        DOCUMENT ME!
-     * @param   schluessel  path DOCUMENT ME!
+     * @param   host        DOCUMENT ME!
+     * @param   schluessel  DOCUMENT ME!
      * @param   gemarkung   DOCUMENT ME!
      * @param   flur        DOCUMENT ME!
      * @param   blatt       DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static Image loadImage(final String type,
+    public static Image loadImage(final String host,
             final String schluessel,
             final Integer gemarkung,
             final String flur,
             final String blatt) {
         final Collection<URL> validURLs = VermessungRissEditor.getCorrespondingURLs(
-                type,
+                host,
                 gemarkung,
                 flur,
                 schluessel,
@@ -208,7 +208,7 @@ public class VermessungRissReportScriptlet extends JRDefaultScriptlet {
                 }
             }
         } catch (IOException ex) {
-            LOG.error("Could not load associated image. Host: '" + type + "', schluessel: '" + schluessel
+            LOG.error("Could not load associated image. Host: '" + host + "', schluessel: '" + schluessel
                         + "', gemarkung: '" + gemarkung + "', flur: '" + flur + "', blatt: '" + blatt + "'.",
                 ex);
         } finally {
