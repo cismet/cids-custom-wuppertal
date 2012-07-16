@@ -86,6 +86,8 @@ import javax.swing.text.html.StyleSheet;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.alkis.AlkisSOAPWorkerService;
 import de.cismet.cids.custom.utils.alkis.SOAPAccessProvider;
@@ -1201,9 +1203,16 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      */
     private void hlBestandsnachweisNrwPdfActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlBestandsnachweisNrwPdfActionPerformed
         if (!demoMode) {
-            downloadProduct(hlBestandsnachweisNrwPdf.getText(),
-                AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_NRW_PDF,
-                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW);
+            try {
+                if (BillingPopup.doBilling("benw", "no.yet", (Geometry)null, new ProductGroupAmount("ea", 1))) {
+                    downloadProduct(hlBestandsnachweisNrwPdf.getText(),
+                        AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_NRW_PDF,
+                        PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW);
+                }
+            } catch (Exception e) {
+                log.error("Error when trying to produce a alkis product", e);
+                // Hier noch ein Fehlerdialog
+            }
         } else {
             BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL + "bestandsnachweis_nrw.pdf");
         }
@@ -1339,9 +1348,16 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      */
     private void hlBestandsnachweisKomPdfActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlBestandsnachweisKomPdfActionPerformed
         if (!demoMode) {
-            downloadProduct(hlBestandsnachweisKomPdf.getText(),
-                AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_PDF,
-                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM);
+            try {
+                if (BillingPopup.doBilling("bekom", "no.yet", (Geometry)null, new ProductGroupAmount("ea", 1))) {
+                    downloadProduct(hlBestandsnachweisKomPdf.getText(),
+                        AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_PDF,
+                        PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM);
+                }
+            } catch (Exception e) {
+                log.error("Error when trying to produce a alkis product", e);
+                // Hier noch ein Fehlerdialog
+            }
         } else {
             BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL + "bestandsnachweis_kommunal.pdf");
         }
@@ -1353,9 +1369,16 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      * @param  evt  DOCUMENT ME!
      */
     private void hlGrundstuecksnachweisNrwPdfActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlGrundstuecksnachweisNrwPdfActionPerformed
-        downloadProduct(hlGrundstuecksnachweisNrwPdf.getText(),
-            AlkisUtils.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_PDF,
-            PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW);
+        try {
+            if (BillingPopup.doBilling("grnw", "no.yet", (Geometry)null, new ProductGroupAmount("ea", 1))) {
+                downloadProduct(hlGrundstuecksnachweisNrwPdf.getText(),
+                    AlkisUtils.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_PDF,
+                    PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW);
+            }
+        } catch (Exception e) {
+            log.error("Error when trying to produce a alkis product", e);
+            // Hier noch ein Fehlerdialog
+        }
     }                                                                                                //GEN-LAST:event_hlGrundstuecksnachweisNrwPdfActionPerformed
 
     /**

@@ -45,6 +45,8 @@ import javax.swing.table.TableColumn;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -378,10 +380,24 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
      * @param  evt  DOCUMENT ME!
      */
     private void jxlFlurstuecksnachweisActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlFlurstuecksnachweisActionPerformed
-        downloadEinzelnachweisProduct(jxlFlurstuecksnachweis.getText(),
-            AlkisUtils.PRODUCTS.FLURSTUECKSNACHWEIS_PDF,
-            PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS);
-    }                                                                                          //GEN-LAST:event_jxlFlurstuecksnachweisActionPerformed
+        try {
+            int stueck = 0;
+            for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
+                if (cidsBeanWrapper.isSelected()) {
+                    stueck++;
+                }
+            }
+
+            if (BillingPopup.doBilling("fsnw", "no.yet", (Geometry)null, new ProductGroupAmount("ea", stueck))) {
+                downloadEinzelnachweisProduct(jxlFlurstuecksnachweis.getText(),
+                    AlkisUtils.PRODUCTS.FLURSTUECKSNACHWEIS_PDF,
+                    PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS);
+            }
+        } catch (Exception e) {
+            LOG.error("Error when trying to produce a alkis product", e);
+            // Hier noch ein Fehlerdialog
+        }
+    } //GEN-LAST:event_jxlFlurstuecksnachweisActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -389,10 +405,24 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
      * @param  evt  DOCUMENT ME!
      */
     private void jxlNachweisNRWActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlNachweisNRWActionPerformed
-        downloadEinzelnachweisProduct(jxlNachweisNRW.getText(),
-            AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF,
-            PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW);
-    }                                                                                  //GEN-LAST:event_jxlNachweisNRWActionPerformed
+        try {
+            int stueck = 0;
+            for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
+                if (cidsBeanWrapper.isSelected()) {
+                    stueck++;
+                }
+            }
+
+            if (BillingPopup.doBilling("fsuenw", "no.yet", (Geometry)null, new ProductGroupAmount("ea", stueck))) {
+                downloadEinzelnachweisProduct(jxlNachweisNRW.getText(),
+                    AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF,
+                    PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW);
+            }
+        } catch (Exception e) {
+            LOG.error("Error when trying to produce a alkis product", e);
+            // Hier noch ein Fehlerdialog
+        }
+    } //GEN-LAST:event_jxlNachweisNRWActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -400,10 +430,24 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
      * @param  evt  DOCUMENT ME!
      */
     private void jxlNachweisKommunalActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlNachweisKommunalActionPerformed
-        downloadEinzelnachweisProduct(jxlNachweisKommunal.getText(),
-            AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF,
-            PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM);
-    }                                                                                       //GEN-LAST:event_jxlNachweisKommunalActionPerformed
+        try {
+            int stueck = 0;
+            for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
+                if (cidsBeanWrapper.isSelected()) {
+                    stueck++;
+                }
+            }
+
+            if (BillingPopup.doBilling("fsuekom", "no.yet", (Geometry)null, new ProductGroupAmount("ea", stueck))) {
+                downloadEinzelnachweisProduct(jxlNachweisKommunal.getText(),
+                    AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF,
+                    PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM);
+            }
+        } catch (Exception e) {
+            LOG.error("Error when trying to produce a alkis product", e);
+            // Hier noch ein Fehlerdialog
+        }
+    } //GEN-LAST:event_jxlNachweisKommunalActionPerformed
 
     /**
      * DOCUMENT ME!

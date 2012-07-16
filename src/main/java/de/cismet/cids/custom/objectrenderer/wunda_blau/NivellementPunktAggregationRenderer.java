@@ -52,6 +52,8 @@ import javax.swing.table.TableModel;
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -354,6 +356,26 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
             return;
         }
 
+        try {
+            if (BillingPopup.doBilling(
+                            "nivppdf",
+                            "no.yet",
+                            (Geometry)null,
+                            new ProductGroupAmount("ea", selectedNivellementPunkte.size()))) {
+                downloadReport(selectedNivellementPunkte);
+            }
+        } catch (Exception e) {
+            LOG.error("Error when trying to produce a alkis product", e);
+            // Hier noch ein Fehlerdialog
+        }
+    } //GEN-LAST:event_btnGenerateReportActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  selectedNivellementPunkte  DOCUMENT ME!
+     */
+    private void downloadReport(final Collection<CidsBean> selectedNivellementPunkte) {
         final Runnable runnable = new Runnable() {
 
                 @Override
@@ -405,7 +427,7 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
             };
 
         CismetThreadPool.execute(runnable);
-    } //GEN-LAST:event_btnGenerateReportActionPerformed
+    }
 
     /**
      * DOCUMENT ME!

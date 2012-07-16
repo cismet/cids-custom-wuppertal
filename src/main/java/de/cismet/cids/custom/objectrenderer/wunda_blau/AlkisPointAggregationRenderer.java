@@ -79,6 +79,8 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -364,7 +366,67 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                 return;
             }
 
-            CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
+            final int numOfPoints = selectedAlkisPoints.size();
+
+            if (format.equalsIgnoreCase(PDF)) {
+                try {
+                    if (BillingPopup.doBilling(
+                                    "pktlstpdf",
+                                    "no.yet",
+                                    (Geometry)null,
+                                    new ProductGroupAmount("eafifty", (int)Math.floor(numOfPoints / 50f)))) {
+                        CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
+                    }
+                } catch (Exception e) {
+                    log.error("Error when trying to produce a alkis product", e);
+                    // Hier noch ein Fehlerdialog
+                }
+            } else if (format.equalsIgnoreCase(HTML)) {
+                CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
+            } else if (format.equalsIgnoreCase(TEXT)) {
+                try {
+                    final String eapkt;
+                    if (numOfPoints <= 1000) {
+                        eapkt = "eapkt_1000";
+                    } else if (numOfPoints <= 10000) {
+                        eapkt = "eapkt_1001-10000";
+                    } else if (numOfPoints <= 100000) {
+                        eapkt = "eapkt_10001-100000";
+                    } else if (numOfPoints <= 1000000) {
+                        eapkt = "eapkt_100001-1000000";
+                    } else {
+                        eapkt = "eapkt_1000001";
+                    }
+
+                    if (BillingPopup.doBilling(
+                                    "pktlsttxt",
+                                    "no.yet",
+                                    (Geometry)null,
+                                    new ProductGroupAmount(eapkt, numOfPoints))) {
+                        CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
+                    }
+                } catch (Exception e) {
+                    log.error("Error when trying to produce a alkis product", e);
+                    // Hier noch ein Fehlerdialog
+                }
+
+                CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
+            } else if (format.equalsIgnoreCase(APMAP)) {
+                try {
+                    if (BillingPopup.doBilling(
+                                    "appdf",
+                                    "no.yet",
+                                    (Geometry)null,
+                                    new ProductGroupAmount("ea", numOfPoints))) {
+                        CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
+                    }
+                } catch (Exception e) {
+                    log.error("Error when trying to produce a alkis product", e);
+                    // Hier noch ein Fehlerdialog
+                }
+            } else {
+                CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
+            }
         }
     } //GEN-LAST:event_btnCreateActionPerformed
 

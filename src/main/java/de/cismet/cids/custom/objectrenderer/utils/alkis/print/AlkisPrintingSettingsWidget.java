@@ -40,6 +40,9 @@ import javax.swing.JOptionPane;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
+import de.cismet.cids.custom.objectrenderer.wunda_blau.AlkisLandparcelAggregationRenderer;
 import de.cismet.cids.custom.utils.alkis.AlkisProductDescription;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -828,18 +831,144 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                     false);
 
             if (url != null) {
-                if (!DownloadManagerDialog.showAskingForUserTitle(this)) {
-                    return;
-                }
+                try {
+                    final String product;
+                    final String prGroup;
+                    final String dinFormat = selectedProduct.getDinFormat();
+                    final boolean isDinA4 = dinFormat.equals("DINA4 Hochformat")
+                                || dinFormat.equals("DINA4 Querformat");
+                    final boolean isDinA3 = dinFormat.equals("DINA3 Hochformat")
+                                || dinFormat.equals("DINA3 Querformat");
+                    final boolean isDinA2 = dinFormat.equals("DINA2 Hochformat")
+                                || dinFormat.equals("DINA2 Querformat");
+                    final boolean isDinA1 = dinFormat.equals("DINA2 Hochformat")
+                                || dinFormat.equals("DINA1 Querformat");
+                    final boolean isDinA0 = dinFormat.equals("DINA2 Hochformat")
+                                || dinFormat.equals("DINA0 Querformat");
+                    final String clazz = selectedProduct.getClazz();
+                    final boolean isGdbNrwAmtlich = clazz.equals("Gdb-NRW-Amtlich");
+                    final boolean isNrwKommunal = clazz.equals("NRW-Kommunal");
+                    final String type = selectedProduct.getType();
+                    final boolean isLiegenschaftsKarte = type.equals("Liegenschaftskarte, farbig")
+                                || type.equals("Liegenschaftskarte, grau");
+                    final boolean isStadtgrundkarteMKO = type.equals("Stadtgrundkarte m. kom. Erg., farbig")
+                                || type.equals("Stadtgrundkarte m. kom. Erg., grau");
+                    final boolean isSchaetzungskarte = type.equals("Schätzungskarte, farbig")
+                                || type.equals("Schätzungskarte, grau");
+                    final boolean isAmtlicheBasiskarte = type.equals("Amtliche Basiskarte (farbig)")
+                                || type.equals("Amtliche Basiskarte, grau");
+                    final boolean isStadtgrundkarte = type.equals("Stadtgrundkarte, farbig")
+                                || type.equals("Stadtgrundkarte, grau");
 
-                final HttpDownload download = new HttpDownload(
-                        url,
-                        "",
-                        DownloadManagerDialog.getJobname(),
-                        "ALKIS-Druck",
-                        landParcelCode.replaceAll("\\/", "-"),
-                        ".pdf");
-                DownloadManager.instance().add(download);
+                    if (isGdbNrwAmtlich && isLiegenschaftsKarte && isDinA4) {
+                        product = "fknw4";
+                        prGroup = "eakarte_a3";
+                    } else if (isGdbNrwAmtlich && isLiegenschaftsKarte && isDinA3) {
+                        product = "fknw3";
+                        prGroup = "eakarte_a3";
+                    } else if (isGdbNrwAmtlich && isLiegenschaftsKarte && isDinA2) {
+                        product = "fknw2";
+                        prGroup = "eakarte_a2-a0";
+                    } else if (isGdbNrwAmtlich && isLiegenschaftsKarte && isDinA1) {
+                        product = "fknw1";
+                        prGroup = "eakarte_a2-a0";
+                    } else if (isGdbNrwAmtlich && isLiegenschaftsKarte && isDinA0) {
+                        product = "fknw0";
+                        prGroup = "eakarte_a2-a0";
+                    } else if (isNrwKommunal && isStadtgrundkarteMKO && isDinA4) {
+                        product = "skmekom4";
+                        prGroup = "eakarte_a3";
+                    } else if (isNrwKommunal && isStadtgrundkarteMKO && isDinA3) {
+                        product = "skmekom3";
+                        prGroup = "eakarte_a3";
+                    } else if (isNrwKommunal && isStadtgrundkarteMKO && isDinA2) {
+                        product = "skmekom2";
+                        prGroup = "eakarte_a2-a0";
+                    } else if (isNrwKommunal && isStadtgrundkarteMKO && isDinA1) {
+                        product = "skmekom1";
+                        prGroup = "eakarte_a2-a0";
+                    } else if (isNrwKommunal && isStadtgrundkarteMKO && isDinA0) {
+                        product = "skmekom0";
+                        prGroup = "eakarte_a2-a0";
+                    } else if (isGdbNrwAmtlich && isSchaetzungskarte && isDinA4) {
+                        product = "schknw4";
+                        prGroup = "eakarte_a3";
+                    } else if (isGdbNrwAmtlich && isSchaetzungskarte && isDinA3) {
+                        product = "schknw3";
+                        prGroup = "eakarte_a3";
+                    } else if (isGdbNrwAmtlich && isSchaetzungskarte && isDinA2) {
+                        product = "schknw2";
+                        prGroup = "eakarte_a2-a0";
+                    } else if (isGdbNrwAmtlich && isSchaetzungskarte && isDinA1) {
+                        product = "schknw1";
+                        prGroup = "eakarte_a2-a0";
+                    } else if (isGdbNrwAmtlich && isSchaetzungskarte && isDinA0) {
+                        product = "schknw0";
+                        prGroup = "eakarte_a2-a0";
+                    } else if (isGdbNrwAmtlich && isAmtlicheBasiskarte && isDinA4) {
+                        product = "abknw4";
+                        prGroup = "eakarte_a3";
+                    } else if (isGdbNrwAmtlich && isAmtlicheBasiskarte && isDinA3) {
+                        product = "abknw3";
+                        prGroup = "eakarte_a3";
+                    } else if (isGdbNrwAmtlich && isAmtlicheBasiskarte && isDinA2) {
+                        product = "abknw2";
+                        prGroup = "eakarte_a2-a0";
+                    } else if (isGdbNrwAmtlich && isAmtlicheBasiskarte && isDinA1) {
+                        product = "abknw1";
+                        prGroup = "eakarte_a2-a0";
+                    } else if (isGdbNrwAmtlich && isAmtlicheBasiskarte && isDinA0) {
+                        product = "abknw0";
+                        prGroup = "eakarte_a2-a0";
+                    } else if (isNrwKommunal && isStadtgrundkarte && isDinA4) {
+                        product = "skkom4";
+                        prGroup = "eakarte_a3";
+                    } else if (isNrwKommunal && isStadtgrundkarte && isDinA3) {
+                        product = "skkom3";
+                        prGroup = "eakarte_a3";
+                    } else if (isNrwKommunal && isStadtgrundkarte && isDinA2) {
+                        product = "skkom2";
+                        prGroup = "eakarte_a2-a0";
+                    } else if (isNrwKommunal && isStadtgrundkarte && isDinA1) {
+                        product = "skkom1";
+                        prGroup = "eakarte_a2-a0";
+                    } else if (isNrwKommunal && isStadtgrundkarte && isDinA0) {
+                        product = "skkom0";
+                        prGroup = "eakarte_a2-a0";
+                    } else {
+                        product = null;
+                        prGroup = null;
+                    }
+
+                    final HttpDownload download = new HttpDownload(
+                            url,
+                            "",
+                            DownloadManagerDialog.getJobname(),
+                            "ALKIS-Druck",
+                            landParcelCode.replaceAll("\\/", "-"),
+                            ".pdf");
+                    if ((product != null) && (prGroup != null)) {
+                        if (BillingPopup.doBilling(
+                                        product,
+                                        url.toString(),
+                                        (Geometry)null,
+                                        new ProductGroupAmount(prGroup, 1))) {
+                            if (!DownloadManagerDialog.showAskingForUserTitle(this)) {
+                                return;
+                            }
+                            DownloadManager.instance().add(download);
+                        }
+                    } else {
+                        log.info("no product or productgroup is matching");
+                        if (!DownloadManagerDialog.showAskingForUserTitle(this)) {
+                            return;
+                        }
+                        DownloadManager.instance().add(download);
+                    }
+                } catch (Exception e) {
+                    log.error("Error when trying to produce a alkis product", e);
+                    // Hier noch ein Fehlerdialog
+                }
             }
         } catch (Exception e) {
             ObjectRendererUtils.showExceptionWindowToUser(

@@ -64,6 +64,9 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -1270,29 +1273,51 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      */
     private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
         if (currentDocument != NO_SELECTION) {
-            CismetThreadPool.execute(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        if (DownloadManagerDialog.showAskingForUserTitle(VermessungRissEditor.this)) {
-                            final String url = documentURLs[currentDocument].toExternalForm();
-                            final String filename = url.substring(url.lastIndexOf("/") + 1);
-
-                            DownloadManager.instance()
-                                    .add(
-                                        new HttpDownload(
-                                            documentURLs[currentDocument],
-                                            "",
-                                            DownloadManagerDialog.getJobname(),
-                                            (currentDocument == DOCUMENT_BILD) ? "Vermessungsriss"
-                                                                               : "Grenzniederschrift",
-                                            filename.substring(0, filename.lastIndexOf(".")),
-                                            filename.substring(filename.lastIndexOf("."))));
-                        }
+            final String url = documentURLs[currentDocument].toExternalForm();
+            try {
+                if (currentDocument == DOCUMENT_BILD) {
+                    if (BillingPopup.doBilling("vrpdf", url, (Geometry)null, new ProductGroupAmount("ea", 1))) {
+                        downloadProduct(url, true);
                     }
-                });
+                } else {
+                    if (BillingPopup.doBilling("doklapdf", url, (Geometry)null, new ProductGroupAmount("ea", 1))) {
+                        downloadProduct(url, true);
+                    }
+                }
+            } catch (Exception e) {
+                LOG.error("Error when trying to produce a alkis product", e);
+                // Hier noch ein Fehlerdialog
+            }
         }
-    } //GEN-LAST:event_btnOpenActionPerformed
+    }                                                                           //GEN-LAST:event_btnOpenActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  url                DOCUMENT ME!
+     * @param  isVermessungsriss  DOCUMENT ME!
+     */
+    private void downloadProduct(final String url, final boolean isVermessungsriss) {
+        CismetThreadPool.execute(new Runnable() {
+
+                @Override
+                public void run() {
+                    if (DownloadManagerDialog.showAskingForUserTitle(VermessungRissEditor.this)) {
+                        final String filename = url.substring(url.lastIndexOf("/") + 1);
+
+                        DownloadManager.instance()
+                                .add(
+                                    new HttpDownload(
+                                        documentURLs[currentDocument],
+                                        "",
+                                        DownloadManagerDialog.getJobname(),
+                                        (isVermessungsriss) ? "Vermessungsriss" : "Grenzniederschrift",
+                                        filename.substring(0, filename.lastIndexOf(".")),
+                                        filename.substring(filename.lastIndexOf("."))));
+                    }
+                }
+            });
+    }
 
     /**
      * DOCUMENT ME!

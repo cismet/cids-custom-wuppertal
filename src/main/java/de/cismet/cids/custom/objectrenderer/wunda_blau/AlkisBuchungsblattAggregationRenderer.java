@@ -46,6 +46,8 @@ import javax.swing.table.TableColumn;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -335,10 +337,24 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
      * @param  evt  DOCUMENT ME!
      */
     private void jxlBestandsnachweisNRWActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlBestandsnachweisNRWActionPerformed
-        downloadEinzelnachweisProduct(jxlBestandsnachweisNRW.getText(),
-            AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_NRW_PDF,
-            PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW);
-    }                                                                                          //GEN-LAST:event_jxlBestandsnachweisNRWActionPerformed
+        try {
+            int stueck = 0;
+            for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
+                if (cidsBeanWrapper.isSelected()) {
+                    stueck++;
+                }
+            }
+
+            if (BillingPopup.doBilling("benw", "no.yet", (Geometry)null, new ProductGroupAmount("ea", stueck))) {
+                downloadEinzelnachweisProduct(jxlBestandsnachweisNRW.getText(),
+                    AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_NRW_PDF,
+                    PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW);
+            }
+        } catch (Exception e) {
+            LOG.error("Error when trying to produce a alkis product", e);
+            // Hier noch ein Fehlerdialog
+        }
+    } //GEN-LAST:event_jxlBestandsnachweisNRWActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -346,10 +362,24 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
      * @param  evt  DOCUMENT ME!
      */
     private void jxlBestandsnachweisKommunalActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlBestandsnachweisKommunalActionPerformed
-        downloadEinzelnachweisProduct(jxlBestandsnachweisKommunal.getText(),
-            AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_PDF,
-            PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM);
-    }                                                                                               //GEN-LAST:event_jxlBestandsnachweisKommunalActionPerformed
+        try {
+            int stueck = 0;
+            for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
+                if (cidsBeanWrapper.isSelected()) {
+                    stueck++;
+                }
+            }
+
+            if (BillingPopup.doBilling("bekom", "no.yet", (Geometry)null, new ProductGroupAmount("ea", stueck))) {
+                downloadEinzelnachweisProduct(jxlBestandsnachweisKommunal.getText(),
+                    AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_PDF,
+                    PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM);
+            }
+        } catch (Exception e) {
+            LOG.error("Error when trying to produce a alkis product", e);
+            // Hier noch ein Fehlerdialog
+        }
+    } //GEN-LAST:event_jxlBestandsnachweisKommunalActionPerformed
 
     /**
      * DOCUMENT ME!

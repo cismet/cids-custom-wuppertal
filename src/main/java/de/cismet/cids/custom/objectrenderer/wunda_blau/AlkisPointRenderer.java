@@ -22,6 +22,8 @@ import com.sun.media.jai.codec.ImageCodec;
 import com.sun.media.jai.codec.ImageDecoder;
 import com.sun.media.jai.codec.TIFFDecodeParam;
 
+import com.vividsolutions.jts.geom.Geometry;
+
 import de.aedsicad.aaaweb.service.alkis.info.ALKISInfoServices;
 import de.aedsicad.aaaweb.service.util.Point;
 import de.aedsicad.aaaweb.service.util.PointLocation;
@@ -78,6 +80,8 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.alkis.AlkisSOAPWorkerService;
 import de.cismet.cids.custom.utils.alkis.SOAPAccessProvider;
@@ -2068,7 +2072,14 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      * @param  evt  DOCUMENT ME!
      */
     private void hlPunktlistePdfActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlPunktlistePdfActionPerformed
-        downloadProduct(AlkisUtils.PRODUCTS.PUNKTLISTE_PDF);
+        try {
+            if (BillingPopup.doBilling("pktlstpdf", "no.yet", (Geometry)null, new ProductGroupAmount("eafifty", 1))) {
+                downloadProduct(AlkisUtils.PRODUCTS.PUNKTLISTE_PDF);
+            }
+        } catch (Exception e) {
+            log.error("Error when trying to produce a alkis product", e);
+            // Hier noch ein Fehlerdialog
+        }
     }                                                                                   //GEN-LAST:event_hlPunktlistePdfActionPerformed
 
     /**
@@ -2103,7 +2114,18 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      * @param  evt  DOCUMENT ME!
      */
     private void hlPunktlisteTxtActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlPunktlisteTxtActionPerformed
-        downloadProduct(AlkisUtils.PRODUCTS.PUNKTLISTE_TXT);
+        try {
+            if (BillingPopup.doBilling(
+                            "pktlsttxt",
+                            "no.yet",
+                            (Geometry)null,
+                            new ProductGroupAmount("eapkt_1000", 1))) {
+                downloadProduct(AlkisUtils.PRODUCTS.PUNKTLISTE_TXT);
+            }
+        } catch (Exception e) {
+            log.error("Error when trying to produce a alkis product", e);
+            // Hier noch ein Fehlerdialog
+        }
     }                                                                                   //GEN-LAST:event_hlPunktlisteTxtActionPerformed
 
     /**
@@ -2148,24 +2170,35 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                 return;
             }
 
-            CismetThreadPool.execute(new Runnable() {
+            try {
+                if (BillingPopup.doBilling(
+                                "appdf",
+                                url.toString(),
+                                (Geometry)null,
+                                new ProductGroupAmount("ea", 1))) {
+                    CismetThreadPool.execute(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        if (DownloadManagerDialog.showAskingForUserTitle(AlkisPointRenderer.this)) {
-                            final String filename = urlOfAPMap.substring(urlOfAPMap.lastIndexOf("/") + 1);
-                            DownloadManager.instance()
-                                    .add(
-                                        new HttpDownload(
-                                            url,
-                                            "",
-                                            DownloadManagerDialog.getJobname(),
-                                            "AP-Karte",
-                                            filename.substring(0, filename.lastIndexOf(".")),
-                                            filename.substring(filename.lastIndexOf("."))));
-                        }
-                    }
-                });
+                            @Override
+                            public void run() {
+                                if (DownloadManagerDialog.showAskingForUserTitle(AlkisPointRenderer.this)) {
+                                    final String filename = urlOfAPMap.substring(urlOfAPMap.lastIndexOf("/") + 1);
+                                    DownloadManager.instance()
+                                            .add(
+                                                new HttpDownload(
+                                                    url,
+                                                    "",
+                                                    DownloadManagerDialog.getJobname(),
+                                                    "AP-Karte",
+                                                    filename.substring(0, filename.lastIndexOf(".")),
+                                                    filename.substring(filename.lastIndexOf("."))));
+                                }
+                            }
+                        });
+                }
+            } catch (Exception e) {
+                log.error("Error when trying to produce a alkis product", e);
+                // Hier noch ein Fehlerdialog
+            }
         }
     } //GEN-LAST:event_btnOpenActionPerformed
 

@@ -31,24 +31,10 @@ import java.awt.EventQueue;
 import java.awt.Image;
 import java.awt.geom.Rectangle2D;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.ListCellRenderer;
-import javax.swing.RowSorter;
-import javax.swing.SortOrder;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -60,6 +46,8 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.PrintingWaitDialog;
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -397,12 +385,43 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
         final String type;
         if (typeObj instanceof String) {
             type = (String)typeObj;
+
+            try {
+                if (type.equalsIgnoreCase(AlkisConstants.COMMONS.VERMESSUNG_TYPE_VERMESSUNGSRISS)) {
+                    if (BillingPopup.doBilling(
+                                    "vrpdf",
+                                    "no.yet",
+                                    (Geometry)null,
+                                    new ProductGroupAmount("ea", selectedVermessungsrisse.size()))) {
+                        downloadProducts(selectedVermessungsrisse, type);
+                    }
+                } else if (type.equalsIgnoreCase(AlkisConstants.COMMONS.VERMESSUNG_TYPE_ERGAENZENDEDOKUMENTE)) {
+                    if (BillingPopup.doBilling(
+                                    "doklapdf",
+                                    "no.yet",
+                                    (Geometry)null,
+                                    new ProductGroupAmount("ea", selectedVermessungsrisse.size()))) {
+                        downloadProducts(selectedVermessungsrisse, type);
+                    }
+                }
+            } catch (Exception e) {
+                LOG.error("Error when trying to produce a alkis product", e);
+                // Hier noch ein Fehlerdialog
+            }
         } else {
             // TODO: User feedback?!
             LOG.info("Unknown type '" + typeObj + "' encountered. Skipping report generation.");
             return;
         }
+    } //GEN-LAST:event_btnGenerateReportActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  selectedVermessungsrisse  DOCUMENT ME!
+     * @param  type                      DOCUMENT ME!
+     */
+    private void downloadProducts(final Collection<CidsBean> selectedVermessungsrisse, final String type) {
         final Runnable runnable = new Runnable() {
 
                 @Override
@@ -542,7 +561,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             };
 
         CismetThreadPool.execute(runnable);
-    } //GEN-LAST:event_btnGenerateReportActionPerformed
+    }
 
     /**
      * DOCUMENT ME!

@@ -11,6 +11,8 @@ import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaObject;
 
+import com.vividsolutions.jts.geom.Geometry;
+
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -50,6 +52,8 @@ import javax.swing.border.EmptyBorder;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.NivellementPunktAggregationRenderer;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 
@@ -985,6 +989,24 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
      * @param  evt  DOCUMENT ME!
      */
     private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
+        try {
+            if (BillingPopup.doBilling(
+                            "nivppdf",
+                            "no.yet",
+                            (Geometry)null,
+                            new ProductGroupAmount("ea", 1))) {
+                downloadReport();
+            }
+        } catch (Exception e) {
+            LOG.error("Error when trying to produce a alkis product", e);
+            // Hier noch ein Fehlerdialog
+        }
+    }                                                                             //GEN-LAST:event_btnReportActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void downloadReport() {
         final Runnable runnable = new Runnable() {
 
                 @Override
@@ -1034,7 +1056,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
             };
 
         CismetThreadPool.execute(runnable);
-    } //GEN-LAST:event_btnReportActionPerformed
+    }
 
     /**
      * DOCUMENT ME!
