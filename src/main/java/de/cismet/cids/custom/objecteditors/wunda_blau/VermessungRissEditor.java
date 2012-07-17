@@ -1270,12 +1270,13 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      */
     private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
         if (currentDocument != NO_SELECTION) {
+            final String url = documentURLs[currentDocument].toExternalForm();
+
             CismetThreadPool.execute(new Runnable() {
 
                     @Override
                     public void run() {
                         if (DownloadManagerDialog.showAskingForUserTitle(VermessungRissEditor.this)) {
-                            final String url = documentURLs[currentDocument].toExternalForm();
                             final String filename = url.substring(url.lastIndexOf("/") + 1);
 
                             DownloadManager.instance()
@@ -1285,7 +1286,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                                             "",
                                             DownloadManagerDialog.getJobname(),
                                             (currentDocument == DOCUMENT_BILD) ? "Vermessungsriss"
-                                                                               : "Grenzniederschrift",
+                                                                               : "Ergänzende Dokumente",
                                             filename.substring(0, filename.lastIndexOf(".")),
                                             filename.substring(filename.lastIndexOf("."))));
                         }
@@ -1476,11 +1477,21 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         }
     } //GEN-LAST:event_cmbGeometrieStatusActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cidsBean  DOCUMENT ME!
+     */
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         bindingGroup.unbind();
@@ -1509,6 +1520,9 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         EventQueue.invokeLater(new RefreshDocumentWorker());
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
         bindingGroup.unbind();
@@ -1522,35 +1536,70 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getTitleComponent() {
         return pnlTitle;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getFooterComponent() {
         return strFooter;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getTitleBorder() {
         return new EmptyBorder(10, 10, 10, 10);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getFooterBorder() {
         return new EmptyBorder(5, 5, 5, 5);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getCenterrBorder() {
         return new EmptyBorder(0, 5, 0, 5);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  event  DOCUMENT ME!
+     */
     @Override
     public void editorClosed(final EditorClosedEvent event) {
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public boolean prepareForSave() {
         boolean save = true;
@@ -2260,6 +2309,11 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  e  DOCUMENT ME!
+         */
         @Override
         public void windowDeactivated(final WindowEvent e) {
             super.windowDeactivated(e);
@@ -2267,6 +2321,11 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             btnCombineGeometries.setEnabled(lstLandparcels.getModel().getSize() > 0);
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  e  DOCUMENT ME!
+         */
         @Override
         public void windowClosed(final WindowEvent e) {
             super.windowClosed(e);
@@ -2284,6 +2343,17 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   list          DOCUMENT ME!
+         * @param   value         DOCUMENT ME!
+         * @param   index         DOCUMENT ME!
+         * @param   isSelected    DOCUMENT ME!
+         * @param   cellHasFocus  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public Component getListCellRendererComponent(final JList list,
                 final Object value,
@@ -2392,6 +2462,17 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   list          DOCUMENT ME!
+         * @param   value         DOCUMENT ME!
+         * @param   index         DOCUMENT ME!
+         * @param   isSelected    DOCUMENT ME!
+         * @param   cellHasFocus  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public Component getListCellRendererComponent(final JList list,
                 final Object value,

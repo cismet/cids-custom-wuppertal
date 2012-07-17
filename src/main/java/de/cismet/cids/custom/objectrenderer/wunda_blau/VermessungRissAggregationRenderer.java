@@ -30,6 +30,8 @@ import java.awt.EventQueue;
 import java.awt.Image;
 import java.awt.geom.Rectangle2D;
 
+import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -54,6 +56,7 @@ import javax.swing.table.TableRowSorter;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
+import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungRissEditor;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.PrintingWaitDialog;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
@@ -96,7 +99,8 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
     private static final String PARAMETER_PROJECTNAME = "PROJECTNAME";
     private static final String PARAMETER_TYPE = "TYPE";
     private static final String PARAMETER_STARTINGPAGES = "STARTINGPAGES";
-    private static final String[] TYPES = new String[] { "Vermessungsriss", "Ergänzende Dokumente" };
+    private static final String TYPE_VERMESSUNGSRISSE = "Vermessungsrisse";
+    private static final String TYPE_COMPLEMENTARYDOCUMENTS = "Ergänzende Dokumente";
 
     // Spaltenueberschriften
     private static final String[] AGR_COMLUMN_NAMES = new String[] {
@@ -328,8 +332,6 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
         pnlReport.add(btnGenerateReport, gridBagConstraints);
-
-        cmbType.setModel(new DefaultComboBoxModel(TYPES));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
@@ -391,18 +393,32 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
         final String type;
         if (typeObj instanceof String) {
             type = (String)typeObj;
+
+            if (type.equalsIgnoreCase(TYPE_VERMESSUNGSRISSE)) {
+                downloadProducts(selectedVermessungsrisse, type, AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER);
+            } else if (type.equalsIgnoreCase(TYPE_COMPLEMENTARYDOCUMENTS)) {
+                downloadProducts(
+                    selectedVermessungsrisse,
+                    type,
+                    AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN);
+            }
         } else {
             // TODO: User feedback?!
             LOG.info("Unknown type '" + typeObj + "' encountered. Skipping report generation.");
             return;
         }
-        final String host;
-        if (TYPES[0].equalsIgnoreCase(type)) {
-            host = AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER;
-        } else {
-            host = AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN;
-        }
+    } //GEN-LAST:event_btnGenerateReportActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  selectedVermessungsrisse  DOCUMENT ME!
+     * @param  type                      DOCUMENT ME!
+     * @param  host                      DOCUMENT ME!
+     */
+    private void downloadProducts(final Collection<CidsBean> selectedVermessungsrisse,
+            final String type,
+            final String host) {
         final Runnable runnable = new Runnable() {
 
                 @Override
@@ -455,7 +471,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         }
 
                         final StringBuilder description;
-                        if (TYPES[0].equalsIgnoreCase(type)) {
+                        if (TYPE_VERMESSUNGSRISSE.equalsIgnoreCase(type)) {
                             description = new StringBuilder("Vermessungsriss ");
                         } else {
                             description = new StringBuilder("Ergänzende Dokumente zum Vermessungsriss ");
@@ -542,7 +558,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             };
 
         CismetThreadPool.execute(runnable);
-    } //GEN-LAST:event_btnGenerateReportActionPerformed
+    }
 
     /**
      * DOCUMENT ME!
@@ -596,11 +612,21 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
         return result;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Collection<CidsBean> getCidsBeans() {
         return cidsBeans;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  beans  DOCUMENT ME!
+     */
     @Override
     public void setCidsBeans(final Collection<CidsBean> beans) {
         if (beans instanceof List) {
@@ -609,9 +635,19 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
 
             initMap();
 
+            boolean allowVermessungsrisseReport = false;
+            boolean allowErgaenzendeDokumenteReport = false;
+
             final List<Object[]> tableData = new ArrayList<Object[]>();
-            for (final CidsBean punktBean : cidsBeans) {
-                tableData.add(cidsBean2Row(punktBean));
+            for (final CidsBean vermessungsrissBean : cidsBeans) {
+                tableData.add(cidsBean2Row(vermessungsrissBean));
+
+                if (!allowVermessungsrisseReport) {
+                    allowVermessungsrisseReport = hasVermessungsriss(vermessungsrissBean);
+                }
+                if (!allowErgaenzendeDokumenteReport) {
+                    allowErgaenzendeDokumenteReport = hasErgaenzendeDokumente(vermessungsrissBean);
+                }
             }
 
             tableModel = new PointTableModel(tableData.toArray(new Object[tableData.size()][]), AGR_COMLUMN_NAMES);
@@ -629,20 +665,48 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             sortKeys.add(new RowSorter.SortKey(3, SortOrder.ASCENDING));
             sortKeys.add(new RowSorter.SortKey(4, SortOrder.DESCENDING));
             tableSorter.setSortKeys(sortKeys);
+
+            if (allowErgaenzendeDokumenteReport && allowVermessungsrisseReport) {
+                cmbType.setModel(new DefaultComboBoxModel(
+                        new String[] { TYPE_VERMESSUNGSRISSE, TYPE_COMPLEMENTARYDOCUMENTS }));
+            } else if (allowErgaenzendeDokumenteReport) {
+                cmbType.setModel(new DefaultComboBoxModel(new String[] { TYPE_COMPLEMENTARYDOCUMENTS }));
+            } else if (allowVermessungsrisseReport) {
+                cmbType.setModel(new DefaultComboBoxModel(new String[] { TYPE_VERMESSUNGSRISSE }));
+            } else {
+                cmbType.setEnabled(false);
+                btnGenerateReport.setEnabled(false);
+                txtJobnumber.setEnabled(false);
+                txtProjectname.setEnabled(false);
+            }
         }
+
         setTitle(null);
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
         mappingComponent.dispose();
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getTitle() {
         return title;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  title  DOCUMENT ME!
+     */
     @Override
     public void setTitle(final String title) {
         String desc = "Vermessungsrisse";
@@ -744,6 +808,48 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
     /**
      * DOCUMENT ME!
      *
+     * @param   cidsBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static boolean hasVermessungsriss(final CidsBean cidsBean) {
+        try {
+            return VermessungRissReportScriptlet.isImageAvailable(
+                    AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER,
+                    (String)cidsBean.getProperty("schluessel"),
+                    (Integer)cidsBean.getProperty("gemarkung.id"),
+                    (String)cidsBean.getProperty("flur"),
+                    (String)cidsBean.getProperty("blatt"));
+        } catch (final Exception ex) {
+            LOG.info("Could not determine if CidsBean has measurement sketches.", ex);
+            return false;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   cidsBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static boolean hasErgaenzendeDokumente(final CidsBean cidsBean) {
+        try {
+            return VermessungRissReportScriptlet.isImageAvailable(
+                    AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN,
+                    (String)cidsBean.getProperty("schluessel"),
+                    (Integer)cidsBean.getProperty("gemarkung.id"),
+                    (String)cidsBean.getProperty("flur"),
+                    (String)cidsBean.getProperty("blatt"));
+        } catch (final Exception ex) {
+            LOG.info("Could not determine if CidsBean has measurement sketches.", ex);
+            return false;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param  args  DOCUMENT ME!
      */
     public static void main(final String[] args) {
@@ -796,6 +902,11 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  e  DOCUMENT ME!
+         */
         @Override
         public void valueChanged(final ListSelectionEvent e) {
             if (e.getValueIsAdjusting() || (cidsBeans == null)) {
@@ -858,11 +969,26 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   row     DOCUMENT ME!
+         * @param   column  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public boolean isCellEditable(final int row, final int column) {
             return column == 0;
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   columnIndex  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public Class<?> getColumnClass(final int columnIndex) {
             if (columnIndex == 0) {
