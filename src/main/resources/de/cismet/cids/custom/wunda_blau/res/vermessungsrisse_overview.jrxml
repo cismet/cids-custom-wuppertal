@@ -40,8 +40,8 @@
 	</field>
 	<variable name="HAS_ENTRIES_WO_RASTERDOCUMENTS" class="java.lang.Boolean" calculation="Sum">
 		<variableExpression><![CDATA[Boolean.valueOf($V{HAS_ENTRIES_WO_RASTERDOCUMENTS}.booleanValue()
-    || ($P{TYPE}.equalsIgnoreCase("Vermessungsriss") && !$P{REPORT_SCRIPTLET}.isImageAvailable(de.cismet.cids.custom.utils.alkis.AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER, $F{schluessel}, $F{gemarkung.id}, $F{flur}, $F{blatt}).booleanValue())
-    || (!$P{TYPE}.equalsIgnoreCase("Vermessungsriss") && !$P{REPORT_SCRIPTLET}.isImageAvailable(de.cismet.cids.custom.utils.alkis.AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN, $F{schluessel}, $F{gemarkung.id}, $F{flur}, $F{blatt}).booleanValue())
+    || ($P{TYPE}.toLowerCase().startsWith("vermessungsrisse") && !$P{REPORT_SCRIPTLET}.isImageAvailable(de.cismet.cids.custom.utils.alkis.AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER, $F{schluessel}, $F{gemarkung.id}, $F{flur}, $F{blatt}).booleanValue())
+    || (!$P{TYPE}.toLowerCase().startsWith("vermessungsrisse") && !$P{REPORT_SCRIPTLET}.isImageAvailable(de.cismet.cids.custom.utils.alkis.AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN, $F{schluessel}, $F{gemarkung.id}, $F{flur}, $F{blatt}).booleanValue())
     )]]></variableExpression>
 		<initialValueExpression><![CDATA[Boolean.FALSE]]></initialValueExpression>
 	</variable>
@@ -52,7 +52,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{TYPE}.equalsIgnoreCase("Vermessungsriss") ? "Enthaltene Vermessungsrisse" : "Enthaltene ergänzende Dokumente"]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{TYPE}.toLowerCase().startsWith("vermessungsriss") ? "Enthaltene Vermessungsrisse" : "Enthaltene ergänzende Dokumente"]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="5" y="57" width="545" height="1" forecolor="#C0C0C0"/>
@@ -62,7 +62,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$V{HAS_ENTRIES_WO_RASTERDOCUMENTS}.booleanValue() ? ($P{TYPE}.equalsIgnoreCase("Vermessungsriss") ? "Für die grau hinterlegten Risse sind keine Rasterdokumente verfügbar." : "Zu den grau hinterlegten Rissen sind keine ergänzenden Dokumente verfügbar.") : ""]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{HAS_ENTRIES_WO_RASTERDOCUMENTS}.booleanValue() ? ($P{TYPE}.toLowerCase().startsWith("vermessungsriss") ? "Für die grau hinterlegten Risse sind keine Rasterdokumente verfügbar." : "Zu den grau hinterlegten Rissen sind keine ergänzenden Dokumente verfügbar.") : ""]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="5" y="42" width="545" height="1" forecolor="#C0C0C0"/>
@@ -147,8 +147,8 @@
 		<band height="20">
 			<rectangle>
 				<reportElement x="5" y="1" width="545" height="18" backcolor="#C0C0C0">
-					<printWhenExpression><![CDATA[Boolean.valueOf(($P{TYPE}.equalsIgnoreCase("Vermessungsriss") && !$P{REPORT_SCRIPTLET}.isImageAvailable(de.cismet.cids.custom.utils.alkis.AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER, $F{schluessel}, $F{gemarkung.id}, $F{flur}, $F{blatt}).booleanValue())
-|| (!$P{TYPE}.equalsIgnoreCase("Vermessungsriss") && !$P{REPORT_SCRIPTLET}.isImageAvailable(de.cismet.cids.custom.utils.alkis.AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN, $F{schluessel}, $F{gemarkung.id}, $F{flur}, $F{blatt}).booleanValue()))]]></printWhenExpression>
+					<printWhenExpression><![CDATA[Boolean.valueOf(($P{TYPE}.toLowerCase().startsWith("vermessungsriss") && !$P{REPORT_SCRIPTLET}.isImageAvailable(de.cismet.cids.custom.utils.alkis.AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER, $F{schluessel}, $F{gemarkung.id}, $F{flur}, $F{blatt}).booleanValue())
+|| (!$P{TYPE}.toLowerCase().startsWith("vermessungsriss") && !$P{REPORT_SCRIPTLET}.isImageAvailable(de.cismet.cids.custom.utils.alkis.AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN, $F{schluessel}, $F{gemarkung.id}, $F{flur}, $F{blatt}).booleanValue()))]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.0"/>
@@ -208,8 +208,8 @@
 			</line>
 			<textField isBlankWhenNull="true">
 				<reportElement x="484" y="0" width="66" height="20">
-					<printWhenExpression><![CDATA[Boolean.valueOf(($P{TYPE}.equalsIgnoreCase("Vermessungsriss") && $P{REPORT_SCRIPTLET}.isImageAvailable(de.cismet.cids.custom.utils.alkis.AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER, $F{schluessel}, $F{gemarkung.id}, $F{flur}, $F{blatt}).booleanValue())
-|| (!$P{TYPE}.equalsIgnoreCase("Vermessungsriss") && $P{REPORT_SCRIPTLET}.isImageAvailable(de.cismet.cids.custom.utils.alkis.AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN, $F{schluessel}, $F{gemarkung.id}, $F{flur}, $F{blatt}).booleanValue()))]]></printWhenExpression>
+					<printWhenExpression><![CDATA[Boolean.valueOf(($P{TYPE}.toLowerCase().startsWith("vermessungsriss") && $P{REPORT_SCRIPTLET}.isImageAvailable(de.cismet.cids.custom.utils.alkis.AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER, $F{schluessel}, $F{gemarkung.id}, $F{flur}, $F{blatt}).booleanValue())
+|| (!$P{TYPE}.toLowerCase().startsWith("vermessungsriss") && $P{REPORT_SCRIPTLET}.isImageAvailable(de.cismet.cids.custom.utils.alkis.AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN, $F{schluessel}, $F{gemarkung.id}, $F{flur}, $F{blatt}).booleanValue()))]]></printWhenExpression>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
 					<font isBold="false"/>

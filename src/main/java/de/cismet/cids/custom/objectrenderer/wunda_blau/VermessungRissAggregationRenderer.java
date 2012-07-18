@@ -26,12 +26,19 @@ import org.jdesktop.swingx.error.ErrorInfo;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
-import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Image;
 import java.awt.geom.Rectangle2D;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 import javax.swing.DefaultComboBoxModel;
@@ -91,7 +98,8 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
     private static final String PARAMETER_PROJECTNAME = "PROJECTNAME";
     private static final String PARAMETER_TYPE = "TYPE";
     private static final String PARAMETER_STARTINGPAGES = "STARTINGPAGES";
-    private static final String[] TYPES = new String[] { "Vermessungsriss", "Ergänzende Dokumente" };
+    private static final String TYPE_VERMESSUNGSRISSE = "Vermessungsrisse";
+    private static final String TYPE_COMPLEMENTARYDOCUMENTS = "Ergänzende Dokumente";
 
     // Spaltenueberschriften
     private static final String[] AGR_COMLUMN_NAMES = new String[] {
@@ -323,8 +331,6 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
         pnlReport.add(btnGenerateReport, gridBagConstraints);
-
-        cmbType.setModel(new DefaultComboBoxModel(TYPES));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
@@ -403,7 +409,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                     }
                 }
 
-                if (type.equalsIgnoreCase(TYPES[0])) {
+                if (type.equalsIgnoreCase(TYPE_VERMESSUNGSRISSE)) {
                     if (BillingPopup.doBilling(
                                     "vrpdf",
                                     "no.yet",
@@ -412,7 +418,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                     new ProductGroupAmount("eadoc_a2-a0", dinA2Orbigger))) {
                         downloadProducts(selectedVermessungsrisse, type, AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER);
                     }
-                } else if (type.equalsIgnoreCase(TYPES[1])) {
+                } else if (type.equalsIgnoreCase(TYPE_COMPLEMENTARYDOCUMENTS)) {
                     if (BillingPopup.doBilling(
                                     "doklapdf",
                                     "no.yet",
@@ -498,7 +504,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         }
 
                         final StringBuilder description;
-                        if (TYPES[0].equalsIgnoreCase(type)) {
+                        if (TYPE_VERMESSUNGSRISSE.equalsIgnoreCase(type)) {
                             description = new StringBuilder("Vermessungsriss ");
                         } else {
                             description = new StringBuilder("Ergänzende Dokumente zum Vermessungsriss ");
@@ -662,9 +668,19 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
 
             initMap();
 
+            boolean allowVermessungsrisseReport = false;
+            boolean allowErgaenzendeDokumenteReport = false;
+
             final List<Object[]> tableData = new ArrayList<Object[]>();
-            for (final CidsBean punktBean : cidsBeans) {
-                tableData.add(cidsBean2Row(punktBean));
+            for (final CidsBean vermessungsrissBean : cidsBeans) {
+                tableData.add(cidsBean2Row(vermessungsrissBean));
+
+                if (!allowVermessungsrisseReport) {
+                    allowVermessungsrisseReport = hasVermessungsriss(vermessungsrissBean);
+                }
+                if (!allowErgaenzendeDokumenteReport) {
+                    allowErgaenzendeDokumenteReport = hasErgaenzendeDokumente(vermessungsrissBean);
+                }
             }
 
             tableModel = new PointTableModel(tableData.toArray(new Object[tableData.size()][]), AGR_COMLUMN_NAMES);
@@ -682,6 +698,20 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             sortKeys.add(new RowSorter.SortKey(3, SortOrder.ASCENDING));
             sortKeys.add(new RowSorter.SortKey(4, SortOrder.DESCENDING));
             tableSorter.setSortKeys(sortKeys);
+
+            if (allowErgaenzendeDokumenteReport && allowVermessungsrisseReport) {
+                cmbType.setModel(new DefaultComboBoxModel(
+                        new String[] { TYPE_VERMESSUNGSRISSE, TYPE_COMPLEMENTARYDOCUMENTS }));
+            } else if (allowErgaenzendeDokumenteReport) {
+                cmbType.setModel(new DefaultComboBoxModel(new String[] { TYPE_COMPLEMENTARYDOCUMENTS }));
+            } else if (allowVermessungsrisseReport) {
+                cmbType.setModel(new DefaultComboBoxModel(new String[] { TYPE_VERMESSUNGSRISSE }));
+            } else {
+                cmbType.setEnabled(false);
+                btnGenerateReport.setEnabled(false);
+                txtJobnumber.setEnabled(false);
+                txtProjectname.setEnabled(false);
+            }
         }
         setTitle(null);
     }
@@ -805,6 +835,48 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
         }
 
         return new Object[0];
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   cidsBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static boolean hasVermessungsriss(final CidsBean cidsBean) {
+        try {
+            return VermessungRissReportScriptlet.isImageAvailable(
+                    AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER,
+                    (String)cidsBean.getProperty("schluessel"),
+                    (Integer)cidsBean.getProperty("gemarkung.id"),
+                    (String)cidsBean.getProperty("flur"),
+                    (String)cidsBean.getProperty("blatt"));
+        } catch (final Exception ex) {
+            LOG.info("Could not determine if CidsBean has measurement sketches.", ex);
+            return false;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   cidsBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static boolean hasErgaenzendeDokumente(final CidsBean cidsBean) {
+        try {
+            return VermessungRissReportScriptlet.isImageAvailable(
+                    AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN,
+                    (String)cidsBean.getProperty("schluessel"),
+                    (Integer)cidsBean.getProperty("gemarkung.id"),
+                    (String)cidsBean.getProperty("flur"),
+                    (String)cidsBean.getProperty("blatt"));
+        } catch (final Exception ex) {
+            LOG.info("Could not determine if CidsBean has measurement sketches.", ex);
+            return false;
+        }
     }
 
     /**

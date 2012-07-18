@@ -1292,7 +1292,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                                     url,
                                     (Geometry)null,
                                     new ProductGroupAmount(priceGroup, 1))) {
-                        downloadProduct(url, true);
+                        downloadProduct(url, false);
                     }
                 }
             } catch (Exception e) {
