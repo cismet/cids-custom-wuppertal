@@ -45,6 +45,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
+import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -388,58 +389,77 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             return;
         }
 
-        final Object typeObj = cmbType.getSelectedItem();
-        final String type;
-        if (typeObj instanceof String) {
-            type = (String)typeObj;
+        new SwingWorker<Void, Void>() {
 
-            try {
-                int dinA3Orless = 0;
-                int dinA2Orbigger = 0;
-                for (final CidsBean selectedVermessungsriss : selectedVermessungsrisse) {
-                    final CidsBean format = (CidsBean)selectedVermessungsriss.getProperty("format");
-                    if (format != null) {
-                        if (format.getProperty("name").equals("2")) {
-                            dinA2Orbigger++;
-                        } else {
-                            dinA3Orless++;
+                @Override
+                protected Void doInBackground() throws Exception {
+                    final Object typeObj = cmbType.getSelectedItem();
+                    final String type;
+                    if (typeObj instanceof String) {
+                        type = (String)typeObj;
+
+                        try {
+                            int dinA3Orless = 0;
+                            int dinA2Orbigger = 0;
+                            for (final CidsBean selectedVermessungsriss : selectedVermessungsrisse) {
+                                final boolean isDocumentAvailable;
+                                if (type.equalsIgnoreCase(TYPE_VERMESSUNGSRISSE)) {
+                                    isDocumentAvailable = hasVermessungsriss(selectedVermessungsriss);
+                                } else if (type.equalsIgnoreCase(TYPE_COMPLEMENTARYDOCUMENTS)) {
+                                    isDocumentAvailable = hasErgaenzendeDokumente(selectedVermessungsriss);
+                                } else {
+                                    isDocumentAvailable = false;
+                                }
+                                if (isDocumentAvailable) {
+                                    final CidsBean format = (CidsBean)selectedVermessungsriss.getProperty("format");
+                                    if (format != null) {
+                                        if (format.getProperty("name").equals("2")) {
+                                            dinA2Orbigger++;
+                                        } else {
+                                            dinA3Orless++;
+                                        }
+                                    } else {
+                                        dinA3Orless++;
+                                    }
+                                }
+                            }
+
+                            if (type.equalsIgnoreCase(TYPE_VERMESSUNGSRISSE)) {
+                                if (BillingPopup.doBilling(
+                                                "vrpdf",
+                                                "no.yet",
+                                                (Geometry)null,
+                                                new ProductGroupAmount("eadoc_a3", dinA3Orless),
+                                                new ProductGroupAmount("eadoc_a2-a0", dinA2Orbigger))) {
+                                    downloadProducts(
+                                        selectedVermessungsrisse,
+                                        type,
+                                        AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER);
+                                }
+                            } else if (type.equalsIgnoreCase(TYPE_COMPLEMENTARYDOCUMENTS)) {
+                                if (BillingPopup.doBilling(
+                                                "doklapdf",
+                                                "no.yet",
+                                                (Geometry)null,
+                                                new ProductGroupAmount("eadoc_a3", dinA3Orless),
+                                                new ProductGroupAmount("eadoc_a2-a0", dinA2Orbigger))) {
+                                    downloadProducts(
+                                        selectedVermessungsrisse,
+                                        type,
+                                        AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN);
+                                }
+                            }
+                        } catch (Exception e) {
+                            LOG.error("Error when trying to produce a alkis product", e);
+                            // Hier noch ein Fehlerdialog
                         }
                     } else {
-                        dinA3Orless++;
+                        // TODO: User feedback?!
+                        LOG.info("Unknown type '" + typeObj + "' encountered. Skipping report generation.");
                     }
+                    return null;
                 }
-
-                if (type.equalsIgnoreCase(TYPE_VERMESSUNGSRISSE)) {
-                    if (BillingPopup.doBilling(
-                                    "vrpdf",
-                                    "no.yet",
-                                    (Geometry)null,
-                                    new ProductGroupAmount("eadoc_a3", dinA3Orless),
-                                    new ProductGroupAmount("eadoc_a2-a0", dinA2Orbigger))) {
-                        downloadProducts(selectedVermessungsrisse, type, AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER);
-                    }
-                } else if (type.equalsIgnoreCase(TYPE_COMPLEMENTARYDOCUMENTS)) {
-                    if (BillingPopup.doBilling(
-                                    "doklapdf",
-                                    "no.yet",
-                                    (Geometry)null,
-                                    new ProductGroupAmount("eadoc_a3", dinA3Orless),
-                                    new ProductGroupAmount("eadoc_a2-a0", dinA2Orbigger))) {
-                        downloadProducts(
-                            selectedVermessungsrisse,
-                            type,
-                            AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN);
-                    }
-                }
-            } catch (Exception e) {
-                LOG.error("Error when trying to produce a alkis product", e);
-                // Hier noch ein Fehlerdialog
-            }
-        } else {
-            // TODO: User feedback?!
-            LOG.info("Unknown type '" + typeObj + "' encountered. Skipping report generation.");
-            return;
-        }
+            }.execute();
     } //GEN-LAST:event_btnGenerateReportActionPerformed
 
     /**
