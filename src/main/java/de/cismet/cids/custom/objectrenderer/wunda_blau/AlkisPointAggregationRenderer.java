@@ -325,7 +325,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCreateActionPerformed
+    private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
         if (!ObjectRendererUtils.checkActionTag(AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE)) {
             JOptionPane.showMessageDialog(this, "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
             return;
@@ -381,8 +381,6 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                     log.error("Error when trying to produce a alkis product", e);
                     // Hier noch ein Fehlerdialog
                 }
-            } else if (format.equalsIgnoreCase(HTML)) {
-                CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
             } else if (format.equalsIgnoreCase(TEXT)) {
                 try {
                     final String eapkt;
@@ -409,8 +407,6 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                     log.error("Error when trying to produce a alkis product", e);
                     // Hier noch ein Fehlerdialog
                 }
-
-                CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
             } else if (format.equalsIgnoreCase(APMAP)) {
                 try {
                     if (BillingPopup.doBilling(
@@ -428,45 +424,45 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                 CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
             }
         }
-    } //GEN-LAST:event_btnCreateActionPerformed
+    }//GEN-LAST:event_btnCreateActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnReleaseActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReleaseActionPerformed
+    private void btnReleaseActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReleaseActionPerformed
         gehaltenePunkte.clear();
         setCidsBeans(pureSelectionCidsBeans);
         btnRelease.setEnabled(false);
-    }                                                                              //GEN-LAST:event_btnReleaseActionPerformed
+    }//GEN-LAST:event_btnReleaseActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRememberActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRememberActionPerformed
+    private void btnRememberActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRememberActionPerformed
         gehaltenePunkte.addAll(cidsBeans);
         btnRelease.setEnabled(true);
-    }                                                                               //GEN-LAST:event_btnRememberActionPerformed
+    }//GEN-LAST:event_btnRememberActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblAggregationFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblAggregationFocusLost
+    private void tblAggregationFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblAggregationFocusLost
         animateToOverview();
         tblAggregation.clearSelection();
-    }                                                                           //GEN-LAST:event_tblAggregationFocusLost
+    }//GEN-LAST:event_tblAggregationFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) { //GEN-FIRST:event_formAncestorAdded
+    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_formAncestorAdded
         CismetThreadPool.execute(new Runnable() {
 
                 @Override
@@ -485,7 +481,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                         });
                 }
             });
-    } //GEN-LAST:event_formAncestorAdded
+    }//GEN-LAST:event_formAncestorAdded
 
     /**
      * DOCUMENT ME!
