@@ -28,6 +28,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 
+import java.io.File;
 import java.io.InputStream;
 
 import java.net.MalformedURLException;
@@ -64,7 +65,6 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
@@ -1314,7 +1314,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 @Override
                 public void run() {
                     if (DownloadManagerDialog.showAskingForUserTitle(VermessungRissEditor.this)) {
-                        final String filename = url.substring(url.lastIndexOf("/") + 1);
+                        final String filename = url.substring(url.lastIndexOf(File.separator) + 1);
 
                         DownloadManager.instance()
                                 .add(
