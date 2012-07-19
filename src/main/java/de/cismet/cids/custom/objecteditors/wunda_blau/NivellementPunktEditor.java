@@ -948,9 +948,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
                     @Override
                     public void run() {
                         if (DownloadManagerDialog.showAskingForUserTitle(NivellementPunktEditor.this)) {
-                            final String filename = urlOfDocument.substring(
-                                    urlOfDocument.lastIndexOf(File.separator)
-                                            + 1);
+                            final String filename = urlOfDocument.substring(urlOfDocument.lastIndexOf("/") + 1);
                             DownloadManager.instance()
                                     .add(
                                         new HttpDownload(

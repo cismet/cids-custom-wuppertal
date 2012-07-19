@@ -1314,7 +1314,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 @Override
                 public void run() {
                     if (DownloadManagerDialog.showAskingForUserTitle(VermessungRissEditor.this)) {
-                        final String filename = url.substring(url.lastIndexOf(File.separator) + 1);
+                        final String filename = url.substring(url.lastIndexOf("/") + 1);
 
                         DownloadManager.instance()
                                 .add(

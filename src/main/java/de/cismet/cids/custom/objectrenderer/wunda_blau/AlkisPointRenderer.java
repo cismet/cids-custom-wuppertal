@@ -2182,9 +2182,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                             @Override
                             public void run() {
                                 if (DownloadManagerDialog.showAskingForUserTitle(AlkisPointRenderer.this)) {
-                                    final String filename = urlOfAPMap.substring(
-                                            urlOfAPMap.lastIndexOf(File.separator)
-                                                    + 1);
+                                    final String filename = urlOfAPMap.substring(urlOfAPMap.lastIndexOf("/") + 1);
                                     DownloadManager.instance()
                                             .add(
                                                 new HttpDownload(
