@@ -374,7 +374,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                                     "pktlstpdf",
                                     "no.yet",
                                     (Geometry)null,
-                                    new ProductGroupAmount("eafifty", (int)Math.floor(numOfPoints / 50f)))) {
+                                    new ProductGroupAmount("eafifty", 1 + (int)Math.floor(numOfPoints / 50f)))) {
                         CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
                     }
                 } catch (Exception e) {
