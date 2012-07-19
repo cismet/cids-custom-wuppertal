@@ -349,7 +349,18 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                 return;
             }
 
-            CismetThreadPool.execute(new GenerateAPMapReport(selectedAlkisPoints));
+            try {
+                if (BillingPopup.doBilling(
+                                "appdf",
+                                "no.yet",
+                                (Geometry)null,
+                                new ProductGroupAmount("ea", 1))) {
+                    CismetThreadPool.execute(new GenerateAPMapReport(selectedAlkisPoints));
+                }
+            } catch (Exception e) {
+                log.error("Error when trying to produce a alkis product", e);
+                // Hier noch ein Fehlerdialog
+            }
         } else {
             final Collection<CidsBean> selectedAlkisPoints = getSelectedAlkisPoints();
 
