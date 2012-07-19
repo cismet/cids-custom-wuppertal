@@ -42,10 +42,10 @@
         "description":"Punkte 93.75% Rabatt"
      },{
         "key":"eakarte_a3",
-        "description":"Karte(n) max. DIN A3"
+        "description":"Karte max. DIN A3"
     },{
         "key":"eakarte_a2-a0",
-        "description":"Karte(n) DIN A2 - DIN A0"
+        "description":"Karte DIN A2 - DIN A0"
     },{
         "key":"eadoc_a3",
         "description":"Dokument(e) max. DIN A3"
