@@ -9,8 +9,8 @@
 	</field>
 	<detail>
 		<band height="750">
-			<image vAlign="Middle" onErrorType="Blank">
-				<reportElement x="5" y="25" width="545" height="720" isRemoveLineWhenBlank="true"/>
+			<image vAlign="Middle">
+				<reportElement x="5" y="25" width="545" height="720"/>
 				<imageExpression class="java.awt.Image"><![CDATA[$F{image}]]></imageExpression>
 			</image>
 			<textField isBlankWhenNull="true">

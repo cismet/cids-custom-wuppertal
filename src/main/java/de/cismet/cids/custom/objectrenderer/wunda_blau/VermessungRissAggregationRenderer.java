@@ -453,6 +453,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                     }
 
                     Image[] images = null;
+                    boolean isAnImageNull = false;
                     for (final CidsBean vermessungsriss : selectedVermessungsrisse) {
                         try {
                             images = VermessungRissReportScriptlet.loadImages(
@@ -491,6 +492,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                         description.toString()
                                                 + (i + 1),
                                         images[i]));
+                                isAnImageNull |= images[i] == null;
                             }
 
                             startingPages.put(vermessungsriss.getProperty("id"), new Integer(startingPage));
@@ -553,6 +555,18 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                         jobname,
                                         projectname,
                                         "vermriss"));
+                    }
+
+                    if (isAnImageNull) {
+                        JOptionPane.showMessageDialog(
+                            VermessungRissAggregationRenderer.this,
+                            NbBundle.getMessage(
+                                VermessungRissAggregationRenderer.class,
+                                "VermessungRissAggregationRenderer.downloadProducts(Collection,String,String).isAnImageNull.message"),
+                            NbBundle.getMessage(
+                                VermessungRissAggregationRenderer.class,
+                                "VermessungRissAggregationRenderer.downloadProducts(Collection,String,String).isAnImageNull.title"),
+                            JOptionPane.WARNING_MESSAGE);
                     }
                 }
             };
