@@ -569,7 +569,8 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     public boolean checkActionTag() {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), "navigator.baulasten.search") != null;
+                        .getConfigAttr(SessionManager.getSession().getUser(), "navigator.baulasten.search@WUNDA_BLAU")
+                        != null;
         } catch (ConnectionException ex) {
             log.error("Can not validate ActionTag for Baulasten Suche!", ex);
             return false;

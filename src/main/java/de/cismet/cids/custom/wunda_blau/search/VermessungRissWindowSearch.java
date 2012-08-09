@@ -99,7 +99,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
 
     private static final Logger LOG = Logger.getLogger(VermessungRissWindowSearch.class);
 
-    private static final String ACTION_TAG = "custom.alkis.windowsearch";
+    private static final String ACTION_TAG = "custom.alkis.windowsearch@WUNDA_BLAU";
 
     //~ Instance fields --------------------------------------------------------
 

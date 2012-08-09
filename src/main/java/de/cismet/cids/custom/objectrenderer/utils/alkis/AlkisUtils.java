@@ -516,7 +516,8 @@ public class AlkisUtils {
     public static boolean validateUserHasAlkisPrintAccess() {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), "navigator.alkis.print") != null;
+                        .getConfigAttr(SessionManager.getSession().getUser(), "navigator.alkis.print@WUNDA_BLAU")
+                        != null;
         } catch (ConnectionException ex) {
             log.error("Could not validate action tag for Alkis Print Dialog!", ex);
         }
@@ -531,7 +532,8 @@ public class AlkisUtils {
     public static boolean validateUserHasAlkisProductAccess() {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), "navigator.alkis.products") != null;
+                        .getConfigAttr(SessionManager.getSession().getUser(), "navigator.alkis.products@WUNDA_BLAU")
+                        != null;
         } catch (ConnectionException ex) {
             log.error("Could not validate action tag for Alkis Products!", ex);
         }
@@ -546,7 +548,8 @@ public class AlkisUtils {
     public static boolean validateUserHasAlkisBuchungsblattAccess() {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), "custom.alkis.buchungsblatt") != null;
+                        .getConfigAttr(SessionManager.getSession().getUser(), "custom.alkis.buchungsblatt@WUNDA_BLAU")
+                        != null;
         } catch (ConnectionException ex) {
             log.error("Could not validate action tag for Alkis Buchungsblatt!", ex);
         }

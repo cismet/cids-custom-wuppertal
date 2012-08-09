@@ -133,7 +133,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
     private static final String CARD_PREVIEW = "preview";
     private static final String CARD_APMAP = "apmap";
     private static final String ERHEBUNGS_PROPERTIES = "datenerhebung.properties";
-    static final String PRODUCT_ACTION_TAG_PUNKTLISTE = "custom.alkis.product.punktliste";
+    static final String PRODUCT_ACTION_TAG_PUNKTLISTE = "custom.alkis.product.punktliste@WUNDA_BLAU";
 //    private ImageIcon FORWARD_PRESSED;
 //    private ImageIcon FORWARD_SELECTED;
 //    private ImageIcon BACKWARD_PRESSED;

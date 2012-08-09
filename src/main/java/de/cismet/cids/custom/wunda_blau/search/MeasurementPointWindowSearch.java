@@ -93,7 +93,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(MeasurementPointWindowSearch.class);
-    private static final String ACTION_TAG = "custom.measurement.pointsearch";
+    private static final String ACTION_TAG = "custom.measurement.pointsearch@WUNDA_BLAU";
     private static final String ACTION_POINTTYPE_ALLE = "cmdAllePunkte";
     private static final String ACTION_POINTTYPE_ANSCHLUSS = "cmdAnschlussPunkte";
     private static final String ACTION_POINTTYPE_GRENZUNDGEBAEUDE = "cmdGrenzUndGebaeudePunkte";

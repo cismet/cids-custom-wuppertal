@@ -67,7 +67,7 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
 
     private static final Logger LOG = Logger.getLogger(Alb_baulastEditor.class);
     public static final String TITLE_AGR_PREFIX = "Baulasten";
-    private static final String ACTION_TAG = "custom.baulast.document";
+    private static final String ACTION_TAG = "custom.baulast.document@WUNDA_BLAU";
 
     //~ Instance fields --------------------------------------------------------
 

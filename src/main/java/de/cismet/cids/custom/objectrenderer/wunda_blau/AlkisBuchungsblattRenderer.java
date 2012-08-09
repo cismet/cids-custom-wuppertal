@@ -149,12 +149,14 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private static final String CARD_1 = "CARD_1";
     private static final String CARD_2 = "CARD_2";
     //
-    private static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW = "custom.alkis.product.bestandsnachweis_nrw";
-    private static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM = "custom.alkis.product.bestandsnachweis_kom";
+    private static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW =
+        "custom.alkis.product.bestandsnachweis_nrw@WUNDA_BLAU";
+    private static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM =
+        "custom.alkis.product.bestandsnachweis_kom@WUNDA_BLAU";
     private static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN =
-        "custom.alkis.product.bestandsnachweis_kom_intern";
+        "custom.alkis.product.bestandsnachweis_kom_intern@WUNDA_BLAU";
     private static final String PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW =
-        "custom.alkis.product.grundstuecksnachweis_nrw";
+        "custom.alkis.product.grundstuecksnachweis_nrw@WUNDA_BLAU";
 
     //~ Instance fields --------------------------------------------------------
 

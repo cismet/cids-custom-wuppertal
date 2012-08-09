@@ -91,7 +91,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
     public static final String TITLE_AGR_PREFIX = "Baulastblätter";
     private static final String FLURSTUECKE_BELASTET = "flurstuecke_belastet";
     private static final String FLURSTUECKE_BEGUENSTIGT = "flurstuecke_beguenstigt";
-    private static final String ACTION_TAG = "custom.baulast.document";
+    private static final String ACTION_TAG = "custom.baulast.document@WUNDA_BLAU";
 
     //~ Instance fields --------------------------------------------------------
 

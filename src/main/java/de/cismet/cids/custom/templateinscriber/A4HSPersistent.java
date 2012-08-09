@@ -12,17 +12,22 @@
  */
 package de.cismet.cids.custom.templateinscriber;
 
+import org.apache.log4j.Logger;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+
+import java.util.*;
+
+import javax.swing.JCheckBox;
+
 import de.cismet.cismap.commons.MappingModel;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.printing.AbstractPrintingInscriber;
 import de.cismet.cismap.commons.interaction.CismapBroker;
+
 import de.cismet.tools.CismetThreadPool;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.util.*;
-import javax.swing.JCheckBox;
-import org.apache.log4j.Logger;
 
 /**
  * DOCUMENT ME!
@@ -340,8 +345,8 @@ public class A4HSPersistent extends AbstractPrintingInscriber {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtHighlightActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHighlightActionPerformed
-    }//GEN-LAST:event_txtHighlightActionPerformed
+    private void txtHighlightActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtHighlightActionPerformed
+    }                                                                                //GEN-LAST:event_txtHighlightActionPerformed
 
     /**
      * DOCUMENT ME!
