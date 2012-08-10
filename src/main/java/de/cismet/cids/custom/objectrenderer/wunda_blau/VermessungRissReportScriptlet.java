@@ -11,6 +11,8 @@ import net.sf.jasperreports.engine.JRDefaultScriptlet;
 
 import org.apache.log4j.Logger;
 
+import org.openide.util.Exceptions;
+
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -124,7 +126,7 @@ public class VermessungRissReportScriptlet extends JRDefaultScriptlet {
         MultiPagePictureReader reader = null;
         for (final URL url : validURLs) {
             try {
-                reader = new MultiPagePictureReader(url);
+                reader = new MultiPagePictureReader(url, false, false);
                 break;
             } catch (Exception ex) {
                 LOG.warn("Could not read document from URL '" + url.toExternalForm() + "'. Skipping this url.", ex);
@@ -149,7 +151,7 @@ public class VermessungRissReportScriptlet extends JRDefaultScriptlet {
                 }
             }
         } catch (IOException ex) {
-            LOG.error("Could not load associated images. Host: '" + host + "', schluessel: '" + schluessel
+            LOG.warn("Could not load associated images. Host: '" + host + "', schluessel: '" + schluessel
                         + "', gemarkung: '" + gemarkung + "', flur: '" + flur + "', blatt: '" + blatt + "'.",
                 ex);
         } finally {
@@ -187,7 +189,7 @@ public class VermessungRissReportScriptlet extends JRDefaultScriptlet {
         MultiPagePictureReader reader = null;
         for (final URL url : validURLs) {
             try {
-                reader = new MultiPagePictureReader(url);
+                reader = new MultiPagePictureReader(url, false, false);
                 break;
             } catch (Exception ex) {
                 LOG.warn("Could not read document from URL '" + url.toExternalForm() + "'. Skipping this url.", ex);
@@ -208,8 +210,123 @@ public class VermessungRissReportScriptlet extends JRDefaultScriptlet {
                 }
             }
         } catch (IOException ex) {
-            LOG.error("Could not load associated image. Host: '" + host + "', schluessel: '" + schluessel
+            LOG.warn("Could not load associated image. Host: '" + host + "', schluessel: '" + schluessel
                         + "', gemarkung: '" + gemarkung + "', flur: '" + flur + "', blatt: '" + blatt + "'.",
+                ex);
+        } finally {
+            if (reader != null) {
+                reader.close();
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   host        DOCUMENT ME!
+     * @param   schluessel  DOCUMENT ME!
+     * @param   gemarkung   DOCUMENT ME!
+     * @param   flur        DOCUMENT ME!
+     * @param   blatt       DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static Integer getPageCount(final String host,
+            final String schluessel,
+            final Integer gemarkung,
+            final String flur,
+            final String blatt) {
+        final Collection<URL> validURLs = VermessungRissEditor.getCorrespondingURLs(
+                host,
+                gemarkung,
+                flur,
+                schluessel,
+                blatt);
+
+        MultiPagePictureReader reader = null;
+        for (final URL url : validURLs) {
+            try {
+                reader = new MultiPagePictureReader(url, false, false);
+                break;
+            } catch (Exception ex) {
+                LOG.warn("Could not read document from URL '" + url.toExternalForm() + "'. Skipping this url.", ex);
+            }
+        }
+
+        int result = 0;
+        if (reader == null) {
+            return result;
+        }
+        try {
+            result = reader.getNumberOfPages();
+        } catch (final IOException ex) {
+            LOG.warn("Could not get page count of image. Host: '" + host + "', schluessel: '" + schluessel
+                        + "', gemarkung: '" + gemarkung + "', flur: '" + flur + "', blatt: '" + blatt + "'.",
+                ex);
+            result = 0;
+        }
+
+        if (reader != null) {
+            reader.close();
+        }
+
+        return result;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   host        DOCUMENT ME!
+     * @param   schluessel  DOCUMENT ME!
+     * @param   gemarkung   DOCUMENT ME!
+     * @param   flur        DOCUMENT ME!
+     * @param   blatt       DOCUMENT ME!
+     * @param   page        DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static Image loadImage(final String host,
+            final String schluessel,
+            final Integer gemarkung,
+            final String flur,
+            final String blatt,
+            final Integer page) {
+        final Collection<URL> validURLs = VermessungRissEditor.getCorrespondingURLs(
+                host,
+                gemarkung,
+                flur,
+                schluessel,
+                blatt);
+
+        MultiPagePictureReader reader = null;
+        for (final URL url : validURLs) {
+            try {
+                reader = new MultiPagePictureReader(url, false, false);
+                break;
+            } catch (Exception ex) {
+                LOG.warn("Could not read document from URL '" + url.toExternalForm() + "'. Skipping this url.", ex);
+            }
+        }
+
+        BufferedImage result = null;
+        if (reader == null) {
+            return result;
+        }
+
+        try {
+            if (reader.getNumberOfPages() > page) {
+                result = reader.loadPage(page);
+
+                if ((result instanceof BufferedImage) && (result.getWidth(null) > result.getHeight(null))) {
+                    result = Static2DTools.rotate((BufferedImage)result, 90D, false, Color.white);
+                }
+            }
+        } catch (IOException ex) {
+            LOG.warn("Could not load associated image. Host: '" + host + "', schluessel: '" + schluessel
+                        + "', gemarkung: '" + gemarkung + "', flur: '" + flur + "', blatt: '" + blatt + "', page: '"
+                        + page + "'.",
                 ex);
         } finally {
             if (reader != null) {

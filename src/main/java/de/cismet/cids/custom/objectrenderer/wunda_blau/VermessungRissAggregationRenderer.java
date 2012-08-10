@@ -76,6 +76,7 @@ import de.cismet.cismap.navigatorplugin.CidsFeature;
 
 import de.cismet.tools.CismetThreadPool;
 
+import de.cismet.tools.gui.MultiPagePictureReader;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
@@ -452,16 +453,17 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         startingPage += Math.ceil((selectedVermessungsrisse.size() - 27D) / 37D);
                     }
 
-                    Image[] images = null;
-                    boolean isAnImageNull = false;
                     for (final CidsBean vermessungsriss : selectedVermessungsrisse) {
+                        final String schluessel;
+                        final Integer gemarkung;
+                        final String flur;
+                        final String blatt;
+
                         try {
-                            images = VermessungRissReportScriptlet.loadImages(
-                                    host,
-                                    vermessungsriss.getProperty("schluessel").toString(),
-                                    (Integer)vermessungsriss.getProperty("gemarkung.id"),
-                                    vermessungsriss.getProperty("flur").toString(),
-                                    vermessungsriss.getProperty("blatt").toString());
+                            schluessel = vermessungsriss.getProperty("schluessel").toString();
+                            gemarkung = (Integer)vermessungsriss.getProperty("gemarkung.id");
+                            flur = vermessungsriss.getProperty("flur").toString();
+                            blatt = vermessungsriss.getProperty("blatt").toString();
                         } catch (final Exception ex) {
                             // TODO: User feedback?
                             LOG.warn("Could not include raster document for vermessungsriss '"
@@ -486,18 +488,46 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         description.append(vermessungsriss.getProperty("blatt"));
                         description.append(" - Seite ");
 
-                        if (images != null) {
-                            for (int i = 0; i < images.length; i++) {
-                                imageBeans.add(new VermessungRissImageReportBean(
-                                        description.toString()
-                                                + (i + 1),
-                                        images[i]));
-                                isAnImageNull |= images[i] == null;
-                            }
+                        final Collection<URL> validURLs = VermessungRissEditor.getCorrespondingURLs(
+                                host,
+                                gemarkung,
+                                flur,
+                                schluessel,
+                                blatt);
 
-                            startingPages.put(vermessungsriss.getProperty("id"), new Integer(startingPage));
-                            startingPage += images.length;
+                        MultiPagePictureReader reader = null;
+                        int pageCount = 0;
+                        for (final URL url : validURLs) {
+                            try {
+                                reader = new MultiPagePictureReader(url, false, false);
+                                pageCount = reader.getNumberOfPages();
+                                break;
+                            } catch (final Exception ex) {
+                                LOG.warn("Could not read document from URL '" + url.toExternalForm()
+                                            + "'. Skipping this url.",
+                                    ex);
+                            }
                         }
+
+                        if (reader == null) {
+                            continue;
+                        }
+
+                        for (int i = 0; i < pageCount; i++) {
+                            imageBeans.add(new VermessungRissImageReportBean(
+                                    description.toString()
+                                            + (i + 1),
+                                    host,
+                                    schluessel,
+                                    gemarkung,
+                                    flur,
+                                    blatt,
+                                    i,
+                                    reader));
+                        }
+
+                        startingPages.put(vermessungsriss.getProperty("id"), new Integer(startingPage));
+                        startingPage += pageCount;
                     }
 
                     reportBeans.add(new VermessungRissReportBean(selectedVermessungsrisse, imageBeans));
@@ -555,18 +585,6 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                         jobname,
                                         projectname,
                                         "vermriss"));
-                    }
-
-                    if (isAnImageNull) {
-                        JOptionPane.showMessageDialog(
-                            VermessungRissAggregationRenderer.this,
-                            NbBundle.getMessage(
-                                VermessungRissAggregationRenderer.class,
-                                "VermessungRissAggregationRenderer.downloadProducts(Collection,String,String).isAnImageNull.message"),
-                            NbBundle.getMessage(
-                                VermessungRissAggregationRenderer.class,
-                                "VermessungRissAggregationRenderer.downloadProducts(Collection,String,String).isAnImageNull.title"),
-                            JOptionPane.WARNING_MESSAGE);
                     }
                 }
             };
@@ -1070,7 +1088,13 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
         //~ Instance fields ----------------------------------------------------
 
         private String description;
-        private Image image;
+        private String host;
+        private String schluessel;
+        private Integer gemarkung;
+        private String flur;
+        private String blatt;
+        private Integer page;
+        private MultiPagePictureReader reader;
 
         //~ Constructors -------------------------------------------------------
 
@@ -1078,11 +1102,30 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
          * Creates a new VermessungRissImageReportBean object.
          *
          * @param  description  DOCUMENT ME!
-         * @param  image        DOCUMENT ME!
+         * @param  host         DOCUMENT ME!
+         * @param  schluessel   DOCUMENT ME!
+         * @param  gemarkung    DOCUMENT ME!
+         * @param  flur         DOCUMENT ME!
+         * @param  blatt        DOCUMENT ME!
+         * @param  page         DOCUMENT ME!
+         * @param  reader       DOCUMENT ME!
          */
-        public VermessungRissImageReportBean(final String description, final Image image) {
+        public VermessungRissImageReportBean(final String description,
+                final String host,
+                final String schluessel,
+                final Integer gemarkung,
+                final String flur,
+                final String blatt,
+                final Integer page,
+                final MultiPagePictureReader reader) {
             this.description = description;
-            this.image = image;
+            this.host = host;
+            this.schluessel = schluessel;
+            this.gemarkung = gemarkung;
+            this.flur = flur;
+            this.blatt = blatt;
+            this.page = page;
+            this.reader = reader;
         }
 
         //~ Methods ------------------------------------------------------------
@@ -1101,8 +1144,62 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
          *
          * @return  DOCUMENT ME!
          */
-        public Image getImage() {
-            return image;
+        public String getBlatt() {
+            return blatt;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public String getFlur() {
+            return flur;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public Integer getGemarkung() {
+            return gemarkung;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public String getHost() {
+            return host;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public Integer getPage() {
+            return page;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public String getSchluessel() {
+            return schluessel;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public MultiPagePictureReader getReader() {
+            return reader;
         }
     }
 }

@@ -111,7 +111,18 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
     private static final Logger LOG = Logger.getLogger(VermessungRissEditor.class);
 
-    public static final String[] SUFFIXES = new String[] { "tif", "jpg", "tiff", "jpeg", "TIF", "JPG", "TIFF", "JPEG" };
+    public static final String[] SUFFIXES = new String[] {
+            "tif",
+            "jpg",
+            "jpe",
+            "tiff",
+            "jpeg",
+            "TIF",
+            "JPG",
+            "JPE",
+            "TIFF",
+            "JPEG"
+        };
 
     protected static final int DOCUMENT_BILD = 0;
     protected static final int DOCUMENT_GRENZNIEDERSCHRIFT = 1;
@@ -2056,7 +2067,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             closeReader();
 
             try {
-                pictureReader = new MultiPagePictureReader(url);
+                pictureReader = new MultiPagePictureReader(url, false, true);
             } catch (Exception e) {
                 LOG.error("Could not create a MultiPagePictureReader for URL '" + url.toExternalForm() + "'.", e);
                 return model;
