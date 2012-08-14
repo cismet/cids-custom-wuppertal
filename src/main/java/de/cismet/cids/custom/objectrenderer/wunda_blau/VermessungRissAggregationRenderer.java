@@ -27,7 +27,6 @@ import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 import java.awt.EventQueue;
-import java.awt.Image;
 import java.awt.geom.Rectangle2D;
 
 import java.net.URL;
@@ -78,8 +77,11 @@ import de.cismet.tools.CismetThreadPool;
 
 import de.cismet.tools.gui.MultiPagePictureReader;
 import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
+import de.cismet.tools.gui.downloadmanager.HttpDownload;
+import de.cismet.tools.gui.downloadmanager.MultipleDownload;
 
 /**
  * DOCUMENT ME!
@@ -437,6 +439,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                     final Collection<VermessungRissReportBean> reportBeans = new LinkedList<VermessungRissReportBean>();
                     final Collection<VermessungRissImageReportBean> imageBeans =
                         new LinkedList<VermessungRissImageReportBean>();
+                    final Collection<URL> additionalFilesToDownload = new LinkedList<URL>();
 
                     // Not the most elegant way, but it works. We have to calculate on which page an image will appear.
                     // This can't be easily done with JasperReports. In order to let JasperReports calculate which page
@@ -488,7 +491,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         description.append(vermessungsriss.getProperty("blatt"));
                         description.append(" - Seite ");
 
-                        final Collection<URL> validURLs = VermessungRissEditor.getCorrespondingURLs(
+                        final Map<URL, URL> validURLs = VermessungRissEditor.getCorrespondingURLs(
                                 host,
                                 gemarkung,
                                 flur,
@@ -497,19 +500,36 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
 
                         MultiPagePictureReader reader = null;
                         int pageCount = 0;
-                        for (final URL url : validURLs) {
+                        for (final Map.Entry<URL, URL> urls : validURLs.entrySet()) {
                             try {
-                                reader = new MultiPagePictureReader(url, false, false);
+                                reader = new MultiPagePictureReader(urls.getValue(), false, false);
                                 pageCount = reader.getNumberOfPages();
+                                additionalFilesToDownload.add(urls.getKey());
                                 break;
                             } catch (final Exception ex) {
-                                LOG.warn("Could not read document from URL '" + url.toExternalForm()
+                                LOG.warn("Could not read document from URL '" + urls.getValue().toExternalForm()
                                             + "'. Skipping this url.",
                                     ex);
                             }
                         }
 
                         if (reader == null) {
+                            // Didn't find an image of reduced size
+                            for (final Map.Entry<URL, URL> urls : validURLs.entrySet()) {
+                                try {
+                                    reader = new MultiPagePictureReader(urls.getKey(), false, false);
+                                    pageCount = reader.getNumberOfPages();
+                                    break;
+                                } catch (final Exception ex) {
+                                    LOG.warn("Could not read document from URL '" + urls.getValue().toExternalForm()
+                                                + "'. Skipping this url.",
+                                        ex);
+                                }
+                            }
+                        }
+
+                        if (reader == null) {
+                            // Couldn't open any image.
                             continue;
                         }
 
@@ -576,15 +596,37 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                             projectname = type;
                         }
                         final String jobname = DownloadManagerDialog.getJobname();
+                        final JasperDownload jasperDownload = new JasperDownload(
+                                jasperReport,
+                                parameters,
+                                dataSource,
+                                jobname,
+                                projectname,
+                                "vermriss");
 
-                        DownloadManager.instance()
-                                .add(new JasperDownload(
-                                        jasperReport,
-                                        parameters,
-                                        dataSource,
+                        if (additionalFilesToDownload.isEmpty()) {
+                            DownloadManager.instance().add(jasperDownload);
+                        } else {
+                            final Collection<Download> downloads = new LinkedList<Download>();
+                            downloads.add(jasperDownload);
+
+                            for (final URL additionalFileToDownload : additionalFilesToDownload) {
+                                final String file = additionalFileToDownload.getFile()
+                                            .substring(additionalFileToDownload.getFile().lastIndexOf('/') + 1);
+                                final String filename = file.substring(0, file.lastIndexOf('.'));
+                                final String extension = file.substring(file.lastIndexOf('.'));
+
+                                downloads.add(new HttpDownload(
+                                        additionalFileToDownload,
+                                        null,
                                         jobname,
-                                        projectname,
-                                        "vermriss"));
+                                        file,
+                                        filename,
+                                        extension));
+                            }
+
+                            DownloadManager.instance().add(new MultipleDownload(downloads, projectname));
+                        }
                     }
                 }
             };

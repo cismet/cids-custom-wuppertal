@@ -28,6 +28,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import java.net.MalformedURLException;
@@ -39,7 +40,6 @@ import java.text.MessageFormat;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -59,8 +59,6 @@ import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
-
-import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
@@ -83,8 +81,6 @@ import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.measuring.MeasuringComponent;
 
 import de.cismet.security.WebAccessManager;
-
-import de.cismet.tools.CismetThreadPool;
 
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
@@ -123,6 +119,8 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             "TIFF",
             "JPEG"
         };
+    private static final String SUFFIX_REDUCED_SIZE = "_RS";
+    private static final String KEY_WARNINGREDUCEDSIZE_WIDGET = "WarningReducedSize_Widget";
 
     protected static final int DOCUMENT_BILD = 0;
     protected static final int DOCUMENT_GRENZNIEDERSCHRIFT = 1;
@@ -165,8 +163,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
     protected CidsBean cidsBean;
     protected boolean readOnly;
-    // When Wupp decides to publish the correspoding files on a WebDAV server, switch documentURLs' type to URL[].
-    protected URL[] documentURLs;
+    protected Map.Entry<URL, URL>[] documentURLs;
     protected JToggleButton[] documentButtons;
     protected JToggleButton currentSelectedButton;
     protected PictureSelectWorker currentPictureSelectWorker = null;
@@ -190,6 +187,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private javax.swing.JComboBox cmbSchluessel;
     private javax.swing.Box.Filler gluGapControls;
     private javax.swing.Box.Filler gluGeneralInformationGap;
+    private javax.swing.JInternalFrame ifrWarningReducedSize;
     private javax.swing.JLabel lblBlatt;
     private javax.swing.JLabel lblErrorWhileLoadingBild;
     private javax.swing.JLabel lblErrorWhileLoadingGrenzniederschrift;
@@ -211,6 +209,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private javax.swing.JLabel lblMissingDocuments;
     private javax.swing.JLabel lblSchluessel;
     private javax.swing.JLabel lblTitle;
+    private javax.swing.JLabel lblWarningReducedSize;
     private javax.swing.JList lstLandparcels;
     private javax.swing.JList lstPages;
     private de.cismet.cismap.commons.gui.measuring.MeasuringComponent measuringComponent;
@@ -261,11 +260,13 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     public VermessungRissEditor(final boolean readOnly) {
         this.readOnly = readOnly;
 
-        documentURLs = new URL[2];
+        documentURLs = new Map.Entry[2];
         documentButtons = new JToggleButton[documentURLs.length];
         initComponents();
         documentButtons[DOCUMENT_BILD] = togBild;
         documentButtons[DOCUMENT_GRENZNIEDERSCHRIFT] = togGrenzniederschrift;
+
+        ifrWarningReducedSize.putClientProperty("JInternalFrame.isPalette", Boolean.TRUE);
 
         if (readOnly) {
             lblSchluessel.setVisible(false);
@@ -320,6 +321,8 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         lblTitle = new javax.swing.JLabel();
         bgrControls = new javax.swing.ButtonGroup();
         bgrDocument = new javax.swing.ButtonGroup();
+        ifrWarningReducedSize = new javax.swing.JInternalFrame();
+        lblWarningReducedSize = new javax.swing.JLabel();
         pnlContainer = new javax.swing.JPanel();
         pnlGeneralInformation = new de.cismet.tools.gui.RoundedPanel();
         pnlHeaderGeneralInformation = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -402,6 +405,16 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlTitle.add(lblTitle, gridBagConstraints);
+
+        ifrWarningReducedSize.setResizable(true);
+        ifrWarningReducedSize.setVisible(true);
+
+        lblWarningReducedSize.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/warningReducedSize.png"))); // NOI18N
+        lblWarningReducedSize.setText(org.openide.util.NbBundle.getMessage(
+                VermessungRissEditor.class,
+                "VermessungRissEditor.lblWarningReducedSize.text"));                                                // NOI18N
+        ifrWarningReducedSize.getContentPane().add(lblWarningReducedSize, java.awt.BorderLayout.CENTER);
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -1281,9 +1294,9 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      */
     private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
         if (currentDocument != NO_SELECTION) {
-            final String url = documentURLs[currentDocument].toExternalForm();
+            final String url = documentURLs[currentDocument].getKey().toExternalForm();
 
-            CismetThreadPool.execute(new Runnable() {
+            EventQueue.invokeLater(new Runnable() {
 
                     @Override
                     public void run() {
@@ -1293,7 +1306,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                             DownloadManager.instance()
                                     .add(
                                         new HttpDownload(
-                                            documentURLs[currentDocument],
+                                            documentURLs[currentDocument].getKey(),
                                             "",
                                             DownloadManagerDialog.getJobname(),
                                             (currentDocument == DOCUMENT_BILD) ? "Vermessungsriss"
@@ -1527,7 +1540,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
         setCurrentDocumentNull();
 
-//        CismetThreadPool.execute(new RefreshDocumentWorker());
         EventQueue.invokeLater(new RefreshDocumentWorker());
     }
 
@@ -1691,12 +1703,12 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      *
      * @return  DOCUMENT ME!
      */
-    public static Collection<URL> getCorrespondingURLs(final String host,
+    public static Map<URL, URL> getCorrespondingURLs(final String host,
             final Integer gemarkung,
             final String flur,
             final String schluessel,
             final String blatt) {
-        final Collection<URL> validURLs = new LinkedList<URL>();
+        final Map<URL, URL> validURLs = new HashMap<URL, URL>();
 
         String urlString = null;
         try {
@@ -1705,8 +1717,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                     schluessel,
                     gemarkung,
                     flur,
-                    new Integer(Integer.parseInt(blatt)))
-                        + '.';
+                    new Integer(Integer.parseInt(blatt)));
         } catch (final Exception ex) {
             LOG.warn("Can't build a valid URL for current measurement sketch.", ex);
             return validURLs;
@@ -1714,64 +1725,43 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
         for (final String suffix : SUFFIXES) {
             URL urlToTry = null;
+            URL urlToTryReducedSize = null;
             try {
-                urlToTry = new URL(urlString + suffix);
-            } catch (MalformedURLException ex) {
-                LOG.warn("The URL '" + urlString.toString() + suffix
+                urlToTry = new URL(urlString + '.' + suffix);
+            } catch (final MalformedURLException ex) {
+                LOG.warn("The URL '" + urlString.toString() + '.' + suffix
+                            + "' is malformed. Can't load the corresponding picture.",
+                    ex);
+                continue;
+            }
+
+            try {
+                urlToTryReducedSize = new URL(urlString + SUFFIX_REDUCED_SIZE + '.' + suffix);
+            } catch (final MalformedURLException ex) {
+                LOG.warn("The URL '" + urlString.toString() + SUFFIX_REDUCED_SIZE + '.' + suffix
                             + "' is malformed. Can't load the corresponding picture.",
                     ex);
             }
 
             if (urlToTry != null) {
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("Valid URL: " + urlToTry.toExternalForm());
+                    LOG.debug("URL '" + urlToTry.toExternalForm() + "' is valid.");
                 }
 
-                validURLs.add(urlToTry);
+                validURLs.put(urlToTry, null);
+            }
+
+            if (urlToTryReducedSize != null) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("URL '" + urlToTry.toExternalForm() + "' is valid.");
+                }
+
+                validURLs.put(urlToTry, urlToTryReducedSize);
             }
         }
 
         return validURLs;
     }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   property  host DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-// public static Collection<File> getCorrespondingFiles(final String host, final String path) {
-// final Collection<File> validFiles = new LinkedList<File>();
-//
-// final StringBuilder urlBuilder = new StringBuilder(host);
-// urlBuilder.append('/');
-// urlBuilder.append(path);
-// urlBuilder.append('.');
-//
-// for (final String suffix : SUFFIXES) {
-// final URL fileURL;
-// final File testFile;
-// try {
-// fileURL = new URL(urlBuilder.toString() + suffix);
-// testFile = new File(fileURL.toURI());
-//
-// if (testFile.isFile()) {
-// if (LOG.isDebugEnabled()) {
-// LOG.debug("Found picture in file: " + testFile.getAbsolutePath());
-// }
-//
-// validFiles.add(testFile);
-// }
-// } catch (MalformedURLException ex) {
-// LOG.warn("Could not create URL object for '" + urlBuilder.toString() + suffix + "'.", ex);
-// } catch (URISyntaxException ex) {
-// LOG.warn("Could not create File object for '" + urlBuilder.toString() + suffix + "'.", ex);
-// }
-// }
-//
-// return validFiles;
-// }
 
     /**
      * DOCUMENT ME!
@@ -1871,9 +1861,25 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      */
     protected void loadBild() {
         currentSelectedButton = togBild;
-        lblHeaderDocument.setText("Vermessungsriss");
         currentDocument = DOCUMENT_BILD;
-        CismetThreadPool.execute(new PictureReaderWorker(documentURLs[currentDocument]));
+
+        final URL url;
+        if (documentURLs[currentDocument].getValue() != null) {
+            url = documentURLs[currentDocument].getValue();
+            lblHeaderDocument.setText(NbBundle.getMessage(
+                    VermessungRissEditor.class,
+                    "VermessungRissEditor.lblHeaderDocument.text.vermessungsriss") + " "
+                        + NbBundle.getMessage(
+                            VermessungRissEditor.class,
+                            "VermessungRissEditor.lblHeaderDocument.text.suffixWarningReducedSize"));
+        } else {
+            url = documentURLs[currentDocument].getKey();
+            lblHeaderDocument.setText(NbBundle.getMessage(
+                    VermessungRissEditor.class,
+                    "VermessungRissEditor.lblHeaderDocument.text.vermessungsriss"));
+        }
+
+        EventQueue.invokeLater(new PictureReaderWorker(url));
     }
 
     /**
@@ -1881,10 +1887,25 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      */
     protected void loadGrenzniederschrift() {
         currentSelectedButton = togGrenzniederschrift;
-        lblHeaderDocument.setText("Ergänzende Dokumente");
         currentDocument = DOCUMENT_GRENZNIEDERSCHRIFT;
-//        CismetThreadPool.execute(new PictureReaderWorker(documentURLs[currentDocument]));
-        EventQueue.invokeLater(new PictureReaderWorker(documentURLs[currentDocument]));
+
+        final URL url;
+        if (documentURLs[currentDocument].getValue() != null) {
+            url = documentURLs[currentDocument].getValue();
+            lblHeaderDocument.setText(NbBundle.getMessage(
+                    VermessungRissEditor.class,
+                    "VermessungRissEditor.lblHeaderDocument.text.ergaenzendeDokumente") + " "
+                        + NbBundle.getMessage(
+                            VermessungRissEditor.class,
+                            "VermessungRissEditor.lblHeaderDocument.text.suffixWarningReducedSize"));
+        } else {
+            url = documentURLs[currentDocument].getKey();
+            lblHeaderDocument.setText(NbBundle.getMessage(
+                    VermessungRissEditor.class,
+                    "VermessungRissEditor.lblHeaderDocument.text.ergaenzendeDokumente"));
+        }
+
+        EventQueue.invokeLater(new PictureReaderWorker(url));
     }
 
     /**
@@ -1899,7 +1920,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         }
 
         currentPictureSelectWorker = new PictureSelectWorker(page);
-//        CismetThreadPool.execute(currentPictureSelectWorker);
         EventQueue.invokeLater(currentPictureSelectWorker);
     }
 
@@ -1970,58 +1990,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         }
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   args  DOCUMENT ME!
-     *
-     * @throws  Exception  DOCUMENT ME!
-     */
-    public static void main(final String[] args) throws Exception {
-//        final CidsBean riss = DevelopmentTools.createCidsBeanFromRMIConnectionOnLocalhost(
-//                "WUNDA_BLAU",
-//                "Administratoren",
-//                "admin",
-//                "sb",
-//                "vermessung_riss",
-////            27
-//                26);
-//
-//        final Collection<CidsBean> geometryBeans = new LinkedList<CidsBean>();
-//        final Collection<CidsBean> flurstuecksvermessungen = riss.getBeanCollectionProperty("flurstuecksvermessung");
-//        for (final CidsBean flurstuecksvermessung : flurstuecksvermessungen) {
-//            System.out.println("Has Flurstuecksvermessung '" + flurstuecksvermessung.getProperty("id").toString()
-//                        + "' a geometry? "
-//                        + (flurstuecksvermessung.getProperty("flurstueck.flurstueck.umschreibendes_rechteck.geo_field")
-//                            instanceof Geometry));
-//        }
-
-        DevelopmentTools.createEditorInFrameFromRMIConnectionOnLocalhost(
-            "WUNDA_BLAU",
-            "Administratoren",
-            "admin",
-            "sb",
-            "vermessung_riss",
-//            27,
-//            26,
-            4,
-//            985,
-//            6833,
-            1024,
-            768);
-
-//        DevelopmentTools.createRendererInFrameFromRMIConnectionOnLocalhost(
-//            "WUNDA_BLAU",
-//            "Administratoren",
-//            "admin",
-//            "sb",
-//            "nivellement_punkt",
-//            4349,
-//            "Renderer",
-//            1024,
-//            768);
-    }
-
     //~ Inner Classes ----------------------------------------------------------
 
     //J-
@@ -2068,7 +2036,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
             try {
                 pictureReader = new MultiPagePictureReader(url, false, true);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 LOG.error("Could not create a MultiPagePictureReader for URL '" + url.toExternalForm() + "'.", e);
                 return model;
             }
@@ -2153,6 +2121,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             if (pictureReader != null) {
                 return pictureReader.loadPage(pageNumber);
             }
+
             throw new IllegalStateException("PictureReader is null!");
         }
 
@@ -2166,11 +2135,11 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                     measuringComponent.zoomToFeatureCollection();
                     displayErrorOrEnableControls(false);
                 }
-            } catch (InterruptedException ex) {
+            } catch (final InterruptedException ex) {
                 setCurrentPageNull();
                 displayErrorOrEnableControls(true);
                 LOG.warn("Was interrupted while setting new image.", ex);
-            } catch (Exception ex) {
+            } catch (final Exception ex) {
                 setCurrentPageNull();
                 displayErrorOrEnableControls(true);
                 LOG.error("Could not set new image.", ex);
@@ -2219,54 +2188,77 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 return null;
             }
 
-            final Collection<URL> validBildURLs = getCorrespondingURLs(
+            final Map<URL, URL> validBildURLs = getCorrespondingURLs(
                     AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER,
                     getGemarkungOfCurrentCidsBean(),
                     getSimplePropertyOfCurrentCidsBean("flur"),
                     getSimplePropertyOfCurrentCidsBean("schluessel"),
                     getSimplePropertyOfCurrentCidsBean("blatt"));
-            final Collection<URL> validGrenzniederschriftURLs = getCorrespondingURLs(
+            final Map<URL, URL> validGrenzniederschriftURLs = getCorrespondingURLs(
                     AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN,
                     getGemarkungOfCurrentCidsBean(),
                     getSimplePropertyOfCurrentCidsBean("flur"),
                     getSimplePropertyOfCurrentCidsBean("schluessel"),
                     getSimplePropertyOfCurrentCidsBean("blatt"));
 
-            InputStream streamToReadFrom = null;
-            for (final URL url : validBildURLs) {
-                try {
-                    streamToReadFrom = WebAccessManager.getInstance().doRequest(url);
-                    documentURLs[DOCUMENT_BILD] = url;
-                    break;
-                } catch (Exception ex) {
-                    LOG.warn("An exception occurred while opening URL '" + url.toExternalForm()
-                                + "'. Skipping this url.",
-                        ex);
-                } finally {
-                    if (streamToReadFrom != null) {
-                        streamToReadFrom.close();
-                    }
-                }
-            }
-
-            streamToReadFrom = null;
-            for (final URL url : validGrenzniederschriftURLs) {
-                try {
-                    streamToReadFrom = WebAccessManager.getInstance().doRequest(url);
-                    documentURLs[DOCUMENT_GRENZNIEDERSCHRIFT] = url;
-                    break;
-                } catch (Exception ex) {
-                    LOG.warn("An exception occurred while opening URL '" + url.toExternalForm()
-                                + "'. Skipping this url.",
-                        ex);
-                } finally {
-                    if (streamToReadFrom != null) {
-                        streamToReadFrom.close();
-                    }
-                }
-            }
+            tryToLoadImageFromURLs(validBildURLs, DOCUMENT_BILD);
+            tryToLoadImageFromURLs(validGrenzniederschriftURLs, DOCUMENT_GRENZNIEDERSCHRIFT);
 
             return null;
+        }
+
+        private void tryToLoadImageFromURLs(final Map<URL, URL> urls, final int type) {
+            InputStream streamToReadFrom = null;
+
+            //First we try to load an image of reduced size
+            for (final Map.Entry<URL, URL> urlEntry : urls.entrySet()) {
+                if(urlEntry.getValue() == null) {
+                    continue;
+                }
+
+                try {
+                    streamToReadFrom = WebAccessManager.getInstance().doRequest(urlEntry.getValue());
+                    documentURLs[type] = urlEntry;
+                    break;
+                } catch (final Exception ex) {
+                    LOG.debug("An exception occurred while opening URL '" + urlEntry.getValue().toExternalForm()
+                                + "'. Skipping this url.", ex);
+                } finally {
+                    if (streamToReadFrom != null) {
+                        try {
+                            streamToReadFrom.close();
+                        } catch (final IOException ex) {
+                        }
+                    }
+                }
+            }
+
+            if(documentURLs[type] != null) {
+                // Found an image.
+                return;
+            }
+
+            for (final Map.Entry<URL, URL> urlEntry : urls.entrySet()) {
+                try {
+                    streamToReadFrom = WebAccessManager.getInstance().doRequest(urlEntry.getKey());
+                    documentURLs[type] = urlEntry;
+                    break;
+                } catch (final Exception ex) {
+                    LOG.debug("An exception occurred while opening URL '" + urlEntry.getKey().toExternalForm()
+                                + "'. Skipping this url.", ex);
+                } finally {
+                    if (streamToReadFrom != null) {
+                        try {
+                            streamToReadFrom.close();
+                        } catch (final IOException ex) {
+                        }
+                    }
+                }
+            }
+
+            if(documentURLs[type] != null) {
+                documentURLs[type].setValue(null);
+            }
         }
 
         @Override
@@ -2293,6 +2285,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                     currentSelectedButton = togBild;
                     currentDocument = DOCUMENT_BILD;
                 }
+
                 if (documentURLs[DOCUMENT_GRENZNIEDERSCHRIFT] != null) {
                     togGrenzniederschrift.setEnabled(true);
 
@@ -2303,8 +2296,11 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                     }
                 }
 
-//                CismetThreadPool.execute(new PictureReaderWorker(documentURLs[currentDocument]));
-                EventQueue.invokeLater(new PictureReaderWorker(documentURLs[currentDocument]));
+                if(currentDocument == DOCUMENT_BILD) {
+                    loadBild();
+                } else if(currentDocument == DOCUMENT_GRENZNIEDERSCHRIFT) {
+                    loadGrenzniederschrift();
+                }
             }
         }
     }
