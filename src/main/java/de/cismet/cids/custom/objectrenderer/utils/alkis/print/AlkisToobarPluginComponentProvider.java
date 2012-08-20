@@ -35,6 +35,7 @@ import de.cismet.cismap.commons.gui.ToolbarComponentsProvider;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.tools.collections.TypeSafeCollections;
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * ToolbarComponentsProvider that delivers a Button for Alkis Print to integrate into the Navigator Toolbar.
@@ -127,8 +128,8 @@ final class AlkisPrintJButton extends JButton {
 
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    printWidget.setVisible(true);
                     printWidget.pack();
+                    StaticSwingTools.showDialog(printWidget);
                 }
             });
     }
