@@ -58,6 +58,8 @@ public class AlkisUtils {
             AlkisConstants.COMMONS.PASSWORD,
             AlkisConstants.COMMONS.SERVICE);
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisUtils.class);
+    
+    public static final String ALKIS_HTML_PRODUCTS_ENABLED="custom.alkis.products.html.enabled";
     // --
 
     //~ Methods ----------------------------------------------------------------
@@ -555,4 +557,16 @@ public class AlkisUtils {
         }
         return false;
     }
+
+    public static boolean validateUserHasAlkisHTMLProductAccess() {
+        try {
+            return SessionManager.getConnection()
+                        .getConfigAttr(SessionManager.getSession().getUser(), ALKIS_HTML_PRODUCTS_ENABLED)
+                        != null;
+        } catch (ConnectionException ex) {
+            log.error("Could not validate action tag for Alkis HTML Products!", ex);
+        }
+        return false;
+    }
+    
 }
