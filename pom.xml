@@ -55,6 +55,17 @@
 
     <dependencies>
         <dependency>
+            <groupId>de.cismet.cids.navigator</groupId>
+            <artifactId>default-forms</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>de.cismet.cids.navigator</groupId>
+                    <artifactId>cids-navigator</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
             <groupId>de.cismet.cismap</groupId>
             <artifactId>cismap-plugin</artifactId>
             <version>2.0-SNAPSHOT</version>
@@ -143,6 +154,24 @@
             </build>
         </profile>
     -->
+       <profile>
+            <id>default-tools.jar</id>
+            <activation>
+                <property>
+                    <name>java.vendor</name>
+                    <value>Sun Microsystems Inc.</value>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>com.sun</groupId>
+                    <artifactId>tools</artifactId>
+                    <version>1.6.0</version>
+                    <scope>system</scope>
+                    <systemPath>${java.home}/../lib/tools.jar</systemPath>
+                </dependency>
+            </dependencies>
+        </profile>
     </profiles>
     
 </project>
