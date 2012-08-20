@@ -156,7 +156,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
             beansToPrint = getAlkisFlurstueckBeansFromTreeSelection();
         } else if (beansToPrint.size() > 1) {
             final int dialogResult = JOptionPane.showConfirmDialog(
-                    this,
+                    StaticSwingTools.getParentFrame(this),
                     "Sollen alle Flurstückeobjekte der Karte gedruckt werden?",
                     "Flurstücke in Druckauswahl übernehmen",
                     JOptionPane.YES_NO_OPTION);
@@ -670,7 +670,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmdOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdOkActionPerformed
+    private void cmdOkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdOkActionPerformed
         try {
             final AlkisProductDescription selectedProduct = getSelectedProduct();
             mapPrintListener.init(selectedProduct, allLandparcelGeometryUnion, chkRotation.isSelected());
@@ -678,50 +678,50 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         } catch (Exception e) {
             log.error("Fehler beim Verarbeiten der Druckeinstellungen", e);
         }
-    }                                                                         //GEN-LAST:event_cmdOkActionPerformed
+    }//GEN-LAST:event_cmdOkActionPerformed
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmdCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdCancelActionPerformed
+    private void cmdCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdCancelActionPerformed
         dispose();
-    }                                                                             //GEN-LAST:event_cmdCancelActionPerformed
+    }//GEN-LAST:event_cmdCancelActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveActionPerformed
+    private void btnRemoveActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
         final int[] sel = lstFlurstuecke.getSelectedIndices();
         for (int i = sel.length; --i >= 0;) {
             flurstueckListModel.removeElementAt(sel[i]);
         }
         updateFormatProposal();
         syncOkButtonWithListStatus();
-    }                                                                             //GEN-LAST:event_btnRemoveActionPerformed
+    }//GEN-LAST:event_btnRemoveActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbClazzActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbClazzActionPerformed
+    private void cbClazzActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbClazzActionPerformed
         cbProduct.setModel(getProductTypeModel());
         cbProductActionPerformed(null);
-    }                                                                           //GEN-LAST:event_cbClazzActionPerformed
+    }//GEN-LAST:event_cbClazzActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbProductActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbProductActionPerformed
+    private void cbProductActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbProductActionPerformed
         final ComboBoxModel[] models = getProductDetailModels();
         cbFormat.setModel(models[0]);
         cbScales.setModel(models[1]);
-    }                                                                             //GEN-LAST:event_cbProductActionPerformed
+    }//GEN-LAST:event_cbProductActionPerformed
 
     @Override
     public void beansDropped(final ArrayList<CidsBean> beans) {

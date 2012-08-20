@@ -66,6 +66,7 @@ import de.cismet.cismap.commons.features.Feature;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -152,7 +153,6 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
 
             new CidsBeanDropTarget(this);
             fsSelectionDialoge.pack();
-            fsSelectionDialoge.setLocationRelativeTo(this);
 //        cmdAbort.setVisible(false);
             pnlSearchCancel = new SearchControlPanel(this);
             panCommand.add(pnlSearchCancel);
@@ -433,7 +433,10 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     private void btnAddFSActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddFSActionPerformed
         final List<CidsBean> result = new ArrayList<CidsBean>(1);
         fsSelectionDialoge.setCurrentListToAdd(result);
-        fsSelectionDialoge.setVisible(true);
+        
+        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), 
+                                    fsSelectionDialoge, 
+                                    true);
     }//GEN-LAST:event_btnAddFSActionPerformed
 
     /**

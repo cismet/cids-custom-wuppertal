@@ -42,6 +42,7 @@ import de.cismet.cids.editors.FastBindableReferenceCombo;
 import de.cismet.cids.tools.metaobjectrenderer.Titled;
 
 import de.cismet.tools.gui.RoundedPanel;
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -543,17 +544,18 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddActionPerformed
-        dlgAddLocationType.setLocationRelativeTo(Poi_locationtypeEditor.this);
-        dlgAddLocationType.setVisible(true);
-    }                                                                          //GEN-LAST:event_btnAddActionPerformed
+    private void btnAddActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(Poi_locationtypeEditor.this), 
+                                    dlgAddLocationType, 
+                                    true);               
+    }//GEN-LAST:event_btnAddActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveActionPerformed
+    private void btnRemoveActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
         final Object selection = lstLocationTypes.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -581,23 +583,23 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
                 }
             }
         }
-    }                                                                             //GEN-LAST:event_btnRemoveActionPerformed
+    }//GEN-LAST:event_btnRemoveActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbortActionPerformed
+    private void btnMenAbortActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbortActionPerformed
         dlgAddLocationType.setVisible(false);
-    }                                                                               //GEN-LAST:event_btnMenAbortActionPerformed
+    }//GEN-LAST:event_btnMenAbortActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOkActionPerformed
+    private void btnMenOkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOkActionPerformed
         try {
             final Object selItem = cbTypes.getSelectedItem();
             if (selItem instanceof MetaObject) {
@@ -608,14 +610,14 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         } finally {
             dlgAddLocationType.setVisible(false);
         }
-    }                                                                            //GEN-LAST:event_btnMenOkActionPerformed
+    }//GEN-LAST:event_btnMenOkActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtIconFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtIconFocusLost
+    private void txtIconFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIconFocusLost
         final String iconUrlString = StaticProperties.POI_LOCATIONTYPE_URL_PREFIX + txtIcon.getText()
                     + StaticProperties.POI_LOCATIONTYPE_URL_SUFFIX;
         if ((latestIconUrl == null) || !latestIconUrl.equals(iconUrlString)) {
@@ -631,16 +633,16 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
                 log.warn("Can not find icon " + iconUrlString + " !");
             }
         }
-    }                                                                    //GEN-LAST:event_txtIconFocusLost
+    }//GEN-LAST:event_txtIconFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtIconActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtIconActionPerformed
+    private void txtIconActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIconActionPerformed
         txtIconFocusLost(null);
-    }                                                                           //GEN-LAST:event_txtIconActionPerformed
+    }//GEN-LAST:event_txtIconActionPerformed
 
     /**
      * DOCUMENT ME!
