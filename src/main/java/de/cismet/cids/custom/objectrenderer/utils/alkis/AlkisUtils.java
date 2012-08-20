@@ -58,8 +58,8 @@ public class AlkisUtils {
             AlkisConstants.COMMONS.PASSWORD,
             AlkisConstants.COMMONS.SERVICE);
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisUtils.class);
-    
-    public static final String ALKIS_HTML_PRODUCTS_ENABLED="custom.alkis.products.html.enabled";
+
+    public static final String ALKIS_HTML_PRODUCTS_ENABLED = "custom.alkis.products.html.enabled";
     // --
 
     //~ Methods ----------------------------------------------------------------
@@ -558,6 +558,11 @@ public class AlkisUtils {
         return false;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public static boolean validateUserHasAlkisHTMLProductAccess() {
         try {
             return SessionManager.getConnection()
@@ -568,5 +573,4 @@ public class AlkisUtils {
         }
         return false;
     }
-    
 }
