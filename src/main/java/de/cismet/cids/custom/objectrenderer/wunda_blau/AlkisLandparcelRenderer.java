@@ -384,6 +384,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         if (!buchungsblattPermission) {
             panBuchungEigentum.setVisible(false);
         }
+        panHtmlProducts.setVisible(AlkisUtils.validateUserHasAlkisHTMLProductAccess());
     }
 
     //~ Methods ----------------------------------------------------------------

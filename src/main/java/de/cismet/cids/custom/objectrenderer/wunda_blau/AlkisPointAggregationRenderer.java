@@ -119,9 +119,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
 
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(
             AlkisPointAggregationRenderer.class);
-
     private static final double BUFFER = 0.005;
-
     public static final HashMap<String, String> POST_HEADER = new HashMap<String, String>();
 
     static {
@@ -545,11 +543,16 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
             }
             ObjectRendererUtils.decorateTableWithSorter(tblAggregation);
 
-            if (allowAPMapReport) {
-                cbProducts.setModel(new DefaultComboBoxModel(new String[] { PDF, HTML, TEXT, APMAP }));
-            } else {
-                cbProducts.setModel(new DefaultComboBoxModel(new String[] { PDF, HTML, TEXT }));
+            final ArrayList<String> comboBoxContent = new ArrayList<String>();
+            comboBoxContent.add(PDF);
+            if (AlkisUtils.validateUserHasAlkisHTMLProductAccess()) {
+                comboBoxContent.add(HTML);
             }
+            comboBoxContent.add(TEXT);
+            if (allowAPMapReport) {
+                comboBoxContent.add(APMAP);
+            }
+            cbProducts.setModel(new DefaultComboBoxModel(comboBoxContent.toArray(new String[0])));
         }
         setTitle(null);
     }
@@ -651,6 +654,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         mappingComponent.getCamera()
                 .animateViewToCenterBounds(viewBounds, true, mappingComponent.getAnimationDuration());
     }
+
     /**
      * DOCUMENT ME!
      *

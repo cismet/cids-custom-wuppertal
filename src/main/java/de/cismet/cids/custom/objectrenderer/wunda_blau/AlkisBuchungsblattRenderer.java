@@ -303,6 +303,8 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
             btnForward.setEnabled(false);
             lblForw.setEnabled(false);
         }
+
+        panProdukteHTML.setVisible(AlkisUtils.validateUserHasAlkisHTMLProductAccess());
     }
 
     //~ Methods ----------------------------------------------------------------

@@ -495,6 +495,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
             btnForward.setEnabled(false);
             lblForw.setEnabled(false);
         }
+        panHtmlProducts.setVisible(AlkisUtils.validateUserHasAlkisHTMLProductAccess());
     }
 
     //~ Methods ----------------------------------------------------------------
