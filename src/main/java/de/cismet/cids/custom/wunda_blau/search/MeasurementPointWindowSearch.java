@@ -77,6 +77,7 @@ import de.cismet.cismap.tools.gui.CidsBeanDropJPopupMenuButton;
 
 import de.cismet.tools.gui.HighlightingRadioButtonMenuItem;
 import de.cismet.tools.gui.JPopupMenuButton;
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -1171,7 +1172,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
                 @Override
                 public void run() {
                     final String s = (String)JOptionPane.showInputDialog(
-                            null,
+                            StaticSwingTools.getParentFrame(MeasurementPointWindowSearch.this),
                             "Geben Sie den Abstand des zu erzeugenden\n"       // NOI18N
                                     + "Puffers der letzten Suchgeometrie an.", // NOI18N
                             "Puffer",                                          // NOI18N
@@ -1234,7 +1235,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
                         }
                     } catch (NumberFormatException ex) {
                         JOptionPane.showMessageDialog(
-                            null,
+                            StaticSwingTools.getParentFrame(MeasurementPointWindowSearch.this),
                             "The given value was not a floating point value.!",
                             "Error",
                             JOptionPane.ERROR_MESSAGE); // NOI18N

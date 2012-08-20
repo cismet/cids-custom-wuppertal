@@ -76,11 +76,11 @@ import de.cismet.security.exceptions.MissingArgumentException;
 import de.cismet.security.exceptions.NoHandlerForURLException;
 import de.cismet.security.exceptions.RequestFailedException;
 
-import de.cismet.tools.BrowserLauncher;
 import de.cismet.tools.CismetThreadPool;
 
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
+import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
@@ -1212,7 +1212,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         if (hoehe == null) {
             save = false;
             JOptionPane.showMessageDialog(
-                this,
+                StaticSwingTools.getParentFrame(this),
                 "Die angegebene Höhe ist ungültig.",
                 "Fehler aufgetreten",
                 JOptionPane.WARNING_MESSAGE);
@@ -1221,7 +1221,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         if ((txtDGKBlattnummer.getText() == null) || (txtDGKBlattnummer.getText().trim().length() <= 0)) {
             save = false;
             JOptionPane.showMessageDialog(
-                this,
+                StaticSwingTools.getParentFrame(this),
                 "Die angegebene DGK-Blattnummer ist ungültig.",
                 "Fehler aufgetreten",
                 JOptionPane.WARNING_MESSAGE);
@@ -1230,7 +1230,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         if ((txtLaufendeNummer.getText() == null) || (txtLaufendeNummer.getText().trim().length() <= 0)) {
             save = false;
             JOptionPane.showMessageDialog(
-                this,
+                StaticSwingTools.getParentFrame(this),
                 "Die angegebene laufende Nummer ist ungültig.",
                 "Fehler aufgetreten",
                 JOptionPane.WARNING_MESSAGE);

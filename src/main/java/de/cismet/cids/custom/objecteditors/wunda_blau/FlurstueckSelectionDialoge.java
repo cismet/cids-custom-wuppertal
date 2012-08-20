@@ -45,6 +45,8 @@ import de.cismet.tools.CismetThreadPool;
 
 import de.cismet.tools.collections.TypeSafeCollections;
 
+import de.cismet.tools.gui.StaticSwingTools;
+
 /**
  * DOCUMENT ME!
  *
@@ -604,7 +606,7 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
             final String flur = String.valueOf(cboFlur.getSelectedItem());
             if (flur.length() != 3) {
                 result = JOptionPane.showConfirmDialog(
-                        this,
+                        StaticSwingTools.getParentFrame(this),
                         "Das neue Flurstück entspricht nicht der Namenskonvention: Flur sollte dreistellig sein (mit führenden Nullen, z.B. 007). Datensatz trotzdem abspeichern?",
                         "Warnung: Format",
                         JOptionPane.YES_NO_OPTION,
