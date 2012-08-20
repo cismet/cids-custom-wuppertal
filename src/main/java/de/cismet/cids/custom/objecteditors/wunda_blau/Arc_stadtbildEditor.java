@@ -915,11 +915,11 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+    private void btnRemoveActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveActionPerformed
         final Object selection = lstSuchworte.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(
-                    this,
+                    StaticSwingTools.getParentFrame(this),
                     "Soll das Suchwort wirklich gelöscht werden?",
                     "Suchwort entfernen",
                     JOptionPane.YES_NO_OPTION);
@@ -935,23 +935,23 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveActionPerformed
+    }                                                                             //GEN-LAST:event_btnRemoveActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+    private void btnAddActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddActionPerformed
         CismetThreadPool.execute(new ComboBoxWorker());
-    }//GEN-LAST:event_btnAddActionPerformed
+    }                                                                          //GEN-LAST:event_btnAddActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOkActionPerformed
+    private void btnMenOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOkActionPerformed
         final String suchwort = lookForNewSuchwort();
         if (suchwort != null) {
             if (suchwort.trim().length() > 0) {
@@ -973,29 +973,29 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
             }
         }
         dlgAddSuchwort.setVisible(false);
-    }//GEN-LAST:event_btnMenOkActionPerformed
+    }                                                                            //GEN-LAST:event_btnMenOkActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbortActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbortActionPerformed
+    private void btnMenAbortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbortActionPerformed
         dlgAddSuchwort.setVisible(false);
-    }//GEN-LAST:event_btnMenAbortActionPerformed
+    }                                                                               //GEN-LAST:event_btnMenAbortActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblPictureMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPictureMouseClicked
+    private void lblPictureMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblPictureMouseClicked
         if (!evt.isPopupTrigger()) {
             if (lblPicture.getPictureURL() != null) {
                 ObjectRendererUtils.openURL(lblPicture.getPictureURL());
             }
         }
-    }//GEN-LAST:event_lblPictureMouseClicked
+    }                                                                          //GEN-LAST:event_lblPictureMouseClicked
 
     /**
      * DOCUMENT ME!
@@ -1013,30 +1013,30 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtBildnummerFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBildnummerFocusLost
+    private void txtBildnummerFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtBildnummerFocusLost
         setNewPicture();
-    }//GEN-LAST:event_txtBildnummerFocusLost
+    }                                                                          //GEN-LAST:event_txtBildnummerFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtBildnummerKeyPressed(final java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBildnummerKeyPressed
+    private void txtBildnummerKeyPressed(final java.awt.event.KeyEvent evt) { //GEN-FIRST:event_txtBildnummerKeyPressed
         final int key = evt.getKeyCode();
         if (key == KeyEvent.VK_ENTER) {
             setNewPicture();
         }
-    }//GEN-LAST:event_txtBildnummerKeyPressed
+    }                                                                         //GEN-LAST:event_txtBildnummerKeyPressed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbHauptsuchwortActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbHauptsuchwortActionPerformed
+    private void cbHauptsuchwortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbHauptsuchwortActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbHauptsuchwortActionPerformed
+    } //GEN-LAST:event_cbHauptsuchwortActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1165,9 +1165,9 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
             try {
                 cbSuchworte.setModel(get());
                 cbSuchworte.setSelectedIndex(0);
-                StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(Arc_stadtbildEditor.this), 
-                                            dlgAddSuchwort,
-                                            true);
+                StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(Arc_stadtbildEditor.this),
+                    dlgAddSuchwort,
+                    true);
             } catch (InterruptedException ex) {
                 log.warn(ex, ex);
             } catch (ExecutionException ex) {

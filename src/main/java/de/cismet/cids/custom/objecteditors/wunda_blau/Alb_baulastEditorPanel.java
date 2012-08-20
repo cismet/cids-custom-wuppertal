@@ -966,22 +966,22 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddBelastetActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddBelastetActionPerformed
+    private void btnAddBelastetActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddBelastetActionPerformed
         fsDialoge.setCurrentListToAdd(CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "flurstuecke_belastet"));
         handleAddFlurstueck(true);
-    }//GEN-LAST:event_btnAddBelastetActionPerformed
+    }                                                                                  //GEN-LAST:event_btnAddBelastetActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddBeguenstigtActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddBeguenstigtActionPerformed
+    private void btnAddBeguenstigtActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddBeguenstigtActionPerformed
         fsDialoge.setCurrentListToAdd(CidsBeanSupport.getBeanCollectionFromProperty(
                 cidsBean,
                 "flurstuecke_beguenstigt"));
         handleAddFlurstueck(false);
-    }//GEN-LAST:event_btnAddBeguenstigtActionPerformed
+    }                                                                                     //GEN-LAST:event_btnAddBeguenstigtActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -996,8 +996,8 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         }
 
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this),
-                                    fsDialoge, 
-                                    true);
+            fsDialoge,
+            true);
     }
 
     /**
@@ -1005,11 +1005,11 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveBeguenstigtActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveBeguenstigtActionPerformed
+    private void btnRemoveBeguenstigtActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveBeguenstigtActionPerformed
         final Object[] selection = lstFlurstueckeBeguenstigt.getSelectedValues();
         if ((selection != null) && (selection.length > 0)) {
             final int answer = JOptionPane.showConfirmDialog(
-                    this,
+                    StaticSwingTools.getParentFrame(this),
                     "Soll das Flurstück wirklich gelöscht werden?",
                     "Begünstigtes Flurstück entfernen",
                     JOptionPane.YES_NO_OPTION);
@@ -1028,18 +1028,18 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveBeguenstigtActionPerformed
+    }                                                                                        //GEN-LAST:event_btnRemoveBeguenstigtActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveBelastetActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveBelastetActionPerformed
+    private void btnRemoveBelastetActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveBelastetActionPerformed
         final Object[] selection = lstFlurstueckeBelastet.getSelectedValues();
         if ((selection != null) && (selection.length > 0)) {
             final int answer = JOptionPane.showConfirmDialog(
-                    this,
+                    StaticSwingTools.getParentFrame(this),
                     "Soll das Flurstück wirklich gelöscht werden?",
                     "Belastetes Flurstück entfernen",
                     JOptionPane.YES_NO_OPTION);
@@ -1058,31 +1058,31 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveBelastetActionPerformed
+    }                                                                                     //GEN-LAST:event_btnRemoveBelastetActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddArtActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddArtActionPerformed
+    private void btnAddArtActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddArtActionPerformed
         if (!baulastArtenListInitialized) {
             CismetThreadPool.execute(new BaulastArtenComboModelWorker());
         }
-        
+
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgAddBaulastArt, true);
-    }//GEN-LAST:event_btnAddArtActionPerformed
+    } //GEN-LAST:event_btnAddArtActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveArtActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveArtActionPerformed
+    private void btnRemoveArtActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveArtActionPerformed
         final Object[] selection = lstBaulastArt.getSelectedValues();
         if ((selection != null) && (selection.length > 0)) {
             final int answer = JOptionPane.showConfirmDialog(
-                    this,
+                    StaticSwingTools.getParentFrame(this),
                     "Soll die Art wirklich gelöscht werden?",
                     "Art entfernen",
                     JOptionPane.YES_NO_OPTION);
@@ -1099,23 +1099,23 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveArtActionPerformed
+    }                                                                                //GEN-LAST:event_btnRemoveArtActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbort1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbort1ActionPerformed
+    private void btnMenAbort1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbort1ActionPerformed
         dlgAddBaulastArt.setVisible(false);
-    }//GEN-LAST:event_btnMenAbort1ActionPerformed
+    }                                                                                //GEN-LAST:event_btnMenAbort1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOk1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOk1ActionPerformed
+    private void btnMenOk1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOk1ActionPerformed
         final Object selection = cbBaulastArt.getSelectedItem();
         if (selection instanceof LightweightMetaObject) {
             final CidsBean selectedBean = ((LightweightMetaObject)selection).getBean();
@@ -1127,39 +1127,39 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
             }
         }
         dlgAddBaulastArt.setVisible(false);
-    }//GEN-LAST:event_btnMenOk1ActionPerformed
+    }                                                                             //GEN-LAST:event_btnMenOk1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstFlurstueckeBelastetMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstFlurstueckeBelastetMouseClicked
+    private void lstFlurstueckeBelastetMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstFlurstueckeBelastetMouseClicked
         if (evt.getClickCount() > 1) {
             handleJumpToListeSelectionBean(lstFlurstueckeBelastet);
         }
-    }//GEN-LAST:event_lstFlurstueckeBelastetMouseClicked
+    }                                                                                      //GEN-LAST:event_lstFlurstueckeBelastetMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstFlurstueckeBeguenstigtMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstFlurstueckeBeguenstigtMouseClicked
+    private void lstFlurstueckeBeguenstigtMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstFlurstueckeBeguenstigtMouseClicked
         if (evt.getClickCount() > 1) {
             handleJumpToListeSelectionBean(lstFlurstueckeBeguenstigt);
         }
-    }//GEN-LAST:event_lstFlurstueckeBeguenstigtMouseClicked
+    }                                                                                         //GEN-LAST:event_lstFlurstueckeBeguenstigtMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblLastInMapMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLastInMapMouseClicked
+    private void lblLastInMapMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblLastInMapMouseClicked
         ObjectRendererUtils.switchToCismapMap();
         ObjectRendererUtils.addBeanGeomsAsFeaturesToCismapMap(allSelectedObjects, editable);
-    }//GEN-LAST:event_lblLastInMapMouseClicked
+    }                                                                            //GEN-LAST:event_lblLastInMapMouseClicked
 
     /**
      * DOCUMENT ME!

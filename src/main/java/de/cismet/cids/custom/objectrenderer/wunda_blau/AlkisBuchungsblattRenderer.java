@@ -354,7 +354,8 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      * DOCUMENT ME!
      */
     private void showNoProductPermissionWarning() {
-        JOptionPane.showMessageDialog(this, "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
+        JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+            "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
     }
 
     /**
@@ -1517,7 +1518,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                     Arrays.sort(flurstuecke);
 
                     final String s = (String)JOptionPane.showInputDialog(
-                            this,
+                            StaticSwingTools.getParentFrame(this),
                             "Auf welches Flurstück soll sich der Grundstücksnachweis beziehen?",
                             "Flurstückauswahl",
                             JOptionPane.PLAIN_MESSAGE,

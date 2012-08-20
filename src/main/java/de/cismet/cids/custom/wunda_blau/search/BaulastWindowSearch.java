@@ -66,6 +66,7 @@ import de.cismet.cismap.commons.features.Feature;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
+
 import de.cismet.tools.gui.StaticSwingTools;
 
 /**
@@ -433,11 +434,11 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     private void btnAddFSActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddFSActionPerformed
         final List<CidsBean> result = new ArrayList<CidsBean>(1);
         fsSelectionDialoge.setCurrentListToAdd(result);
-        
-        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), 
-                                    fsSelectionDialoge, 
-                                    true);
-    }//GEN-LAST:event_btnAddFSActionPerformed
+
+        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this),
+            fsSelectionDialoge,
+            true);
+    } //GEN-LAST:event_btnAddFSActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -592,7 +593,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
 
         if (keineBlattNummer && keinKartenausschnitt && keineArt && keinFlurstueck) {
             JOptionPane.showMessageDialog(
-                this,
+                StaticSwingTools.getParentFrame(this),
                 "Ihre Suchanfrage ist nicht plausibel. Bitte präzisieren Sie die\n"
                         + "Suchanfrage durch weitere Angaben im Attribut- und Flurstücksfilter.",
                 "Plausibilitätskontrolle",

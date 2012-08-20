@@ -35,6 +35,7 @@ import de.cismet.cismap.commons.gui.ToolbarComponentsProvider;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.tools.collections.TypeSafeCollections;
+
 import de.cismet.tools.gui.StaticSwingTools;
 
 /**
