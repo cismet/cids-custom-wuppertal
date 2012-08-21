@@ -8,6 +8,7 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
@@ -19,6 +20,7 @@ import com.vividsolutions.jts.geom.PrecisionModel;
 
 import org.apache.log4j.Logger;
 
+import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 import java.awt.Color;
@@ -63,6 +65,7 @@ import javax.swing.text.DocumentFilter;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.wunda_blau.search.server.CidsVermessungRissSearchStatement;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
@@ -159,6 +162,10 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     //~ Instance fields --------------------------------------------------------
 
     protected CidsBean cidsBean;
+    protected Object schluessel;
+    protected Object gemarkung;
+    protected Object flur;
+    protected Object blatt;
     protected boolean readOnly;
     protected Map.Entry<URL, URL>[] documentURLs;
     protected JToggleButton[] documentButtons;
@@ -1500,7 +1507,10 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                         (Integer)cidsBean.getProperty("geometrie_status.id")));
             }
 
-            // TODO: Add a propertyChangeListener to CidsBean which reacts on changes to 'bild' or 'grenzniederschrift'?
+            schluessel = cidsBean.getProperty("schluessel");
+            gemarkung = (cidsBean.getProperty("gemarkung") != null) ? cidsBean.getProperty("gemarkung.id") : null;
+            flur = cidsBean.getProperty("flur");
+            blatt = cidsBean.getProperty("blatt");
         }
 
         setCurrentDocumentNull();
@@ -1645,13 +1655,65 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                     "VermessungRissEditor.prepareForSave().JOptionPane.title"),
                 JOptionPane.WARNING_MESSAGE);
         }
+        final Object newSchluessel = cidsBean.getProperty("schluessel");
+        final Object newGemarkung = cidsBean.getProperty("gemarkung.id");
+        final Object newFlur = cidsBean.getProperty("flur");
+        final Object newBlatt = cidsBean.getProperty("blatt");
 
+        final CidsVermessungRissSearchStatement search = new CidsVermessungRissSearchStatement(
+                newSchluessel.toString(),
+                newGemarkung.toString(),
+                newFlur.toString(),
+                newBlatt.toString(),
+                null,
+                null,
+                null);
+
+        final Collection result;
         try {
-            cidsBean.setProperty("letzteaenderung_datum", new Date(System.currentTimeMillis()));
-            cidsBean.setProperty("letzteaenderung_name", SessionManager.getSession().getUser().getName());
-        } catch (Exception ex) {
-            // TODO: Tell user?
-            LOG.warn("Could not save date and user of last change.", ex);
+            result = SessionManager.getProxy().customServerSearch(SessionManager.getSession().getUser(), search);
+        } catch (final ConnectionException ex) {
+            LOG.error("Could not check if the natural key of this measurement sketch is valid.", ex);
+            JOptionPane.showMessageDialog(
+                this,
+                NbBundle.getMessage(
+                    VermessungRissEditor.class,
+                    "VermessungRissEditor.prepareForSave().noConnection.message"),
+                NbBundle.getMessage(
+                    VermessungRissEditor.class,
+                    "VermessungRissEditor.prepareForSave().noConnection.title"),
+                JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        if ((result != null) && !result.isEmpty()
+                    && !(newSchluessel.equals(schluessel) && newGemarkung.equals(gemarkung) && newFlur.equals(flur)
+                        && newBlatt.equals(blatt))) {
+            save = false;
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("The given natural key of the measurement sketch already exists. Skip saving.");
+            }
+
+            JOptionPane.showMessageDialog(
+                this,
+                NbBundle.getMessage(
+                    VermessungRissEditor.class,
+                    "VermessungRissEditor.prepareForSave().keyExists.message"),
+                NbBundle.getMessage(
+                    VermessungRissEditor.class,
+                    "VermessungRissEditor.prepareForSave().keyExists.title"),
+                JOptionPane.WARNING_MESSAGE);
+        } else {
+            save = true;
+
+            try {
+                cidsBean.setProperty("letzteaenderung_datum", new Date(System.currentTimeMillis()));
+                cidsBean.setProperty("letzteaenderung_name", SessionManager.getSession().getUser().getName());
+            } catch (final Exception ex) {
+                LOG.warn("Could not save date and user of last change.", ex);
+                // TODO: User feedback?
+            }
         }
 
         return save;
