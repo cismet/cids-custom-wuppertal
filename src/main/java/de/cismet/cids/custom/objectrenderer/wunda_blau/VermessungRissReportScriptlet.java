@@ -51,7 +51,7 @@ public class VermessungRissReportScriptlet extends JRDefaultScriptlet {
      *
      * @return  DOCUMENT ME!
      */
-    public static Boolean isImageAvailable(final String type,
+    public static Boolean isImageAvailable(final String host,
             final String schluessel,
             final Integer gemarkung,
             final String flur,

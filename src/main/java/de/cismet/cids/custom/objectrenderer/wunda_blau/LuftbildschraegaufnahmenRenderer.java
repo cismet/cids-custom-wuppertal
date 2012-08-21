@@ -1017,7 +1017,7 @@ public class LuftbildschraegaufnahmenRenderer extends BlurredMapObjectRenderer {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void AgrPrintActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgrPrintActionPerformed
+    private void AgrPrintActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_AgrPrintActionPerformed
         final Thread t = new Thread(new Runnable() {
 
                     @Override
@@ -1169,14 +1169,14 @@ public class LuftbildschraegaufnahmenRenderer extends BlurredMapObjectRenderer {
                     }
                 });
         t.start();
-    }//GEN-LAST:event_AgrPrintActionPerformed
+    } //GEN-LAST:event_AgrPrintActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void printActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printActionPerformed
+    private void printActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_printActionPerformed
         final Thread t = new Thread(new Runnable() {
 
                     @Override
@@ -1310,5 +1310,5 @@ public class LuftbildschraegaufnahmenRenderer extends BlurredMapObjectRenderer {
                     }
                 });
         t.start();
-    }//GEN-LAST:event_printActionPerformed
+    } //GEN-LAST:event_printActionPerformed
 }
