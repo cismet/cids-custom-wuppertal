@@ -15,6 +15,8 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.server.middleware.types.LightweightMetaObject;
 import Sirius.server.middleware.types.MetaObject;
 
+import org.openide.util.NbBundle;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.HeadlessException;
@@ -790,6 +792,17 @@ public class VermessungFlurstueckSelectionDialog extends javax.swing.JDialog {
 
             if (position < 0) {
                 currentListToAdd.add(-position - 1, flurstuecksvermessung);
+            } else {
+                JOptionPane.showMessageDialog(
+                    this,
+                    NbBundle.getMessage(
+                        VermessungFlurstueckSelectionDialog.class,
+                        "VermessungFlurstueckSelectionDialog.apply(boolean).itemAlreadyExists.message"),
+                    NbBundle.getMessage(
+                        VermessungFlurstueckSelectionDialog.class,
+                        "VermessungFlurstueckSelectionDialog.apply(boolean).itemAlreadyExists.title"),
+                    JOptionPane.WARNING_MESSAGE);
+                return;
             }
         }
 
