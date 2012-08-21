@@ -181,6 +181,8 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         btnRelease.setEnabled(gehaltenePunkte.size() > 0);
         btnRemember.setVisible(false);
         btnRelease.setVisible(false);
+
+        btnCreate.setEnabled(ObjectRendererUtils.checkActionTag(AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE));
     }
 
     //~ Methods ----------------------------------------------------------------
