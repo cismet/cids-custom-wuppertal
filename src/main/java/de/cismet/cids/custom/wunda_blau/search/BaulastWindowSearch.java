@@ -67,6 +67,8 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 
+import de.cismet.tools.gui.StaticSwingTools;
+
 /**
  * DOCUMENT ME!
  *
@@ -152,7 +154,6 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
 
             new CidsBeanDropTarget(this);
             fsSelectionDialoge.pack();
-            fsSelectionDialoge.setLocationRelativeTo(this);
 //        cmdAbort.setVisible(false);
             pnlSearchCancel = new SearchControlPanel(this);
             panCommand.add(pnlSearchCancel);
@@ -433,8 +434,11 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     private void btnAddFSActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddFSActionPerformed
         final List<CidsBean> result = new ArrayList<CidsBean>(1);
         fsSelectionDialoge.setCurrentListToAdd(result);
-        fsSelectionDialoge.setVisible(true);
-    }                                                                            //GEN-LAST:event_btnAddFSActionPerformed
+
+        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this),
+            fsSelectionDialoge,
+            true);
+    } //GEN-LAST:event_btnAddFSActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -599,35 +603,14 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     public boolean checkActionTag() {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), "navigator.baulasten.search") != null;
+                        .getConfigAttr(SessionManager.getSession().getUser(), "navigator.baulasten.search@WUNDA_BLAU")
+                        != null;
         } catch (ConnectionException ex) {
             log.error("Can not validate ActionTag for Baulasten Suche!", ex);
             return false;
         }
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   args  DOCUMENT ME!
-     *
-     * @throws  Exception  DOCUMENT ME!
-     */
-    public static void main(final String[] args) throws Exception {
-        DevelopmentTools.initSessionManagerFromRMIConnectionOnLocalhost(
-            "WUNDA_BLAU",
-            "Administratoren",
-            "admin",
-            "krissenich");
-        final BaulastWindowSearch bws = new BaulastWindowSearch();
-        DevelopmentTools.showTestFrame(bws, 800, 600);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
     @Override
     public CidsServerSearch assembleSearch() {
         CidsServerSearch result = null;
@@ -640,7 +623,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
 
         if (keineBlattNummer && keinKartenausschnitt && keineArt && keinFlurstueck) {
             JOptionPane.showMessageDialog(
-                this,
+                StaticSwingTools.getParentFrame(this),
                 "Ihre Suchanfrage ist nicht plausibel. Bitte präzisieren Sie die\n"
                         + "Suchanfrage durch weitere Angaben im Attribut- und Flurstücksfilter.",
                 "Plausibilitätskontrolle",

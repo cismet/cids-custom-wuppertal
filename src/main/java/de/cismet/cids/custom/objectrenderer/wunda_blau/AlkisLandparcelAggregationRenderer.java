@@ -82,14 +82,15 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
 
     private static final Logger LOG = Logger.getLogger(AlkisLandparcelAggregationRenderer.class);
 
-    private static final String PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS = "custom.alkis.product.flurstuecksnachweis";
+    private static final String PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS =
+        "custom.alkis.product.flurstuecksnachweis@WUNDA_BLAU";
     private static final String PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW =
-        "custom.alkis.product.flurstuecks_eigentumsnachweis_nrw";
+        "custom.alkis.product.flurstuecks_eigentumsnachweis_nrw@WUNDA_BLAU";
     private static final String PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM =
-        "custom.alkis.product.flurstuecks_eigentumsnachweis_kom";
+        "custom.alkis.product.flurstuecks_eigentumsnachweis_kom@WUNDA_BLAU";
     private static final String PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN =
-        "custom.alkis.product.flurstuecks_eigentumsnachweis_kom_intern";
-    private static final String PRODUCT_ACTION_TAG_KARTE = "custom.alkis.product.karte";
+        "custom.alkis.product.flurstuecks_eigentumsnachweis_kom_intern@WUNDA_BLAU";
+    private static final String PRODUCT_ACTION_TAG_KARTE = "custom.alkis.product.karte@WUNDA_BLAU";
 
     private static final Color[] COLORS = new Color[] {
             new Color(247, 150, 70, 192),
@@ -152,6 +153,15 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
                     changeMap();
                 }
             });
+
+        jxlKarte.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_KARTE));
+        jxlFlurstuecksnachweis.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS));
+        jxlNachweisKommunal.setEnabled(ObjectRendererUtils.checkActionTag(
+                PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM));
+        jxlNachweisKommunalIntern.setEnabled(ObjectRendererUtils.checkActionTag(
+                PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN));
+        jxlNachweisNRW.setEnabled(ObjectRendererUtils.checkActionTag(
+                PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW));
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -706,7 +716,8 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
      * DOCUMENT ME!
      */
     private void showNoProductPermissionWarning() {
-        JOptionPane.showMessageDialog(this, "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
+        JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+            "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
     }
 
     //~ Inner Classes ----------------------------------------------------------

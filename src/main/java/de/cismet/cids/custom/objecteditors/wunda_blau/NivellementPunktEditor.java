@@ -11,8 +11,6 @@ import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaObject;
 
-import com.vividsolutions.jts.geom.Geometry;
-
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -30,7 +28,6 @@ import org.openide.util.NbBundle;
 
 import java.awt.image.BufferedImage;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -53,8 +50,6 @@ import javax.swing.border.EmptyBorder;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
-import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.NivellementPunktAggregationRenderer;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 
@@ -81,11 +76,11 @@ import de.cismet.security.exceptions.MissingArgumentException;
 import de.cismet.security.exceptions.NoHandlerForURLException;
 import de.cismet.security.exceptions.RequestFailedException;
 
-import de.cismet.tools.BrowserLauncher;
 import de.cismet.tools.CismetThreadPool;
 
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
+import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
@@ -914,26 +909,6 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
      * @param  evt  DOCUMENT ME!
      */
     private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
-        try {
-            if (BillingPopup.doBilling(
-                            "nivppdf",
-                            urlOfDocument,
-                            (Geometry)null,
-                            new ProductGroupAmount("ea", 1))) {
-                openDoc(urlOfDocument);
-            }
-        } catch (Exception e) {
-            LOG.error("Error when trying to produce a alkis product", e);
-            // Hier noch ein Fehlerdialog
-        }
-    }                                                                           //GEN-LAST:event_btnOpenActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  urlOfDocument  DOCUMENT ME!
-     */
-    private void openDoc(final String urlOfDocument) {
         if (urlOfDocument != null) {
             final URL url;
             try {
@@ -962,7 +937,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
                     }
                 });
         }
-    }
+    } //GEN-LAST:event_btnOpenActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1010,24 +985,6 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
      * @param  evt  DOCUMENT ME!
      */
     private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
-        try {
-            if (BillingPopup.doBilling(
-                            "nivppdf",
-                            "no.yet",
-                            (Geometry)null,
-                            new ProductGroupAmount("ea", 1))) {
-                downloadReport();
-            }
-        } catch (Exception e) {
-            LOG.error("Error when trying to produce a alkis product", e);
-            // Hier noch ein Fehlerdialog
-        }
-    }                                                                             //GEN-LAST:event_btnReportActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     */
-    private void downloadReport() {
         final Runnable runnable = new Runnable() {
 
                 @Override
@@ -1077,7 +1034,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
             };
 
         CismetThreadPool.execute(runnable);
-    }
+    } //GEN-LAST:event_btnReportActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1172,21 +1129,11 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         return result.toString();
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  cidsBean  DOCUMENT ME!
-     */
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         bindingGroup.unbind();
@@ -1218,9 +1165,6 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         }
     }
 
-    /**
-     * DOCUMENT ME!
-     */
     @Override
     public void dispose() {
         bindingGroup.unbind();
@@ -1231,60 +1175,30 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         }
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
     @Override
     public JComponent getTitleComponent() {
         return pnlTitle;
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
     @Override
     public Border getTitleBorder() {
         return new EmptyBorder(10, 10, 10, 10);
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
     @Override
     public Border getFooterBorder() {
         return new EmptyBorder(5, 5, 5, 5);
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
     @Override
     public Border getCenterrBorder() {
         return new EmptyBorder(0, 5, 0, 5);
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  event  DOCUMENT ME!
-     */
     @Override
     public void editorClosed(final EditorClosedEvent event) {
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
     @Override
     public boolean prepareForSave() {
         boolean save = true;
@@ -1298,7 +1212,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         if (hoehe == null) {
             save = false;
             JOptionPane.showMessageDialog(
-                this,
+                StaticSwingTools.getParentFrame(this),
                 "Die angegebene Höhe ist ungültig.",
                 "Fehler aufgetreten",
                 JOptionPane.WARNING_MESSAGE);
@@ -1307,7 +1221,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         if ((txtDGKBlattnummer.getText() == null) || (txtDGKBlattnummer.getText().trim().length() <= 0)) {
             save = false;
             JOptionPane.showMessageDialog(
-                this,
+                StaticSwingTools.getParentFrame(this),
                 "Die angegebene DGK-Blattnummer ist ungültig.",
                 "Fehler aufgetreten",
                 JOptionPane.WARNING_MESSAGE);
@@ -1316,7 +1230,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         if ((txtLaufendeNummer.getText() == null) || (txtLaufendeNummer.getText().trim().length() <= 0)) {
             save = false;
             JOptionPane.showMessageDialog(
-                this,
+                StaticSwingTools.getParentFrame(this),
                 "Die angegebene laufende Nummer ist ungültig.",
                 "Fehler aufgetreten",
                 JOptionPane.WARNING_MESSAGE);
@@ -1325,11 +1239,6 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
         return save;
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
     @Override
     public JComponent getFooterComponent() {
         return strFooter;
@@ -1390,13 +1299,6 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
 
         //~ Methods ------------------------------------------------------------
 
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         *
-         * @throws  Exception  DOCUMENT ME!
-         */
         @Override
         protected BufferedImage doInBackground() throws Exception {
             final Collection<URL> validURLs = getCorrespondingURLs(txtDGKBlattnummer.getText(),
@@ -1452,9 +1354,6 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
             return result;
         }
 
-        /**
-         * DOCUMENT ME!
-         */
         @Override
         protected void done() {
             BufferedImage document = null;

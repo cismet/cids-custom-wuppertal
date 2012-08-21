@@ -44,6 +44,8 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.tools.CismetThreadPool;
 
+import de.cismet.tools.gui.StaticSwingTools;
+
 /**
  * DOCUMENT ME!
  *
@@ -481,7 +483,7 @@ public class VermessungFlurstueckSelectionDialog extends javax.swing.JDialog {
             flurstueckBean = ((LightweightMetaObject)flurstueck).getBean();
         } else if ((flurstueck instanceof String) && usedInEditor) {
             final int result = JOptionPane.showConfirmDialog(
-                    this,
+                    StaticSwingTools.getParentFrame(this),
                     "Das Flurstück befindet sich nicht im Datenbestand der aktuellen Flurstücke. Soll es als historisch angelegt werden?",
                     "Historisches Flurstück anlegen",
                     JOptionPane.YES_NO_OPTION);
@@ -699,7 +701,7 @@ public class VermessungFlurstueckSelectionDialog extends javax.swing.JDialog {
 
             if (flur.length() != 3) {
                 result = JOptionPane.showConfirmDialog(
-                        this,
+                        StaticSwingTools.getParentFrame(this),
                         "Das neue Flurstück entspricht nicht der Namenskonvention: Flur sollte dreistellig sein (mit führenden Nullen, z.B. 007). Datensatz trotzdem abspeichern?",
                         "Warnung: Format",
                         JOptionPane.YES_NO_OPTION,

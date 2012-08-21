@@ -53,7 +53,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     //~ Static fields/initializers ---------------------------------------------
 
     static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisWindowSearch.class);
-    private static final String ACTION_TAG = "custom.alkis.windowsearch";
+    private static final String ACTION_TAG = "custom.alkis.windowsearch@WUNDA_BLAU";
 
     //~ Instance fields --------------------------------------------------------
 

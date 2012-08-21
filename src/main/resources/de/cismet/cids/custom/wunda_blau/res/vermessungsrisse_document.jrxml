@@ -4,14 +4,32 @@
 	<field name="description" class="java.lang.String">
 		<fieldDescription><![CDATA[description]]></fieldDescription>
 	</field>
-	<field name="image" class="java.awt.Image">
-		<fieldDescription><![CDATA[image]]></fieldDescription>
+	<field name="host" class="java.lang.String">
+		<fieldDescription><![CDATA[host]]></fieldDescription>
+	</field>
+	<field name="schluessel" class="java.lang.String">
+		<fieldDescription><![CDATA[schluessel]]></fieldDescription>
+	</field>
+	<field name="gemarkung" class="java.lang.Integer">
+		<fieldDescription><![CDATA[gemarkung]]></fieldDescription>
+	</field>
+	<field name="flur" class="java.lang.String">
+		<fieldDescription><![CDATA[flur]]></fieldDescription>
+	</field>
+	<field name="blatt" class="java.lang.String">
+		<fieldDescription><![CDATA[blatt]]></fieldDescription>
+	</field>
+	<field name="page" class="java.lang.Integer">
+		<fieldDescription><![CDATA[page]]></fieldDescription>
+	</field>
+	<field name="reader" class="de.cismet.tools.gui.MultiPagePictureReader">
+		<fieldDescription><![CDATA[reader]]></fieldDescription>
 	</field>
 	<detail>
 		<band height="750">
-			<image vAlign="Middle" onErrorType="Blank">
-				<reportElement x="5" y="25" width="545" height="720" isRemoveLineWhenBlank="true"/>
-				<imageExpression class="java.awt.Image"><![CDATA[$F{image}]]></imageExpression>
+			<image vAlign="Middle">
+				<reportElement x="5" y="25" width="545" height="720"/>
+				<imageExpression class="java.awt.Image"><![CDATA[$F{reader}.loadPage($F{page}.intValue())]]></imageExpression>
 			</image>
 			<textField isBlankWhenNull="true">
 				<reportElement x="5" y="5" width="545" height="20" isRemoveLineWhenBlank="true"/>

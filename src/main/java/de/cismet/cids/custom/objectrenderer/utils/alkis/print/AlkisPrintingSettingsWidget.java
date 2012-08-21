@@ -164,7 +164,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
             beansToPrint = getAlkisFlurstueckBeansFromTreeSelection();
         } else if (beansToPrint.size() > 1) {
             final int dialogResult = JOptionPane.showConfirmDialog(
-                    this,
+                    StaticSwingTools.getParentFrame(this),
                     "Sollen alle Flurstückeobjekte der Karte gedruckt werden?",
                     "Flurstücke in Druckauswahl übernehmen",
                     JOptionPane.YES_NO_OPTION);

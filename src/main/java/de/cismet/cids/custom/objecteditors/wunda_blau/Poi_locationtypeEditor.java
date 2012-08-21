@@ -42,6 +42,7 @@ import de.cismet.cids.editors.FastBindableReferenceCombo;
 import de.cismet.cids.tools.metaobjectrenderer.Titled;
 
 import de.cismet.tools.gui.RoundedPanel;
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -552,8 +553,9 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
      * @param  evt  DOCUMENT ME!
      */
     private void btnAddActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddActionPerformed
-        dlgAddLocationType.setLocationRelativeTo(Poi_locationtypeEditor.this);
-        dlgAddLocationType.setVisible(true);
+        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(Poi_locationtypeEditor.this),
+            dlgAddLocationType,
+            true);
     }                                                                          //GEN-LAST:event_btnAddActionPerformed
 
     /**
@@ -565,7 +567,7 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         final Object selection = lstLocationTypes.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(
-                    this,
+                    StaticSwingTools.getParentFrame(this),
                     "Soll die Lebenslage wirklich gelöscht werden?",
                     "Lebenslage entfernen",
                     JOptionPane.YES_NO_OPTION);

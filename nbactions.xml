@@ -6,6 +6,9 @@
             <goal>process-classes</goal>
             <goal>org.codehaus.mojo:exec-maven-plugin:1.1.1:exec</goal>
         </goals>
+        <activatedProfiles>
+            <activatedProfile>cismet-dev-exec</activatedProfile>
+        </activatedProfiles>
         <properties>
             <jalopy.skip>true</jalopy.skip>
             <exec.classpathScope>runtime</exec.classpathScope>
@@ -20,6 +23,9 @@
             <goal>process-classes</goal>
             <goal>org.codehaus.mojo:exec-maven-plugin:1.1.1:exec</goal>
         </goals>
+        <activatedProfiles>
+            <activatedProfile>cismet-dev-exec</activatedProfile>
+        </activatedProfiles>
         <properties>
             <jalopy.skip>true</jalopy.skip>
             <exec.classpathScope>runtime</exec.classpathScope>
@@ -35,6 +41,9 @@
             <goal>process-classes</goal>
             <goal>org.codehaus.mojo:exec-maven-plugin:1.1.1:exec</goal>
         </goals>
+        <activatedProfiles>
+            <activatedProfile>cismet-dev-exec</activatedProfile>
+        </activatedProfiles>
         <properties>
             <exec.args>${profiler.args} -Ddirectory.extension=WUNDA -Xms256m -Xmx1024m -Duser.country=DE -Duser.language=de -classpath ${de.cismet.cids.classpath} Sirius.navigator.Navigator ${de.cismet.cids.navigator.workingDir.wunda}/config/log4j.debug.properties ${de.cismet.cids.navigator.workingDir.wunda}/config/navigator.cfg ${de.cismet.cids.navigator.workingDir.wunda} ${de.cismet.cids.navigator.workingDir.wunda}/plugins ${de.cismet.cids.navigator.workingDir.wunda}/search ${de.cismet.cids.navigator.workingDir.wunda}/profiles</exec.args>
             <exec.workingdir>${de.cismet.cids.navigator.workingDir.wunda}</exec.workingdir>
@@ -55,30 +64,30 @@
         </activatedProfiles>
     </action>
     <action>
-            <actionName>debug.single.main</actionName>
-            <goals>
-                <goal>process-classes</goal>
-                <goal>org.codehaus.mojo:exec-maven-plugin:1.2:exec</goal>
-            </goals>
-            <properties>
-                <jalopy.skip>true</jalopy.skip>
-                <exec.classpathScope>${classPathScope}</exec.classpathScope>
-                <jpda.listen>true</jpda.listen>
-                <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath ${packageClassName}</exec.args>
-                <exec.executable>java</exec.executable>
-            </properties>
-        </action>
+        <actionName>debug.single.main</actionName>
+        <goals>
+            <goal>process-classes</goal>
+            <goal>org.codehaus.mojo:exec-maven-plugin:1.2:exec</goal>
+        </goals>
+        <properties>
+            <jalopy.skip>true</jalopy.skip>
+            <exec.classpathScope>${classPathScope}</exec.classpathScope>
+            <jpda.listen>true</jpda.listen>
+            <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath ${packageClassName}</exec.args>
+            <exec.executable>java</exec.executable>
+        </properties>
+    </action>
     <action>
-            <actionName>run.single.main</actionName>
-            <goals>
-                <goal>process-classes</goal>
-                <goal>org.codehaus.mojo:exec-maven-plugin:1.2:exec</goal>
-            </goals>
-            <properties>
-                <exec.classpathScope>${classPathScope}</exec.classpathScope>
-                <exec.args>-classpath %classpath ${packageClassName}</exec.args>
-                <jalopy.skip>true</jalopy.skip>
-                <exec.executable>java</exec.executable>
-            </properties>
-        </action>
+        <actionName>run.single.main</actionName>
+        <goals>
+            <goal>process-classes</goal>
+            <goal>org.codehaus.mojo:exec-maven-plugin:1.2:exec</goal>
+        </goals>
+        <properties>
+            <exec.classpathScope>${classPathScope}</exec.classpathScope>
+            <exec.args>-classpath %classpath ${packageClassName}</exec.args>
+            <jalopy.skip>true</jalopy.skip>
+            <exec.executable>java</exec.executable>
+        </properties>
+    </action>
 </actions>

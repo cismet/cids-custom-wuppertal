@@ -27,8 +27,9 @@ import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 import java.awt.EventQueue;
-import java.awt.Image;
 import java.awt.geom.Rectangle2D;
+
+import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,7 +46,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
-import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -55,10 +55,9 @@ import javax.swing.table.TableRowSorter;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
+import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungRissEditor;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.PrintingWaitDialog;
-import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
-import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -76,9 +75,13 @@ import de.cismet.cismap.navigatorplugin.CidsFeature;
 
 import de.cismet.tools.CismetThreadPool;
 
+import de.cismet.tools.gui.MultiPagePictureReader;
 import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
+import de.cismet.tools.gui.downloadmanager.HttpDownload;
+import de.cismet.tools.gui.downloadmanager.MultipleDownload;
 
 /**
  * DOCUMENT ME!
@@ -389,77 +392,24 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             return;
         }
 
-        new SwingWorker<Void, Void>() {
+        final Object typeObj = cmbType.getSelectedItem();
+        final String type;
+        if (typeObj instanceof String) {
+            type = (String)typeObj;
 
-                @Override
-                protected Void doInBackground() throws Exception {
-                    final Object typeObj = cmbType.getSelectedItem();
-                    final String type;
-                    if (typeObj instanceof String) {
-                        type = (String)typeObj;
-
-                        try {
-                            int dinA3Orless = 0;
-                            int dinA2Orbigger = 0;
-                            for (final CidsBean selectedVermessungsriss : selectedVermessungsrisse) {
-                                final boolean isDocumentAvailable;
-                                if (type.equalsIgnoreCase(TYPE_VERMESSUNGSRISSE)) {
-                                    isDocumentAvailable = hasVermessungsriss(selectedVermessungsriss);
-                                } else if (type.equalsIgnoreCase(TYPE_COMPLEMENTARYDOCUMENTS)) {
-                                    isDocumentAvailable = hasErgaenzendeDokumente(selectedVermessungsriss);
-                                } else {
-                                    isDocumentAvailable = false;
-                                }
-                                if (isDocumentAvailable) {
-                                    final CidsBean format = (CidsBean)selectedVermessungsriss.getProperty("format");
-                                    if (format != null) {
-                                        if (format.getProperty("name").equals("2")) {
-                                            dinA2Orbigger++;
-                                        } else {
-                                            dinA3Orless++;
-                                        }
-                                    } else {
-                                        dinA3Orless++;
-                                    }
-                                }
-                            }
-
-                            if (type.equalsIgnoreCase(TYPE_VERMESSUNGSRISSE)) {
-                                if (BillingPopup.doBilling(
-                                                "vrpdf",
-                                                "no.yet",
-                                                (Geometry)null,
-                                                new ProductGroupAmount("eadoc_a3", dinA3Orless),
-                                                new ProductGroupAmount("eadoc_a2-a0", dinA2Orbigger))) {
-                                    downloadProducts(
-                                        selectedVermessungsrisse,
-                                        type,
-                                        AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER);
-                                }
-                            } else if (type.equalsIgnoreCase(TYPE_COMPLEMENTARYDOCUMENTS)) {
-                                if (BillingPopup.doBilling(
-                                                "doklapdf",
-                                                "no.yet",
-                                                (Geometry)null,
-                                                new ProductGroupAmount("eadoc_a3", dinA3Orless),
-                                                new ProductGroupAmount("eadoc_a2-a0", dinA2Orbigger))) {
-                                    downloadProducts(
-                                        selectedVermessungsrisse,
-                                        type,
-                                        AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN);
-                                }
-                            }
-                        } catch (Exception e) {
-                            LOG.error("Error when trying to produce a alkis product", e);
-                            // Hier noch ein Fehlerdialog
-                        }
-                    } else {
-                        // TODO: User feedback?!
-                        LOG.info("Unknown type '" + typeObj + "' encountered. Skipping report generation.");
-                    }
-                    return null;
-                }
-            }.execute();
+            if (type.equalsIgnoreCase(TYPE_VERMESSUNGSRISSE)) {
+                downloadProducts(selectedVermessungsrisse, type, AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER);
+            } else if (type.equalsIgnoreCase(TYPE_COMPLEMENTARYDOCUMENTS)) {
+                downloadProducts(
+                    selectedVermessungsrisse,
+                    type,
+                    AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN);
+            }
+        } else {
+            // TODO: User feedback?!
+            LOG.info("Unknown type '" + typeObj + "' encountered. Skipping report generation.");
+            return;
+        }
     } //GEN-LAST:event_btnGenerateReportActionPerformed
 
     /**
@@ -480,15 +430,17 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
 
                             @Override
                             public void run() {
-                                printingWaitDialog.setLocationRelativeTo(
-                                    StaticSwingTools.getParentFrame(VermessungRissAggregationRenderer.this));
-                                printingWaitDialog.setVisible(true);
+                                StaticSwingTools.showDialog(
+                                    StaticSwingTools.getParentFrame(VermessungRissAggregationRenderer.this),
+                                    printingWaitDialog,
+                                    true);
                             }
                         });
 
                     final Collection<VermessungRissReportBean> reportBeans = new LinkedList<VermessungRissReportBean>();
                     final Collection<VermessungRissImageReportBean> imageBeans =
                         new LinkedList<VermessungRissImageReportBean>();
+                    final Collection<URL> additionalFilesToDownload = new LinkedList<URL>();
 
                     // Not the most elegant way, but it works. We have to calculate on which page an image will appear.
                     // This can't be easily done with JasperReports. In order to let JasperReports calculate which page
@@ -505,15 +457,17 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         startingPage += Math.ceil((selectedVermessungsrisse.size() - 27D) / 37D);
                     }
 
-                    Image[] images = null;
                     for (final CidsBean vermessungsriss : selectedVermessungsrisse) {
+                        final String schluessel;
+                        final Integer gemarkung;
+                        final String flur;
+                        final String blatt;
+
                         try {
-                            images = VermessungRissReportScriptlet.loadImages(
-                                    host,
-                                    vermessungsriss.getProperty("schluessel").toString(),
-                                    (Integer)vermessungsriss.getProperty("gemarkung.id"),
-                                    vermessungsriss.getProperty("flur").toString(),
-                                    vermessungsriss.getProperty("blatt").toString());
+                            schluessel = vermessungsriss.getProperty("schluessel").toString();
+                            gemarkung = (Integer)vermessungsriss.getProperty("gemarkung.id");
+                            flur = vermessungsriss.getProperty("flur").toString();
+                            blatt = vermessungsriss.getProperty("blatt").toString();
                         } catch (final Exception ex) {
                             // TODO: User feedback?
                             LOG.warn("Could not include raster document for vermessungsriss '"
@@ -538,17 +492,63 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         description.append(vermessungsriss.getProperty("blatt"));
                         description.append(" - Seite ");
 
-                        if (images != null) {
-                            for (int i = 0; i < images.length; i++) {
-                                imageBeans.add(new VermessungRissImageReportBean(
-                                        description.toString()
-                                                + (i + 1),
-                                        images[i]));
-                            }
+                        final Map<URL, URL> validURLs = VermessungRissEditor.getCorrespondingURLs(
+                                host,
+                                gemarkung,
+                                flur,
+                                schluessel,
+                                blatt);
 
-                            startingPages.put(vermessungsriss.getProperty("id"), new Integer(startingPage));
-                            startingPage += images.length;
+                        MultiPagePictureReader reader = null;
+                        int pageCount = 0;
+                        for (final Map.Entry<URL, URL> urls : validURLs.entrySet()) {
+                            try {
+                                reader = new MultiPagePictureReader(urls.getValue(), false, false);
+                                pageCount = reader.getNumberOfPages();
+                                additionalFilesToDownload.add(urls.getKey());
+                                break;
+                            } catch (final Exception ex) {
+                                LOG.warn("Could not read document from URL '" + urls.getValue().toExternalForm()
+                                            + "'. Skipping this url.",
+                                    ex);
+                            }
                         }
+
+                        if (reader == null) {
+                            // Didn't find an image of reduced size
+                            for (final Map.Entry<URL, URL> urls : validURLs.entrySet()) {
+                                try {
+                                    reader = new MultiPagePictureReader(urls.getKey(), false, false);
+                                    pageCount = reader.getNumberOfPages();
+                                    break;
+                                } catch (final Exception ex) {
+                                    LOG.warn("Could not read document from URL '" + urls.getValue().toExternalForm()
+                                                + "'. Skipping this url.",
+                                        ex);
+                                }
+                            }
+                        }
+
+                        if (reader == null) {
+                            // Couldn't open any image.
+                            continue;
+                        }
+
+                        for (int i = 0; i < pageCount; i++) {
+                            imageBeans.add(new VermessungRissImageReportBean(
+                                    description.toString()
+                                            + (i + 1),
+                                    host,
+                                    schluessel,
+                                    gemarkung,
+                                    flur,
+                                    blatt,
+                                    i,
+                                    reader));
+                        }
+
+                        startingPages.put(vermessungsriss.getProperty("id"), new Integer(startingPage));
+                        startingPage += pageCount;
                     }
 
                     reportBeans.add(new VermessungRissReportBean(selectedVermessungsrisse, imageBeans));
@@ -597,15 +597,37 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                             projectname = type;
                         }
                         final String jobname = DownloadManagerDialog.getJobname();
+                        final JasperDownload jasperDownload = new JasperDownload(
+                                jasperReport,
+                                parameters,
+                                dataSource,
+                                jobname,
+                                projectname,
+                                "vermriss");
 
-                        DownloadManager.instance()
-                                .add(new JasperDownload(
-                                        jasperReport,
-                                        parameters,
-                                        dataSource,
+                        if (additionalFilesToDownload.isEmpty()) {
+                            DownloadManager.instance().add(jasperDownload);
+                        } else {
+                            final Collection<Download> downloads = new LinkedList<Download>();
+                            downloads.add(jasperDownload);
+
+                            for (final URL additionalFileToDownload : additionalFilesToDownload) {
+                                final String file = additionalFileToDownload.getFile()
+                                            .substring(additionalFileToDownload.getFile().lastIndexOf('/') + 1);
+                                final String filename = file.substring(0, file.lastIndexOf('.'));
+                                final String extension = file.substring(file.lastIndexOf('.'));
+
+                                downloads.add(new HttpDownload(
+                                        additionalFileToDownload,
+                                        null,
                                         jobname,
-                                        projectname,
-                                        "vermriss"));
+                                        file,
+                                        filename,
+                                        extension));
+                            }
+
+                            DownloadManager.instance().add(new MultipleDownload(downloads, projectname));
+                        }
                     }
                 }
             };
@@ -733,6 +755,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                 txtProjectname.setEnabled(false);
             }
         }
+
         setTitle(null);
     }
 
@@ -1108,7 +1131,13 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
         //~ Instance fields ----------------------------------------------------
 
         private String description;
-        private Image image;
+        private String host;
+        private String schluessel;
+        private Integer gemarkung;
+        private String flur;
+        private String blatt;
+        private Integer page;
+        private MultiPagePictureReader reader;
 
         //~ Constructors -------------------------------------------------------
 
@@ -1116,11 +1145,30 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
          * Creates a new VermessungRissImageReportBean object.
          *
          * @param  description  DOCUMENT ME!
-         * @param  image        DOCUMENT ME!
+         * @param  host         DOCUMENT ME!
+         * @param  schluessel   DOCUMENT ME!
+         * @param  gemarkung    DOCUMENT ME!
+         * @param  flur         DOCUMENT ME!
+         * @param  blatt        DOCUMENT ME!
+         * @param  page         DOCUMENT ME!
+         * @param  reader       DOCUMENT ME!
          */
-        public VermessungRissImageReportBean(final String description, final Image image) {
+        public VermessungRissImageReportBean(final String description,
+                final String host,
+                final String schluessel,
+                final Integer gemarkung,
+                final String flur,
+                final String blatt,
+                final Integer page,
+                final MultiPagePictureReader reader) {
             this.description = description;
-            this.image = image;
+            this.host = host;
+            this.schluessel = schluessel;
+            this.gemarkung = gemarkung;
+            this.flur = flur;
+            this.blatt = blatt;
+            this.page = page;
+            this.reader = reader;
         }
 
         //~ Methods ------------------------------------------------------------
@@ -1139,8 +1187,62 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
          *
          * @return  DOCUMENT ME!
          */
-        public Image getImage() {
-            return image;
+        public String getBlatt() {
+            return blatt;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public String getFlur() {
+            return flur;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public Integer getGemarkung() {
+            return gemarkung;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public String getHost() {
+            return host;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public Integer getPage() {
+            return page;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public String getSchluessel() {
+            return schluessel;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public MultiPagePictureReader getReader() {
+            return reader;
         }
     }
 }

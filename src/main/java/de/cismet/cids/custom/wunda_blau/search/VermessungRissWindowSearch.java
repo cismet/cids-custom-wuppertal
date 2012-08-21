@@ -82,6 +82,7 @@ import de.cismet.cismap.tools.gui.CidsBeanDropJPopupMenuButton;
 
 import de.cismet.tools.gui.HighlightingRadioButtonMenuItem;
 import de.cismet.tools.gui.JPopupMenuButton;
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -99,7 +100,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
 
     private static final Logger LOG = Logger.getLogger(VermessungRissWindowSearch.class);
 
-    private static final String ACTION_TAG = "custom.alkis.windowsearch";
+    private static final String ACTION_TAG = "custom.alkis.windowsearch@WUNDA_BLAU";
 
     //~ Instance fields --------------------------------------------------------
 
@@ -266,7 +267,6 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
             };
 
         flurstueckDialog.pack();
-        flurstueckDialog.setLocationRelativeTo(this);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -1065,7 +1065,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                 @Override
                 public void run() {
                     final String s = (String)JOptionPane.showInputDialog(
-                            null,
+                            StaticSwingTools.getParentFrame(VermessungRissWindowSearch.this),
                             "Geben Sie den Abstand des zu erzeugenden\n"       // NOI18N
                                     + "Puffers der letzten Suchgeometrie an.", // NOI18N
                             "Puffer",                                          // NOI18N
@@ -1128,7 +1128,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                         }
                     } catch (NumberFormatException ex) {
                         JOptionPane.showMessageDialog(
-                            null,
+                            StaticSwingTools.getParentFrame(VermessungRissWindowSearch.this),
                             "The given value was not a floating point value.!",
                             "Error",
                             JOptionPane.ERROR_MESSAGE); // NOI18N
@@ -1177,8 +1177,11 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     private void btnAddFlurstueckActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddFlurstueckActionPerformed
         final List<CidsBean> result = new ArrayList<CidsBean>(1);
         flurstueckDialog.setCurrentListToAdd(result);
-        flurstueckDialog.setVisible(true);
-    }                                                                                    //GEN-LAST:event_btnAddFlurstueckActionPerformed
+
+        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this),
+            flurstueckDialog,
+            true);
+    } //GEN-LAST:event_btnAddFlurstueckActionPerformed
 
     /**
      * DOCUMENT ME!

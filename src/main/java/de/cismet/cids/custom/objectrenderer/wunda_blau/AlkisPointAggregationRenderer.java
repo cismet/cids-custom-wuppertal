@@ -121,9 +121,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
 
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(
             AlkisPointAggregationRenderer.class);
-
     private static final double BUFFER = 0.005;
-
     public static final HashMap<String, String> POST_HEADER = new HashMap<String, String>();
 
     static {
@@ -185,6 +183,8 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         btnRelease.setEnabled(gehaltenePunkte.size() > 0);
         btnRemember.setVisible(false);
         btnRelease.setVisible(false);
+
+        btnCreate.setEnabled(ObjectRendererUtils.checkActionTag(AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE));
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -327,7 +327,8 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
      */
     private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCreateActionPerformed
         if (!ObjectRendererUtils.checkActionTag(AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE)) {
-            JOptionPane.showMessageDialog(this, "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
+            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
             return;
         }
 
@@ -636,11 +637,16 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
             }
             ObjectRendererUtils.decorateTableWithSorter(tblAggregation);
 
-            if (allowAPMapReport) {
-                cbProducts.setModel(new DefaultComboBoxModel(new String[] { PDF, HTML, TEXT, APMAP }));
-            } else {
-                cbProducts.setModel(new DefaultComboBoxModel(new String[] { PDF, HTML, TEXT }));
+            final ArrayList<String> comboBoxContent = new ArrayList<String>();
+            comboBoxContent.add(PDF);
+            if (AlkisUtils.validateUserHasAlkisHTMLProductAccess()) {
+                comboBoxContent.add(HTML);
             }
+            comboBoxContent.add(TEXT);
+            if (allowAPMapReport) {
+                comboBoxContent.add(APMAP);
+            }
+            cbProducts.setModel(new DefaultComboBoxModel(comboBoxContent.toArray(new String[0])));
         }
         setTitle(null);
     }
@@ -742,6 +748,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         mappingComponent.getCamera()
                 .animateViewToCenterBounds(viewBounds, true, mappingComponent.getAnimationDuration());
     }
+
     /**
      * DOCUMENT ME!
      *

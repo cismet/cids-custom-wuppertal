@@ -151,12 +151,14 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private static final String CARD_1 = "CARD_1";
     private static final String CARD_2 = "CARD_2";
     //
-    private static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW = "custom.alkis.product.bestandsnachweis_nrw";
-    private static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM = "custom.alkis.product.bestandsnachweis_kom";
+    private static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW =
+        "custom.alkis.product.bestandsnachweis_nrw@WUNDA_BLAU";
+    private static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM =
+        "custom.alkis.product.bestandsnachweis_kom@WUNDA_BLAU";
     private static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN =
-        "custom.alkis.product.bestandsnachweis_kom_intern";
+        "custom.alkis.product.bestandsnachweis_kom_intern@WUNDA_BLAU";
     private static final String PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW =
-        "custom.alkis.product.grundstuecksnachweis_nrw";
+        "custom.alkis.product.grundstuecksnachweis_nrw@WUNDA_BLAU";
 
     //~ Instance fields --------------------------------------------------------
 
@@ -303,6 +305,25 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
             btnForward.setEnabled(false);
             lblForw.setEnabled(false);
         }
+
+        panProdukteHTML.setVisible(AlkisUtils.validateUserHasAlkisHTMLProductAccess());
+
+        hlBestandsnachweisKomPdf.setEnabled(ObjectRendererUtils.checkActionTag(
+                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM));
+        hlBestandsnachweisKomHtml.setEnabled(ObjectRendererUtils.checkActionTag(
+                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM));
+        hlBestandsnachweisNrwPdf.setEnabled(ObjectRendererUtils.checkActionTag(
+                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW));
+        hlBestandsnachweisNrwHtml.setEnabled(ObjectRendererUtils.checkActionTag(
+                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW));
+        hlBestandsnachweisKomInternPdf.setEnabled(ObjectRendererUtils.checkActionTag(
+                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN));
+        hlBestandsnachweisKomInternHtml.setEnabled(ObjectRendererUtils.checkActionTag(
+                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN));
+        hlGrundstuecksnachweisNrwPdf.setEnabled(ObjectRendererUtils.checkActionTag(
+                PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW));
+        hlGrundstuecksnachweisNrwHtml.setEnabled(ObjectRendererUtils.checkActionTag(
+                PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW));
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -352,7 +373,8 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      * DOCUMENT ME!
      */
     private void showNoProductPermissionWarning() {
-        JOptionPane.showMessageDialog(this, "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
+        JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+            "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
     }
 
     /**
@@ -1536,7 +1558,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                     Arrays.sort(flurstuecke);
 
                     final String s = (String)JOptionPane.showInputDialog(
-                            this,
+                            StaticSwingTools.getParentFrame(this),
                             "Auf welches Flurstück soll sich der Grundstücksnachweis beziehen?",
                             "Flurstückauswahl",
                             JOptionPane.PLAIN_MESSAGE,
