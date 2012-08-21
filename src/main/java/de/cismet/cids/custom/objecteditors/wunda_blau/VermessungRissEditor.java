@@ -82,10 +82,7 @@ import de.cismet.cismap.commons.gui.measuring.MeasuringComponent;
 
 import de.cismet.security.WebAccessManager;
 
-import de.cismet.tools.gui.BorderProvider;
-import de.cismet.tools.gui.FooterComponentProvider;
-import de.cismet.tools.gui.MultiPagePictureReader;
-import de.cismet.tools.gui.TitleComponentProvider;
+import de.cismet.tools.gui.*;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import de.cismet.tools.gui.downloadmanager.HttpDownload;
@@ -290,7 +287,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         } else {
             flurstueckDialog = new VermessungFlurstueckSelectionDialog();
             flurstueckDialog.pack();
-            flurstueckDialog.setLocationRelativeTo(this);
             flurstueckDialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
             flurstueckDialog.addWindowListener(new EnableCombineGeometriesButton());
             if (txtBlatt.getDocument() instanceof AbstractDocument) {
@@ -1383,8 +1379,9 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         flurstueckDialog.setCurrentListToAdd(CidsBeanSupport.getBeanCollectionFromProperty(
                 cidsBean,
                 "flurstuecksvermessung"));
-        flurstueckDialog.setVisible(true);
-    }                                                                                    //GEN-LAST:event_btnAddLandparcelActionPerformed
+
+        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), flurstueckDialog, true);
+    } //GEN-LAST:event_btnAddLandparcelActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1396,7 +1393,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
         if ((selection != null) && (selection.length > 0)) {
             final int answer = JOptionPane.showConfirmDialog(
-                    this,
+                    StaticSwingTools.getParentFrame(this),
                     "Soll das Flurstück wirklich gelöscht werden?",
                     "Flurstück entfernen",
                     JOptionPane.YES_NO_OPTION);
@@ -1465,7 +1462,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         if (union == null) {
             LOG.warn("Could not find geometries on given landparcels. Did not attach a new geometry.");
             JOptionPane.showMessageDialog(
-                this,
+                StaticSwingTools.getParentFrame(this),
                 "Keines der betroffenen Flurstücke weist eine Geometrie auf.",
                 "Keine Geometrie erstellt",
                 JOptionPane.WARNING_MESSAGE);
@@ -1667,7 +1664,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             save = false;
 
             JOptionPane.showMessageDialog(
-                this,
+                StaticSwingTools.getParentFrame(this),
                 NbBundle.getMessage(
                     VermessungRissEditor.class,
                     "VermessungRissEditor.prepareForSave().JOptionPane.message.prefix")

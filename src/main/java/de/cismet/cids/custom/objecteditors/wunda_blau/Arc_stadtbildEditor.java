@@ -52,6 +52,7 @@ import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 import de.cismet.tools.CismetThreadPool;
 
 import de.cismet.tools.gui.RoundedPanel;
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -918,7 +919,7 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         final Object selection = lstSuchworte.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(
-                    this,
+                    StaticSwingTools.getParentFrame(this),
                     "Soll das Suchwort wirklich gelöscht werden?",
                     "Suchwort entfernen",
                     JOptionPane.YES_NO_OPTION);
@@ -1164,8 +1165,9 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
             try {
                 cbSuchworte.setModel(get());
                 cbSuchworte.setSelectedIndex(0);
-                dlgAddSuchwort.setLocationRelativeTo(Arc_stadtbildEditor.this);
-                dlgAddSuchwort.setVisible(true);
+                StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(Arc_stadtbildEditor.this),
+                    dlgAddSuchwort,
+                    true);
             } catch (InterruptedException ex) {
                 log.warn(ex, ex);
             } catch (ExecutionException ex) {

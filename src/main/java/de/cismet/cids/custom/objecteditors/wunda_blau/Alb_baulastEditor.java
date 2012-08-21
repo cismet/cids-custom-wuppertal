@@ -45,6 +45,7 @@ import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
+import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
 
 /**
@@ -373,7 +374,7 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         final String fileCollisionWarning = alb_picturePanel.getCollisionWarning();
         if (fileCollisionWarning.length() > 0) {
             JOptionPane.showMessageDialog(
-                this,
+                StaticSwingTools.getParentFrame(this),
                 fileCollisionWarning,
                 "Unterschiedliche Dateiformate",
                 JOptionPane.WARNING_MESSAGE);
@@ -461,7 +462,7 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
                 }
                 errorOutput = errorOutput.substring(0, errorOutput.length() - 1);
                 JOptionPane.showMessageDialog(
-                    this,
+                    StaticSwingTools.getParentFrame(this),
                     errorOutput,
                     "Fehler aufgetreten",
                     JOptionPane.WARNING_MESSAGE);

@@ -57,6 +57,7 @@ import de.cismet.tools.collections.TypeSafeCollections;
 
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
+import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
 
 /**
@@ -741,7 +742,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
             final Collection<CidsBean> baulasten = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "baulasten");
             if (baulasten != null) {
                 final String userInput = (String)JOptionPane.showInputDialog(
-                        this,
+                        StaticSwingTools.getParentFrame(this),
                         "Bitte die neue Laufende Nummer eingeben:",
                         "Neue Laufende Nummer anlegen",
                         JOptionPane.PLAIN_MESSAGE,
@@ -765,7 +766,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                         lstLaufendeNummern.setSelectedIndex(newIndex - 1);
                     } else {
                         JOptionPane.showMessageDialog(
-                            this,
+                            StaticSwingTools.getParentFrame(this),
                             "Die Nummer "
                                     + userInput
                                     + " kann nicht angelegt werden, weil diese Nummer bereits existiert!");
@@ -931,13 +932,13 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                     final int answer;
                     if (checkOK) {
                         answer = JOptionPane.showConfirmDialog(
-                                this,
+                                StaticSwingTools.getParentFrame(this),
                                 "Soll die Nummer wirklich gelöscht werden?",
                                 "Nummer entfernen",
                                 JOptionPane.YES_NO_OPTION);
                     } else {
                         answer = JOptionPane.showConfirmDialog(
-                                this,
+                                StaticSwingTools.getParentFrame(this),
                                 "Plausibilitätsprüfung fehlgeschlagen. Nicht alle Flurstücke des Platzhalters wurden realen Baulasten zugeordnet. Soll dennoch gelöscht werden?",
                                 "Platzhalter entfernen",
                                 JOptionPane.YES_NO_OPTION,
@@ -995,7 +996,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         final String fileCollisionWarning = alb_picturePanel.getCollisionWarning();
         if (fileCollisionWarning.length() > 0) {
             JOptionPane.showMessageDialog(
-                this,
+                StaticSwingTools.getParentFrame(this),
                 fileCollisionWarning,
                 "Unterschiedliche Dateiformate",
                 JOptionPane.WARNING_MESSAGE);
@@ -1208,7 +1209,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                 }
                 errorOutput = errorOutput.substring(0, errorOutput.length() - 1);
                 JOptionPane.showMessageDialog(
-                    this,
+                    StaticSwingTools.getParentFrame(this),
                     errorOutput,
                     "Fehler aufgetreten",
                     JOptionPane.WARNING_MESSAGE);
