@@ -8,6 +8,7 @@
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import Sirius.navigator.tools.BrowserLauncher;
+import Sirius.navigator.ui.ComponentRegistry;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -148,7 +149,8 @@ public class LuftbildschraegaufnahmenRenderer extends BlurredMapObjectRenderer {
 
     @CidsAttributeVector("Georeferenz.GEO_STRING")
     public Vector<Geometry> geoAgr = new Vector();
-    PrintingWaitDialog printingWaitDialog = new PrintingWaitDialog(StaticSwingTools.getParentFrame(this), true);
+    PrintingWaitDialog printingWaitDialog = new PrintingWaitDialog(ComponentRegistry.getRegistry().getMainWindow(),
+            true);
     Properties properties = new Properties();
 
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
@@ -1015,7 +1017,7 @@ public class LuftbildschraegaufnahmenRenderer extends BlurredMapObjectRenderer {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void AgrPrintActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_AgrPrintActionPerformed
+    private void AgrPrintActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgrPrintActionPerformed
         final Thread t = new Thread(new Runnable() {
 
                     @Override
@@ -1025,10 +1027,7 @@ public class LuftbildschraegaufnahmenRenderer extends BlurredMapObjectRenderer {
 
                                     @Override
                                     public void run() {
-                                        StaticSwingTools.showDialog(
-                                            StaticSwingTools.getParentFrame(LuftbildschraegaufnahmenRenderer.this),
-                                            printingWaitDialog,
-                                            true);
+                                        StaticSwingTools.showDialog(printingWaitDialog);
                                     }
                                 });
 
@@ -1170,14 +1169,14 @@ public class LuftbildschraegaufnahmenRenderer extends BlurredMapObjectRenderer {
                     }
                 });
         t.start();
-    } //GEN-LAST:event_AgrPrintActionPerformed
+    }//GEN-LAST:event_AgrPrintActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void printActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_printActionPerformed
+    private void printActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printActionPerformed
         final Thread t = new Thread(new Runnable() {
 
                     @Override
@@ -1187,11 +1186,7 @@ public class LuftbildschraegaufnahmenRenderer extends BlurredMapObjectRenderer {
 
                                     @Override
                                     public void run() {
-                                        final Component parent = StaticSwingTools.getParentFrame(
-                                                LuftbildschraegaufnahmenRenderer.this);
-                                        StaticSwingTools.showDialog(parent,
-                                            printingWaitDialog,
-                                            true);
+                                        StaticSwingTools.showDialog(printingWaitDialog);
                                     }
                                 });
 
@@ -1315,5 +1310,5 @@ public class LuftbildschraegaufnahmenRenderer extends BlurredMapObjectRenderer {
                     }
                 });
         t.start();
-    } //GEN-LAST:event_printActionPerformed
+    }//GEN-LAST:event_printActionPerformed
 }
