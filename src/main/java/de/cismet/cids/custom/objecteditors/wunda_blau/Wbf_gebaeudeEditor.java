@@ -71,6 +71,7 @@ import de.cismet.cids.tools.metaobjectrenderer.Titled;
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
 import de.cismet.tools.gui.RoundedPanel;
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -1317,7 +1318,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
      */
     private void cmdRemoveVorgangActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdRemoveVorgangActionPerformed
         final int answer = JOptionPane.showConfirmDialog(
-                this,
+                StaticSwingTools.getParentFrame(this),
                 "Soll dieser Vorgang wirklich gelöscht werden?",
                 "Vorgang entfernen",
                 JOptionPane.YES_NO_OPTION);

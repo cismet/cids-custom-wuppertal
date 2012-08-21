@@ -66,6 +66,7 @@ import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.StaticDecimalTools;
 
 import de.cismet.tools.gui.MultiPagePictureReader;
+import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import de.cismet.tools.gui.downloadmanager.HttpDownload;
@@ -768,7 +769,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                     }
                 } else {
                     JOptionPane.showMessageDialog(
-                        this,
+                        StaticSwingTools.getParentFrame(this),
                         "Eingegebene(r) Distanz bzw. Umfang ist kein gültiger Wert oder gleich 0.",
                         "Ungültige Eingabe",
                         JOptionPane.WARNING_MESSAGE);
@@ -969,7 +970,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     private void showPermissionWarning() {
         if (!alreadyWarnedAboutPermissionProblem) {
             JOptionPane.showMessageDialog(
-                this,
+                StaticSwingTools.getParentFrame(this),
                 "Kein Schreibrecht",
                 "Kein Schreibrecht für die Klasse. Änderungen werden nicht gespeichert.",
                 JOptionPane.WARNING_MESSAGE);
@@ -1026,7 +1027,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     private Double askForDistanceValue() {
         try {
             final String laenge = JOptionPane.showInputDialog(
-                    this,
+                    StaticSwingTools.getParentFrame(this),
                     "Bitte Länge bzw. Umfang in Metern eingeben:",
                     "Kalibrierung",
                     JOptionPane.QUESTION_MESSAGE);

@@ -325,7 +325,8 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
      */
     private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCreateActionPerformed
         if (!ObjectRendererUtils.checkActionTag(AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE)) {
-            JOptionPane.showMessageDialog(this, "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
+            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
             return;
         }
 

@@ -430,9 +430,10 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
 
                             @Override
                             public void run() {
-                                printingWaitDialog.setLocationRelativeTo(
-                                    StaticSwingTools.getParentFrame(VermessungRissAggregationRenderer.this));
-                                printingWaitDialog.setVisible(true);
+                                StaticSwingTools.showDialog(
+                                    StaticSwingTools.getParentFrame(VermessungRissAggregationRenderer.this),
+                                    printingWaitDialog,
+                                    true);
                             }
                         });
 

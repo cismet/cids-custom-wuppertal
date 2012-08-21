@@ -68,6 +68,7 @@ import de.cismet.cids.editors.DefaultBindableDateChooser;
 import de.cismet.tools.CismetThreadPool;
 
 import de.cismet.tools.gui.AlphaContainer;
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -993,7 +994,10 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         } else {
             fsDialoge.setTitle("Begünstigtes Flurstück hinzufügen");
         }
-        fsDialoge.setVisible(true);
+
+        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this),
+            fsDialoge,
+            true);
     }
 
     /**
@@ -1005,7 +1009,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         final Object[] selection = lstFlurstueckeBeguenstigt.getSelectedValues();
         if ((selection != null) && (selection.length > 0)) {
             final int answer = JOptionPane.showConfirmDialog(
-                    this,
+                    StaticSwingTools.getParentFrame(this),
                     "Soll das Flurstück wirklich gelöscht werden?",
                     "Begünstigtes Flurstück entfernen",
                     JOptionPane.YES_NO_OPTION);
@@ -1035,7 +1039,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         final Object[] selection = lstFlurstueckeBelastet.getSelectedValues();
         if ((selection != null) && (selection.length > 0)) {
             final int answer = JOptionPane.showConfirmDialog(
-                    this,
+                    StaticSwingTools.getParentFrame(this),
                     "Soll das Flurstück wirklich gelöscht werden?",
                     "Belastetes Flurstück entfernen",
                     JOptionPane.YES_NO_OPTION);
@@ -1065,8 +1069,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         if (!baulastArtenListInitialized) {
             CismetThreadPool.execute(new BaulastArtenComboModelWorker());
         }
-        dlgAddBaulastArt.setVisible(true);
-    }                                                                             //GEN-LAST:event_btnAddArtActionPerformed
+
+        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgAddBaulastArt, true);
+    } //GEN-LAST:event_btnAddArtActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1077,7 +1082,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         final Object[] selection = lstBaulastArt.getSelectedValues();
         if ((selection != null) && (selection.length > 0)) {
             final int answer = JOptionPane.showConfirmDialog(
-                    this,
+                    StaticSwingTools.getParentFrame(this),
                     "Soll die Art wirklich gelöscht werden?",
                     "Art entfernen",
                     JOptionPane.YES_NO_OPTION);
