@@ -20,7 +20,6 @@ import com.vividsolutions.jts.geom.PrecisionModel;
 
 import org.apache.log4j.Logger;
 
-import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 import java.awt.Color;
@@ -160,6 +159,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         COLORS_GEOMETRIE_STATUS.put(new Integer(3), Color.yellow);
         COLORS_GEOMETRIE_STATUS.put(new Integer(4), Color.red);
         COLORS_GEOMETRIE_STATUS.put(new Integer(5), Color.red);
+        COLORS_GEOMETRIE_STATUS.put(new Integer(6), Color.green);
     }
 
     //~ Instance fields --------------------------------------------------------
@@ -1724,6 +1724,37 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             } catch (final Exception ex) {
                 LOG.warn("Could not save date and user of last change.", ex);
                 // TODO: User feedback?
+            }
+        }
+
+        if (save) {
+            final CidsBean geometrieStatus = (CidsBean)cidsBean.getProperty("geometrie_status");
+
+            if (geometrieStatus.getProperty("id") instanceof Integer) {
+                final Integer geometrieStatusId = (Integer)geometrieStatus.getProperty("id");
+
+                if (geometrieStatusId.intValue() == 6) {
+                    final Object nameObj = cidsBean.getProperty("optimiert_name");
+                    final String name;
+
+                    if (nameObj instanceof String) {
+                        name = (String)nameObj;
+                    } else {
+                        name = "";
+                    }
+
+                    if (name.isEmpty()) {
+                        try {
+                            cidsBean.setProperty("optimiert_datum", new Date(System.currentTimeMillis()));
+                            cidsBean.setProperty("optimiert_name", SessionManager.getSession().getUser().getName());
+                        } catch (final Exception ex) {
+                            LOG.info("Couldn't save who changed when the geometry's state to '"
+                                        + geometrieStatus.getProperty("name") + "'.",
+                                ex);
+                            // TODO: User feedback?
+                        }
+                    }
+                }
             }
         }
 
