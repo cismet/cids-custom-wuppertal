@@ -261,7 +261,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                 public void okHook() {
                     final List<CidsBean> result = getCurrentListToAdd();
                     if (result.size() > 0) {
-                        flurstuecksvermessungFilterModel.addElement(result.get(0));
+                        flurstuecksvermessungFilterModel.addElement(result.remove(0));
                     }
                 }
             };
