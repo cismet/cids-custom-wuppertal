@@ -38,6 +38,7 @@ import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -51,6 +52,7 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
 import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungFlurstueckSelectionDialog;
+import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsVermessungRissSearchStatement;
@@ -259,9 +261,10 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
 
                 @Override
                 public void okHook() {
-                    final List<CidsBean> result = getCurrentListToAdd();
-                    if (result.size() > 0) {
-                        flurstuecksvermessungFilterModel.addElement(result.remove(0));
+                    flurstuecksvermessungFilterModel.clear();
+
+                    for (final CidsBean flurstuecksvermessung : getCurrentListToAdd()) {
+                        flurstuecksvermessungFilterModel.addElement(flurstuecksvermessung);
                     }
                 }
             };
@@ -1176,6 +1179,13 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
      */
     private void btnAddFlurstueckActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddFlurstueckActionPerformed
         final List<CidsBean> result = new ArrayList<CidsBean>(1);
+
+        for (final Object flurstuecksvermessung : flurstuecksvermessungFilterModel.toArray()) {
+            result.add((CidsBean)flurstuecksvermessung);
+        }
+
+        Collections.sort(result, AlphanumComparator.getInstance());
+
         flurstueckDialog.setCurrentListToAdd(result);
 
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this),
