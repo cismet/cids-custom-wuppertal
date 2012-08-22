@@ -8,6 +8,7 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
@@ -39,7 +40,9 @@ import java.sql.Date;
 import java.text.MessageFormat;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -60,9 +63,11 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 
+import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.wunda_blau.search.server.CidsVermessungRissSearchStatement;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
@@ -154,11 +159,16 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         COLORS_GEOMETRIE_STATUS.put(new Integer(3), Color.yellow);
         COLORS_GEOMETRIE_STATUS.put(new Integer(4), Color.red);
         COLORS_GEOMETRIE_STATUS.put(new Integer(5), Color.red);
+        COLORS_GEOMETRIE_STATUS.put(new Integer(6), Color.green);
     }
 
     //~ Instance fields --------------------------------------------------------
 
     protected CidsBean cidsBean;
+    protected Object schluessel;
+    protected Object gemarkung;
+    protected Object flur;
+    protected Object blatt;
     protected boolean readOnly;
     protected Map.Entry<URL, URL>[] documentURLs;
     protected JToggleButton[] documentButtons;
@@ -200,7 +210,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private javax.swing.JLabel lblHeaderLandparcels;
     private javax.swing.JLabel lblHeaderPages;
     private javax.swing.JLabel lblJahr;
-    private javax.swing.JLabel lblKennziffer;
     private javax.swing.JLabel lblLetzteAenderungDatum;
     private javax.swing.JLabel lblLetzteAenderungName;
     private javax.swing.JLabel lblMissingDocuments;
@@ -234,7 +243,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private javax.swing.JTextField txtBlatt;
     private javax.swing.JTextField txtFlur;
     private javax.swing.JTextField txtJahr;
-    private javax.swing.JTextField txtKennziffer;
     private javax.swing.JTextField txtLetzteaenderungDatum;
     private javax.swing.JTextField txtLetzteaenderungName;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
@@ -275,7 +283,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             lblBlatt.setVisible(false);
             txtBlatt.setVisible(false);
             txtJahr.setEditable(false);
-            txtKennziffer.setEditable(false);
             cmbFormat.setEditable(false);
             cmbFormat.setEnabled(false);
             cmbGeometrieStatus.setEditable(false);
@@ -325,8 +332,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         lblGeneralInformation = new javax.swing.JLabel();
         lblJahr = new javax.swing.JLabel();
         txtJahr = new javax.swing.JTextField();
-        lblKennziffer = new javax.swing.JLabel();
-        txtKennziffer = new javax.swing.JTextField();
         lblFormat = new javax.swing.JLabel();
         cmbFormat = new DefaultBindableReferenceCombo();
         lblLetzteAenderungName = new javax.swing.JLabel();
@@ -460,42 +465,16 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 7);
         pnlGeneralInformation.add(txtJahr, gridBagConstraints);
-
-        lblKennziffer.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.lblKennziffer.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
-        pnlGeneralInformation.add(lblKennziffer, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kennziffer}"),
-                txtKennziffer,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 7);
-        pnlGeneralInformation.add(txtKennziffer, gridBagConstraints);
 
         lblFormat.setText(org.openide.util.NbBundle.getMessage(
                 VermessungRissEditor.class,
                 "VermessungRissEditor.lblFormat.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
@@ -511,9 +490,10 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 7);
         pnlGeneralInformation.add(cmbFormat, gridBagConstraints);
 
@@ -543,6 +523,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         pnlGeneralInformation.add(txtLetzteaenderungName, gridBagConstraints);
 
@@ -573,6 +554,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         pnlGeneralInformation.add(txtLetzteaenderungDatum, gridBagConstraints);
 
@@ -581,7 +563,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 "VermessungRissEditor.lblGeometrie.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -600,9 +582,10 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         if (!readOnly) {
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 3;
-            gridBagConstraints.gridy = 6;
+            gridBagConstraints.gridy = 5;
             gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+            gridBagConstraints.weightx = 0.5;
             gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
             pnlGeneralInformation.add(cmbGeometrie, gridBagConstraints);
         }
@@ -626,13 +609,13 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 10);
         pnlGeneralInformation.add(btnCombineGeometries, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 0.1;
@@ -642,7 +625,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 VermessungRissEditor.class,
                 "VermessungRissEditor.lblGeometrieStatus.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -666,10 +649,11 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         pnlGeneralInformation.add(cmbGeometrieStatus, gridBagConstraints);
 
@@ -701,7 +685,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.weightx = 0.25;
+        gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
         pnlGeneralInformation.add(cmbSchluessel, gridBagConstraints);
 
@@ -730,7 +714,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.weightx = 0.25;
+        gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 10);
         pnlGeneralInformation.add(cmbGemarkung, gridBagConstraints);
 
@@ -759,6 +743,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlGeneralInformation.add(txtFlur, gridBagConstraints);
 
@@ -787,6 +772,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         pnlGeneralInformation.add(txtBlatt, gridBagConstraints);
 
@@ -1261,34 +1247,34 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togPanActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togPanActionPerformed
+    private void togPanActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togPanActionPerformed
         measuringComponent.actionPan();
-    }                                                                          //GEN-LAST:event_togPanActionPerformed
+    }//GEN-LAST:event_togPanActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togZoomActionPerformed
+    private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togZoomActionPerformed
         measuringComponent.actionZoom();
-    }                                                                           //GEN-LAST:event_togZoomActionPerformed
+    }//GEN-LAST:event_togZoomActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnHomeActionPerformed
+    private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
         measuringComponent.actionOverview();
-    }                                                                           //GEN-LAST:event_btnHomeActionPerformed
+    }//GEN-LAST:event_btnHomeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
+    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
         if (currentDocument != NO_SELECTION) {
             final String url = documentURLs[currentDocument].getKey().toExternalForm();
 
@@ -1313,14 +1299,14 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                     }
                 });
         }
-    } //GEN-LAST:event_btnOpenActionPerformed
+    }//GEN-LAST:event_btnOpenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstLandparcelsMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstLandparcelsMouseClicked
+    private void lstLandparcelsMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstLandparcelsMouseClicked
         if (evt.getClickCount() <= 1) {
             return;
         }
@@ -1335,14 +1321,14 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObject(selMO, "");
             }
         }
-    } //GEN-LAST:event_lstLandparcelsMouseClicked
+    }//GEN-LAST:event_lstLandparcelsMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstPagesValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstPagesValueChanged
+    private void lstPagesValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstPagesValueChanged
         if (!evt.getValueIsAdjusting()) {
             final Object page = lstPages.getSelectedValue();
 
@@ -1350,32 +1336,32 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 loadPage(((Integer)page) - 1);
             }
         }
-    } //GEN-LAST:event_lstPagesValueChanged
+    }//GEN-LAST:event_lstPagesValueChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togBildActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togBildActionPerformed
+    private void togBildActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togBildActionPerformed
         loadBild();
-    }                                                                           //GEN-LAST:event_togBildActionPerformed
+    }//GEN-LAST:event_togBildActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togGrenzniederschriftActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togGrenzniederschriftActionPerformed
+    private void togGrenzniederschriftActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togGrenzniederschriftActionPerformed
         loadGrenzniederschrift();
-    }                                                                                         //GEN-LAST:event_togGrenzniederschriftActionPerformed
+    }//GEN-LAST:event_togGrenzniederschriftActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddLandparcelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddLandparcelActionPerformed
+    private void btnAddLandparcelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddLandparcelActionPerformed
         flurstueckDialog.setCurrentListToAdd(CidsBeanSupport.getBeanCollectionFromProperty(
                 cidsBean,
                 "flurstuecksvermessung"));
@@ -1388,7 +1374,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveLandparcelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveLandparcelActionPerformed
+    private void btnRemoveLandparcelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveLandparcelActionPerformed
         final Object[] selection = lstLandparcels.getSelectedValues();
 
         if ((selection != null) && (selection.length > 0)) {
@@ -1416,25 +1402,25 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 }
             }
         }
-    } //GEN-LAST:event_btnRemoveLandparcelActionPerformed
+    }//GEN-LAST:event_btnRemoveLandparcelActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstLandparcelsValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstLandparcelsValueChanged
+    private void lstLandparcelsValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstLandparcelsValueChanged
         if (!evt.getValueIsAdjusting()) {
             btnRemoveLandparcel.setEnabled(!readOnly && (lstLandparcels.getSelectedIndex() > -1));
         }
-    }                                                                                         //GEN-LAST:event_lstLandparcelsValueChanged
+    }//GEN-LAST:event_lstLandparcelsValueChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCombineGeometriesActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCombineGeometriesActionPerformed
+    private void btnCombineGeometriesActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCombineGeometriesActionPerformed
         if (cidsBean == null) {
             return;
         }
@@ -1480,14 +1466,14 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             // TODO: Tell user about error.
             LOG.error("Could set new geometry: '" + union.toText() + "'.", ex);
         }
-    } //GEN-LAST:event_btnCombineGeometriesActionPerformed
+    }//GEN-LAST:event_btnCombineGeometriesActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmbGeometrieStatusActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmbGeometrieStatusActionPerformed
+    private void cmbGeometrieStatusActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbGeometrieStatusActionPerformed
         if (cmbGeometrieStatus.getSelectedItem() instanceof CidsBean) {
             final CidsBean geometrieStatus = (CidsBean)cmbGeometrieStatus.getSelectedItem();
 
@@ -1496,7 +1482,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                         (Integer)geometrieStatus.getProperty("id")));
             }
         }
-    } //GEN-LAST:event_cmbGeometrieStatusActionPerformed
+    }//GEN-LAST:event_cmbGeometrieStatusActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1519,6 +1505,18 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
         if (cidsBean != null) {
             this.cidsBean = cidsBean;
+
+            final List<CidsBean> flurstuecksvermessung = cidsBean.getBeanCollectionProperty("flurstuecksvermessung");
+            if ((flurstuecksvermessung != null) && !flurstuecksvermessung.isEmpty()) {
+                Collections.sort(flurstuecksvermessung, AlphanumComparator.getInstance());
+                try {
+                    cidsBean.setProperty("flurstuecksvermessung", flurstuecksvermessung);
+                } catch (final Exception ex) {
+                    LOG.info("Couldn't sort the linked landparcels. Plausibility check of landparcels will fail.", ex);
+                    // TODO: User feedback?
+                }
+            }
+
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
                 this.cidsBean);
@@ -1532,7 +1530,10 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                         (Integer)cidsBean.getProperty("geometrie_status.id")));
             }
 
-            // TODO: Add a propertyChangeListener to CidsBean which reacts on changes to 'bild' or 'grenzniederschrift'?
+            schluessel = cidsBean.getProperty("schluessel");
+            gemarkung = (cidsBean.getProperty("gemarkung") != null) ? cidsBean.getProperty("gemarkung.id") : null;
+            flur = cidsBean.getProperty("flur");
+            blatt = cidsBean.getProperty("blatt");
         }
 
         setCurrentDocumentNull();
@@ -1677,13 +1678,96 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                     "VermessungRissEditor.prepareForSave().JOptionPane.title"),
                 JOptionPane.WARNING_MESSAGE);
         }
+        final Object newSchluessel = cidsBean.getProperty("schluessel");
+        final Object newGemarkung = cidsBean.getProperty("gemarkung.id");
+        final Object newFlur = cidsBean.getProperty("flur");
+        final Object newBlatt = cidsBean.getProperty("blatt");
 
+        final CidsVermessungRissSearchStatement search = new CidsVermessungRissSearchStatement(
+                newSchluessel.toString(),
+                newGemarkung.toString(),
+                newFlur.toString(),
+                newBlatt.toString(),
+                null,
+                null,
+                null);
+
+        final Collection result;
         try {
-            cidsBean.setProperty("letzteaenderung_datum", new Date(System.currentTimeMillis()));
-            cidsBean.setProperty("letzteaenderung_name", SessionManager.getSession().getUser().getName());
-        } catch (Exception ex) {
-            // TODO: Tell user?
-            LOG.warn("Could not save date and user of last change.", ex);
+            result = SessionManager.getProxy().customServerSearch(SessionManager.getSession().getUser(), search);
+        } catch (final ConnectionException ex) {
+            LOG.error("Could not check if the natural key of this measurement sketch is valid.", ex);
+            JOptionPane.showMessageDialog(
+                this,
+                NbBundle.getMessage(
+                    VermessungRissEditor.class,
+                    "VermessungRissEditor.prepareForSave().noConnection.message"),
+                NbBundle.getMessage(
+                    VermessungRissEditor.class,
+                    "VermessungRissEditor.prepareForSave().noConnection.title"),
+                JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        if ((result != null) && !result.isEmpty()
+                    && !(newSchluessel.equals(schluessel) && newGemarkung.equals(gemarkung) && newFlur.equals(flur)
+                        && newBlatt.equals(blatt))) {
+            save = false;
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("The given natural key of the measurement sketch already exists. Skip saving.");
+            }
+
+            JOptionPane.showMessageDialog(
+                this,
+                NbBundle.getMessage(
+                    VermessungRissEditor.class,
+                    "VermessungRissEditor.prepareForSave().keyExists.message"),
+                NbBundle.getMessage(
+                    VermessungRissEditor.class,
+                    "VermessungRissEditor.prepareForSave().keyExists.title"),
+                JOptionPane.WARNING_MESSAGE);
+        } else {
+            save = true;
+
+            try {
+                cidsBean.setProperty("letzteaenderung_datum", new Date(System.currentTimeMillis()));
+                cidsBean.setProperty("letzteaenderung_name", SessionManager.getSession().getUser().getName());
+            } catch (final Exception ex) {
+                LOG.warn("Could not save date and user of last change.", ex);
+                // TODO: User feedback?
+            }
+        }
+
+        if (save) {
+            final CidsBean geometrieStatus = (CidsBean)cidsBean.getProperty("geometrie_status");
+
+            if (geometrieStatus.getProperty("id") instanceof Integer) {
+                final Integer geometrieStatusId = (Integer)geometrieStatus.getProperty("id");
+
+                if (geometrieStatusId.intValue() == 6) {
+                    final Object nameObj = cidsBean.getProperty("optimiert_name");
+                    final String name;
+
+                    if (nameObj instanceof String) {
+                        name = (String)nameObj;
+                    } else {
+                        name = "";
+                    }
+
+                    if (name.isEmpty()) {
+                        try {
+                            cidsBean.setProperty("optimiert_datum", new Date(System.currentTimeMillis()));
+                            cidsBean.setProperty("optimiert_name", SessionManager.getSession().getUser().getName());
+                        } catch (final Exception ex) {
+                            LOG.info("Couldn't save who changed when the geometry's state to '"
+                                        + geometrieStatus.getProperty("name") + "'.",
+                                ex);
+                            // TODO: User feedback?
+                        }
+                    }
+                }
+            }
         }
 
         return save;
