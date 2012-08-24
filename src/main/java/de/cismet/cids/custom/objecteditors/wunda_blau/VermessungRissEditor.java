@@ -1810,7 +1810,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         if (save) {
             final CidsBean geometrieStatus = (CidsBean)cidsBean.getProperty("geometrie_status");
 
-            if (geometrieStatus.getProperty("id") instanceof Integer) {
+            if ((geometrieStatus != null) && (geometrieStatus.getProperty("id") instanceof Integer)) {
                 final Integer geometrieStatusId = (Integer)geometrieStatus.getProperty("id");
 
                 if (geometrieStatusId.intValue() == 6) {
