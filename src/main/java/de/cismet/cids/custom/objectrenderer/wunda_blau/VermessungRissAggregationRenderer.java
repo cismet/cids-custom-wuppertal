@@ -113,7 +113,8 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             "Gemarkung",
             "Flur",
             "Blatt",
-            "Jahr"
+            "Jahr",
+            "Format"
         };
     // Namen der Properties -> Spalten
     private static final String[] AGR_PROPERTY_NAMES = new String[] {
@@ -121,10 +122,11 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             "gemarkung.name",
             "flur",
             "blatt",
-            "jahr"
+            "jahr",
+            "format"
         };
 
-    private static final int[] AGR_COMLUMN_WIDTH = new int[] { 40, 85, 125, 85, 85, 60 };
+    private static final int[] AGR_COMLUMN_WIDTH = new int[] { 40, 40, 130, 85, 85, 60, 40 };
 
     //~ Instance fields --------------------------------------------------------
 
@@ -449,13 +451,13 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                     // possible in JasperReports itself. Whether we evaluate the page calculation "Now" - which means at
                     // the time one row is written -: Then we only get the current page count, not the future page
                     // count. Or we evaluate the page calculation "Report", that means after the rest of the reportwas
-                    // created: Then the page count has a fix value for every row. The first page can contain 26 rows,
-                    // the following pages are able to hold 36 rows. The first image will appear on page 2 if there are
-                    // less than 26 rows to write.
+                    // created: Then the page count has a fix value for every row. The first page can contain 27 rows,
+                    // the following pages are able to hold 37 rows. The first image will appear on page 2 if there are
+                    // less than 27 rows to write.
                     final Map startingPages = new HashMap();
                     int startingPage = 2;
-                    if (selectedVermessungsrisse.size() > 26) {
-                        startingPage += Math.ceil((selectedVermessungsrisse.size() - 26D) / 36D);
+                    if (selectedVermessungsrisse.size() > 27) {
+                        startingPage += Math.ceil((selectedVermessungsrisse.size() - 27D) / 37D);
                     }
 
                     final Map imageAvailable = new HashMap();

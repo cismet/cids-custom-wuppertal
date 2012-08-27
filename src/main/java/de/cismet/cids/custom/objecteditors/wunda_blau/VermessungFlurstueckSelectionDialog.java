@@ -259,7 +259,7 @@ public class VermessungFlurstueckSelectionDialog extends javax.swing.JDialog {
         pnlControls.setLayout(new java.awt.GridBagLayout());
 
         btnCancel.setText("Abbrechen");
-        btnCancel.setToolTipText("Eingaben nicht übernehmen und Dialog schliessen");
+        btnCancel.setToolTipText("Eingaben nicht übernehmen und Dialog schließen");
         btnCancel.setFocusPainted(false);
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
 
@@ -276,7 +276,7 @@ public class VermessungFlurstueckSelectionDialog extends javax.swing.JDialog {
         pnlControls.add(btnCancel, gridBagConstraints);
 
         btnOK.setText("OK");
-        btnOK.setToolTipText("Eingaben übernehmen und Dialog schliessen");
+        btnOK.setToolTipText("Eingaben übernehmen und Dialog schließen");
         btnOK.setFocusPainted(false);
         btnOK.setMaximumSize(new java.awt.Dimension(85, 23));
         btnOK.setMinimumSize(new java.awt.Dimension(85, 23));

@@ -36,31 +36,27 @@
 	<field name="id" class="java.lang.Integer">
 		<fieldDescription><![CDATA[id]]></fieldDescription>
 	</field>
-	<variable name="HAS_ENTRIES_WO_RASTERDOCUMENTS" class="java.lang.Boolean" calculation="Sum">
-		<variableExpression><![CDATA[Boolean.valueOf($V{HAS_ENTRIES_WO_RASTERDOCUMENTS}.booleanValue() || !((Boolean)$P{IMAGEAVAILABLE}.get($F{id})).booleanValue())]]></variableExpression>
-		<initialValueExpression><![CDATA[Boolean.FALSE]]></initialValueExpression>
-	</variable>
 	<title>
 		<band height="70">
 			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="0" width="555" height="37"/>
+				<reportElement x="0" y="0" width="555" height="35"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{TYPE}.toLowerCase().startsWith("vermessungsriss") ? "Enthaltene Vermessungsrisse" : "Enthaltene ergänzende Dokumente"]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="5" y="57" width="545" height="1" forecolor="#C0C0C0"/>
+				<reportElement x="5" y="69" width="545" height="1" forecolor="#C0C0C0"/>
 			</line>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="9" y="42" width="541" height="15"/>
+				<reportElement x="9" y="39" width="541" height="30"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$V{HAS_ENTRIES_WO_RASTERDOCUMENTS}.booleanValue() ? ($P{TYPE}.toLowerCase().startsWith("vermessungsriss") ? "Für die grau hinterlegten Risse sind keine Rasterdokumente verfügbar." : "Zu den grau hinterlegten Rissen sind keine ergänzenden Dokumente verfügbar.") : ""]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[($P{TYPE}.toLowerCase().startsWith("vermessungsriss") ? "Für die grau hinterlegten Risse sind keine Rasterdokumente verfügbar." : "Zu den grau hinterlegten Rissen sind keine ergänzenden Dokumente verfügbar.") + "\n" + "* Die zugehörigen Bilder werden in diesem Dokument in reduzierter Auflösung dargestellt."]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="5" y="42" width="545" height="1" forecolor="#C0C0C0"/>
+				<reportElement x="5" y="39" width="545" height="1" forecolor="#C0C0C0"/>
 			</line>
 		</band>
 	</title>
@@ -77,7 +73,7 @@
 				<text><![CDATA[Schlüssel]]></text>
 			</staticText>
 			<line>
-				<reportElement x="79" y="0" width="1" height="45"/>
+				<reportElement x="79" y="15" width="1" height="30"/>
 			</line>
 			<staticText>
 				<reportElement x="80" y="0" width="99" height="40"/>
@@ -87,7 +83,7 @@
 				<text><![CDATA[Gemarkung]]></text>
 			</staticText>
 			<line>
-				<reportElement x="179" y="0" width="1" height="45"/>
+				<reportElement x="179" y="15" width="1" height="30"/>
 			</line>
 			<staticText>
 				<reportElement x="180" y="0" width="74" height="40"/>
@@ -97,7 +93,7 @@
 				<text><![CDATA[Flur]]></text>
 			</staticText>
 			<line>
-				<reportElement x="254" y="0" width="1" height="45"/>
+				<reportElement x="254" y="15" width="1" height="30"/>
 			</line>
 			<staticText>
 				<reportElement x="255" y="0" width="74" height="40"/>
@@ -107,7 +103,7 @@
 				<text><![CDATA[Blatt]]></text>
 			</staticText>
 			<line>
-				<reportElement x="329" y="0" width="1" height="45"/>
+				<reportElement x="329" y="15" width="1" height="30"/>
 			</line>
 			<staticText>
 				<reportElement x="330" y="0" width="74" height="40"/>
@@ -117,7 +113,7 @@
 				<text><![CDATA[Jahr]]></text>
 			</staticText>
 			<line>
-				<reportElement x="404" y="0" width="1" height="45"/>
+				<reportElement x="404" y="15" width="1" height="30"/>
 			</line>
 			<staticText>
 				<reportElement x="405" y="0" width="74" height="40"/>
@@ -127,7 +123,7 @@
 				<text><![CDATA[Format]]></text>
 			</staticText>
 			<line>
-				<reportElement x="479" y="0" width="1" height="45"/>
+				<reportElement x="479" y="15" width="1" height="30"/>
 			</line>
 			<staticText>
 				<reportElement x="479" y="0" width="74" height="40"/>
@@ -211,19 +207,4 @@
 			</textField>
 		</band>
 	</detail>
-	<pageFooter>
-		<band height="30">
-			<printWhenExpression><![CDATA[Boolean.valueOf($V{PAGE_NUMBER}.intValue() == 1)]]></printWhenExpression>
-			<staticText>
-				<reportElement x="9" y="15" width="541" height="15"/>
-				<textElement verticalAlignment="Middle">
-					<font size="8"/>
-				</textElement>
-				<text><![CDATA[* Die zugehörigen Bilder werden in diesem Dokument in reduzierter Auflösung dargestellt.]]></text>
-			</staticText>
-			<line>
-				<reportElement x="5" y="10" width="545" height="1" forecolor="#C0C0C0"/>
-			</line>
-		</band>
-	</pageFooter>
 </jasperReport>
