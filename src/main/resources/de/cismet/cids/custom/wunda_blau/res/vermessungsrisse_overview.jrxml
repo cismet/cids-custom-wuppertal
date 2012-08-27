@@ -40,7 +40,7 @@
 		<band height="70">
 			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="0" width="555" height="35"/>
-				<textElement verticalAlignment="Middle">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{TYPE}.toLowerCase().startsWith("vermessungsriss") ? "Enthaltene Vermessungsrisse" : "Enthaltene ergänzende Dokumente"]]></textFieldExpression>
