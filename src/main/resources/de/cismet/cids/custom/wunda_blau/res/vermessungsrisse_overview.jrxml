@@ -40,7 +40,7 @@
 		<band height="70">
 			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="0" width="555" height="35"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{TYPE}.toLowerCase().startsWith("vermessungsriss") ? "Enthaltene Vermessungsrisse" : "Enthaltene ergänzende Dokumente"]]></textFieldExpression>
@@ -53,7 +53,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[($P{TYPE}.toLowerCase().startsWith("vermessungsriss") ? "Für die grau hinterlegten Risse sind keine Rasterdokumente verfügbar." : "Zu den grau hinterlegten Rissen sind keine ergänzenden Dokumente verfügbar.") + "\n" + "* Die zugehörigen Bilder werden in diesem Dokument in reduzierter Auflösung dargestellt."]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[($P{TYPE}.toLowerCase().startsWith("vermessungsriss") ? "Für die grau hinterlegten Risse sind keine Rasterdokumente verfügbar.\nDie Rasterdokumente der mit * markierten Risse werden in diesem Dokument in reduzierter Auflösung dargestellt." : "Zu den grau hinterlegten Rissen sind keine ergänzenden Dokumente verfügbar.\nDie ergänzenden Dokumente der mit * markierten Risse werden in diesem Dokument in reduzierter Auflösung dargestellt.")]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="5" y="39" width="545" height="1" forecolor="#C0C0C0"/>
