@@ -202,6 +202,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private javax.swing.JComboBox cmbGeometrie;
     private javax.swing.JComboBox cmbGeometrieStatus;
     private javax.swing.JComboBox cmbSchluessel;
+    private javax.swing.JFormattedTextField ftxFlur;
     private javax.swing.Box.Filler gluGapControls;
     private javax.swing.Box.Filler gluGeneralInformationGap;
     private javax.swing.JLabel lblBlatt;
@@ -250,7 +251,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private javax.swing.JToggleButton togPan;
     private javax.swing.JToggleButton togZoom;
     private javax.swing.JTextField txtBlatt;
-    private javax.swing.JTextField txtFlur;
     private javax.swing.JTextField txtJahr;
     private javax.swing.JTextField txtLetzteaenderungDatum;
     private javax.swing.JTextField txtLetzteaenderungName;
@@ -286,7 +286,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             lblGemarkung.setVisible(false);
             cmbGemarkung.setVisible(false);
             lblFlur.setVisible(false);
-            txtFlur.setVisible(false);
+            ftxFlur.setVisible(false);
             lblBlatt.setVisible(false);
             txtBlatt.setVisible(false);
             txtJahr.setEditable(false);
@@ -306,8 +306,8 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             if (txtBlatt.getDocument() instanceof AbstractDocument) {
                 ((AbstractDocument)txtBlatt.getDocument()).setDocumentFilter(new DocumentSizeFilter());
             }
-            if (txtFlur.getDocument() instanceof AbstractDocument) {
-                ((AbstractDocument)txtFlur.getDocument()).setDocumentFilter(new DocumentSizeFilter());
+            if (ftxFlur.getDocument() instanceof AbstractDocument) {
+                ((AbstractDocument)ftxFlur.getDocument()).setDocumentFilter(new DocumentSizeFilter());
             }
         }
 
@@ -382,9 +382,9 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         lblGemarkung = new javax.swing.JLabel();
         cmbGemarkung = new DefaultBindableReferenceCombo();
         lblFlur = new javax.swing.JLabel();
-        txtFlur = new javax.swing.JTextField();
         lblBlatt = new javax.swing.JLabel();
         txtBlatt = new javax.swing.JTextField();
+        ftxFlur = new javax.swing.JFormattedTextField();
         pnlLandparcels = new de.cismet.tools.gui.RoundedPanel();
         pnlHeaderLandparcels = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeaderLandparcels = new javax.swing.JLabel();
@@ -737,7 +737,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 10);
         pnlGeneralInformation.add(cmbGemarkung, gridBagConstraints);
 
-        lblFlur.setLabelFor(txtFlur);
         lblFlur.setText(org.openide.util.NbBundle.getMessage(
                 VermessungRissEditor.class,
                 "VermessungRissEditor.lblFlur.text")); // NOI18N
@@ -748,23 +747,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         pnlGeneralInformation.add(lblFlur, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.flur}"),
-                txtFlur,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlGeneralInformation.add(txtFlur, gridBagConstraints);
 
         lblBlatt.setLabelFor(txtBlatt);
         lblBlatt.setText(org.openide.util.NbBundle.getMessage(
@@ -794,6 +776,26 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         pnlGeneralInformation.add(txtBlatt, gridBagConstraints);
+
+        ftxFlur.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+                new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("000"))));
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.flur}"),
+                ftxFlur,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlGeneralInformation.add(ftxFlur, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1691,7 +1693,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      */
     @Override
     public boolean prepareForSave() {
-        boolean save = true;
         final StringBuilder errorMessage = new StringBuilder();
 
         if (cmbSchluessel.getSelectedItem() == null) {
@@ -1706,12 +1707,12 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                     VermessungRissEditor.class,
                     "VermessungRissEditor.prepareForSave().noGemarkung"));
         }
-        if ((txtFlur.getText() == null) || txtFlur.getText().trim().isEmpty()) {
+        if ((ftxFlur.getText() == null) || ftxFlur.getText().trim().isEmpty()) {
             LOG.warn("No 'flur' specified. Skip persisting.");
             errorMessage.append(NbBundle.getMessage(
                     VermessungRissEditor.class,
                     "VermessungRissEditor.prepareForSave().noFlur"));
-        } else if (txtFlur.getText().length() > 31) {
+        } else if (ftxFlur.getText().length() > 3) {
             LOG.warn("Property 'flur' is too long. Skip persisting.");
             errorMessage.append(NbBundle.getMessage(
                     VermessungRissEditor.class,
@@ -1730,8 +1731,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         }
 
         if (errorMessage.length() > 0) {
-            save = false;
-
             JOptionPane.showMessageDialog(
                 StaticSwingTools.getParentFrame(this),
                 NbBundle.getMessage(
@@ -1745,7 +1744,10 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                     VermessungRissEditor.class,
                     "VermessungRissEditor.prepareForSave().JOptionPane.title"),
                 JOptionPane.WARNING_MESSAGE);
+
+            return false;
         }
+
         final Object newSchluessel = cidsBean.getProperty("schluessel");
         final Object newGemarkung = cidsBean.getProperty("gemarkung.id");
         final Object newFlur = cidsBean.getProperty("flur");
@@ -1774,8 +1776,11 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                     VermessungRissEditor.class,
                     "VermessungRissEditor.prepareForSave().noConnection.title"),
                 JOptionPane.WARNING_MESSAGE);
+
             return false;
         }
+
+        boolean save = true;
 
         if ((result != null) && !result.isEmpty()
                     && !(newSchluessel.equals(schluessel) && newGemarkung.equals(gemarkung) && newFlur.equals(flur)
