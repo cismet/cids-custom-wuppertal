@@ -123,9 +123,6 @@
 		<band height="750">
 			<subreport>
 				<reportElement x="0" y="0" width="555" height="750"/>
-				<subreportParameter name="TYPE">
-					<subreportParameterExpression><![CDATA[$P{TYPE}]]></subreportParameterExpression>
-				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{images}, false)]]></dataSourceExpression>
 				<subreportExpression class="java.lang.String"><![CDATA["de/cismet/cids/custom/wunda_blau/res/vermessungsrisse_document.jasper"]]></subreportExpression>
 			</subreport>

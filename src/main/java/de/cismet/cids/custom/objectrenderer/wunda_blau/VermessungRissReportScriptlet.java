@@ -11,6 +11,9 @@ import net.sf.jasperreports.engine.JRDefaultScriptlet;
 
 import org.apache.log4j.Logger;
 
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+
 import java.io.InputStream;
 
 import java.net.URL;
@@ -25,6 +28,8 @@ import de.cismet.security.exceptions.AccessMethodIsNotSupportedException;
 import de.cismet.security.exceptions.MissingArgumentException;
 import de.cismet.security.exceptions.NoHandlerForURLException;
 import de.cismet.security.exceptions.RequestFailedException;
+
+import de.cismet.tools.gui.Static2DTools;
 
 /**
  * DOCUMENT ME!
@@ -89,5 +94,26 @@ public class VermessungRissReportScriptlet extends JRDefaultScriptlet {
         }
 
         return streamToReadFrom != null;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   imageToRotate  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static BufferedImage rotate(final BufferedImage imageToRotate) {
+        BufferedImage result = imageToRotate;
+
+        if (imageToRotate == null) {
+            return result;
+        }
+
+        if ((imageToRotate instanceof BufferedImage) && (imageToRotate.getWidth() > imageToRotate.getHeight())) {
+            result = Static2DTools.rotate(imageToRotate, 90D, false, Color.white);
+        }
+
+        return result;
     }
 }
