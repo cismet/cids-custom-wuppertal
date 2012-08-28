@@ -8,6 +8,7 @@
 package de.cismet.cids.custom.objectrenderer.utils.billing;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.newuser.User;
@@ -15,6 +16,8 @@ import Sirius.server.newuser.User;
 import com.vividsolutions.jts.geom.Geometry;
 
 import org.codehaus.jackson.map.ObjectMapper;
+
+import org.openide.util.Exceptions;
 
 import java.io.IOException;
 
@@ -536,6 +539,22 @@ public class BillingPopup extends javax.swing.JDialog {
         rawPrice = 0;
         for (final ProductGroupAmount pga : amounts) {
             rawPrice += ((double)pga.getAmount()) * currentProduct.getPrices().get(pga.group);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static boolean isBillingAllowed() {
+        try {
+            final User user = SessionManager.getSession().getUser();
+            return (SessionManager.getConnection().getConfigAttr(user, MODE_CONFIG_ATTR) != null)
+                        && (SessionManager.getConnection().getConfigAttr(user, ALLOWED_USAGE_CONFIG_ATTR) != null);
+        } catch (ConnectionException ex) {
+            LOG.error("error while checking configAttr", ex);
+            return false;
         }
     }
 

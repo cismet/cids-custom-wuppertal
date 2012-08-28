@@ -150,9 +150,10 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
                 }
             });
 
-        jxlBestandsnachweisNRW.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW));
+        jxlBestandsnachweisNRW.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW)
+                    && BillingPopup.isBillingAllowed());
         jxlBestandsnachweisKommunal.setEnabled(ObjectRendererUtils.checkActionTag(
-                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM));
+                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM) && BillingPopup.isBillingAllowed());
         jxlBestandsnachweisKommunalIntern.setEnabled(ObjectRendererUtils.checkActionTag(
                 PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN));
     }
