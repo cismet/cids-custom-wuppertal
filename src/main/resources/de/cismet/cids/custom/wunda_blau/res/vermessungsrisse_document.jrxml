@@ -1,23 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RasterdokumentVermessungsriss" pageWidth="555" pageHeight="750" columnWidth="535" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" scriptletClass="de.cismet.cids.custom.objectrenderer.wunda_blau.VermessungRissReportScriptlet" whenResourceMissingType="Empty">
-	<parameter name="TYPE" class="java.lang.String"/>
 	<field name="description" class="java.lang.String">
 		<fieldDescription><![CDATA[description]]></fieldDescription>
-	</field>
-	<field name="host" class="java.lang.String">
-		<fieldDescription><![CDATA[host]]></fieldDescription>
-	</field>
-	<field name="schluessel" class="java.lang.String">
-		<fieldDescription><![CDATA[schluessel]]></fieldDescription>
-	</field>
-	<field name="gemarkung" class="java.lang.Integer">
-		<fieldDescription><![CDATA[gemarkung]]></fieldDescription>
-	</field>
-	<field name="flur" class="java.lang.String">
-		<fieldDescription><![CDATA[flur]]></fieldDescription>
-	</field>
-	<field name="blatt" class="java.lang.String">
-		<fieldDescription><![CDATA[blatt]]></fieldDescription>
 	</field>
 	<field name="page" class="java.lang.Integer">
 		<fieldDescription><![CDATA[page]]></fieldDescription>
@@ -29,7 +13,7 @@
 		<band height="750">
 			<image vAlign="Middle">
 				<reportElement x="5" y="25" width="545" height="720"/>
-				<imageExpression class="java.awt.Image"><![CDATA[$F{reader}.loadPage($F{page}.intValue())]]></imageExpression>
+				<imageExpression class="java.awt.Image"><![CDATA[$P{REPORT_SCRIPTLET}.rotate($F{reader}.loadPage($F{page}.intValue()))]]></imageExpression>
 			</image>
 			<textField isBlankWhenNull="true">
 				<reportElement x="5" y="5" width="545" height="20" isRemoveLineWhenBlank="true"/>
