@@ -44,8 +44,8 @@ public class BillingPopup extends javax.swing.JDialog {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    public static final String MODE_CONFIG_ATTR = "billing.mode";
-    public static final String ALLOWED_USAGE_CONFIG_ATTR = "billing.allowed.usage";
+    public static final String MODE_CONFIG_ATTR = "billing.mode@WUNDA_BLAU";
+    public static final String ALLOWED_USAGE_CONFIG_ATTR = "billing.allowed.usage@WUNDA_BLAU";
     private static ObjectMapper mapper = new ObjectMapper();
     private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             BillingPopup.class);
