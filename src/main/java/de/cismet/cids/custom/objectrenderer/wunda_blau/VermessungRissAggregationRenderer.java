@@ -626,7 +626,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                 dataSource,
                                 jobname,
                                 projectname,
-                                "vermriss");
+                                (TYPE_VERMESSUNGSRISSE.equalsIgnoreCase(type)) ? "vermriss" : "ergdok");
 
                         if (additionalFilesToDownload.isEmpty()) {
                             DownloadManager.instance().add(jasperDownload);
