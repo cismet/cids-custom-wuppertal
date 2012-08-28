@@ -155,13 +155,14 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             });
 
         jxlKarte.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_KARTE));
-        jxlFlurstuecksnachweis.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS));
+        jxlFlurstuecksnachweis.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS)
+                    && BillingPopup.isBillingAllowed());
         jxlNachweisKommunal.setEnabled(ObjectRendererUtils.checkActionTag(
-                PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM));
+                PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM) && BillingPopup.isBillingAllowed());
         jxlNachweisKommunalIntern.setEnabled(ObjectRendererUtils.checkActionTag(
                 PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN));
         jxlNachweisNRW.setEnabled(ObjectRendererUtils.checkActionTag(
-                PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW));
+                PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW) && BillingPopup.isBillingAllowed());
     }
 
     //~ Methods ----------------------------------------------------------------
