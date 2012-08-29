@@ -147,11 +147,11 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
 //        final MetaClass swClass = ClassCacheMultiple.getMetaClass(domain, "ARC_S");
         suchwortModelProvider.setSorted(true);
         cbSuchworte.setEditable(true);
-        AutoCompleteDecorator.decorate(bcbFotograf);
-        AutoCompleteDecorator.decorate(bcbAuftraggeber);
-        AutoCompleteDecorator.decorate(bcbStrasse);
-        AutoCompleteDecorator.decorate(bcbFilmart);
-        AutoCompleteDecorator.decorate(cbSuchworte);
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(bcbFotograf);
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(bcbAuftraggeber);
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(bcbStrasse);
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(bcbFilmart);
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbSuchworte);
         ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(
             lblPicture,
             Cursor.HAND_CURSOR,

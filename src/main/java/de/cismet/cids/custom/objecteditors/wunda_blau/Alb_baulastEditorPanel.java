@@ -195,7 +195,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         fsDialoge.setLocationRelativeTo(this);
         dlgAddBaulastArt.pack();
         dlgAddBaulastArt.setLocationRelativeTo(this);
-        AutoCompleteDecorator.decorate(cbBaulastArt);
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbBaulastArt);
     }
 
     //~ Methods ----------------------------------------------------------------
