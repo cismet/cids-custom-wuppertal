@@ -287,11 +287,21 @@ public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements Di
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cb  DOCUMENT ME!
+     */
     @Override
     public void setCidsBean(final CidsBean cb) {
         bindingGroup.unbind();
@@ -403,6 +413,9 @@ public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements Di
         }
     }                                                                              //GEN-LAST:event_lstLandparcelsMouseClicked
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
         bindingGroup.unbind();

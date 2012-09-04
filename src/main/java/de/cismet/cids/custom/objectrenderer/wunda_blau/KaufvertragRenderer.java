@@ -257,10 +257,16 @@ public class KaufvertragRenderer extends BlurredMapObjectRenderer {
         super.setGeometry(geometry);
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void assignAggregation() {
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void assignSingle() {
         if (!name.equals("")) {

@@ -22,6 +22,8 @@ import com.sun.media.jai.codec.ImageCodec;
 import com.sun.media.jai.codec.ImageDecoder;
 import com.sun.media.jai.codec.TIFFDecodeParam;
 
+import com.vividsolutions.jts.geom.Geometry;
+
 import de.aedsicad.aaaweb.service.alkis.info.ALKISInfoServices;
 import de.aedsicad.aaaweb.service.util.Point;
 import de.aedsicad.aaaweb.service.util.PointLocation;
@@ -78,6 +80,8 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.alkis.AlkisSOAPWorkerService;
 import de.cismet.cids.custom.utils.alkis.SOAPAccessProvider;
@@ -496,6 +500,10 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
             lblForw.setEnabled(false);
         }
         panHtmlProducts.setVisible(AlkisUtils.validateUserHasAlkisHTMLProductAccess());
+
+        hlPunktlisteHtml.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE));
+        hlPunktlistePdf.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE));
+        hlPunktlisteTxt.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE));
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -1976,7 +1984,8 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      * DOCUMENT ME!
      */
     private void showNoProductPermissionWarning() {
-        JOptionPane.showMessageDialog(this, "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
+        JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+            "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
     }
 
     /**
@@ -2068,7 +2077,14 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      * @param  evt  DOCUMENT ME!
      */
     private void hlPunktlistePdfActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlPunktlistePdfActionPerformed
-        downloadProduct(AlkisUtils.PRODUCTS.PUNKTLISTE_PDF);
+        try {
+            if (BillingPopup.doBilling("pktlstpdf", "no.yet", (Geometry)null, new ProductGroupAmount("eafifty", 1))) {
+                downloadProduct(AlkisUtils.PRODUCTS.PUNKTLISTE_PDF);
+            }
+        } catch (Exception e) {
+            log.error("Error when trying to produce a alkis product", e);
+            // Hier noch ein Fehlerdialog
+        }
     }                                                                                   //GEN-LAST:event_hlPunktlistePdfActionPerformed
 
     /**
@@ -2103,7 +2119,18 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      * @param  evt  DOCUMENT ME!
      */
     private void hlPunktlisteTxtActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlPunktlisteTxtActionPerformed
-        downloadProduct(AlkisUtils.PRODUCTS.PUNKTLISTE_TXT);
+        try {
+            if (BillingPopup.doBilling(
+                            "pktlsttxt",
+                            "no.yet",
+                            (Geometry)null,
+                            new ProductGroupAmount("eapkt_1000", 1))) {
+                downloadProduct(AlkisUtils.PRODUCTS.PUNKTLISTE_TXT);
+            }
+        } catch (Exception e) {
+            log.error("Error when trying to produce a alkis product", e);
+            // Hier noch ein Fehlerdialog
+        }
     }                                                                                   //GEN-LAST:event_hlPunktlisteTxtActionPerformed
 
     /**
@@ -2148,27 +2175,43 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                 return;
             }
 
-            CismetThreadPool.execute(new Runnable() {
+            try {
+                if (BillingPopup.doBilling(
+                                "appdf",
+                                url.toString(),
+                                (Geometry)null,
+                                new ProductGroupAmount("ea", 1))) {
+                    CismetThreadPool.execute(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        if (DownloadManagerDialog.showAskingForUserTitle(AlkisPointRenderer.this)) {
-                            final String filename = urlOfAPMap.substring(urlOfAPMap.lastIndexOf("/") + 1);
-                            DownloadManager.instance()
-                                    .add(
-                                        new HttpDownload(
-                                            url,
-                                            "",
-                                            DownloadManagerDialog.getJobname(),
-                                            "AP-Karte",
-                                            filename.substring(0, filename.lastIndexOf(".")),
-                                            filename.substring(filename.lastIndexOf("."))));
-                        }
-                    }
-                });
+                            @Override
+                            public void run() {
+                                if (DownloadManagerDialog.showAskingForUserTitle(AlkisPointRenderer.this)) {
+                                    final String filename = urlOfAPMap.substring(urlOfAPMap.lastIndexOf("/") + 1);
+                                    DownloadManager.instance()
+                                            .add(
+                                                new HttpDownload(
+                                                    url,
+                                                    "",
+                                                    DownloadManagerDialog.getJobname(),
+                                                    "AP-Karte",
+                                                    filename.substring(0, filename.lastIndexOf(".")),
+                                                    filename.substring(filename.lastIndexOf("."))));
+                                }
+                            }
+                        });
+                }
+            } catch (Exception e) {
+                log.error("Error when trying to produce a alkis product", e);
+                // Hier noch ein Fehlerdialog
+            }
         }
     } //GEN-LAST:event_btnOpenActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
@@ -2195,6 +2238,11 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         return result;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cb  DOCUMENT ME!
+     */
     @Override
     public void setCidsBean(final CidsBean cb) {
         bindingGroup.unbind();
@@ -2216,11 +2264,21 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getTitle() {
         return title;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  title  DOCUMENT ME!
+     */
     @Override
     public void setTitle(String title) {
         if (title == null) {
@@ -2232,26 +2290,51 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         lblTitle.setText(this.title);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getTitleBorder() {
         return new EmptyBorder(10, 10, 10, 10);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getFooterBorder() {
         return new EmptyBorder(5, 5, 5, 5);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getCenterrBorder() {
         return new EmptyBorder(5, 5, 5, 5);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getTitleComponent() {
         return panTitle;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getFooterComponent() {
         return panFooter;
@@ -2293,6 +2376,9 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         this.pointLocations = pointLocations;
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
         bindingGroup.unbind();
@@ -2401,6 +2487,13 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception  DOCUMENT ME!
+         */
         @Override
         protected Point doInBackground() throws Exception {
             return infoService.getPoint(soapProvider.getIdentityCard(), soapProvider.getService(), pointCode);
@@ -2413,6 +2506,9 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
             btnRetrieve.setEnabled(true);
         }
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         protected void done() {
             setWait(false);
@@ -2471,6 +2567,17 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   list          DOCUMENT ME!
+         * @param   value         DOCUMENT ME!
+         * @param   index         DOCUMENT ME!
+         * @param   isSelected    DOCUMENT ME!
+         * @param   cellHasFocus  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public Component getListCellRendererComponent(final JList list,
                 final Object value,
@@ -2510,6 +2617,11 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  e  DOCUMENT ME!
+         */
         @Override
         public void mouseEntered(final MouseEvent e) {
             final Object srcObj = e.getSource();
@@ -2519,6 +2631,11 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
             }
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  e  DOCUMENT ME!
+         */
         @Override
         public void mouseExited(final MouseEvent e) {
             lblProductPreview.setIcon(null);
@@ -2549,6 +2666,13 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception  DOCUMENT ME!
+         */
         @Override
         protected BufferedImage doInBackground() throws Exception {
             BufferedImage result = null;
@@ -2618,6 +2742,9 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
             return result;
         }
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         protected void done() {
             BufferedImage document = null;

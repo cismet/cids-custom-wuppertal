@@ -621,16 +621,17 @@ public class ObjectRendererUtils {
             final PermissionType permissionToCheck) {
         if ((mc != null) && (user != null) && (permissionToCheck != null)) {
             final PermissionHolder mcPermissions = mc.getPermissions();
-            final UserGroup group = user.getUserGroup();
+
             switch (permissionToCheck) {
                 case READ: {
-                    return mcPermissions.hasReadPermission(group);
+                    return mcPermissions.hasReadPermission(user.getUserGroup());
                 }
                 case WRITE: {
-                    return mcPermissions.hasWritePermission(group);
+                    return mcPermissions.hasWritePermission(user.getUserGroup());
                 }
                 case READ_WRITE: {
-                    return mcPermissions.hasWritePermission(group) && mcPermissions.hasReadPermission(group);
+                    return mcPermissions.hasWritePermission(user.getUserGroup())
+                                && mcPermissions.hasReadPermission(user.getUserGroup());
                 }
             }
         }

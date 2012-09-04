@@ -77,6 +77,9 @@ public class LuftbildschraegaufnahmenFeatureRenderer extends CustomCidsFeatureRe
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void assign() {
         if (log.isDebugEnabled()) {
@@ -132,11 +135,21 @@ public class LuftbildschraegaufnahmenFeatureRenderer extends CustomCidsFeatureRe
 //        //((TitledBorder)getBorder()).setTitle(title);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public float getTransparency() {
         return 0.9f;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Paint getFillingStyle() {
         return new Color(100, 100, 100, 50);

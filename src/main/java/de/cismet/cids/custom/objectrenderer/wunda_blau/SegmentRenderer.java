@@ -151,15 +151,26 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  geometry  DOCUMENT ME!
+     */
     @Override
     public void setGeometry(final Geometry geometry) {
         super.setGeometry(geometry);
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void assignAggregation() {
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void assignSingle() {
         if (!name.equals("")) {
@@ -275,6 +286,11 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public double getWidthRatio() {
         return 1.0;

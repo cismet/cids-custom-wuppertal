@@ -7,6 +7,7 @@
 	<parameter name="PROJECTNAME" class="java.lang.String"/>
 	<parameter name="TYPE" class="java.lang.String"/>
 	<parameter name="STARTINGPAGES" class="java.util.Map"/>
+	<parameter name="IMAGEAVAILABLE" class="java.util.Map"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -14,7 +15,7 @@
 	<field name="images" class="java.util.Collection">
 		<fieldDescription><![CDATA[images]]></fieldDescription>
 	</field>
-	<variable name="DATE" class="java.util.Date">
+	<variable name="DATE" class="java.util.Date" calculation="First">
 		<variableExpression><![CDATA[new Date()]]></variableExpression>
 	</variable>
 	<background>
@@ -42,6 +43,9 @@
 				</subreportParameter>
 				<subreportParameter name="TYPE">
 					<subreportParameterExpression><![CDATA[$P{TYPE}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="IMAGEAVAILABLE">
+					<subreportParameterExpression><![CDATA[$P{IMAGEAVAILABLE}]]></subreportParameterExpression>
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{vermessungsrisse}, false)]]></dataSourceExpression>
 				<subreportExpression class="java.lang.String"><![CDATA["de/cismet/cids/custom/wunda_blau/res/vermessungsrisse_overview.jasper"]]></subreportExpression>
@@ -104,8 +108,8 @@
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$P{PROJECTNAME}]]></textFieldExpression>
 				</textField>
-				<textField evaluationTime="Report" isBlankWhenNull="true">
-					<reportElement x="307" y="89" width="240" height="20" isRemoveLineWhenBlank="true"/>
+				<textField evaluationTime="null" isBlankWhenNull="true">
+					<reportElement mode="Transparent" x="307" y="89" width="240" height="20"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle"/>
 					<textFieldExpression class="java.lang.String"><![CDATA[DateFormat.getDateInstance(DateFormat.LONG).format($V{DATE}) + ", " + DateFormat.getTimeInstance(DateFormat.SHORT).format($V{DATE}) + " Uhr"]]></textFieldExpression>
 				</textField>
@@ -119,9 +123,6 @@
 		<band height="750">
 			<subreport>
 				<reportElement x="0" y="0" width="555" height="750"/>
-				<subreportParameter name="TYPE">
-					<subreportParameterExpression><![CDATA[$P{TYPE}]]></subreportParameterExpression>
-				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{images}, false)]]></dataSourceExpression>
 				<subreportExpression class="java.lang.String"><![CDATA["de/cismet/cids/custom/wunda_blau/res/vermessungsrisse_document.jasper"]]></subreportExpression>
 			</subreport>
@@ -134,7 +135,7 @@
 				<textElement verticalAlignment="Bottom"/>
 				<textFieldExpression class="java.lang.String"><![CDATA["Seite " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
-			<textField evaluationTime="Report" isBlankWhenNull="true">
+			<textField isBlankWhenNull="true">
 				<reportElement x="150" y="0" width="400" height="15" isRemoveLineWhenBlank="true"/>
 				<textElement verticalAlignment="Bottom"/>
 				<textFieldExpression class="java.lang.String"><![CDATA["Dieser Bericht wurde am " + DateFormat.getDateInstance(DateFormat.LONG).format($V{DATE}) + " um " + DateFormat.getTimeInstance(DateFormat.SHORT).format($V{DATE}) + " Uhr erstellt."]]></textFieldExpression>

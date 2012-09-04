@@ -79,6 +79,8 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -181,6 +183,8 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         btnRelease.setEnabled(gehaltenePunkte.size() > 0);
         btnRemember.setVisible(false);
         btnRelease.setVisible(false);
+
+        btnCreate.setEnabled(ObjectRendererUtils.checkActionTag(AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE));
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -323,7 +327,8 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
      */
     private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCreateActionPerformed
         if (!ObjectRendererUtils.checkActionTag(AlkisPointRenderer.PRODUCT_ACTION_TAG_PUNKTLISTE)) {
-            JOptionPane.showMessageDialog(this, "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
+            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
             return;
         }
 
@@ -331,6 +336,8 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
 
         if (APMAP.equalsIgnoreCase(format)) {
             final Collection<CidsBean> selectedAlkisPoints = getSelectedAlkisPointsContainingAPMap();
+
+            final int numOfPoints = selectedAlkisPoints.size();
 
             if (selectedAlkisPoints.isEmpty()) {
                 JOptionPane.showMessageDialog(
@@ -345,7 +352,18 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                 return;
             }
 
-            CismetThreadPool.execute(new GenerateAPMapReport(selectedAlkisPoints));
+            try {
+                if (BillingPopup.doBilling(
+                                "appdf",
+                                "no.yet",
+                                (Geometry)null,
+                                new ProductGroupAmount("ea", numOfPoints))) {
+                    CismetThreadPool.execute(new GenerateAPMapReport(selectedAlkisPoints));
+                }
+            } catch (Exception e) {
+                log.error("Error when trying to produce a alkis product", e);
+                // Hier noch ein Fehlerdialog
+            }
         } else {
             final Collection<CidsBean> selectedAlkisPoints = getSelectedAlkisPoints();
 
@@ -362,7 +380,63 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                 return;
             }
 
-            CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
+            final int numOfPoints = selectedAlkisPoints.size();
+
+            if (format.equalsIgnoreCase(PDF)) {
+                try {
+                    if (BillingPopup.doBilling(
+                                    "pktlstpdf",
+                                    "no.yet",
+                                    (Geometry)null,
+                                    new ProductGroupAmount("eafifty", 1 + (int)Math.floor(numOfPoints / 50f)))) {
+                        CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
+                    }
+                } catch (Exception e) {
+                    log.error("Error when trying to produce a alkis product", e);
+                    // Hier noch ein Fehlerdialog
+                }
+            } else if (format.equalsIgnoreCase(TEXT)) {
+                try {
+                    final String eapkt;
+                    if (numOfPoints <= 1000) {
+                        eapkt = "eapkt_1000";
+                    } else if (numOfPoints <= 10000) {
+                        eapkt = "eapkt_1001-10000";
+                    } else if (numOfPoints <= 100000) {
+                        eapkt = "eapkt_10001-100000";
+                    } else if (numOfPoints <= 1000000) {
+                        eapkt = "eapkt_100001-1000000";
+                    } else {
+                        eapkt = "eapkt_1000001";
+                    }
+
+                    if (BillingPopup.doBilling(
+                                    "pktlsttxt",
+                                    "no.yet",
+                                    (Geometry)null,
+                                    new ProductGroupAmount(eapkt, numOfPoints))) {
+                        CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
+                    }
+                } catch (Exception e) {
+                    log.error("Error when trying to produce a alkis product", e);
+                    // Hier noch ein Fehlerdialog
+                }
+            } else if (format.equalsIgnoreCase(APMAP)) {
+                try {
+                    if (BillingPopup.doBilling(
+                                    "appdf",
+                                    "no.yet",
+                                    (Geometry)null,
+                                    new ProductGroupAmount("ea", numOfPoints))) {
+                        CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
+                    }
+                } catch (Exception e) {
+                    log.error("Error when trying to produce a alkis product", e);
+                    // Hier noch ein Fehlerdialog
+                }
+            } else {
+                CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
+            }
         }
     } //GEN-LAST:event_btnCreateActionPerformed
 
@@ -490,16 +564,31 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         return punktListeString.toString();
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Collection<CidsBean> getCidsBeans() {
         return cidsBeans;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getTitle() {
         return title;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  title  DOCUMENT ME!
+     */
     @Override
     public void setTitle(final String title) {
         String desc = "Punktliste";
@@ -510,6 +599,11 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         this.title = desc;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  beans  DOCUMENT ME!
+     */
     @Override
     public void setCidsBeans(final Collection<CidsBean> beans) {
         if (beans instanceof List) {
@@ -679,6 +773,9 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
         return new XBoundingBox(geoCollection.getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER));
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
         mappingComponent.dispose();
@@ -718,6 +815,11 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  e  DOCUMENT ME!
+         */
         @Override
         public void valueChanged(final ListSelectionEvent e) {
             if (!e.getValueIsAdjusting() && (cidsBeans != null)) {
@@ -769,11 +871,26 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   row     DOCUMENT ME!
+         * @param   column  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public boolean isCellEditable(final int row, final int column) {
             return column == 0;
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   columnIndex  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public Class<?> getColumnClass(final int columnIndex) {
             if (columnIndex == 0) {
@@ -845,6 +962,9 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         public void run() {
             final String punktListenString = getPunktlistenStringForChosenPoints(alkisPoints);
@@ -935,6 +1055,9 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         public void run() {
             final Collection<AlkisPointReportBean> reportBeans = new LinkedList<AlkisPointReportBean>();

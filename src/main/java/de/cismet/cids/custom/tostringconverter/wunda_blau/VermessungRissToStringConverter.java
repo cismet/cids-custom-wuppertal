@@ -21,6 +21,11 @@ public class VermessungRissToStringConverter extends CustomToStringConverter {
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String createString() {
         final StringBuilder result = new StringBuilder();

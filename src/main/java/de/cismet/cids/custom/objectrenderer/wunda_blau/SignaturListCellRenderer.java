@@ -46,6 +46,17 @@ public class SignaturListCellRenderer implements ListCellRenderer {
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   list          DOCUMENT ME!
+     * @param   value         DOCUMENT ME!
+     * @param   index         DOCUMENT ME!
+     * @param   isSelected    DOCUMENT ME!
+     * @param   cellHasFocus  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Component getListCellRendererComponent(final JList list,
             final Object value,

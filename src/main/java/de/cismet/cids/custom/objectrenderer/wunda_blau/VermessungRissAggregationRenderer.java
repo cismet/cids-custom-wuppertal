@@ -102,6 +102,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
     private static final String PARAMETER_PROJECTNAME = "PROJECTNAME";
     private static final String PARAMETER_TYPE = "TYPE";
     private static final String PARAMETER_STARTINGPAGES = "STARTINGPAGES";
+    private static final String PARAMETER_IMAGEAVAILABLE = "IMAGEAVAILABLE";
     private static final String TYPE_VERMESSUNGSRISSE = "Vermessungsrisse";
     private static final String TYPE_COMPLEMENTARYDOCUMENTS = "Ergänzende Dokumente";
 
@@ -112,7 +113,8 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             "Gemarkung",
             "Flur",
             "Blatt",
-            "Jahr"
+            "Jahr",
+            "Format"
         };
     // Namen der Properties -> Spalten
     private static final String[] AGR_PROPERTY_NAMES = new String[] {
@@ -120,10 +122,11 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             "gemarkung.name",
             "flur",
             "blatt",
-            "jahr"
+            "jahr",
+            "format"
         };
 
-    private static final int[] AGR_COMLUMN_WIDTH = new int[] { 40, 85, 125, 85, 85, 60 };
+    private static final int[] AGR_COMLUMN_WIDTH = new int[] { 40, 40, 130, 85, 85, 60, 40 };
 
     //~ Instance fields --------------------------------------------------------
 
@@ -430,9 +433,10 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
 
                             @Override
                             public void run() {
-                                printingWaitDialog.setLocationRelativeTo(
-                                    StaticSwingTools.getParentFrame(VermessungRissAggregationRenderer.this));
-                                printingWaitDialog.setVisible(true);
+                                StaticSwingTools.showDialog(
+                                    StaticSwingTools.getParentFrame(VermessungRissAggregationRenderer.this),
+                                    printingWaitDialog,
+                                    true);
                             }
                         });
 
@@ -455,6 +459,8 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                     if (selectedVermessungsrisse.size() > 27) {
                         startingPage += Math.ceil((selectedVermessungsrisse.size() - 27D) / 37D);
                     }
+
+                    final Map imageAvailable = new HashMap();
 
                     for (final CidsBean vermessungsriss : selectedVermessungsrisse) {
                         final String schluessel;
@@ -500,11 +506,18 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
 
                         MultiPagePictureReader reader = null;
                         int pageCount = 0;
+                        final StringBuilder fileReference = new StringBuilder();
                         for (final Map.Entry<URL, URL> urls : validURLs.entrySet()) {
                             try {
                                 reader = new MultiPagePictureReader(urls.getValue(), false, false);
                                 pageCount = reader.getNumberOfPages();
                                 additionalFilesToDownload.add(urls.getKey());
+
+                                String path = urls.getKey().getPath();
+                                path = path.substring(path.lastIndexOf('/') + 1);
+                                fileReference.append(" (");
+                                fileReference.append(path);
+                                fileReference.append(')');
                                 break;
                             } catch (final Exception ex) {
                                 LOG.warn("Could not read document from URL '" + urls.getValue().toExternalForm()
@@ -513,12 +526,14 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                             }
                         }
 
+                        boolean isOfReducedSize = true;
                         if (reader == null) {
                             // Didn't find an image of reduced size
                             for (final Map.Entry<URL, URL> urls : validURLs.entrySet()) {
                                 try {
                                     reader = new MultiPagePictureReader(urls.getKey(), false, false);
                                     pageCount = reader.getNumberOfPages();
+                                    isOfReducedSize = false;
                                     break;
                                 } catch (final Exception ex) {
                                     LOG.warn("Could not read document from URL '" + urls.getValue().toExternalForm()
@@ -528,6 +543,8 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                             }
                         }
 
+                        imageAvailable.put(vermessungsriss.getProperty("id"), Boolean.valueOf(reader != null));
+
                         if (reader == null) {
                             // Couldn't open any image.
                             continue;
@@ -536,7 +553,8 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         for (int i = 0; i < pageCount; i++) {
                             imageBeans.add(new VermessungRissImageReportBean(
                                     description.toString()
-                                            + (i + 1),
+                                            + (i + 1)
+                                            + fileReference.toString(),
                                     host,
                                     schluessel,
                                     gemarkung,
@@ -546,7 +564,12 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                     reader));
                         }
 
-                        startingPages.put(vermessungsriss.getProperty("id"), new Integer(startingPage));
+                        String startingPageString = Integer.toString(startingPage);
+                        if (isOfReducedSize) {
+                            startingPageString = startingPageString.concat("*");
+                        }
+
+                        startingPages.put(vermessungsriss.getProperty("id"), startingPageString);
                         startingPage += pageCount;
                     }
 
@@ -558,6 +581,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                     parameters.put(PARAMETER_PROJECTNAME, txtProjectname.getText());
                     parameters.put(PARAMETER_TYPE, type);
                     parameters.put(PARAMETER_STARTINGPAGES, startingPages);
+                    parameters.put(PARAMETER_IMAGEAVAILABLE, imageAvailable);
 
                     final JasperReport jasperReport;
                     try {
@@ -602,7 +626,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                 dataSource,
                                 jobname,
                                 projectname,
-                                "vermriss");
+                                (TYPE_VERMESSUNGSRISSE.equalsIgnoreCase(type)) ? "vermriss" : "ergdok");
 
                         if (additionalFilesToDownload.isEmpty()) {
                             DownloadManager.instance().add(jasperDownload);

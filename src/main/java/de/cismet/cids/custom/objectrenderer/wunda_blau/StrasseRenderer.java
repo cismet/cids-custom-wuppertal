@@ -190,6 +190,9 @@ public class StrasseRenderer extends BlurredMapObjectRenderer {
         add(panMap, java.awt.BorderLayout.CENTER);
     } // </editor-fold>//GEN-END:initComponents
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void assignSingle() {
         if (geom != null) {
@@ -212,10 +215,18 @@ public class StrasseRenderer extends BlurredMapObjectRenderer {
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void assignAggregation() {
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  geometry  DOCUMENT ME!
+     */
     @Override
     public void setGeometry(final Geometry geometry) {
         super.setGeometry(geometry);

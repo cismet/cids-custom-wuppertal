@@ -341,6 +341,9 @@ public class Tim_liegRenderer extends BlurredMapObjectRenderer implements Change
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void assignSingle() {
         if (geometry != null) {
@@ -1673,6 +1676,11 @@ public class Tim_liegRenderer extends BlurredMapObjectRenderer implements Change
         add(panMap, java.awt.BorderLayout.CENTER);
     } // </editor-fold>//GEN-END:initComponents
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  e  DOCUMENT ME!
+     */
     @Override
     public void stateChanged(final ChangeEvent e) {
         lastSelected = tabbedPane.getSelectedIndex();

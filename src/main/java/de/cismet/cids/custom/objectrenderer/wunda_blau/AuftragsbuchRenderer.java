@@ -125,6 +125,9 @@ public class AuftragsbuchRenderer extends BlurredMapObjectRenderer {
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void assignSingle() {
         if (auftragsnummer != null) {

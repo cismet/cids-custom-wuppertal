@@ -38,6 +38,7 @@ import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -51,6 +52,7 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
 import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungFlurstueckSelectionDialog;
+import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsVermessungRissSearchStatement;
@@ -82,6 +84,7 @@ import de.cismet.cismap.tools.gui.CidsBeanDropJPopupMenuButton;
 
 import de.cismet.tools.gui.HighlightingRadioButtonMenuItem;
 import de.cismet.tools.gui.JPopupMenuButton;
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -258,15 +261,15 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
 
                 @Override
                 public void okHook() {
-                    final List<CidsBean> result = getCurrentListToAdd();
-                    if (result.size() > 0) {
-                        flurstuecksvermessungFilterModel.addElement(result.get(0));
+                    flurstuecksvermessungFilterModel.clear();
+
+                    for (final CidsBean flurstuecksvermessung : getCurrentListToAdd()) {
+                        flurstuecksvermessungFilterModel.addElement(flurstuecksvermessung);
                     }
                 }
             };
 
         flurstueckDialog.pack();
-        flurstueckDialog.setLocationRelativeTo(this);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -1065,7 +1068,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                 @Override
                 public void run() {
                     final String s = (String)JOptionPane.showInputDialog(
-                            null,
+                            StaticSwingTools.getParentFrame(VermessungRissWindowSearch.this),
                             "Geben Sie den Abstand des zu erzeugenden\n"       // NOI18N
                                     + "Puffers der letzten Suchgeometrie an.", // NOI18N
                             "Puffer",                                          // NOI18N
@@ -1128,7 +1131,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                         }
                     } catch (NumberFormatException ex) {
                         JOptionPane.showMessageDialog(
-                            null,
+                            StaticSwingTools.getParentFrame(VermessungRissWindowSearch.this),
                             "The given value was not a floating point value.!",
                             "Error",
                             JOptionPane.ERROR_MESSAGE); // NOI18N
@@ -1176,9 +1179,19 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
      */
     private void btnAddFlurstueckActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddFlurstueckActionPerformed
         final List<CidsBean> result = new ArrayList<CidsBean>(1);
+
+        for (final Object flurstuecksvermessung : flurstuecksvermessungFilterModel.toArray()) {
+            result.add((CidsBean)flurstuecksvermessung);
+        }
+
+        Collections.sort(result, AlphanumComparator.getInstance());
+
         flurstueckDialog.setCurrentListToAdd(result);
-        flurstueckDialog.setVisible(true);
-    }                                                                                    //GEN-LAST:event_btnAddFlurstueckActionPerformed
+
+        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this),
+            flurstueckDialog,
+            true);
+    } //GEN-LAST:event_btnAddFlurstueckActionPerformed
 
     /**
      * DOCUMENT ME!

@@ -75,6 +75,9 @@ public class WerbetraegerFeatureRenderer extends CustomCidsFeatureRenderer {
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void assign() {
         prbLoad.setVisible(true);
@@ -129,11 +132,21 @@ public class WerbetraegerFeatureRenderer extends CustomCidsFeatureRenderer {
         t.start();
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public float getTransparency() {
         return 0.9f;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Paint getFillingStyle() {
         return new Color(100, 100, 100, 50);

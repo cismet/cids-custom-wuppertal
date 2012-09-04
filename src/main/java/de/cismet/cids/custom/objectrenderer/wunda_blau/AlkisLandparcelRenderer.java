@@ -16,6 +16,7 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
@@ -73,6 +74,8 @@ import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.StyleListCellRenderer;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.alkis.AlkisSOAPWorkerService;
 import de.cismet.cids.custom.utils.alkis.SOAPAccessProvider;
@@ -138,12 +141,21 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
     private static final String BUCHUNGSBLATT_TABLE = "alkis_buchungsblatt";
     private static final String DOMAIN = "WUNDA_BLAU";
 
-    // <editor-fold defaultstate="collapsed" desc="Border- and Titleprovider method implementations">
+    /**
+     * <editor-fold defaultstate="collapsed" desc="Border- and Titleprovider method implementations">.
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getTitleComponent() {
         return panTitle;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getFooterComponent() {
         return panFooter;
@@ -158,21 +170,39 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         return landparcel;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getTitleBorder() {
         return new EmptyBorder(10, 10, 10, 10);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getFooterBorder() {
         return new EmptyBorder(5, 5, 5, 5);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getCenterrBorder() {
         return new EmptyBorder(5, 5, 5, 5);
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
         bindingGroup.unbind();
@@ -385,6 +415,24 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
             panBuchungEigentum.setVisible(false);
         }
         panHtmlProducts.setVisible(AlkisUtils.validateUserHasAlkisHTMLProductAccess());
+
+        hlKarte.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_KARTE));
+        hlFlurstuecksnachweisPdf.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS)
+                    && BillingPopup.isBillingAllowed());
+        hlFlurstuecksnachweisHtml.setEnabled(ObjectRendererUtils.checkActionTag(
+                PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS));
+        hlFlurstuecksEigentumsnachweisKomPdf.setEnabled(ObjectRendererUtils.checkActionTag(
+                PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM) && BillingPopup.isBillingAllowed());
+        hlFlurstuecksEigentumsnachweisKomHtml.setEnabled(ObjectRendererUtils.checkActionTag(
+                PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM));
+        hlFlurstuecksEigentumsnachweisKomInternPdf.setEnabled(ObjectRendererUtils.checkActionTag(
+                PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN));
+        hlFlurstuecksEigentumsnachweisKomInternHtml.setEnabled(ObjectRendererUtils.checkActionTag(
+                PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN));
+        hlFlurstuecksEigentumsnachweisNrwPdf.setEnabled(ObjectRendererUtils.checkActionTag(
+                PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW) && BillingPopup.isBillingAllowed());
+        hlFlurstuecksEigentumsnachweisNrwHtml.setEnabled(ObjectRendererUtils.checkActionTag(
+                PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW));
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -624,7 +672,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         if ((parcelCode != null) && (parcelCode.length() > 0)) {
             try {
                 url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(parcelCode, product);
-
+//                BillingPopup.doBilling(SessionManager.getSession().getUser(), product, url.toString(), (Geometry)null, new ProductGroupAmount("ea",1));
                 if (url != null) {
                     if (!DownloadManagerDialog.showAskingForUserTitle(this)) {
                         return;
@@ -692,7 +740,8 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
      * DOCUMENT ME!
      */
     private void showNoProductPermissionWarning() {
-        JOptionPane.showMessageDialog(this, "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
+        JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+            "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
     }
 
     /**
@@ -1475,9 +1524,16 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
      */
     private void hlFlurstuecksnachweisPdfActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlFlurstuecksnachweisPdfActionPerformed
         if (!demoMode) {
-            downloadEinzelnachweisProduct(hlFlurstuecksnachweisPdf.getText(),
-                AlkisUtils.PRODUCTS.FLURSTUECKSNACHWEIS_PDF,
-                PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS);
+            try {
+                if (BillingPopup.doBilling("fsnw", "no.yet", (Geometry)null, new ProductGroupAmount("ea", 1))) {
+                    downloadEinzelnachweisProduct(hlFlurstuecksnachweisPdf.getText(),
+                        AlkisUtils.PRODUCTS.FLURSTUECKSNACHWEIS_PDF,
+                        PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS);
+                }
+            } catch (Exception e) {
+                log.error("Error when trying to produce a alkis product", e);
+                // Hier noch ein Fehlerdialog
+            }
         } else {
             BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL + "flurstuecksnachweis.pdf");
         }
@@ -1490,9 +1546,16 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
      */
     private void hlFlurstuecksEigentumsnachweisKomHtmlActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlFlurstuecksEigentumsnachweisKomHtmlActionPerformed
         if (!demoMode) {
-            downloadEinzelnachweisProduct(hlFlurstuecksEigentumsnachweisKomHtml.getText(),
-                AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_HTML,
-                PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM);
+            try {
+//                if (BillingPopup.doBilling("fsuekom", "no.yet", (Geometry)null, new ProductGroupAmount("ea", 1))) {
+                downloadEinzelnachweisProduct(hlFlurstuecksEigentumsnachweisKomHtml.getText(),
+                    AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_HTML,
+                    PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM);
+//                }
+            } catch (Exception e) {
+                log.error("Error when trying to produce a alkis product", e);
+                // Hier noch ein Fehlerdialog
+            }
         } else {
             BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL + "flurstuecksnachweis.pdf");
         }
@@ -1590,9 +1653,16 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
      */
     private void hlFlurstuecksEigentumsnachweisNrwPdfActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlFlurstuecksEigentumsnachweisNrwPdfActionPerformed
         if (!demoMode) {
-            downloadEinzelnachweisProduct(hlFlurstuecksEigentumsnachweisNrwPdf.getText(),
-                AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF,
-                PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW);
+            try {
+                if (BillingPopup.doBilling("fsuenw", "no.yet", (Geometry)null, new ProductGroupAmount("ea", 1))) {
+                    downloadEinzelnachweisProduct(hlFlurstuecksEigentumsnachweisNrwPdf.getText(),
+                        AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_NRW_PDF,
+                        PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW);
+                }
+            } catch (Exception e) {
+                log.error("Error when trying to produce a alkis product", e);
+                // Hier noch ein Fehlerdialog
+            }
         } else {
             BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL
                         + "flurstuecksundeigentumsnachweis_nrw.pdf");
@@ -1621,9 +1691,16 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
      */
     private void hlFlurstuecksEigentumsnachweisKomPdfActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlFlurstuecksEigentumsnachweisKomPdfActionPerformed
         if (!demoMode) {
-            downloadEinzelnachweisProduct(hlFlurstuecksEigentumsnachweisKomPdf.getText(),
-                AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF,
-                PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM);
+            try {
+                if (BillingPopup.doBilling("fsuekom", "no.yet", (Geometry)null, new ProductGroupAmount("ea", 1))) {
+                    downloadEinzelnachweisProduct(hlFlurstuecksEigentumsnachweisKomPdf.getText(),
+                        AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_PDF,
+                        PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM);
+                }
+            } catch (Exception e) {
+                log.error("Error when trying to produce a alkis product", e);
+                // Hier noch ein Fehlerdialog
+            }
         } else {
             BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL
                         + "flurstuecksundeigentumsnachweis_kommunal.pdf");
@@ -1678,11 +1755,21 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         }
     }                                                                                                               //GEN-LAST:event_hlFlurstuecksEigentumsnachweisKomInternHtmlActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cb  DOCUMENT ME!
+     */
     @Override
     public void setCidsBean(final CidsBean cb) {
         bindingGroup.unbind();
@@ -1898,11 +1985,21 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getTitle() {
         return title;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  title  DOCUMENT ME!
+     */
     @Override
     public void setTitle(String title) {
         if (title == null) {
@@ -1950,6 +2047,13 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception  DOCUMENT ME!
+         */
         @Override
         protected String doInBackground() throws Exception {
             for (final CidsBean buchungsblattBean : buchungsblaetterBeans) {
@@ -1973,6 +2077,11 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
             return currentInfoText.toString();
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  chunks  DOCUMENT ME!
+         */
         @Override
         protected void process(final List<String> chunks) {
             if (!isCancelled()) {
@@ -1989,11 +2098,19 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
             }
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public String toString() {
             return super.toString() + " " + buchungsblaetterBeans;
         }
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         protected void done() {
             if (!isCancelled()) {
@@ -2029,6 +2146,11 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  e  DOCUMENT ME!
+         */
         @Override
         public void mouseEntered(final MouseEvent e) {
             final Object srcObj = e.getSource();
@@ -2038,6 +2160,11 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
             }
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  e  DOCUMENT ME!
+         */
         @Override
         public void mouseExited(final MouseEvent e) {
             lblProductPreview.setIcon(null);

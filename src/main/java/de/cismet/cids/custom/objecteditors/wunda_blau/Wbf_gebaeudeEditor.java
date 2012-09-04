@@ -71,6 +71,7 @@ import de.cismet.cids.tools.metaobjectrenderer.Titled;
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
 import de.cismet.tools.gui.RoundedPanel;
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -1317,7 +1318,7 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
      */
     private void cmdRemoveVorgangActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdRemoveVorgangActionPerformed
         final int answer = JOptionPane.showConfirmDialog(
-                this,
+                StaticSwingTools.getParentFrame(this),
                 "Soll dieser Vorgang wirklich gelöscht werden?",
                 "Vorgang entfernen",
                 JOptionPane.YES_NO_OPTION);
@@ -1363,8 +1364,11 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
     private void txtFolgenummerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtFolgenummerActionPerformed
         // TODO add your handling code here:
     } //GEN-LAST:event_txtFolgenummerActionPerformed
-
-    // End of variables declaration
+    /**
+     * End of variables declaration.
+     *
+     * @param  cidsBean  DOCUMENT ME!
+     */
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         domain = cidsBean.getMetaObject().getDomain();
@@ -1398,22 +1402,40 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
         super.setCidsBean(cidsBean);
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
         super.dispose();
         ((DefaultCismapGeometryComboBoxEditor)cboGeom).dispose();
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getTitle() {
         return title;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  title  DOCUMENT ME!
+     */
     @Override
     public void setTitle(final String title) {
         this.title = title;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public BindingGroup getBindingGroup() {
         return bindingGroup;
@@ -1431,6 +1453,13 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   value  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public Result validate(final Integer value) {
             final String warn = "Die Anzahl der Wohneinheiten darf nur bei Mietobjekten ausgefüllt sein.";
@@ -1454,6 +1483,13 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   value  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public Result validate(final Integer value) {
             final CidsBean nutzungsart = (CidsBean)cidsBean.getProperty("art");
@@ -1479,6 +1515,13 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   value  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public Result validate(final Integer value) {
             final CidsBean nutzungsart = (CidsBean)cidsBean.getProperty("art");
@@ -1504,6 +1547,13 @@ public class Wbf_gebaeudeEditor extends DefaultCustomObjectEditor implements Tit
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   validationBean  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public Result validate(final CidsBean validationBean) {
             final String kuerzel = (String)validationBean.getProperty("kuerzel");
@@ -1533,6 +1583,11 @@ class MyLockableUI extends LockableUI {
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  dirty  DOCUMENT ME!
+     */
     @Override
     public void setDirty(final boolean dirty) {
         super.setDirty(dirty);

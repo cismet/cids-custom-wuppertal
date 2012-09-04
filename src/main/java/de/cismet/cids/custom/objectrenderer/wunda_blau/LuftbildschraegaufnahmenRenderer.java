@@ -8,6 +8,7 @@
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import Sirius.navigator.tools.BrowserLauncher;
+import Sirius.navigator.ui.ComponentRegistry;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -23,6 +24,7 @@ import org.jdesktop.swingx.graphics.ShadowRenderer;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -147,7 +149,8 @@ public class LuftbildschraegaufnahmenRenderer extends BlurredMapObjectRenderer {
 
     @CidsAttributeVector("Georeferenz.GEO_STRING")
     public Vector<Geometry> geoAgr = new Vector();
-    PrintingWaitDialog printingWaitDialog = new PrintingWaitDialog(StaticSwingTools.getParentFrame(this), true);
+    PrintingWaitDialog printingWaitDialog = new PrintingWaitDialog(ComponentRegistry.getRegistry().getMainWindow(),
+            true);
     Properties properties = new Properties();
 
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
@@ -1024,9 +1027,7 @@ public class LuftbildschraegaufnahmenRenderer extends BlurredMapObjectRenderer {
 
                                     @Override
                                     public void run() {
-                                        printingWaitDialog.setLocationRelativeTo(
-                                            StaticSwingTools.getParentFrame(LuftbildschraegaufnahmenRenderer.this));
-                                        printingWaitDialog.setVisible(true);
+                                        StaticSwingTools.showDialog(printingWaitDialog);
                                     }
                                 });
 
@@ -1185,9 +1186,7 @@ public class LuftbildschraegaufnahmenRenderer extends BlurredMapObjectRenderer {
 
                                     @Override
                                     public void run() {
-                                        printingWaitDialog.setLocationRelativeTo(
-                                            StaticSwingTools.getParentFrame(LuftbildschraegaufnahmenRenderer.this));
-                                        printingWaitDialog.setVisible(true);
+                                        StaticSwingTools.showDialog(printingWaitDialog);
                                     }
                                 });
 

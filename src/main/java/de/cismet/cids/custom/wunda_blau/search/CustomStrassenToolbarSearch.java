@@ -7,6 +7,9 @@
 ****************************************************/
 package de.cismet.cids.custom.wunda_blau.search;
 
+import Sirius.navigator.Navigator;
+import Sirius.navigator.ui.ComponentRegistry;
+
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.search.CidsServerSearch;
 
@@ -29,6 +32,8 @@ import de.cismet.cids.custom.wunda_blau.search.server.CustomStrassenSearchStatem
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.tools.search.clientstuff.CidsToolbarSearch;
+
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -65,21 +70,41 @@ public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public ImageIcon getIcon() {
         return icon;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getName() {
         return mc.getName();
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  toolbarSearchString  DOCUMENT ME!
+     */
     @Override
     public void setSearchParameter(final String toolbarSearchString) {
         this.searchString = toolbarSearchString;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public CidsServerSearch getServerSearch() {
         if (searchString.startsWith("str ")) {
@@ -95,9 +120,12 @@ public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
             hud.getContentPane().add(t);
             final JButton s = HudWidgetFactory.createHudButton("Suche");
             hud.getContentPane().add(s);
-            hud.getJDialog().setLocationRelativeTo(null);
             hud.getJDialog().setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            hud.getJDialog().setVisible(true);
+
+            StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(
+                    ComponentRegistry.getRegistry().getMainWindow()),
+                hud.getJDialog(),
+                true);
         }
 
         return new CustomStrassenSearchStatement(searchString);

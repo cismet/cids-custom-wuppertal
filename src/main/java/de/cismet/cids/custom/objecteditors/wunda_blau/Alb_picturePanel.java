@@ -66,6 +66,7 @@ import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.StaticDecimalTools;
 
 import de.cismet.tools.gui.MultiPagePictureReader;
+import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import de.cismet.tools.gui.downloadmanager.HttpDownload;
@@ -768,7 +769,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                     }
                 } else {
                     JOptionPane.showMessageDialog(
-                        this,
+                        StaticSwingTools.getParentFrame(this),
                         "Eingegebene(r) Distanz bzw. Umfang ist kein gültiger Wert oder gleich 0.",
                         "Ungültige Eingabe",
                         JOptionPane.WARNING_MESSAGE);
@@ -969,7 +970,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     private void showPermissionWarning() {
         if (!alreadyWarnedAboutPermissionProblem) {
             JOptionPane.showMessageDialog(
-                this,
+                StaticSwingTools.getParentFrame(this),
                 "Kein Schreibrecht",
                 "Kein Schreibrecht für die Klasse. Änderungen werden nicht gespeichert.",
                 JOptionPane.WARNING_MESSAGE);
@@ -1026,7 +1027,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     private Double askForDistanceValue() {
         try {
             final String laenge = JOptionPane.showInputDialog(
-                    this,
+                    StaticSwingTools.getParentFrame(this),
                     "Bitte Länge bzw. Umfang in Metern eingeben:",
                     "Kalibrierung",
                     JOptionPane.QUESTION_MESSAGE);
@@ -1230,12 +1231,15 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 
         //~ Methods ------------------------------------------------------------
 
-// private void updateMD5() throws Exception {
-// expectedMD5Values[currentDocument] = currentActualDocumentMD5;
-// cidsBean.setProperty(MD5_PROPERTY_NAMES[currentDocument], currentActualDocumentMD5);
-// log.debug("saving md5 value " + currentActualDocumentMD5);
-// persistBean();
-// }
+        /**
+         * private void updateMD5() throws Exception { expectedMD5Values[currentDocument] = currentActualDocumentMD5;
+         * cidsBean.setProperty(MD5_PROPERTY_NAMES[currentDocument], currentActualDocumentMD5); log.debug("saving md5
+         * value " + currentActualDocumentMD5); persistBean(); }.
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception  DOCUMENT ME!
+         */
         @Override
         protected ListModel doInBackground() throws Exception {
             final DefaultListModel model = new DefaultListModel();
@@ -1269,6 +1273,9 @@ public class Alb_picturePanel extends javax.swing.JPanel {
             }
         }
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         protected void done() {
             try {
@@ -1320,6 +1327,14 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception              DOCUMENT ME!
+         * @throws  IllegalStateException  DOCUMENT ME!
+         */
         @Override
         protected BufferedImage doInBackground() throws Exception {
             if (pictureReader != null) {
@@ -1328,6 +1343,9 @@ public class Alb_picturePanel extends javax.swing.JPanel {
             throw new IllegalStateException("PictureReader is null!!");
         }
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         protected void done() {
             try {
@@ -1368,6 +1386,11 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  fce  DOCUMENT ME!
+         */
         @Override
         public void featuresAdded(final FeatureCollectionEvent fce) {
             if (!togCalibrate.isEnabled()) {
@@ -1381,6 +1404,11 @@ public class Alb_picturePanel extends javax.swing.JPanel {
             refreshMeasurementsInStatus(fce.getEventFeatures());
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  fce  DOCUMENT ME!
+         */
         @Override
         public void featuresRemoved(final FeatureCollectionEvent fce) {
             if (togCalibrate.isEnabled()) {
@@ -1394,16 +1422,31 @@ public class Alb_picturePanel extends javax.swing.JPanel {
             }
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  fce  DOCUMENT ME!
+         */
         @Override
         public void allFeaturesRemoved(final FeatureCollectionEvent fce) {
             featuresRemoved(fce);
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  fce  DOCUMENT ME!
+         */
         @Override
         public void featuresChanged(final FeatureCollectionEvent fce) {
             refreshMeasurementsInStatus(fce.getEventFeatures());
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  fce  DOCUMENT ME!
+         */
         @Override
         public void featureSelectionChanged(final FeatureCollectionEvent fce) {
             refreshMeasurementsInStatus(fce.getEventFeatures());

@@ -158,6 +158,9 @@ public class AltstandortRenderer extends BlurredMapObjectRenderer {
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void assignSingle() {
         if (geom != null) {

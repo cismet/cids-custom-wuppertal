@@ -23,6 +23,11 @@ public class Alkis_buchungsblatt_landparcelToStringConverter extends CustomToStr
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String createString() {
         String result = String.valueOf(cidsBean.getProperty("landparcelcode"));

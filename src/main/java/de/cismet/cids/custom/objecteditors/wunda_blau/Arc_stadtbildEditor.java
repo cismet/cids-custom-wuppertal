@@ -52,6 +52,7 @@ import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 import de.cismet.tools.CismetThreadPool;
 
 import de.cismet.tools.gui.RoundedPanel;
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -146,11 +147,11 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
 //        final MetaClass swClass = ClassCacheMultiple.getMetaClass(domain, "ARC_S");
         suchwortModelProvider.setSorted(true);
         cbSuchworte.setEditable(true);
-        AutoCompleteDecorator.decorate(bcbFotograf);
-        AutoCompleteDecorator.decorate(bcbAuftraggeber);
-        AutoCompleteDecorator.decorate(bcbStrasse);
-        AutoCompleteDecorator.decorate(bcbFilmart);
-        AutoCompleteDecorator.decorate(cbSuchworte);
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(bcbFotograf);
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(bcbAuftraggeber);
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(bcbStrasse);
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(bcbFilmart);
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbSuchworte);
         ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(
             lblPicture,
             Cursor.HAND_CURSOR,
@@ -180,6 +181,9 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
         super.dispose();
@@ -901,6 +905,11 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cidsBean  DOCUMENT ME!
+     */
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         super.setCidsBean(cidsBean);
@@ -918,7 +927,7 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
         final Object selection = lstSuchworte.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(
-                    this,
+                    StaticSwingTools.getParentFrame(this),
                     "Soll das Suchwort wirklich gelöscht werden?",
                     "Suchwort entfernen",
                     JOptionPane.YES_NO_OPTION);
@@ -1154,18 +1163,29 @@ public class Arc_stadtbildEditor extends DefaultCustomObjectEditor {
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception  DOCUMENT ME!
+         */
         @Override
         protected DefaultComboBoxModel doInBackground() throws Exception {
             return initDialogeSuchwortCombobox();
         }
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         protected void done() {
             try {
                 cbSuchworte.setModel(get());
                 cbSuchworte.setSelectedIndex(0);
-                dlgAddSuchwort.setLocationRelativeTo(Arc_stadtbildEditor.this);
-                dlgAddSuchwort.setVisible(true);
+                StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(Arc_stadtbildEditor.this),
+                    dlgAddSuchwort,
+                    true);
             } catch (InterruptedException ex) {
                 log.warn(ex, ex);
             } catch (ExecutionException ex) {
