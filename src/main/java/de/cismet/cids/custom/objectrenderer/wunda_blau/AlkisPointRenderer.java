@@ -501,9 +501,12 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         }
         panHtmlProducts.setVisible(AlkisUtils.validateUserHasAlkisHTMLProductAccess());
 
-        hlPunktlisteHtml.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE));
-        hlPunktlistePdf.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE));
-        hlPunktlisteTxt.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE));
+        hlPunktlisteHtml.setEnabled(BillingPopup.isBillingAllowed()
+                    && ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE));
+        hlPunktlistePdf.setEnabled(BillingPopup.isBillingAllowed()
+                    && ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE));
+        hlPunktlisteTxt.setEnabled(BillingPopup.isBillingAllowed()
+                    && ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_PUNKTLISTE));
     }
 
     //~ Methods ----------------------------------------------------------------
