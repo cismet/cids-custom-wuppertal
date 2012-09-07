@@ -369,17 +369,17 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblRisseFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblRisseFocusLost
+    private void tblRisseFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblRisseFocusLost
         tblRisse.clearSelection();
         animateToOverview();
-    }                                                                     //GEN-LAST:event_tblRisseFocusLost
+    }//GEN-LAST:event_tblRisseFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnGenerateReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnGenerateReportActionPerformed
+    private void btnGenerateReportActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateReportActionPerformed
         final Collection<CidsBean> selectedVermessungsrisse = getSelectedVermessungsrisse();
 
         if (selectedVermessungsrisse.isEmpty()) {
@@ -395,25 +395,78 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             return;
         }
 
+        new SwingWorker<Void, Void>() {
+
+                @Override
+                protected Void doInBackground() throws Exception {
         final Object typeObj = cmbType.getSelectedItem();
         final String type;
         if (typeObj instanceof String) {
             type = (String)typeObj;
 
+                        try {
+                            int dinA3Orless = 0;
+                            int dinA2Orbigger = 0;
+                            for (final CidsBean selectedVermessungsriss : selectedVermessungsrisse) {
+                                final boolean isDocumentAvailable;
             if (type.equalsIgnoreCase(TYPE_VERMESSUNGSRISSE)) {
-                downloadProducts(selectedVermessungsrisse, type, AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER);
+                                    isDocumentAvailable = hasVermessungsriss(selectedVermessungsriss);
             } else if (type.equalsIgnoreCase(TYPE_COMPLEMENTARYDOCUMENTS)) {
+                                    isDocumentAvailable = hasErgaenzendeDokumente(selectedVermessungsriss);
+                                } else {
+                                    isDocumentAvailable = false;
+                                }
+                                if (isDocumentAvailable) {
+                                    final CidsBean format = (CidsBean)selectedVermessungsriss.getProperty("format");
+                                    if (format != null) {
+                                        if (format.getProperty("name").equals("2")) {
+                                            dinA2Orbigger++;
+                                        } else {
+                                            dinA3Orless++;
+                                        }
+                                    } else {
+                                        dinA3Orless++;
+                                    }
+                                }
+                            }
+
+                            if (type.equalsIgnoreCase(TYPE_VERMESSUNGSRISSE)) {
+                                if (BillingPopup.doBilling(
+                                                "vrpdf",
+                                                "no.yet",
+                                                (Geometry)null,
+                                                new ProductGroupAmount("eadoc_a3", dinA3Orless),
+                                                new ProductGroupAmount("eadoc_a2-a0", dinA2Orbigger))) {
                 downloadProducts(
                     selectedVermessungsrisse,
                     type,
+                                        AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER);
+                                }
+                            } else if (type.equalsIgnoreCase(TYPE_COMPLEMENTARYDOCUMENTS)) {
+                                if (BillingPopup.doBilling(
+                                                "doklapdf",
+                                                "no.yet",
+                                                (Geometry)null,
+                                                new ProductGroupAmount("eadoc_a3", dinA3Orless),
+                                                new ProductGroupAmount("eadoc_a2-a0", dinA2Orbigger))) {
+                                    downloadProducts(
+                                        selectedVermessungsrisse,
+                                        type,
                     AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN);
             }
+                            }
+                        } catch (Exception e) {
+                            LOG.error("Error when trying to produce a alkis product", e);
+                            // Hier noch ein Fehlerdialog
+                        }
         } else {
             // TODO: User feedback?!
             LOG.info("Unknown type '" + typeObj + "' encountered. Skipping report generation.");
-            return;
         }
-    } //GEN-LAST:event_btnGenerateReportActionPerformed
+                    return null;
+                }
+                }.execute();
+    }//GEN-LAST:event_btnGenerateReportActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -663,7 +716,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) { //GEN-FIRST:event_formAncestorAdded
+    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_formAncestorAdded
         CismetThreadPool.execute(new Runnable() {
 
                 @Override
@@ -682,7 +735,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         });
                 }
             });
-    } //GEN-LAST:event_formAncestorAdded
+    }//GEN-LAST:event_formAncestorAdded
 
     /**
      * DOCUMENT ME!
