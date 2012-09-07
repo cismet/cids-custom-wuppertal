@@ -105,6 +105,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
     private static final String PARAMETER_PROJECTNAME = "PROJECTNAME";
     private static final String PARAMETER_TYPE = "TYPE";
     private static final String PARAMETER_STARTINGPAGES = "STARTINGPAGES";
+    private static final String PARAMETER_IMAGEAVAILABLE = "IMAGEAVAILABLE";
     private static final String TYPE_VERMESSUNGSRISSE = "Vermessungsrisse";
     private static final String TYPE_COMPLEMENTARYDOCUMENTS = "Ergänzende Dokumente";
 
@@ -115,7 +116,8 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             "Gemarkung",
             "Flur",
             "Blatt",
-            "Jahr"
+            "Jahr",
+            "Format"
         };
     // Namen der Properties -> Spalten
     private static final String[] AGR_PROPERTY_NAMES = new String[] {
@@ -123,10 +125,11 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             "gemarkung.name",
             "flur",
             "blatt",
-            "jahr"
+            "jahr",
+            "format"
         };
 
-    private static final int[] AGR_COMLUMN_WIDTH = new int[] { 40, 85, 125, 85, 85, 60 };
+    private static final int[] AGR_COMLUMN_WIDTH = new int[] { 40, 40, 130, 85, 85, 60, 40 };
 
     //~ Instance fields --------------------------------------------------------
 
@@ -369,17 +372,17 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblRisseFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblRisseFocusLost
+    private void tblRisseFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblRisseFocusLost
         tblRisse.clearSelection();
         animateToOverview();
-    }                                                                     //GEN-LAST:event_tblRisseFocusLost
+    }//GEN-LAST:event_tblRisseFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnGenerateReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnGenerateReportActionPerformed
+    private void btnGenerateReportActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateReportActionPerformed
         final Collection<CidsBean> selectedVermessungsrisse = getSelectedVermessungsrisse();
 
         if (selectedVermessungsrisse.isEmpty()) {
@@ -399,19 +402,19 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
 
                 @Override
                 protected Void doInBackground() throws Exception {
-                    final Object typeObj = cmbType.getSelectedItem();
-                    final String type;
-                    if (typeObj instanceof String) {
-                        type = (String)typeObj;
+        final Object typeObj = cmbType.getSelectedItem();
+        final String type;
+        if (typeObj instanceof String) {
+            type = (String)typeObj;
 
                         try {
                             int dinA3Orless = 0;
                             int dinA2Orbigger = 0;
                             for (final CidsBean selectedVermessungsriss : selectedVermessungsrisse) {
                                 final boolean isDocumentAvailable;
-                                if (type.equalsIgnoreCase(TYPE_VERMESSUNGSRISSE)) {
+            if (type.equalsIgnoreCase(TYPE_VERMESSUNGSRISSE)) {
                                     isDocumentAvailable = hasVermessungsriss(selectedVermessungsriss);
-                                } else if (type.equalsIgnoreCase(TYPE_COMPLEMENTARYDOCUMENTS)) {
+            } else if (type.equalsIgnoreCase(TYPE_COMPLEMENTARYDOCUMENTS)) {
                                     isDocumentAvailable = hasErgaenzendeDokumente(selectedVermessungsriss);
                                 } else {
                                     isDocumentAvailable = false;
@@ -437,9 +440,9 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                                 (Geometry)null,
                                                 new ProductGroupAmount("eadoc_a3", dinA3Orless),
                                                 new ProductGroupAmount("eadoc_a2-a0", dinA2Orbigger))) {
-                                    downloadProducts(
-                                        selectedVermessungsrisse,
-                                        type,
+                downloadProducts(
+                    selectedVermessungsrisse,
+                    type,
                                         AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER);
                                 }
                             } else if (type.equalsIgnoreCase(TYPE_COMPLEMENTARYDOCUMENTS)) {
@@ -452,21 +455,21 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                     downloadProducts(
                                         selectedVermessungsrisse,
                                         type,
-                                        AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN);
-                                }
+                    AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN);
+            }
                             }
                         } catch (Exception e) {
                             LOG.error("Error when trying to produce a alkis product", e);
                             // Hier noch ein Fehlerdialog
                         }
-                    } else {
-                        // TODO: User feedback?!
-                        LOG.info("Unknown type '" + typeObj + "' encountered. Skipping report generation.");
-                    }
+        } else {
+            // TODO: User feedback?!
+            LOG.info("Unknown type '" + typeObj + "' encountered. Skipping report generation.");
+        }
                     return null;
                 }
-            }.execute();
-    } //GEN-LAST:event_btnGenerateReportActionPerformed
+                }.execute();
+    }//GEN-LAST:event_btnGenerateReportActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -513,6 +516,8 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         startingPage += Math.ceil((selectedVermessungsrisse.size() - 27D) / 37D);
                     }
 
+                    final Map imageAvailable = new HashMap();
+
                     for (final CidsBean vermessungsriss : selectedVermessungsrisse) {
                         final String schluessel;
                         final Integer gemarkung;
@@ -557,11 +562,18 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
 
                         MultiPagePictureReader reader = null;
                         int pageCount = 0;
+                        final StringBuilder fileReference = new StringBuilder();
                         for (final Map.Entry<URL, URL> urls : validURLs.entrySet()) {
                             try {
                                 reader = new MultiPagePictureReader(urls.getValue(), false, false);
                                 pageCount = reader.getNumberOfPages();
                                 additionalFilesToDownload.add(urls.getKey());
+
+                                String path = urls.getKey().getPath();
+                                path = path.substring(path.lastIndexOf('/') + 1);
+                                fileReference.append(" (");
+                                fileReference.append(path);
+                                fileReference.append(')');
                                 break;
                             } catch (final Exception ex) {
                                 LOG.warn("Could not read document from URL '" + urls.getValue().toExternalForm()
@@ -570,12 +582,14 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                             }
                         }
 
+                        boolean isOfReducedSize = true;
                         if (reader == null) {
                             // Didn't find an image of reduced size
                             for (final Map.Entry<URL, URL> urls : validURLs.entrySet()) {
                                 try {
                                     reader = new MultiPagePictureReader(urls.getKey(), false, false);
                                     pageCount = reader.getNumberOfPages();
+                                    isOfReducedSize = false;
                                     break;
                                 } catch (final Exception ex) {
                                     LOG.warn("Could not read document from URL '" + urls.getValue().toExternalForm()
@@ -585,6 +599,8 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                             }
                         }
 
+                        imageAvailable.put(vermessungsriss.getProperty("id"), Boolean.valueOf(reader != null));
+
                         if (reader == null) {
                             // Couldn't open any image.
                             continue;
@@ -593,7 +609,8 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         for (int i = 0; i < pageCount; i++) {
                             imageBeans.add(new VermessungRissImageReportBean(
                                     description.toString()
-                                            + (i + 1),
+                                            + (i + 1)
+                                            + fileReference.toString(),
                                     host,
                                     schluessel,
                                     gemarkung,
@@ -603,7 +620,12 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                     reader));
                         }
 
-                        startingPages.put(vermessungsriss.getProperty("id"), new Integer(startingPage));
+                        String startingPageString = Integer.toString(startingPage);
+                        if (isOfReducedSize) {
+                            startingPageString = startingPageString.concat("*");
+                        }
+
+                        startingPages.put(vermessungsriss.getProperty("id"), startingPageString);
                         startingPage += pageCount;
                     }
 
@@ -615,6 +637,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                     parameters.put(PARAMETER_PROJECTNAME, txtProjectname.getText());
                     parameters.put(PARAMETER_TYPE, type);
                     parameters.put(PARAMETER_STARTINGPAGES, startingPages);
+                    parameters.put(PARAMETER_IMAGEAVAILABLE, imageAvailable);
 
                     final JasperReport jasperReport;
                     try {
@@ -659,7 +682,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                 dataSource,
                                 jobname,
                                 projectname,
-                                "vermriss");
+                                (TYPE_VERMESSUNGSRISSE.equalsIgnoreCase(type)) ? "vermriss" : "ergdok");
 
                         if (additionalFilesToDownload.isEmpty()) {
                             DownloadManager.instance().add(jasperDownload);
@@ -696,7 +719,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) { //GEN-FIRST:event_formAncestorAdded
+    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_formAncestorAdded
         CismetThreadPool.execute(new Runnable() {
 
                 @Override
@@ -715,7 +738,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         });
                 }
             });
-    } //GEN-LAST:event_formAncestorAdded
+    }//GEN-LAST:event_formAncestorAdded
 
     /**
      * DOCUMENT ME!
