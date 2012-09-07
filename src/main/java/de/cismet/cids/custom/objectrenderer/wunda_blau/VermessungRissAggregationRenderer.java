@@ -820,6 +820,9 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             sortKeys.add(new RowSorter.SortKey(4, SortOrder.DESCENDING));
             tableSorter.setSortKeys(sortKeys);
 
+            final boolean enabled = BillingPopup.isBillingAllowed()
+                        && ((allowErgaenzendeDokumenteReport && allowVermessungsrisseReport)
+                            || allowErgaenzendeDokumenteReport || allowVermessungsrisseReport);
             if (allowErgaenzendeDokumenteReport && allowVermessungsrisseReport) {
                 cmbType.setModel(new DefaultComboBoxModel(
                         new String[] { TYPE_VERMESSUNGSRISSE, TYPE_COMPLEMENTARYDOCUMENTS }));
@@ -827,12 +830,11 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                 cmbType.setModel(new DefaultComboBoxModel(new String[] { TYPE_COMPLEMENTARYDOCUMENTS }));
             } else if (allowVermessungsrisseReport) {
                 cmbType.setModel(new DefaultComboBoxModel(new String[] { TYPE_VERMESSUNGSRISSE }));
-            } else {
-                cmbType.setEnabled(false);
-                btnGenerateReport.setEnabled(false);
-                txtJobnumber.setEnabled(false);
-                txtProjectname.setEnabled(false);
             }
+            cmbType.setEnabled(enabled);
+            btnGenerateReport.setEnabled(enabled);
+            txtJobnumber.setEnabled(enabled);
+            txtProjectname.setEnabled(enabled);
         }
 
         setTitle(null);
