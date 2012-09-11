@@ -46,6 +46,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
+import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -58,6 +59,8 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungRissEditor;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.PrintingWaitDialog;
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -395,24 +398,77 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             return;
         }
 
-        final Object typeObj = cmbType.getSelectedItem();
-        final String type;
-        if (typeObj instanceof String) {
-            type = (String)typeObj;
+        new SwingWorker<Void, Void>() {
 
-            if (type.equalsIgnoreCase(TYPE_VERMESSUNGSRISSE)) {
-                downloadProducts(selectedVermessungsrisse, type, AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER);
-            } else if (type.equalsIgnoreCase(TYPE_COMPLEMENTARYDOCUMENTS)) {
-                downloadProducts(
-                    selectedVermessungsrisse,
-                    type,
-                    AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN);
-            }
-        } else {
-            // TODO: User feedback?!
-            LOG.info("Unknown type '" + typeObj + "' encountered. Skipping report generation.");
-            return;
-        }
+                @Override
+                protected Void doInBackground() throws Exception {
+                    final Object typeObj = cmbType.getSelectedItem();
+                    final String type;
+                    if (typeObj instanceof String) {
+                        type = (String)typeObj;
+
+                        try {
+                            int dinA3Orless = 0;
+                            int dinA2Orbigger = 0;
+                            for (final CidsBean selectedVermessungsriss : selectedVermessungsrisse) {
+                                final boolean isDocumentAvailable;
+                                if (type.equalsIgnoreCase(TYPE_VERMESSUNGSRISSE)) {
+                                    isDocumentAvailable = hasVermessungsriss(selectedVermessungsriss);
+                                } else if (type.equalsIgnoreCase(TYPE_COMPLEMENTARYDOCUMENTS)) {
+                                    isDocumentAvailable = hasErgaenzendeDokumente(selectedVermessungsriss);
+                                } else {
+                                    isDocumentAvailable = false;
+                                }
+                                if (isDocumentAvailable) {
+                                    final CidsBean format = (CidsBean)selectedVermessungsriss.getProperty("format");
+                                    if (format != null) {
+                                        if (format.getProperty("name").equals("2")) {
+                                            dinA2Orbigger++;
+                                        } else {
+                                            dinA3Orless++;
+                                        }
+                                    } else {
+                                        dinA3Orless++;
+                                    }
+                                }
+                            }
+
+                            if (type.equalsIgnoreCase(TYPE_VERMESSUNGSRISSE)) {
+                                if (BillingPopup.doBilling(
+                                                "vrpdf",
+                                                "no.yet",
+                                                (Geometry)null,
+                                                new ProductGroupAmount("eadoc_a3", dinA3Orless),
+                                                new ProductGroupAmount("eadoc_a2-a0", dinA2Orbigger))) {
+                                    downloadProducts(
+                                        selectedVermessungsrisse,
+                                        type,
+                                        AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER);
+                                }
+                            } else if (type.equalsIgnoreCase(TYPE_COMPLEMENTARYDOCUMENTS)) {
+                                if (BillingPopup.doBilling(
+                                                "doklapdf",
+                                                "no.yet",
+                                                (Geometry)null,
+                                                new ProductGroupAmount("eadoc_a3", dinA3Orless),
+                                                new ProductGroupAmount("eadoc_a2-a0", dinA2Orbigger))) {
+                                    downloadProducts(
+                                        selectedVermessungsrisse,
+                                        type,
+                                        AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN);
+                                }
+                            }
+                        } catch (Exception e) {
+                            LOG.error("Error when trying to produce a alkis product", e);
+                            // Hier noch ein Fehlerdialog
+                        }
+                    } else {
+                        // TODO: User feedback?!
+                        LOG.info("Unknown type '" + typeObj + "' encountered. Skipping report generation.");
+                    }
+                    return null;
+                }
+            }.execute();
     } //GEN-LAST:event_btnGenerateReportActionPerformed
 
     /**
@@ -764,6 +820,9 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             sortKeys.add(new RowSorter.SortKey(4, SortOrder.DESCENDING));
             tableSorter.setSortKeys(sortKeys);
 
+            final boolean enabled = BillingPopup.isBillingAllowed()
+                        && ((allowErgaenzendeDokumenteReport && allowVermessungsrisseReport)
+                            || allowErgaenzendeDokumenteReport || allowVermessungsrisseReport);
             if (allowErgaenzendeDokumenteReport && allowVermessungsrisseReport) {
                 cmbType.setModel(new DefaultComboBoxModel(
                         new String[] { TYPE_VERMESSUNGSRISSE, TYPE_COMPLEMENTARYDOCUMENTS }));
@@ -771,12 +830,11 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                 cmbType.setModel(new DefaultComboBoxModel(new String[] { TYPE_COMPLEMENTARYDOCUMENTS }));
             } else if (allowVermessungsrisseReport) {
                 cmbType.setModel(new DefaultComboBoxModel(new String[] { TYPE_VERMESSUNGSRISSE }));
-            } else {
-                cmbType.setEnabled(false);
-                btnGenerateReport.setEnabled(false);
-                txtJobnumber.setEnabled(false);
-                txtProjectname.setEnabled(false);
             }
+            cmbType.setEnabled(enabled);
+            btnGenerateReport.setEnabled(enabled);
+            txtJobnumber.setEnabled(enabled);
+            txtProjectname.setEnabled(enabled);
         }
 
         setTitle(null);

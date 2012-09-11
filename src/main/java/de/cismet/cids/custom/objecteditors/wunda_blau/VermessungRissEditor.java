@@ -70,6 +70,8 @@ import javax.swing.text.DocumentFilter;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsVermessungRissArtSearchStatement;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsVermessungRissSearchStatement;
@@ -91,6 +93,8 @@ import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.measuring.MeasuringComponent;
 
 import de.cismet.security.WebAccessManager;
+
+import de.cismet.tools.CismetThreadPool;
 
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
@@ -1307,27 +1311,59 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         if (currentDocument != NO_SELECTION) {
             final String url = documentURLs[currentDocument].getKey().toExternalForm();
 
-            EventQueue.invokeLater(new Runnable() {
+            try {
+                String priceGroup = "eadoc_a3";
+                final CidsBean format = (CidsBean)cidsBean.getProperty("format");
+                if ((format != null) && format.getProperty("name").equals("2")) {
+                    priceGroup = "eadoc_a2-a0";
+                }
 
-                    @Override
-                    public void run() {
-                        if (DownloadManagerDialog.showAskingForUserTitle(VermessungRissEditor.this)) {
-                            final String filename = url.substring(url.lastIndexOf("/") + 1);
-
-                            DownloadManager.instance()
-                                    .add(
-                                        new HttpDownload(
-                                            documentURLs[currentDocument].getKey(),
-                                            "",
-                                            DownloadManagerDialog.getJobname(),
-                                            (currentDocument == DOCUMENT_BILD) ? "Vermessungsriss"
-                                                                               : "Ergänzende Dokumente",
-                                            filename.substring(0, filename.lastIndexOf(".")),
-                                            filename.substring(filename.lastIndexOf("."))));
-                        }
+                if (currentDocument == DOCUMENT_BILD) {
+                    if (BillingPopup.doBilling("vrpdf", url, (Geometry)null, new ProductGroupAmount(priceGroup, 1))) {
+                        downloadProduct(url, true);
                     }
-                });
+                } else {
+                    if (BillingPopup.doBilling(
+                                    "doklapdf",
+                                    url,
+                                    (Geometry)null,
+                                    new ProductGroupAmount(priceGroup, 1))) {
+                        downloadProduct(url, false);
+                    }
+                }
+            } catch (Exception e) {
+                LOG.error("Error when trying to produce a alkis product", e);
+                // Hier noch ein Fehlerdialog
+            }
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  url                DOCUMENT ME!
+     * @param  isVermessungsriss  DOCUMENT ME!
+     */
+    private void downloadProduct(final String url, final boolean isVermessungsriss) {
+        CismetThreadPool.execute(new Runnable() {
+
+                @Override
+                public void run() {
+                    if (DownloadManagerDialog.showAskingForUserTitle(VermessungRissEditor.this)) {
+                        final String filename = url.substring(url.lastIndexOf("/") + 1);
+
+                        DownloadManager.instance()
+                                .add(
+                                    new HttpDownload(
+                                        documentURLs[currentDocument].getKey(),
+                                        "",
+                                        DownloadManagerDialog.getJobname(),
+                                        (currentDocument == DOCUMENT_BILD) ? "Vermessungsriss" : "Ergänzende Dokumente",
+                                        filename.substring(0, filename.lastIndexOf(".")),
+                                        filename.substring(filename.lastIndexOf("."))));
+                    }
+                }
+            });
     } //GEN-LAST:event_btnOpenActionPerformed
 
     /**
@@ -2112,7 +2148,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     protected void displayErrorOrEnableControls(final boolean errorOccurred) {
         measuringComponent.setVisible(!errorOccurred);
         btnHome.setEnabled(!errorOccurred);
-        btnOpen.setEnabled(!errorOccurred);
+        btnOpen.setEnabled(!errorOccurred && BillingPopup.isBillingAllowed());
         togPan.setEnabled(!errorOccurred);
         togZoom.setEnabled(!errorOccurred);
         lstPages.setEnabled(!errorOccurred);

@@ -149,6 +149,8 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
         scpPunkte.getViewport().setOpaque(false);
         tblPunkte.getSelectionModel().addListSelectionListener(new TableSelectionListener());
         tableComparator = new TableModelIndexConvertingToViewIndexComparator((tblPunkte));
+
+        btnGenerateReport.setEnabled(BillingPopup.isBillingAllowed());
     }
 
     //~ Methods ----------------------------------------------------------------

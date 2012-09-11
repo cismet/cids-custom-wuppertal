@@ -1474,7 +1474,8 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
                 measuringComponent.addImage(document);
                 measuringComponent.zoomToFeatureCollection();
                 btnHome.setEnabled(true);
-                btnOpen.setEnabled(true);
+                btnOpen.setEnabled(BillingPopup.isBillingAllowed());
+                btnReport.setEnabled(BillingPopup.isBillingAllowed());
                 togPan.setEnabled(true);
                 togZoom.setEnabled(true);
             } else {
@@ -1482,6 +1483,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
                 lblMissingRasterdocument.setVisible(true);
                 btnHome.setEnabled(false);
                 btnOpen.setEnabled(false);
+                btnReport.setEnabled(false);
                 togPan.setEnabled(false);
                 togZoom.setEnabled(false);
             }
