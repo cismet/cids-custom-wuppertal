@@ -174,9 +174,14 @@ public class BillingPopup extends javax.swing.JDialog {
             }
             instance = new BillingPopup(f, true);
         }
-        instance.initialize(product, request, geom, amounts);
-
-        return instance.shouldGoOn;
+        final User user = SessionManager.getSession().getUser();
+        final String modus = SessionManager.getConnection().getConfigAttr(user, MODE_CONFIG_ATTR);
+        if (modus != null) {
+            instance.initialize(product, request, geom, amounts);
+            return instance.shouldGoOn;
+        } else {
+            return true;
+        }
     }
 
     /**
@@ -550,8 +555,9 @@ public class BillingPopup extends javax.swing.JDialog {
     public static boolean isBillingAllowed() {
         try {
             final User user = SessionManager.getSession().getUser();
-            return (SessionManager.getConnection().getConfigAttr(user, MODE_CONFIG_ATTR) != null)
-                        && (SessionManager.getConnection().getConfigAttr(user, ALLOWED_USAGE_CONFIG_ATTR) != null);
+            return (SessionManager.getConnection().getConfigAttr(user, MODE_CONFIG_ATTR) == null)
+                        || ((SessionManager.getConnection().getConfigAttr(user, MODE_CONFIG_ATTR) != null)
+                            && (SessionManager.getConnection().getConfigAttr(user, ALLOWED_USAGE_CONFIG_ATTR) != null));
         } catch (ConnectionException ex) {
             LOG.error("error while checking configAttr", ex);
             return false;
