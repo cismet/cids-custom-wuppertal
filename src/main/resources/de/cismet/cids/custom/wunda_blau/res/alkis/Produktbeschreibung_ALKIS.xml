@@ -279,7 +279,7 @@
            <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
         <KartenProdukt ID="LK.GDBNRW.A.BF.27" Kartenname="Karte" Layout="LKA1H" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
-           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="2000"/>
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
         <KartenProdukt ID="LK.GDBNRW.A.BF.28" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:2000">
            <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="2000"/>
