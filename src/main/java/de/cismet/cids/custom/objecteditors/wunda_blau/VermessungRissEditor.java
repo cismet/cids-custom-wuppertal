@@ -40,6 +40,7 @@ import java.sql.Date;
 
 import java.text.MessageFormat;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -49,7 +50,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -1490,27 +1490,25 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             return;
         }
 
-        Geometry union = null;
         final Collection<CidsBean> flurstuecksvermessungen = cidsBean.getBeanCollectionProperty(
                 "flurstuecksvermessung");
+        final Collection<Geometry> union = new ArrayList<Geometry>();
         for (final CidsBean flurstuecksvermessung : flurstuecksvermessungen) {
-            if (flurstuecksvermessung.getProperty("flurstueck.flurstueck.umschreibendes_rechteck.geo_field")
-                        instanceof Geometry) {
-                final Geometry geometry = (Geometry)flurstuecksvermessung.getProperty(
-                        "flurstueck.flurstueck.umschreibendes_rechteck.geo_field");
+            final CidsBean flurstueckKicker = (CidsBean)flurstuecksvermessung.getProperty("flurstueck.flurstueck");
+            if ((flurstueckKicker != null)
+                        && (flurstueckKicker.getProperty("umschreibendes_rechteck.geo_field")
+                            instanceof Geometry)) {
+                final Geometry geometry = (Geometry)flurstueckKicker.getProperty(
+                        "umschreibendes_rechteck.geo_field");
                 final Geometry transformedGeometry = CrsTransformer.transformToGivenCrs(
                         geometry,
                         AlkisConstants.COMMONS.SRS_SERVICE);
 
-                if (union == null) {
-                    union = transformedGeometry;
-                } else {
-                    union = union.union(transformedGeometry);
-                }
+                union.add(transformedGeometry);
             }
         }
 
-        if (union == null) {
+        if (union.isEmpty()) {
             LOG.warn("Could not find geometries on given landparcels. Did not attach a new geometry.");
             JOptionPane.showMessageDialog(
                 StaticSwingTools.getParentFrame(this),
@@ -1520,8 +1518,10 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             return;
         }
 
+        final Geometry unionGeometry = GEOMETRY_FACTORY.createGeometryCollection(union.toArray(new Geometry[0]));
+
         final Map<String, Object> properties = new HashMap<String, Object>();
-        properties.put("geo_field", union);
+        properties.put("geo_field", unionGeometry);
 
         try {
             final CidsBean geomBean = CidsBeanSupport.createNewCidsBeanFromTableName("geom", properties);
@@ -1529,7 +1529,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             cidsBean.setProperty("geometrie", geomBean);
         } catch (Exception ex) {
             // TODO: Tell user about error.
-            LOG.error("Could set new geometry: '" + union.toText() + "'.", ex);
+            LOG.error("Could set new geometry: '" + unionGeometry.toText() + "'.", ex);
         }
     } //GEN-LAST:event_btnCombineGeometriesActionPerformed
 
