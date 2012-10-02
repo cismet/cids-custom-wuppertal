@@ -940,30 +940,17 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                         prGroup = null;
                     }
 
-                    final HttpDownload download = new HttpDownload(
-                            url,
-                            "",
-                            DownloadManagerDialog.getJobname(),
-                            "ALKIS-Druck",
-                            landParcelCode.replaceAll("\\/", "-"),
-                            ".pdf");
                     if ((product != null) && (prGroup != null)) {
                         if (BillingPopup.doBilling(
                                         product,
                                         url.toString(),
                                         (Geometry)null,
                                         new ProductGroupAmount(prGroup, 1))) {
-                            if (!DownloadManagerDialog.showAskingForUserTitle(this)) {
-                                return;
-                            }
-                            DownloadManager.instance().add(download);
+                            doDownload(url, landParcelCode);
                         }
                     } else {
                         log.info("no product or productgroup is matching");
-                        if (!DownloadManagerDialog.showAskingForUserTitle(this)) {
-                            return;
-                        }
-                        DownloadManager.instance().add(download);
+                        doDownload(url, landParcelCode);
                     }
                 } catch (Exception e) {
                     log.error("Error when trying to produce a alkis product", e);
@@ -978,6 +965,26 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                 AlkisPrintingSettingsWidget.this);
             log.error(e);
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  url             DOCUMENT ME!
+     * @param  landParcelCode  DOCUMENT ME!
+     */
+    private void doDownload(final URL url, final String landParcelCode) {
+        if (!DownloadManagerDialog.showAskingForUserTitle(this)) {
+            return;
+        }
+        final HttpDownload download = new HttpDownload(
+                url,
+                "",
+                DownloadManagerDialog.getJobname(),
+                "ALKIS-Druck",
+                landParcelCode.replaceAll("\\/", "-"),
+                ".pdf");
+        DownloadManager.instance().add(download);
     }
 
     /**
