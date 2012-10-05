@@ -7,6 +7,8 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.ui.RequestsFullSizeComponent;
+
 import com.vividsolutions.jts.geom.Geometry;
 
 import java.awt.EventQueue;
@@ -46,7 +48,7 @@ import de.cismet.tools.BrowserLauncher;
  * @version  $Revision$, $Date$
  */
 //de.cismet.cids.objectrenderer.CoolMauerRenderer
-public class MauerRenderer extends BlurredMapObjectRenderer {
+public class MauerRenderer extends BlurredMapObjectRenderer implements RequestsFullSizeComponent {
 
     //~ Static fields/initializers ---------------------------------------------
 
