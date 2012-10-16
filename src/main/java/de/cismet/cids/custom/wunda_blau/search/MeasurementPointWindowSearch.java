@@ -864,90 +864,90 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAllePunkteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAllePunkteActionPerformed
+    private void btnAllePunkteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAllePunkteActionPerformed
         changeFilterPointtype(evt.getActionCommand());
-    }                                                                                 //GEN-LAST:event_btnAllePunkteActionPerformed
+    }//GEN-LAST:event_btnAllePunkteActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAnschlusspunkteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAnschlusspunkteActionPerformed
+    private void btnAnschlusspunkteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnschlusspunkteActionPerformed
         changeFilterPointtype(evt.getActionCommand());
-    }                                                                                      //GEN-LAST:event_btnAnschlusspunkteActionPerformed
+    }//GEN-LAST:event_btnAnschlusspunkteActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnGrenzUndGebaudepunkteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnGrenzUndGebaudepunkteActionPerformed
+    private void btnGrenzUndGebaudepunkteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrenzUndGebaudepunkteActionPerformed
         changeFilterPointtype(evt.getActionCommand());
-    }                                                                                            //GEN-LAST:event_btnGrenzUndGebaudepunkteActionPerformed
+    }//GEN-LAST:event_btnGrenzUndGebaudepunkteActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnGebaeudeUndBauwerkspunkteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnGebaeudeUndBauwerkspunkteActionPerformed
+    private void btnGebaeudeUndBauwerkspunkteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGebaeudeUndBauwerkspunkteActionPerformed
         changeFilterPointtype(evt.getActionCommand());
-    }                                                                                                //GEN-LAST:event_btnGebaeudeUndBauwerkspunkteActionPerformed
+    }//GEN-LAST:event_btnGebaeudeUndBauwerkspunkteActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void chkAufnahmepunkteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_chkAufnahmepunkteActionPerformed
+    private void chkAufnahmepunkteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkAufnahmepunkteActionPerformed
         changeEnabledStateOfSearchButtons();
-    }                                                                                     //GEN-LAST:event_chkAufnahmepunkteActionPerformed
+    }//GEN-LAST:event_chkAufnahmepunkteActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void chkSonstigeVermessungspunkteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_chkSonstigeVermessungspunkteActionPerformed
+    private void chkSonstigeVermessungspunkteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkSonstigeVermessungspunkteActionPerformed
         changeEnabledStateOfSearchButtons();
-    }                                                                                                //GEN-LAST:event_chkSonstigeVermessungspunkteActionPerformed
+    }//GEN-LAST:event_chkSonstigeVermessungspunkteActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void chkGrenzpunkteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_chkGrenzpunkteActionPerformed
+    private void chkGrenzpunkteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkGrenzpunkteActionPerformed
         changeEnabledStateOfSearchButtons();
-    }                                                                                  //GEN-LAST:event_chkGrenzpunkteActionPerformed
+    }//GEN-LAST:event_chkGrenzpunkteActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void chkBesondereGebaeudepunkteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_chkBesondereGebaeudepunkteActionPerformed
+    private void chkBesondereGebaeudepunkteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkBesondereGebaeudepunkteActionPerformed
         changeEnabledStateOfSearchButtons();
-    }                                                                                              //GEN-LAST:event_chkBesondereGebaeudepunkteActionPerformed
+    }//GEN-LAST:event_chkBesondereGebaeudepunkteActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void chkBesondereBauwerkspunkteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_chkBesondereBauwerkspunkteActionPerformed
+    private void chkBesondereBauwerkspunkteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkBesondereBauwerkspunkteActionPerformed
         changeEnabledStateOfSearchButtons();
-    }                                                                                              //GEN-LAST:event_chkBesondereBauwerkspunkteActionPerformed
+    }//GEN-LAST:event_chkBesondereBauwerkspunkteActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void chkBesondereTopographischePunkteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_chkBesondereTopographischePunkteActionPerformed
+    private void chkBesondereTopographischePunkteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkBesondereTopographischePunkteActionPerformed
         changeEnabledStateOfSearchButtons();
-    }                                                                                                    //GEN-LAST:event_chkBesondereTopographischePunkteActionPerformed
+    }//GEN-LAST:event_chkBesondereTopographischePunkteActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -970,7 +970,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void mniSearchRectangleActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchRectangleActionPerformed
+    private void mniSearchRectangleActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniSearchRectangleActionPerformed
         btnGeoSearch.setIcon(icoPluginRectangle);
         btnGeoSearch.setSelectedIcon(icoPluginRectangle);
 
@@ -986,14 +986,14 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
                         MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY);
                 }
             });
-    } //GEN-LAST:event_mniSearchRectangleActionPerformed
+    }//GEN-LAST:event_mniSearchRectangleActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void mniSearchPolygonActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchPolygonActionPerformed
+    private void mniSearchPolygonActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniSearchPolygonActionPerformed
         btnGeoSearch.setIcon(icoPluginPolygon);
         btnGeoSearch.setSelectedIcon(icoPluginPolygon);
 
@@ -1009,14 +1009,14 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
                         MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY);
                 }
             });
-    } //GEN-LAST:event_mniSearchPolygonActionPerformed
+    }//GEN-LAST:event_mniSearchPolygonActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void mniSearchEllipseActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchEllipseActionPerformed
+    private void mniSearchEllipseActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniSearchEllipseActionPerformed
         btnGeoSearch.setIcon(icoPluginEllipse);
         btnGeoSearch.setSelectedIcon(icoPluginEllipse);
 
@@ -1032,14 +1032,14 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
                         MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY);
                 }
             });
-    } //GEN-LAST:event_mniSearchEllipseActionPerformed
+    }//GEN-LAST:event_mniSearchEllipseActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void mniSearchPolylineActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchPolylineActionPerformed
+    private void mniSearchPolylineActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniSearchPolylineActionPerformed
         btnGeoSearch.setIcon(icoPluginPolyline);
         btnGeoSearch.setSelectedIcon(icoPluginPolyline);
 
@@ -1055,14 +1055,14 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
                         MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY);
                 }
             });
-    } //GEN-LAST:event_mniSearchPolylineActionPerformed
+    }//GEN-LAST:event_mniSearchPolylineActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void mniSearchCidsFeatureActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchCidsFeatureActionPerformed
+    private void mniSearchCidsFeatureActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniSearchCidsFeatureActionPerformed
         EventQueue.invokeLater(new Runnable() {
 
                 @Override
@@ -1119,14 +1119,14 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
                         });
                 }
             });
-    } //GEN-LAST:event_mniSearchCidsFeatureActionPerformed
+    }//GEN-LAST:event_mniSearchCidsFeatureActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void mniSearchShowLastFeatureActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchShowLastFeatureActionPerformed
+    private void mniSearchShowLastFeatureActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniSearchShowLastFeatureActionPerformed
         java.awt.EventQueue.invokeLater(new Runnable() {
 
                 @Override
@@ -1139,14 +1139,14 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
                         MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY);
                 }
             });
-    } //GEN-LAST:event_mniSearchShowLastFeatureActionPerformed
+    }//GEN-LAST:event_mniSearchShowLastFeatureActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void mniSearchRedoActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchRedoActionPerformed
+    private void mniSearchRedoActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniSearchRedoActionPerformed
         java.awt.EventQueue.invokeLater(new Runnable() {
 
                 @Override
@@ -1159,14 +1159,14 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
                         MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY);
                 }
             });
-    } //GEN-LAST:event_mniSearchRedoActionPerformed
+    }//GEN-LAST:event_mniSearchRedoActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void mniSearchBufferActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchBufferActionPerformed
+    private void mniSearchBufferActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniSearchBufferActionPerformed
         java.awt.EventQueue.invokeLater(new Runnable() {
 
                 @Override
@@ -1246,25 +1246,25 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
                     }
                 }
             });
-    }                                                   //GEN-LAST:event_mniSearchBufferActionPerformed
+    }//GEN-LAST:event_mniSearchBufferActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnHoehenfestpunkteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnHoehenfestpunkteActionPerformed
+    private void btnHoehenfestpunkteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHoehenfestpunkteActionPerformed
         changeFilterPointtype(evt.getActionCommand());
-    }                                                                                       //GEN-LAST:event_btnHoehenfestpunkteActionPerformed
+    }//GEN-LAST:event_btnHoehenfestpunkteActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void chkNivellementPunkteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_chkNivellementPunkteActionPerformed
+    private void chkNivellementPunkteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkNivellementPunkteActionPerformed
         changeEnabledStateOfSearchButtons();
-    }                                                                                        //GEN-LAST:event_chkNivellementPunkteActionPerformed
+    }//GEN-LAST:event_chkNivellementPunkteActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1533,6 +1533,16 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
      */
     @Override
     public String getName() {
+        return NbBundle.getMessage(MeasurementPointWindowSearch.class, "MeasurementPointWindowSearch.name");
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Override
+    public String getHint() {
         return NbBundle.getMessage(MeasurementPointWindowSearch.class, "MeasurementPointWindowSearch.name");
     }
 
