@@ -243,11 +243,23 @@ public class ThemaEditor extends PureCoolPanel implements DoNotWrap, DisposableC
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   cidsBean  DOCUMENT ME!
+     *
+     * @throws  RuntimeException  DOCUMENT ME!
+     */
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         bindingGroup.unbind();
@@ -2044,6 +2056,9 @@ public class ThemaEditor extends PureCoolPanel implements DoNotWrap, DisposableC
         // lblPages.setText("2 / 2");
     }                                                                             //GEN-LAST:event_btnForwrdActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
         bindingGroup.unbind();

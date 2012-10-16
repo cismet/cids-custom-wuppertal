@@ -17,6 +17,7 @@ import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.search.dynamic.SearchControlListener;
 import Sirius.navigator.search.dynamic.SearchControlPanel;
+import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
@@ -27,6 +28,10 @@ import com.vividsolutions.jts.geom.Geometry;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
+import java.awt.Component;
+import java.awt.EventQueue;
+import java.awt.HeadlessException;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -35,6 +40,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
@@ -61,6 +67,8 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 
+import de.cismet.tools.gui.StaticSwingTools;
+
 /**
  * DOCUMENT ME!
  *
@@ -79,10 +87,10 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
 
     //~ Instance fields --------------------------------------------------------
 
-    private final MetaClass mc;
-    private final ImageIcon icon;
-    private final FlurstueckSelectionDialoge fsSelectionDialoge;
-    private final DefaultListModel model;
+    private MetaClass mc = null;
+    private ImageIcon icon = null;
+    private FlurstueckSelectionDialoge fsSelectionDialoge = null;
+    private DefaultListModel flurstuecksFilterModel = null;
     private SearchControlPanel pnlSearchCancel;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddFS;
@@ -97,15 +105,15 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     private javax.swing.JCheckBox chkKartenausschnitt;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JList lstFlurstueck;
     private javax.swing.JPanel panCommand;
     private javax.swing.JPanel panSearch;
+    private javax.swing.JPanel pnlAttributeFilter;
+    private javax.swing.JPanel pnlFlurstuecksfilter;
+    private javax.swing.JPanel pnlSearchFor;
     private javax.swing.JRadioButton rbBaulastBlaetter;
     private javax.swing.JRadioButton rbBaulasten;
     private javax.swing.JTextField txtBlattnummer;
@@ -117,36 +125,41 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
      * Creates new form BaulastWindowSearch.
      */
     public BaulastWindowSearch() {
-        mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "ALB_BAULAST");
-        icon = new ImageIcon(mc.getIconData());
-        fsSelectionDialoge = new FlurstueckSelectionDialoge(false) {
-
-                @Override
-                public void okHook() {
-                    final List<CidsBean> result = getCurrentListToAdd();
-                    if (result.size() > 0) {
-                        model.addElement(result.get(0));
-                    }
-                }
-            };
-        initComponents();
-        final MetaClass artMC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "ALB_BAULAST_ART");
-        final DefaultComboBoxModel cbArtModel;
         try {
-            cbArtModel = DefaultBindableReferenceCombo.getModelByMetaClass(artMC, true);
-            cbArt.setModel(cbArtModel);
-        } catch (Exception ex) {
-            log.error(ex, ex);
-        }
-        model = new DefaultListModel();
-        lstFlurstueck.setModel(model);
-        AutoCompleteDecorator.decorate(cbArt);
-        new CidsBeanDropTarget(this);
-        fsSelectionDialoge.pack();
-        fsSelectionDialoge.setLocationRelativeTo(this);
+            mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "ALB_BAULAST");
+            icon = new ImageIcon(mc.getIconData());
+            fsSelectionDialoge = new FlurstueckSelectionDialoge(false) {
+
+                    @Override
+                    public void okHook() {
+                        final List<CidsBean> result = getCurrentListToAdd();
+                        if (result.size() > 0) {
+                            flurstuecksFilterModel.addElement(result.get(0));
+                        }
+                    }
+                };
+
+            initComponents();
+            final MetaClass artMC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "ALB_BAULAST_ART");
+            final DefaultComboBoxModel cbArtModel;
+            try {
+                cbArtModel = DefaultBindableReferenceCombo.getModelByMetaClass(artMC, true);
+                cbArt.setModel(cbArtModel);
+            } catch (Exception ex) {
+                log.error(ex, ex);
+            }
+            flurstuecksFilterModel = new DefaultListModel();
+            lstFlurstueck.setModel(flurstuecksFilterModel);
+            StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbArt);
+
+            new CidsBeanDropTarget(this);
+            fsSelectionDialoge.pack();
 //        cmdAbort.setVisible(false);
-        pnlSearchCancel = new SearchControlPanel(this);
-        panCommand.add(pnlSearchCancel);
+            pnlSearchCancel = new SearchControlPanel(this);
+            panCommand.add(pnlSearchCancel);
+        } catch (Exception exception) {
+            log.warn("Error in Constructor of BaulastWindowSearch", exception);
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -163,14 +176,14 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         buttonGroup1 = new javax.swing.ButtonGroup();
         panSearch = new javax.swing.JPanel();
         panCommand = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
+        pnlAttributeFilter = new javax.swing.JPanel();
         chkGeloescht = new javax.swing.JCheckBox();
         chkGueltig = new javax.swing.JCheckBox();
         cbArt = new javax.swing.JComboBox();
         txtBlattnummer = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
+        pnlFlurstuecksfilter = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         lstFlurstueck = new javax.swing.JList();
         btnAddFS = new javax.swing.JButton();
@@ -178,7 +191,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         btnFromMapFS = new javax.swing.JButton();
         chkBeguenstigt = new javax.swing.JCheckBox();
         chkBelastet = new javax.swing.JCheckBox();
-        jPanel4 = new javax.swing.JPanel();
+        pnlSearchFor = new javax.swing.JPanel();
         rbBaulastBlaetter = new javax.swing.JRadioButton();
         rbBaulasten = new javax.swing.JRadioButton();
         jPanel5 = new javax.swing.JPanel();
@@ -194,14 +207,17 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         panSearch.setMinimumSize(new java.awt.Dimension(400, 150));
         panSearch.setPreferredSize(new java.awt.Dimension(400, 150));
         panSearch.setLayout(new java.awt.GridBagLayout());
+
+        panCommand.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.TRAILING));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSearch.add(panCommand, gridBagConstraints);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Attributfilter"));
-        jPanel2.setLayout(new java.awt.GridBagLayout());
+        pnlAttributeFilter.setBorder(javax.swing.BorderFactory.createTitledBorder("Attributfilter"));
+        pnlAttributeFilter.setLayout(new java.awt.GridBagLayout());
 
         chkGeloescht.setSelected(true);
         chkGeloescht.setText("gelöscht / geschlossen");
@@ -210,7 +226,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel2.add(chkGeloescht, gridBagConstraints);
+        pnlAttributeFilter.add(chkGeloescht, gridBagConstraints);
 
         chkGueltig.setSelected(true);
         chkGueltig.setText("gültig");
@@ -219,7 +235,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel2.add(chkGueltig, gridBagConstraints);
+        pnlAttributeFilter.add(chkGueltig, gridBagConstraints);
 
         cbArt.setEditable(true);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -228,7 +244,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel2.add(cbArt, gridBagConstraints);
+        pnlAttributeFilter.add(cbArt, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -236,7 +252,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel2.add(txtBlattnummer, gridBagConstraints);
+        pnlAttributeFilter.add(txtBlattnummer, gridBagConstraints);
 
         jLabel1.setText("Blattnummer:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -244,7 +260,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel2.add(jLabel1, gridBagConstraints);
+        pnlAttributeFilter.add(jLabel1, gridBagConstraints);
 
         jLabel2.setText("Art der Baulast:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -252,19 +268,19 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel2.add(jLabel2, gridBagConstraints);
+        pnlAttributeFilter.add(jLabel2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panSearch.add(jPanel2, gridBagConstraints);
+        panSearch.add(pnlAttributeFilter, gridBagConstraints);
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Flurstückfilter"));
-        jPanel3.setLayout(new java.awt.GridBagLayout());
+        pnlFlurstuecksfilter.setBorder(javax.swing.BorderFactory.createTitledBorder("Flurstücksfilter"));
+        pnlFlurstuecksfilter.setLayout(new java.awt.GridBagLayout());
 
         jScrollPane1.setMaximumSize(new java.awt.Dimension(200, 100));
         jScrollPane1.setMinimumSize(new java.awt.Dimension(200, 100));
@@ -280,7 +296,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel3.add(jScrollPane1, gridBagConstraints);
+        pnlFlurstuecksfilter.add(jScrollPane1, gridBagConstraints);
 
         btnAddFS.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit-add.png"))); // NOI18N
@@ -297,7 +313,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel3.add(btnAddFS, gridBagConstraints);
+        pnlFlurstuecksfilter.add(btnAddFS, gridBagConstraints);
 
         btnRemoveFS.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit-delete.png"))); // NOI18N
@@ -314,7 +330,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel3.add(btnRemoveFS, gridBagConstraints);
+        pnlFlurstuecksfilter.add(btnRemoveFS, gridBagConstraints);
 
         btnFromMapFS.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/bookmark-new.png"))); // NOI18N
@@ -330,7 +346,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel3.add(btnFromMapFS, gridBagConstraints);
+        pnlFlurstuecksfilter.add(btnFromMapFS, gridBagConstraints);
 
         chkBeguenstigt.setSelected(true);
         chkBeguenstigt.setText("begünstigt");
@@ -339,7 +355,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel3.add(chkBeguenstigt, gridBagConstraints);
+        pnlFlurstuecksfilter.add(chkBeguenstigt, gridBagConstraints);
 
         chkBelastet.setSelected(true);
         chkBelastet.setText("belastet");
@@ -348,7 +364,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel3.add(chkBelastet, gridBagConstraints);
+        pnlFlurstuecksfilter.add(chkBelastet, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -356,10 +372,10 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panSearch.add(jPanel3, gridBagConstraints);
+        panSearch.add(pnlFlurstuecksfilter, gridBagConstraints);
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Suche nach"));
-        jPanel4.setLayout(new java.awt.GridBagLayout());
+        pnlSearchFor.setBorder(javax.swing.BorderFactory.createTitledBorder("Suche nach"));
+        pnlSearchFor.setLayout(new java.awt.GridBagLayout());
 
         buttonGroup1.add(rbBaulastBlaetter);
         rbBaulastBlaetter.setSelected(true);
@@ -369,7 +385,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel4.add(rbBaulastBlaetter, gridBagConstraints);
+        pnlSearchFor.add(rbBaulastBlaetter, gridBagConstraints);
 
         buttonGroup1.add(rbBaulasten);
         rbBaulasten.setText("Baulasten");
@@ -378,20 +394,21 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel4.add(rbBaulasten, gridBagConstraints);
+        pnlSearchFor.add(rbBaulasten, gridBagConstraints);
 
         jPanel5.setOpaque(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.weightx = 1.0;
-        jPanel4.add(jPanel5, gridBagConstraints);
+        pnlSearchFor.add(jPanel5, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panSearch.add(jPanel4, gridBagConstraints);
+        panSearch.add(pnlSearchFor, gridBagConstraints);
 
         jPanel6.setOpaque(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -417,8 +434,11 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     private void btnAddFSActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddFSActionPerformed
         final List<CidsBean> result = new ArrayList<CidsBean>(1);
         fsSelectionDialoge.setCurrentListToAdd(result);
-        fsSelectionDialoge.setVisible(true);
-    }                                                                            //GEN-LAST:event_btnAddFSActionPerformed
+
+        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this),
+            fsSelectionDialoge,
+            true);
+    } //GEN-LAST:event_btnAddFSActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -428,7 +448,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     private void btnRemoveFSActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveFSActionPerformed
         final Object[] selection = lstFlurstueck.getSelectedValues();
         for (final Object o : selection) {
-            model.removeElement(o);
+            flurstuecksFilterModel.removeElement(o);
         }
     }                                                                               //GEN-LAST:event_btnRemoveFSActionPerformed
 
@@ -454,17 +474,27 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
                 final String tableName = mo.getMetaClass().getTableName();
                 if ("FLURSTUECK".equalsIgnoreCase(tableName) || "ALB_FLURSTUECK_KICKER".equalsIgnoreCase(tableName)) {
 //                if ("FLURSTUECK".equalsIgnoreCase(tableName) || "ALB_FLURSTUECK_KICKER".equalsIgnoreCase(tableName) || "ALKIS_LANDPARCEL".equalsIgnoreCase(tableName)) {
-                    model.addElement(mo.getBean());
+                    flurstuecksFilterModel.addElement(mo.getBean());
                 }
             }
         }
     }                                                                                //GEN-LAST:event_btnFromMapFSActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public ImageIcon getIcon() {
         return icon;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getName() {
         return "Baulast Suche";
@@ -475,6 +505,11 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         return "Baulast Suche";
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getSearchWindowComponent() {
         return this;
@@ -507,11 +542,16 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         return bsi;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public CidsServerSearch getServerSearch() {
         final BaulastSearchInfo bsi = getBaulastInfoFromGUI();
-        for (int i = 0; i < model.size(); ++i) {
-            final CidsBean fsBean = (CidsBean)model.getElementAt(i);
+        for (int i = 0; i < flurstuecksFilterModel.size(); ++i) {
+            final CidsBean fsBean = (CidsBean)flurstuecksFilterModel.getElementAt(i);
             try {
                 if ("ALB_FLURSTUECK_KICKER".equalsIgnoreCase(fsBean.getMetaObject().getMetaClass().getTableName())) {
                     final FlurstueckInfo fi = new FlurstueckInfo((Integer)fsBean.getProperty("gemarkung"),
@@ -543,64 +583,98 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         return new CidsBaulastSearchStatement(bsi, baulastClassID, baulastblattClassID);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  beans  DOCUMENT ME!
+     */
     @Override
     public void beansDropped(final ArrayList<CidsBean> beans) {
         for (final CidsBean bean : beans) {
             if ("FLURSTUECK".equalsIgnoreCase(bean.getMetaObject().getMetaClass().getTableName())) {
 //            if ("FLURSTUECK".equalsIgnoreCase(bean.getMetaObject().getMetaClass().getTableName()) || "ALKIS_LANDPARCEL".equalsIgnoreCase(bean.getMetaObject().getMetaClass().getTableName())) {
-                model.addElement(bean);
+                flurstuecksFilterModel.addElement(bean);
             }
             lstFlurstueck.repaint();
-        }
-    }
-
-    @Override
-    public boolean checkActionTag() {
-        try {
-            return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), "navigator.baulasten.search") != null;
-        } catch (ConnectionException ex) {
-            log.error("Can not validate ActionTag for Baulasten Suche!", ex);
-            return false;
         }
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param   args  DOCUMENT ME!
-     *
-     * @throws  Exception  DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
-    public static void main(final String[] args) throws Exception {
-        DevelopmentTools.initSessionManagerFromRMIConnectionOnLocalhost(
-            "WUNDA_BLAU",
-            "Administratoren",
-            "admin",
-            "krissenich");
-        final BaulastWindowSearch bws = new BaulastWindowSearch();
-        DevelopmentTools.showTestFrame(bws, 800, 600);
+    @Override
+    public boolean checkActionTag() {
+        try {
+            return SessionManager.getConnection()
+                        .getConfigAttr(SessionManager.getSession().getUser(), "navigator.baulasten.search@WUNDA_BLAU")
+                        != null;
+        } catch (ConnectionException ex) {
+            log.error("Can not validate ActionTag for Baulasten Suche!", ex);
+            return false;
+        }
     }
 
     @Override
     public CidsServerSearch assembleSearch() {
-        return getServerSearch();
+        CidsServerSearch result = null;
+
+        final BaulastSearchInfo bsi = getBaulastInfoFromGUI();
+        final boolean keineBlattNummer = (bsi.getBlattnummer() == null) || (bsi.getBlattnummer().trim().length() == 0);
+        final boolean keineArt = (bsi.getArt() == null) || (bsi.getArt().trim().length() == 0);
+        final boolean keinFlurstueck = lstFlurstueck.getModel().getSize() == 0;
+        final boolean keinKartenausschnitt = !chkKartenausschnitt.isSelected();
+
+        if (keineBlattNummer && keinKartenausschnitt && keineArt && keinFlurstueck) {
+            JOptionPane.showMessageDialog(
+                StaticSwingTools.getParentFrame(this),
+                "Ihre Suchanfrage ist nicht plausibel. Bitte präzisieren Sie die\n"
+                        + "Suchanfrage durch weitere Angaben im Attribut- und Flurstücksfilter.",
+                "Plausibilitätskontrolle",
+                JOptionPane.WARNING_MESSAGE);
+        } else {
+            result = getServerSearch();
+        }
+
+        return result;
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void searchStarted() {
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  results  DOCUMENT ME!
+     */
     @Override
-    public void searchDone(final Node[] result) {
+    public void searchDone(final int results) {
+        if (results > 0) {
+            txtBlattnummer.setText("");
+            cbArt.setSelectedItem("");
+            chkKartenausschnitt.setSelected(false);
+        }
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
-    public void searchCancelled() {
+    public void searchCanceled() {
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
-    public boolean displaysEmptyResultMessage() {
-        return true;
+    public boolean suppressEmptyResultMessage() {
+        return false;
     }
 }

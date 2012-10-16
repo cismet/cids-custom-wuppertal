@@ -91,22 +91,40 @@ public class Wbf_gebaeudeFeatureRenderer extends CustomCidsFeatureRenderer {
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
     } // </editor-fold>//GEN-END:initComponents
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void assign() {
         cidsBean = metaObject.getBean();
         txtDescription.setText(getHtmlString());
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public float getTransparency() {
         return 1;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Paint getFillingStyle() {
         return BCKGRND;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public FeatureAnnotationSymbol getPointSymbol() {
         Color color = Color.GRAY;
@@ -193,6 +211,11 @@ public class Wbf_gebaeudeFeatureRenderer extends CustomCidsFeatureRenderer {
         return symb;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getAlternativeName() {
         final Object o = cidsBean.getProperty("vorgaenge");

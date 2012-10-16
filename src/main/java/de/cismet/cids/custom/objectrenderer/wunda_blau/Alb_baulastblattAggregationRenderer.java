@@ -99,11 +99,21 @@ public class Alb_baulastblattAggregationRenderer extends javax.swing.JPanel impl
         add(panContent, java.awt.BorderLayout.CENTER);
     } // </editor-fold>//GEN-END:initComponents
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Collection<CidsBean> getCidsBeans() {
         return cidsBeans;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cidsBeans  DOCUMENT ME!
+     */
     @Override
     public void setCidsBeans(final Collection<CidsBean> cidsBeans) {
         this.cidsBeans = cidsBeans;
@@ -111,11 +121,21 @@ public class Alb_baulastblattAggregationRenderer extends javax.swing.JPanel impl
         setTitle(null);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getTitle() {
         return lblAgrTitle.getText();
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  title  DOCUMENT ME!
+     */
     @Override
     public void setTitle(final String title) {
         String desc = "Baulastblätter";
@@ -128,11 +148,19 @@ public class Alb_baulastblattAggregationRenderer extends javax.swing.JPanel impl
         lblAgrTitle.setText(desc);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getTitleComponent() {
         return panTitle;
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
     }

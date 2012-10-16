@@ -233,6 +233,11 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cidsBean  DOCUMENT ME!
+     */
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         super.setCidsBean(cidsBean);
@@ -2969,15 +2974,28 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         txtFreizeit_ueb_beab.setText(getCurrentUser());
     }                                                                             //GEN-LAST:event_jButton15ActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getTitle() {
         return "TIM Liegenschaftskarte";
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  title  DOCUMENT ME!
+     */
     @Override
     public void setTitle(final String title) {
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
         super.dispose();

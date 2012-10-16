@@ -52,7 +52,7 @@ import de.cismet.cids.client.tools.ReportLookupButton;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
+import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
 
 /**
  * de.cismet.cids.objectrenderer.CoolPassantenfrequenzRenderer.
@@ -60,7 +60,7 @@ import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
  * @author   nh
  * @version  $Revision$, $Date$
  */
-public class ZaehlungsstandortRenderer extends CoolPanel {
+public class ZaehlungsstandortRenderer extends BlurredMapObjectRenderer {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -578,6 +578,9 @@ public class ZaehlungsstandortRenderer extends CoolPanel {
      */
     private void cmdPrintActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdPrintActionPerformed
     }                                                                            //GEN-LAST:event_cmdPrintActionPerformed
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void assignSingle() {
         if (geom != null) {
@@ -706,15 +709,28 @@ public class ZaehlungsstandortRenderer extends CoolPanel {
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void assignAggregation() {
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public double getWidthRatio() {
         return 1.0;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  geometry  DOCUMENT ME!
+     */
     @Override
     public void setGeometry(final Geometry geometry) {
         super.setGeometry(geometry);
@@ -780,6 +796,18 @@ public class ZaehlungsstandortRenderer extends CoolPanel {
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   table       DOCUMENT ME!
+         * @param   value       DOCUMENT ME!
+         * @param   isSelected  DOCUMENT ME!
+         * @param   hasFocus    DOCUMENT ME!
+         * @param   row         DOCUMENT ME!
+         * @param   column      DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public Component getTableCellRendererComponent(final JTable table,
                 final Object value,

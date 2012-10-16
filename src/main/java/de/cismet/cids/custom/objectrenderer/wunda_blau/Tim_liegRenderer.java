@@ -29,7 +29,7 @@ import de.cismet.cids.custom.deprecated.JBreakLabel;
 import de.cismet.cids.custom.deprecated.JLoadDots;
 import de.cismet.cids.custom.deprecated.TabbedPaneUITransparent;
 
-import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
+import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
 
 /**
  * de.cismet.cids.objectrenderer.CoolTIMRenderer.
@@ -37,7 +37,7 @@ import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
  * @author   nh
  * @version  $Revision$, $Date$
  */
-public class Tim_liegRenderer extends CoolPanel implements ChangeListener {
+public class Tim_liegRenderer extends BlurredMapObjectRenderer implements ChangeListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -341,6 +341,9 @@ public class Tim_liegRenderer extends CoolPanel implements ChangeListener {
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void assignSingle() {
         if (geometry != null) {
@@ -1673,6 +1676,11 @@ public class Tim_liegRenderer extends CoolPanel implements ChangeListener {
         add(panMap, java.awt.BorderLayout.CENTER);
     } // </editor-fold>//GEN-END:initComponents
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  e  DOCUMENT ME!
+     */
     @Override
     public void stateChanged(final ChangeEvent e) {
         lastSelected = tabbedPane.getSelectedIndex();

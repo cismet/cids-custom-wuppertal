@@ -1,0 +1,717 @@
+{
+    "modi":[{
+        "key":"selbst_oebvi",
+        "name":"Selbstentnahme (ÖbVI)",
+        "discounts":"true"
+    },
+    {
+        "key":"selbst_extern",
+        "name":"Selbstentnahme (extern)",
+        "discounts":"true"
+    },
+    {
+        "key":"geodatenzentrum",
+        "name":"Kundenauftrag Geodatenzentrum",
+        "discounts":"false"
+    },
+    {
+        "key":"r102",
+        "name":"Datenentnahme durch einen Mitarbeiter der Vermessungsabteilung (102.1) im Zuge eines eigenen Projektes von R102",
+        "discounts":"false"
+    }],
+    "productGroups":[{
+        "key":"ea",
+        "description":"Stück"
+    },{
+        "key":"eafifty",
+        "description":"Paket(e) mit max. 50 Punkten"
+    },{
+        "key":"eapkt_1000",
+        "description":"Punkte unrabattiert"
+    },{
+        "key":"eapkt_1001-10000",
+        "description":"Punkte 50% Rabatt"
+    },{
+        "key":"eapkt_10001-100000",
+        "description":"Punkte 75% Rabatt"
+    },{
+        "key":"eapkt_100001-1000000",
+        "description":"Punkte 87.5% Rabatt"
+    },{
+        "key":"eapkt_1000001",
+        "description":"Punkte 93.75% Rabatt"
+     },{
+        "key":"eakarte_a3",
+        "description":"Karte max. DIN A3"
+    },{
+        "key":"eakarte_a2-a0",
+        "description":"Karte DIN A2 - DIN A0"
+    },{
+        "key":"eadoc_a3",
+        "description":"Dokument(e) max. DIN A3"
+    },{
+        "key":"eadoc_a2-a0",
+        "description":"Dokument(e) DIN A2 - DIN A0"
+    },{
+        "key":"eaflst_1000",
+        "description":"Datensätze Flurstück unrabattiert"
+    },{
+        "key":"eaflst_1001-10000",
+        "description":"Datensätze Flurstück 50% Rabatt"
+    },{
+        "key":"eaflst_10001-100000",
+        "description":"Datensätze Flurstück 75% Rabatt"
+    },{
+        "key":"eaflst_100001-1000000",
+        "description":"Datensätze Flurstück 87.5% Rabatt"
+    },{
+        "key":"eaflst_1000001",
+        "description":"Datensätze Flurstück 93.75% Rabatt"
+    },{
+        "key":"eageb_1000",
+        "description":"Datensätze Gebäude unrabattiert"
+    },{
+        "key":"eageb_1001-10000",
+        "description":"Datensätze Gebäude 50% Rabatt"
+    },{
+        "key":"eageb_10001-100000",
+        "description":"Datensätze Gebäude 75% Rabatt"
+    },{
+        "key":"eageb_100001-1000000",
+        "description":"Datensätze Gebäude 87.5% Rabatt"
+    },{
+        "key":"eageb_1000001",
+        "description":"Datensätze Gebäude 93.75% Rabatt"
+    },{
+        "key":"eaeig_1000",
+        "description":"Datensätze Eigentümer unrabattiert"
+    },{
+        "key":"eaeig_1001-10000",
+        "description":"Datensätze Eigentümer 50% Rabatt"
+    },{
+        "key":"eaeig_10001-100000",
+        "description":"Datensätze Eigentümer 75% Rabatt"
+    },{
+        "key":"eaeig_100001-1000000",
+        "description":"Datensätze Eigentümer 87.5% Rabatt"
+    },{
+        "key":"eaeig_1000001",
+        "description":"Datensätze Eigentümer 93.75% Rabatt"
+    },{
+        "key":"eaqkm",
+        "description":"Quadratkilometer"
+    }],
+     "usages":[{
+        "name":"Vermessungsunterlagen (amtlicher Lageplan TS 3)",
+        "key":"VU aL",
+        "description":"-"
+    },{
+        "name":"Vermessungsunterlagen (hoheitliche Vermessung TS 4)",
+        "key":"VU hV",
+        "description":"-"
+    },{
+        "name":"Vermessungsunterlagen (sonstige)",
+        "key":"VU s",
+        "description":"-"
+    },{
+        "name":"eigener Gebrauch (einmalig)",
+        "key":"eigG",
+        "description":"-"
+    }],
+    "products":[{
+        "name":"Flurstücksnachweis",
+        "id":"fsnw",
+        "description":"[x] Einzelobjektrenderer ALKIS-Flurstücke / Produkte / PDF-Produkte / Flurstücksnachweis und Aggregierender Renderer ALKIS-Flurstücke / PDF-Produkte / Flurstücksnachweis",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0
+        },
+        "prices":{
+            "ea":10.0
+        }
+    },{
+        "name":"Flurstücks- und Eigentumsnachweis (NRW)",
+        "id":"fsuenw",
+        "description":"[x] Einzelobjektrenderer ALKIS-Flurstücke / Produkte / PDF-Produkte / Flurstücks- und Eigentumsnachweis (NRW) und Aggregierender Renderer ALKIS-Flurstücke / PDF-Produkte / Flurstücks- und Eigentumsnachweis NRW",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0
+        },
+        "prices":{
+            "ea":10.0
+        }
+    },{
+        "name":"Flurstücks- und Eigentumsnachweis (kommunal)",
+        "id":"fsuekom",
+        "description":"[x] Einzelobjektrenderer ALKIS-Flurstücke / Produkte / PDF-Produkte / Flurstücks- und Eigentumsnachweis (kommunal) und Aggregierender Renderer ALKIS-Flurstücke / PDF-Produkte / Flurstücks- und Eigentumsnachweis (kommunal)",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75
+        },
+        "prices":{
+            "ea":11.0
+        }
+    },{
+        "name":"Bestandsnachweis (NRW)",
+        "id":"benw",
+        "description":"[x] Einzelobjektrenderer ALKIS-Buchungsblätter / Produkte / PDF-Produkte / Bestandsnachweis (NRW) und Aggregierender Renderer ALKIS-Buchungsblätter / PDF-Produkte / Bestandsnachweis (NRW)",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75
+        },
+        "prices":{
+            "ea":20.0
+        }
+    },{
+        "name":"Bestandsnachweis (kommunal)",
+        "id":"bekom",
+        "description":"[x] Einzelobjektrenderer ALKIS-Buchungsblätter / Produkte / PDF-Produkte / Bestandsnachweis (kommunal) und Aggregierender Renderer ALKIS-Buchungsblätter / PDF-Produkte / Bestandsnachweis (kommunal)",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75
+        },
+        "prices":{
+            "ea":22.0
+        }
+    },{
+        "name":"Grundstücksnachweis (NRW)",
+        "id":"grnw",
+        "description":"[x] Einzelobjektrenderer ALKIS-Buchungsblätter / Produkte / PDF-Produkte / Grundstücksnachweis (NRW)",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75
+        },
+        "prices":{
+            "ea":10.0
+        }
+    },{
+        "name":"Flurkarte (NRW) DIN A4",
+        "id":"fknw4",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Liegenschaftskarte, farbig oder Liegenschaftskarte, grau; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0
+        },
+        "prices":{
+            "eakarte_a3":20.0
+        }
+    },{
+        "name":"Flurkarte (NRW) DIN A3",
+        "id":"fknw3",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Liegenschaftskarte, farbig oder Liegenschaftskarte, grau; Formate DINA3 Hochformat oder DINA3 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0
+        },
+        "prices":{
+            "eakarte_a3":20.0
+        }
+    },{
+        "name":"Flurkarte (NRW) DIN A2",
+        "id":"fknw2",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Liegenschaftskarte, farbig oder Liegenschaftskarte, grau; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0
+        },
+        "prices":{
+            "eakarte_a2-a0":40.0
+        }
+    },{
+        "name":"Flurkarte (NRW) DIN A1",
+        "id":"fknw1",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Liegenschaftskarte, farbig oder Liegenschaftskarte, grau; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0
+        },
+        "prices":{
+            "eakarte_a2-a0":40.0
+        }
+    },{
+        "name":"Flurkarte (NRW) DIN A0",
+        "id":"fknw0",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Liegenschaftskarte, farbig oder Liegenschaftskarte, grau; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0
+        },
+        "prices":{
+            "eakarte_a2-a0":40.0
+        }
+    },{
+        "name":"Stadtgrundkarte (kommunal) DIN A4",
+        "id":"skmekom4",
+        "description":"[x] ALKIS-Druck: Produktklasse NRW-Kommunal; Produkte Stadtgrundkarte m. kom. Erg., farbig oder Stadtgrundkarte m. kom. Erg., schwarz-weiß; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75
+        },
+        "prices":{
+            "eakarte_a3":22.0
+        }
+    },{
+        "name":"Stadtgrundkarte (kommunal) DIN A3",
+        "id":"skmekom3",
+        "description":"[x] ALKIS-Druck: Produktklasse NRW-Kommunal; Produkte Stadtgrundkarte m. kom. Erg., farbig oder Stadtgrundkarte m. kom. Erg., schwarz-weiß; Formate DINA3 Hochformat oder DINA3 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75
+        },
+        "prices":{
+            "eakarte_a3":22.0
+        }
+    },{
+        "name":"Stadtgrundkarte (kommunal) DIN A2",
+        "id":"skmekom2",
+        "description":"[x] ALKIS-Druck: Produktklasse NRW-Kommunal; Produkte Stadtgrundkarte m. kom. Erg., farbig oder Stadtgrundkarte m. kom. Erg., schwarz-weiß; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75
+        },
+        "prices":{
+            "eakarte_a2-a0":44.0
+        }
+    },{
+        "name":"Stadtgrundkarte (kommunal) DIN A1",
+        "id":"skmekom1",
+        "description":"[x] ALKIS-Druck: Produktklasse NRW-Kommunal; Produkte Stadtgrundkarte m. kom. Erg., farbig oder Stadtgrundkarte m. kom. Erg., schwarz-weiß; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75
+        },
+        "prices":{
+            "eakarte_a2-a0":44.0
+        }
+    },{
+        "name":"Stadtgrundkarte (kommunal) DIN A0",
+        "id":"skmekom0",
+        "description":"[x] ALKIS-Druck: Produktklasse NRW-Kommunal; Produkte Stadtgrundkarte m. kom. Erg., farbig oder Stadtgrundkarte m. kom. Erg., schwarz-weiß; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75
+        },
+        "prices":{
+            "eakarte_a2-a0":44.0
+        }
+    },{
+        "name":"Schätzungskarte (NRW) DIN A4",
+        "id":"schknw4",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Schätzungskarte, farbig oder Schätzungskarte, grau; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75
+        },
+        "prices":{
+            "eakarte_a3":20.0
+        }
+    },{
+        "name":"Schätzungskarte (NRW) DIN A3",
+        "id":"schknw3",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Schätzungskarte, farbig oder Schätzungskarte, grau; Formate DINA3 Hochformat oder DINA3 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75
+        },
+        "prices":{
+            "eakarte_a3":20.0
+        }
+    },{
+        "name":"Schätzungskarte (NRW) DIN A2",
+        "id":"schknw2",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Schätzungskarte, farbig oder Schätzungskarte, grau; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75
+        },
+        "prices":{
+            "eakarte_a2-a0":40.0
+        }
+    },{
+        "name":"Schätzungskarte (NRW) DIN A1",
+        "id":"schknw1",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Schätzungskarte, farbig oder Schätzungskarte, grau; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75
+        },
+        "prices":{
+            "eakarte_a2-a0":40.0
+        }
+    },{
+        "name":"Schätzungskarte (NRW) DIN A0",
+        "id":"schknw0",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Schätzungskarte, farbig oder Schätzungskarte, grau; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75
+        },
+        "prices":{
+            "eakarte_a2-a0":40.0
+        }
+    },{
+        "name":"Amtliche Basiskarte (NRW) DIN A4",
+        "id":"abknw4",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Amtliche Basiskarte (farbig) oder Amtliche Basiskarte, grau; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75
+        },
+        "prices":{
+            "eakarte_a3":15.0
+        }
+    },{
+        "name":"Amtliche Basiskarte (NRW) DIN A3",
+        "id":"abknw3",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Amtliche Basiskarte (farbig) oder Amtliche Basiskarte, grau; Formate DIN3 Hochformat oder DINA3 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75
+        },
+        "prices":{
+            "eakarte_a3":15.0
+        }
+    },{
+        "name":"Amtliche Basiskarte (NRW) DIN A2",
+        "id":"abknw2",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Amtliche Basiskarte (farbig) oder Amtliche Basiskarte, grau; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75
+        },
+        "prices":{
+            "eakarte_a2-a0":30.0
+        }
+    },{
+        "name":"Amtliche Basiskarte (NRW) DIN A1",
+        "id":"abknw1",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Amtliche Basiskarte (farbig) oder Amtliche Basiskarte, grau; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75
+        },
+        "prices":{
+            "eakarte_a2-a0":30.0
+        }
+    },{
+        "name":"Amtliche Basiskarte (NRW) DIN A0",
+        "id":"abknw0",
+        "description":"[x] ALKIS-Druck: Produktklasse Gdb-NRW-Amtlich; Produkte Amtliche Basiskarte (farbig) oder Amtliche Basiskarte, grau; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75
+        },
+        "prices":{
+            "eakarte_a2-a0":30.0
+        }
+    },{
+        "name":"Stadtgrundkarte DIN A4",
+        "id":"skkom4",
+        "description":"[x] Stadtgrundkarte ohne kommunale Ergänzungen => ALKIS-Druck: Produktklasse NRW-Kommunal; Produkte Stadtgrundkarte, farbig oder Stadtgrundkarte, grau; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75
+        },
+        "prices":{
+            "eakarte_a3":22.0
+        }
+    },{
+        "name":"Stadtgrundkarte DIN A3",
+        "id":"skkom3",
+        "description":"[x] Stadtgrundkarte ohne kommunale Ergänzungen => ALKIS-Druck: Produktklasse NRW-Kommunal; Produkte Stadtgrundkarte, farbig oder Stadtgrundkarte, grau; Formate DINA3 Hochformat oder DINA3 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75
+        },
+        "prices":{
+            "eakarte_a3":22.0
+        }
+    },{
+        "name":"Stadtgrundkarte DIN A2",
+        "id":"skkom2",
+        "description":"[x] Stadtgrundkarte ohne kommunale Ergänzungen => ALKIS-Druck: Produktklasse NRW-Kommunal; Produkte Stadtgrundkarte, farbig oder Stadtgrundkarte, grau; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75
+        },
+        "prices":{
+            "eakarte_a2-a0":44.0
+        }
+    },{
+        "name":"Stadtgrundkarte DIN A1",
+        "id":"skkom1",
+        "description":"[x] Stadtgrundkarte ohne kommunale Ergänzungen => ALKIS-Druck: Produktklasse NRW-Kommunal; Produkte Stadtgrundkarte, farbig oder Stadtgrundkarte, grau; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75
+        },
+        "prices":{
+            "eakarte_a2-a0":44.0
+        }
+    },{
+        "name":"Stadtgrundkarte DIN A0",
+        "id":"skkom0",
+        "description":"[x] Stadtgrundkarte ohne kommunale Ergänzungen => ALKIS-Druck: Produktklasse NRW-Kommunal; Produkte Stadtgrundkarte, farbig oder Stadtgrundkarte, grau; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75
+        },
+        "prices":{
+            "eakarte_a2-a0":44.0
+        }
+    },{
+        "name":"Punktliste (TEXT)",
+        "id":"pktlsttxt",
+        "description":"[x] ALKIS-Lagefestpunkte als Textdokument: Einzelobjektrenderer ALKIS-Punkte / Produkte / Textformat-Produkte / Punktliste und Aggregierender Renderer ALKIS-Punkte / Verfügbare Berichte / Punktliste (TEXT)",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.0,
+            "VU s":0.5,
+            "VU hV":0.0
+        },
+        "prices":{
+            "eapkt_1000":0.1,
+            "eapkt_1001-10000":0.05,
+            "eapkt_10001-100000":0.025,
+            "eapkt_100001-1000000":0.0125,
+            "eapkt_1000001":0.00625
+        }
+    },{
+        "name":"Punktnachweis (PDF)",
+        "id":"pktlstpdf",
+        "description":"[x] ALKIS-Lagefestpunkte als PDF-Dokument: Einzelobjektrenderer ALKIS-Punkte / Produkte / PDF-Produkte / Punktliste und Aggregierender Renderer ALKIS-Punkte / Verfügbare Berichte / Punktliste (PDF)",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0
+        },
+        "prices":{
+            "eafifty":20.0
+        }
+    },{
+        "name":"AP-Karte",
+        "id":"appdf",
+        "description":"[x] Einzelobjektrenderer ALKIS-Punkte (für Aufnahmepunkte und Sonstige Vermessungspunkte) / Produkte / Öffnen [erst nach Umsetzung von bug tracker ID 2647] und Aggregierender Renderer ALKIS-Punkte / Verfügbare Berichte / AP-Karten (PDF) ",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0
+        },
+        "prices":{
+            "ea":10.0
+        }
+    },{
+        "name":"Nivellement-Punkt",
+        "id":"nivppdf",
+        "description":"[x] Einzelobjektrenderer Nivellement-Punkte / Bericht erzeugen, Einzelobjektrenderer Nivellement-Punkte / Öffnen [erst nach Umsetzung von bug tracker ID 2650]  und Aggregierender Renderer Nivellement-Punkte / Bericht erzeugen",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0
+        },
+        "prices":{
+            "ea":10.0
+        }
+    },{
+        "name":"Vermessungsriss",
+        "id":"vrpdf",
+        "description":"[x] Einzelobjektrenderer Vermessungsrisse / Dokumentauswahl: Vermessungsriss / Öffnen und Aggregierender Renderer Vermessungsrisse / Verfügbare Berichte / Vermessungsrisse [erst nach Umsetzung von bug tracker ID 2651]",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0
+        },
+        "prices":{
+            "ea":10.0,
+            "eadoc_a3":10.0,
+            "eadoc_a2-a0":20.0
+        }
+    },{
+        "name":"Dokument Liegenschaftskatasterakte",
+        "id":"doklapdf",
+        "description":"[x] Einzelobjektrenderer Vermessungsrisse / Dokumentauswahl: Ergänzende Dokumente / Öffnen und Aggregierender Renderer Vermessungsrisse / Verfügbare Berichte / Ergänzende Dokumente [erst nach Umsetzung von bug tracker ID 2651]",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0
+        },
+        "prices":{
+            "ea":10.0,
+            "eadoc_a3":10.0,
+            "eadoc_a2-a0":20.0
+        }
+    },{
+        "name":"NAS-Daten (mit Eigentümern)",
+        "id":"naskom",
+        "description":"# vollständiger NAS-Datensatz: GUI in WuNDa fehlt noch, kann noch nicht implementiert werden",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.0
+        },
+        "prices":{
+            "eaflst_1000":1.98,
+            "eaflst_1001-10000":0.99,
+            "eaflst_10001-100000":0.495,
+            "eaflst_100001-1000000":0.2475,
+            "eaflst_1000001":0.12375,
+            "eageb_1000":1.8,
+            "eafgeb_1001-10000":0.9,
+            "eageb_10001-100000":0.45,
+            "eageb_100001-1000000":0.225,
+            "eageb_1000001":0.1125,
+            "eaeig_1000":0.9,
+            "eafeig_1001-10000":0.45,
+            "eaeig_10001-100000":0.225,
+            "eaeig_100001-1000000":0.1125,
+            "eaeig_1000001":0.05625
+        }
+    },{
+        "name":"NAS-Daten (ohne Eigentümer)",
+        "id":"nasoeig",
+        "description":"# NAS-Datensatz ohne Eigentümer:  GUI in WuNDa fehlt noch, kann noch nicht implementiert werden",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.0
+        },
+        "prices":{
+            "eaflst_1000":1.98,
+            "eaflst_1001-10000":0.99,
+            "eaflst_10001-100000":0.495,
+            "eaflst_100001-1000000":0.2475,
+            "eaflst_1000001":0.12375,
+            "eageb_1000":1.8,
+            "eafgeb_1001-10000":0.9,
+            "eageb_10001-100000":0.45,
+            "eageb_100001-1000000":0.225,
+            "eageb_1000001":0.1125
+        }
+    },{
+        "name":"DXF-Daten (Stadtgrundkarte kommunal)",
+        "id":"skmekomdxf",
+        "description":"# GUI in WuNDa fehlt noch, kann noch nicht implementiert werden",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5
+        },
+        "prices":{
+            "eaflst_1000":0.99,
+            "eaflst_1001-10000":0.495,
+            "eaflst_10001-100000":0.2475,
+            "eaflst_100001-1000000":0.12375,
+            "eaflst_1000001":0.061875,
+            "eageb_1000":0.9,
+            "eafgeb_1001-10000":0.45,
+            "eageb_10001-100000":0.225,
+            "eageb_100001-1000000":0.1125,
+            "eageb_1000001":0.05625
+        }
+    },{
+        "name":"GEOTIFF-Daten (Stadtgrundkarte kommunal)",
+        "id":"skmekomtiff",
+        "description":"# GUI in WuNDa fehlt noch, kann noch nicht implementiert werden",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5
+        },
+        "prices":{
+            "eaflst_1000":0.495,
+            "eaflst_1001-10000":0.2475,
+            "eaflst_10001-100000":0.12375,
+            "eaflst_100001-1000000":0.061875,
+            "eaflst_1000001":0.0309375,
+            "eageb_1000":0.45,
+            "eafgeb_1001-10000":0.225,
+            "eageb_10001-100000":0.1125,
+            "eageb_100001-1000000":0.05625,
+            "eageb_1000001":0.028125
+        }
+    },{
+        "name":"GEOTIFF-Daten (DGK, ABK)",
+        "id":"abktiff",
+        "description":"# GUI in WuNDa fehlt noch, kann noch nicht implementiert werden",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5
+        },
+        "prices":{
+            "eaqkm":7.5
+        }
+    }]
+}

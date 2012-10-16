@@ -45,6 +45,8 @@ import de.cismet.tools.CismetThreadPool;
 
 import de.cismet.tools.collections.TypeSafeCollections;
 
+import de.cismet.tools.gui.StaticSwingTools;
+
 /**
  * DOCUMENT ME!
  *
@@ -146,6 +148,11 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  b  DOCUMENT ME!
+     */
     @Override
     public void setVisible(final boolean b) {
         checkOkEnableState();
@@ -604,7 +611,7 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
             final String flur = String.valueOf(cboFlur.getSelectedItem());
             if (flur.length() != 3) {
                 result = JOptionPane.showConfirmDialog(
-                        this,
+                        StaticSwingTools.getParentFrame(this),
                         "Das neue Flurstück entspricht nicht der Namenskonvention: Flur sollte dreistellig sein (mit führenden Nullen, z.B. 007). Datensatz trotzdem abspeichern?",
                         "Warnung: Format",
                         JOptionPane.YES_NO_OPTION,
@@ -632,7 +639,7 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
 //                    CidsBean newBean = unpersistedHistoricLandparcels.get(compountParcelData);
 //                    if (newBean == null) {
                     final CidsBean newBean = CidsBeanSupport.createNewCidsBeanFromTableName(
-                            FlurstueckFinder.FLURSTUECK_TABLE_NAME,
+                            FlurstueckFinder.FLURSTUECK_KICKER_TABLE_NAME,
                             newLandParcelProperties);
 //                        unpersistedHistoricLandparcels.put(compountParcelData, newBean);
 //                    }
@@ -677,6 +684,9 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         protected void done() {
             try {

@@ -46,6 +46,8 @@ import javax.swing.table.TableColumn;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -81,10 +83,12 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
 
     private static final Logger LOG = Logger.getLogger(AlkisBuchungsblattAggregationRenderer.class);
 
-    private static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW = "custom.alkis.product.bestandsnachweis_nrw";
-    private static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM = "custom.alkis.product.bestandsnachweis_kom";
+    private static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW =
+        "custom.alkis.product.bestandsnachweis_nrw@WUNDA_BLAU";
+    private static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM =
+        "custom.alkis.product.bestandsnachweis_kom@WUNDA_BLAU";
     private static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN =
-        "custom.alkis.product.bestandsnachweis_kom_intern";
+        "custom.alkis.product.bestandsnachweis_kom_intern@WUNDA_BLAU";
 
     private static final Color[] COLORS = new Color[] {
             new Color(247, 150, 70, 192),
@@ -145,6 +149,13 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
                     changeMap();
                 }
             });
+
+        jxlBestandsnachweisNRW.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW)
+                    && BillingPopup.isBillingAllowed());
+        jxlBestandsnachweisKommunal.setEnabled(ObjectRendererUtils.checkActionTag(
+                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM) && BillingPopup.isBillingAllowed());
+        jxlBestandsnachweisKommunalIntern.setEnabled(ObjectRendererUtils.checkActionTag(
+                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN));
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -335,10 +346,24 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
      * @param  evt  DOCUMENT ME!
      */
     private void jxlBestandsnachweisNRWActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlBestandsnachweisNRWActionPerformed
-        downloadEinzelnachweisProduct(jxlBestandsnachweisNRW.getText(),
-            AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_NRW_PDF,
-            PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW);
-    }                                                                                          //GEN-LAST:event_jxlBestandsnachweisNRWActionPerformed
+        try {
+            int stueck = 0;
+            for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
+                if (cidsBeanWrapper.isSelected()) {
+                    stueck++;
+                }
+            }
+
+            if (BillingPopup.doBilling("benw", "no.yet", (Geometry)null, new ProductGroupAmount("ea", stueck))) {
+                downloadEinzelnachweisProduct(jxlBestandsnachweisNRW.getText(),
+                    AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_NRW_PDF,
+                    PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW);
+            }
+        } catch (Exception e) {
+            LOG.error("Error when trying to produce a alkis product", e);
+            // Hier noch ein Fehlerdialog
+        }
+    } //GEN-LAST:event_jxlBestandsnachweisNRWActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -346,10 +371,24 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
      * @param  evt  DOCUMENT ME!
      */
     private void jxlBestandsnachweisKommunalActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlBestandsnachweisKommunalActionPerformed
-        downloadEinzelnachweisProduct(jxlBestandsnachweisKommunal.getText(),
-            AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_PDF,
-            PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM);
-    }                                                                                               //GEN-LAST:event_jxlBestandsnachweisKommunalActionPerformed
+        try {
+            int stueck = 0;
+            for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
+                if (cidsBeanWrapper.isSelected()) {
+                    stueck++;
+                }
+            }
+
+            if (BillingPopup.doBilling("bekom", "no.yet", (Geometry)null, new ProductGroupAmount("ea", stueck))) {
+                downloadEinzelnachweisProduct(jxlBestandsnachweisKommunal.getText(),
+                    AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_KOMMUNAL_PDF,
+                    PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM);
+            }
+        } catch (Exception e) {
+            LOG.error("Error when trying to produce a alkis product", e);
+            // Hier noch ein Fehlerdialog
+        }
+    } //GEN-LAST:event_jxlBestandsnachweisKommunalActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -500,7 +539,7 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
             // return;
         }
 
-        if (!DownloadManagerDialog.showAskingForUserTitle(StaticSwingTools.getParentFrame(this))) {
+        if (!DownloadManagerDialog.showAskingForUserTitle(this)) {
             return;
         }
         final String jobname = DownloadManagerDialog.getJobname();
@@ -595,7 +634,8 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
      * DOCUMENT ME!
      */
     private void showNoProductPermissionWarning() {
-        JOptionPane.showMessageDialog(this, "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
+        JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+            "Sie besitzen keine Berechtigung zur Erzeugung dieses Produkts!");
     }
 
     //~ Inner Classes ----------------------------------------------------------

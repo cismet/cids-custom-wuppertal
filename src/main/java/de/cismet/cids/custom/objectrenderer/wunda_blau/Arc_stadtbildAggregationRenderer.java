@@ -116,7 +116,9 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
 
     //~ Methods ----------------------------------------------------------------
 
-    // TODO: error prone: remove notify is called by the docking framework -> we need a remove-hook
+    /**
+     * TODO: error prone: remove notify is called by the docking framework -> we need a remove-hook
+     */
     @Override
     public void removeNotify() {
         final PictureWorker w = worker;
@@ -210,11 +212,21 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
         }
     }                                                                        //GEN-LAST:event_lblPrintMouseClicked
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Collection<CidsBean> getCidsBeans() {
         return cidsBeans;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cidsBeans  DOCUMENT ME!
+     */
     @Override
     public void setCidsBeans(final Collection<CidsBean> cidsBeans) {
         this.cidsBeans = cidsBeans;
@@ -271,11 +283,21 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
         CismetThreadPool.execute(worker);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getTitle() {
         return lblAgrTitle.getText();
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  title  DOCUMENT ME!
+     */
     @Override
     public void setTitle(final String title) {
         String desc = "Lichtkasten";
@@ -286,11 +308,19 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
         lblAgrTitle.setText(desc);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getTitleComponent() {
         return panTitle;
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
     }
@@ -323,6 +353,13 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception  DOCUMENT ME!
+         */
         @Override
         protected Void doInBackground() throws Exception {
             int j = -1;
@@ -346,6 +383,9 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
             return null;
         }
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         protected void done() {
             try {
@@ -357,6 +397,11 @@ public class Arc_stadtbildAggregationRenderer extends javax.swing.JPanel impleme
             }
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  chunks  DOCUMENT ME!
+         */
         @Override
         protected void process(final List<ImageIcon> chunks) {
             if (chunks != null) {

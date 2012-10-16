@@ -280,11 +280,21 @@ public class Poi_locationtypeRenderer extends javax.swing.JPanel implements Cids
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cidsBean  DOCUMENT ME!
+     */
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         bindingGroup.unbind();
@@ -294,22 +304,40 @@ public class Poi_locationtypeRenderer extends javax.swing.JPanel implements Cids
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getTitleComponent() {
         return panTitle;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getTitle() {
         return title;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  title  DOCUMENT ME!
+     */
     @Override
     public void setTitle(final String title) {
         this.title = title;
         lblTitle.setText(title);
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
         bindingGroup.unbind();

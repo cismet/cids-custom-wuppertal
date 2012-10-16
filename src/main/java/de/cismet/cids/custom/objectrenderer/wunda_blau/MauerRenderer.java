@@ -7,6 +7,8 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.ui.RequestsFullSizeComponent;
+
 import com.vividsolutions.jts.geom.Geometry;
 
 import java.awt.EventQueue;
@@ -35,7 +37,7 @@ import de.cismet.cids.custom.deprecated.JBreakLabel;
 import de.cismet.cids.custom.deprecated.JLoadDots;
 import de.cismet.cids.custom.deprecated.TabbedPaneUITransparent;
 
-import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
+import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
 
 import de.cismet.tools.BrowserLauncher;
 
@@ -46,7 +48,7 @@ import de.cismet.tools.BrowserLauncher;
  * @version  $Revision$, $Date$
  */
 //de.cismet.cids.objectrenderer.CoolMauerRenderer
-public class MauerRenderer extends CoolPanel {
+public class MauerRenderer extends BlurredMapObjectRenderer implements RequestsFullSizeComponent {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -329,10 +331,16 @@ public class MauerRenderer extends CoolPanel {
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void assignAggregation() {
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void assignSingle() {
         if (this.geometry != null) {

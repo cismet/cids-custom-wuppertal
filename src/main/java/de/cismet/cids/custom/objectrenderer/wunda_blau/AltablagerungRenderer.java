@@ -13,7 +13,7 @@ import de.cismet.cids.annotations.CidsAttribute;
 
 import de.cismet.cids.custom.deprecated.JLoadDots;
 
-import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
+import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
 
 /**
  * de.cismet.cids.objectrenderer.CoolAltablagerungRenderer.
@@ -21,7 +21,7 @@ import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
  * @author   nh
  * @version  $Revision$, $Date$
  */
-public class AltablagerungRenderer extends CoolPanel {
+public class AltablagerungRenderer extends BlurredMapObjectRenderer {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -111,6 +111,9 @@ public class AltablagerungRenderer extends CoolPanel {
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void assignSingle() {
         if (geom != null) {

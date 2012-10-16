@@ -8,6 +8,7 @@
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import Sirius.navigator.tools.BrowserLauncher;
+import Sirius.navigator.ui.ComponentRegistry;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -23,6 +24,7 @@ import org.jdesktop.swingx.graphics.ShadowRenderer;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -61,7 +63,7 @@ import de.cismet.cids.custom.deprecated.JBreakLabel;
 import de.cismet.cids.custom.deprecated.JLoadDots;
 import de.cismet.cids.custom.objectrenderer.utils.PrintingWaitDialog;
 
-import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
+import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
@@ -75,7 +77,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @version  $Revision$, $Date$
  */
 @AggregationRenderer
-public class LuftbildschraegaufnahmenRenderer extends CoolPanel {
+public class LuftbildschraegaufnahmenRenderer extends BlurredMapObjectRenderer {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -147,7 +149,8 @@ public class LuftbildschraegaufnahmenRenderer extends CoolPanel {
 
     @CidsAttributeVector("Georeferenz.GEO_STRING")
     public Vector<Geometry> geoAgr = new Vector();
-    PrintingWaitDialog printingWaitDialog = new PrintingWaitDialog(StaticSwingTools.getParentFrame(this), true);
+    PrintingWaitDialog printingWaitDialog = new PrintingWaitDialog(ComponentRegistry.getRegistry().getMainWindow(),
+            true);
     Properties properties = new Properties();
 
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
@@ -384,7 +387,7 @@ public class LuftbildschraegaufnahmenRenderer extends CoolPanel {
                     });
             t.start();
         }
-        ((CoolPanel)panAggregation).setGeometry(allGeom);
+        ((BlurredMapObjectRenderer)panAggregation).setGeometry(allGeom);
     }
 
     @Override
@@ -606,7 +609,7 @@ public class LuftbildschraegaufnahmenRenderer extends CoolPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        panAggregation = new CoolPanel();
+        panAggregation = new BlurredMapObjectRenderer();
         panAgrTitle = new javax.swing.JPanel();
         jxhAgrPrint = new org.jdesktop.swingx.JXHyperlink();
         lblAgrTitle = new javax.swing.JLabel();
@@ -1024,9 +1027,7 @@ public class LuftbildschraegaufnahmenRenderer extends CoolPanel {
 
                                     @Override
                                     public void run() {
-                                        printingWaitDialog.setLocationRelativeTo(
-                                            StaticSwingTools.getParentFrame(LuftbildschraegaufnahmenRenderer.this));
-                                        printingWaitDialog.setVisible(true);
+                                        StaticSwingTools.showDialog(printingWaitDialog);
                                     }
                                 });
 
@@ -1185,9 +1186,7 @@ public class LuftbildschraegaufnahmenRenderer extends CoolPanel {
 
                                     @Override
                                     public void run() {
-                                        printingWaitDialog.setLocationRelativeTo(
-                                            StaticSwingTools.getParentFrame(LuftbildschraegaufnahmenRenderer.this));
-                                        printingWaitDialog.setVisible(true);
+                                        StaticSwingTools.showDialog(printingWaitDialog);
                                     }
                                 });
 

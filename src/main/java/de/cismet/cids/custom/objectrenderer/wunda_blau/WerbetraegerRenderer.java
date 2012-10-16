@@ -29,7 +29,7 @@ import de.cismet.cids.annotations.CidsAttribute;
 import de.cismet.cids.custom.deprecated.JBreakLabel;
 import de.cismet.cids.custom.deprecated.JLoadDots;
 
-import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
+import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
 
 import de.cismet.tools.BrowserLauncher;
 
@@ -39,7 +39,7 @@ import de.cismet.tools.BrowserLauncher;
  * @author   nh
  * @version  $Revision$, $Date$
  */
-public class WerbetraegerRenderer extends CoolPanel {
+public class WerbetraegerRenderer extends BlurredMapObjectRenderer {
 
     //~ Static fields/initializers ---------------------------------------------
 

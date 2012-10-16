@@ -45,6 +45,7 @@ import de.cismet.cids.tools.metaobjectrenderer.Titled;
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
 import de.cismet.tools.gui.RoundedPanel;
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -139,6 +140,9 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
         super.dispose();
@@ -978,8 +982,9 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
      * @param  evt  DOCUMENT ME!
      */
     private void btnAddThemaActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddThemaActionPerformed
-        dlgAddLocationType.setLocationRelativeTo(Poi_locationinstanceEditor.this);
-        dlgAddLocationType.setVisible(true);
+        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(Poi_locationinstanceEditor.this),
+            dlgAddLocationType,
+            true);
     }                                                                               //GEN-LAST:event_btnAddThemaActionPerformed
 
     /**
@@ -991,7 +996,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         final Object selection = lstLocationTypes.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(
-                    this,
+                    StaticSwingTools.getParentFrame(this),
                     "Soll das Thema wirklich gelöscht werden?",
                     "Thema entfernen",
                     JOptionPane.YES_NO_OPTION);
@@ -1046,8 +1051,9 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
      * @param  evt  DOCUMENT ME!
      */
     private void btnAddZusNamenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddZusNamenActionPerformed
-        dlgAddZusNamen.setLocationRelativeTo(Poi_locationinstanceEditor.this);
-        dlgAddZusNamen.setVisible(true);
+        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(Poi_locationinstanceEditor.this),
+            dlgAddZusNamen,
+            true);
     }                                                                                  //GEN-LAST:event_btnAddZusNamenActionPerformed
 
     /**
@@ -1059,7 +1065,7 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         final Object selection = lstZusNamen.getSelectedValue();
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(
-                    this,
+                    StaticSwingTools.getParentFrame(this),
                     "Soll der zusätzliche Name wirklich gelöscht werden?",
                     "Name entfernen",
                     JOptionPane.YES_NO_OPTION);
@@ -1142,6 +1148,11 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getTitle() {
         if ((title == null) || (title.length() == 0)) {
@@ -1150,6 +1161,11 @@ public class Poi_locationinstanceEditor extends DefaultCustomObjectEditor implem
         return title;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  title  DOCUMENT ME!
+     */
     @Override
     public void setTitle(final String title) {
         this.title = title;

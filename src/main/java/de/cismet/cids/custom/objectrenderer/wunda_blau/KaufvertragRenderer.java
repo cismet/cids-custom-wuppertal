@@ -29,7 +29,7 @@ import de.cismet.cids.annotations.CidsAttribute;
 
 import de.cismet.cids.custom.deprecated.JLoadDots;
 
-import de.cismet.cids.tools.metaobjectrenderer.CoolPanel;
+import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
 
 import de.cismet.tools.gui.RoundedPanel;
 
@@ -41,7 +41,7 @@ import de.cismet.tools.gui.RoundedPanel;
  * @author   nhaffke
  * @version  $Revision$, $Date$
  */
-public class KaufvertragRenderer extends CoolPanel {
+public class KaufvertragRenderer extends BlurredMapObjectRenderer {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -257,10 +257,16 @@ public class KaufvertragRenderer extends CoolPanel {
         super.setGeometry(geometry);
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void assignAggregation() {
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void assignSingle() {
         if (!name.equals("")) {

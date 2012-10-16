@@ -11,6 +11,9 @@
  */
 package de.cismet.cids.custom.objectrenderer.utils;
 
+import Sirius.navigator.ui.ComponentRegistry;
+
+import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.JRPrintPage;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -19,6 +22,7 @@ import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.swing.JRViewer;
+import net.sf.jasperreports.swing.JRViewerToolbar;
 
 import java.awt.EventQueue;
 
@@ -241,9 +245,9 @@ public abstract class AbstractJasperReportPrint {
                         + insets.top
                         + insets.bottom
                         + 20);
-            aFrame.setLocation((screenSize.width - aFrame.getWidth()) / 2,
-                (screenSize.height - aFrame.getHeight())
-                        / 2);
+
+            final JFrame main = ComponentRegistry.getRegistry().getMainWindow();
+            aFrame.setLocationRelativeTo(main);
             aFrame.setVisible(true);
         }
     }

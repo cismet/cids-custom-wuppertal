@@ -45,6 +45,7 @@ import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
+import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
 
 /**
@@ -67,7 +68,7 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
 
     private static final Logger LOG = Logger.getLogger(Alb_baulastEditor.class);
     public static final String TITLE_AGR_PREFIX = "Baulasten";
-    private static final String ACTION_TAG = "custom.baulast.document";
+    private static final String ACTION_TAG = "custom.baulast.document@WUNDA_BLAU";
 
     //~ Instance fields --------------------------------------------------------
 
@@ -151,6 +152,11 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
             ObjectRendererUtils.BACKWARD_PRESSED);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
@@ -165,6 +171,11 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         this.panMain.setAllSelectedMetaObjects(selection);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cidsBean  DOCUMENT ME!
+     */
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         if (cidsBean != null) {
@@ -373,7 +384,7 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         final String fileCollisionWarning = alb_picturePanel.getCollisionWarning();
         if (fileCollisionWarning.length() > 0) {
             JOptionPane.showMessageDialog(
-                this,
+                StaticSwingTools.getParentFrame(this),
                 fileCollisionWarning,
                 "Unterschiedliche Dateiformate",
                 JOptionPane.WARNING_MESSAGE);
@@ -390,41 +401,81 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         btnForwardActionPerformed(null);
     }                                                                       //GEN-LAST:event_lblForwMouseClicked
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getTitleComponent() {
         return panTitle;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getFooterComponent() {
         return panFooter;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getTitleBorder() {
         return new EmptyBorder(10, 10, 10, 10);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getFooterBorder() {
         return new EmptyBorder(5, 5, 5, 5);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Border getCenterrBorder() {
         return new EmptyBorder(0, 5, 0, 5);
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
         panMain.dispose();
         alb_picturePanel.dispose();
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  event  DOCUMENT ME!
+     */
     @Override
     public void editorClosed(final EditorClosedEvent event) {
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  RuntimeException  DOCUMENT ME!
+     */
     @Override
     public boolean prepareForSave() {
         try {
@@ -461,7 +512,7 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
                 }
                 errorOutput = errorOutput.substring(0, errorOutput.length() - 1);
                 JOptionPane.showMessageDialog(
-                    this,
+                    StaticSwingTools.getParentFrame(this),
                     errorOutput,
                     "Fehler aufgetreten",
                     JOptionPane.WARNING_MESSAGE);

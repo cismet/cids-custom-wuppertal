@@ -53,13 +53,13 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     //~ Static fields/initializers ---------------------------------------------
 
     static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisWindowSearch.class);
-    private static final String ACTION_TAG = "custom.alkis.windowsearch";
+    private static final String ACTION_TAG = "custom.alkis.windowsearch@WUNDA_BLAU";
 
     //~ Instance fields --------------------------------------------------------
 
-    private final MetaClass mc;
-    private final ImageIcon icon;
-    private SearchControlPanel pnlSearchCancel;
+    private MetaClass mc = null;
+    private ImageIcon icon = null;
+    private SearchControlPanel pnlSearchCancel = null;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrNach;
     private javax.swing.ButtonGroup bgrOwner;
@@ -114,12 +114,16 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
      * Creates new form BaulastWindowSearch.
      */
     public AlkisWindowSearch() {
-        mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "ALKIS_LANDPARCEL");
-        icon = new ImageIcon(mc.getIconData());
-        initComponents();
-        ((CardLayout)panEingabe.getLayout()).show(panEingabe, "eigentuemer");
-        pnlSearchCancel = new SearchControlPanel(this);
-        panCommand.add(pnlSearchCancel);
+        try {
+            mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "ALKIS_LANDPARCEL");
+            icon = new ImageIcon(mc.getIconData());
+            initComponents();
+            ((CardLayout)panEingabe.getLayout()).show(panEingabe, "eigentuemer");
+            pnlSearchCancel = new SearchControlPanel(this);
+            panCommand.add(pnlSearchCancel);
+        } catch (Exception e) {
+            log.warn("Error in Constructor of AlkisWindowSearch", e);
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -676,14 +680,24 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         ((CardLayout)panEingabe.getLayout()).show(panEingabe, "grundbuchblatt");
     }                                                                                               //GEN-LAST:event_optSucheUeberGrundbuchblattActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public ImageIcon getIcon() {
         return icon;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getName() {
-        return "Alkis Suche";
+        return "ALKIS-Suche";
     }
     
     @Override
@@ -691,11 +705,21 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         return "Alkis Suche";
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getSearchWindowComponent() {
         return this;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public CidsServerSearch getServerSearch() {
         Geometry searchgeom = null;
@@ -753,6 +777,11 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public boolean checkActionTag() {
         return ObjectRendererUtils.checkActionTag(ACTION_TAG);
@@ -768,25 +797,46 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
 //        }
 //    }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public CidsServerSearch assembleSearch() {
         return getServerSearch();
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void searchStarted() {
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  results  DOCUMENT ME!
+     */
     @Override
-    public void searchDone(final Node[] result) {
+    public void searchDone(final int results) {
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
-    public void searchCancelled() {
+    public void searchCanceled() {
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
-    public boolean displaysEmptyResultMessage() {
-        return true;
+    public boolean suppressEmptyResultMessage() {
+        return false;
     }
 }

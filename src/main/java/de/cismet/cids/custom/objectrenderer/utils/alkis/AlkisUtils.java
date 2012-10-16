@@ -58,6 +58,8 @@ public class AlkisUtils {
             AlkisConstants.COMMONS.PASSWORD,
             AlkisConstants.COMMONS.SERVICE);
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisUtils.class);
+
+    public static final String ALKIS_HTML_PRODUCTS_ENABLED = "custom.alkis.products.html.enabled";
     // --
 
     //~ Methods ----------------------------------------------------------------
@@ -188,6 +190,45 @@ public class AlkisUtils {
             }
         }
         return "";
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   land       DOCUMENT ME!
+     * @param   gemarkung  DOCUMENT ME!
+     * @param   flur       DOCUMENT ME!
+     * @param   zaehler    DOCUMENT ME!
+     * @param   nenner     DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String generateLandparcelCode(final int land,
+            final int gemarkung,
+            final int flur,
+            final int zaehler,
+            final int nenner) {
+        final String withoutNenner = generateLandparcelCode(land, gemarkung, flur, zaehler);
+        final StringBuilder sb = new StringBuilder(withoutNenner);
+        sb.append(String.format("/%04d", nenner));
+        return sb.toString();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   land       DOCUMENT ME!
+     * @param   gemarkung  DOCUMENT ME!
+     * @param   flur       DOCUMENT ME!
+     * @param   zaehler    DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String generateLandparcelCode(final int land,
+            final int gemarkung,
+            final int flur,
+            final int zaehler) {
+        return String.format("%02d%04d-%03d-%05d", land, gemarkung, flur, zaehler);
     }
 
     /**
@@ -477,7 +518,8 @@ public class AlkisUtils {
     public static boolean validateUserHasAlkisPrintAccess() {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), "navigator.alkis.print") != null;
+                        .getConfigAttr(SessionManager.getSession().getUser(), "navigator.alkis.print@WUNDA_BLAU")
+                        != null;
         } catch (ConnectionException ex) {
             log.error("Could not validate action tag for Alkis Print Dialog!", ex);
         }
@@ -492,7 +534,8 @@ public class AlkisUtils {
     public static boolean validateUserHasAlkisProductAccess() {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), "navigator.alkis.products") != null;
+                        .getConfigAttr(SessionManager.getSession().getUser(), "navigator.alkis.products@WUNDA_BLAU")
+                        != null;
         } catch (ConnectionException ex) {
             log.error("Could not validate action tag for Alkis Products!", ex);
         }
@@ -507,9 +550,26 @@ public class AlkisUtils {
     public static boolean validateUserHasAlkisBuchungsblattAccess() {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), "custom.alkis.buchungsblatt") != null;
+                        .getConfigAttr(SessionManager.getSession().getUser(), "custom.alkis.buchungsblatt@WUNDA_BLAU")
+                        != null;
         } catch (ConnectionException ex) {
             log.error("Could not validate action tag for Alkis Buchungsblatt!", ex);
+        }
+        return false;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static boolean validateUserHasAlkisHTMLProductAccess() {
+        try {
+            return SessionManager.getConnection()
+                        .getConfigAttr(SessionManager.getSession().getUser(), ALKIS_HTML_PRODUCTS_ENABLED)
+                        != null;
+        } catch (ConnectionException ex) {
+            log.error("Could not validate action tag for Alkis HTML Products!", ex);
         }
         return false;
     }

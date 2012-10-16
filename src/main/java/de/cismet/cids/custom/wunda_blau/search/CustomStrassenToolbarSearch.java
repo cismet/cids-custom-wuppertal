@@ -26,6 +26,8 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.cids.tools.search.clientstuff.CidsToolbarSearch;
 import de.cismet.cids.tools.search.clientstuff.Modifier;
 
+import de.cismet.tools.gui.StaticSwingTools;
+
 /**
  * DOCUMENT ME!
  *
@@ -62,16 +64,31 @@ public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public ImageIcon getIcon() {
         return icon;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getName() {
         return mc.getName();
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  toolbarSearchString  DOCUMENT ME!
+     */
     @Override
     public String getHint() {
         return "Strassenname";
@@ -82,6 +99,11 @@ public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
         this.searchString = toolbarSearchString;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public void applyModifiers(final Collection<? extends Modifier> modifiers) {
         this.modifiers = modifiers;
