@@ -26,11 +26,19 @@ package de.cismet.cids.custom.objectrenderer.utils.alkis;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 
+import Sirius.server.middleware.impls.domainserver.DomainServerImpl;
+
 import de.aedsicad.aaaweb.service.util.Address;
 import de.aedsicad.aaaweb.service.util.Buchungsblatt;
 import de.aedsicad.aaaweb.service.util.Buchungsstelle;
 import de.aedsicad.aaaweb.service.util.Owner;
+import de.aedsicad.aaaweb.service.util.Point;
 
+import java.io.BufferedReader;
+
+import java.net.URL;
+
+import java.util.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -40,8 +48,14 @@ import java.util.List;
 
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.alkis.AlkisProducts;
+import de.cismet.cids.custom.wunda_blau.search.actions.ServerAlkisSoapAction;
 
 import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.server.actions.HttpTunnelAction;
+import de.cismet.cids.server.actions.ServerActionParameter;
+
+import de.cismet.security.AccessHandler;
 
 /**
  * DOCUMENT ME!
@@ -58,12 +72,12 @@ public class AlkisUtils {
             AlkisConstants.COMMONS.PASSWORD,
             AlkisConstants.COMMONS.SERVICE);
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisUtils.class);
-
     public static final String ALKIS_HTML_PRODUCTS_ENABLED = "custom.alkis.products.html.enabled";
-    // --
+    public static final String ALKIS_SOAP_OVER_CSA = "alkisSoapTunnelAction";
 
     //~ Methods ----------------------------------------------------------------
 
+    // --
     /**
      * DOCUMENT ME!
      *
@@ -269,7 +283,9 @@ public class AlkisUtils {
     public static String arrayToSeparatedString(final String[] strings, final String separator) {
         if (strings != null) {
             final StringBuilder result = new StringBuilder();
-            for (int i = 0; i < strings.length; /**incremented in loop**/) {
+            for (int i = 0; i < strings.length; /**
+                                                 * incremented in loop*
+                                                 */) {
                 result.append(strings[i]);
                 if (++i < strings.length) {
                     result.append(separator);
@@ -572,5 +588,72 @@ public class AlkisUtils {
             log.error("Could not validate action tag for Alkis HTML Products!", ex);
         }
         return false;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static boolean validateUserShouldUseAlkisSOAPServerActions() {
+        try {
+            return SessionManager.getConnection()
+                        .getConfigAttr(SessionManager.getSession().getUser(),
+                                DomainServerImpl.SERVER_ACTION_PERMISSION_ATTRIBUTE_PREFIX
+                                + ALKIS_SOAP_OVER_CSA)
+                        != null;
+        } catch (ConnectionException ex) {
+            log.error("Could not validate action tag for Alkis SOAP CSA Calls!", ex);
+        }
+        return false;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   pointCode  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public static Point getPointFromAlkisSOAPServerAction(final String pointCode) throws Exception {
+        final ServerActionParameter pointCodeSAP = new ServerActionParameter<String>(
+                ServerAlkisSoapAction.RETURN_VALUE.POINT.toString(),
+                pointCode);
+        final Object body = ServerAlkisSoapAction.RETURN_VALUE.POINT;
+
+        final Point result = (Point)SessionManager.getProxy()
+                    .executeTask(
+                            ALKIS_SOAP_OVER_CSA,
+                            "WUNDA_BLAU",
+                            body,
+                            pointCodeSAP);
+        return result;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   buchungsblattCode  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public static Buchungsblatt getBuchungsblattFromAlkisSOAPServerAction(final String buchungsblattCode)
+            throws Exception {
+        final ServerActionParameter buchungsblattCodeSAP = new ServerActionParameter<String>(
+                ServerAlkisSoapAction.RETURN_VALUE.BUCHUNGSBLATT.toString(),
+                buchungsblattCode);
+        final Object body = ServerAlkisSoapAction.RETURN_VALUE.BUCHUNGSBLATT;
+
+        final Buchungsblatt result = (Buchungsblatt)SessionManager.getProxy()
+                    .executeTask(
+                            ALKIS_SOAP_OVER_CSA,
+                            "WUNDA_BLAU",
+                            body,
+                            buchungsblattCodeSAP);
+        return result;
     }
 }
