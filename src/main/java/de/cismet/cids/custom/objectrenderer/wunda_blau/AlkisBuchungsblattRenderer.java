@@ -267,11 +267,14 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         map.setOpaque(false);
         landParcelList = TypeSafeCollections.newArrayList();
         productPreviewImages = TypeSafeCollections.newHashMap();
-        try {
-            soapProvider = new SOAPAccessProvider();
-            infoService = soapProvider.getAlkisInfoService();
-        } catch (Exception ex) {
-            log.fatal(ex, ex);
+
+        if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions()) {
+            try {
+                soapProvider = new SOAPAccessProvider();
+                infoService = soapProvider.getAlkisInfoService();
+            } catch (Exception ex) {
+                log.fatal(ex, ex);
+            }
         }
         initIcons();
         initComponents();
@@ -1925,6 +1928,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         }
         map.dispose();
     }
+
     /**
      * final class GeomQueryWorker extends SwingWorker<List<MetaObject>, Void> { @Override protected List<MetaObject>
      * doInBackground() throws Exception { //set dummy to avoid multiple worker calls realLandParcelMetaObjectsCache =
@@ -1998,9 +2002,14 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         protected Buchungsblatt doInBackground() throws Exception {
             setWaiting(true);
             epOwner.setText("Wird geladen...");
-            return infoService.getBuchungsblatt(soapProvider.getIdentityCard(),
-                    soapProvider.getService(),
-                    fixBuchungslattCode(String.valueOf(bean.getProperty("buchungsblattcode"))));
+            if (infoService != null) {
+                return infoService.getBuchungsblatt(soapProvider.getIdentityCard(),
+                        soapProvider.getService(),
+                        fixBuchungslattCode(String.valueOf(bean.getProperty("buchungsblattcode"))));
+            } else {
+                return AlkisUtils.getBuchungsblattFromAlkisSOAPServerAction(AlkisBuchungsblattRenderer
+                                .fixBuchungslattCode(String.valueOf(bean.getProperty("buchungsblattcode"))));
+            }
         }
 
         /**

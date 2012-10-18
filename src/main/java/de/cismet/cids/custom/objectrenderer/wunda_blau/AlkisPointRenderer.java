@@ -16,6 +16,7 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import com.sun.media.jai.codec.ImageCodec;
@@ -24,6 +25,7 @@ import com.sun.media.jai.codec.TIFFDecodeParam;
 
 import com.vividsolutions.jts.geom.Geometry;
 
+import de.aedsicad.aaaweb.client.alkis.AlkisUtil;
 import de.aedsicad.aaaweb.service.alkis.info.ALKISInfoServices;
 import de.aedsicad.aaaweb.service.util.Point;
 import de.aedsicad.aaaweb.service.util.PointLocation;
@@ -31,6 +33,8 @@ import de.aedsicad.aaaweb.service.util.PointLocation;
 import org.jdesktop.beansbinding.Converter;
 import org.jdesktop.swingx.error.ErrorInfo;
 import org.jdesktop.swingx.graphics.ReflectionRenderer;
+
+import org.mortbay.jetty.SessionIdManager;
 
 import org.openide.util.Exceptions;
 
@@ -144,7 +148,6 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
 //    private ImageIcon BACKWARD_SELECTED;
     private static final Color PUNKTORT_MIT_KARTENDARSTELLUNG = new Color(120, 255, 190);
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisPointRenderer.class);
-
     public static final String[] SUFFIXES = new String[] { "tif", "jpg", "tiff", "jpeg" };
     protected static final String POINTTYPE_AUFNAHMEPUNKT = "Aufnahmepunkt";
     protected static final String POINTTYPE_SONSTIGERVERMESSUNGSPUNKT = "Sonstiger Vermessungspunkt";
@@ -161,7 +164,6 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
             AlkisConstants.COMMONS.SRS_SERVICE,
             true,
             true);
-
     private static final Converter<String, String> ALKIS_BOOLEAN_CONVERTER = new Converter<String, String>() {
 
             private static final String TRUE_REP = "Ja";
@@ -453,12 +455,14 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
     public AlkisPointRenderer() {
         retrieveableLabels = TypeSafeCollections.newArrayList();
         productPreviewImages = TypeSafeCollections.newHashMap();
-        try {
-            soapProvider = new SOAPAccessProvider();
-//            searchService = soapProvider.getAlkisSearchService();
-            infoService = soapProvider.getAlkisInfoService();
-        } catch (Exception ex) {
-            log.fatal(ex, ex);
+
+        if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions()) {
+            try {
+                soapProvider = new SOAPAccessProvider();
+                infoService = soapProvider.getAlkisInfoService();
+            } catch (Exception ex) {
+                log.fatal(ex, ex);
+            }
         }
         initIcons();
         initComponents();
@@ -2451,9 +2455,9 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
                 "admin",
                 "sb",
                 "alkis_point",
-//                548516,
+                // 548516,
                 574043,
-//                1,
+                // 1,
                 "ALKIS-Punkt-Renderer",
                 1024,
                 768);
@@ -2499,7 +2503,11 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
          */
         @Override
         protected Point doInBackground() throws Exception {
-            return infoService.getPoint(soapProvider.getIdentityCard(), soapProvider.getService(), pointCode);
+            if (infoService != null) {
+                return infoService.getPoint(soapProvider.getIdentityCard(), soapProvider.getService(), pointCode);
+            } else {
+                return AlkisUtils.getPointFromAlkisSOAPServerAction(pointCode);
+            }
         }
 
         /**
