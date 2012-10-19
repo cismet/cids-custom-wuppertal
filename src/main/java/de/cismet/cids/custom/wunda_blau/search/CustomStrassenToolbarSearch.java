@@ -87,7 +87,7 @@ public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
     /**
      * DOCUMENT ME!
      *
-     * @param  toolbarSearchString  DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     @Override
     public String getHint() {
@@ -102,7 +102,7 @@ public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
     /**
      * DOCUMENT ME!
      *
-     * @return  DOCUMENT ME!
+     * @param  modifiers  DOCUMENT ME!
      */
     @Override
     public void applyModifiers(final Collection<? extends Modifier> modifiers) {
