@@ -348,7 +348,9 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         productPreviewImages = TypeSafeCollections.newHashMap();
         gotoBeanMap = TypeSafeCollections.newHashMap();
         initIcons();
-        initSoapServiceAccess();
+        if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions()) {
+            initSoapServiceAccess();
+        }
         initComponents();
         initFooterElements();
         initProductPreview();
@@ -568,9 +570,14 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
                 final String buchungsblattcode = String.valueOf(buchungsblattBean.getProperty("buchungsblattcode"));
                 if ((buchungsblattcode != null) && (buchungsblattcode.length() > 5)) {
                     if (!demoMode) {
-                        buchungsblatt = infoService.getBuchungsblatt(soapProvider.getIdentityCard(),
-                                soapProvider.getService(),
-                                AlkisBuchungsblattRenderer.fixBuchungslattCode(buchungsblattcode));
+                        if (infoService != null) {
+                            buchungsblatt = infoService.getBuchungsblatt(soapProvider.getIdentityCard(),
+                                    soapProvider.getService(),
+                                    AlkisBuchungsblattRenderer.fixBuchungslattCode(buchungsblattcode));
+                        } else {
+                            buchungsblatt = AlkisUtils.getBuchungsblattFromAlkisSOAPServerAction(
+                                    AlkisBuchungsblattRenderer.fixBuchungslattCode(buchungsblattcode));
+                        }
                     } else {
                         final Owner o = new Owner();
                         o.setForeName("***");
