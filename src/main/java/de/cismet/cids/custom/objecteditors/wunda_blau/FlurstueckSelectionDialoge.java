@@ -431,13 +431,14 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
         if (selection instanceof LightweightMetaObject) {
             final CidsBean selectedBean = ((LightweightMetaObject)selection).getBean();
             if (currentListToAdd != null) {
-                final int position = Collections.binarySearch(
-                        currentListToAdd,
-                        selectedBean,
-                        AlphanumComparator.getInstance());
-                if (position < 0) {
-                    currentListToAdd.add(-position - 1, selectedBean);
-                }
+                currentListToAdd.add(selectedBean);
+//                final int position = Collections.binarySearch(
+//                        currentListToAdd,
+//                        selectedBean,
+//                        AlphanumComparator.getInstance());
+//                if (position < 0) {
+//                    currentListToAdd.add(-position - 1, selectedBean);
+//                }
             }
         } else if ((selection instanceof String) && createEnabled) {
             final int result = JOptionPane.showConfirmDialog(
