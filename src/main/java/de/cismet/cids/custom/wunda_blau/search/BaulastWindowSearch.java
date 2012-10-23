@@ -522,8 +522,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         if (chkKartenausschnitt.isSelected()) {
             final XBoundingBox bb = (XBoundingBox)CismapBroker.getInstance().getMappingComponent()
                         .getCurrentBoundingBox();
-            final Geometry g = CrsTransformer.transformToDefaultCrs(bb.getGeometry());
-            bsi.setBounds(g.toText());
+            bsi.setGeometry(CrsTransformer.transformToDefaultCrs(bb.getGeometry()));
         }
         bsi.setBelastet(chkBelastet.isSelected());
         bsi.setBeguenstigt(chkBeguenstigt.isSelected());

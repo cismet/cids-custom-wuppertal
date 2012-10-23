@@ -1456,11 +1456,12 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
             }
         }
 
-        String geometryString = null;
+        final Geometry transformedBoundingBox;
         if (geometryToSearchFor != null) {
-            final Geometry transformedBoundingBox = CrsTransformer.transformToDefaultCrs(geometryToSearchFor);
+            transformedBoundingBox = CrsTransformer.transformToDefaultCrs(geometryToSearchFor);
             transformedBoundingBox.setSRID(CismapBroker.getInstance().getDefaultCrsAlias());
-            geometryString = PostGisGeometryFactory.getPostGisCompliantDbString(transformedBoundingBox);
+        } else {
+            transformedBoundingBox = null;
         }
 
         return new CidsVermessungRissSearchStatement(
@@ -1469,7 +1470,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                 flur,
                 blatt,
                 schluesselCollection,
-                geometryString,
+                transformedBoundingBox,
                 flurstuecke);
     }
 
