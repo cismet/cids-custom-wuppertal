@@ -1506,14 +1506,15 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
             }
         }
 
-        String geometryString = null;
+        final Geometry transformedBoundingBox;
         if (geometryToSearchFor != null) {
-            final Geometry transformedBoundingBox = CrsTransformer.transformToDefaultCrs(geometryToSearchFor);
+            transformedBoundingBox = CrsTransformer.transformToDefaultCrs(geometryToSearchFor);
             transformedBoundingBox.setSRID(CismapBroker.getInstance().getDefaultCrsAlias());
-            geometryString = PostGisGeometryFactory.getPostGisCompliantDbString(transformedBoundingBox);
+        } else {
+            transformedBoundingBox = null;
         }
 
-        return new CidsMeasurementPointSearchStatement(txtPointcode.getText(), pointtypes, gst, geometryString);
+        return new CidsMeasurementPointSearchStatement(txtPointcode.getText(), pointtypes, gst, transformedBoundingBox);
     }
 
     /**
