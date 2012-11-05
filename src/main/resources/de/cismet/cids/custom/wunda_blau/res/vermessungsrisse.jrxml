@@ -108,7 +108,7 @@
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$P{PROJECTNAME}]]></textFieldExpression>
 				</textField>
-				<textField evaluationTime="null" isBlankWhenNull="true">
+				<textField evaluationTime="Report" isBlankWhenNull="true">
 					<reportElement mode="Transparent" x="307" y="89" width="240" height="20"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle"/>
 					<textFieldExpression class="java.lang.String"><![CDATA[DateFormat.getDateInstance(DateFormat.LONG).format($V{DATE}) + ", " + DateFormat.getTimeInstance(DateFormat.SHORT).format($V{DATE}) + " Uhr"]]></textFieldExpression>
