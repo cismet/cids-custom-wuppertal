@@ -24,12 +24,13 @@
 package de.cismet.cids.custom.wunda_blau.search;
 
 import Sirius.server.middleware.interfaces.domainserver.MetaService;
-import Sirius.server.search.CidsServerSearch;
 
 import java.rmi.RemoteException;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+import de.cismet.cids.server.search.AbstractCidsServerSearch;
 
 /**
  * DOCUMENT ME!
@@ -37,7 +38,7 @@ import java.util.Collection;
  * @author   stefan
  * @version  $Revision$, $Date$
  */
-public class Alb_BaulastblattChecker extends CidsServerSearch {
+public class Alb_BaulastblattChecker extends AbstractCidsServerSearch {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -61,7 +62,7 @@ public class Alb_BaulastblattChecker extends CidsServerSearch {
 
     @Override
     public Collection performServerSearch() {
-        final MetaService ms = (MetaService)getActiveLoaclServers().get("WUNDA_BLAU");
+        final MetaService ms = (MetaService)getActiveLocalServers().get("WUNDA_BLAU");
         if (ms != null) {
             try {
                 final ArrayList<ArrayList> lists = ms.performCustomSearch(searchQuery);

@@ -7,11 +7,9 @@
 ****************************************************/
 package de.cismet.cids.custom.wunda_blau.search;
 
-import Sirius.navigator.Navigator;
 import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.MetaClass;
-import Sirius.server.search.CidsServerSearch;
 
 import com.explodingpixels.macwidgets.HudWidgetFactory;
 import com.explodingpixels.macwidgets.HudWindow;
@@ -30,6 +28,8 @@ import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.wunda_blau.search.server.CustomStrassenSearchStatement;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+
+import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
 import de.cismet.cids.tools.search.clientstuff.CidsToolbarSearch;
 
@@ -106,7 +106,7 @@ public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
      * @return  DOCUMENT ME!
      */
     @Override
-    public CidsServerSearch getServerSearch() {
+    public MetaObjectNodeServerSearch getServerSearch() {
         if (searchString.startsWith("str ")) {
             searchString = searchString.substring(4);
             final HudWindow hud = new HudWindow("Straßensuche");
