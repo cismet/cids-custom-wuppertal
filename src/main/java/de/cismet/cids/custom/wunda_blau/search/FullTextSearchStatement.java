@@ -24,13 +24,15 @@
 package de.cismet.cids.custom.wunda_blau.search;
 
 import Sirius.server.middleware.interfaces.domainserver.MetaService;
-import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObjectNode;
-import Sirius.server.middleware.types.Node;
-import Sirius.server.search.CidsServerSearch;
+
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+import de.cismet.cids.server.search.AbstractCidsServerSearch;
+import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
 /**
  * DOCUMENT ME!
@@ -38,7 +40,12 @@ import java.util.Collection;
  * @author   thorsten
  * @version  $Revision$, $Date$
  */
-public class FullTextSearchStatement extends CidsServerSearch {
+public class FullTextSearchStatement extends AbstractCidsServerSearch implements MetaObjectNodeServerSearch {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    /** LOGGER. */
+    private static final transient Logger LOG = Logger.getLogger(FullTextSearchStatement.class);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -58,7 +65,7 @@ public class FullTextSearchStatement extends CidsServerSearch {
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public Collection performServerSearch() {
+    public Collection<MetaObjectNode> performServerSearch() {
         try {
             final String classes = "6";
 
@@ -107,16 +114,16 @@ public class FullTextSearchStatement extends CidsServerSearch {
                         + "FROM   derived_index "
                         + "WHERE  ocid IN (" + classes + ") "
                         + "LIMIT  1000;";
-            if (getLog().isDebugEnabled()) {
-                getLog().debug("search started ");
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("search started ");
             }
 
-            getLog().fatal(sql);
-            final MetaService ms = (MetaService)getActiveLoaclServers().get("WUNDA_BLAU");
+            LOG.fatal(sql);
+            final MetaService ms = (MetaService)getActiveLocalServers().get("WUNDA_BLAU");
 
             final ArrayList<ArrayList> result = ms.performCustomSearch(sql);
 
-            final ArrayList<Node> aln = new ArrayList<Node>();
+            final ArrayList<MetaObjectNode> aln = new ArrayList<MetaObjectNode>();
             for (final ArrayList al : result) {
                 final int cid = (Integer)al.get(0);
                 final int oid = (Integer)al.get(1);
@@ -124,10 +131,10 @@ public class FullTextSearchStatement extends CidsServerSearch {
 
                 aln.add(mon);
             }
-            // Thread.sleep(5000);
+
             return aln;
         } catch (Exception e) {
-            getLog().error("Problem", e);
+            LOG.error("Problem", e);
             return null;
         }
     }
