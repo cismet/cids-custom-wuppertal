@@ -17,20 +17,9 @@ import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.search.dynamic.SearchControlListener;
 import Sirius.navigator.search.dynamic.SearchControlPanel;
-import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
-import Sirius.server.middleware.types.Node;
-import Sirius.server.search.CidsServerSearch;
-
-import com.vividsolutions.jts.geom.Geometry;
-
-import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
-
-import java.awt.Component;
-import java.awt.EventQueue;
-import java.awt.HeadlessException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,8 +30,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
-
-import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objecteditors.wunda_blau.FlurstueckSelectionDialoge;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
@@ -57,6 +44,8 @@ import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+
+import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
 
@@ -542,7 +531,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
      * @return  DOCUMENT ME!
      */
     @Override
-    public CidsServerSearch getServerSearch() {
+    public MetaObjectNodeServerSearch getServerSearch() {
         final BaulastSearchInfo bsi = getBaulastInfoFromGUI();
         for (int i = 0; i < flurstuecksFilterModel.size(); ++i) {
             final CidsBean fsBean = (CidsBean)flurstuecksFilterModel.getElementAt(i);
@@ -611,8 +600,8 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     }
 
     @Override
-    public CidsServerSearch assembleSearch() {
-        CidsServerSearch result = null;
+    public MetaObjectNodeServerSearch assembleSearch() {
+        MetaObjectNodeServerSearch result = null;
 
         final BaulastSearchInfo bsi = getBaulastInfoFromGUI();
         final boolean keineBlattNummer = (bsi.getBlattnummer() == null) || (bsi.getBlattnummer().trim().length() == 0);

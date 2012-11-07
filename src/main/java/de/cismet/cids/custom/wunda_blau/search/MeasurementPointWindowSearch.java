@@ -17,7 +17,6 @@ import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
-import Sirius.server.search.CidsServerSearch;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
@@ -55,6 +54,9 @@ import de.cismet.cids.custom.wunda_blau.search.server.CidsMeasurementPointSearch
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.search.AbstractCidsServerSearch;
+import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
+
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
 
 import de.cismet.cismap.commons.CrsTransformer;
@@ -69,7 +71,6 @@ import de.cismet.cismap.commons.gui.piccolo.eventlistener.CreateGeometryListener
 import de.cismet.cismap.commons.gui.piccolo.eventlistener.CreateSearchGeometryListener;
 import de.cismet.cismap.commons.gui.piccolo.eventlistener.MetaSearchCreateSearchGeometryListener;
 import de.cismet.cismap.commons.interaction.CismapBroker;
-import de.cismet.cismap.commons.jtsgeometryfactories.PostGisGeometryFactory;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 
@@ -1426,8 +1427,8 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
 
         if (MeasurementPointCreateSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
             if ((evt.getNewValue() != null) && (evt.getNewValue() instanceof Geometry)) {
-                final CidsServerSearch cidsServerSearch = getServerSearch((Geometry)evt.getNewValue());
-                CidsSearchExecutor.searchAndDisplayResultsWithDialog(cidsServerSearch);
+                final MetaObjectNodeServerSearch search = getServerSearch((Geometry)evt.getNewValue());
+                CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);
             }
         }
     }
@@ -1448,7 +1449,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
      * @return  DOCUMENT ME!
      */
     @Override
-    public CidsServerSearch getServerSearch() {
+    public MetaObjectNodeServerSearch getServerSearch() {
         return getServerSearch(null);
     }
 
@@ -1459,7 +1460,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
      *
      * @return  DOCUMENT ME!
      */
-    public CidsServerSearch getServerSearch(final Geometry geometry) {
+    public MetaObjectNodeServerSearch getServerSearch(final Geometry geometry) {
         final Collection<Pointtype> pointtypes = new LinkedList<Pointtype>();
 
         if (chkAufnahmepunkte.isSelected()) {
@@ -1553,7 +1554,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
      * @return  DOCUMENT ME!
      */
     @Override
-    public CidsServerSearch assembleSearch() {
+    public MetaObjectNodeServerSearch assembleSearch() {
         return getServerSearch();
     }
 

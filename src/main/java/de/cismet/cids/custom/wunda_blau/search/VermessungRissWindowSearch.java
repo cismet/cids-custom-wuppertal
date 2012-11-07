@@ -17,7 +17,6 @@ import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
-import Sirius.server.search.CidsServerSearch;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
@@ -62,6 +61,8 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
+import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
+
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
 
 import de.cismet.cismap.commons.CrsTransformer;
@@ -76,7 +77,6 @@ import de.cismet.cismap.commons.gui.piccolo.eventlistener.CreateGeometryListener
 import de.cismet.cismap.commons.gui.piccolo.eventlistener.CreateSearchGeometryListener;
 import de.cismet.cismap.commons.gui.piccolo.eventlistener.MetaSearchCreateSearchGeometryListener;
 import de.cismet.cismap.commons.interaction.CismapBroker;
-import de.cismet.cismap.commons.jtsgeometryfactories.PostGisGeometryFactory;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 
@@ -1320,8 +1320,8 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
 
         if (VermessungRissCreateSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
             if ((evt.getNewValue() != null) && (evt.getNewValue() instanceof Geometry)) {
-                final CidsServerSearch cidsServerSearch = getServerSearch((Geometry)evt.getNewValue());
-                CidsSearchExecutor.searchAndDisplayResultsWithDialog(cidsServerSearch);
+                final MetaObjectNodeServerSearch search = getServerSearch((Geometry)evt.getNewValue());
+                CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);
             }
         }
     }
@@ -1332,7 +1332,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     }
 
     @Override
-    public CidsServerSearch getServerSearch() {
+    public MetaObjectNodeServerSearch getServerSearch() {
         return getServerSearch(null);
     }
 
@@ -1343,7 +1343,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
      *
      * @return  DOCUMENT ME!
      */
-    public CidsServerSearch getServerSearch(final Geometry geometry) {
+    public MetaObjectNodeServerSearch getServerSearch(final Geometry geometry) {
         final String schluessel = txtSchluessel.getText();
         final String gemarkung = txtGemarkung.getText();
         final String flur = txtFlur.getText();
@@ -1490,7 +1490,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     }
 
     @Override
-    public CidsServerSearch assembleSearch() {
+    public MetaObjectNodeServerSearch assembleSearch() {
         return getServerSearch();
     }
 
