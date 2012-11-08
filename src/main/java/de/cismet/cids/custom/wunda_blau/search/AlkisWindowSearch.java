@@ -17,8 +17,6 @@ import Sirius.navigator.search.dynamic.SearchControlListener;
 import Sirius.navigator.search.dynamic.SearchControlPanel;
 
 import Sirius.server.middleware.types.MetaClass;
-import Sirius.server.middleware.types.Node;
-import Sirius.server.search.CidsServerSearch;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -32,6 +30,8 @@ import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsAlkisSearchStatement;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+
+import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
 
@@ -716,7 +716,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
      * @return  DOCUMENT ME!
      */
     @Override
-    public CidsServerSearch getServerSearch() {
+    public MetaObjectNodeServerSearch getServerSearch() {
         Geometry searchgeom = null;
         if (chkGeomFilter.isSelected()) {
             final Geometry g = ((XBoundingBox)CismapBroker.getInstance().getMappingComponent().getCurrentBoundingBox())
@@ -798,7 +798,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
      * @return  DOCUMENT ME!
      */
     @Override
-    public CidsServerSearch assembleSearch() {
+    public MetaObjectNodeServerSearch assembleSearch() {
         return getServerSearch();
     }
 
