@@ -101,15 +101,14 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(VermessungRissWindowSearch.class);
-
     private static final String ACTION_TAG = "custom.alkis.windowsearch@WUNDA_BLAU";
 
     //~ Instance fields --------------------------------------------------------
 
-    private final boolean geoSearchEnabled;
-    private final MetaClass metaClass;
+    private boolean geoSearchEnabled;
+    private MetaClass metaClass;
     private ImageIcon icon;
-    private final MappingComponent mappingComponent;
+    private MappingComponent mappingComponent;
     private SearchControlPanel pnlSearchCancel;
     private CidsBeanDropJPopupMenuButton btnGeoSearch;
     private VermessungFlurstueckSelectionDialog flurstueckDialog;
@@ -118,7 +117,6 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     private ImageIcon icoPluginPolygon;
     private ImageIcon icoPluginEllipse;
     private ImageIcon icoPluginPolyline;
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrSearch;
     private javax.swing.JButton btnAddFlurstueck;
@@ -172,104 +170,115 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
      * Creates new form VermessungRissWindowSearch.
      */
     public VermessungRissWindowSearch() {
-        mappingComponent = CismapBroker.getInstance().getMappingComponent();
-        geoSearchEnabled = mappingComponent != null;
-        metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "vermessung_riss");
+        try {
+            mappingComponent = CismapBroker.getInstance().getMappingComponent();
+            geoSearchEnabled = mappingComponent != null;
+            metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "vermessung_riss");
 
-        byte[] iconDataFromMetaclass = new byte[] {};
+            if (metaClass != null) {
+                byte[] iconDataFromMetaclass = new byte[] {};
 
-        if (metaClass != null) {
-            iconDataFromMetaclass = metaClass.getIconData();
-        }
+                if (metaClass != null) {
+                    iconDataFromMetaclass = metaClass.getIconData();
+                }
 
-        if (iconDataFromMetaclass.length > 0) {
-            LOG.info("Using icon from metaclass.");
-            icon = new ImageIcon(metaClass.getIconData());
-        } else {
-            LOG.warn("Metaclass icon is not set. Trying to load default icon.");
-            final URL urlToIcon = getClass().getResource("/de/cismet/cids/custom/wunda_blau/search/search.png");
+                if (iconDataFromMetaclass.length > 0) {
+                    LOG.info("Using icon from metaclass.");
+                    icon = new ImageIcon(metaClass.getIconData());
+                } else {
+                    LOG.warn("Metaclass icon is not set. Trying to load default icon.");
+                    final URL urlToIcon = getClass().getResource("/de/cismet/cids/custom/wunda_blau/search/search.png");
 
-            if (urlToIcon != null) {
-                icon = new ImageIcon(urlToIcon);
-            } else {
-                icon = new ImageIcon(new byte[] {});
-            }
-        }
-
-        icoPluginRectangle = new ImageIcon(getClass().getResource("/images/pluginSearchRectangle.png"));
-        icoPluginPolygon = new ImageIcon(getClass().getResource("/images/pluginSearchPolygon.png"));
-        icoPluginEllipse = new ImageIcon(getClass().getResource("/images/pluginSearchEllipse.png"));
-        icoPluginPolyline = new ImageIcon(getClass().getResource("/images/pluginSearchPolyline.png"));
-
-        initComponents();
-
-        pnlSearchCancel = new SearchControlPanel(this);
-        final Dimension max = pnlSearchCancel.getMaximumSize();
-        final Dimension min = pnlSearchCancel.getMinimumSize();
-        final Dimension pre = pnlSearchCancel.getPreferredSize();
-        pnlSearchCancel.setMaximumSize(new java.awt.Dimension(
-                new Double(max.getWidth()).intValue(),
-                new Double(max.getHeight() + 6).intValue()));
-        pnlSearchCancel.setMinimumSize(new java.awt.Dimension(
-                new Double(min.getWidth()).intValue(),
-                new Double(min.getHeight() + 6).intValue()));
-        pnlSearchCancel.setPreferredSize(new java.awt.Dimension(
-                new Double(pre.getWidth() + 6).intValue(),
-                new Double(pre.getHeight() + 6).intValue()));
-        pnlButtons.add(pnlSearchCancel);
-
-        if (geoSearchEnabled) {
-            final VermessungRissCreateSearchGeometryListener vermessungRissCreateSearchGeometryListener =
-                new VermessungRissCreateSearchGeometryListener(mappingComponent, new VermessungRissSearchTooltip(icon));
-            vermessungRissCreateSearchGeometryListener.addPropertyChangeListener(this);
-
-            pnlButtons.add(Box.createHorizontalStrut(5));
-
-            btnGeoSearch = new CidsBeanDropJPopupMenuButton(
-                    VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY,
-                    mappingComponent,
-                    null);
-            btnGeoSearch.addActionListener(new java.awt.event.ActionListener() {
-
-                    @Override
-                    public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                        btnGeoSearchActionPerformed(evt);
-                    }
-                });
-            btnGeoSearch.setToolTipText(org.openide.util.NbBundle.getMessage(
-                    VermessungRissWindowSearch.class,
-                    "VermessungRissWindowSearch.btnGeoSearch.toolTipText"));
-            ((JPopupMenuButton)btnGeoSearch).setPopupMenu(popMenSearch);
-            btnGeoSearch.setFocusPainted(false);
-            pnlButtons.add(btnGeoSearch);
-
-            visualizeSearchMode((MetaSearchCreateSearchGeometryListener)mappingComponent.getInputListener(
-                    MappingComponent.CREATE_SEARCH_POLYGON));
-            mappingComponent.getInteractionButtonGroup().add(btnGeoSearch);
-            new CidsBeanDropTarget(btnGeoSearch);
-
-            ((CidsBeanDropJPopupMenuButton)btnGeoSearch).setTargetIcon(new javax.swing.ImageIcon(
-                    getClass().getResource("/images/pluginSearchTarget.png")));
-        } else {
-            chkSearchInCismap.setVisible(false);
-        }
-
-        flurstuecksvermessungFilterModel = new DefaultListModel();
-        lstFlurstuecke.setModel(flurstuecksvermessungFilterModel);
-
-        flurstueckDialog = new VermessungFlurstueckSelectionDialog(false) {
-
-                @Override
-                public void okHook() {
-                    flurstuecksvermessungFilterModel.clear();
-
-                    for (final CidsBean flurstuecksvermessung : getCurrentListToAdd()) {
-                        flurstuecksvermessungFilterModel.addElement(flurstuecksvermessung);
+                    if (urlToIcon != null) {
+                        icon = new ImageIcon(urlToIcon);
+                    } else {
+                        icon = new ImageIcon(new byte[] {});
                     }
                 }
-            };
 
-        flurstueckDialog.pack();
+                icoPluginRectangle = new ImageIcon(getClass().getResource("/images/pluginSearchRectangle.png"));
+                icoPluginPolygon = new ImageIcon(getClass().getResource("/images/pluginSearchPolygon.png"));
+                icoPluginEllipse = new ImageIcon(getClass().getResource("/images/pluginSearchEllipse.png"));
+                icoPluginPolyline = new ImageIcon(getClass().getResource("/images/pluginSearchPolyline.png"));
+
+                initComponents();
+
+                pnlSearchCancel = new SearchControlPanel(this);
+                final Dimension max = pnlSearchCancel.getMaximumSize();
+                final Dimension min = pnlSearchCancel.getMinimumSize();
+                final Dimension pre = pnlSearchCancel.getPreferredSize();
+                pnlSearchCancel.setMaximumSize(new java.awt.Dimension(
+                        new Double(max.getWidth()).intValue(),
+                        new Double(max.getHeight() + 6).intValue()));
+                pnlSearchCancel.setMinimumSize(new java.awt.Dimension(
+                        new Double(min.getWidth()).intValue(),
+                        new Double(min.getHeight() + 6).intValue()));
+                pnlSearchCancel.setPreferredSize(new java.awt.Dimension(
+                        new Double(pre.getWidth() + 6).intValue(),
+                        new Double(pre.getHeight() + 6).intValue()));
+                pnlButtons.add(pnlSearchCancel);
+
+                if (geoSearchEnabled) {
+                    final VermessungRissCreateSearchGeometryListener vermessungRissCreateSearchGeometryListener =
+                        new VermessungRissCreateSearchGeometryListener(
+                            mappingComponent,
+                            new VermessungRissSearchTooltip(icon));
+                    vermessungRissCreateSearchGeometryListener.addPropertyChangeListener(this);
+
+                    pnlButtons.add(Box.createHorizontalStrut(5));
+
+                    btnGeoSearch = new CidsBeanDropJPopupMenuButton(
+                            VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY,
+                            mappingComponent,
+                            null);
+                    btnGeoSearch.addActionListener(new java.awt.event.ActionListener() {
+
+                            @Override
+                            public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                                btnGeoSearchActionPerformed(evt);
+                            }
+                        });
+                    btnGeoSearch.setToolTipText(org.openide.util.NbBundle.getMessage(
+                            VermessungRissWindowSearch.class,
+                            "VermessungRissWindowSearch.btnGeoSearch.toolTipText"));
+                    ((JPopupMenuButton)btnGeoSearch).setPopupMenu(popMenSearch);
+                    btnGeoSearch.setFocusPainted(false);
+                    pnlButtons.add(btnGeoSearch);
+
+                    visualizeSearchMode((MetaSearchCreateSearchGeometryListener)mappingComponent.getInputListener(
+                            MappingComponent.CREATE_SEARCH_POLYGON));
+                    mappingComponent.getInteractionButtonGroup().add(btnGeoSearch);
+                    new CidsBeanDropTarget(btnGeoSearch);
+
+                    ((CidsBeanDropJPopupMenuButton)btnGeoSearch).setTargetIcon(new javax.swing.ImageIcon(
+                            getClass().getResource("/images/pluginSearchTarget.png")));
+                } else {
+                    chkSearchInCismap.setVisible(false);
+                }
+
+                flurstuecksvermessungFilterModel = new DefaultListModel();
+                lstFlurstuecke.setModel(flurstuecksvermessungFilterModel);
+
+                flurstueckDialog = new VermessungFlurstueckSelectionDialog(false) {
+
+                        @Override
+                        public void okHook() {
+                            flurstuecksvermessungFilterModel.clear();
+
+                            for (final CidsBean flurstuecksvermessung : getCurrentListToAdd()) {
+                                flurstuecksvermessungFilterModel.addElement(flurstuecksvermessung);
+                            }
+                        }
+                    };
+
+                flurstueckDialog.pack();
+            }
+        } catch (Throwable e) {
+            LOG.warn("Error in Constructor of VermessungsRissWindowSearch. Search will not work properly.", e);
+            geoSearchEnabled = false;
+            metaClass = null;
+            mappingComponent = null;
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -1237,6 +1246,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                 }
             });
     }
+
     /**
      * DOCUMENT ME!
      */
