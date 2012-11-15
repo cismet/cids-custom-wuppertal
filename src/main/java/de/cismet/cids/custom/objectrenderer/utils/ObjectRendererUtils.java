@@ -329,7 +329,7 @@ public class ObjectRendererUtils {
                 return SessionManager.getProxy()
                             .getLightweightMetaObjectsByQuery(mc.getID(), user, query, fields, formatter);
             } else {
-                log.error("Can not find MetaClass for Tablename: " + tabName);
+                log.error("Can not find MetaClass for Tablename: " + tabName, new Exception());
             }
         } catch (Exception ex) {
             log.error(ex, ex);
