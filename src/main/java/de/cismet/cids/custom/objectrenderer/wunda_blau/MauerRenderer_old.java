@@ -862,16 +862,18 @@ public class MauerRenderer_old extends BlurredMapObjectRenderer implements Reque
 
         panSpinner.setOpaque(false);
 
-        javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
+        final javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
         panSpinner.setLayout(panSpinnerLayout);
         panSpinnerLayout.setHorizontalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
         panSpinnerLayout.setVerticalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                0,
+                Short.MAX_VALUE));
 
         panMap.add(panSpinner, new java.awt.GridBagConstraints());
 
@@ -880,16 +882,18 @@ public class MauerRenderer_old extends BlurredMapObjectRenderer implements Reque
         panInter.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 5, 1));
         panInter.setOpaque(false);
 
-        javax.swing.GroupLayout panInterLayout = new javax.swing.GroupLayout(panInter);
+        final javax.swing.GroupLayout panInterLayout = new javax.swing.GroupLayout(panInter);
         panInter.setLayout(panInterLayout);
         panInterLayout.setHorizontalGroup(
-            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 589, Short.MAX_VALUE)
-        );
+            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                589,
+                Short.MAX_VALUE));
         panInterLayout.setVerticalGroup(
-            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 9, Short.MAX_VALUE)
-        );
+            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                9,
+                Short.MAX_VALUE));
 
         add(panInter, java.awt.BorderLayout.SOUTH);
 
@@ -899,22 +903,18 @@ public class MauerRenderer_old extends BlurredMapObjectRenderer implements Reque
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblTitle.setText("Mauer");
 
-        javax.swing.GroupLayout panTitleLayout = new javax.swing.GroupLayout(panTitle);
+        final javax.swing.GroupLayout panTitleLayout = new javax.swing.GroupLayout(panTitle);
         panTitle.setLayout(panTitleLayout);
         panTitleLayout.setHorizontalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panTitleLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblTitle)
-                .addContainerGap(515, Short.MAX_VALUE))
-        );
+            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addContainerGap(
+                    515,
+                    Short.MAX_VALUE)));
         panTitleLayout.setVerticalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panTitleLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblTitle)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addContainerGap(
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    Short.MAX_VALUE)));
 
         add(panTitle, java.awt.BorderLayout.NORTH);
 
@@ -1701,7 +1701,11 @@ public class MauerRenderer_old extends BlurredMapObjectRenderer implements Reque
         jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createEmptyBorder(1, 10, 10, 10), javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(255, 255, 255), new java.awt.Color(0, 0, 0))));
+        jPanel2.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+                javax.swing.BorderFactory.createEmptyBorder(1, 10, 10, 10),
+                javax.swing.BorderFactory.createEtchedBorder(
+                    new java.awt.Color(255, 255, 255),
+                    new java.awt.Color(0, 0, 0))));
         jPanel2.setOpaque(false);
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
@@ -1718,10 +1722,12 @@ public class MauerRenderer_old extends BlurredMapObjectRenderer implements Reque
         jPanel2.add(jLabel49, gridBagConstraints);
 
         jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton1ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1729,10 +1735,12 @@ public class MauerRenderer_old extends BlurredMapObjectRenderer implements Reque
         jPanel2.add(jButton1, gridBagConstraints);
 
         jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton2ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -1837,31 +1845,31 @@ public class MauerRenderer_old extends BlurredMapObjectRenderer implements Reque
         panContent.add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
         add(panContent, java.awt.BorderLayout.WEST);
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
         try {
             BrowserLauncher.openURL(prot + server + path + bild2);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         try {
             BrowserLauncher.openURL(prot + server + path + bild1);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
 }
