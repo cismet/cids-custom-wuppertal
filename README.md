@@ -1,10 +1,6 @@
 cids-custom-wuppertal
 =====================
 
-
-cids-custom-wrrl-db-mv
-======================
-
 Clientside customizations of the cids system for the city of Wuppertal.
 
 ![WuNDA Screener](http://www.cismet.de/images/projects/screener/wunda.png)
