@@ -2261,6 +2261,24 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         lblInfo.setEnabled(false);
     }//GEN-LAST:event_btnInfoActionPerformed
 
+    private void btnPrevImgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevImgActionPerformed
+        lstFotos.setSelectedIndex(lstFotos.getSelectedIndex() - 1);
+    }//GEN-LAST:event_btnPrevImgActionPerformed
+
+    private void btnNextImgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImgActionPerformed
+        lstFotos.setSelectedIndex(lstFotos.getSelectedIndex() + 1);
+    }//GEN-LAST:event_btnNextImgActionPerformed
+
+    private void lstFotosValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstFotosValueChanged
+        if (!evt.getValueIsAdjusting()) {//&& listListenerEnabled) {
+            loadFoto();
+        }
+    }//GEN-LAST:event_lstFotosValueChanged
+
+    private void tfStaerke_untenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfStaerke_untenActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfStaerke_untenActionPerformed
+
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
@@ -2479,5 +2497,326 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
     @Override
     public JComponent getFooterComponent() {
         return panFooter;
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void loadFoto() {
+        final Object fotoObj = lstFotos.getSelectedValue();
+        if (fotoCidsBean != null) {
+            fotoCidsBean.removePropertyChangeListener(listRepaintListener);
+        }
+        if (fotoObj instanceof CidsBean) {
+            fotoCidsBean = (CidsBean) fotoObj;
+            fotoCidsBean.addPropertyChangeListener(listRepaintListener);
+            final Object fileObj = fotoCidsBean.getProperty("file");
+            boolean cacheHit = false;
+            if (fileObj != null) {
+                final String file = fileObj.toString();
+                final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(file);
+                if (cachedImageRef != null) {
+                    final BufferedImage cachedImage = cachedImageRef.get();
+                    if (cachedImage != null) {
+                        cacheHit = true;
+                        image = cachedImage;
+                        showWait(true);
+                        timer.restart();
+                    }
+                }
+                if (!cacheHit) {
+                    CismetThreadPool.execute(new LoadSelectedImageWorker(file));
+                }
+            }
+        } else {
+            image = null;
+            lblPicture.setIcon(FOLDER_ICON);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version $Revision$, $Date$
+     */
+    final class LoadSelectedImageWorker extends SwingWorker<BufferedImage, Void> {
+
+        //~ Instance fields ----------------------------------------------------
+        private final String file;
+
+        //~ Constructors -------------------------------------------------------
+        /**
+         * Creates a new LoadSelectedImageWorker object.
+         *
+         * @param toLoad DOCUMENT ME!
+         */
+        public LoadSelectedImageWorker(final String toLoad) {
+            this.file = toLoad;
+            lblPicture.setText("");
+            lblPicture.setToolTipText(null);
+            showWait(true);
+        }
+
+        //~ Methods ------------------------------------------------------------
+        @Override
+        protected BufferedImage doInBackground() throws Exception {
+            if ((file != null) && (file.length() > 0)) {
+                return downloadImageFromWebDAV(file);
+            }
+            return null;
+        }
+
+        @Override
+        protected void done() {
+            try {
+                image = get();
+                if (image != null) {
+                    IMAGE_CACHE.put(file, new SoftReference<BufferedImage>(image));
+                    timer.restart();
+                } else {
+                    indicateError("Bild konnte nicht geladen werden: Unbekanntes Bildformat");
+                }
+            } catch (InterruptedException ex) {
+                image = null;
+                log.warn(ex, ex);
+            } catch (ExecutionException ex) {
+                image = null;
+                log.error(ex, ex);
+                String causeMessage = "";
+                final Throwable cause = ex.getCause();
+                if (cause != null) {
+                    causeMessage = cause.getMessage();
+                }
+                indicateError(causeMessage);
+            } finally {
+                if (image == null) {
+                    showWait(false);
+                }
+            }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param tooltip DOCUMENT ME!
+     */
+    private void indicateError(final String tooltip) {
+        lblPicture.setIcon(ERROR_ICON);
+        lblPicture.setText("Fehler beim Übertragen des Bildes!");
+        lblPicture.setToolTipText(tooltip);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param wait DOCUMENT ME!
+     */
+    private void showWait(final boolean wait) {
+        if (wait) {
+            if (!lblBusy.isBusy()) {
+                cardLayout.show(pnlFoto, "busy");
+                lblPicture.setIcon(null);
+                lblBusy.setBusy(true);
+                btnAddImg.setEnabled(false);
+                btnRemoveImg.setEnabled(false);
+                lstFotos.setEnabled(false);
+                btnPrevImg.setEnabled(false);
+                btnNextImg.setEnabled(false);
+            }
+        } else {
+            cardLayout.show(pnlFoto, "preview");
+            lblBusy.setBusy(false);
+            btnAddImg.setEnabled(true);
+            btnRemoveImg.setEnabled(true);
+            lstFotos.setEnabled(true);
+            defineButtonStatus();
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param fileName DOCUMENT ME!
+     *
+     * @return DOCUMENT ME!
+     *
+     * @throws IOException DOCUMENT ME!
+     */
+    private BufferedImage downloadImageFromWebDAV(final String fileName) throws IOException {
+        final String encodedFileName = "";// WebDavHelper.encodeURL(fileName);
+        final InputStream iStream = webDavClient.getInputStream(WEB_DAV_DIRECTORY
+                + encodedFileName);
+        if (log.isDebugEnabled()) {
+            log.debug("original: " + fileName + "\nweb dav path: " + WEB_DAV_DIRECTORY + encodedFileName);
+        }
+        try {
+            final ImageInputStream iiStream = ImageIO.createImageInputStream(iStream);
+            final Iterator<ImageReader> itReader = ImageIO.getImageReaders(iiStream);
+            final ImageReader reader = itReader.next();
+            final ProgressMonitor monitor = new ProgressMonitor(this, "Bild wird übertragen...", "", 0, 100);
+//            monitor.setMillisToPopup(500);
+            reader.addIIOReadProgressListener(new IIOReadProgressListener() {
+                @Override
+                public void sequenceStarted(final ImageReader source, final int minIndex) {
+                }
+
+                @Override
+                public void sequenceComplete(final ImageReader source) {
+                }
+
+                @Override
+                public void imageStarted(final ImageReader source, final int imageIndex) {
+                    monitor.setProgress(monitor.getMinimum());
+                }
+
+                @Override
+                public void imageProgress(final ImageReader source, final float percentageDone) {
+                    if (monitor.isCanceled()) {
+                        try {
+                            iiStream.close();
+                        } catch (IOException ex) {
+                            // NOP
+                        }
+                    } else {
+                        monitor.setProgress(Math.round(percentageDone));
+                    }
+                }
+
+                @Override
+                public void imageComplete(final ImageReader source) {
+                    monitor.setProgress(monitor.getMaximum());
+                }
+
+                @Override
+                public void thumbnailStarted(final ImageReader source,
+                        final int imageIndex,
+                        final int thumbnailIndex) {
+                }
+
+                @Override
+                public void thumbnailProgress(final ImageReader source, final float percentageDone) {
+                }
+
+                @Override
+                public void thumbnailComplete(final ImageReader source) {
+                }
+
+                @Override
+                public void readAborted(final ImageReader source) {
+                    monitor.close();
+                }
+            });
+
+            final ImageReadParam param = reader.getDefaultReadParam();
+            reader.setInput(iiStream, true, true);
+            final BufferedImage result;
+            try {
+                result = reader.read(0, param);
+            } finally {
+                reader.dispose();
+                iiStream.close();
+            }
+            return result;
+        } finally {
+            IOUtils.closeQuietly(iStream);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void defineButtonStatus() {
+        final int selectedIdx = lstFotos.getSelectedIndex();
+        btnPrevImg.setEnabled(selectedIdx > 0);
+        btnNextImg.setEnabled((selectedIdx < (lstFotos.getModel().getSize() - 1)) && (selectedIdx > -1));
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version $Revision$, $Date$
+     */
+    final class ImageResizeWorker extends SwingWorker<ImageIcon, Void> {
+
+        //~ Constructors -------------------------------------------------------
+        /**
+         * Creates a new ImageResizeWorker object.
+         */
+        public ImageResizeWorker() {
+            // TODO image im EDT auslesen und final speichern!
+            if (image != null) {
+                lblPicture.setText("Wird neu skaliert...");
+                lstFotos.setEnabled(false);
+            }
+//            log.fatal("RESIZE Image!", new Exception());
+        }
+
+        //~ Methods ------------------------------------------------------------
+        @Override
+        protected ImageIcon doInBackground() throws Exception {
+            if (image != null) {
+//                if (panButtons.getSize().getWidth() + 10 < panPreview.getSize().getWidth()) {
+                // ImageIcon result = new ImageIcon(ImageUtil.adjustScale(image, panPreview, 20, 20));
+                final ImageIcon result = new ImageIcon(adjustScale(image, pnlFoto, 20, 20));
+                return result;
+//                } else {
+//                    return new ImageIcon(image);
+//                }
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        protected void done() {
+            if (!isCancelled()) {
+                try {
+                    resizeListenerEnabled = false;
+                    final ImageIcon result = get();
+                    lblPicture.setIcon(result);
+                    lblPicture.setText("");
+                    lblPicture.setToolTipText(null);
+                } catch (InterruptedException ex) {
+                    log.warn(ex, ex);
+                } catch (ExecutionException ex) {
+                    log.error(ex, ex);
+                    lblPicture.setText("Fehler beim Skalieren!");
+                } finally {
+                    showWait(false);
+                    if (currentResizeWorker == this) {
+                        currentResizeWorker = null;
+                    }
+                    resizeListenerEnabled = true;
+                }
+            }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param bi DOCUMENT ME!
+     * @param component DOCUMENT ME!
+     * @param insetX DOCUMENT ME!
+     * @param insetY DOCUMENT ME!
+     *
+     * @return DOCUMENT ME!
+     */
+    public static Image adjustScale(final BufferedImage bi,
+            final JComponent component,
+            final int insetX,
+            final int insetY) {
+        final double scalex = (double) component.getWidth() / bi.getWidth();
+        final double scaley = (double) component.getHeight() / bi.getHeight();
+        final double scale = Math.min(scalex, scaley);
+        if (scale <= 1d) {
+            return bi.getScaledInstance((int) (bi.getWidth() * scale) - insetX,
+                    (int) (bi.getHeight() * scale)
+                    - insetY,
+                    Image.SCALE_SMOOTH);
+        } else {
+            return bi;
+        }
     }
 }
