@@ -2758,65 +2758,65 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnImagesActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnImagesActionPerformed
+    private void btnImagesActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImagesActionPerformed
 
         cardLayout.show(this, "card2");
         btnImages.setEnabled(false);
         btnInfo.setEnabled(true);
         lblImages.setEnabled(false);
         lblInfo.setEnabled(true);
-    } //GEN-LAST:event_btnImagesActionPerformed
+    }//GEN-LAST:event_btnImagesActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnInfoActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnInfoActionPerformed
+    private void btnInfoActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInfoActionPerformed
         cardLayout.show(this, "card1");
         btnImages.setEnabled(true);
         btnInfo.setEnabled(false);
         lblImages.setEnabled(true);
         lblInfo.setEnabled(false);
-    }                                                                           //GEN-LAST:event_btnInfoActionPerformed
+    }//GEN-LAST:event_btnInfoActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnPrevImgActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnPrevImgActionPerformed
+    private void btnPrevImgActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevImgActionPerformed
         lstFotos.setSelectedIndex(lstFotos.getSelectedIndex() - 1);
-    }                                                                              //GEN-LAST:event_btnPrevImgActionPerformed
+    }//GEN-LAST:event_btnPrevImgActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnNextImgActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnNextImgActionPerformed
+    private void btnNextImgActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImgActionPerformed
         lstFotos.setSelectedIndex(lstFotos.getSelectedIndex() + 1);
-    }                                                                              //GEN-LAST:event_btnNextImgActionPerformed
+    }//GEN-LAST:event_btnNextImgActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstFotosValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstFotosValueChanged
+    private void lstFotosValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstFotosValueChanged
         if (!evt.getValueIsAdjusting()) {                                               // && listListenerEnabled) {
             loadFoto();
         }
-    }                                                                                   //GEN-LAST:event_lstFotosValueChanged
+    }//GEN-LAST:event_lstFotosValueChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tfStaerke_untenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tfStaerke_untenActionPerformed
+    private void tfStaerke_untenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfStaerke_untenActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_tfStaerke_untenActionPerformed
+    }//GEN-LAST:event_tfStaerke_untenActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
@@ -3019,6 +3019,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
             RendererTools.makeReadOnly(cbArtLetztePruefung);
             RendererTools.makeReadOnly(cbArtNaechstePruefung);
             RendererTools.makeReadOnly(cbArtNaechstePruefung);
+            RendererTools.makeReadOnly(cbLastklasse);
             RendererTools.makeReadOnly(dcErstePruefung);
             RendererTools.makeReadOnly(dcLetztePruefung);
             RendererTools.makeReadOnly(dcNaechstePruefung);
