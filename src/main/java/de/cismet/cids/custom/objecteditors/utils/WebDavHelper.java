@@ -1,28 +1,44 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package de.cismet.cids.custom.objecteditors.utils;
 
-import de.cismet.security.WebDavClient;
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
+
+import org.xhtmlrenderer.css.style.Length;
+
 import java.awt.Component;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+
 import java.net.URLEncoder;
+
 import javax.swing.ProgressMonitorInputStream;
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-import org.xhtmlrenderer.css.style.Length;
+
+import de.cismet.security.WebDavClient;
 
 /**
+ * DOCUMENT ME!
  *
- * @author daniel
+ * @author   daniel
+ * @version  $Revision$, $Date$
  */
 public class WebDavHelper {
-       //~ Static fields/initializers ---------------------------------------------
+
+    //~ Static fields/initializers ---------------------------------------------
 
     private static Logger LOG = Logger.getLogger(WebDavHelper.class);
 
@@ -95,10 +111,17 @@ public class WebDavHelper {
         }
         return false;
     }
-    
-    public static String getFilenameFromUrl(final String fileName){
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   fileName  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String getFilenameFromUrl(final String fileName) {
         final String[] splittedFileName = fileName.split("/");
-        return splittedFileName[splittedFileName.length-1];
+        return splittedFileName[splittedFileName.length - 1];
     }
 
     /**
