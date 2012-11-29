@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="1190" pageHeight="842" orientation="Landscape" columnWidth="1150" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<field name="mauer.lagebezeichnung" class="java.lang.String"/>
+	<field name="mauer.mauer_nummer" class="java.lang.String"/>
+	<field name="mauer.lagebeschreibung" class="java.lang.String"/>
+	<field name="mauer.umgebung" class="java.lang.String"/>
+	<field name="mauer.neigung" class="java.lang.String"/>
+	<field name="mauer.stuetzmauertyp.name" class="java.lang.String"/>
+	<field name="mauer.materialtyp.name" class="java.lang.String"/>
+	<field name="mauer.hoehe_min" class="java.lang.Float"/>
+	<field name="mauer.hoehe_max" class="java.lang.Float"/>
+	<field name="mauer.laenge" class="java.lang.Integer"/>
+	<field name="mauer.eigentuemer.name" class="java.lang.String"/>
+	<field name="mauer.datum_erste_pruefung" class="java.util.Date"/>
+	<field name="mauer.datum_letzte_pruefung" class="java.util.Date"/>
+	<field name="mauer.datum_naechste_pruefung" class="java.util.Date"/>
+	<field name="mauer.art_erste_pruefung.name" class="java.lang.String"/>
+	<field name="mauer.art_letzte_pruefung.name" class="java.lang.String"/>
+	<field name="mauer.art_naechste_pruefung.name" class="java.lang.String"/>
+	<field name="mauer.beschreibung_gelaender" class="java.lang.String"/>
+	<field name="mauer.beschreibung_kopf" class="java.lang.String"/>
+	<field name="mauer.beschreibung_ansicht" class="java.lang.String"/>
+	<field name="mauer.beschreibung_gruendung" class="java.lang.String"/>
+	<field name="mauer.beschreibung_verformung" class="java.lang.String"/>
+	<field name="mauer.beschreibung_gelaende" class="java.lang.String"/>
+	<field name="mauer.zustand_gelaender" class="java.lang.Float"/>
+	<field name="mauer.zustand_kopf" class="java.lang.Float"/>
+	<field name="mauer.zustand_ansicht" class="java.lang.Float"/>
+	<field name="mauer.zustand_gruendung" class="java.lang.Float"/>
+	<field name="mauer.zustand_verformung" class="java.lang.Float"/>
+	<field name="mauer.zustand_gelaende" class="java.lang.Float"/>
+	<field name="mauer.san_massnahme_gelaender" class="java.lang.String"/>
+	<field name="mauer.san_massnahme_kopf" class="java.lang.String"/>
+	<field name="mauer.san_massnahme_ansicht" class="java.lang.String"/>
+	<field name="mauer.san_massnahme_gruendung" class="java.lang.String"/>
+	<field name="mauer.san_massnahme_verformung" class="java.lang.String"/>
+	<field name="mauer.san_massnahme_gelaende" class="java.lang.String"/>
+	<field name="mauer.san_kosten_gelaender" class="java.lang.Integer"/>
+	<field name="mauer.san_kosten_kopf" class="java.lang.Integer"/>
+	<field name="mauer.san_kosten_ansicht" class="java.lang.Integer"/>
+	<field name="mauer.san_kosten_gruendung" class="java.lang.Integer"/>
+	<field name="mauer.san_kosten_verformung" class="java.lang.Integer"/>
+	<field name="mauer.san_kosten_gelaende" class="java.lang.Integer"/>
+	<field name="mauer.san_eingriff_gelaender" class="java.lang.Float"/>
+	<field name="mauer.san_eingriff_kopf" class="java.lang.Float"/>
+	<field name="mauer.san_eingriff_ansicht" class="java.lang.Float"/>
+	<field name="mauer.san_eingriff_gruendung" class="java.lang.Float"/>
+	<field name="mauer.san_eingriff_verformung" class="java.lang.Float"/>
+	<field name="mauer.san_eingriff_gelaende" class="java.lang.Float"/>
+	<field name="mauer.standsicherheit.name" class="java.lang.String"/>
+	<field name="mauer.verkehrssicherheit.name" class="java.lang.String"/>
+	<field name="mauer.dauerhaftigkeit.name" class="java.lang.String"/>
+	<field name="mauer.besonderheiten" class="java.lang.String"/>
+	<field name="mapImage" class="java.lang.Object"/>
+	<field name="img0" class="java.lang.Object"/>
+	<field name="img1" class="java.lang.Object"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="555" splitType="Stretch">
+			<textField>
+				<reportElement x="57" y="18" width="355" height="18"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.lagebezeichnung}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement mode="Opaque" x="0" y="46" width="540" height="219" backcolor="#CCCCCC"/>
+				<imageExpression class="java.awt.Image"><![CDATA[((java.awt.Image)$F{mapImage})]]></imageExpression>
+			</image>
+			<image hyperlinkType="Reference" hyperlinkTarget="Blank">
+				<reportElement x="12" y="440" width="100" height="100"/>
+				<imageExpression class="java.awt.Image"><![CDATA[$F{img0}]]></imageExpression>
+			</image>
+			<image hyperlinkType="Reference" hyperlinkTarget="Blank">
+				<reportElement x="190" y="440" width="100" height="100"/>
+				<imageExpression class="java.awt.Image"><![CDATA[$F{img1}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="1007" y="0" width="143" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.mauer_nummer}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="640" y="18" width="180" height="28"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.lagebeschreibung}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="833" y="510" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.besonderheiten}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="722" y="470" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.dauerhaftigkeit.name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="725" y="490" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.verkehrssicherheit.name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="722" y="510" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.standsicherheit.name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="642" y="144" width="189" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.stuetzmauertyp.name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="642" y="164" width="185" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.materialtyp.name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="640" y="245" width="182" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.eigentuemer.name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1050" y="39" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.art_erste_pruefung.name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1050" y="59" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.art_letzte_pruefung.name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1050" y="81" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.art_naechste_pruefung.name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="604" y="286" width="151" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.beschreibung_gelaender}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="606" y="313" width="149" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.beschreibung_kopf}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="606" y="340" width="149" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.beschreibung_ansicht}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="604" y="370" width="151" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.beschreibung_gruendung}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="604" y="401" width="151" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.beschreibung_verformung}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="606" y="429" width="149" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.beschreibung_gelaende}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="831" y="286" width="144" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.san_massnahme_gelaender}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="833" y="315" width="144" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.san_massnahme_kopf}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="831" y="340" width="144" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.san_massnahme_ansicht}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="831" y="370" width="144" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.san_massnahme_gruendung}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="833" y="403" width="144" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.san_massnahme_verformung}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="833" y="429" width="144" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.san_massnahme_gelaende}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="996" y="286" width="74" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{mauer.san_kosten_gelaender}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="996" y="313" width="74" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{mauer.san_kosten_kopf}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="999" y="344" width="74" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{mauer.san_kosten_ansicht}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="996" y="370" width="74" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{mauer.san_kosten_gruendung}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="996" y="402" width="74" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{mauer.san_kosten_verformung}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="996" y="429" width="74" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{mauer.san_kosten_gelaende}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="769" y="429" width="57" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Float"><![CDATA[$F{mauer.san_eingriff_gelaende}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="769" y="402" width="53" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Float"><![CDATA[$F{mauer.san_eingriff_verformung}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="769" y="370" width="51" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Float"><![CDATA[$F{mauer.san_eingriff_gruendung}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="769" y="346" width="53" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Float"><![CDATA[$F{mauer.san_eingriff_ansicht}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="769" y="313" width="53" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Float"><![CDATA[$F{mauer.san_eingriff_kopf}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="769" y="286" width="53" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Float"><![CDATA[$F{mauer.san_eingriff_gelaender}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1070" y="286" width="70" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Float"><![CDATA[$F{mauer.zustand_gelaender}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1079" y="314" width="61" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Float"><![CDATA[$F{mauer.zustand_kopf}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1074" y="341" width="66" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Float"><![CDATA[$F{mauer.zustand_ansicht}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1079" y="369" width="61" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Float"><![CDATA[$F{mauer.zustand_gruendung}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1084" y="398" width="56" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Float"><![CDATA[$F{mauer.zustand_verformung}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1085" y="429" width="55" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Float"><![CDATA[$F{mauer.zustand_gelaende}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="644" y="101" width="185" height="43"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.neigung}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="642" y="59" width="183" height="42"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.umgebung}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="640" y="184" width="63" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Float"><![CDATA[$F{mauer.hoehe_min}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="703" y="184" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Float"><![CDATA[$F{mauer.hoehe_max}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="642" y="204" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{mauer.laenge}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="643" y="228" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{mauer.laenge}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="950" y="36" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{mauer.datum_erste_pruefung}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="950" y="58" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{mauer.datum_letzte_pruefung}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="952" y="83" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{mauer.datum_naechste_pruefung}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
