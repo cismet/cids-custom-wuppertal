@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="1190" pageHeight="842" orientation="Landscape" columnWidth="1150" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<field name="mauer.lagebezeichnung" class="java.lang.String"/>
 	<field name="mauer.mauer_nummer" class="java.lang.String"/>
 	<field name="mauer.lagebeschreibung" class="java.lang.String"/>
@@ -55,28 +55,18 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="555" splitType="Stretch">
+		<band height="521" splitType="Stretch">
 			<textField>
-				<reportElement x="57" y="18" width="355" height="18"/>
+				<reportElement x="57" y="18" width="195" height="18"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.lagebezeichnung}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="57" y="74" width="100" height="20"/>
+				<reportElement x="263" y="16" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.stuetzmauertyp.name}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="57" y="110" width="100" height="20"/>
-				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.materialtyp.name}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="57" y="41" width="100" height="20"/>
-				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.lagebeschreibung}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.mauer_nummer}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

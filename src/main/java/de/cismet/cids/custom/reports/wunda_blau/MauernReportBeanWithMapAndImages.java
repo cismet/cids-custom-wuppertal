@@ -58,6 +58,7 @@ import de.cismet.security.WebDavClient;
 
 import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.PasswordEncrypter;
+import org.openide.util.NbBundle;
 
 /**
  * DOCUMENT ME!
@@ -181,7 +182,10 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
                 true));
         // set the model
         map.setMappingModel(mappingModel);
-        map.setSize(540, 219);
+        final int height = Integer.parseInt(NbBundle.getMessage(MauernReportBeanWithMapAndImages.class,"MauernReportBeanWithMapAndImages.mapHeight"));
+        final int width = Integer.parseInt(NbBundle.getMessage(MauernReportBeanWithMapAndImages.class,"MauernReportBeanWithMapAndImages.mapWidth"));
+        map.setSize(width, height);
+//        map.setSize(540, 219);
         // initial positioning of the map
         map.setAnimationDuration(0);
         map.gotoInitialBoundingBox();
