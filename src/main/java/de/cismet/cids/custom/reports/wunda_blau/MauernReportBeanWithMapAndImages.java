@@ -207,11 +207,9 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
         for (final CidsBean b : images) {
             final Integer nr = (Integer)b.getProperty("laufende_nummer");
             if (nr == 1) {
-//                url0Builder.append("http://s102x003/WebDAV/cids/mauern/bilder/");
-                url0Builder.append(b.getProperty("name").toString());
+                url0Builder.append(b.getProperty("url").toString());
             } else if (nr == 2) {
-//                url1Builder.append("http://s102x003/WebDAV/cids/mauern/bilder/   ");
-                url1Builder.append(b.getProperty("name").toString());
+                url1Builder.append(b.getProperty("url").toString());
             }
         }
 
@@ -224,8 +222,7 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
                             return;
                         }
                         final InputStream iStream = webDavClient.getInputStream(
-                                WEB_DAV_DIRECTORY
-                                        + url0Builder.toString());
+                                url0Builder.toString());
                         img0 = ImageIO.read(iStream);
                         if (img0 == null) {
                             image0Error = true;
@@ -248,8 +245,7 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
                             return;
                         }
                         final InputStream iStream = webDavClient.getInputStream(
-                                WEB_DAV_DIRECTORY
-                                        + url1Builder.toString());
+                                url1Builder.toString());
                         img1 = ImageIO.read(iStream);
                         if (img1 == null) {
                             image1Error = true;

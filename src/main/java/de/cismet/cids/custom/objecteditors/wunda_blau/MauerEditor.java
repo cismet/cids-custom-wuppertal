@@ -11,6 +11,11 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
+
+import Sirius.server.middleware.types.MetaClass;
+import Sirius.server.middleware.types.MetaObject;
+
 import com.vividsolutions.jts.geom.Geometry;
 
 import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
@@ -88,6 +93,8 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
+
+import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -395,7 +402,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         map = new MappingComponent();
         pnlMap.setLayout(new BorderLayout());
         pnlMap.add(map, BorderLayout.CENTER);
-        this.webDavClient = new WebDavClient(Proxy.fromPreferences(), WEB_DAV_USER, WEB_DAV_PASSWORD, false);
+        this.webDavClient = new WebDavClient(Proxy.fromPreferences(), WEB_DAV_USER, WEB_DAV_PASSWORD, true);
         setEditable();
         final LayoutManager layout = getLayout();
         if (layout instanceof CardLayout) {
@@ -3031,14 +3038,14 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
                 try {
                     listListenerEnabled = false;
                     final List<Object> removeList = Arrays.asList(selection);
-                    final List<CidsBean> fotos = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "fotos");
+                    final List<CidsBean> fotos = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "bilder");
                     if (fotos != null) {
                         fotos.removeAll(removeList);
                     }
                     for (final Object toDeleteObj : removeList) {
                         if (toDeleteObj instanceof CidsBean) {
                             final CidsBean fotoToDelete = (CidsBean)toDeleteObj;
-                            final String file = String.valueOf(fotoToDelete.getProperty("file"));
+                            final String file = String.valueOf(fotoToDelete.getProperty("url.object_name"));
                             IMAGE_CACHE.remove(file);
                             removedFotoBeans.add(fotoToDelete);
                         }
@@ -3146,7 +3153,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
             "admin",
             "kif",
             "mauer",
-            1,
+            314,
             1280,
             1024);
     }
@@ -3155,11 +3162,16 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
     public void editorClosed(final EditorClosedEvent event) {
         if (EditorSaveStatus.SAVE_SUCCESS == event.getStatus()) {
             for (final CidsBean deleteBean : removedFotoBeans) {
-                final String url = (String)deleteBean.getProperty("url");
+                final String fileName = (String)deleteBean.getProperty("url_object_name");
+                final StringBuilder fileDir = new StringBuilder();
+                fileDir.append(deleteBean.getProperty("url.url_base_id.prot_prefix").toString());
+                fileDir.append(deleteBean.getProperty("url.url_base_id.server").toString());
+                fileDir.append(deleteBean.getProperty("url.url_base_id.path").toString());
+
                 try {
-                    WebDavHelper.deleteFileFromWebDAV(WebDavHelper.getFilenameFromUrl(url),
+                    WebDavHelper.deleteFileFromWebDAV(fileName,
                         webDavClient,
-                        WEB_DAV_DIRECTORY);
+                        fileDir.toString());
                     deleteBean.delete();
                 } catch (Exception ex) {
                     log.error(ex, ex);
@@ -3167,10 +3179,14 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
             }
         } else {
             for (final CidsBean deleteBean : removeNewAddedFotoBean) {
-                final String fileName = (String)deleteBean.getProperty("url");
-                WebDavHelper.deleteFileFromWebDAV(WebDavHelper.getFilenameFromUrl(fileName),
+                final String fileName = (String)deleteBean.getProperty("url.object_name");
+                final StringBuilder fileDir = new StringBuilder();
+                fileDir.append(deleteBean.getProperty("url.url_base_id.prot_prefix").toString());
+                fileDir.append(deleteBean.getProperty("url.url_base_id.server").toString());
+                fileDir.append(deleteBean.getProperty("url.url_base_id.path").toString());
+                WebDavHelper.deleteFileFromWebDAV(fileName,
                     webDavClient,
-                    WEB_DAV_DIRECTORY);
+                    fileDir.toString());
             }
         }
     }
@@ -3360,6 +3376,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
                         cacheHit = true;
                         image = cachedImage;
                         showWait(true);
+                        resizeListenerEnabled = true;
                         timer.restart();
                     }
                 }
@@ -3727,9 +3744,21 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
                     WEB_DAV_DIRECTORY,
                     webDavClient,
                     MauerEditor.this);
+
+                final MetaClass MB_MC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "url_base");
+                String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " ";
+                query += "FROM " + MB_MC.getTableName();
+                query += " WHERE server = 's102x003/WebDAV' and path = '/cids/mauern/bilder/';  ";
+                final MetaObject[] metaObjects = SessionManager.getProxy().getMetaObjectByQuery(query, 0);
+
+                final CidsBean url = CidsBeanSupport.createNewCidsBeanFromTableName("url");
+                url.setProperty("url_base_id", metaObjects[0].getBean());
+                url.setProperty("object_name", imageFile.getName());
+
                 final CidsBean newFotoBean = CidsBeanSupport.createNewCidsBeanFromTableName("Mauer_bilder");
                 newFotoBean.setProperty("laufende_nummer", i);
                 newFotoBean.setProperty("name", imageFile.getName());
+                newFotoBean.setProperty("url", url);
                 newBeans.add(newFotoBean);
                 i++;
             }

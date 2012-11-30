@@ -52,20 +52,20 @@ public class MauernReportTester {
                 1);
 
         System.out.println("Anzahl:" + beans.length);
-//        final MauernReportBeanWithMapAndImages[] mauern = new MauernReportBeanWithMapAndImages[beans.length];
-//        int i = 0;
-//        for (final CidsBean b : beans) {
-//            final MauernReportBeanWithMapAndImages x = new MauernReportBeanWithMapAndImages(b);
-//            mauern[i++] = x;
-//            LOG.fatal(b.getMOString());
-//        }
-        final MauernReportBean[] mauern = new MauernReportBean[beans.length];
+        final MauernReportBeanWithMapAndImages[] mauern = new MauernReportBeanWithMapAndImages[beans.length];
         int i = 0;
         for (final CidsBean b : beans) {
-            final MauernReportBean x = new MauernReportBean(b);
+            final MauernReportBeanWithMapAndImages x = new MauernReportBeanWithMapAndImages(b);
             mauern[i++] = x;
             LOG.fatal(b.getMOString());
         }
+//        final MauernReportBean[] mauern = new MauernReportBean[beans.length];
+//        int i = 0;
+//        for (final CidsBean b : beans) {
+//            final MauernReportBean x = new MauernReportBean(b);
+//            mauern[i++] = x;
+//            LOG.fatal(b.getMOString());
+//        }
 
         final ArrayList<String> fields = new ArrayList<String>(Arrays.asList(
                     "lagebezeichnung",
