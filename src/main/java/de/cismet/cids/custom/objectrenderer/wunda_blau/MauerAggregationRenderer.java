@@ -13,20 +13,7 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import com.vividsolutions.jts.geom.Geometry;
 
-import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
-import edu.umd.cs.piccolo.event.PInputEvent;
-
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.util.JRLoader;
-
 import org.apache.log4j.Logger;
-
-import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.error.ErrorInfo;
 
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
@@ -35,17 +22,18 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 
-import java.sql.Array;
+import java.net.URL;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -57,8 +45,6 @@ import javax.swing.table.TableColumn;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
-import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.reports.wunda_blau.MauernReportBeanWithMapAndImages;
 import de.cismet.cids.custom.reports.wunda_blau.MauernReportGenerator;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 
@@ -69,17 +55,13 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.features.DefaultStyledFeature;
+import de.cismet.cismap.commons.features.Feature;
 import de.cismet.cismap.commons.features.StyledFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
-import de.cismet.cismap.commons.gui.printing.JasperDownload;
+import de.cismet.cismap.commons.gui.piccolo.FeatureAnnotationSymbol;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
-
-import de.cismet.tools.CismetThreadPool;
-
-import de.cismet.tools.gui.downloadmanager.DownloadManager;
-import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 
 /**
  * DOCUMENT ME!
@@ -107,6 +89,7 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
     private CidsBeanWrapper selectedCidsBeanWrapper;
     private MauerTableModel tableModel;
     private MappingComponent map;
+    private final Collection<Feature> pointFeatures = new LinkedList<Feature>();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLayeredPane jLayeredPane1;
     private org.jdesktop.swingx.JXHyperlink jxlHauptinfo;
@@ -368,6 +351,7 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
      */
     private void tblMauernFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblMauernFocusLost
         map.gotoInitialBoundingBox();
+        map.getFeatureCollection().addFeatures(pointFeatures);
         tblMauern.clearSelection();
     }                                                                      //GEN-LAST:event_tblMauernFocusLost
 
@@ -397,6 +381,7 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
                                 - (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
                     boxToGoto.setY2(boxToGoto.getY2()
                                 + (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
+                    map.getFeatureCollection().removeFeatures(pointFeatures);
                     map.gotoBoundingBox(boxToGoto, false, true, 500);
                 }
             };
@@ -482,7 +467,7 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
                     "admin",
                     "kif",
                     "mauer",
-                    3);
+                    6);
 
             DevelopmentTools.createAggregationRendererInFrameFromRMIConnectionOnLocalhost(Arrays.asList(beans),
                 "Ausgewählte Mauern",
@@ -525,11 +510,11 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
                         // finally when all configurations are done ...
                         map.unlock();
                         map.setInteractionMode("MUTE");
-
                         for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
                             map.getFeatureCollection().addFeature(cidsBeanWrapper.getFeature());
+                            pointFeatures.add(cidsBeanWrapper.getPointFeature());
+                            map.getFeatureCollection().addFeature(cidsBeanWrapper.getPointFeature());
                         }
-
                         map.setAnimationDuration(duration);
 
 //            initialisedMap = true;
@@ -715,6 +700,7 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
         private String stuetzmauertyp;
         private Geometry geometry;
         private StyledFeature feature;
+        private StyledFeature pointFeature;
 
         //~ Constructors -------------------------------------------------------
 
@@ -746,10 +732,43 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
             }
 
             final StyledFeature dsf = new DefaultStyledFeature();
+            dsf.setLineWidth(3);
             dsf.setGeometry(this.geometry);
-            dsf.setTransparency(0.8F);
-
+            dsf.setTransparency(0.9F);
             this.feature = dsf;
+
+            final StyledFeature pointDsf = new DefaultStyledFeature();
+            pointDsf.setGeometry(geometry.getEnvelope().getCentroid());
+            FeatureAnnotationSymbol result;
+            URL urlToIcon = null;
+            urlToIcon = getClass().getResource(
+                    "/de/cismet/cids/custom/featurerenderer/wunda_blau/pointicon_mauer_silver.png");
+            final Color pointColor = new Color(0xC0, 0xC0, 0xC0);
+            ImageIcon pointIcon = null;
+            if (urlToIcon != null) {
+                pointIcon = new ImageIcon(urlToIcon);
+            }
+            if (pointIcon != null) {
+                result = new FeatureAnnotationSymbol(pointIcon.getImage());
+                result.setSweetSpotX(0.5D);
+                result.setSweetSpotY(0.9D);
+            } else {
+                final int fallbackSymbolSize = 8;
+                final BufferedImage bufferedImage = new BufferedImage(
+                        fallbackSymbolSize,
+                        fallbackSymbolSize,
+                        BufferedImage.TYPE_INT_ARGB);
+
+                final Graphics2D graphics = (Graphics2D)bufferedImage.getGraphics();
+                graphics.setColor(pointColor);
+                graphics.fillOval(0, 0, fallbackSymbolSize, fallbackSymbolSize);
+
+                result = new FeatureAnnotationSymbol(bufferedImage);
+                result.setSweetSpotX(0.5);
+                result.setSweetSpotY(0.5);
+            }
+            pointDsf.setPointAnnotationSymbol(result);
+            this.pointFeature = pointDsf;
         }
 
         //~ Methods ------------------------------------------------------------
@@ -780,6 +799,7 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
         public void setColor(final Color color) {
             this.color = color;
             feature.setFillingPaint(this.color);
+            feature.setLinePaint(this.color);
         }
 
         /**
@@ -834,6 +854,15 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
          */
         public StyledFeature getFeature() {
             return feature;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public StyledFeature getPointFeature() {
+            return pointFeature;
         }
 
         @Override
