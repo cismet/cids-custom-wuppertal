@@ -11,12 +11,15 @@
  */
 package de.cismet.cids.custom.wunda_blau.search;
 
+import com.vividsolutions.jts.geom.Geometry;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
 import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
+import de.cismet.cismap.commons.XBoundingBox;
+import de.cismet.cismap.commons.interaction.CismapBroker;
 
 /**
  * DOCUMENT ME!
@@ -28,10 +31,10 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JCheckBox cbMapSearch;
     private javax.swing.JCheckBox cbNotenGesamt;
     private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooser1;
     private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooser2;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -124,7 +127,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         lblHoeheBis = new javax.swing.JLabel();
         tfHoeheBis = new javax.swing.JTextField();
         lblFiller3 = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        cbMapSearch = new javax.swing.JCheckBox();
         jRadioButton3 = new javax.swing.JRadioButton();
         jRadioButton4 = new javax.swing.JRadioButton();
         jRadioButton5 = new javax.swing.JRadioButton();
@@ -138,25 +141,14 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         setLayout(new java.awt.GridBagLayout());
 
-        pnlEigetuemer.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                org.openide.util.NbBundle.getMessage(
-                    MauernWindowSearch.class,
-                    "MauernWindowSearch.pnlEigetuemer.border.title"))); // NOI18N
+        pnlEigetuemer.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.pnlEigetuemer.border.title"))); // NOI18N
         pnlEigetuemer.setLayout(new java.awt.GridBagLayout());
 
         lstEigentuemer.setModel(new javax.swing.AbstractListModel() {
-
-                String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-
-                @Override
-                public int getSize() {
-                    return strings.length;
-                }
-                @Override
-                public Object getElementAt(final int i) {
-                    return strings[i];
-                }
-            });
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
         scpListEigentuemer.setViewportView(lstEigentuemer);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -180,55 +172,40 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.weightx = 1.0;
         add(pnlEigetuemer, gridBagConstraints);
 
-        jLabel1.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.jLabel1.text")); // NOI18N
+        jLabel1.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.jLabel1.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         add(jLabel1, gridBagConstraints);
 
-        jRadioButton1.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.jRadioButton1.text")); // NOI18N
+        jRadioButton1.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.jRadioButton1.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         add(jRadioButton1, gridBagConstraints);
 
-        jRadioButton2.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.jRadioButton2.text")); // NOI18N
+        jRadioButton2.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.jRadioButton2.text")); // NOI18N
         jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jRadioButton2ActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton2ActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
         add(jRadioButton2, gridBagConstraints);
 
-        jLabel2.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.jLabel2.text")); // NOI18N
+        jLabel2.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.jLabel2.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         add(jLabel2, gridBagConstraints);
 
-        pnlPruefung.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                org.openide.util.NbBundle.getMessage(
-                    MauernWindowSearch.class,
-                    "MauernWindowSearch.pnlPruefung.border.title"))); // NOI18N
+        pnlPruefung.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.pnlPruefung.border.title"))); // NOI18N
         pnlPruefung.setLayout(new java.awt.GridBagLayout());
 
-        lblPruefVon.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.lblPruefVon.text")); // NOI18N
+        lblPruefVon.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.lblPruefVon.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -236,9 +213,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         pnlPruefung.add(lblPruefVon, gridBagConstraints);
 
-        lblPruefTil.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.lblPruefTil.text")); // NOI18N
+        lblPruefTil.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.lblPruefTil.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -254,9 +229,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.gridy = 0;
         pnlPruefung.add(defaultBindableDateChooser2, gridBagConstraints);
 
-        lblFiller.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.lblFiller.text")); // NOI18N
+        lblFiller.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.lblFiller.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
@@ -271,25 +244,14 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.weightx = 1.0;
         add(pnlPruefung, gridBagConstraints);
 
-        pnlLastklasse.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                org.openide.util.NbBundle.getMessage(
-                    MauernWindowSearch.class,
-                    "MauernWindowSearch.pnlLastklasse.border.title"))); // NOI18N
+        pnlLastklasse.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.pnlLastklasse.border.title"))); // NOI18N
         pnlLastklasse.setLayout(new java.awt.GridBagLayout());
 
         lstLastklasse.setModel(new javax.swing.AbstractListModel() {
-
-                String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-
-                @Override
-                public int getSize() {
-                    return strings.length;
-                }
-                @Override
-                public Object getElementAt(final int i) {
-                    return strings[i];
-                }
-            });
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
         scpListLastklasse.setViewportView(lstLastklasse);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -306,24 +268,17 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.weightx = 1.0;
         add(pnlLastklasse, gridBagConstraints);
 
-        pnlNoten.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                org.openide.util.NbBundle.getMessage(
-                    MauernWindowSearch.class,
-                    "MauernWindowSearch.pnlNoten.border.title"))); // NOI18N
+        pnlNoten.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.pnlNoten.border.title"))); // NOI18N
         pnlNoten.setLayout(new java.awt.GridBagLayout());
 
-        lblNotenFrom.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.lblNotenFrom.text")); // NOI18N
+        lblNotenFrom.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.lblNotenFrom.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         pnlNoten.add(lblNotenFrom, gridBagConstraints);
 
-        tfNotenVon.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.tfNotenVon.text")); // NOI18N
+        tfNotenVon.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.tfNotenVon.text")); // NOI18N
         tfNotenVon.setMinimumSize(new java.awt.Dimension(70, 27));
         tfNotenVon.setPreferredSize(new java.awt.Dimension(70, 27));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -332,18 +287,14 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 20);
         pnlNoten.add(tfNotenVon, gridBagConstraints);
 
-        lblNotenBis.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.lblNotenBis.text")); // NOI18N
+        lblNotenBis.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.lblNotenBis.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         pnlNoten.add(lblNotenBis, gridBagConstraints);
 
-        tfNotenBis.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.tfNotenBis.text")); // NOI18N
+        tfNotenBis.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.tfNotenBis.text")); // NOI18N
         tfNotenBis.setMinimumSize(new java.awt.Dimension(70, 27));
         tfNotenBis.setPreferredSize(new java.awt.Dimension(70, 27));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -351,16 +302,12 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.gridy = 0;
         pnlNoten.add(tfNotenBis, gridBagConstraints);
 
-        cbNotenGesamt.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.cbNotenGesamt.text")); // NOI18N
+        cbNotenGesamt.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.cbNotenGesamt.text")); // NOI18N
         cbNotenGesamt.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    cbNotenGesamtActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbNotenGesamtActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -369,9 +316,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 0, 0);
         pnlNoten.add(cbNotenGesamt, gridBagConstraints);
 
-        lblFiller2.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.lblFiller2.text")); // NOI18N
+        lblFiller2.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.lblFiller2.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
@@ -387,36 +332,33 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.weightx = 1.0;
         add(pnlNoten, gridBagConstraints);
 
-        final javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
         add(jPanel1, gridBagConstraints);
 
-        pnlHoehe.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                org.openide.util.NbBundle.getMessage(
-                    MauernWindowSearch.class,
-                    "MauernWindowSearch.pnlHoehe.border.title"))); // NOI18N
+        pnlHoehe.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.pnlHoehe.border.title"))); // NOI18N
         pnlHoehe.setLayout(new java.awt.GridBagLayout());
 
-        lblHoeheVon.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.lblHoeheVon.text")); // NOI18N
+        lblHoeheVon.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.lblHoeheVon.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         pnlHoehe.add(lblHoeheVon, gridBagConstraints);
 
-        tfHoeheVon.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.tfNotenBis.text")); // NOI18N
+        tfHoeheVon.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.tfNotenBis.text")); // NOI18N
         tfHoeheVon.setMinimumSize(new java.awt.Dimension(70, 27));
         tfHoeheVon.setPreferredSize(new java.awt.Dimension(70, 27));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -425,18 +367,14 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 20);
         pnlHoehe.add(tfHoeheVon, gridBagConstraints);
 
-        lblHoeheBis.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.lblHoeheBis.text")); // NOI18N
+        lblHoeheBis.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.lblHoeheBis.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         pnlHoehe.add(lblHoeheBis, gridBagConstraints);
 
-        tfHoeheBis.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.tfNotenBis.text")); // NOI18N
+        tfHoeheBis.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.tfNotenBis.text")); // NOI18N
         tfHoeheBis.setMinimumSize(new java.awt.Dimension(70, 27));
         tfHoeheBis.setPreferredSize(new java.awt.Dimension(70, 27));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -444,9 +382,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.gridy = 0;
         pnlHoehe.add(tfHoeheBis, gridBagConstraints);
 
-        lblFiller3.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.lblFiller3.text")); // NOI18N
+        lblFiller3.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.lblFiller3.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
@@ -462,195 +398,163 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.weightx = 1.0;
         add(pnlHoehe, gridBagConstraints);
 
-        jCheckBox1.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.jCheckBox1.text")); // NOI18N
-        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jCheckBox1ActionPerformed(evt);
-                }
-            });
+        cbMapSearch.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.cbMapSearch.text")); // NOI18N
+        cbMapSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbMapSearchActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
-        add(jCheckBox1, gridBagConstraints);
+        add(cbMapSearch, gridBagConstraints);
 
-        jRadioButton3.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.jRadioButton3.text")); // NOI18N
+        jRadioButton3.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.jRadioButton3.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
         add(jRadioButton3, gridBagConstraints);
 
-        jRadioButton4.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.jRadioButton4.text")); // NOI18N
+        jRadioButton4.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.jRadioButton4.text")); // NOI18N
         jRadioButton4.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jRadioButton4ActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton4ActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
         add(jRadioButton4, gridBagConstraints);
 
-        jRadioButton5.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.jRadioButton5.text")); // NOI18N
+        jRadioButton5.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.jRadioButton5.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
         add(jRadioButton5, gridBagConstraints);
 
-        jRadioButton6.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.jRadioButton6.text")); // NOI18N
+        jRadioButton6.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.jRadioButton6.text")); // NOI18N
         jRadioButton6.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jRadioButton6ActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton6ActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 4;
         add(jRadioButton6, gridBagConstraints);
 
-        jRadioButton7.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.jRadioButton7.text")); // NOI18N
+        jRadioButton7.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.jRadioButton7.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
         add(jRadioButton7, gridBagConstraints);
 
-        jRadioButton8.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.jRadioButton8.text")); // NOI18N
+        jRadioButton8.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.jRadioButton8.text")); // NOI18N
         jRadioButton8.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jRadioButton8ActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton8ActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 5;
         add(jRadioButton8, gridBagConstraints);
 
-        jRadioButton9.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.jRadioButton9.text")); // NOI18N
+        jRadioButton9.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.jRadioButton9.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
         add(jRadioButton9, gridBagConstraints);
 
-        jRadioButton10.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.jRadioButton10.text")); // NOI18N
+        jRadioButton10.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.jRadioButton10.text")); // NOI18N
         jRadioButton10.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jRadioButton10ActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton10ActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
         add(jRadioButton10, gridBagConstraints);
 
-        jLabel3.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.jLabel3.text")); // NOI18N
+        jLabel3.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.jLabel3.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         add(jLabel3, gridBagConstraints);
 
-        jLabel4.setText(org.openide.util.NbBundle.getMessage(
-                MauernWindowSearch.class,
-                "MauernWindowSearch.jLabel4.text")); // NOI18N
+        jLabel4.setText(org.openide.util.NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.jLabel4.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
         add(jLabel4, gridBagConstraints);
-    }                                                // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jRadioButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jRadioButton2ActionPerformed
+    private void jRadioButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_jRadioButton2ActionPerformed
+    }//GEN-LAST:event_jRadioButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbNotenGesamtActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbNotenGesamtActionPerformed
+    private void cbNotenGesamtActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbNotenGesamtActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_cbNotenGesamtActionPerformed
+    }//GEN-LAST:event_cbNotenGesamtActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jCheckBox1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jCheckBox1ActionPerformed
+    private void cbMapSearchActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbMapSearchActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_jCheckBox1ActionPerformed
+    }//GEN-LAST:event_cbMapSearchActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jRadioButton4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jRadioButton4ActionPerformed
+    private void jRadioButton4ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton4ActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_jRadioButton4ActionPerformed
+    }//GEN-LAST:event_jRadioButton4ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jRadioButton6ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jRadioButton6ActionPerformed
+    private void jRadioButton6ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton6ActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_jRadioButton6ActionPerformed
+    }//GEN-LAST:event_jRadioButton6ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jRadioButton8ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jRadioButton8ActionPerformed
+    private void jRadioButton8ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton8ActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_jRadioButton8ActionPerformed
+    }//GEN-LAST:event_jRadioButton8ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jRadioButton10ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jRadioButton10ActionPerformed
+    private void jRadioButton10ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton10ActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_jRadioButton10ActionPerformed
+    }//GEN-LAST:event_jRadioButton10ActionPerformed
 
     @Override
     public JComponent getSearchWindowComponent() {
@@ -659,7 +563,13 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
     @Override
     public MetaObjectNodeServerSearch getServerSearch() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Geometry geometryToSearchFor =null;
+            if (cbMapSearch.isSelected()) {
+                geometryToSearchFor =
+                    ((XBoundingBox)CismapBroker.getInstance().getMappingComponent().getCurrentBoundingBox())
+                            .getGeometry();
+            }
+            return null;
     }
 
     @Override
