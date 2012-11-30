@@ -26,12 +26,17 @@ import org.jdesktop.swingx.error.ErrorInfo;
 import org.openide.util.NbBundle;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.logging.Level;
 
+import javax.swing.Timer;
+
+import de.cismet.cids.custom.objecteditors.wunda_blau.MauerEditor;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.MauerAggregationRenderer;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.NivellementPunktAggregationRenderer;
 
@@ -55,6 +60,7 @@ public class MauernReportGenerator {
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(MauernReportGenerator.class);
+    private static boolean forceQuit = false;
 
     //~ Methods ----------------------------------------------------------------
 
@@ -75,10 +81,18 @@ public class MauernReportGenerator {
                         reportBeans.add(new MauernReportBeanWithMapAndImages(b));
                     }
                     boolean ready = false;
+
+                    final Timer timer = new Timer(5000, new ActionListener() {
+
+                                @Override
+                                public void actionPerformed(final ActionEvent e) {
+                                    forceQuit = true;
+                                }
+                            });
                     do {
                         ready = true;
                         for (final MauernReportBeanWithMapAndImages m : reportBeans) {
-                            if (!m.isReadyToProceed()) {
+                            if (!m.isReadyToProceed() || forceQuit) {
                                 ready = false;
                                 break;
                             }

@@ -219,6 +219,7 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
                 public void run() {
                     try {
                         if (url0Builder.toString().equals("")) {
+                            image0Error = true;
                             return;
                         }
                         final InputStream iStream = webDavClient.getInputStream(
@@ -242,6 +243,7 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
                 public void run() {
                     try {
                         if (url1Builder.toString().equals("")) {
+                            image1Error = true;
                             return;
                         }
                         final InputStream iStream = webDavClient.getInputStream(
