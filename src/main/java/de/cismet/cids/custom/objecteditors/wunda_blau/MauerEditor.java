@@ -12,6 +12,7 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
@@ -131,7 +132,8 @@ import de.cismet.tools.gui.TitleComponentProvider;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
+public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeComponent,
+    CidsBeanRenderer,
     EditorSaveListener,
     FooterComponentProvider,
     TitleComponentProvider {
@@ -260,6 +262,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
     private javax.swing.JLabel lblFiller4;
     private javax.swing.JLabel lblFiller5;
     private javax.swing.JLabel lblFiller6;
+    private javax.swing.JLabel lblFiller7;
     private javax.swing.JLabel lblFiller9;
     private javax.swing.JLabel lblFotos;
     private javax.swing.JLabel lblGelaenderHeader;
@@ -520,6 +523,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         tfStaerke_unten = new javax.swing.JTextField();
         lblStaerkeOben = new javax.swing.JLabel();
         tfStaerkeOben = new javax.swing.JTextField();
+        lblFiller7 = new javax.swing.JLabel();
         pnlRight = new javax.swing.JPanel();
         lblPruefung1 = new javax.swing.JLabel();
         lblLastklasse = new javax.swing.JLabel();
@@ -772,8 +776,8 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         pnlCard1.setOpaque(false);
         pnlCard1.setLayout(new java.awt.GridBagLayout());
 
-        pnlAllgemein.setMinimumSize(new java.awt.Dimension(600, 430));
-        pnlAllgemein.setPreferredSize(new java.awt.Dimension(600, 430));
+        pnlAllgemein.setMinimumSize(new java.awt.Dimension(600, 440));
+        pnlAllgemein.setPreferredSize(new java.awt.Dimension(600, 440));
         pnlAllgemein.setLayout(new java.awt.GridBagLayout());
 
         pnlHeaderAllgemein.setBackground(new java.awt.Color(51, 51, 51));
@@ -824,7 +828,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 0);
         pnlLeft.add(jScrollPane2, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -839,7 +843,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 0);
         pnlLeft.add(cbMaterialtyp, gridBagConstraints);
 
         lblStaerke.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblStaerke.text")); // NOI18N
@@ -847,7 +851,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
         pnlLeft.add(lblStaerke, gridBagConstraints);
 
         lblStuetzmauer.setText(org.openide.util.NbBundle.getMessage(
@@ -857,7 +861,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
         pnlLeft.add(lblStuetzmauer, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -872,7 +876,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 0);
         pnlLeft.add(cbEigentuemer, gridBagConstraints);
 
         lblLagebeschreibung.setText(org.openide.util.NbBundle.getMessage(
@@ -881,8 +885,8 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
         pnlLeft.add(lblLagebeschreibung, gridBagConstraints);
 
         lblHoeheMin.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblHoeheMin.text")); // NOI18N
@@ -890,7 +894,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
         pnlLeft.add(lblHoeheMin, gridBagConstraints);
 
         tfUmgebung.setMinimumSize(new java.awt.Dimension(100, 20));
@@ -909,7 +913,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 0);
         pnlLeft.add(tfUmgebung, gridBagConstraints);
 
         pnlHoehe.setOpaque(false);
@@ -988,7 +992,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 0);
         pnlLeft.add(pnlHoehe, gridBagConstraints);
 
         lblEigentümer.setText(org.openide.util.NbBundle.getMessage(
@@ -998,15 +1002,15 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
         pnlLeft.add(lblEigentümer, gridBagConstraints);
 
         lblNeigung.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblNeigung.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
         pnlLeft.add(lblNeigung, gridBagConstraints);
 
         jScrollPane1.setMinimumSize(new java.awt.Dimension(26, 70));
@@ -1037,7 +1041,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 0);
         pnlLeft.add(jScrollPane1, gridBagConstraints);
 
         lblLaenge.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblLaenge.text")); // NOI18N
@@ -1045,7 +1049,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
         pnlLeft.add(lblLaenge, gridBagConstraints);
 
         lblUmgebung.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblUmgebung.text")); // NOI18N
@@ -1053,7 +1057,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
         pnlLeft.add(lblUmgebung, gridBagConstraints);
 
         tfLaenge.setMinimumSize(new java.awt.Dimension(100, 20));
@@ -1071,7 +1075,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 0);
         pnlLeft.add(tfLaenge, gridBagConstraints);
 
         lblMaterialTyp.setText(org.openide.util.NbBundle.getMessage(
@@ -1081,7 +1085,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
         pnlLeft.add(lblMaterialTyp, gridBagConstraints);
 
         org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
@@ -1105,7 +1109,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 0);
         pnlLeft.add(cbStuetzmauertyp, gridBagConstraints);
 
         jPanel1.setOpaque(false);
@@ -1173,15 +1177,24 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 0);
         pnlLeft.add(jPanel1, gridBagConstraints);
+
+        lblFiller7.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblFiller7.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.weighty = 1.0;
+        pnlLeft.add(lblFiller7, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 0);
         pnlAllgemein.add(pnlLeft, gridBagConstraints);
 
         pnlRight.setMinimumSize(new java.awt.Dimension(500, 163));
@@ -1194,7 +1207,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
         pnlRight.add(lblPruefung1, gridBagConstraints);
 
         lblLastklasse.setText(org.openide.util.NbBundle.getMessage(
@@ -1204,7 +1217,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
         pnlRight.add(lblLastklasse, gridBagConstraints);
 
         lblLastabstand.setText(org.openide.util.NbBundle.getMessage(
@@ -1214,7 +1227,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
         pnlRight.add(lblLastabstand, gridBagConstraints);
 
         lblLetztePruefung.setText(org.openide.util.NbBundle.getMessage(
@@ -1224,7 +1237,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
         pnlRight.add(lblLetztePruefung, gridBagConstraints);
 
         lblNaechstePruefung.setText(org.openide.util.NbBundle.getMessage(
@@ -1234,7 +1247,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
         pnlRight.add(lblNaechstePruefung, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -1249,7 +1262,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         pnlRight.add(cbLastklasse, gridBagConstraints);
 
         tfLastabstand.setMinimumSize(new java.awt.Dimension(100, 20));
@@ -1267,7 +1280,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         pnlRight.add(tfLastabstand, gridBagConstraints);
 
         jPanel2.setOpaque(false);
@@ -1322,15 +1335,18 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
         jPanel2.add(cbArtErstePruefung, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         pnlRight.add(jPanel2, gridBagConstraints);
 
         jPanel5.setOpaque(false);
@@ -1385,14 +1401,17 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
         jPanel5.add(cbArtNaechstePruefung, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         pnlRight.add(jPanel5, gridBagConstraints);
 
         jPanel6.setOpaque(false);
@@ -1447,14 +1466,17 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
         jPanel6.add(cbArtLetztePruefung, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         pnlRight.add(jPanel6, gridBagConstraints);
 
         pnlMap.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -1467,7 +1489,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
         pnlRight.add(pnlMap, gridBagConstraints);
 
         lblVerkehrssicherheit.setText(org.openide.util.NbBundle.getMessage(
@@ -1477,7 +1499,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
         pnlRight.add(lblVerkehrssicherheit, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -1492,7 +1514,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         pnlRight.add(cbDauerhaftigkeit, gridBagConstraints);
 
         lblDauerhaftigkeit.setText(org.openide.util.NbBundle.getMessage(
@@ -1502,7 +1524,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
         pnlRight.add(lblDauerhaftigkeit, gridBagConstraints);
 
         lblStandsicherheit.setText(org.openide.util.NbBundle.getMessage(
@@ -1512,7 +1534,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
         pnlRight.add(lblStandsicherheit, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -1527,7 +1549,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         pnlRight.add(cbStandsicherheit, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -1542,7 +1564,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         pnlRight.add(cbVerkehrssicherheit, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1550,7 +1572,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 0, 0);
         pnlAllgemein.add(pnlRight, gridBagConstraints);
 
         lblfiller.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblfiller.text")); // NOI18N
@@ -1632,8 +1654,8 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 5);
         pnlGelaender.add(lblBeschreibungGelaender, gridBagConstraints);
 
         jScrollPane4.setMinimumSize(new java.awt.Dimension(26, 70));
@@ -1659,7 +1681,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 10);
         pnlGelaender.add(jScrollPane4, gridBagConstraints);
 
         lblZustandGelaender.setText(org.openide.util.NbBundle.getMessage(
@@ -1669,7 +1691,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         pnlGelaender.add(lblZustandGelaender, gridBagConstraints);
 
         lblSanKostenGelaender.setText(org.openide.util.NbBundle.getMessage(
@@ -1678,8 +1700,8 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         pnlGelaender.add(lblSanKostenGelaender, gridBagConstraints);
 
         lblSanMassnahmenGelaender.setText(org.openide.util.NbBundle.getMessage(
@@ -1689,7 +1711,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         pnlGelaender.add(lblSanMassnahmenGelaender, gridBagConstraints);
 
         lblEingriffGeleander.setText(org.openide.util.NbBundle.getMessage(
@@ -1699,7 +1721,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         pnlGelaender.add(lblEingriffGeleander, gridBagConstraints);
 
         tfZustandGelaender.setMinimumSize(new java.awt.Dimension(100, 20));
@@ -1779,7 +1801,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         pnlGelaender.add(jScrollPane5, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1826,8 +1848,8 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 5);
         pnlKopf.add(lblbeschreibungKopf, gridBagConstraints);
 
         jScrollPane6.setMinimumSize(new java.awt.Dimension(26, 70));
@@ -1853,7 +1875,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 10);
         pnlKopf.add(jScrollPane6, gridBagConstraints);
 
         lblZustandKopf.setText(org.openide.util.NbBundle.getMessage(
@@ -1863,7 +1885,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         pnlKopf.add(lblZustandKopf, gridBagConstraints);
 
         lblSanMassnahmenKopf.setText(org.openide.util.NbBundle.getMessage(
@@ -1872,8 +1894,8 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         pnlKopf.add(lblSanMassnahmenKopf, gridBagConstraints);
 
         lblSanKostenKopf.setText(org.openide.util.NbBundle.getMessage(
@@ -1883,7 +1905,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         pnlKopf.add(lblSanKostenKopf, gridBagConstraints);
 
         lblEingriffKopf.setText(org.openide.util.NbBundle.getMessage(
@@ -1893,7 +1915,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         pnlKopf.add(lblEingriffKopf, gridBagConstraints);
 
         tfZustandKopf.setMinimumSize(new java.awt.Dimension(100, 20));
@@ -1973,7 +1995,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         pnlKopf.add(jScrollPane7, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2020,8 +2042,8 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 5);
         pnlAnsicht.add(lblbeschreibungAnsicht, gridBagConstraints);
 
         jScrollPane8.setMinimumSize(new java.awt.Dimension(26, 70));
@@ -2047,7 +2069,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 10);
         pnlAnsicht.add(jScrollPane8, gridBagConstraints);
 
         lblZustandAnsicht.setText(org.openide.util.NbBundle.getMessage(
@@ -2057,7 +2079,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         pnlAnsicht.add(lblZustandAnsicht, gridBagConstraints);
 
         lblSanMassnahmenAnsicht.setText(org.openide.util.NbBundle.getMessage(
@@ -2066,8 +2088,8 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         pnlAnsicht.add(lblSanMassnahmenAnsicht, gridBagConstraints);
 
         lblSanKostenAnsicht.setText(org.openide.util.NbBundle.getMessage(
@@ -2077,7 +2099,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         pnlAnsicht.add(lblSanKostenAnsicht, gridBagConstraints);
 
         lblEingriffAnsicht.setText(org.openide.util.NbBundle.getMessage(
@@ -2087,7 +2109,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         pnlAnsicht.add(lblEingriffAnsicht, gridBagConstraints);
 
         tfZustandAnsicht.setMinimumSize(new java.awt.Dimension(100, 20));
@@ -2167,7 +2189,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         pnlAnsicht.add(jScrollPane9, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2214,8 +2236,8 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 5);
         pnlGruendung.add(lblbeschreibungGruendung, gridBagConstraints);
 
         jScrollPane10.setMinimumSize(new java.awt.Dimension(26, 70));
@@ -2241,7 +2263,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 10);
         pnlGruendung.add(jScrollPane10, gridBagConstraints);
 
         lblZustandGruendung.setText(org.openide.util.NbBundle.getMessage(
@@ -2251,7 +2273,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         pnlGruendung.add(lblZustandGruendung, gridBagConstraints);
 
         lblSanMassnahmenGruendung.setText(org.openide.util.NbBundle.getMessage(
@@ -2260,8 +2282,8 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         pnlGruendung.add(lblSanMassnahmenGruendung, gridBagConstraints);
 
         lblSanKostenAnsicht1.setText(org.openide.util.NbBundle.getMessage(
@@ -2271,7 +2293,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         pnlGruendung.add(lblSanKostenAnsicht1, gridBagConstraints);
 
         lblEingriffAnsicht1.setText(org.openide.util.NbBundle.getMessage(
@@ -2281,7 +2303,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         pnlGruendung.add(lblEingriffAnsicht1, gridBagConstraints);
 
         tfZustandGruendung.setMinimumSize(new java.awt.Dimension(100, 20));
@@ -2361,7 +2383,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         pnlGruendung.add(jScrollPane11, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2408,8 +2430,8 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 5);
         pnlGelaende.add(lblbeschreibungGruendung1, gridBagConstraints);
 
         jScrollPane12.setMinimumSize(new java.awt.Dimension(26, 70));
@@ -2435,7 +2457,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 10);
         pnlGelaende.add(jScrollPane12, gridBagConstraints);
 
         lblZustandGruendung1.setText(org.openide.util.NbBundle.getMessage(
@@ -2445,7 +2467,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         pnlGelaende.add(lblZustandGruendung1, gridBagConstraints);
 
         lblSanMassnahmenGruendung1.setText(org.openide.util.NbBundle.getMessage(
@@ -2454,8 +2476,8 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         pnlGelaende.add(lblSanMassnahmenGruendung1, gridBagConstraints);
 
         lblSanKostenAnsicht2.setText(org.openide.util.NbBundle.getMessage(
@@ -2465,7 +2487,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         pnlGelaende.add(lblSanKostenAnsicht2, gridBagConstraints);
 
         lblEingriffAnsicht2.setText(org.openide.util.NbBundle.getMessage(
@@ -2475,7 +2497,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         pnlGelaende.add(lblEingriffAnsicht2, gridBagConstraints);
 
         tfZustandGruendung1.setMinimumSize(new java.awt.Dimension(100, 20));
@@ -2555,7 +2577,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         pnlGelaende.add(jScrollPane13, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2602,8 +2624,8 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 5);
         pnlVerformung.add(lblbeschreibungGruendung2, gridBagConstraints);
 
         jScrollPane14.setMinimumSize(new java.awt.Dimension(26, 70));
@@ -2629,7 +2651,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 10);
         pnlVerformung.add(jScrollPane14, gridBagConstraints);
 
         lblZustandGruendung2.setText(org.openide.util.NbBundle.getMessage(
@@ -2639,7 +2661,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         pnlVerformung.add(lblZustandGruendung2, gridBagConstraints);
 
         lblSanMassnahmenGruendung2.setText(org.openide.util.NbBundle.getMessage(
@@ -2648,8 +2670,8 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         pnlVerformung.add(lblSanMassnahmenGruendung2, gridBagConstraints);
 
         lblSanKostenAnsicht3.setText(org.openide.util.NbBundle.getMessage(
@@ -2659,7 +2681,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         pnlVerformung.add(lblSanKostenAnsicht3, gridBagConstraints);
 
         lblEingriffAnsicht3.setText(org.openide.util.NbBundle.getMessage(
@@ -2669,7 +2691,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         pnlVerformung.add(lblEingriffAnsicht3, gridBagConstraints);
 
         tfZustandGruendung2.setMinimumSize(new java.awt.Dimension(100, 20));
@@ -2749,7 +2771,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         pnlVerformung.add(jScrollPane15, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -3294,6 +3316,7 @@ public class MauerEditor extends javax.swing.JPanel implements CidsBeanRenderer,
                             final StyledFeature dsf = new DefaultStyledFeature();
                             dsf.setGeometry(pureGeom);
                             dsf.setFillingPaint(new Color(1, 0, 0, 0.5f));
+                            dsf.setLineWidth(2);
                             // add the raster layer to the model
                             mappingModel.addLayer(swms);
                             // set the model

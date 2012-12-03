@@ -14,6 +14,7 @@ package de.cismet.cids.custom.reports.wunda_blau;
 import com.vividsolutions.jts.geom.Geometry;
 
 import org.openide.util.Exceptions;
+import org.openide.util.NbBundle;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -58,7 +59,6 @@ import de.cismet.security.WebDavClient;
 
 import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.PasswordEncrypter;
-import org.openide.util.NbBundle;
 
 /**
  * DOCUMENT ME!
@@ -182,8 +182,12 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
                 true));
         // set the model
         map.setMappingModel(mappingModel);
-        final int height = Integer.parseInt(NbBundle.getMessage(MauernReportBeanWithMapAndImages.class,"MauernReportBeanWithMapAndImages.mapHeight"));
-        final int width = Integer.parseInt(NbBundle.getMessage(MauernReportBeanWithMapAndImages.class,"MauernReportBeanWithMapAndImages.mapWidth"));
+        final int height = Integer.parseInt(NbBundle.getMessage(
+                    MauernReportBeanWithMapAndImages.class,
+                    "MauernReportBeanWithMapAndImages.mapHeight"));
+        final int width = Integer.parseInt(NbBundle.getMessage(
+                    MauernReportBeanWithMapAndImages.class,
+                    "MauernReportBeanWithMapAndImages.mapWidth"));
         map.setSize(width, height);
 //        map.setSize(540, 219);
         // initial positioning of the map
