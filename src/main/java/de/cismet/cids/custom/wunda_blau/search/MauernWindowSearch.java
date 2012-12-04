@@ -27,10 +27,14 @@ import org.apache.log4j.Logger;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
-import java.awt.Dimension;
+import sun.security.jca.JCAUtil;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import java.net.URL;
 
@@ -38,9 +42,17 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import javax.swing.DefaultListModel;
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.ListCellRenderer;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
@@ -124,8 +136,10 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
     private javax.swing.JLabel lblPruefTil;
     private javax.swing.JLabel lblPruefVon;
     private javax.swing.JLabel lblSanierung;
+    private javax.swing.JLabel lblSelektierteLastklassen;
     private javax.swing.JLabel lblVerformung;
     private javax.swing.JLabel lblWandKopf;
+    private javax.swing.JLabel lblselectedEigentuemer;
     private javax.swing.JList lstEigentuemer;
     private javax.swing.JList lstLastklasse;
     private javax.swing.JPanel pnlButtons;
@@ -210,6 +224,37 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         fillEigentuemerListModel();
         fillLastKlasseListModel();
         lstEigentuemer.setModel(eigentuemerListModel);
+        lstEigentuemer.setCellRenderer(new CheckboxCellRenderer());
+        lstEigentuemer.setSelectionModel(new ListToggleSelectionModel());
+        lstEigentuemer.addListSelectionListener(new ListSelectionListener() {
+
+                @Override
+                public void valueChanged(final ListSelectionEvent lse) {
+                    lblselectedEigentuemer.setText("" + lstEigentuemer.getSelectedIndices().length);
+                    if (lstEigentuemer.getSelectedIndices().length != 1) {
+                        lblselectedEigentuemer.setText(lblselectedEigentuemer.getText() + " selektierte Eigentümer");
+                    } else {
+                        lblselectedEigentuemer.setText(lblselectedEigentuemer.getText() + " selektierter Eigentümer");
+                    }
+                }
+            });
+        lstLastklasse.addListSelectionListener(new ListSelectionListener() {
+
+                @Override
+                public void valueChanged(final ListSelectionEvent lse) {
+                    lblSelektierteLastklassen.setText("" + lstLastklasse.getSelectedIndices().length);
+                    if (lstLastklasse.getSelectedIndices().length != 1) {
+                        lblSelektierteLastklassen.setText(
+                            lblSelektierteLastklassen.getText()
+                                    + " selektierte Lastklassen");
+                    } else {
+                        lblSelektierteLastklassen.setText(
+                            lblSelektierteLastklassen.getText()
+                                    + " selektierte Lastklasse");
+                    }
+                }
+            });
+        lstLastklasse.setCellRenderer(new CheckboxCellRenderer());
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -262,6 +307,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         pnlLastklasse = new javax.swing.JPanel();
         scpListLastklasse = new javax.swing.JScrollPane();
         lstLastklasse = new javax.swing.JList();
+        lblSelektierteLastklassen = new javax.swing.JLabel();
         pnlSearchMode = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         rbAll = new javax.swing.JRadioButton();
@@ -270,6 +316,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         scpListEigentuemer = new javax.swing.JScrollPane();
         lstEigentuemer = new javax.swing.JList();
         pnlEigentuemerCtrlBtns = new javax.swing.JPanel();
+        lblselectedEigentuemer = new javax.swing.JLabel();
         pnlGesamtnoten = new javax.swing.JPanel();
         lblBausubstanz = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -300,6 +347,10 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         setPreferredSize(new java.awt.Dimension(70, 20));
         setLayout(new java.awt.BorderLayout());
 
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jScrollPane1.setViewportBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+
+        pnlScrollPane.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         pnlScrollPane.setLayout(new java.awt.GridBagLayout());
 
         pnlNoten.setBorder(javax.swing.BorderFactory.createTitledBorder(
@@ -623,6 +674,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlScrollPane.add(pnlNoten, gridBagConstraints);
 
         pnlLastklasse.setBorder(javax.swing.BorderFactory.createTitledBorder(
@@ -645,11 +697,22 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
         pnlLastklasse.add(scpListLastklasse, gridBagConstraints);
 
+        lblSelektierteLastklassen.setText(org.openide.util.NbBundle.getMessage(
+                MauernWindowSearch.class,
+                "MauernWindowSearch.lblSelektierteLastklassen.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        pnlLastklasse.add(lblSelektierteLastklassen, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlScrollPane.add(pnlLastklasse, gridBagConstraints);
 
         pnlSearchMode.setLayout(new java.awt.GridBagLayout());
@@ -660,7 +723,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         pnlSearchMode.add(jLabel1, gridBagConstraints);
 
         buttonGroup1.add(rbAll);
@@ -685,7 +748,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 25, 0, 25);
         pnlScrollPane.add(pnlSearchMode, gridBagConstraints);
 
         pnlEigetuemer.setBorder(javax.swing.BorderFactory.createTitledBorder(
@@ -714,11 +777,22 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.gridy = 0;
         pnlEigetuemer.add(pnlEigentuemerCtrlBtns, gridBagConstraints);
 
+        lblselectedEigentuemer.setText(org.openide.util.NbBundle.getMessage(
+                MauernWindowSearch.class,
+                "MauernWindowSearch.lblselectedEigentuemer.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        pnlEigetuemer.add(lblselectedEigentuemer, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlScrollPane.add(pnlEigetuemer, gridBagConstraints);
 
         pnlGesamtnoten.setBorder(javax.swing.BorderFactory.createTitledBorder(
@@ -842,6 +916,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlScrollPane.add(pnlGesamtnoten, gridBagConstraints);
 
         pnlPruefung.setBorder(javax.swing.BorderFactory.createTitledBorder(
@@ -898,6 +973,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlScrollPane.add(pnlPruefung, gridBagConstraints);
 
         pnlButtons.setLayout(new javax.swing.BoxLayout(pnlButtons, javax.swing.BoxLayout.LINE_AXIS));
@@ -907,7 +983,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlScrollPane.add(pnlButtons, gridBagConstraints);
 
         cbMapSearch.setText(org.openide.util.NbBundle.getMessage(
@@ -917,7 +993,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 5, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 25, 0, 25);
         pnlScrollPane.add(cbMapSearch, gridBagConstraints);
 
         pnlHoehe.setBorder(javax.swing.BorderFactory.createTitledBorder(
@@ -982,6 +1058,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlScrollPane.add(pnlHoehe, gridBagConstraints);
 
         jScrollPane1.setViewportView(pnlScrollPane);
@@ -1294,5 +1371,85 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
     @Override
     public String getName() {
         return NbBundle.getMessage(MauernWindowSearch.class, "MauernWindowSearch.name");
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public DefaultListModel getEigentuemerListModel() {
+        return eigentuemerListModel;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  eigentuemerListModel  DOCUMENT ME!
+     */
+    public void setEigentuemerListModel(final DefaultListModel eigentuemerListModel) {
+        this.eigentuemerListModel = eigentuemerListModel;
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private final class CheckboxCellRenderer implements ListCellRenderer {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Component getListCellRendererComponent(final JList jlist,
+                final Object o,
+                final int i,
+                final boolean isSelected,
+                final boolean cellHasFocus) {
+            final JPanel pnl = new JPanel();
+            pnl.setLayout(new BorderLayout());
+            final JCheckBox cb = new JCheckBox();
+            cb.setSelected(isSelected);
+            cb.setOpaque(false);
+            pnl.add(cb, BorderLayout.WEST);
+            pnl.add(new JLabel(o.toString()), BorderLayout.CENTER);
+            pnl.setOpaque(false);
+            pnl.setBorder(new EmptyBorder(new Insets(0, 0, 0, 5)));
+            return pnl;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private final class ListToggleSelectionModel extends DefaultListSelectionModel {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void setSelectionInterval(final int index0, final int index1) {
+            if (index0 == index1) {
+                if (isSelectedIndex(index0)) {
+                    removeSelectionInterval(index0, index0);
+                    return;
+                }
+            }
+            super.setSelectionInterval(index0, index1);
+        }
+
+        @Override
+        public void addSelectionInterval(final int index0, final int index1) {
+            if (index0 == index1) {
+                if (isSelectedIndex(index0)) {
+                    removeSelectionInterval(index0, index0);
+                    return;
+                }
+                super.addSelectionInterval(index0, index1);
+            }
+        }
     }
 }
