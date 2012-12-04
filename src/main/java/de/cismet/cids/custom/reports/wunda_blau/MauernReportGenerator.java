@@ -32,8 +32,12 @@ import java.awt.event.ActionListener;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.Timer;
 
 import de.cismet.cids.custom.objecteditors.wunda_blau.MauerEditor;
@@ -42,10 +46,14 @@ import de.cismet.cids.custom.objectrenderer.wunda_blau.NivellementPunktAggregati
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.utils.jasperreports.ReportSwingWorkerDialog;
+
 import de.cismet.cismap.commons.gui.printing.JasperDownload;
+import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.tools.CismetThreadPool;
 
+import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 
@@ -71,10 +79,22 @@ public class MauernReportGenerator {
      * @param  parent     DOCUMENT ME!
      */
     public static void generateKatasterBlatt(final Collection<CidsBean> cidsBeans, final Component parent) {
-        final Runnable runnable = new Runnable() {
+        final SwingWorker<Boolean, Object> worker = new SwingWorker<Boolean, Object>() {
+
+                ReportSwingWorkerDialog dialog = new ReportSwingWorkerDialog(StaticSwingTools.getParentFrame(
+                            CismapBroker.getInstance().getMappingComponent()),
+                        true);
 
                 @Override
-                public void run() {
+                protected Boolean doInBackground() throws Exception {
+                    SwingUtilities.invokeLater(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                StaticSwingTools.showDialog(dialog);
+                            }
+                        });
+
                     final Collection<MauernReportBeanWithMapAndImages> reportBeans =
                         new LinkedList<MauernReportBeanWithMapAndImages>();
                     for (final CidsBean b : cidsBeans) {
@@ -111,21 +131,7 @@ public class MauernReportGenerator {
                         jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
                     } catch (JRException ex) {
                         LOG.error("Could not generate katasterblatt report for mauern.", ex);
-
-                        final ErrorInfo ei = new ErrorInfo(NbBundle.getMessage(
-                                    MauernReportGenerator.class,
-                                    "MauernReportGenerator.jxlKatasterblattActionPerformed(ActionEvent).ErrorInfo.title"),   // NOI18N
-                                NbBundle.getMessage(
-                                    MauernReportGenerator.class,
-                                    "MauernReportGenerator.jxlKatasterblattActionPerformed(ActionEvent).ErrorInfo.message"), // NOI18N
-                                null,
-                                null,
-                                ex,
-                                Level.ALL,
-                                null);
-                        JXErrorPane.showDialog(parent, ei);
-
-                        return;
+                        return false;
                     }
 
                     if (DownloadManagerDialog.showAskingForUserTitle(parent)) {
@@ -138,10 +144,39 @@ public class MauernReportGenerator {
                                         "Mauer Katasterblatt",
                                         "mauern_katasterblatt"));
                     }
+                    return true;
+                }
+
+                @Override
+                protected void done() {
+                    boolean error = false;
+                    try {
+                        error = !get();
+                    } catch (InterruptedException ex) {
+                        // unterbrochen, nichts tun
+                    } catch (ExecutionException ex) {
+                        error = true;
+                        LOG.error("error while generating report", ex);
+                    }
+                    dialog.setVisible(false);
+                    if (error) {
+                        final ErrorInfo ei = new ErrorInfo(NbBundle.getMessage(
+                                    MauernReportGenerator.class,
+                                    "MauernReportGenerator.jxlKatasterblattActionPerformed(ActionEvent).ErrorInfo.title"),   // NOI18N
+                                NbBundle.getMessage(
+                                    MauernReportGenerator.class,
+                                    "MauernReportGenerator.jxlKatasterblattActionPerformed(ActionEvent).ErrorInfo.message"), // NOI18N
+                                null,
+                                null,
+                                null,
+                                Level.ALL,
+                                null);
+                        JXErrorPane.showDialog(parent, ei);
+                    }
                 }
             };
 
-        CismetThreadPool.execute(runnable);
+        worker.execute();
     }
 
     /**
@@ -151,10 +186,22 @@ public class MauernReportGenerator {
      * @param  parent     DOCUMENT ME!
      */
     public static void generateMainInfo(final Collection<CidsBean> cidsBeans, final Component parent) {
-        final Runnable runnable = new Runnable() {
+        final SwingWorker<Boolean, Object> worker = new SwingWorker<Boolean, Object>() {
+
+                ReportSwingWorkerDialog dialog = new ReportSwingWorkerDialog(StaticSwingTools.getParentFrame(
+                            CismapBroker.getInstance().getMappingComponent()),
+                        true);
 
                 @Override
-                public void run() {
+                protected Boolean doInBackground() throws Exception {
+                    SwingUtilities.invokeLater(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                StaticSwingTools.showDialog(dialog);
+                            }
+                        });
+
                     final Collection<MauernReportBean> reportBeans = new LinkedList<MauernReportBean>();
                     for (final CidsBean b : cidsBeans) {
                         reportBeans.add(new MauernReportBeanWithMapAndImages(b));
@@ -183,20 +230,7 @@ public class MauernReportGenerator {
                     } catch (JRException ex) {
                         LOG.error("Could not generate main info report for mauern.", ex);
 
-                        final ErrorInfo ei = new ErrorInfo(NbBundle.getMessage(
-                                    MauernReportGenerator.class,
-                                    "MauernReportGenerator.jxlKatasterblattActionPerformed(ActionEvent).ErrorInfo.title"),   // NOI18N
-                                NbBundle.getMessage(
-                                    MauernReportGenerator.class,
-                                    "MauernReportGenerator.jxlKatasterblattActionPerformed(ActionEvent).ErrorInfo.message"), // NOI18N
-                                null,
-                                null,
-                                ex,
-                                Level.ALL,
-                                null);
-                        JXErrorPane.showDialog(parent, ei);
-
-                        return;
+                        return false;
                     }
 
                     if (DownloadManagerDialog.showAskingForUserTitle(parent)) {
@@ -209,9 +243,38 @@ public class MauernReportGenerator {
                                         "Mauer Katasterblatt",
                                         "mauern_hauptinfo"));
                     }
+                    return true;
+                }
+
+                @Override
+                protected void done() {
+                    boolean error = false;
+                    try {
+                        error = !get();
+                    } catch (InterruptedException ex) {
+                        // unterbrochen, nichts tun
+                    } catch (ExecutionException ex) {
+                        error = true;
+                        LOG.error("error while generating report", ex);
+                    }
+                    dialog.setVisible(false);
+                    if (error) {
+                        final ErrorInfo ei = new ErrorInfo(NbBundle.getMessage(
+                                    MauernReportGenerator.class,
+                                    "MauernReportGenerator.jxlKatasterblattActionPerformed(ActionEvent).ErrorInfo.title"),   // NOI18N
+                                NbBundle.getMessage(
+                                    MauernReportGenerator.class,
+                                    "MauernReportGenerator.jxlKatasterblattActionPerformed(ActionEvent).ErrorInfo.message"), // NOI18N
+                                null,
+                                null,
+                                null,
+                                Level.ALL,
+                                null);
+                        JXErrorPane.showDialog(parent, ei);
+                    }
                 }
             };
 
-        CismetThreadPool.execute(runnable);
+        worker.execute();
     }
 }
