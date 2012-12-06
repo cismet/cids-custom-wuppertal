@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<field name="mauer.lagebezeichnung" class="java.lang.String"/>
+	<field name="mauer.mauer_nummer" class="java.lang.String"/>
+	<field name="mauer.lagebeschreibung" class="java.lang.String"/>
+	<field name="mauer.umgebung" class="java.lang.String"/>
+	<field name="mauer.neigung" class="java.lang.String"/>
+	<field name="mauer.stuetzmauertyp.name" class="java.lang.String"/>
+	<field name="mauer.materialtyp.name" class="java.lang.String"/>
+	<field name="mauer.hoehe_min" class="java.lang.Float"/>
+	<field name="mauer.hoehe_max" class="java.lang.Float"/>
+	<field name="mauer.laenge" class="java.lang.Integer"/>
+	<field name="mauer.eigentuemer.name" class="java.lang.String"/>
+	<field name="mauer.datum_erste_pruefung" class="java.util.Date"/>
+	<field name="mauer.datum_letzte_pruefung" class="java.util.Date"/>
+	<field name="mauer.datum_naechste_pruefung" class="java.util.Date"/>
+	<field name="mauer.art_erste_pruefung.name" class="java.lang.String"/>
+	<field name="mauer.art_letzte_pruefung.name" class="java.lang.String"/>
+	<field name="mauer.art_naechste_pruefung.name" class="java.lang.String"/>
+	<field name="mauer.beschreibung_gelaender" class="java.lang.String"/>
+	<field name="mauer.beschreibung_kopf" class="java.lang.String"/>
+	<field name="mauer.beschreibung_ansicht" class="java.lang.String"/>
+	<field name="mauer.beschreibung_gruendung" class="java.lang.String"/>
+	<field name="mauer.beschreibung_verformung" class="java.lang.String"/>
+	<field name="mauer.beschreibung_gelaende" class="java.lang.String"/>
+	<field name="mauer.zustand_gelaender" class="java.lang.Float"/>
+	<field name="mauer.zustand_kopf" class="java.lang.Float"/>
+	<field name="mauer.zustand_ansicht" class="java.lang.Float"/>
+	<field name="mauer.zustand_gruendung" class="java.lang.Float"/>
+	<field name="mauer.zustand_verformung" class="java.lang.Float"/>
+	<field name="mauer.zustand_gelaende" class="java.lang.Float"/>
+	<field name="mauer.san_massnahme_gelaender" class="java.lang.String"/>
+	<field name="mauer.san_massnahme_kopf" class="java.lang.String"/>
+	<field name="mauer.san_massnahme_ansicht" class="java.lang.String"/>
+	<field name="mauer.san_massnahme_gruendung" class="java.lang.String"/>
+	<field name="mauer.san_massnahme_verformung" class="java.lang.String"/>
+	<field name="mauer.san_massnahme_gelaende" class="java.lang.String"/>
+	<field name="mauer.san_kosten_gelaender" class="java.lang.Integer"/>
+	<field name="mauer.san_kosten_kopf" class="java.lang.Integer"/>
+	<field name="mauer.san_kosten_ansicht" class="java.lang.Integer"/>
+	<field name="mauer.san_kosten_gruendung" class="java.lang.Integer"/>
+	<field name="mauer.san_kosten_verformung" class="java.lang.Integer"/>
+	<field name="mauer.san_kosten_gelaende" class="java.lang.Integer"/>
+	<field name="mauer.san_eingriff_gelaender" class="java.lang.Float"/>
+	<field name="mauer.san_eingriff_kopf" class="java.lang.Float"/>
+	<field name="mauer.san_eingriff_ansicht" class="java.lang.Float"/>
+	<field name="mauer.san_eingriff_gruendung" class="java.lang.Float"/>
+	<field name="mauer.san_eingriff_verformung" class="java.lang.Float"/>
+	<field name="mauer.san_eingriff_gelaende" class="java.lang.Float"/>
+	<field name="mauer.standsicherheit.name" class="java.lang.String"/>
+	<field name="mauer.verkehrssicherheit.name" class="java.lang.String"/>
+	<field name="mauer.dauerhaftigkeit.name" class="java.lang.String"/>
+	<field name="mauer.besonderheiten" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="521" splitType="Stretch">
+			<textField>
+				<reportElement x="57" y="18" width="195" height="18"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.lagebezeichnung}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="263" y="16" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{mauer.mauer_nummer}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
