@@ -145,7 +145,6 @@ public class MauernReportTester {
         DevelopmentTools.showReportForBeans(
             "/de/cismet/cids/custom/reports/wunda_blau/mauer-katasterblatt.jasper",
             Arrays.asList(mauern));
-
         System.out.println("alles fertich.ok");
     }
 }
