@@ -3484,7 +3484,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
             if (geoObj instanceof Geometry) {
                 final Geometry pureGeom = CrsTransformer.transformToGivenCrs((Geometry)geoObj,
                         AlkisConstants.COMMONS.SRS_SERVICE);
-                final BoundingBox box = new BoundingBox(pureGeom.getEnvelope().buffer(
+                final XBoundingBox box = new XBoundingBox(pureGeom.getEnvelope().buffer(
                             AlkisConstants.COMMONS.GEO_BUFFER));
 
                 final Runnable mapRunnable = new Runnable() {
