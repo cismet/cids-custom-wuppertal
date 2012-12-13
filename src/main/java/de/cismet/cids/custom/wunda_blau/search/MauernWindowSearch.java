@@ -49,6 +49,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -89,7 +90,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
     private static final Logger LOG = Logger.getLogger(MauernWindowSearch.class);
     // End of variables declaration
-    private static final String ACTION_TAG = "custom.alkis.windowsearch@WUNDA_BLAU";
+    private static final String ACTION_TAG = "custom.mauern.search@WUNDA_BLAU";
 
     //~ Instance fields --------------------------------------------------------
 
@@ -238,6 +239,8 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
                     }
                 }
             });
+        lstLastklasse.setCellRenderer(new CheckboxCellRenderer());
+        lstLastklasse.setSelectionModel(new ListToggleSelectionModel());
         lstLastklasse.addListSelectionListener(new ListSelectionListener() {
 
                 @Override
@@ -254,7 +257,6 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
                     }
                 }
             });
-        lstLastklasse.setCellRenderer(new CheckboxCellRenderer());
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -1317,7 +1319,8 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
                 "Administratoren",
                 "admin",
                 "kif");
-            DevelopmentTools.showTestFrame(new MauernWindowSearch(), 800, 1000);
+            final JScrollPane jsp = new JScrollPane(new MauernWindowSearch());
+            DevelopmentTools.showTestFrame(jsp, 800, 1000);
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
         }
@@ -1413,10 +1416,11 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
             final JCheckBox cb = new JCheckBox();
             cb.setSelected(isSelected);
             cb.setOpaque(false);
+//            cb.setBorder(new EmptyBorder(new Insets(1, 5, 1, 5)));
             pnl.add(cb, BorderLayout.WEST);
             pnl.add(new JLabel(o.toString()), BorderLayout.CENTER);
             pnl.setOpaque(false);
-            pnl.setBorder(new EmptyBorder(new Insets(0, 0, 0, 5)));
+            pnl.setBorder(new EmptyBorder(new Insets(0, 5, 0, 0)));
             return pnl;
         }
     }
