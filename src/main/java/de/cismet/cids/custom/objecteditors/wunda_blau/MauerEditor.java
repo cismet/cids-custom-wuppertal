@@ -3370,8 +3370,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                 bindingGroup,
                 cidsBean);
             this.cidsBean = cidsBean;
-            final String lagebez = cidsBean.getProperty("lagebezeichnung").toString();
-            this.title = NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblTitle.prefix") + lagebez;
+            final String lagebez = (String)cidsBean.getProperty("lagebezeichnung");
+            this.title = NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblTitle.prefix")
+                        + ((lagebez != null) ? lagebez : "");
             lblTitle.setText(this.title);
             initMap();
             bindingGroup.bind();
