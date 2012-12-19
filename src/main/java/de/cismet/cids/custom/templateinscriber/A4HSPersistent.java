@@ -23,9 +23,13 @@ import java.util.*;
 import javax.swing.JCheckBox;
 
 import de.cismet.cismap.commons.MappingModel;
+import de.cismet.cismap.commons.RetrievalServiceLayer;
+import de.cismet.cismap.commons.ServiceLayer;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.printing.AbstractPrintingInscriber;
 import de.cismet.cismap.commons.interaction.CismapBroker;
+import de.cismet.cismap.commons.raster.wms.WMSServiceLayer;
+import de.cismet.cismap.commons.rasterservice.MapService;
 
 import de.cismet.tools.CismetThreadPool;
 
@@ -45,20 +49,15 @@ public class A4HSPersistent extends AbstractPrintingInscriber {
     public static final String KEY_LOC_DESC = "Lagebezeichnung";
     public static final String KEY_DATA = "Datenart";
     public static final String KEY_DATASOURCES = "Datenquellen";
-
     private static final String CBO_DATA_PROPERTIES = "CboData.properties";
-
     private static final Logger LOG = Logger.getLogger(A4HSPersistent.class);
 
     //~ Instance fields --------------------------------------------------------
 
     String cacheFile = ""; // NOI18N
     Properties cache = new Properties();
-
     private final ArrayList<JCheckBox> chkDataSourcesList;
-
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cboData;
     private javax.swing.JScrollPane jScrollPane2;
@@ -111,11 +110,20 @@ public class A4HSPersistent extends AbstractPrintingInscriber {
         while (it.hasNext()) {
             v = it.next();
 
-            chkDataSource = new JCheckBox(v.toString());
-            chkDataSource.setSelected(true);
+            final boolean serviceLayerCheck = ((v instanceof ServiceLayer) && ((ServiceLayer)(v)).isEnabled()
+                            && (((ServiceLayer)(v)).getTranslucency() > 0)) || !(v instanceof ServiceLayer);
 
-            this.pnlDataSources.add(chkDataSource, 0);
-            this.chkDataSourcesList.add(chkDataSource);
+            final boolean retrievalServiceLayerCheck = ((v instanceof RetrievalServiceLayer)
+                            && ((RetrievalServiceLayer)v).getPNode().getVisible())
+                        || !(v instanceof MapService);
+
+            if (serviceLayerCheck && retrievalServiceLayerCheck) {
+                chkDataSource = new JCheckBox(v.toString());
+                chkDataSource.setSelected(true);
+
+                this.pnlDataSources.add(chkDataSource, 0);
+                this.chkDataSourcesList.add(chkDataSource);
+            }
         }
 
         // more efficient than always adding elements on the first position
@@ -193,8 +201,10 @@ public class A4HSPersistent extends AbstractPrintingInscriber {
         hm.put(KEY_DATA, String.valueOf(cboData.getSelectedItem()));
         hm.put(KEY_DATASOURCES, this.getSelectedDataSourcesString());
 
-        cache.setProperty(KEY_HIGHLIGHT, txtHighlight.getText()); // NOI18N
-        cache.setProperty(KEY_SIGNATURE, txtSignature.getText()); // NOI18N
+        cache.setProperty(KEY_HIGHLIGHT, txtHighlight.getText());          // NOI18N
+        cache.setProperty(KEY_SIGNATURE, txtSignature.getText());          // NOI18N
+        cache.setProperty(KEY_E_NR, txtENr.getText());                     // NOI18N
+        cache.setProperty(KEY_LOC_DESC, txtLocationDescription.getText()); // NOI18N
         writeInscriberCache();
         return hm;
     }
@@ -264,30 +274,27 @@ public class A4HSPersistent extends AbstractPrintingInscriber {
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
                 layout.createSequentialGroup().addContainerGap().add(
-                    layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(lblLocationDescription).add(
-                        lblData).add(lblENr).add(lblSignature).add(lblHighlight).add(lblDataSources)).addPreferredGap(
-                    org.jdesktop.layout.LayoutStyle.RELATED).add(
-                    layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(txtHighlight).add(
-                        txtSignature).add(txtENr).add(txtLocationDescription).add(cboData, 0, 164, Short.MAX_VALUE).add(
-                        jScrollPane2,
-                        org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-                        org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-                        Short.MAX_VALUE)).addContainerGap()));
+                    layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(lblData).add(
+                        lblSignature).add(lblHighlight).add(lblENr).add(lblLocationDescription).add(lblDataSources))
+                            .add(
+                                layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
+                                    layout.createSequentialGroup().add(7, 7, 7).add(
+                                        layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
+                                            txtLocationDescription).add(txtSignature).add(txtENr).add(
+                                            cboData,
+                                            0,
+                                            198,
+                                            Short.MAX_VALUE).add(txtHighlight))).add(
+                                    org.jdesktop.layout.GroupLayout.TRAILING,
+                                    layout.createSequentialGroup().addPreferredGap(
+                                        org.jdesktop.layout.LayoutStyle.RELATED).add(
+                                        jScrollPane2,
+                                        org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+                                        org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+                                        Short.MAX_VALUE))).addContainerGap()));
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
                 layout.createSequentialGroup().addContainerGap().add(
-                    layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(lblHighlight).add(
-                        txtHighlight,
-                        org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
-                        org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-                        org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
-                    org.jdesktop.layout.LayoutStyle.RELATED).add(
-                    layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(lblSignature).add(
-                        txtSignature,
-                        org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
-                        org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-                        org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
-                    org.jdesktop.layout.LayoutStyle.RELATED).add(
                     layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(lblENr).add(
                         txtENr,
                         org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
@@ -301,14 +308,30 @@ public class A4HSPersistent extends AbstractPrintingInscriber {
                                     org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
                                     org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
                     org.jdesktop.layout.LayoutStyle.RELATED).add(
-                    layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false).add(cboData).add(
+                    layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(lblSignature).add(
+                        txtSignature,
+                        org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+                        org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+                        org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
+                    org.jdesktop.layout.LayoutStyle.RELATED).add(
+                    layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(lblHighlight).add(
+                        txtHighlight,
+                        org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+                        org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+                        org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
+                    org.jdesktop.layout.LayoutStyle.RELATED).add(
+                    layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(
+                        cboData,
+                        org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+                        org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+                        org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(
                         lblData,
                         org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
                         27,
                         org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
                     org.jdesktop.layout.LayoutStyle.RELATED).add(
                     layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
-                        layout.createSequentialGroup().add(lblDataSources).add(0, 39, Short.MAX_VALUE)).add(
+                        layout.createSequentialGroup().add(lblDataSources).add(0, 106, Short.MAX_VALUE)).add(
                         jScrollPane2,
                         org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
                         org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
@@ -356,8 +379,12 @@ public class A4HSPersistent extends AbstractPrintingInscriber {
             cache.load(new FileInputStream(cacheFile));
             final String h = cache.getProperty(KEY_HIGHLIGHT).toString();
             final String s = cache.getProperty(KEY_SIGNATURE).toString();
+            final String l = cache.getProperty(KEY_LOC_DESC).toString();
+            final String e = cache.getProperty(KEY_E_NR).toString();
             txtHighlight.setText(h);
             txtSignature.setText(s);
+            txtENr.setText(e);
+            txtLocationDescription.setText(l);
         } catch (Throwable t) {
             log.warn("Error while reading the InscriberCache", t); // NOI18N
         }
