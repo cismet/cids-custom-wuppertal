@@ -1748,6 +1748,15 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
 
         cbArtNaechstePruefung1.setMinimumSize(new java.awt.Dimension(150, 20));
         cbArtNaechstePruefung1.setPreferredSize(new java.awt.Dimension(150, 20));
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.art_naechste_pruefung}"),
+                cbArtNaechstePruefung1,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
