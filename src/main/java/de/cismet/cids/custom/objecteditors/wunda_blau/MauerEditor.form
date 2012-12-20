@@ -410,6 +410,9 @@
                       <BindingProperties>
                         <BindingProperty name="text" source="Form" sourcePath="${cidsBean.hoehe_min}" target="tfHoeheMin" targetPath="text" updateStrategy="0" immediately="false">
                           <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                          <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                            <Connection code="new NumberConverter()" type="code"/>
+                          </Property>
                         </BindingProperty>
                       </BindingProperties>
                       <Constraints>
@@ -442,6 +445,9 @@
                       <BindingProperties>
                         <BindingProperty name="text" source="Form" sourcePath="${cidsBean.hoehe_max}" target="tfHoeheMax" targetPath="text" updateStrategy="0" immediately="false">
                           <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                          <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                            <Connection code="new NumberConverter()" type="code"/>
+                          </Property>
                         </BindingProperty>
                       </BindingProperties>
                       <Constraints>
@@ -653,6 +659,9 @@
                       <BindingProperties>
                         <BindingProperty name="text" source="Form" sourcePath="${cidsBean.staerke_unten}" target="tfStaerke_unten" targetPath="text" updateStrategy="0" immediately="false">
                           <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                          <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                            <Connection code="new NumberConverter()" type="code"/>
+                          </Property>
                         </BindingProperty>
                       </BindingProperties>
                       <Events>
@@ -688,6 +697,9 @@
                       <BindingProperties>
                         <BindingProperty name="text" source="Form" sourcePath="${cidsBean.staerke_oben}" target="tfStaerkeOben" targetPath="text" updateStrategy="0" immediately="false">
                           <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                          <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                            <Connection code="new NumberConverter()" type="code"/>
+                          </Property>
                         </BindingProperty>
                       </BindingProperties>
                       <Constraints>
@@ -920,6 +932,9 @@
                   <BindingProperties>
                     <BindingProperty name="text" source="Form" sourcePath="${cidsBean.lastabstand}" target="tfLastabstand" targetPath="text" updateStrategy="0" immediately="false">
                       <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                      <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                        <Connection code="new NumberConverter()" type="code"/>
+                      </Property>
                     </BindingProperty>
                   </BindingProperties>
                   <Constraints>
@@ -1385,6 +1400,9 @@
                   <BindingProperties>
                     <BindingProperty name="text" source="Form" sourcePath="${cidsBean.sanierung}" target="tfSanierung" targetPath="text" updateStrategy="0" immediately="false">
                       <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                      <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                        <Connection code="new NumberConverter()" type="code"/>
+                      </Property>
                     </BindingProperty>
                   </BindingProperties>
                   <Constraints>
@@ -1619,6 +1637,9 @@
                           <BindingProperties>
                             <BindingProperty name="text" source="Form" sourcePath="${cidsBean.zustand_gelaender}" target="tfZustandGelaender" targetPath="text" updateStrategy="0" immediately="false">
                               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                              <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                <Connection code="new NumberConverter()" type="code"/>
+                              </Property>
                             </BindingProperty>
                           </BindingProperties>
                           <Constraints>
@@ -1659,6 +1680,9 @@
                           <BindingProperties>
                             <BindingProperty name="text" source="Form" sourcePath="${cidsBean.san_eingriff_gelaender}" target="tfEingriffGelaender" targetPath="text" updateStrategy="0" immediately="false">
                               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                              <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                <Connection code="new NumberConverter()" type="code"/>
+                              </Property>
                             </BindingProperty>
                           </BindingProperties>
                           <Constraints>
@@ -1866,6 +1890,9 @@
                           <BindingProperties>
                             <BindingProperty name="text" source="Form" sourcePath="${cidsBean.zustand_kopf}" target="tfZustandKopf" targetPath="text" updateStrategy="0" immediately="false">
                               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                              <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                <Connection code="new NumberConverter()" type="code"/>
+                              </Property>
                             </BindingProperty>
                           </BindingProperties>
                           <Constraints>
@@ -1906,6 +1933,9 @@
                           <BindingProperties>
                             <BindingProperty name="text" source="Form" sourcePath="${cidsBean.san_eingriff_kopf}" target="tfEingriffKopf" targetPath="text" updateStrategy="0" immediately="false">
                               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                              <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                <Connection code="new NumberConverter()" type="code"/>
+                              </Property>
                             </BindingProperty>
                           </BindingProperties>
                           <Constraints>
@@ -2113,6 +2143,9 @@
                           <BindingProperties>
                             <BindingProperty name="text" source="Form" sourcePath="${cidsBean.zustand_ansicht}" target="tfZustandAnsicht" targetPath="text" updateStrategy="0" immediately="false">
                               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                              <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                <Connection code="new NumberConverter()" type="code"/>
+                              </Property>
                             </BindingProperty>
                           </BindingProperties>
                           <Constraints>
@@ -2153,6 +2186,9 @@
                           <BindingProperties>
                             <BindingProperty name="text" source="Form" sourcePath="${cidsBean.san_eingriff_ansicht}" target="tfEingriffAnsicht" targetPath="text" updateStrategy="0" immediately="false">
                               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                              <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                <Connection code="new NumberConverter()" type="code"/>
+                              </Property>
                             </BindingProperty>
                           </BindingProperties>
                           <Constraints>
@@ -2359,6 +2395,9 @@
                           <BindingProperties>
                             <BindingProperty name="text" source="Form" sourcePath="${cidsBean.zustand_gruendung}" target="tfZustandGruendung" targetPath="text" updateStrategy="0" immediately="false">
                               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                              <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                <Connection code="new NumberConverter()" type="code"/>
+                              </Property>
                             </BindingProperty>
                           </BindingProperties>
                           <Constraints>
@@ -2399,6 +2438,9 @@
                           <BindingProperties>
                             <BindingProperty name="text" source="Form" sourcePath="${cidsBean.san_eingriff_gruendung}" target="tfEingriffGruendung" targetPath="text" updateStrategy="0" immediately="false">
                               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                              <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                <Connection code="new NumberConverter()" type="code"/>
+                              </Property>
                             </BindingProperty>
                           </BindingProperties>
                           <Constraints>
@@ -2606,6 +2648,9 @@
                           <BindingProperties>
                             <BindingProperty name="text" source="Form" sourcePath="${cidsBean.zustand_gelaende}" target="tfZustandGruendung1" targetPath="text" updateStrategy="0" immediately="false">
                               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                              <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                <Connection code="new NumberConverter()" type="code"/>
+                              </Property>
                             </BindingProperty>
                           </BindingProperties>
                           <Constraints>
@@ -2646,6 +2691,9 @@
                           <BindingProperties>
                             <BindingProperty name="text" source="Form" sourcePath="${cidsBean.san_eingriff_gelaende}" target="tfEingriffGruendung1" targetPath="text" updateStrategy="0" immediately="false">
                               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                              <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                <Connection code="new NumberConverter()" type="code"/>
+                              </Property>
                             </BindingProperty>
                           </BindingProperties>
                           <Constraints>
@@ -2853,6 +2901,9 @@
                           <BindingProperties>
                             <BindingProperty name="text" source="Form" sourcePath="${cidsBean.zustand_verformung}" target="tfZustandGruendung2" targetPath="text" updateStrategy="0" immediately="false">
                               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                              <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                <Connection code="new NumberConverter()" type="code"/>
+                              </Property>
                             </BindingProperty>
                           </BindingProperties>
                           <Constraints>
@@ -2893,6 +2944,9 @@
                           <BindingProperties>
                             <BindingProperty name="text" source="Form" sourcePath="${cidsBean.san_eingriff_verformung}" target="tfEingriffGruendung2" targetPath="text" updateStrategy="0" immediately="false">
                               <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                              <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                <Connection code="new NumberConverter()" type="code"/>
+                              </Property>
                             </BindingProperty>
                           </BindingProperties>
                           <Constraints>
