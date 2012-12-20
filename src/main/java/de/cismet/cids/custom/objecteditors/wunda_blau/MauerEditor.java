@@ -574,7 +574,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         lblStandsicherheit = new javax.swing.JLabel();
         cbStandsicherheit = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
         cbVerkehrssicherheit = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
-        cbGeom = new DefaultCismapGeometryComboBoxEditor();
+        if (editable) {
+            cbGeom = new DefaultCismapGeometryComboBoxEditor();
+        }
         lblGeom = new javax.swing.JLabel();
         lblBauwerksbuchfertigstellung = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
@@ -1313,9 +1315,6 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 0);
         pnlAllgemein.add(pnlLeft, gridBagConstraints);
-        if (!editable) {
-            pnlLeft.remove(cbGeom);
-        }
 
         pnlRight.setMinimumSize(new java.awt.Dimension(500, 163));
         pnlRight.setOpaque(false);
@@ -1668,26 +1667,26 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         pnlRight.add(cbVerkehrssicherheit, gridBagConstraints);
 
-        cbGeom.setMinimumSize(new java.awt.Dimension(41, 25));
-        cbGeom.setPreferredSize(new java.awt.Dimension(41, 25));
+        if (editable) {
+            cbGeom.setMinimumSize(new java.awt.Dimension(41, 25));
+            cbGeom.setPreferredSize(new java.awt.Dimension(41, 25));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.georeferenz}"),
-                cbGeom,
-                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
-        pnlRight.add(cbGeom, gridBagConstraints);
-        if (!editable) {
-            pnlRight.remove(cbGeom);
+            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                    org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    org.jdesktop.beansbinding.ELProperty.create("${cidsBean.georeferenz}"),
+                    cbGeom,
+                    org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+            binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cbGeom).getConverter());
+            bindingGroup.addBinding(binding);
+        }
+        if (editable) {
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridy = 10;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+            pnlRight.add(cbGeom, gridBagConstraints);
         }
 
         lblGeom.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblGeom.text")); // NOI18N
@@ -1821,13 +1820,11 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
 
         jScrollPane3.setBackground(new java.awt.Color(254, 254, 254));
         jScrollPane3.setBorder(null);
-        jScrollPane3.setViewportBorder(null);
         jScrollPane3.setFocusable(false);
         jScrollPane3.setOpaque(false);
         jScrollPane3.setPreferredSize(new java.awt.Dimension(600, 120));
 
         pnlScrollPane.setBackground(new java.awt.Color(254, 254, 254));
-        pnlScrollPane.setBorder(null);
         pnlScrollPane.setFocusable(false);
         pnlScrollPane.setOpaque(false);
         pnlScrollPane.setLayout(new java.awt.GridBagLayout());
@@ -3370,8 +3367,9 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                 bindingGroup,
                 cidsBean);
             this.cidsBean = cidsBean;
-            final String lagebez = cidsBean.getProperty("lagebezeichnung").toString();
-            this.title = NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblTitle.prefix") + lagebez;
+            final String lagebez = (String)cidsBean.getProperty("lagebezeichnung");
+            this.title = NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblTitle.prefix")
+                        + ((lagebez != null) ? lagebez : "");
             lblTitle.setText(this.title);
             initMap();
             bindingGroup.bind();

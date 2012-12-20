@@ -1,12 +1,10 @@
-/**
- * *************************************************
- *
- * cismet GmbH, Saarbruecken, Germany
- * 
-* ... and it just works.
- * 
-***************************************************
- */
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.cids.custom.wunda_blau.search;
 
 import Sirius.navigator.actiontag.ActionTagProtected;
@@ -85,16 +83,17 @@ import de.cismet.tools.gui.StaticSwingTools;
 /**
  * DOCUMENT ME!
  *
- * @author jweintraut
- * @version $Revision$, $Date$
+ * @author   jweintraut
+ * @version  $Revision$, $Date$
  */
 @org.openide.util.lookup.ServiceProvider(service = CidsWindowSearch.class)
 public class MeasurementPointWindowSearch extends javax.swing.JPanel implements CidsWindowSearch,
-        ActionTagProtected,
-        SearchControlListener,
-        PropertyChangeListener {
+    ActionTagProtected,
+    SearchControlListener,
+    PropertyChangeListener {
 
     //~ Static fields/initializers ---------------------------------------------
+
     private static final Logger LOG = Logger.getLogger(MeasurementPointWindowSearch.class);
     private static final String ACTION_TAG = "custom.measurement.pointsearch@WUNDA_BLAU";
     private static final String ACTION_POINTTYPE_ALLE = "cmdAllePunkte";
@@ -102,7 +101,9 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
     private static final String ACTION_POINTTYPE_GRENZUNDGEBAEUDE = "cmdGrenzUndGebaeudePunkte";
     private static final String ACTION_POINTTYPE_GEBAEUDEUNDBAUWERK = "cmdGebaeudeUndBauwerksPunkte";
     private static final String ACTION_POINTTYPE_HOEHENFEST = "cmdHoehenfestPunkte";
+
     //~ Instance fields --------------------------------------------------------
+
     private boolean geoSearchEnabled;
     private MetaClass metaClass;
     private ImageIcon icon;
@@ -160,6 +161,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
+
     /**
      * Creates new form AlkisPointWindowSearch.
      */
@@ -180,7 +182,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
                 if (urlToIcon != null) {
                     icon = new ImageIcon(urlToIcon);
                 } else {
-                    icon = new ImageIcon(new byte[]{});
+                    icon = new ImageIcon(new byte[] {});
                 }
             }
 
@@ -208,7 +210,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
 
             if (geoSearchEnabled) {
                 final MeasurementPointCreateSearchGeometryListener measurementPointCreateSearchGeometryListener =
-                        new MeasurementPointCreateSearchGeometryListener(
+                    new MeasurementPointCreateSearchGeometryListener(
                         mappingComponent,
                         new MeasurementPointSearchTooltip(icon));
                 measurementPointCreateSearchGeometryListener.addPropertyChangeListener(this);
@@ -221,24 +223,24 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
                         null);
                 btnGeoSearch.addActionListener(new java.awt.event.ActionListener() {
 
-                    @Override
-                    public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                        btnGeoSearchActionPerformed(evt);
-                    }
-                });
+                        @Override
+                        public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                            btnGeoSearchActionPerformed(evt);
+                        }
+                    });
                 btnGeoSearch.setToolTipText(org.openide.util.NbBundle.getMessage(
                         MeasurementPointWindowSearch.class,
                         "MeasurementPointWindowSearch.btnGeoSearch.toolTipText"));
-                ((JPopupMenuButton) btnGeoSearch).setPopupMenu(popMenSearch);
+                ((JPopupMenuButton)btnGeoSearch).setPopupMenu(popMenSearch);
                 btnGeoSearch.setFocusPainted(false);
                 pnlButtons.add(btnGeoSearch);
 
-                visualizeSearchMode((MetaSearchCreateSearchGeometryListener) mappingComponent.getInputListener(
+                visualizeSearchMode((MetaSearchCreateSearchGeometryListener)mappingComponent.getInputListener(
                         MappingComponent.CREATE_SEARCH_POLYGON));
                 mappingComponent.getInteractionButtonGroup().add(btnGeoSearch);
                 new CidsBeanDropTarget(btnGeoSearch);
 
-                ((CidsBeanDropJPopupMenuButton) btnGeoSearch).setTargetIcon(new javax.swing.ImageIcon(
+                ((CidsBeanDropJPopupMenuButton)btnGeoSearch).setTargetIcon(new javax.swing.ImageIcon(
                         getClass().getResource("/images/pluginSearchTarget.png")));
             } else {
                 chkSearchInCismap.setVisible(false);
@@ -252,10 +254,10 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
     }
 
     //~ Methods ----------------------------------------------------------------
+
     /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -868,224 +870,230 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void btnAllePunkteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAllePunkteActionPerformed
+    private void btnAllePunkteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAllePunkteActionPerformed
         changeFilterPointtype(evt.getActionCommand());
-    }//GEN-LAST:event_btnAllePunkteActionPerformed
+    }                                                                                 //GEN-LAST:event_btnAllePunkteActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void btnAnschlusspunkteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnschlusspunkteActionPerformed
+    private void btnAnschlusspunkteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAnschlusspunkteActionPerformed
         changeFilterPointtype(evt.getActionCommand());
-    }//GEN-LAST:event_btnAnschlusspunkteActionPerformed
+    }                                                                                      //GEN-LAST:event_btnAnschlusspunkteActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void btnGrenzUndGebaudepunkteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrenzUndGebaudepunkteActionPerformed
+    private void btnGrenzUndGebaudepunkteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnGrenzUndGebaudepunkteActionPerformed
         changeFilterPointtype(evt.getActionCommand());
-    }//GEN-LAST:event_btnGrenzUndGebaudepunkteActionPerformed
+    }                                                                                            //GEN-LAST:event_btnGrenzUndGebaudepunkteActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void btnGebaeudeUndBauwerkspunkteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGebaeudeUndBauwerkspunkteActionPerformed
+    private void btnGebaeudeUndBauwerkspunkteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnGebaeudeUndBauwerkspunkteActionPerformed
         changeFilterPointtype(evt.getActionCommand());
-    }//GEN-LAST:event_btnGebaeudeUndBauwerkspunkteActionPerformed
+    }                                                                                                //GEN-LAST:event_btnGebaeudeUndBauwerkspunkteActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void chkAufnahmepunkteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkAufnahmepunkteActionPerformed
+    private void chkAufnahmepunkteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_chkAufnahmepunkteActionPerformed
         changeEnabledStateOfSearchButtons();
-    }//GEN-LAST:event_chkAufnahmepunkteActionPerformed
+    }                                                                                     //GEN-LAST:event_chkAufnahmepunkteActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void chkSonstigeVermessungspunkteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkSonstigeVermessungspunkteActionPerformed
+    private void chkSonstigeVermessungspunkteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_chkSonstigeVermessungspunkteActionPerformed
         changeEnabledStateOfSearchButtons();
-    }//GEN-LAST:event_chkSonstigeVermessungspunkteActionPerformed
+    }                                                                                                //GEN-LAST:event_chkSonstigeVermessungspunkteActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void chkGrenzpunkteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkGrenzpunkteActionPerformed
+    private void chkGrenzpunkteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_chkGrenzpunkteActionPerformed
         changeEnabledStateOfSearchButtons();
-    }//GEN-LAST:event_chkGrenzpunkteActionPerformed
+    }                                                                                  //GEN-LAST:event_chkGrenzpunkteActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void chkBesondereGebaeudepunkteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkBesondereGebaeudepunkteActionPerformed
+    private void chkBesondereGebaeudepunkteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_chkBesondereGebaeudepunkteActionPerformed
         changeEnabledStateOfSearchButtons();
-    }//GEN-LAST:event_chkBesondereGebaeudepunkteActionPerformed
+    }                                                                                              //GEN-LAST:event_chkBesondereGebaeudepunkteActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void chkBesondereBauwerkspunkteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkBesondereBauwerkspunkteActionPerformed
+    private void chkBesondereBauwerkspunkteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_chkBesondereBauwerkspunkteActionPerformed
         changeEnabledStateOfSearchButtons();
-    }//GEN-LAST:event_chkBesondereBauwerkspunkteActionPerformed
+    }                                                                                              //GEN-LAST:event_chkBesondereBauwerkspunkteActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void chkBesondereTopographischePunkteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkBesondereTopographischePunkteActionPerformed
+    private void chkBesondereTopographischePunkteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_chkBesondereTopographischePunkteActionPerformed
         changeEnabledStateOfSearchButtons();
-    }//GEN-LAST:event_chkBesondereTopographischePunkteActionPerformed
+    }                                                                                                    //GEN-LAST:event_chkBesondereTopographischePunkteActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
     private void btnGeoSearchActionPerformed(final java.awt.event.ActionEvent evt) {
         EventQueue.invokeLater(new Runnable() {
 
-            @Override
-            public void run() {
-                mappingComponent.setInteractionMode(
+                @Override
+                public void run() {
+                    mappingComponent.setInteractionMode(
                         MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY);
-            }
-        });
+                }
+            });
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void mniSearchRectangleActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniSearchRectangleActionPerformed
+    private void mniSearchRectangleActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchRectangleActionPerformed
         btnGeoSearch.setIcon(icoPluginRectangle);
         btnGeoSearch.setSelectedIcon(icoPluginRectangle);
 
         EventQueue.invokeLater(new Runnable() {
 
-            @Override
-            public void run() {
-                ((MeasurementPointCreateSearchGeometryListener) mappingComponent.getInputListener(
-                        MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY)).setMode(
-                        CreateGeometryListenerInterface.RECTANGLE);
-                mappingComponent.setInteractionMode(
+                @Override
+                public void run() {
+                    ((MeasurementPointCreateSearchGeometryListener)mappingComponent.getInputListener(
+                            MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY))
+                            .setMode(
+                                CreateGeometryListenerInterface.RECTANGLE);
+                    mappingComponent.setInteractionMode(
                         MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY);
-            }
-        });
-    }//GEN-LAST:event_mniSearchRectangleActionPerformed
+                }
+            });
+    } //GEN-LAST:event_mniSearchRectangleActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void mniSearchPolygonActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniSearchPolygonActionPerformed
+    private void mniSearchPolygonActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchPolygonActionPerformed
         btnGeoSearch.setIcon(icoPluginPolygon);
         btnGeoSearch.setSelectedIcon(icoPluginPolygon);
 
         EventQueue.invokeLater(new Runnable() {
 
-            @Override
-            public void run() {
-                ((MeasurementPointCreateSearchGeometryListener) mappingComponent.getInputListener(
-                        MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY)).setMode(
-                        CreateGeometryListenerInterface.POLYGON);
-                mappingComponent.setInteractionMode(
+                @Override
+                public void run() {
+                    ((MeasurementPointCreateSearchGeometryListener)mappingComponent.getInputListener(
+                            MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY))
+                            .setMode(
+                                CreateGeometryListenerInterface.POLYGON);
+                    mappingComponent.setInteractionMode(
                         MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY);
-            }
-        });
-    }//GEN-LAST:event_mniSearchPolygonActionPerformed
+                }
+            });
+    } //GEN-LAST:event_mniSearchPolygonActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void mniSearchEllipseActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniSearchEllipseActionPerformed
+    private void mniSearchEllipseActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchEllipseActionPerformed
         btnGeoSearch.setIcon(icoPluginEllipse);
         btnGeoSearch.setSelectedIcon(icoPluginEllipse);
 
         EventQueue.invokeLater(new Runnable() {
 
-            @Override
-            public void run() {
-                ((MeasurementPointCreateSearchGeometryListener) mappingComponent.getInputListener(
-                        MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY)).setMode(
-                        CreateGeometryListenerInterface.ELLIPSE);
-                mappingComponent.setInteractionMode(
+                @Override
+                public void run() {
+                    ((MeasurementPointCreateSearchGeometryListener)mappingComponent.getInputListener(
+                            MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY))
+                            .setMode(
+                                CreateGeometryListenerInterface.ELLIPSE);
+                    mappingComponent.setInteractionMode(
                         MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY);
-            }
-        });
-    }//GEN-LAST:event_mniSearchEllipseActionPerformed
+                }
+            });
+    } //GEN-LAST:event_mniSearchEllipseActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void mniSearchPolylineActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniSearchPolylineActionPerformed
+    private void mniSearchPolylineActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchPolylineActionPerformed
         btnGeoSearch.setIcon(icoPluginPolyline);
         btnGeoSearch.setSelectedIcon(icoPluginPolyline);
 
         EventQueue.invokeLater(new Runnable() {
 
-            @Override
-            public void run() {
-                ((MeasurementPointCreateSearchGeometryListener) mappingComponent.getInputListener(
-                        MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY)).setMode(
-                        CreateGeometryListenerInterface.LINESTRING);
-                mappingComponent.setInteractionMode(
+                @Override
+                public void run() {
+                    ((MeasurementPointCreateSearchGeometryListener)mappingComponent.getInputListener(
+                            MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY))
+                            .setMode(
+                                CreateGeometryListenerInterface.LINESTRING);
+                    mappingComponent.setInteractionMode(
                         MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY);
-            }
-        });
-    }//GEN-LAST:event_mniSearchPolylineActionPerformed
+                }
+            });
+    } //GEN-LAST:event_mniSearchPolylineActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void mniSearchCidsFeatureActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniSearchCidsFeatureActionPerformed
+    private void mniSearchCidsFeatureActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchCidsFeatureActionPerformed
         EventQueue.invokeLater(new Runnable() {
 
-            @Override
-            public void run() {
-                mappingComponent.setInteractionMode(
+                @Override
+                public void run() {
+                    mappingComponent.setInteractionMode(
                         MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY);
-                final MeasurementPointCreateSearchGeometryListener searchListener =
-                        ((MeasurementPointCreateSearchGeometryListener) mappingComponent.getInputListener(
-                        MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY));
+                    final MeasurementPointCreateSearchGeometryListener searchListener =
+                        ((MeasurementPointCreateSearchGeometryListener)mappingComponent.getInputListener(
+                                MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY));
 
-                de.cismet.tools.CismetThreadPool.execute(
+                    de.cismet.tools.CismetThreadPool.execute(
                         new javax.swing.SwingWorker<SearchFeature, Void>() {
 
                             @Override
                             protected SearchFeature doInBackground() throws Exception {
-                                final DefaultMetaTreeNode[] nodes = ComponentRegistry.getRegistry().getActiveCatalogue().getSelectedNodesArray();
+                                final DefaultMetaTreeNode[] nodes = ComponentRegistry.getRegistry()
+                                                .getActiveCatalogue()
+                                                .getSelectedNodesArray();
                                 final Collection<Geometry> searchGeoms = new ArrayList<Geometry>();
 
                                 for (final DefaultMetaTreeNode dmtn : nodes) {
                                     if (dmtn instanceof ObjectTreeNode) {
-                                        final MetaObject mo = ((ObjectTreeNode) dmtn).getMetaObject();
+                                        final MetaObject mo = ((ObjectTreeNode)dmtn).getMetaObject();
                                         final CidsFeature cf = new CidsFeature(mo);
                                         searchGeoms.add(cf.getGeometry());
                                     }
@@ -1093,7 +1101,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
 
                                 final Geometry[] searchGeomsArr = searchGeoms.toArray(new Geometry[0]);
                                 final GeometryCollection coll =
-                                        new GeometryFactory().createGeometryCollection(searchGeomsArr);
+                                    new GeometryFactory().createGeometryCollection(searchGeomsArr);
 
                                 final Geometry newG = coll.buffer(0.1d);
                                 if (LOG.isDebugEnabled()) {
@@ -1117,158 +1125,159 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
                                 }
                             }
                         });
-            }
-        });
-    }//GEN-LAST:event_mniSearchCidsFeatureActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param evt DOCUMENT ME!
-     */
-    private void mniSearchShowLastFeatureActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniSearchShowLastFeatureActionPerformed
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-                final MeasurementPointCreateSearchGeometryListener searchListener =
-                        (MeasurementPointCreateSearchGeometryListener) mappingComponent.getInputListener(
-                        MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY);
-                searchListener.showLastFeature();
-                mappingComponent.setInteractionMode(
-                        MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY);
-            }
-        });
-    }//GEN-LAST:event_mniSearchShowLastFeatureActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param evt DOCUMENT ME!
-     */
-    private void mniSearchRedoActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniSearchRedoActionPerformed
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-                final MeasurementPointCreateSearchGeometryListener searchListener =
-                        (MeasurementPointCreateSearchGeometryListener) mappingComponent.getInputListener(
-                        MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY);
-                searchListener.redoLastSearch();
-                mappingComponent.setInteractionMode(
-                        MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY);
-            }
-        });
-    }//GEN-LAST:event_mniSearchRedoActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param evt DOCUMENT ME!
-     */
-    private void mniSearchBufferActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniSearchBufferActionPerformed
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-                final String s = (String) JOptionPane.showInputDialog(
-                        StaticSwingTools.getParentFrame(MeasurementPointWindowSearch.this),
-                        "Geben Sie den Abstand des zu erzeugenden\n" // NOI18N
-                        + "Puffers der letzten Suchgeometrie an.", // NOI18N
-                        "Puffer", // NOI18N
-                        JOptionPane.PLAIN_MESSAGE,
-                        null,
-                        null,
-                        "");                                               // NOI18N
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug(s);
                 }
+            });
+    } //GEN-LAST:event_mniSearchCidsFeatureActionPerformed
 
-                // , statt . ebenfalls erlauben
-                if (s.matches("\\d*,\\d*")) { // NOI18N
-                    s.replace(",", ".");      // NOI18N
-                }
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void mniSearchShowLastFeatureActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchShowLastFeatureActionPerformed
+        java.awt.EventQueue.invokeLater(new Runnable() {
 
-                try {
-                    final float buffer = Float.valueOf(s);
-
+                @Override
+                public void run() {
                     final MeasurementPointCreateSearchGeometryListener searchListener =
-                            (MeasurementPointCreateSearchGeometryListener) mappingComponent.getInputListener(
+                        (MeasurementPointCreateSearchGeometryListener)mappingComponent.getInputListener(
                             MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY);
-                    final PureNewFeature lastFeature = searchListener.getLastSearchFeature();
+                    searchListener.showLastFeature();
+                    mappingComponent.setInteractionMode(
+                        MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY);
+                }
+            });
+    } //GEN-LAST:event_mniSearchShowLastFeatureActionPerformed
 
-                    if (lastFeature != null) {
-                        // Geometrie-Daten holen
-                        final Geometry geom = lastFeature.getGeometry();
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void mniSearchRedoActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchRedoActionPerformed
+        java.awt.EventQueue.invokeLater(new Runnable() {
 
-                        // Puffer-Geometrie holen
-                        final Geometry bufferGeom = geom.buffer(buffer);
+                @Override
+                public void run() {
+                    final MeasurementPointCreateSearchGeometryListener searchListener =
+                        (MeasurementPointCreateSearchGeometryListener)mappingComponent.getInputListener(
+                            MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY);
+                    searchListener.redoLastSearch();
+                    mappingComponent.setInteractionMode(
+                        MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY);
+                }
+            });
+    } //GEN-LAST:event_mniSearchRedoActionPerformed
 
-                        // und setzen
-                        lastFeature.setGeometry(bufferGeom);
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void mniSearchBufferActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniSearchBufferActionPerformed
+        java.awt.EventQueue.invokeLater(new Runnable() {
 
-                        // Geometrie ist jetzt eine Polygon (keine Linie, Ellipse, oder
-                        // �hnliches mehr)
-                        lastFeature.setGeometryType(PureNewFeature.geomTypes.POLYGON);
-
-                        for (final Object feature : mappingComponent.getFeatureCollection().getAllFeatures()) {
-                            final PFeature sel = (PFeature) mappingComponent.getPFeatureHM().get(feature);
-
-                            if (sel.getFeature().equals(lastFeature)) {
-                                // Koordinaten der Puffer-Geometrie als Feature-Koordinaten
-                                // setzen
-                                sel.setCoordArr(bufferGeom.getCoordinates());
-
-                                // refresh
-                                sel.syncGeometry();
-
-                                final Vector v = new Vector();
-                                v.add(sel.getFeature());
-                                ((DefaultFeatureCollection) mappingComponent.getFeatureCollection()).fireFeaturesChanged(v);
-                            }
-                        }
-
-                        searchListener.search(lastFeature);
-                        mappingComponent.setInteractionMode(
-                                MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY);
+                @Override
+                public void run() {
+                    final String s = (String)JOptionPane.showInputDialog(
+                            StaticSwingTools.getParentFrame(MeasurementPointWindowSearch.this),
+                            "Geben Sie den Abstand des zu erzeugenden\n"       // NOI18N
+                                    + "Puffers der letzten Suchgeometrie an.", // NOI18N
+                            "Puffer",                                          // NOI18N
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            null,
+                            "");                                               // NOI18N
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug(s);
                     }
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(
+
+                    // , statt . ebenfalls erlauben
+                    if (s.matches("\\d*,\\d*")) { // NOI18N
+                        s.replace(",", ".");      // NOI18N
+                    }
+
+                    try {
+                        final float buffer = Float.valueOf(s);
+
+                        final MeasurementPointCreateSearchGeometryListener searchListener =
+                            (MeasurementPointCreateSearchGeometryListener)mappingComponent.getInputListener(
+                                MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY);
+                        final PureNewFeature lastFeature = searchListener.getLastSearchFeature();
+
+                        if (lastFeature != null) {
+                            // Geometrie-Daten holen
+                            final Geometry geom = lastFeature.getGeometry();
+
+                            // Puffer-Geometrie holen
+                            final Geometry bufferGeom = geom.buffer(buffer);
+
+                            // und setzen
+                            lastFeature.setGeometry(bufferGeom);
+
+                            // Geometrie ist jetzt eine Polygon (keine Linie, Ellipse, oder
+                            // �hnliches mehr)
+                            lastFeature.setGeometryType(PureNewFeature.geomTypes.POLYGON);
+
+                            for (final Object feature : mappingComponent.getFeatureCollection().getAllFeatures()) {
+                                final PFeature sel = (PFeature)mappingComponent.getPFeatureHM().get(feature);
+
+                                if (sel.getFeature().equals(lastFeature)) {
+                                    // Koordinaten der Puffer-Geometrie als Feature-Koordinaten
+                                    // setzen
+                                    sel.setCoordArr(bufferGeom.getCoordinates());
+
+                                    // refresh
+                                    sel.syncGeometry();
+
+                                    final Vector v = new Vector();
+                                    v.add(sel.getFeature());
+                                    ((DefaultFeatureCollection)mappingComponent.getFeatureCollection())
+                                            .fireFeaturesChanged(v);
+                                }
+                            }
+
+                            searchListener.search(lastFeature);
+                            mappingComponent.setInteractionMode(
+                                MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY);
+                        }
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(
                             StaticSwingTools.getParentFrame(MeasurementPointWindowSearch.this),
                             "The given value was not a floating point value.!",
                             "Error",
                             JOptionPane.ERROR_MESSAGE); // NOI18N
-                } catch (Exception ex) {
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("", ex);          // NOI18N
+                    } catch (Exception ex) {
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("", ex);          // NOI18N
+                        }
                     }
                 }
-            }
-        });
-    }//GEN-LAST:event_mniSearchBufferActionPerformed
+            });
+    }                                                   //GEN-LAST:event_mniSearchBufferActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void btnHoehenfestpunkteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHoehenfestpunkteActionPerformed
+    private void btnHoehenfestpunkteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnHoehenfestpunkteActionPerformed
         changeFilterPointtype(evt.getActionCommand());
-    }//GEN-LAST:event_btnHoehenfestpunkteActionPerformed
+    }                                                                                       //GEN-LAST:event_btnHoehenfestpunkteActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void chkNivellementPunkteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkNivellementPunkteActionPerformed
+    private void chkNivellementPunkteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_chkNivellementPunkteActionPerformed
         changeEnabledStateOfSearchButtons();
-    }//GEN-LAST:event_chkNivellementPunkteActionPerformed
+    }                                                                                        //GEN-LAST:event_chkNivellementPunkteActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param actionCommand DOCUMENT ME!
+     * @param  actionCommand  DOCUMENT ME!
      */
     protected void changeFilterPointtype(final String actionCommand) {
         if (ACTION_POINTTYPE_ALLE.equals(actionCommand)) {
@@ -1342,7 +1351,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
      */
     protected void visualizeSearchMode() {
         if (geoSearchEnabled) {
-            visualizeSearchMode((MeasurementPointCreateSearchGeometryListener) mappingComponent.getInputListener(
+            visualizeSearchMode((MeasurementPointCreateSearchGeometryListener)mappingComponent.getInputListener(
                     MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY));
         }
     }
@@ -1350,7 +1359,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
     /**
      * DOCUMENT ME!
      *
-     * @param searchListener DOCUMENT ME!
+     * @param  searchListener  DOCUMENT ME!
      */
     protected void visualizeSearchMode(final CreateSearchGeometryListener searchListener) {
         final String searchMode = searchListener.getMode();
@@ -1414,18 +1423,18 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
         if (AbstractCreateSearchGeometryListener.PROPERTY_FORGUI_LAST_FEATURE.equals(evt.getPropertyName())
-                || AbstractCreateSearchGeometryListener.PROPERTY_FORGUI_MODE.equals(evt.getPropertyName())) {
+                    || AbstractCreateSearchGeometryListener.PROPERTY_FORGUI_MODE.equals(evt.getPropertyName())) {
             visualizeSearchMode();
         }
 
         if (MeasurementPointCreateSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
             if ((evt.getNewValue() != null) && (evt.getNewValue() instanceof Geometry)) {
-                final MetaObjectNodeServerSearch search = getServerSearch((Geometry) evt.getNewValue());
+                final MetaObjectNodeServerSearch search = getServerSearch((Geometry)evt.getNewValue());
                 CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);
             }
         }
@@ -1434,7 +1443,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     @Override
     public JComponent getSearchWindowComponent() {
@@ -1444,7 +1453,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     @Override
     public MetaObjectNodeServerSearch getServerSearch() {
@@ -1454,9 +1463,9 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
     /**
      * DOCUMENT ME!
      *
-     * @param geometry DOCUMENT ME!
+     * @param   geometry  DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     public MetaObjectNodeServerSearch getServerSearch(final Geometry geometry) {
         final Collection<Pointtype> pointtypes = new LinkedList<Pointtype>();
@@ -1500,7 +1509,8 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
         } else {
             if (chkSearchInCismap.isSelected()) {
                 geometryToSearchFor =
-                        ((XBoundingBox) CismapBroker.getInstance().getMappingComponent().getCurrentBoundingBox()).getGeometry();
+                    ((XBoundingBox)CismapBroker.getInstance().getMappingComponent().getCurrentBoundingBox())
+                            .getGeometry();
             }
         }
 
@@ -1518,7 +1528,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     @Override
     public ImageIcon getIcon() {
@@ -1528,7 +1538,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     @Override
     public String getName() {
@@ -1538,7 +1548,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     @Override
     public boolean checkActionTag() {
@@ -1548,7 +1558,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     @Override
     public MetaObjectNodeServerSearch assembleSearch() {
@@ -1565,7 +1575,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
     /**
      * DOCUMENT ME!
      *
-     * @param result DOCUMENT ME!
+     * @param  result  DOCUMENT ME!
      */
     @Override
     public void searchDone(final int result) {
@@ -1581,7 +1591,7 @@ public class MeasurementPointWindowSearch extends javax.swing.JPanel implements 
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     @Override
     public boolean suppressEmptyResultMessage() {
