@@ -12,6 +12,7 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaClass;
@@ -92,6 +93,7 @@ import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.reports.wunda_blau.MauernReportGenerator;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.wunda_blau.search.server.MauerNummerSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -100,6 +102,8 @@ import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+
+import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -3523,8 +3527,45 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
 
     @Override
     public boolean prepareForSave() {
-        log.info("prepare for save");
-        return true;
+        try {
+            log.info("prepare for save");
+            final String mauerNummer = (String)cidsBean.getProperty("mauer_nummer");
+            final String lagebezeichnung = (String)cidsBean.getProperty("lagebezeichnung");
+            if ((lagebezeichnung == null) || lagebezeichnung.trim().equals("")) {
+                log.warn("lagebezeichnung must not be null or empty");
+                JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                    "Das Feld Lagebezeichnung muss ausgefüllt sein.",
+                    "Fehlerhafte Eingaben",
+                    JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+            // check if the mauer nummer is already used for another mauer object
+            if (mauerNummer != null) {
+                final CidsServerSearch search = new MauerNummerSearch(mauerNummer);
+                final Collection res = SessionManager.getProxy()
+                            .customServerSearch(SessionManager.getSession().getUser(), search);
+
+                final ArrayList<ArrayList> tmp = (ArrayList<ArrayList>)res;
+
+                if (tmp.size() > 0) {
+                    final ArrayList resMauer = tmp.get(0);
+                    final Integer id = (Integer)resMauer.get(0);
+                    final Integer objId = (Integer)cidsBean.getProperty("id");
+                    if (id.intValue() != objId.intValue()) {
+                        log.warn("mauernummer " + mauerNummer + "already exists");
+                        JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                            "Die angegebene Mauernummer existiert bereits.",
+                            "Fehlerhafte Eingaben",
+                            JOptionPane.ERROR_MESSAGE);
+                        return false;
+                    }
+                }
+            }
+            return true;
+        } catch (ConnectionException ex) {
+            Exceptions.printStackTrace(ex);
+            return false;
+        }
     }
 
     /**
