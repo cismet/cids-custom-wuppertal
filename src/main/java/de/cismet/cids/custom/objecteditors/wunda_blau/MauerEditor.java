@@ -209,6 +209,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private javax.swing.JComboBox cbGeom;
     private de.cismet.cids.editors.DefaultBindableReferenceCombo cbLastklasse;
     private de.cismet.cids.editors.DefaultBindableReferenceCombo cbMaterialtyp;
+    private de.cismet.cids.editors.DefaultBindableReferenceCombo cbMauertyp;
     private de.cismet.cids.editors.DefaultBindableReferenceCombo cbStandsicherheit;
     private de.cismet.cids.editors.DefaultBindableReferenceCombo cbStuetzmauertyp;
     private de.cismet.cids.editors.DefaultBindableReferenceCombo cbVerkehrssicherheit;
@@ -292,6 +293,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private javax.swing.JLabel lblLetztePruefung;
     private javax.swing.JLabel lblMaterialTyp;
     private javax.swing.JLabel lblMauerNummer;
+    private javax.swing.JLabel lblMauertyp;
     private javax.swing.JLabel lblNaechstePruefung;
     private javax.swing.JLabel lblNeigung;
     private javax.swing.JLabel lblPicture;
@@ -545,6 +547,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         tfLagebezeichnung = new javax.swing.JTextField();
         lblMauerNummer = new javax.swing.JLabel();
         tfMauerNummer = new javax.swing.JTextField();
+        lblMauertyp = new javax.swing.JLabel();
+        cbMauertyp = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
         pnlRight = new javax.swing.JPanel();
         lblPruefung1 = new javax.swing.JLabel();
         lblLastklasse = new javax.swing.JLabel();
@@ -807,8 +811,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         pnlCard1.setOpaque(false);
         pnlCard1.setLayout(new java.awt.GridBagLayout());
 
-        pnlAllgemein.setMinimumSize(new java.awt.Dimension(600, 480));
-        pnlAllgemein.setPreferredSize(new java.awt.Dimension(600, 480));
+        pnlAllgemein.setMinimumSize(new java.awt.Dimension(600, 500));
+        pnlAllgemein.setPreferredSize(new java.awt.Dimension(600, 500));
         pnlAllgemein.setLayout(new java.awt.GridBagLayout());
 
         pnlHeaderAllgemein.setBackground(new java.awt.Color(51, 51, 51));
@@ -1310,6 +1314,29 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 0);
         pnlLeft.add(tfMauerNummer, gridBagConstraints);
+
+        lblMauertyp.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblMauertyp.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
+        pnlLeft.add(lblMauertyp, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.mauertyp}"),
+                cbMauertyp,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 0);
+        pnlLeft.add(cbMauertyp, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -3647,6 +3674,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
             RendererTools.makeReadOnly(cbVerkehrssicherheit);
             RendererTools.makeReadOnly(cbDauerhaftigkeit);
             RendererTools.makeReadOnly(cbLastklasse);
+            RendererTools.makeReadOnly(cbMauertyp);
             RendererTools.makeReadOnly(dcErstePruefung);
             RendererTools.makeReadOnly(dcLetztePruefung);
             RendererTools.makeReadOnly(dcNaechstePruefung);
