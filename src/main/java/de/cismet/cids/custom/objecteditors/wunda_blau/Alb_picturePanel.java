@@ -820,8 +820,8 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 
                 @Override
                 public void run() {
+                    final String filename = path.substring(path.lastIndexOf("/") + 1);
                     if (DownloadManagerDialog.showAskingForUserTitle(Alb_picturePanel.this)) {
-                        final String filename = path.substring(path.lastIndexOf(File.separator) + 1);
                         DownloadManager.instance()
                                 .add(
                                     new HttpDownload(
