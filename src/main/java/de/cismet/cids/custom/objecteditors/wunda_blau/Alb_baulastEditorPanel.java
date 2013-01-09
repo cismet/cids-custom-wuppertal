@@ -27,11 +27,8 @@ import Sirius.server.newuser.User;
 import org.apache.log4j.Logger;
 
 import org.jdesktop.beansbinding.Converter;
-import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -51,12 +48,13 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
+import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
+import de.cismet.cids.custom.objectrenderer.utils.BaulastenPictureFinder;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 
@@ -82,7 +80,6 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
 
     public static final String ATAG_FINAL_CHECK = "navigator.baulasten.final_check"; // NOI18N
     private static final Logger LOG = Logger.getLogger(Alb_baulastEditorPanel.class);
-
     private static final ComboBoxModel waitModel = new DefaultComboBoxModel(new String[] { "Wird geladen..." });
     private static final Converter<java.sql.Date, String> DATE_TO_STRING = new Converter<Date, String>() {
 
@@ -113,7 +110,6 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
 //    private boolean landParcelListInitialized = false;
     private boolean baulastArtenListInitialized = false;
     private final FlurstueckSelectionDialoge fsDialoge;
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddArt;
     private javax.swing.JButton btnAddBeguenstigt;
@@ -204,9 +200,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
      * DOCUMENT ME!
      */
     private void initEditableComponents() {
-        editableComponents.add(txtLageplan);
+        RendererTools.makeReadOnly(txtLageplan);
+        RendererTools.makeReadOnly(txtTextblatt);
         editableComponents.add(txtLaufendeNr);
-        editableComponents.add(txtTextblatt);
         editableComponents.add(defaultBindableDateChooser1);
         editableComponents.add(defaultBindableDateChooser2);
         editableComponents.add(defaultBindableDateChooser3);
@@ -316,7 +312,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         panAddBaulastArt.setPreferredSize(new java.awt.Dimension(300, 120));
         panAddBaulastArt.setLayout(new java.awt.GridBagLayout());
 
-        lblSuchwortEingeben1.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblSuchwortEingeben1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblSuchwortEingeben1.setText("Bitte Art auswählen:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -614,17 +610,6 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         rpInfo.add(lblDescTextblatt, gridBagConstraints);
-
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.textblatt}"),
-                txtTextblatt,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("nicht verfügbar");
-        binding.setSourceUnreadableValue("");
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
@@ -639,7 +624,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         txtLaufendeNr.setMinimumSize(new java.awt.Dimension(125, 20));
         txtLaufendeNr.setPreferredSize(new java.awt.Dimension(125, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.laufende_nummer}"),
@@ -665,17 +650,6 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         rpInfo.add(lblDescLageplan, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.lageplan}"),
-                txtLageplan,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("nicht verfügbar");
-        binding.setSourceUnreadableValue("");
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 7;
@@ -942,6 +916,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
+
     /**
      * DOCUMENT ME!
      *
@@ -1241,6 +1216,14 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                         lblGeprueft.setText("       ---       ");
                     }
                 }
+
+                final String blattnummer = (String)getCidsBean().getProperty(Alb_picturePanel.BLATTNUMMER_PROPERTY);
+                final String lfdNummer = (String)getCidsBean().getProperty(Alb_picturePanel.LFDNUMMER_PROPERTY);
+                final String postfix = "[tif,jpg,tiff,jpeg]";
+                final String plan = BaulastenPictureFinder.getPlanPictureFilename(blattnummer, lfdNummer);
+                final String textblatt = BaulastenPictureFinder.getTextblattPictureFilename(blattnummer, lfdNummer);
+                txtLageplan.setText((plan != null) ? (plan + postfix) : "");
+                txtTextblatt.setText((textblatt != null) ? (textblatt + postfix) : "");
 
                 bindingGroup.bind();
                 lstFlurstueckeBelastet.setSelectedIndices(belIdx);
