@@ -1122,7 +1122,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         if ((tfHoeheVon.getText() != null) && !tfHoeheVon.getText().equals("")) {
             try {
-                final double hv = Double.parseDouble(tfHoeheVon.getText());
+                final double hv = Double.parseDouble(tfHoeheVon.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.HOEHE_VON, hv);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfHoeheVon.getText(), ex);
@@ -1131,7 +1131,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         if ((tfHoeheBis.getText() != null) && !tfHoeheBis.getText().equals("")) {
             try {
-                final double hv = Double.parseDouble(tfHoeheBis.getText());
+                final double hv = Double.parseDouble(tfHoeheBis.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.HOEHE_BIS, hv);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfHoeheBis.getText(), ex);
@@ -1140,7 +1140,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         if ((tfGelaenderVon.getText() != null) && !tfGelaenderVon.getText().equals("")) {
             try {
-                final double gelaenderVon = Double.parseDouble(tfGelaenderVon.getText());
+                final double gelaenderVon = Double.parseDouble(tfGelaenderVon.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.GELAENDER_VON, gelaenderVon);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfGelaenderVon.getText(), ex);
@@ -1148,7 +1148,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         }
         if ((tfGelaenderBis.getText() != null) && !tfGelaenderBis.getText().equals("")) {
             try {
-                final double gelaenderBis = Double.parseDouble(tfGelaenderBis.getText());
+                final double gelaenderBis = Double.parseDouble(tfGelaenderBis.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.GELAENDER_BIS, gelaenderBis);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfGelaenderBis.getText(), ex);
@@ -1157,7 +1157,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         if ((tfWandkopfVon.getText() != null) && !tfWandkopfVon.getText().equals("")) {
             try {
-                final double wandkopfVon = Double.parseDouble(tfWandkopfVon.getText());
+                final double wandkopfVon = Double.parseDouble(tfWandkopfVon.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.WANDKOPF_VON, wandkopfVon);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfWandkopfVon.getText(), ex);
@@ -1165,7 +1165,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         }
         if ((tfWandkopfBis.getText() != null) && !tfWandkopfBis.getText().equals("")) {
             try {
-                final double gelaenderBis = Double.parseDouble(tfWandkopfBis.getText());
+                final double gelaenderBis = Double.parseDouble(tfWandkopfBis.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.WANDKOPF_BIS, gelaenderBis);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfWandkopfBis.getText(), ex);
@@ -1174,7 +1174,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         if ((tfAnsichtVon.getText() != null) && !tfAnsichtVon.getText().equals("")) {
             try {
-                final double gelaenderVon = Double.parseDouble(tfAnsichtVon.getText());
+                final double gelaenderVon = Double.parseDouble(tfAnsichtVon.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.ANSICHT_VON, gelaenderVon);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfAnsichtVon.getText(), ex);
@@ -1182,7 +1182,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         }
         if ((tfAnsichtBis.getText() != null) && !tfAnsichtBis.getText().equals("")) {
             try {
-                final double gelaenderBis = Double.parseDouble(tfAnsichtBis.getText());
+                final double gelaenderBis = Double.parseDouble(tfAnsichtBis.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.ANSICHT_BIS, gelaenderBis);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfAnsichtBis.getText(), ex);
@@ -1191,7 +1191,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         if ((tfGruendungVon.getText() != null) && !tfGruendungVon.getText().equals("")) {
             try {
-                final double gelaenderVon = Double.parseDouble(tfGruendungVon.getText());
+                final double gelaenderVon = Double.parseDouble(tfGruendungVon.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.GRUENDUNG_VON, gelaenderVon);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfGruendungVon.getText(), ex);
@@ -1199,7 +1199,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         }
         if ((tfGruendungBis.getText() != null) && !tfGruendungBis.getText().equals("")) {
             try {
-                final double gelaenderBis = Double.parseDouble(tfGruendungBis.getText());
+                final double gelaenderBis = Double.parseDouble(tfGruendungBis.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.GRUENDUNG_BIS, gelaenderBis);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfGruendungBis.getText(), ex);
@@ -1208,7 +1208,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         if ((tfVerformungVon.getText() != null) && !tfVerformungVon.getText().equals("")) {
             try {
-                final double gelaenderVon = Double.parseDouble(tfVerformungVon.getText());
+                final double gelaenderVon = Double.parseDouble(tfVerformungVon.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.VERFORMUNG_VON, gelaenderVon);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfVerformungVon.getText(), ex);
@@ -1216,7 +1216,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         }
         if ((tfVerformungBis.getText() != null) && !tfVerformungBis.getText().equals("")) {
             try {
-                final double gelaenderBis = Double.parseDouble(tfVerformungBis.getText());
+                final double gelaenderBis = Double.parseDouble(tfVerformungBis.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.VERFORMUNG_BIS, gelaenderBis);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfVerformungBis.getText(), ex);
@@ -1225,7 +1225,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         if ((tfGelaendeVon.getText() != null) && !tfGelaendeVon.getText().equals("")) {
             try {
-                final double gelaenderVon = Double.parseDouble(tfGelaendeVon.getText());
+                final double gelaenderVon = Double.parseDouble(tfGelaendeVon.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.GELAENDE_VON, gelaenderVon);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfGelaendeVon.getText(), ex);
@@ -1233,7 +1233,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         }
         if ((tfGelaendeBis.getText() != null) && !tfGelaendeBis.getText().equals("")) {
             try {
-                final double gelaenderBis = Double.parseDouble(tfGelaendeBis.getText());
+                final double gelaenderBis = Double.parseDouble(tfGelaendeBis.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.GELAENDE_BIS, gelaenderBis);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfGelaendeBis.getText(), ex);
@@ -1242,7 +1242,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         if ((tfBausubstanzVon.getText() != null) && !tfBausubstanzVon.getText().equals("")) {
             try {
-                final double gelaenderVon = Double.parseDouble(tfBausubstanzVon.getText());
+                final double gelaenderVon = Double.parseDouble(tfBausubstanzVon.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.BAUSUBSTANZ_VON, gelaenderVon);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfBausubstanzVon.getText(), ex);
@@ -1250,7 +1250,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         }
         if ((tfBausubstanzBis.getText() != null) && !tfBausubstanzBis.getText().equals("")) {
             try {
-                final double gelaenderBis = Double.parseDouble(tfBausubstanzBis.getText());
+                final double gelaenderBis = Double.parseDouble(tfBausubstanzBis.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.BAUSUBSTANZ_BIS, gelaenderBis);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfBausubstanzBis.getText(), ex);
@@ -1259,7 +1259,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         if ((tfSanierungVon.getText() != null) && !tfSanierungVon.getText().equals("")) {
             try {
-                final double gelaenderVon = Double.parseDouble(tfSanierungVon.getText());
+                final double gelaenderVon = Double.parseDouble(tfSanierungVon.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.SANIERUNG_VON, gelaenderVon);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfSanierungVon.getText(), ex);
@@ -1267,7 +1267,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         }
         if ((tfSanierungBis.getText() != null) && !tfSanierungBis.getText().equals("")) {
             try {
-                final double gelaenderBis = Double.parseDouble(tfSanierungBis.getText());
+                final double gelaenderBis = Double.parseDouble(tfSanierungBis.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.SANIERUNG_BIS, gelaenderBis);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfSanierungBis.getText(), ex);
