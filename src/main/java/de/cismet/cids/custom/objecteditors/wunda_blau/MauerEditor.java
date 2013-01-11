@@ -38,6 +38,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -80,6 +81,8 @@ import javax.swing.JOptionPane;
 import javax.swing.ProgressMonitor;
 import javax.swing.SwingWorker;
 import javax.swing.Timer;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 import javax.swing.filechooser.FileFilter;
@@ -127,6 +130,7 @@ import de.cismet.security.WebDavClient;
 import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.PasswordEncrypter;
 
+import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
@@ -141,7 +145,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     CidsBeanRenderer,
     EditorSaveListener,
     FooterComponentProvider,
-    TitleComponentProvider {
+    TitleComponentProvider,
+    BorderProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -3951,6 +3956,21 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     @Override
     public JComponent getTitleComponent() {
         return panTitle;
+    }
+
+    @Override
+    public Border getTitleBorder() {
+        return new EmptyBorder(new Insets(10, 20, 10, 25));
+    }
+
+    @Override
+    public Border getFooterBorder() {
+        return new EmptyBorder(new Insets(0, 0, 10, 0));
+    }
+
+    @Override
+    public Border getCenterrBorder() {
+        return new EmptyBorder(new Insets(10, 10, 10, 10));
     }
 
     //~ Inner Classes ----------------------------------------------------------
