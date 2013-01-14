@@ -25,6 +25,8 @@ import org.apache.log4j.Logger;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -134,6 +136,14 @@ public class GeoSearchButton extends CidsBeanDropJPopupMenuButton {
                 getClass().getResource("/images/pluginSearchTarget.png")));
         visualizeSearchMode((MetaSearchCreateSearchGeometryListener)mappingComponent.getInputListener(
                 MappingComponent.CREATE_SEARCH_POLYGON));
+        this.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(final ActionEvent ae) {
+                    mappingComponent.setInteractionMode(
+                        interActionMode);
+                }
+            });
     }
 
     //~ Methods ----------------------------------------------------------------
