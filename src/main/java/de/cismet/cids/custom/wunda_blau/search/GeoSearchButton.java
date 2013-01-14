@@ -28,17 +28,22 @@ import java.awt.EventQueue;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Vector;
 
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 
+import de.cismet.cismap.commons.features.DefaultFeatureCollection;
 import de.cismet.cismap.commons.features.PureNewFeature;
 import de.cismet.cismap.commons.features.SearchFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
+import de.cismet.cismap.commons.gui.piccolo.PFeature;
 import de.cismet.cismap.commons.gui.piccolo.eventlistener.AbstractCreateSearchGeometryListener;
 import de.cismet.cismap.commons.gui.piccolo.eventlistener.CreateGeometryListenerInterface;
 import de.cismet.cismap.commons.gui.piccolo.eventlistener.CreateSearchGeometryListener;
+import de.cismet.cismap.commons.gui.piccolo.eventlistener.MetaSearchCreateSearchGeometryListener;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 
@@ -46,6 +51,7 @@ import de.cismet.cismap.tools.gui.CidsBeanDropJPopupMenuButton;
 
 import de.cismet.tools.gui.HighlightingRadioButtonMenuItem;
 import de.cismet.tools.gui.JPopupMenuButton;
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -84,6 +90,21 @@ public class GeoSearchButton extends CidsBeanDropJPopupMenuButton {
     //~ Constructors -----------------------------------------------------------
 
     /**
+     * Creates a new GeoSearchButton object.
+     *
+     * @param  interActionMode   DOCUMENT ME!
+     * @param  interactionMode   DOCUMENT ME!
+     * @param  mappingComponent  DOCUMENT ME!
+     * @param  searchName        DOCUMENT ME!
+     */
+    public GeoSearchButton(final String interActionMode,
+            final String interactionMode,
+            final MappingComponent mappingComponent,
+            final String searchName) {
+        this(interActionMode, mappingComponent, searchName, "");
+    }
+
+    /**
      * Creates new form GeoSearchButton.
      *
      * @param  interActionMode  DOCUMENT ME!
@@ -111,6 +132,8 @@ public class GeoSearchButton extends CidsBeanDropJPopupMenuButton {
 
         ((CidsBeanDropJPopupMenuButton)this).setTargetIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/images/pluginSearchTarget.png")));
+        visualizeSearchMode((MetaSearchCreateSearchGeometryListener)mappingComponent.getInputListener(
+                MappingComponent.CREATE_SEARCH_POLYGON));
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -142,6 +165,7 @@ public class GeoSearchButton extends CidsBeanDropJPopupMenuButton {
         mniSearchBuffer = new javax.swing.JMenuItem();
         bgrSearch = new javax.swing.ButtonGroup();
 
+        bgrSearch.add(mniSearchRectangle);
         mniSearchRectangle.setSelected(true);
         mniSearchRectangle.setText(org.openide.util.NbBundle.getMessage(
                 GeoSearchButton.class,
@@ -156,6 +180,7 @@ public class GeoSearchButton extends CidsBeanDropJPopupMenuButton {
             });
         popMenSearch.add(mniSearchRectangle);
 
+        bgrSearch.add(mniSearchPolygon);
         mniSearchPolygon.setText(org.openide.util.NbBundle.getMessage(
                 GeoSearchButton.class,
                 "GeoSearchButton.mniSearchPolygon.text"));                                                  // NOI18N
@@ -169,6 +194,7 @@ public class GeoSearchButton extends CidsBeanDropJPopupMenuButton {
             });
         popMenSearch.add(mniSearchPolygon);
 
+        bgrSearch.add(mniSearchEllipse);
         mniSearchEllipse.setText(org.openide.util.NbBundle.getMessage(
                 GeoSearchButton.class,
                 "GeoSearchButton.mniSearchEllipse.text"));                                                  // NOI18N
@@ -182,6 +208,7 @@ public class GeoSearchButton extends CidsBeanDropJPopupMenuButton {
             });
         popMenSearch.add(mniSearchEllipse);
 
+        bgrSearch.add(mniSearchPolyline);
         mniSearchPolyline.setText(org.openide.util.NbBundle.getMessage(
                 GeoSearchButton.class,
                 "GeoSearchButton.mniSearchPolyline.text"));                                                   // NOI18N
@@ -196,6 +223,7 @@ public class GeoSearchButton extends CidsBeanDropJPopupMenuButton {
         popMenSearch.add(mniSearchPolyline);
         popMenSearch.add(sepSearchGeometries);
 
+        bgrSearch.add(mniSearchCidsFeature);
         mniSearchCidsFeature.setText(org.openide.util.NbBundle.getMessage(
                 GeoSearchButton.class,
                 "GeoSearchButton.mniSearchCidsFeature.text"));                                                  // NOI18N
@@ -533,80 +561,80 @@ public class GeoSearchButton extends CidsBeanDropJPopupMenuButton {
 
                 @Override
                 public void run() {
-//                final String s = (String) JOptionPane.showInputDialog(
-//                        StaticSwingTools.getParentFrame(MeasurementPointWindowSearch.this),
-//                        "Geben Sie den Abstand des zu erzeugenden\n" // NOI18N
-//                        + "Puffers der letzten Suchgeometrie an.", // NOI18N
-//                        "Puffer", // NOI18N
-//                        JOptionPane.PLAIN_MESSAGE,
-//                        null,
-//                        null,
-//                        "");                                               // NOI18N
-//                if (LOG.isDebugEnabled()) {
-//                    LOG.debug(s);
-//                }
-//
-//                // , statt . ebenfalls erlauben
-//                if (s.matches("\\d*,\\d*")) { // NOI18N
-//                    s.replace(",", ".");      // NOI18N
-//                }
-//
-//                try {
-//                    final float buffer = Float.valueOf(s);
-//
-//                    final MeasurementPointCreateSearchGeometryListener searchListener =
-//                            (MeasurementPointCreateSearchGeometryListener) mappingComponent.getInputListener(
-//                            MeasurementPointCreateSearchGeometryListener.MEASUREMENTPOINT_CREATE_SEARCH_GEOMETRY);
-//                    final PureNewFeature lastFeature = searchListener.getLastSearchFeature();
-//
-//                    if (lastFeature != null) {
-//                        // Geometrie-Daten holen
-//                        final Geometry geom = lastFeature.getGeometry();
-//
-//                        // Puffer-Geometrie holen
-//                        final Geometry bufferGeom = geom.buffer(buffer);
-//
-//                        // und setzen
-//                        lastFeature.setGeometry(bufferGeom);
-//
-//                        // Geometrie ist jetzt eine Polygon (keine Linie, Ellipse, oder
-//                        // �hnliches mehr)
-//                        lastFeature.setGeometryType(PureNewFeature.geomTypes.POLYGON);
-//
-//                        for (final Object feature : mappingComponent.getFeatureCollection().getAllFeatures()) {
-//                            final PFeature sel = (PFeature) mappingComponent.getPFeatureHM().get(feature);
-//
-//                            if (sel.getFeature().equals(lastFeature)) {
-//                                // Koordinaten der Puffer-Geometrie als Feature-Koordinaten
-//                                // setzen
-//                                sel.setCoordArr(bufferGeom.getCoordinates());
-//
-//                                // refresh
-//                                sel.syncGeometry();
-//
-//                                final Vector v = new Vector();
-//                                v.add(sel.getFeature());
-//                                ((DefaultFeatureCollection) mappingComponent.getFeatureCollection())
-//                                        .fireFeaturesChanged(v);
-//                            }
-//                        }
-//
-//                        searchListener.search(lastFeature);
-//                        mappingComponent.setInteractionMode(
-//                                interActionMode);
-//                    }
-//                } catch (NumberFormatException ex) {
-////                    JOptionPane.showMessageDialog(
-////                            StaticSwingTools.getParentFrame(MeasurementPointWindowSearch.this),
-////                            "The given value was not a floating point value.!",
-////                            "Error",
-////                            JOptionPane.ERROR_MESSAGE); // NOI18N
-//                } catch (Exception ex) {
-//                    if (LOG.isDebugEnabled()) {
-//                        LOG.debug("", ex);          // NOI18N
-//                    }
-//                }
+                    final String s = (String)JOptionPane.showInputDialog(
+                            StaticSwingTools.getParentFrame(GeoSearchButton.this),
+                            "Geben Sie den Abstand des zu erzeugenden\n"       // NOI18N
+                                    + "Puffers der letzten Suchgeometrie an.", // NOI18N
+                            "Puffer",                                          // NOI18N
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            null,
+                            "");                                               // NOI18N
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug(s);
+                    }
+
+                    // , statt . ebenfalls erlauben
+                    if (s.matches("\\d*,\\d*")) { // NOI18N
+                        s.replace(",", ".");      // NOI18N
+                    }
+
+                    try {
+                        final float buffer = Float.valueOf(s);
+
+                        final AbstractCreateSearchGeometryListener searchListener =
+                            (AbstractCreateSearchGeometryListener)mappingComponent.getInputListener(
+                                interActionMode);
+                        final PureNewFeature lastFeature = searchListener.getLastSearchFeature();
+
+                        if (lastFeature != null) {
+                            // Geometrie-Daten holen
+                            final Geometry geom = lastFeature.getGeometry();
+
+                            // Puffer-Geometrie holen
+                            final Geometry bufferGeom = geom.buffer(buffer);
+
+                            // und setzen
+                            lastFeature.setGeometry(bufferGeom);
+
+                            // Geometrie ist jetzt eine Polygon (keine Linie, Ellipse, oder
+                            // �hnliches mehr)
+                            lastFeature.setGeometryType(PureNewFeature.geomTypes.POLYGON);
+
+                            for (final Object feature : mappingComponent.getFeatureCollection().getAllFeatures()) {
+                                final PFeature sel = (PFeature)mappingComponent.getPFeatureHM().get(feature);
+
+                                if (sel.getFeature().equals(lastFeature)) {
+                                    // Koordinaten der Puffer-Geometrie als Feature-Koordinaten
+                                    // setzen
+                                    sel.setCoordArr(bufferGeom.getCoordinates());
+
+                                    // refresh
+                                    sel.syncGeometry();
+
+                                    final Vector v = new Vector();
+                                    v.add(sel.getFeature());
+                                    ((DefaultFeatureCollection)mappingComponent.getFeatureCollection())
+                                            .fireFeaturesChanged(v);
+                                }
+                            }
+
+                            searchListener.search(lastFeature);
+                            mappingComponent.setInteractionMode(
+                                interActionMode);
+                        }
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(
+                            StaticSwingTools.getParentFrame(GeoSearchButton.this),
+                            "The given value was not a floating point value.!",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE); // NOI18N
+                    } catch (Exception ex) {
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("", ex);          // NOI18N
+                        }
+                    }
                 }
             });
-    } //GEN-LAST:event_mniSearchBufferActionPerformed
+    }                                                   //GEN-LAST:event_mniSearchBufferActionPerformed
 }
