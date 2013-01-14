@@ -14,6 +14,7 @@ package de.cismet.cids.custom.wunda_blau.search;
 import Sirius.navigator.actiontag.ActionTagProtected;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
+import Sirius.navigator.search.CidsSearchExecutor;
 import Sirius.navigator.search.dynamic.SearchControlListener;
 import Sirius.navigator.search.dynamic.SearchControlPanel;
 
@@ -27,14 +28,13 @@ import org.apache.log4j.Logger;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
-import sun.security.jca.JCAUtil;
-
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import java.net.URL;
 
@@ -73,6 +73,8 @@ import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
 
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
+import de.cismet.cismap.commons.gui.MappingComponent;
+import de.cismet.cismap.commons.gui.piccolo.eventlistener.AbstractCreateSearchGeometryListener;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 /**
@@ -84,7 +86,8 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 @org.openide.util.lookup.ServiceProvider(service = CidsWindowSearch.class)
 public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindowSearch,
     ActionTagProtected,
-    SearchControlListener {
+    SearchControlListener,
+    PropertyChangeListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -99,6 +102,9 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
     private MetaClass metaClass;
     private ImageIcon icon;
     private JPanel pnlSearchCancel;
+    private GeoSearchButton btnGeoSearch;
+    private MappingComponent mappingComponent;
+    private boolean geoSearchEnabled;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox cbMapSearch;
@@ -220,6 +226,24 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
             } else {
                 icon = new ImageIcon(new byte[] {});
             }
+        }
+
+        mappingComponent = CismapBroker.getInstance().getMappingComponent();
+        geoSearchEnabled = mappingComponent != null;
+        if (geoSearchEnabled) {
+            final MauernCreateSearchGeometryListener mauernSearchGeometryListener =
+                new MauernCreateSearchGeometryListener(mappingComponent,
+                    new MauernSearchTooltip(icon));
+            mauernSearchGeometryListener.addPropertyChangeListener(this);
+            btnGeoSearch = new GeoSearchButton(
+                    MauernCreateSearchGeometryListener.MAUERN_CREATE_SEARCH_GEOMETRY,
+                    mappingComponent,
+                    null,
+                    org.openide.util.NbBundle.getMessage(
+                        MauernWindowSearch.class,
+                        "MauernWindowSearch.btnGeoSearch.toolTipText"));
+            btnGeoSearch.addActionListener(null);
+            pnlButtons.add(btnGeoSearch);
         }
 
         fillEigentuemerListModel();
@@ -701,13 +725,17 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         lblSelektierteLastklassen.setText(org.openide.util.NbBundle.getMessage(
                 MauernWindowSearch.class,
-                "MauernWindowSearch.lblSelektierteLastklassen.text")); // NOI18N
+                "MauernWindowSearch.lblSelektierteLastklassen.text"));                                     // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         pnlLastklasse.add(lblSelektierteLastklassen, gridBagConstraints);
+        lblSelektierteLastklassen.getAccessibleContext()
+                .setAccessibleName(org.openide.util.NbBundle.getMessage(
+                        MauernWindowSearch.class,
+                        "MauernWindowSearch.lblSelektierteLastklassen.AccessibleContext.accessibleName")); // NOI18N
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1076,10 +1104,11 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
     /**
      * DOCUMENT ME!
      *
+     * @param   geometry  DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
-    @Override
-    public MetaObjectNodeServerSearch getServerSearch() {
+    private MetaObjectNodeServerSearch getServerSearch(final Geometry geometry) {
         Geometry geometryToSearchFor = null;
         SearchMode mode = null;
         LinkedList<Integer> eigentuemer = null;
@@ -1090,12 +1119,21 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         } else {
             mode = SearchMode.OR_SEARCH;
         }
-
-        if (cbMapSearch.isSelected()) {
-            geometryToSearchFor =
-                ((XBoundingBox)CismapBroker.getInstance().getMappingComponent().getCurrentBoundingBox()).getGeometry();
-            geometryToSearchFor = CrsTransformer.transformToDefaultCrs(geometryToSearchFor);
-            geometryToSearchFor.setSRID(CismapBroker.getInstance().getDefaultCrsAlias());
+        if (geometry != null) {
+            geometryToSearchFor = geometry;
+        } else {
+            if (cbMapSearch.isSelected()) {
+                geometryToSearchFor =
+                    ((XBoundingBox)CismapBroker.getInstance().getMappingComponent().getCurrentBoundingBox())
+                            .getGeometry();
+            }
+        }
+        final Geometry transformedBoundingBox;
+        if (geometryToSearchFor != null) {
+            transformedBoundingBox = CrsTransformer.transformToDefaultCrs(geometryToSearchFor);
+            transformedBoundingBox.setSRID(CismapBroker.getInstance().getDefaultCrsAlias());
+        } else {
+            transformedBoundingBox = null;
         }
 
         final Object[] selectedEigentuemer = lstEigentuemer.getSelectedValues();
@@ -1279,9 +1317,19 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
                 dcPruefVon.getDate(),
                 dcPruefBis.getDate(),
                 lastklassen,
-                geometryToSearchFor,
+                transformedBoundingBox,
                 mode,
                 filterProps);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Override
+    public MetaObjectNodeServerSearch getServerSearch() {
+        return getServerSearch(null);
     }
 
     @Override
@@ -1392,6 +1440,22 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
      */
     public void setEigentuemerListModel(final DefaultListModel eigentuemerListModel) {
         this.eigentuemerListModel = eigentuemerListModel;
+    }
+
+    @Override
+    public void propertyChange(final PropertyChangeEvent evt) {
+        if (AbstractCreateSearchGeometryListener.PROPERTY_FORGUI_LAST_FEATURE.equals(evt.getPropertyName())
+                    || AbstractCreateSearchGeometryListener.PROPERTY_FORGUI_MODE.equals(evt.getPropertyName())) {
+            btnGeoSearch.visualizeSearchMode((MauernCreateSearchGeometryListener)mappingComponent.getInputListener(
+                    MauernCreateSearchGeometryListener.MAUERN_CREATE_SEARCH_GEOMETRY));
+        }
+
+        if (MeasurementPointCreateSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
+            if ((evt.getNewValue() != null) && (evt.getNewValue() instanceof Geometry)) {
+                final MetaObjectNodeServerSearch search = getServerSearch((Geometry)evt.getNewValue());
+                CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);
+            }
+        }
     }
 
     //~ Inner Classes ----------------------------------------------------------
