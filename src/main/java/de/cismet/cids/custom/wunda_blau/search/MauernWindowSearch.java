@@ -41,6 +41,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import javax.swing.Box;
 import javax.swing.DefaultListModel;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.ImageIcon;
@@ -124,6 +125,8 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
     private javax.swing.JLabel lblFiller2;
     private javax.swing.JLabel lblFiller3;
     private javax.swing.JLabel lblFiller4;
+    private javax.swing.JLabel lblFiller5;
+    private javax.swing.JLabel lblFiller6;
     private javax.swing.JLabel lblGelaende;
     private javax.swing.JLabel lblGruendung;
     private javax.swing.JLabel lblHoeheBis;
@@ -228,6 +231,8 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
             }
         }
 
+        pnlButtons.add(Box.createHorizontalStrut(5));
+
         mappingComponent = CismapBroker.getInstance().getMappingComponent();
         geoSearchEnabled = mappingComponent != null;
         if (geoSearchEnabled) {
@@ -263,6 +268,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
                     }
                 }
             });
+        lstLastklasse.setModel(lastKlasseListModel);
         lstLastklasse.setCellRenderer(new CheckboxCellRenderer());
         lstLastklasse.setSelectionModel(new ListToggleSelectionModel());
         lstLastklasse.addListSelectionListener(new ListSelectionListener() {
@@ -338,6 +344,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         jLabel1 = new javax.swing.JLabel();
         rbAll = new javax.swing.JRadioButton();
         rbOne = new javax.swing.JRadioButton();
+        lblFiller5 = new javax.swing.JLabel();
         pnlEigetuemer = new javax.swing.JPanel();
         scpListEigentuemer = new javax.swing.JScrollPane();
         lstEigentuemer = new javax.swing.JList();
@@ -369,6 +376,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         lblHoeheBis = new javax.swing.JLabel();
         tfHoeheBis = new javax.swing.JTextField();
         lblFiller3 = new javax.swing.JLabel();
+        lblFiller6 = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(70, 20));
         setLayout(new java.awt.BorderLayout());
@@ -697,8 +705,8 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlScrollPane.add(pnlNoten, gridBagConstraints);
@@ -739,8 +747,8 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlScrollPane.add(pnlLastklasse, gridBagConstraints);
@@ -774,9 +782,21 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         pnlSearchMode.add(rbOne, gridBagConstraints);
 
+        lblFiller5.setText(org.openide.util.NbBundle.getMessage(
+                MauernWindowSearch.class,
+                "MauernWindowSearch.lblFiller5.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        pnlSearchMode.add(lblFiller5, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 25, 0, 25);
         pnlScrollPane.add(pnlSearchMode, gridBagConstraints);
@@ -819,8 +839,8 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlScrollPane.add(pnlEigetuemer, gridBagConstraints);
@@ -944,8 +964,8 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlScrollPane.add(pnlGesamtnoten, gridBagConstraints);
 
@@ -1000,8 +1020,8 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlScrollPane.add(pnlPruefung, gridBagConstraints);
@@ -1009,10 +1029,8 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         pnlButtons.setLayout(new javax.swing.BoxLayout(pnlButtons, javax.swing.BoxLayout.LINE_AXIS));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlScrollPane.add(pnlButtons, gridBagConstraints);
 
@@ -1021,7 +1039,8 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
                 "MauernWindowSearch.cbMapSearch.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 25, 0, 25);
         pnlScrollPane.add(cbMapSearch, gridBagConstraints);
@@ -1085,11 +1104,21 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlScrollPane.add(pnlHoehe, gridBagConstraints);
+
+        lblFiller6.setText(org.openide.util.NbBundle.getMessage(
+                MauernWindowSearch.class,
+                "MauernWindowSearch.lblFiller6.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        pnlScrollPane.add(lblFiller6, gridBagConstraints);
 
         jScrollPane1.setViewportView(pnlScrollPane);
 
