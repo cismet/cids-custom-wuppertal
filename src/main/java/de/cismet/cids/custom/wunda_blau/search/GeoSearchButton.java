@@ -95,12 +95,10 @@ public class GeoSearchButton extends CidsBeanDropJPopupMenuButton {
      * Creates a new GeoSearchButton object.
      *
      * @param  interActionMode   DOCUMENT ME!
-     * @param  interactionMode   DOCUMENT ME!
      * @param  mappingComponent  DOCUMENT ME!
      * @param  searchName        DOCUMENT ME!
      */
     public GeoSearchButton(final String interActionMode,
-            final String interactionMode,
             final MappingComponent mappingComponent,
             final String searchName) {
         this(interActionMode, mappingComponent, searchName, "");
@@ -136,6 +134,8 @@ public class GeoSearchButton extends CidsBeanDropJPopupMenuButton {
                 getClass().getResource("/images/pluginSearchTarget.png")));
         visualizeSearchMode((MetaSearchCreateSearchGeometryListener)mappingComponent.getInputListener(
                 MappingComponent.CREATE_SEARCH_POLYGON));
+        mappingComponent.getInteractionButtonGroup().add(this);
+
         this.addActionListener(new ActionListener() {
 
                 @Override
