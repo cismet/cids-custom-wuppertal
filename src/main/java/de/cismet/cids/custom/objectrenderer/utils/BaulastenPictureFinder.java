@@ -7,6 +7,8 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.utils;
 
+import org.apache.commons.io.IOUtils;
+
 import java.io.File;
 
 import java.net.HttpURLConnection;
@@ -34,6 +36,7 @@ public final class BaulastenPictureFinder {
     public static final String SEP = "/";
     static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(BaulastenPictureFinder.class);
     private static final String[] SUFFIXE = new String[] { "tif", "jpg", "tiff", "jpeg" };
+    private static final String LINKEXTENSION = "txt";
 //    "TIF", "JPG", "TIFF", "JPEG"};
     public static final String PATH = "http://s102is/Baulasten/";
 
@@ -119,6 +122,21 @@ public final class BaulastenPictureFinder {
     /**
      * DOCUMENT ME!
      *
+     * @param   filename  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static String getObjectPath(final String filename) {
+        // 001625-01b
+
+        final String numberS = filename.substring(0, 6);
+        final int number = new Integer(numberS);
+        return new StringBuffer(getFolder(number)).append(SEP).append(filename).append('.').toString();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param   blattnummer     DOCUMENT ME!
      * @param   laufendeNummer  DOCUMENT ME!
      *
@@ -156,44 +174,9 @@ public final class BaulastenPictureFinder {
      */
     public static void main(final String[] args) {
         Log4JQuickConfig.configure4LumbermillOnLocalhost();
-        System.out.println(getFolder(50));
-        System.out.println(getFolder(1050));
-        System.out.println(getFolder(1000));
-        System.out.println(getFolder(1001));
-        System.out.println(getFolder(12001));
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   fileWithoutSuffix  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private static List<File> probeFilesystemForRightSuffix(final String fileWithoutSuffix) {
-        if (log.isDebugEnabled()) {
-            log.debug("Searching for picture: " + fileWithoutSuffix + "xxx");
-        }
-        final List<File> results = TypeSafeCollections.newArrayList();
-        for (final String suffix : SUFFIXE) {
-            try {
-                final URL fileURL = new URL(fileWithoutSuffix + suffix);
-
-                final File testFile = new File(fileURL.toURI());
-                if (testFile.isFile()) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("Found picture in file: " + testFile.getAbsolutePath());
-                    }
-                    results.add(testFile);
-                }
-            } catch (Exception ex) {
-                log.error(ex, ex);
-            }
-        }
-        if (log.isDebugEnabled()) {
-            log.debug("No picture file found.");
-        }
-        return results;
+        System.out.println(getObjectPath("001625-01b"));
+        System.out.println(getObjectPath("021625A01b"));
+        System.out.println(getObjectPath("001625-01p"));
     }
 
     /**
@@ -204,6 +187,18 @@ public final class BaulastenPictureFinder {
      * @return  DOCUMENT ME!
      */
     private static List<URL> probeWebserverForRightSuffix(final String fileWithoutSuffix) {
+        return probeWebserverForRightSuffix(fileWithoutSuffix, 0);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   fileWithoutSuffix  DOCUMENT ME!
+     * @param   recursionDepth     DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static List<URL> probeWebserverForRightSuffix(final String fileWithoutSuffix, final int recursionDepth) {
         if (log.isDebugEnabled()) {
             log.debug("Searching for picture: " + fileWithoutSuffix + "xxx");
         }
@@ -221,11 +216,32 @@ public final class BaulastenPictureFinder {
                     results.add(objectURL);
                 }
             } catch (Exception ex) {
-                log.error(ex, ex);
+                log.error("Problem occured, during checking for " + fileWithoutSuffix + suffix, ex);
             }
         }
-        if (log.isDebugEnabled()) {
-            log.debug("No picture file found.");
+        if (results.isEmpty()) {
+            if (log.isDebugEnabled()) {
+                log.debug("No picture file found. Check for Links");
+            }
+            if (recursionDepth < 3) {
+                try {
+                    final URL objectURL = new URL(fileWithoutSuffix + LINKEXTENSION);
+                    final HttpURLConnection huc = (HttpURLConnection)objectURL.openConnection();
+                    huc.setRequestMethod("GET");
+                    huc.connect();
+                    final int reponse = huc.getResponseCode();
+                    if (reponse == 200) {
+                        final String link = IOUtils.toString(huc.getInputStream());
+                        return probeWebserverForRightSuffix(getObjectPath(link.trim()), recursionDepth + 1);
+                    }
+                } catch (Exception ex) {
+                    log.error(ex, ex);
+                }
+            } else {
+                log.error(
+                    "No hop,hop,hop possible within this logic. Seems to be an endless loop, sorry.",
+                    new Exception("JustTheStackTrace"));
+            }
         }
         return results;
     }
