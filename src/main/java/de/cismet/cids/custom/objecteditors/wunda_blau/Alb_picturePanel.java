@@ -243,6 +243,10 @@ public class Alb_picturePanel extends javax.swing.JPanel {
      * @param  cidsBean  the cidsBean to set
      */
     public void setCidsBean(final CidsBean cidsBean) {
+        documentURLs = new URL[2];
+        lstPictures.setModel(new DefaultListModel());
+        measureComponent.removeAllFeatures();
+        setEnabled(false);
         this.cidsBean = cidsBean;
         if (cidsBean != null) {
             updatePicturePathListener = new PropertyChangeListener() {
