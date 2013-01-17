@@ -130,10 +130,8 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
     private javax.swing.JLabel lblDescBefristungsdatum;
     private javax.swing.JLabel lblDescEintragungsdatum;
     private javax.swing.JLabel lblDescGeschlossenAm;
-    private javax.swing.JLabel lblDescLageplan;
     private javax.swing.JLabel lblDescLaufendeNr;
     private javax.swing.JLabel lblDescLoeschungsdatum;
-    private javax.swing.JLabel lblDescTextblatt;
     private javax.swing.JLabel lblGeprueft;
     private javax.swing.JLabel lblHeadBegFlurstuecke;
     private javax.swing.JLabel lblHeadBelFlurstuecke;
@@ -161,9 +159,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel1;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel2;
     private de.cismet.cids.editors.converters.SqlDateToUtilDateConverter sqlDateToUtilDateConverter;
-    private javax.swing.JTextField txtLageplan;
     private javax.swing.JTextField txtLaufendeNr;
-    private javax.swing.JTextField txtTextblatt;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -200,8 +196,6 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
      * DOCUMENT ME!
      */
     private void initEditableComponents() {
-        RendererTools.makeReadOnly(txtLageplan);
-        RendererTools.makeReadOnly(txtTextblatt);
         editableComponents.add(txtLaufendeNr);
         editableComponents.add(defaultBindableDateChooser1);
         editableComponents.add(defaultBindableDateChooser2);
@@ -281,11 +275,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         lblDescBefristungsdatum = new javax.swing.JLabel();
         lblDescGeschlossenAm = new javax.swing.JLabel();
         lblDescLoeschungsdatum = new javax.swing.JLabel();
-        lblDescTextblatt = new javax.swing.JLabel();
-        txtTextblatt = new javax.swing.JTextField();
         txtLaufendeNr = new javax.swing.JTextField();
-        lblDescLageplan = new javax.swing.JLabel();
-        txtLageplan = new javax.swing.JTextField();
         defaultBindableDateChooser4 = new de.cismet.cids.editors.DefaultBindableDateChooser();
         defaultBindableDateChooser1 = new de.cismet.cids.editors.DefaultBindableDateChooser();
         defaultBindableDateChooser2 = new de.cismet.cids.editors.DefaultBindableDateChooser();
@@ -603,23 +593,6 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         rpInfo.add(lblDescLoeschungsdatum, gridBagConstraints);
 
-        lblDescTextblatt.setText("Textblatt:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        rpInfo.add(lblDescTextblatt, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 6;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        rpInfo.add(txtTextblatt, gridBagConstraints);
-
         txtLaufendeNr.setMaximumSize(new java.awt.Dimension(125, 20));
         txtLaufendeNr.setMinimumSize(new java.awt.Dimension(125, 20));
         txtLaufendeNr.setPreferredSize(new java.awt.Dimension(125, 20));
@@ -642,23 +615,6 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(11, 6, 6, 6);
         rpInfo.add(txtLaufendeNr, gridBagConstraints);
-
-        lblDescLageplan.setText("Lageplan:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        rpInfo.add(lblDescLageplan, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.gridwidth = 6;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        rpInfo.add(txtLageplan, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -1216,14 +1172,6 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                         lblGeprueft.setText("       ---       ");
                     }
                 }
-
-                final String blattnummer = (String)getCidsBean().getProperty(Alb_picturePanel.BLATTNUMMER_PROPERTY);
-                final String lfdNummer = (String)getCidsBean().getProperty(Alb_picturePanel.LFDNUMMER_PROPERTY);
-                final String postfix = "[tif,jpg,tiff,jpeg]";
-                final String plan = BaulastenPictureFinder.getPlanPictureFilename(blattnummer, lfdNummer);
-                final String textblatt = BaulastenPictureFinder.getTextblattPictureFilename(blattnummer, lfdNummer);
-                txtLageplan.setText((plan != null) ? (plan + postfix) : "");
-                txtTextblatt.setText((textblatt != null) ? (textblatt + postfix) : "");
 
                 bindingGroup.bind();
                 lstFlurstueckeBelastet.setSelectedIndices(belIdx);
