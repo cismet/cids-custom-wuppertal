@@ -170,18 +170,6 @@ public final class BaulastenPictureFinder {
     /**
      * DOCUMENT ME!
      *
-     * @param  args  DOCUMENT ME!
-     */
-    public static void main(final String[] args) {
-        Log4JQuickConfig.configure4LumbermillOnLocalhost();
-        System.out.println(getObjectPath("001625-01b"));
-        System.out.println(getObjectPath("021625A01b"));
-        System.out.println(getObjectPath("001625-01p"));
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
      * @param   fileWithoutSuffix  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
