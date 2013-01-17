@@ -519,9 +519,12 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
      * @param  enable  DOCUMENT ME!
      */
     private void changeButtonAvailability(final boolean enable) {
-        jxlBestandsnachweisNRW.setEnabled(enable);
-        jxlBestandsnachweisKommunal.setEnabled(enable);
-        jxlBestandsnachweisKommunalIntern.setEnabled(enable);
+        jxlBestandsnachweisNRW.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW)
+                    && BillingPopup.isBillingAllowed());
+        jxlBestandsnachweisKommunal.setEnabled(ObjectRendererUtils.checkActionTag(
+                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM) && BillingPopup.isBillingAllowed());
+        jxlBestandsnachweisKommunalIntern.setEnabled(ObjectRendererUtils.checkActionTag(
+                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN));
     }
 
     /**
