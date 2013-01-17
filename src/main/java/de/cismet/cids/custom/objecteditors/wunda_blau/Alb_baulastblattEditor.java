@@ -763,14 +763,10 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                 if (userInput != null) {
                     if (isNewLaufendeNummer(userInput)) {
                         final int laufendeNr = Integer.parseInt(userInput);
-                        final String blattNummer = txtBlattnummer.getText();
-                        final String folder = generateFolderNameFromBlattnummer(blattNummer);
+
                         final CidsBean newBean = CidsBeanSupport.createNewCidsBeanFromTableName("alb_baulast");
                         newBean.setProperty("laufende_nummer", String.valueOf(laufendeNr));
-                        newBean.setProperty("textblatt", folder);
-                        newBean.setProperty("lageplan", "");
                         newBean.setProperty("blattnummer", txtBlattnummer.getText());
-//                    newBean.setProperty("lageplan", folder);
                         baulasten.add(newBean);
                         final int newIndex = lstLaufendeNummern.getModel().getSize();
                         lstLaufendeNummern.setSelectedIndex(newIndex - 1);
@@ -791,7 +787,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                 ex,
                 this);
         }
-    }                                                                                        //GEN-LAST:event_btnAddLaufendeNummerActionPerformed
+    } //GEN-LAST:event_btnAddLaufendeNummerActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -810,64 +806,6 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         }
         return true;
     }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   blattNummer  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private String generateFolderNameFromBlattnummer(String blattNummer) {
-        if (blattNummer != null) {
-            try {
-                blattNummer = blattNummer.replaceAll("\\D", "");
-                if (blattNummer.length() > 0) {
-                    int nummer = Integer.parseInt(blattNummer) - 1;
-                    nummer /= 1000;
-                    String nummStringStart = String.valueOf(nummer) + "001";
-                    String nummStringEnd = String.valueOf(nummer + 1) + "000";
-                    while (nummStringStart.length() < BLATT_NUMMER_ANZAHL_ZIFFERN) {
-                        nummStringStart = "0" + nummStringStart;
-                    }
-                    while (nummStringEnd.length() < BLATT_NUMMER_ANZAHL_ZIFFERN) {
-                        nummStringEnd = "0" + nummStringEnd;
-                    }
-                    // patch fuer fehler in wuppertaler ordnernummerierung (erster startet bei 000000 statt 000001)
-                    if ("000001".equals(nummStringStart)) {
-                        nummStringStart = "000000";
-                    }
-                    return nummStringStart + "-" + nummStringEnd + "/";
-                }
-            } catch (Exception ex) {
-                log.warn(ex, ex);
-            }
-        }
-        return "XXXW01-XXXX00/";
-    }
-//    private String generateFolderNameFromBlattnummer(String blattNummer) {
-//        if (blattNummer != null) {
-//            try {
-//                blattNummer = blattNummer.replaceAll("\\D", "");
-//                if (blattNummer.length() > 0) {
-//                    int nummer = Integer.parseInt(blattNummer);
-//                    nummer /= 1000;
-//                    String nummStringStart = String.valueOf(nummer) + "000";
-//                    String nummStringEnd = String.valueOf(nummer + 1) + "000";
-//                    while (nummStringStart.length() < 6) {
-//                        nummStringStart = "0" + nummStringStart;
-//                    }
-//                    while (nummStringEnd.length() < 6) {
-//                        nummStringEnd = "0" + nummStringEnd;
-//                    }
-//                    return nummStringStart + "-" + nummStringEnd + "/";
-//                }
-//            } catch (Exception ex) {
-//                log.warn(ex, ex);
-//            }
-//        }
-//        return "XXXX00-XXXY00/";
-//    }
 
     /**
      * DOCUMENT ME!
