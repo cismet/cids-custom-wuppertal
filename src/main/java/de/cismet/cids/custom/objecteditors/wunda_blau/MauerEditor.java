@@ -840,8 +840,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         pnlCard1.setOpaque(false);
         pnlCard1.setLayout(new java.awt.GridBagLayout());
 
-        pnlAllgemein.setMinimumSize(new java.awt.Dimension(600, 500));
-        pnlAllgemein.setPreferredSize(new java.awt.Dimension(600, 800));
+        pnlAllgemein.setMinimumSize(new java.awt.Dimension(540, 500));
+        pnlAllgemein.setPreferredSize(new java.awt.Dimension(540, 800));
         pnlAllgemein.setLayout(new java.awt.GridBagLayout());
 
         pnlHeaderAllgemein.setBackground(new java.awt.Color(51, 51, 51));
@@ -866,7 +866,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         jspAllgemeineInfos.setBorder(null);
         jspAllgemeineInfos.setMinimumSize(new java.awt.Dimension(500, 500));
         jspAllgemeineInfos.setOpaque(false);
-        jspAllgemeineInfos.setPreferredSize(new java.awt.Dimension(502, 860));
+        jspAllgemeineInfos.setPreferredSize(new java.awt.Dimension(500, 860));
 
         pnlLeft.setMinimumSize(new java.awt.Dimension(500, 770));
         pnlLeft.setOpaque(false);
@@ -1625,8 +1625,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         jPanel7.add(jLabel16, gridBagConstraints);
 
-        cbArtNaechstePruefung1.setMinimumSize(new java.awt.Dimension(150, 20));
-        cbArtNaechstePruefung1.setPreferredSize(new java.awt.Dimension(150, 20));
+        cbArtNaechstePruefung1.setMinimumSize(new java.awt.Dimension(120, 20));
+        cbArtNaechstePruefung1.setPreferredSize(new java.awt.Dimension(120, 20));
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -1690,8 +1690,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         jPanel6.add(jLabel14, gridBagConstraints);
 
-        cbArtLetztePruefung.setMinimumSize(new java.awt.Dimension(150, 20));
-        cbArtLetztePruefung.setPreferredSize(new java.awt.Dimension(150, 20));
+        cbArtLetztePruefung.setMinimumSize(new java.awt.Dimension(120, 20));
+        cbArtLetztePruefung.setPreferredSize(new java.awt.Dimension(120, 20));
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -1755,8 +1755,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         jPanel2.add(jLabel6, gridBagConstraints);
 
-        cbArtErstePruefung.setMinimumSize(new java.awt.Dimension(150, 20));
-        cbArtErstePruefung.setPreferredSize(new java.awt.Dimension(150, 20));
+        cbArtErstePruefung.setMinimumSize(new java.awt.Dimension(120, 20));
+        cbArtErstePruefung.setPreferredSize(new java.awt.Dimension(120, 20));
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -1895,18 +1895,23 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlCard1.add(pnlAllgemein, gridBagConstraints);
 
         roundedScrollPanel.setBackground(new java.awt.Color(254, 254, 254));
         roundedScrollPanel.setForeground(new java.awt.Color(254, 254, 254));
+        roundedScrollPanel.setMinimumSize(new java.awt.Dimension(500, 26));
+        roundedScrollPanel.setPreferredSize(new java.awt.Dimension(500, 120));
         roundedScrollPanel.setLayout(new java.awt.GridBagLayout());
 
         jScrollPane3.setBackground(new java.awt.Color(254, 254, 254));
         jScrollPane3.setBorder(null);
         jScrollPane3.setFocusable(false);
+        jScrollPane3.setMinimumSize(new java.awt.Dimension(500, 26));
         jScrollPane3.setOpaque(false);
         jScrollPane3.setPreferredSize(new java.awt.Dimension(600, 120));
 
@@ -3058,7 +3063,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weightx = 0.5;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlCard1.add(roundedScrollPanel, gridBagConstraints);
