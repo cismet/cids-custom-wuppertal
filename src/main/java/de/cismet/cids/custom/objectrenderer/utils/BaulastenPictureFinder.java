@@ -156,7 +156,11 @@ public final class BaulastenPictureFinder {
      * @return  DOCUMENT ME!
      */
     private static String getFolder(final int number) {
-        int lowerBorder = number - (number % 1000);
+        int modulo = (number % 1000);
+        if (modulo == 0) {
+            modulo = 1000;
+        }
+        int lowerBorder = number - modulo;
         final int higherBorder = lowerBorder + 1000;
         if (lowerBorder != 0) {
             lowerBorder += 1;
