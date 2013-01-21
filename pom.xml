@@ -22,7 +22,7 @@
     </prerequisites>
 
     <scm>
-        <connection>https://github.com/cismet/cids-custom-wuppertal.git</connection>
+        <connection>scm:https://github.com/cismet/cids-custom-wuppertal.git</connection>
         <developerConnection>scm:git:git@github.com:cismet/cids-custom-wuppertal.git</developerConnection>
         <url>https://github.com/cismet/cids-custom-wuppertal</url>
     </scm>
