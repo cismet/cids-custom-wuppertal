@@ -22,7 +22,7 @@
     </prerequisites>
 
     <scm>
-        <connection>https://github.com/cismet/cids-custom-wuppertal.git</connection>
+        <connection>scm:https://github.com/cismet/cids-custom-wuppertal.git</connection>
         <developerConnection>scm:git:git@github.com:cismet/cids-custom-wuppertal.git</developerConnection>
         <url>https://github.com/cismet/cids-custom-wuppertal</url>
     </scm>
@@ -43,7 +43,6 @@
             </snapshots>
         </repository>
     </repositories>
-
 
     <properties>
         <!--
@@ -122,42 +121,16 @@
                     </execution>
                 </executions>
             </plugin>
-                
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.9</version>
-                <configuration>
-          
-                </configuration>
             </plugin>
         </plugins>
     </build>
 
 
     <profiles>
-        <!--
-            this profile is added because jalopy complains about signer information of classes of the
-            de.cismet.cids.featurerenderer package. this package is duplicated by cismap-plugin
-        
-        <profile>
-            <id>skip-jalopy</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>triemax</groupId>
-                        <artifactId>jalopy-maven</artifactId>
-                        <configuration>
-                            <skip>false</skip>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    -->
         <profile>
             <id>default-tools.jar</id>
             <activation>
