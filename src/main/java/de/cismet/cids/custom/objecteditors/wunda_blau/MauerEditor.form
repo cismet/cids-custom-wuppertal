@@ -2240,6 +2240,7 @@
                           <SubComponents>
                             <Component class="javax.swing.JTextArea" name="taSanMassnahmeAnsicht">
                               <Properties>
+                                <Property name="lineWrap" type="boolean" value="true"/>
                                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                                   <Dimension value="[500, 70]"/>
                                 </Property>
