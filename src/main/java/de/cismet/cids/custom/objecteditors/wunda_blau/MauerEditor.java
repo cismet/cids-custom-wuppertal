@@ -3406,7 +3406,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                 }
             }
         }
-    }                                                                                //GEN-LAST:event_btnRemoveImgActionPerformed
+    } //GEN-LAST:event_btnRemoveImgActionPerformed
 
     /**
      * DOCUMENT ME!
