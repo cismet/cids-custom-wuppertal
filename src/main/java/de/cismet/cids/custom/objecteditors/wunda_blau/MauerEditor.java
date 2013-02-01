@@ -3292,86 +3292,86 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnImagesActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnImagesActionPerformed
+    private void btnImagesActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImagesActionPerformed
 
         cardLayout.show(this, "card2");
         btnImages.setEnabled(false);
         btnInfo.setEnabled(true);
         lblImages.setEnabled(false);
         lblInfo.setEnabled(true);
-    } //GEN-LAST:event_btnImagesActionPerformed
+    }//GEN-LAST:event_btnImagesActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnInfoActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnInfoActionPerformed
+    private void btnInfoActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInfoActionPerformed
         cardLayout.show(this, "card1");
         btnImages.setEnabled(true);
         btnInfo.setEnabled(false);
         lblImages.setEnabled(true);
         lblInfo.setEnabled(false);
-    }                                                                           //GEN-LAST:event_btnInfoActionPerformed
+    }//GEN-LAST:event_btnInfoActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnPrevImgActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnPrevImgActionPerformed
+    private void btnPrevImgActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevImgActionPerformed
         lstFotos.setSelectedIndex(lstFotos.getSelectedIndex() - 1);
-    }                                                                              //GEN-LAST:event_btnPrevImgActionPerformed
+    }//GEN-LAST:event_btnPrevImgActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnNextImgActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnNextImgActionPerformed
+    private void btnNextImgActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImgActionPerformed
         lstFotos.setSelectedIndex(lstFotos.getSelectedIndex() + 1);
-    }                                                                              //GEN-LAST:event_btnNextImgActionPerformed
+    }//GEN-LAST:event_btnNextImgActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstFotosValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstFotosValueChanged
+    private void lstFotosValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstFotosValueChanged
         if (!evt.getValueIsAdjusting() && listListenerEnabled) {
             loadFoto();
         }
-    }                                                                                   //GEN-LAST:event_lstFotosValueChanged
+    }//GEN-LAST:event_lstFotosValueChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tfStaerke_untenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tfStaerke_untenActionPerformed
+    private void tfStaerke_untenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfStaerke_untenActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_tfStaerke_untenActionPerformed
+    }//GEN-LAST:event_tfStaerke_untenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddImgActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddImgActionPerformed
+    private void btnAddImgActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddImgActionPerformed
         if (JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(this)) {
             final File[] selFiles = fileChooser.getSelectedFiles();
             if ((selFiles != null) && (selFiles.length > 0)) {
                 CismetThreadPool.execute(new ImageUploadWorker(Arrays.asList(selFiles)));
             }
         }
-    }                                                                             //GEN-LAST:event_btnAddImgActionPerformed
+    }//GEN-LAST:event_btnAddImgActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveImgActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveImgActionPerformed
+    private void btnRemoveImgActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveImgActionPerformed
         final Object[] selection = lstFotos.getSelectedValues();
         if ((selection != null) && (selection.length > 0)) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -3410,18 +3410,18 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                 }
             }
         }
-    }                                                                                //GEN-LAST:event_btnRemoveImgActionPerformed
+    }//GEN-LAST:event_btnRemoveImgActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
+    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         final Collection<CidsBean> c = new LinkedList<CidsBean>();
         c.add(cidsBean);
         MauernReportGenerator.generateKatasterBlatt(c, MauerEditor.this);
-    }                                                                             //GEN-LAST:event_btnReportActionPerformed
+    }//GEN-LAST:event_btnReportActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -3611,7 +3611,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                 }
                 final XBoundingBox box = new XBoundingBox(pureGeom.getEnvelope().buffer(
                             AlkisConstants.COMMONS.GEO_BUFFER));
-                final double diagonalLength = (box.getX2() - box.getX1()) + (box.getY2() - box.getY1());
+                final double diagonalLength = Math.sqrt((box.getWidth()*box.getWidth()) + (box.getHeight()*box.getHeight()));
                 if (log.isDebugEnabled()) {
                     log.debug("Buffer for map: " + diagonalLength);
                 }
