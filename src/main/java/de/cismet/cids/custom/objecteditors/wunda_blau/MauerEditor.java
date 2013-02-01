@@ -3376,6 +3376,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                     if (fotos != null) {
                         fotos.removeAll(removeList);
                     }
+                    // TODO set the laufende_nr
+                    for (int i = 0; i < lstFotos.getModel().getSize(); i++) {
+                        final CidsBean foto = (CidsBean)lstFotos.getModel().getElementAt(i);
+                        foto.setProperty("laufende_nummer", i + 1);
+                    }
+
                     for (final Object toDeleteObj : removeList) {
                         if (toDeleteObj instanceof CidsBean) {
                             final CidsBean fotoToDelete = (CidsBean)toDeleteObj;
@@ -3388,6 +3394,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                     log.error(e, e);
                     showExceptionToUser(e, this);
                 } finally {
+                    // TODO check the laufende_nummer attribute
                     listListenerEnabled = true;
                     final int modelSize = lstFotos.getModel().getSize();
                     if (modelSize > 0) {
