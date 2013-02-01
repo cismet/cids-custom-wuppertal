@@ -3610,8 +3610,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                     log.debug("ALKISConstatns.Commons.GeoBUffer: " + AlkisConstants.COMMONS.GEO_BUFFER);
                 }
                 final XBoundingBox box = new XBoundingBox(pureGeom.getEnvelope().buffer(
-                            AlkisConstants.COMMONS.GEO_BUFFER).buffer(50));
-
+                            AlkisConstants.COMMONS.GEO_BUFFER));
+                final double diagonalLength = (box.getX2() - box.getX1()) + (box.getY2() - box.getY1());
+                if (log.isDebugEnabled()) {
+                    log.debug("Buffer for map: " + diagonalLength);
+                }
+                final XBoundingBox bufferedBox = new XBoundingBox(box.getGeometry().buffer(diagonalLength));
                 final Runnable mapRunnable = new Runnable() {
 
                         @Override
@@ -3619,10 +3623,10 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                             final ActiveLayerModel mappingModel = new ActiveLayerModel();
                             mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
                             mappingModel.addHome(new XBoundingBox(
-                                    box.getX1(),
-                                    box.getY1(),
-                                    box.getX2(),
-                                    box.getY2(),
+                                    bufferedBox.getX1(),
+                                    bufferedBox.getY1(),
+                                    bufferedBox.getX2(),
+                                    bufferedBox.getY2(),
                                     AlkisConstants.COMMONS.SRS_SERVICE,
                                     true));
                             final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
