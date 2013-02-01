@@ -209,9 +209,9 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
         map.zoomToFeatureCollection();
         double scale;
         if (map.getScaleDenominator() >= 100) {
-            scale = Math.floor(map.getScaleDenominator() / 100) * 100;
+            scale = Math.round((map.getScaleDenominator() / 100) + 0.5d) * 100;
         } else {
-            scale = Math.floor(map.getScaleDenominator() / 10) * 10;
+            scale = Math.round((map.getScaleDenominator() / 10) + 0.5) * 10;
         }
         masstab = "1:" + NumberFormat.getIntegerInstance().format(scale);
         if (LOG.isDebugEnabled()) {
