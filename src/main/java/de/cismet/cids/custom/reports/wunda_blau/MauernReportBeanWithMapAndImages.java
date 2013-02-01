@@ -25,6 +25,8 @@ import java.io.InputStream;
 
 import java.net.URL;
 
+import java.text.NumberFormat;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -86,6 +88,7 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
     private boolean mapError = false;
     private boolean image0Error = false;
     private boolean image1Error = false;
+    private String masstab = "";
 
     //~ Constructors -----------------------------------------------------------
 
@@ -203,7 +206,17 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
         map.getFeatureCollection().addFeature(dsf);
 
         map.zoomToFeatureCollection();
-
+        double scale;
+        if (map.getScaleDenominator() >= 100) {
+            scale = Math.floor(map.getScaleDenominator() / 100) * 100;
+        } else {
+            scale = Math.floor(map.getScaleDenominator() / 10) * 10;
+        }
+        masstab = "1:" + NumberFormat.getIntegerInstance().format(scale);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Scale for katasterblatt: " + masstab);
+        }
+        map.gotoBoundingBoxWithHistory(map.getBoundingBoxFromScale(scale));
         map.setInteractionMode(MappingComponent.SELECT);
 
         mappingModel.addLayer(s);
@@ -323,6 +336,24 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
      */
     public void setMapImage(final Image mapImage) {
         this.mapImage = mapImage;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public String getMasstab() {
+        return masstab;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  masstab  DOCUMENT ME!
+     */
+    public void setMasstab(final String masstab) {
+        this.masstab = masstab;
     }
 
     /**
