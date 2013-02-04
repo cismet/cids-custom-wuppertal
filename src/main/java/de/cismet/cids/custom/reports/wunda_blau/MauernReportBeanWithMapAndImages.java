@@ -25,6 +25,8 @@ import java.io.InputStream;
 
 import java.net.URL;
 
+import java.text.NumberFormat;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -86,6 +88,7 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
     private boolean mapError = false;
     private boolean image0Error = false;
     private boolean image1Error = false;
+    private String masstab = "";
 
     //~ Constructors -----------------------------------------------------------
 
@@ -110,7 +113,8 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
         final ArrayList al = new ArrayList();
 //        final SimpleWMS s = new SimpleWMS(new SimpleWmsGetMapUrl("http://www.wms.nrw.de/geobasis/DOP?&VERSION=1.1.1&REQUEST=GetMap&WIDTH=<cismap:width>&HEIGHT=<cismap:height>&BBOX=<cismap:boundingBox>&SRS=EPSG:25832&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&LAYERS=WMS,0,Metadaten&STYLES="));
         final SimpleWMS s = new SimpleWMS(new SimpleWmsGetMapUrl(
-                    "http://s102x284:8399/arcgis/services/WuNDa-Grundlagenkarten/MapServer/WMSServer?service=WMS&VERSION=1.1.1&REQUEST=GetMap&WIDTH=<cismap:width>&HEIGHT=<cismap:height>&BBOX=<cismap:boundingBox>&SRS=EPSG:25832&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&LAYERS=0&STYLES=default"));
+                    "http://s102x284:8399/arcgis/services/WuNDa-Orthophoto-WUP/MapServer/WMSServer?service=WMS&VERSION=1.1.1&REQUEST=GetMap&WIDTH=<cismap:width>&HEIGHT=<cismap:height>&BBOX=<cismap:boundingBox>&SRS=EPSG:25832&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&LAYERS=6&STYLES=default"));
+
 //        final SimpleWMS s = new SimpleWMS(new SimpleWmsGetMapUrl(
 //                    "http://S102X284:8399/arcgis/services/ALKIS-EXPRESS/MapServer/WMSServer?&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image/png&TRANSPARENT=FALSE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&LAYERS=2,4,5,6,7,8,10,11,12,13,14,16,17,18,19,20,21,22,23,25,26,27,28,29,30,31,32,33,34,35,36,37,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100&STYLES=&BBOX=<cismap:boundingBox>&WIDTH=<cismap:width>&HEIGHT=<cismap:height>&SRS="));
         final MappingComponent map = new MappingComponent(false);
@@ -203,7 +207,17 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
         map.getFeatureCollection().addFeature(dsf);
 
         map.zoomToFeatureCollection();
-
+        double scale;
+        if (map.getScaleDenominator() >= 100) {
+            scale = Math.round((map.getScaleDenominator() / 100) + 0.5d) * 100;
+        } else {
+            scale = Math.round((map.getScaleDenominator() / 10) + 0.5) * 10;
+        }
+        masstab = "1:" + NumberFormat.getIntegerInstance().format(scale);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Scale for katasterblatt: " + masstab);
+        }
+        map.gotoBoundingBoxWithHistory(map.getBoundingBoxFromScale(scale));
         map.setInteractionMode(MappingComponent.SELECT);
 
         mappingModel.addLayer(s);
@@ -323,6 +337,24 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
      */
     public void setMapImage(final Image mapImage) {
         this.mapImage = mapImage;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public String getMasstab() {
+        return masstab;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  masstab  DOCUMENT ME!
+     */
+    public void setMasstab(final String masstab) {
+        this.masstab = masstab;
     }
 
     /**
