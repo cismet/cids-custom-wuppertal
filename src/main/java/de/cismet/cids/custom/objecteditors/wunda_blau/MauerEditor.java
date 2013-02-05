@@ -565,12 +565,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         lblBesonderheiten = new javax.swing.JLabel();
         jScrollPane17 = new javax.swing.JScrollPane();
         taBesonderheiten = new javax.swing.JTextArea();
-        if (editable) {
-            lblLagebezeichnung = new javax.swing.JLabel();
-        }
-        if (editable) {
-            tfLagebezeichnung = new javax.swing.JTextField();
-        }
+        lblLagebezeichnung = new javax.swing.JLabel();
+        tfLagebezeichnung = new javax.swing.JTextField();
         lblMauerNummer = new javax.swing.JLabel();
         tfMauerNummer = new javax.swing.JTextField();
         lblMauertyp = new javax.swing.JLabel();
@@ -864,13 +860,13 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         pnlAllgemein.add(pnlHeaderAllgemein, gridBagConstraints);
 
         jspAllgemeineInfos.setBorder(null);
-        jspAllgemeineInfos.setMinimumSize(new java.awt.Dimension(500, 500));
+        jspAllgemeineInfos.setMinimumSize(new java.awt.Dimension(500, 520));
         jspAllgemeineInfos.setOpaque(false);
-        jspAllgemeineInfos.setPreferredSize(new java.awt.Dimension(500, 860));
+        jspAllgemeineInfos.setPreferredSize(new java.awt.Dimension(500, 880));
 
-        pnlLeft.setMinimumSize(new java.awt.Dimension(500, 770));
+        pnlLeft.setMinimumSize(new java.awt.Dimension(500, 790));
         pnlLeft.setOpaque(false);
-        pnlLeft.setPreferredSize(new java.awt.Dimension(500, 790));
+        pnlLeft.setPreferredSize(new java.awt.Dimension(500, 850));
         pnlLeft.setLayout(new java.awt.GridBagLayout());
 
         jScrollPane2.setMinimumSize(new java.awt.Dimension(26, 50));
@@ -1297,41 +1293,34 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 10, 10);
         pnlLeft.add(jScrollPane17, gridBagConstraints);
 
-        if (editable) {
-            lblLagebezeichnung.setText(org.openide.util.NbBundle.getMessage(
-                    MauerEditor.class,
-                    "MauerEditor.lblLagebezeichnung.text")); // NOI18N
-        }
-        if (editable) {
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 0;
-            gridBagConstraints.gridy = 1;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-            pnlLeft.add(lblLagebezeichnung, gridBagConstraints);
-        }
+        lblLagebezeichnung.setText(org.openide.util.NbBundle.getMessage(
+                MauerEditor.class,
+                "MauerEditor.lblLagebezeichnung.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
+        pnlLeft.add(lblLagebezeichnung, gridBagConstraints);
 
-        if (editable) {
-            tfLagebezeichnung.setMinimumSize(new java.awt.Dimension(100, 20));
-            tfLagebezeichnung.setPreferredSize(new java.awt.Dimension(50, 20));
+        tfLagebezeichnung.setMinimumSize(new java.awt.Dimension(100, 20));
+        tfLagebezeichnung.setPreferredSize(new java.awt.Dimension(50, 20));
 
-            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                    org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                    this,
-                    org.jdesktop.beansbinding.ELProperty.create("${cidsBean.lagebezeichnung}"),
-                    tfLagebezeichnung,
-                    org.jdesktop.beansbinding.BeanProperty.create("text"));
-            bindingGroup.addBinding(binding);
-        }
-        if (editable) {
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 1;
-            gridBagConstraints.gridy = 1;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-            gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-            pnlLeft.add(tfLagebezeichnung, gridBagConstraints);
-        }
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.lagebezeichnung}"),
+                tfLagebezeichnung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
+        pnlLeft.add(tfLagebezeichnung, gridBagConstraints);
 
         lblMauerNummer.setText(org.openide.util.NbBundle.getMessage(
                 MauerEditor.class,
@@ -2436,6 +2425,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         jScrollPane9.setMinimumSize(new java.awt.Dimension(26, 70));
         jScrollPane9.setPreferredSize(new java.awt.Dimension(0, 70));
 
+        taSanMassnahmeAnsicht.setLineWrap(true);
         taSanMassnahmeAnsicht.setMinimumSize(new java.awt.Dimension(500, 70));
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -3386,6 +3376,12 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                     if (fotos != null) {
                         fotos.removeAll(removeList);
                     }
+                    // TODO set the laufende_nr
+                    for (int i = 0; i < lstFotos.getModel().getSize(); i++) {
+                        final CidsBean foto = (CidsBean)lstFotos.getModel().getElementAt(i);
+                        foto.setProperty("laufende_nummer", i + 1);
+                    }
+
                     for (final Object toDeleteObj : removeList) {
                         if (toDeleteObj instanceof CidsBean) {
                             final CidsBean fotoToDelete = (CidsBean)toDeleteObj;
@@ -3398,6 +3394,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                     log.error(e, e);
                     showExceptionToUser(e, this);
                 } finally {
+                    // TODO check the laufende_nummer attribute
                     listListenerEnabled = true;
                     final int modelSize = lstFotos.getModel().getSize();
                     if (modelSize > 0) {
@@ -3409,7 +3406,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                 }
             }
         }
-    }                                                                                //GEN-LAST:event_btnRemoveImgActionPerformed
+    } //GEN-LAST:event_btnRemoveImgActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -3605,9 +3602,17 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
             if (geoObj instanceof Geometry) {
                 final Geometry pureGeom = CrsTransformer.transformToGivenCrs((Geometry)geoObj,
                         AlkisConstants.COMMONS.SRS_SERVICE);
+                if (log.isDebugEnabled()) {
+                    log.debug("ALKISConstatns.Commons.GeoBUffer: " + AlkisConstants.COMMONS.GEO_BUFFER);
+                }
                 final XBoundingBox box = new XBoundingBox(pureGeom.getEnvelope().buffer(
                             AlkisConstants.COMMONS.GEO_BUFFER));
-
+                final double diagonalLength = Math.sqrt((box.getWidth() * box.getWidth())
+                                + (box.getHeight() * box.getHeight()));
+                if (log.isDebugEnabled()) {
+                    log.debug("Buffer for map: " + diagonalLength);
+                }
+                final XBoundingBox bufferedBox = new XBoundingBox(box.getGeometry().buffer(diagonalLength));
                 final Runnable mapRunnable = new Runnable() {
 
                         @Override
@@ -3615,10 +3620,10 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                             final ActiveLayerModel mappingModel = new ActiveLayerModel();
                             mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
                             mappingModel.addHome(new XBoundingBox(
-                                    box.getX1(),
-                                    box.getY1(),
-                                    box.getX2(),
-                                    box.getY2(),
+                                    bufferedBox.getX1(),
+                                    bufferedBox.getY1(),
+                                    bufferedBox.getX2(),
+                                    bufferedBox.getY2(),
                                     AlkisConstants.COMMONS.SRS_SERVICE,
                                     true));
                             final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
@@ -3627,7 +3632,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                             final StyledFeature dsf = new DefaultStyledFeature();
                             dsf.setGeometry(pureGeom);
                             dsf.setFillingPaint(new Color(1, 0, 0, 0.5f));
-                            dsf.setLineWidth(2);
+                            dsf.setLineWidth(3);
+                            dsf.setLinePaint(new Color(1, 0, 0, 1f));
                             // add the raster layer to the model
                             mappingModel.addLayer(swms);
                             // set the model
@@ -3725,6 +3731,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
             RendererTools.makeReadOnly(tfHoeheMax);
             RendererTools.makeReadOnly(tfHoeheMin);
             RendererTools.makeReadOnly(tfMauerNummer);
+            RendererTools.makeReadOnly(tfLagebezeichnung);
             RendererTools.makeReadOnly(dcSanierung);
             RendererTools.makeReadOnly(tfZustandGesamt);
             RendererTools.makeReadOnly(lstFotos);
