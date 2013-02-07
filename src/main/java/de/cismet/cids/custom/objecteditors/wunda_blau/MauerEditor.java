@@ -3870,7 +3870,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
      * @throws  IOException  DOCUMENT ME!
      */
     private BufferedImage downloadImageFromWebDAV(final String fileName) throws IOException {
-        final String encodedFileName = fileName; // WebDavHelper.encodeURL(fileName);
+        final String encodedFileName = WebDavHelper.encodeURL(fileName);
         final InputStream iStream = webDavClient.getInputStream(WEB_DAV_DIRECTORY
                         + encodedFileName);
         if (log.isDebugEnabled()) {
