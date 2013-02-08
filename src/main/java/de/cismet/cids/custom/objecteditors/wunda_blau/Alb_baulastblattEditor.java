@@ -41,6 +41,8 @@ import javax.swing.border.EmptyBorder;
 
 import de.cismet.cids.annotations.AggregationRenderer;
 
+import de.cismet.cids.client.tools.DevelopmentTools;
+
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
@@ -155,6 +157,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
      */
     public Alb_baulastblattEditor() {
         this(true);
+        log.fatal("Alb_baulastblattEditor constr");
     }
 
     /**
@@ -163,6 +166,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
      * @param  editable  DOCUMENT ME!
      */
     public Alb_baulastblattEditor(final boolean editable) {
+        log.fatal("Alb_baulastblattEditor constr");
         this.editable = editable;
         initComponents();
         initFooterElements();
@@ -176,6 +180,25 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   args  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public static void main(final String[] args) throws Exception {
+        DevelopmentTools.createEditorInFrameFromRMIConnectionOnLocalhost(
+            "WUNDA_BLAU",
+            "Administratoren",
+            "admin",
+            "kif",
+            "alb_baulast",
+            19,
+            1280,
+            1024);
+    }
 
     /**
      * DOCUMENT ME!

@@ -52,6 +52,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
+import de.cismet.cids.client.tools.DevelopmentTools;
+
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.BaulastenPictureFinder;
@@ -111,6 +113,8 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
     private boolean baulastArtenListInitialized = false;
     private final FlurstueckSelectionDialoge fsDialoge;
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastBindableDateChooser
+        alb_baulastBindableDateChooser1;
     private javax.swing.JButton btnAddArt;
     private javax.swing.JButton btnAddBeguenstigt;
     private javax.swing.JButton btnAddBelastet;
@@ -122,7 +126,6 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
     private javax.swing.JComboBox cbBaulastArt;
     private javax.swing.JCheckBox chkGeprueft;
     private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooser1;
-    private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooser2;
     private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooser3;
     private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooser4;
     private javax.swing.JDialog dlgAddBaulastArt;
@@ -198,7 +201,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
     private void initEditableComponents() {
         editableComponents.add(txtLaufendeNr);
         editableComponents.add(defaultBindableDateChooser1);
-        editableComponents.add(defaultBindableDateChooser2);
+        editableComponents.add(alb_baulastBindableDateChooser1);
         editableComponents.add(defaultBindableDateChooser3);
         editableComponents.add(defaultBindableDateChooser4);
 
@@ -278,8 +281,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         txtLaufendeNr = new javax.swing.JTextField();
         defaultBindableDateChooser4 = new de.cismet.cids.editors.DefaultBindableDateChooser();
         defaultBindableDateChooser1 = new de.cismet.cids.editors.DefaultBindableDateChooser();
-        defaultBindableDateChooser2 = new de.cismet.cids.editors.DefaultBindableDateChooser();
         defaultBindableDateChooser3 = new de.cismet.cids.editors.DefaultBindableDateChooser();
+        alb_baulastBindableDateChooser1 =
+            new de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastBindableDateChooser();
         rpHeadInfo = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeadInfo = new javax.swing.JLabel();
         lblLastInMap = new javax.swing.JLabel();
@@ -660,26 +664,6 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.befristungsdatum}"),
-                defaultBindableDateChooser2,
-                org.jdesktop.beansbinding.BeanProperty.create("date"));
-        binding.setSourceNullValue(null);
-        binding.setSourceUnreadableValue(null);
-        binding.setConverter(sqlDateToUtilDateConverter);
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 6;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        rpInfo.add(defaultBindableDateChooser2, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geschlossen_am}"),
                 defaultBindableDateChooser3,
                 org.jdesktop.beansbinding.BeanProperty.create("date"));
@@ -696,6 +680,16 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         rpInfo.add(defaultBindableDateChooser3, gridBagConstraints);
+
+        alb_baulastBindableDateChooser1.setBackground(new java.awt.Color(255, 255, 255));
+        alb_baulastBindableDateChooser1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        rpInfo.add(alb_baulastBindableDateChooser1, gridBagConstraints);
 
         rpHeadInfo.setBackground(java.awt.Color.darkGray);
         rpHeadInfo.setLayout(new java.awt.GridBagLayout());
