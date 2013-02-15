@@ -3602,9 +3602,17 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
             if (geoObj instanceof Geometry) {
                 final Geometry pureGeom = CrsTransformer.transformToGivenCrs((Geometry)geoObj,
                         AlkisConstants.COMMONS.SRS_SERVICE);
+                if (log.isDebugEnabled()) {
+                    log.debug("ALKISConstatns.Commons.GeoBUffer: " + AlkisConstants.COMMONS.GEO_BUFFER);
+                }
                 final XBoundingBox box = new XBoundingBox(pureGeom.getEnvelope().buffer(
                             AlkisConstants.COMMONS.GEO_BUFFER));
-
+                final double diagonalLength = Math.sqrt((box.getWidth() * box.getWidth())
+                                + (box.getHeight() * box.getHeight()));
+                if (log.isDebugEnabled()) {
+                    log.debug("Buffer for map: " + diagonalLength);
+                }
+                final XBoundingBox bufferedBox = new XBoundingBox(box.getGeometry().buffer(diagonalLength));
                 final Runnable mapRunnable = new Runnable() {
 
                         @Override
@@ -3612,10 +3620,10 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                             final ActiveLayerModel mappingModel = new ActiveLayerModel();
                             mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
                             mappingModel.addHome(new XBoundingBox(
-                                    box.getX1(),
-                                    box.getY1(),
-                                    box.getX2(),
-                                    box.getY2(),
+                                    bufferedBox.getX1(),
+                                    bufferedBox.getY1(),
+                                    bufferedBox.getX2(),
+                                    bufferedBox.getY2(),
                                     AlkisConstants.COMMONS.SRS_SERVICE,
                                     true));
                             final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
@@ -3624,7 +3632,8 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                             final StyledFeature dsf = new DefaultStyledFeature();
                             dsf.setGeometry(pureGeom);
                             dsf.setFillingPaint(new Color(1, 0, 0, 0.5f));
-                            dsf.setLineWidth(2);
+                            dsf.setLineWidth(3);
+                            dsf.setLinePaint(new Color(1, 0, 0, 1f));
                             // add the raster layer to the model
                             mappingModel.addLayer(swms);
                             // set the model
@@ -3861,7 +3870,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
      * @throws  IOException  DOCUMENT ME!
      */
     private BufferedImage downloadImageFromWebDAV(final String fileName) throws IOException {
-        final String encodedFileName = fileName; // WebDavHelper.encodeURL(fileName);
+        final String encodedFileName = WebDavHelper.encodeURL(fileName);
         final InputStream iStream = webDavClient.getInputStream(WEB_DAV_DIRECTORY
                         + encodedFileName);
         if (log.isDebugEnabled()) {
