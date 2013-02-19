@@ -2693,11 +2693,11 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
     }//GEN-LAST:event_jButton15ActionPerformed
 
     private void btnBodenschaetzung_ueb_vonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBodenschaetzung_ueb_vonActionPerformed
-        // TODO add your handling code here:
+        txtBodenschaetzung_ueb_von.setText(getCurrentUser());
     }//GEN-LAST:event_btnBodenschaetzung_ueb_vonActionPerformed
 
     private void btnSchlusspruefung_vonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSchlusspruefung_vonActionPerformed
-        // TODO add your handling code here:
+        txtBodenschaetzung_ueb_von.setText(getCurrentUser());
     }//GEN-LAST:event_btnSchlusspruefung_vonActionPerformed
 
     /**
