@@ -118,7 +118,6 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
     private javax.swing.JLabel lblAlk_bod;
     private javax.swing.JLabel lblAlk_ent_beab;
     private javax.swing.JLabel lblAlk_ent_dat;
-    private javax.swing.JLabel lblAlk_feld;
     private javax.swing.JLabel lblAlk_geb;
     private javax.swing.JLabel lblAlk_luft;
     private javax.swing.JLabel lblAlk_nutz;
@@ -192,7 +191,6 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
     private javax.swing.JTextField txtAlb_ueb_beab;
     private javax.swing.JTextField txtAlk_bem;
     private javax.swing.JTextField txtAlk_ent_beab;
-    private javax.swing.JTextField txtAlk_feld;
     private javax.swing.JTextField txtAlk_luft;
     private javax.swing.JTextField txtAlk_prio;
     private javax.swing.JTextField txtAlk_son1;
@@ -313,8 +311,6 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         txtAlk_son1 = new javax.swing.JTextField();
         lblAlk_ver = new javax.swing.JLabel();
         txtAlk_ver = new javax.swing.JTextField();
-        lblAlk_feld = new javax.swing.JLabel();
-        txtAlk_feld = new javax.swing.JTextField();
         lblTop_aussen_beginn = new javax.swing.JLabel();
         jxdTop_aussen_beginn = new org.jdesktop.swingx.JXDatePicker();
         lblTop_aussen_beendet = new javax.swing.JLabel();
@@ -878,26 +874,6 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(txtAlk_ver, gridBagConstraints);
-
-        lblAlk_feld.setText("Feldvergleich");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 14;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
-        jPanel2.add(lblAlk_feld, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_feld}"), txtAlk_feld, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndAlk_feld");
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 14;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
-        jPanel2.add(txtAlk_feld, gridBagConstraints);
 
         lblTop_aussen_beginn.setText("begonnen am");
         gridBagConstraints = new java.awt.GridBagConstraints();
