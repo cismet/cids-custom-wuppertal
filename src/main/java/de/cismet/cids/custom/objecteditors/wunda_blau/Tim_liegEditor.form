@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.2" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+<Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <NonVisualComponents>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
@@ -407,7 +407,6 @@
                     <Component class="javax.swing.JTextField" name="txtBereich_lage_riss">
                       <BindingProperties>
                         <BindingProperty name="text" source="Form" sourcePath="${cidsBean.alkis.bereich_lage_riss}" target="txtBereich_lage_riss" targetPath="text" updateStrategy="0" immediately="false">
-                          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
                           <Property name="name" type="java.lang.String" value="bndBereich_lage_riss"/>
                         </BindingProperty>
                       </BindingProperties>
@@ -428,6 +427,12 @@
                       </Constraints>
                     </Component>
                     <Component class="javax.swing.JTextField" name="txt_Bereich_lage_riss_nummer">
+                      <BindingProperties>
+                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.alkis.riss_nummer}" target="txt_Bereich_lage_riss_nummer" targetPath="text" updateStrategy="0" immediately="false">
+                          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                          <Property name="name" type="java.lang.String" value=""/>
+                        </BindingProperty>
+                      </BindingProperties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                           <GridBagConstraints gridX="2" gridY="6" gridWidth="2" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="3" insetsLeft="3" insetsBottom="3" insetsRight="3" anchor="10" weightX="1.0" weightY="0.0"/>
@@ -446,7 +451,8 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtAlk_projekt_name">
                       <BindingProperties>
-                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.alkis.alk_bem}" target="txtAlk_projekt_name" targetPath="text" updateStrategy="0" immediately="false">
+                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.alkis.alk_projektname}" target="txtAlk_projekt_name" targetPath="text" updateStrategy="0" immediately="false">
+                          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
                           <Property name="name" type="java.lang.String" value="bndAlk_bem"/>
                         </BindingProperty>
                       </BindingProperties>
@@ -467,6 +473,12 @@
                       </Constraints>
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtAlk_bem">
+                      <BindingProperties>
+                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.alkis.alk_bem}" target="txtAlk_bem" targetPath="text" updateStrategy="0" immediately="false">
+                          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                          <Property name="name" type="java.lang.String" value=""/>
+                        </BindingProperty>
+                      </BindingProperties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                           <GridBagConstraints gridX="2" gridY="8" gridWidth="2" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="3" insetsLeft="3" insetsBottom="3" insetsRight="3" anchor="10" weightX="1.0" weightY="0.0"/>
@@ -987,7 +999,6 @@
                     <Component class="javax.swing.JTextField" name="txtRealn_ueb_von">
                       <BindingProperties>
                         <BindingProperty name="text" source="Form" sourcePath="${cidsBean.alkis.realn_ueb_von}" target="txtRealn_ueb_von" targetPath="text" updateStrategy="0" immediately="false">
-                          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
                           <Property name="name" type="java.lang.String" value="bndRealn_ueb_von"/>
                         </BindingProperty>
                       </BindingProperties>
@@ -1669,6 +1680,9 @@
                       </Constraints>
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtBodenschaetzung_ueb_von">
+                      <BindingProperties>
+                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.alkis.bodenschaetzung_ueb_von}" target="txtBodenschaetzung_ueb_von" targetPath="text" updateStrategy="0" immediately="false"/>
+                      </BindingProperties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                           <GridBagConstraints gridX="2" gridY="38" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="3" insetsLeft="3" insetsBottom="3" insetsRight="3" anchor="10" weightX="1.0" weightY="0.0"/>
@@ -1701,6 +1715,9 @@
                       </Constraints>
                     </Component>
                     <Component class="org.jdesktop.swingx.JXDatePicker" name="jxdBodenschaetzung_ueb_am">
+                      <BindingProperties>
+                        <BindingProperty name="date" source="Form" sourcePath="${cidsBean.alkis.bodenschaetzung_ueb_am}" target="jxdBodenschaetzung_ueb_am" targetPath="date" updateStrategy="0" immediately="false"/>
+                      </BindingProperties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                           <GridBagConstraints gridX="2" gridY="39" gridWidth="2" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="3" insetsLeft="3" insetsBottom="3" insetsRight="3" anchor="10" weightX="1.0" weightY="0.0"/>
@@ -1718,6 +1735,9 @@
                       </Constraints>
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtSchlusspruefung_von">
+                      <BindingProperties>
+                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.alkis.schlusspruefung_von}" target="txtSchlusspruefung_von" targetPath="text" updateStrategy="0" immediately="false"/>
+                      </BindingProperties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                           <GridBagConstraints gridX="2" gridY="40" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="3" insetsLeft="3" insetsBottom="3" insetsRight="3" anchor="10" weightX="1.0" weightY="0.0"/>
@@ -1750,6 +1770,9 @@
                       </Constraints>
                     </Component>
                     <Component class="org.jdesktop.swingx.JXDatePicker" name="jxdSchlusspruefung_am">
+                      <BindingProperties>
+                        <BindingProperty name="date" source="Form" sourcePath="${cidsBean.alkis.schlusspruefung_am}" target="jxdSchlusspruefung_am" targetPath="date" updateStrategy="0" immediately="false"/>
+                      </BindingProperties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                           <GridBagConstraints gridX="2" gridY="41" gridWidth="2" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="3" insetsLeft="3" insetsBottom="3" insetsRight="3" anchor="10" weightX="1.0" weightY="0.0"/>
