@@ -474,10 +474,7 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtAlk_bem">
                       <BindingProperties>
-                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.alkis.alk_bem}" target="txtAlk_bem" targetPath="text" updateStrategy="0" immediately="false">
-                          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-                          <Property name="name" type="java.lang.String" value=""/>
-                        </BindingProperty>
+                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.alkis.alk_bem}" target="txtAlk_bem" targetPath="text" updateStrategy="0" immediately="false"/>
                       </BindingProperties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -589,8 +586,7 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtAlk_son1">
                       <BindingProperties>
-                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.alkis.alk_son1}" target="txtAlk_son1" targetPath="text" updateStrategy="0" immediately="false">
-                          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.alkis.top_aussen_bem}" target="txtAlk_son1" targetPath="text" updateStrategy="0" immediately="false">
                           <Property name="name" type="java.lang.String" value="bndAlk_son1"/>
                         </BindingProperty>
                       </BindingProperties>
@@ -1612,6 +1608,9 @@
                       </Constraints>
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtTop_grund_bem">
+                      <BindingProperties>
+                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.alkis.top_grund_bem}" target="txtTop_grund_bem" targetPath="text" updateStrategy="0" immediately="false"/>
+                      </BindingProperties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                           <GridBagConstraints gridX="2" gridY="23" gridWidth="2" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="3" insetsLeft="3" insetsBottom="3" insetsRight="3" anchor="10" weightX="1.0" weightY="0.0"/>
@@ -1629,6 +1628,9 @@
                       </Constraints>
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtPruef_gebeinmess_bem">
+                      <BindingProperties>
+                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.alkis.pruef_gebeinmess_bem}" target="txtPruef_gebeinmess_bem" targetPath="text" updateStrategy="0" immediately="false"/>
+                      </BindingProperties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                           <GridBagConstraints gridX="2" gridY="27" gridWidth="2" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="3" insetsLeft="3" insetsBottom="3" insetsRight="3" anchor="10" weightX="1.0" weightY="0.0"/>
@@ -1646,6 +1648,9 @@
                       </Constraints>
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtUebern_innen_bem">
+                      <BindingProperties>
+                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.alkis.uebernahme_innendienst_bem}" target="txtUebern_innen_bem" targetPath="text" updateStrategy="0" immediately="false"/>
+                      </BindingProperties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                           <GridBagConstraints gridX="2" gridY="48" gridWidth="2" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="3" insetsLeft="3" insetsBottom="3" insetsRight="3" anchor="10" weightX="1.0" weightY="0.0"/>
@@ -1663,6 +1668,9 @@
                       </Constraints>
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtAbschluss_registrierung_bem">
+                      <BindingProperties>
+                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.alkis.abschluss_registrierung_bem}" target="txtAbschluss_registrierung_bem" targetPath="text" updateStrategy="0" immediately="false"/>
+                      </BindingProperties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                           <GridBagConstraints gridX="2" gridY="55" gridWidth="2" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="3" insetsLeft="3" insetsBottom="3" insetsRight="3" anchor="10" weightX="1.0" weightY="0.0"/>

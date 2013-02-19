@@ -18,9 +18,19 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
 
+import org.jdesktop.beansbinding.Binding;
+
+import org.openide.util.Exceptions;
+
+import java.util.List;
+
+import de.cismet.cids.client.tools.DevelopmentTools;
+
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
+import de.cismet.cids.editors.EditorClosedEvent;
+import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.tools.metaobjectrenderer.Titled;
 
@@ -497,7 +507,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         add(lblName, gridBagConstraints);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.name}"), txtName, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndName");
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.name}"),
+                txtName,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndName");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -514,7 +530,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         add(lblHinweis, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hinweis}"), txtHinweis, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndHinweis");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hinweis}"),
+                txtHinweis,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndHinweis");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -535,7 +557,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         txtEin_beab.setEditable(false);
         txtEin_beab.setPreferredSize(new java.awt.Dimension(200, 28));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ein_beab}"), txtEin_beab, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndEin_beab");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ein_beab}"),
+                txtEin_beab,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndEin_beab");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -552,7 +580,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         add(lblEin_dat, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ein_dat}"), jxdEin_dat, org.jdesktop.beansbinding.BeanProperty.create("date"), "bndEin_dat");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ein_dat}"),
+                jxdEin_dat,
+                org.jdesktop.beansbinding.BeanProperty.create("date"),
+                "bndEin_dat");
         binding.setConverter(new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter());
         bindingGroup.addBinding(binding);
 
@@ -573,7 +607,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         txtLoe_beab.setEditable(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.loe_beab}"), txtLoe_beab, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndLoe_beab");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.loe_beab}"),
+                txtLoe_beab,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndLoe_beab");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -590,7 +630,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         add(lblLoe_dat, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.loe_dat}"), jxdLoe_dat, org.jdesktop.beansbinding.BeanProperty.create("date"), "bndLoe_dat");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.loe_dat}"),
+                jxdLoe_dat,
+                org.jdesktop.beansbinding.BeanProperty.create("date"),
+                "bndLoe_dat");
         binding.setConverter(new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter());
         bindingGroup.addBinding(binding);
 
@@ -608,7 +654,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         add(lblLoe_grund, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.loe_grund}"), txtLoe_grund, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndLoe_grund");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.loe_grund}"),
+                txtLoe_grund,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndLoe_grund");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -619,24 +671,30 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         add(txtLoe_grund, gridBagConstraints);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton1ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 2, 2);
         add(jButton1, gridBagConstraints);
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
         jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton2ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 3;
@@ -662,7 +720,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlkis_rel, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alkis_rel}"), jnAlkis_rel, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"), "bndAlkis_rel");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alkis_rel}"),
+                jnAlkis_rel,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"),
+                "bndAlkis_rel");
         binding.setSourceNullValue(null);
         bindingGroup.addBinding(binding);
 
@@ -683,7 +747,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAuftraggeber, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.auftraggeber}"), txtAuftraggeber, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndAuftraggeber");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.auftraggeber}"),
+                txtAuftraggeber,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndAuftraggeber");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -703,7 +773,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_ent_beab, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_ent_beab}"), txtAlk_ent_beab, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndAlk_ent_beab");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_ent_beab}"),
+                txtAlk_ent_beab,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndAlk_ent_beab");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -722,7 +798,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_ent_dat, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_ent_dat}"), jxdAlk_ent_dat, org.jdesktop.beansbinding.BeanProperty.create("date"), "bndAlk_ent_dat");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_ent_dat}"),
+                jxdAlk_ent_dat,
+                org.jdesktop.beansbinding.BeanProperty.create("date"),
+                "bndAlk_ent_dat");
         binding.setConverter(new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter());
         bindingGroup.addBinding(binding);
 
@@ -743,7 +825,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_prio, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_prio}"), txtAlk_prio, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndAlk_prio");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_prio}"),
+                txtAlk_prio,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndAlk_prio");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -763,7 +851,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblBereich_lage_riss, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.bereich_lage_riss}"), txtBereich_lage_riss, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndBereich_lage_riss");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.bereich_lage_riss}"),
+                txtBereich_lage_riss,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndBereich_lage_riss");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -783,7 +877,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lbl_Bereich_lage_riss_nummer, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.riss_nummer}"), txt_Bereich_lage_riss_nummer, org.jdesktop.beansbinding.BeanProperty.create("text"), "");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.riss_nummer}"),
+                txt_Bereich_lage_riss_nummer,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -803,7 +903,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_projekt_name, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_projektname}"), txtAlk_projekt_name, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndAlk_bem");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_projektname}"),
+                txtAlk_projekt_name,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndAlk_bem");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -823,7 +929,12 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_bem, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_bem}"), txtAlk_bem, org.jdesktop.beansbinding.BeanProperty.create("text"), "");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_bem}"),
+                txtAlk_bem,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -843,7 +954,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_top, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_top}"), jnAlk_top, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"), "bndAlk_top");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_top}"),
+                jnAlk_top,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"),
+                "bndAlk_top");
         binding.setSourceNullValue(null);
         bindingGroup.addBinding(binding);
 
@@ -864,7 +981,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_geb, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_geb}"), jnAlk_geb, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"), "bndAlk_geb");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_geb}"),
+                jnAlk_geb,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"),
+                "bndAlk_geb");
         binding.setSourceNullValue(null);
         bindingGroup.addBinding(binding);
 
@@ -885,7 +1008,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_nutz, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_nutz}"), jnAlk_nutz, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"), "bndAlk_nutz");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_nutz}"),
+                jnAlk_nutz,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"),
+                "bndAlk_nutz");
         binding.setSourceNullValue(null);
         bindingGroup.addBinding(binding);
 
@@ -906,7 +1035,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_bod, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_bod}"), jnAlk_bod, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"), "bndAlk_bod");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_bod}"),
+                jnAlk_bod,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"),
+                "bndAlk_bod");
         binding.setSourceNullValue(null);
         bindingGroup.addBinding(binding);
 
@@ -927,7 +1062,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_son1, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_son1}"), txtAlk_son1, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndAlk_son1");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.top_aussen_bem}"),
+                txtAlk_son1,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndAlk_son1");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -947,7 +1088,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_ver, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_ver}"), txtAlk_ver, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndAlk_ver");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_ver}"),
+                txtAlk_ver,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndAlk_ver");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -967,7 +1114,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblTop_aussen_beginn, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.top_aussen_beginn}"), jxdTop_aussen_beginn, org.jdesktop.beansbinding.BeanProperty.create("date"), "bndTop_aussen_beginn");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.top_aussen_beginn}"),
+                jxdTop_aussen_beginn,
+                org.jdesktop.beansbinding.BeanProperty.create("date"),
+                "bndTop_aussen_beginn");
         binding.setConverter(new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter());
         bindingGroup.addBinding(binding);
 
@@ -988,7 +1141,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblTop_aussen_beendet, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.top_aussen_beendet}"), jxdTop_aussen_beendet, org.jdesktop.beansbinding.BeanProperty.create("date"), "bndTop_aussen_beendet");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.top_aussen_beendet}"),
+                jxdTop_aussen_beendet,
+                org.jdesktop.beansbinding.BeanProperty.create("date"),
+                "bndTop_aussen_beendet");
         binding.setConverter(new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter());
         bindingGroup.addBinding(binding);
 
@@ -1009,7 +1168,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_luft, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_luft}"), txtAlk_luft, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndAlk_luft");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_luft}"),
+                txtAlk_luft,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndAlk_luft");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1029,7 +1194,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_son2, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_son2}"), txtAlk_son2, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndAlk_son2");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_son2}"),
+                txtAlk_son2,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndAlk_son2");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1048,7 +1219,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblTop_grund_beginn, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.top_grund_beginn}"), jxdTop_grund_beginn, org.jdesktop.beansbinding.BeanProperty.create("date"), "bndTop_grund_beginn");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.top_grund_beginn}"),
+                jxdTop_grund_beginn,
+                org.jdesktop.beansbinding.BeanProperty.create("date"),
+                "bndTop_grund_beginn");
         binding.setConverter(new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter());
         bindingGroup.addBinding(binding);
 
@@ -1069,7 +1246,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblTop_grund_beendet, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.top_grund_beendet}"), jxdTop_grund_beendet, org.jdesktop.beansbinding.BeanProperty.create("date"), "bndTop_grund_beendet");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.top_grund_beendet}"),
+                jxdTop_grund_beendet,
+                org.jdesktop.beansbinding.BeanProperty.create("date"),
+                "bndTop_grund_beendet");
         binding.setConverter(new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter());
         bindingGroup.addBinding(binding);
 
@@ -1090,7 +1273,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblPruef_gebeinmess_abgabe, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.pruef_gebeinmess_abgabe}"), jxdPruef_gebeinmess_abgabe, org.jdesktop.beansbinding.BeanProperty.create("date"), "bndPruef_gebeinmess_abgabe");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.pruef_gebeinmess_abgabe}"),
+                jxdPruef_gebeinmess_abgabe,
+                org.jdesktop.beansbinding.BeanProperty.create("date"),
+                "bndPruef_gebeinmess_abgabe");
         binding.setConverter(new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter());
         bindingGroup.addBinding(binding);
 
@@ -1111,7 +1300,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblPruef_gebeinmess_rueckgabe, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.pruef_gebeinmess_rueckgabe}"), jxdPruef_gebeinmess_rueckgabe, org.jdesktop.beansbinding.BeanProperty.create("date"), "bndPruef_gebeinmess_rueckgabe");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.pruef_gebeinmess_rueckgabe}"),
+                jxdPruef_gebeinmess_rueckgabe,
+                org.jdesktop.beansbinding.BeanProperty.create("date"),
+                "bndPruef_gebeinmess_rueckgabe");
         binding.setConverter(new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter());
         bindingGroup.addBinding(binding);
 
@@ -1132,7 +1327,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_rel, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_rel}"), jnAlk_rel, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"), "bndAlk_rel");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_rel}"),
+                jnAlk_rel,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"),
+                "bndAlk_rel");
         binding.setSourceNullValue(null);
         bindingGroup.addBinding(binding);
 
@@ -1153,7 +1354,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_ueb_beab, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_ueb_beab}"), txtAlk_ueb_beab, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndAlk_ueb_beab");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_ueb_beab}"),
+                txtAlk_ueb_beab,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndAlk_ueb_beab");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1172,7 +1379,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_beginn_dat, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_beginn_dat}"), jxdAlk_beginn_dat, org.jdesktop.beansbinding.BeanProperty.create("date"), "bndAlk_beginn_dat");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_beginn_dat}"),
+                jxdAlk_beginn_dat,
+                org.jdesktop.beansbinding.BeanProperty.create("date"),
+                "bndAlk_beginn_dat");
         binding.setConverter(new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter());
         bindingGroup.addBinding(binding);
 
@@ -1193,7 +1406,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_ueb_dat, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_ueb_dat}"), jxdAlk_ueb_dat, org.jdesktop.beansbinding.BeanProperty.create("date"), "bndAlk_ueb_dat");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_ueb_dat}"),
+                jxdAlk_ueb_dat,
+                org.jdesktop.beansbinding.BeanProperty.create("date"),
+                "bndAlk_ueb_dat");
         binding.setConverter(new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter());
         bindingGroup.addBinding(binding);
 
@@ -1214,7 +1433,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlb_rel, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alb_rel}"), jnAlb_rel, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"), "bndAlb_rel");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alb_rel}"),
+                jnAlb_rel,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"),
+                "bndAlb_rel");
         binding.setSourceNullValue(null);
         bindingGroup.addBinding(binding);
 
@@ -1235,7 +1460,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlb_ueb_beab, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alb_ueb_beab}"), txtAlb_ueb_beab, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndAlb_ueb_beab");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alb_ueb_beab}"),
+                txtAlb_ueb_beab,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndAlb_ueb_beab");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1254,7 +1485,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlb_ueb_dat, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alb_ueb_dat}"), jxdAlb_ueb_dat, org.jdesktop.beansbinding.BeanProperty.create("date"), "bndAlb_ueb_dat");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alb_ueb_dat}"),
+                jxdAlb_ueb_dat,
+                org.jdesktop.beansbinding.BeanProperty.create("date"),
+                "bndAlb_ueb_dat");
         binding.setConverter(new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter());
         bindingGroup.addBinding(binding);
 
@@ -1275,7 +1512,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblRealn_ueb_von, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.realn_ueb_von}"), txtRealn_ueb_von, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndRealn_ueb_von");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.realn_ueb_von}"),
+                txtRealn_ueb_von,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndRealn_ueb_von");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1294,7 +1537,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblRealn_ueb_am, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.realn_ueb_am}"), jxdRealn_ueb_am, org.jdesktop.beansbinding.BeanProperty.create("date"), "bndRealn_ueb_am");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.realn_ueb_am}"),
+                jxdRealn_ueb_am,
+                org.jdesktop.beansbinding.BeanProperty.create("date"),
+                "bndRealn_ueb_am");
         binding.setConverter(new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter());
         bindingGroup.addBinding(binding);
 
@@ -1315,7 +1564,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblLinkbase_ueb_von, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.linkbase_ueb_von}"), txtLinkbase_ueb_von, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndLinkbase_ueb_von");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.linkbase_ueb_von}"),
+                txtLinkbase_ueb_von,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndLinkbase_ueb_von");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1334,7 +1589,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblLinkbase_ueb_am, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.linkbase_ueb_am}"), jxdLinkbase_ueb_am, org.jdesktop.beansbinding.BeanProperty.create("date"), "bndLinkbase_ueb_am");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.linkbase_ueb_am}"),
+                jxdLinkbase_ueb_am,
+                org.jdesktop.beansbinding.BeanProperty.create("date"),
+                "bndLinkbase_ueb_am");
         binding.setConverter(new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter());
         bindingGroup.addBinding(binding);
 
@@ -1355,7 +1616,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblDgk_rel, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.dgk_rel}"), jnDgk_rel, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"), "bndDgk_rel");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.dgk_rel}"),
+                jnDgk_rel,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"),
+                "bndDgk_rel");
         binding.setSourceNullValue(null);
         bindingGroup.addBinding(binding);
 
@@ -1376,7 +1643,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblDgk_ueb_beab, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.dgk_ueb_beab}"), txtDgk_ueb_beab, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndDgk_ueb_beab");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.dgk_ueb_beab}"),
+                txtDgk_ueb_beab,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndDgk_ueb_beab");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1395,7 +1668,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblDgk_ueb_dat, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.dgk_ueb_dat}"), jxdDgk_ueb_dat, org.jdesktop.beansbinding.BeanProperty.create("date"), "bndDgk_ueb_dat");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.dgk_ueb_dat}"),
+                jxdDgk_ueb_dat,
+                org.jdesktop.beansbinding.BeanProperty.create("date"),
+                "bndDgk_ueb_dat");
         binding.setConverter(new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter());
         bindingGroup.addBinding(binding);
 
@@ -1416,7 +1695,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblScan_dat, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.scan_dat}"), jxdScan_dat, org.jdesktop.beansbinding.BeanProperty.create("date"), "bndScan_dat");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.scan_dat}"),
+                jxdScan_dat,
+                org.jdesktop.beansbinding.BeanProperty.create("date"),
+                "bndScan_dat");
         binding.setConverter(new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter());
         bindingGroup.addBinding(binding);
 
@@ -1437,7 +1722,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblPruefung_von, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.pruefung_von}"), txtPruefung_von, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndPruefung_von");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.pruefung_von}"),
+                txtPruefung_von,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndPruefung_von");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1456,7 +1747,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblComliste_dat, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.comliste_dat}"), jxdComliste_dat, org.jdesktop.beansbinding.BeanProperty.create("date"), "bndComliste_dat");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.comliste_dat}"),
+                jxdComliste_dat,
+                org.jdesktop.beansbinding.BeanProperty.create("date"),
+                "bndComliste_dat");
         binding.setConverter(new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter());
         bindingGroup.addBinding(binding);
 
@@ -1477,7 +1774,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblTim_erled_dat, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.tim_erled_dat}"), jxdTim_erled_dat, org.jdesktop.beansbinding.BeanProperty.create("date"), "bndTim_erled_dat");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.tim_erled_dat}"),
+                jxdTim_erled_dat,
+                org.jdesktop.beansbinding.BeanProperty.create("date"),
+                "bndTim_erled_dat");
         binding.setConverter(new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter());
         bindingGroup.addBinding(binding);
 
@@ -1498,7 +1801,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblLaufzettel_erled_dat, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.laufzettel_erled_dat}"), jxdLaufzettel_erled_dat, org.jdesktop.beansbinding.BeanProperty.create("date"), "bndLaufzettel_erled_dat");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.laufzettel_erled_dat}"),
+                jxdLaufzettel_erled_dat,
+                org.jdesktop.beansbinding.BeanProperty.create("date"),
+                "bndLaufzettel_erled_dat");
         binding.setConverter(new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter());
         bindingGroup.addBinding(binding);
 
@@ -1519,7 +1828,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblUebersicht_liste_erled_dat, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.uebersicht_liste_erled_dat}"), jxdUebersicht_liste_erled_dat, org.jdesktop.beansbinding.BeanProperty.create("date"), "bndUebersicht_liste_erled_dat");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.uebersicht_liste_erled_dat}"),
+                jxdUebersicht_liste_erled_dat,
+                org.jdesktop.beansbinding.BeanProperty.create("date"),
+                "bndUebersicht_liste_erled_dat");
         binding.setConverter(new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter());
         bindingGroup.addBinding(binding);
 
@@ -1660,96 +1975,120 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(jPanel7, gridBagConstraints);
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
+        jButton3.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
         jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton3ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 2, 2);
         jPanel2.add(jButton3, gridBagConstraints);
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
+        jButton4.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
         jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton4ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 30;
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 2, 2);
         jPanel2.add(jButton4, gridBagConstraints);
 
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
+        jButton5.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
         jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton5ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 42;
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 2, 2);
         jPanel2.add(jButton5, gridBagConstraints);
 
-        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
+        jButton6.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
         jButton6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton6ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 34;
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 2, 2);
         jPanel2.add(jButton6, gridBagConstraints);
 
-        jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
+        jButton7.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
         jButton7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton7ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 36;
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 2, 2);
         jPanel2.add(jButton7, gridBagConstraints);
 
-        jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
+        jButton8.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
         jButton8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton8ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 45;
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 2, 2);
         jPanel2.add(jButton8, gridBagConstraints);
 
-        jButton9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
+        jButton9.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
         jButton9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton9ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton9ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 50;
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 2, 2);
         jPanel2.add(jButton9, gridBagConstraints);
 
-        jButton10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
+        jButton10.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
         jButton10.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton10ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton10ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 19;
@@ -1763,6 +2102,15 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblTop_grund_bem, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.top_grund_bem}"),
+                txtTop_grund_bem,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 23;
@@ -1779,6 +2127,15 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblPruef_gebeinmess_bem, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.pruef_gebeinmess_bem}"),
+                txtPruef_gebeinmess_bem,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 27;
@@ -1795,6 +2152,15 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblUebern_innen_bem, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.uebernahme_innendienst_bem}"),
+                txtUebern_innen_bem,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 48;
@@ -1811,6 +2177,15 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAbschluss_registrierung_bem, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.abschluss_registrierung_bem}"),
+                txtAbschluss_registrierung_bem,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 55;
@@ -1828,7 +2203,12 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblBodenschaetzung_ueb_von, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.bodenschaetzung_ueb_von}"), txtBodenschaetzung_ueb_von, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.bodenschaetzung_ueb_von}"),
+                txtBodenschaetzung_ueb_von,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1839,12 +2219,15 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(txtBodenschaetzung_ueb_von, gridBagConstraints);
 
-        btnBodenschaetzung_ueb_von.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
+        btnBodenschaetzung_ueb_von.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
         btnBodenschaetzung_ueb_von.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBodenschaetzung_ueb_vonActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnBodenschaetzung_ueb_vonActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 38;
@@ -1859,7 +2242,12 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblBodenschaetzung_ueb_am, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.bodenschaetzung_ueb_am}"), jxdBodenschaetzung_ueb_am, org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.bodenschaetzung_ueb_am}"),
+                jxdBodenschaetzung_ueb_am,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1879,7 +2267,12 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblSchlusspruefung_von, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.schlusspruefung_von}"), txtSchlusspruefung_von, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.schlusspruefung_von}"),
+                txtSchlusspruefung_von,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1890,12 +2283,15 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(txtSchlusspruefung_von, gridBagConstraints);
 
-        btnSchlusspruefung_von.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
+        btnSchlusspruefung_von.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
         btnSchlusspruefung_von.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSchlusspruefung_vonActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnSchlusspruefung_vonActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 40;
@@ -1910,7 +2306,12 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblSchlusspruefung_am, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.schlusspruefung_am}"), jxdSchlusspruefung_am, org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.schlusspruefung_am}"),
+                jxdSchlusspruefung_am,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1926,7 +2327,11 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         panStadtgrundkarte.add(scpStadtgrundkarte, java.awt.BorderLayout.CENTER);
 
-        tbpAdditionalInfo.addTab("ALKIS", new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wbf_vorgang.png")), panStadtgrundkarte); // NOI18N
+        tbpAdditionalInfo.addTab(
+            "ALKIS",
+            new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wbf_vorgang.png")),
+            panStadtgrundkarte); // NOI18N
 
         panKartographie.setOpaque(false);
         panKartographie.setLayout(new java.awt.BorderLayout());
@@ -1943,7 +2348,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel1.add(lblStadt_rel, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.stadt_rel}"), jnStadt_rel, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"), "bndStadt_rel");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.stadt_rel}"),
+                jnStadt_rel,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"),
+                "bndStadt_rel");
         binding.setSourceNullValue(null);
         bindingGroup.addBinding(binding);
 
@@ -1966,7 +2377,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         txtStadt_ent_beab.setEditable(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.stadt_ent_beab}"), txtStadt_ent_beab, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndStadt_ent_beab");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.stadt_ent_beab}"),
+                txtStadt_ent_beab,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndStadt_ent_beab");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1985,7 +2402,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel1.add(lblStadt_ent_dat, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.stadt_ent_dat}"), jxdStadt_ent_dat, org.jdesktop.beansbinding.BeanProperty.create("date"), "bndStadt_ent_dat");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.stadt_ent_dat}"),
+                jxdStadt_ent_dat,
+                org.jdesktop.beansbinding.BeanProperty.create("date"),
+                "bndStadt_ent_dat");
         binding.setConverter(new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter());
         bindingGroup.addBinding(binding);
 
@@ -2006,7 +2429,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel1.add(lblStadt_bem, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.stadt_bem}"), txtStadt_bem, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndStadt_bem");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.stadt_bem}"),
+                txtStadt_bem,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndStadt_bem");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2028,7 +2457,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         txtStadt_ueb_beab.setEditable(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.stadt_ueb_beab}"), txtStadt_ueb_beab, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndStadt_ueb_beab");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.stadt_ueb_beab}"),
+                txtStadt_ueb_beab,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndStadt_ueb_beab");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2047,7 +2482,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel1.add(lblStadt_ueb_dat, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.stadt_ueb_dat}"), jxdStadt_ueb_dat, org.jdesktop.beansbinding.BeanProperty.create("date"), "bndStadt_ueb_dat");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.stadt_ueb_dat}"),
+                jxdStadt_ueb_dat,
+                org.jdesktop.beansbinding.BeanProperty.create("date"),
+                "bndStadt_ueb_dat");
         binding.setConverter(new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter());
         bindingGroup.addBinding(binding);
 
@@ -2068,7 +2509,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel1.add(lblCity_rel, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.city_rel}"), jnCity_rel, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"), "bndCity_rel");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.city_rel}"),
+                jnCity_rel,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"),
+                "bndCity_rel");
         binding.setSourceNullValue(null);
         bindingGroup.addBinding(binding);
 
@@ -2089,7 +2536,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel1.add(lblCity_bem, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.city_bem}"), txtCity_bem, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndCity_bem");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.city_bem}"),
+                txtCity_bem,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndCity_bem");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2111,7 +2564,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         txtCity_ueb_beab.setEditable(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.city_ueb_beab}"), txtCity_ueb_beab, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndCity_ueb_beab");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.city_ueb_beab}"),
+                txtCity_ueb_beab,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndCity_ueb_beab");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2130,7 +2589,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel1.add(lblCity_ueb_dat, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.city_ueb_dat}"), jxdCity_ueb_dat, org.jdesktop.beansbinding.BeanProperty.create("date"), "bndCity_ueb_dat");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.city_ueb_dat}"),
+                jxdCity_ueb_dat,
+                org.jdesktop.beansbinding.BeanProperty.create("date"),
+                "bndCity_ueb_dat");
         binding.setConverter(new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter());
         bindingGroup.addBinding(binding);
 
@@ -2151,7 +2616,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel1.add(lblUeber_rel, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.ueber_rel}"), jnUeber_rel, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"), "bndUeber_rel");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.ueber_rel}"),
+                jnUeber_rel,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"),
+                "bndUeber_rel");
         binding.setSourceNullValue(null);
         bindingGroup.addBinding(binding);
 
@@ -2172,7 +2643,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel1.add(lblUeber_bem, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.ueber_bem}"), txtUeber_bem, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndUeber_bem");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.ueber_bem}"),
+                txtUeber_bem,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndUeber_bem");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2194,7 +2671,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         txtUeber_ueb_beab.setEditable(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.ueber_ueb_beab}"), txtUeber_ueb_beab, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndUeber_ueb_beab");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.ueber_ueb_beab}"),
+                txtUeber_ueb_beab,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndUeber_ueb_beab");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2213,7 +2696,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel1.add(lblUeber_ueb_dat, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.ueber_ueb_dat}"), jxdUeber_ueb_dat, org.jdesktop.beansbinding.BeanProperty.create("date"), "bndUeber_ueb_dat");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.ueber_ueb_dat}"),
+                jxdUeber_ueb_dat,
+                org.jdesktop.beansbinding.BeanProperty.create("date"),
+                "bndUeber_ueb_dat");
         binding.setConverter(new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter());
         bindingGroup.addBinding(binding);
 
@@ -2234,7 +2723,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel1.add(lblFreizeit_rel, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.freizeit_rel}"), jnFreizeit_rel, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"), "bndFreizeit_rel");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.freizeit_rel}"),
+                jnFreizeit_rel,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"),
+                "bndFreizeit_rel");
         binding.setSourceNullValue(null);
         bindingGroup.addBinding(binding);
 
@@ -2255,7 +2750,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel1.add(lblFreizeit_bem, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.freizeit_bem}"), txtFreizeit_bem, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndFreizeit_bem");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.freizeit_bem}"),
+                txtFreizeit_bem,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndFreizeit_bem");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2277,7 +2778,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         txtFreizeit_ueb_beab.setEditable(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.freizeit_ueb_beab}"), txtFreizeit_ueb_beab, org.jdesktop.beansbinding.BeanProperty.create("text"), "bndFreizeit_ueb_beab");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.freizeit_ueb_beab}"),
+                txtFreizeit_ueb_beab,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndFreizeit_ueb_beab");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2296,7 +2803,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel1.add(lblFreizeit_ueb_dat, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.freizeit_ueb_dat}"), jxdFreizeit_ueb_dat, org.jdesktop.beansbinding.BeanProperty.create("date"), "bndFreizeit_ueb_dat");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.freizeit_ueb_dat}"),
+                jxdFreizeit_ueb_dat,
+                org.jdesktop.beansbinding.BeanProperty.create("date"),
+                "bndFreizeit_ueb_dat");
         binding.setConverter(new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter());
         bindingGroup.addBinding(binding);
 
@@ -2321,60 +2834,75 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 20);
         jPanel1.add(lblJumpAuftrag1, gridBagConstraints);
 
-        jButton11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
+        jButton11.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
         jButton11.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton11ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton11ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 2, 2);
         jPanel1.add(jButton11, gridBagConstraints);
 
-        jButton12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
+        jButton12.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
         jButton12.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton12ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton12ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.insets = new java.awt.Insets(3, 7, 3, 3);
         jPanel1.add(jButton12, gridBagConstraints);
 
-        jButton13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
+        jButton13.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
         jButton13.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton13ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton13ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 9;
         gridBagConstraints.insets = new java.awt.Insets(3, 7, 3, 3);
         jPanel1.add(jButton13, gridBagConstraints);
 
-        jButton14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
+        jButton14.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
         jButton14.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton14ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton14ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 14;
         gridBagConstraints.insets = new java.awt.Insets(3, 7, 3, 3);
         jPanel1.add(jButton14, gridBagConstraints);
 
-        jButton15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
+        jButton15.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
         jButton15.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton15ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton15ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 19;
@@ -2457,7 +2985,11 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         panKartographie.add(scpKartographie, java.awt.BorderLayout.CENTER);
 
-        tbpAdditionalInfo.addTab(" Kartographie ", new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wbf_vorgang.png")), panKartographie); // NOI18N
+        tbpAdditionalInfo.addTab(
+            " Kartographie ",
+            new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wbf_vorgang.png")),
+            panKartographie); // NOI18N
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -2469,7 +3001,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         add(tbpAdditionalInfo, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.georeferenz}"), cboGeom, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"), "bndGeometrie");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.georeferenz}"),
+                cboGeom,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"),
+                "bndGeometrie");
         binding.setSourceNullValue(null);
         binding.setSourceUnreadableValue(null);
         binding.setConverter(((DefaultCismapGeometryComboBoxEditor)cboGeom).getConverter());
@@ -2492,22 +3030,28 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         jPanel10.setOpaque(false);
 
-        cmdAddSgk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        cmdAddSgk.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         cmdAddSgk.setText("ALKIS");
         cmdAddSgk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmdAddSgkActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cmdAddSgkActionPerformed(evt);
+                }
+            });
         jPanel10.add(cmdAddSgk);
 
-        cmdAddKart.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        cmdAddKart.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
         cmdAddKart.setText("Kartographie");
         cmdAddKart.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmdAddKartActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cmdAddKartActionPerformed(evt);
+                }
+            });
         jPanel10.add(cmdAddKart);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2519,7 +3063,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         jCheckBox1.setText("Straße neu / Umbenennung");
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.strasse_neu_umbenennung}"), jCheckBox1, org.jdesktop.beansbinding.BeanProperty.create("selected"), "bndStrasse_neu_umbenennung");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.strasse_neu_umbenennung}"),
+                jCheckBox1,
+                org.jdesktop.beansbinding.BeanProperty.create("selected"),
+                "bndStrasse_neu_umbenennung");
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
@@ -2532,7 +3082,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         add(jCheckBox1, gridBagConstraints);
 
         bindingGroup.bind();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
@@ -2548,97 +3098,97 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         txtEin_beab.setText(getCurrentUser());
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
         txtLoe_beab.setText(getCurrentUser());
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
         txtAlk_ent_beab.setText(getCurrentUser());
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton4ActionPerformed
         txtAlk_ueb_beab.setText(getCurrentUser());
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton5ActionPerformed
         txtLinkbase_ueb_von.setText(getCurrentUser());
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton6ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void jButton6ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton6ActionPerformed
         txtAlb_ueb_beab.setText(getCurrentUser());
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton7ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void jButton7ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton7ActionPerformed
         txtRealn_ueb_von.setText(getCurrentUser());
-    }//GEN-LAST:event_jButton7ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton7ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton8ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+    private void jButton8ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton8ActionPerformed
         txtDgk_ueb_beab.setText(getCurrentUser());
-    }//GEN-LAST:event_jButton8ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton8ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton9ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+    private void jButton9ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton9ActionPerformed
         txtPruefung_von.setText(getCurrentUser());
-    }//GEN-LAST:event_jButton9ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton9ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton10ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+    private void jButton10ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton10ActionPerformed
         txtAlk_son2.setText(getCurrentUser());
-    }//GEN-LAST:event_jButton10ActionPerformed
+    }                                                                             //GEN-LAST:event_jButton10ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmdAddKartActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdAddKartActionPerformed
+    private void cmdAddKartActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdAddKartActionPerformed
         try {
             cidsBean.fillEmptyFieldWithEmptySubInstance("kart");
             tbpAdditionalInfo.addTab(
@@ -2650,14 +3200,14 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         } catch (Exception e) {
             log.error("Error beim Erzeugen eines Kart Objektes", e);
         }
-    }//GEN-LAST:event_cmdAddKartActionPerformed
+    }                                                                              //GEN-LAST:event_cmdAddKartActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmdAddSgkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdAddSgkActionPerformed
+    private void cmdAddSgkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdAddSgkActionPerformed
         try {
             cidsBean.fillEmptyFieldWithEmptySubInstance("alkis");
             tbpAdditionalInfo.addTab(
@@ -2669,60 +3219,70 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         } catch (Exception e) {
             log.error("Error beim Erzeugen eines Alkis Objektes", e);
         }
-    }//GEN-LAST:event_cmdAddSgkActionPerformed
+    }                                                                             //GEN-LAST:event_cmdAddSgkActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton11ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+    private void jButton11ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton11ActionPerformed
         txtStadt_ent_beab.setText(getCurrentUser());
-    }//GEN-LAST:event_jButton11ActionPerformed
+    }                                                                             //GEN-LAST:event_jButton11ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton12ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
+    private void jButton12ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton12ActionPerformed
         txtStadt_ueb_beab.setText(getCurrentUser());
-    }//GEN-LAST:event_jButton12ActionPerformed
+    }                                                                             //GEN-LAST:event_jButton12ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton13ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
+    private void jButton13ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton13ActionPerformed
         txtCity_ueb_beab.setText(getCurrentUser());
-    }//GEN-LAST:event_jButton13ActionPerformed
+    }                                                                             //GEN-LAST:event_jButton13ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton14ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
+    private void jButton14ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton14ActionPerformed
         txtUeber_ueb_beab.setText(getCurrentUser());
-    }//GEN-LAST:event_jButton14ActionPerformed
+    }                                                                             //GEN-LAST:event_jButton14ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton15ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
+    private void jButton15ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton15ActionPerformed
         txtFreizeit_ueb_beab.setText(getCurrentUser());
-    }//GEN-LAST:event_jButton15ActionPerformed
+    }                                                                             //GEN-LAST:event_jButton15ActionPerformed
 
-    private void btnBodenschaetzung_ueb_vonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBodenschaetzung_ueb_vonActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnBodenschaetzung_ueb_vonActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBodenschaetzung_ueb_vonActionPerformed
         txtBodenschaetzung_ueb_von.setText(getCurrentUser());
-    }//GEN-LAST:event_btnBodenschaetzung_ueb_vonActionPerformed
+    }                                                                                              //GEN-LAST:event_btnBodenschaetzung_ueb_vonActionPerformed
 
-    private void btnSchlusspruefung_vonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSchlusspruefung_vonActionPerformed
-        txtBodenschaetzung_ueb_von.setText(getCurrentUser());
-    }//GEN-LAST:event_btnSchlusspruefung_vonActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnSchlusspruefung_vonActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnSchlusspruefung_vonActionPerformed
+        txtSchlusspruefung_von.setText(getCurrentUser());
+    }                                                                                          //GEN-LAST:event_btnSchlusspruefung_vonActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -2750,5 +3310,26 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
     public void dispose() {
         super.dispose();
         ((DefaultCismapGeometryComboBoxEditor)cboGeom).dispose();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  args  DOCUMENT ME!
+     */
+    public static void main(final String[] args) {
+        try {
+            DevelopmentTools.createEditorInFrameFromRMIConnectionOnLocalhost(
+                "WUNDA_BLAU",
+                "Administratoren",
+                "admin",
+                "kif",
+                "tim_lieg",
+                2003,
+                1200,
+                800);
+        } catch (Exception ex) {
+            Exceptions.printStackTrace(ex);
+        }
     }
 }
