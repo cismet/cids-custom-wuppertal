@@ -1724,7 +1724,11 @@
                     </Component>
                     <Component class="org.jdesktop.swingx.JXDatePicker" name="jxdBodenschaetzung_ueb_am">
                       <BindingProperties>
-                        <BindingProperty name="date" source="Form" sourcePath="${cidsBean.alkis.bodenschaetzung_ueb_am}" target="jxdBodenschaetzung_ueb_am" targetPath="date" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="date" source="Form" sourcePath="${cidsBean.alkis.bodenschaetzung_ueb_am}" target="jxdBodenschaetzung_ueb_am" targetPath="date" updateStrategy="0" immediately="false">
+                          <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                            <Connection code="new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter()" type="code"/>
+                          </Property>
+                        </BindingProperty>
                       </BindingProperties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -1779,7 +1783,11 @@
                     </Component>
                     <Component class="org.jdesktop.swingx.JXDatePicker" name="jxdSchlusspruefung_am">
                       <BindingProperties>
-                        <BindingProperty name="date" source="Form" sourcePath="${cidsBean.alkis.schlusspruefung_am}" target="jxdSchlusspruefung_am" targetPath="date" updateStrategy="0" immediately="false"/>
+                        <BindingProperty name="date" source="Form" sourcePath="${cidsBean.alkis.schlusspruefung_am}" target="jxdSchlusspruefung_am" targetPath="date" updateStrategy="0" immediately="false">
+                          <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                            <Connection code="new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter()" type="code"/>
+                          </Property>
+                        </BindingProperty>
                       </BindingProperties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
