@@ -36,25 +36,20 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
 
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(
             Poi_locationinstanceFeatureRenderer.class);
+    private static final FeatureAnnotationSymbol DEFAULT_SYMBOL;
 
-    //~ Instance fields --------------------------------------------------------
-
-    private final FeatureAnnotationSymbol DEFAULT_SYMBOL;
-    private FeatureAnnotationSymbol symbol;
-    private boolean assigned = false;
-
-    //~ Constructors -----------------------------------------------------------
-
-    /**
-     * Creates a new Poi_locationinstanceFeatureRenderer object.
-     */
-    public Poi_locationinstanceFeatureRenderer() {
+    static {
         DEFAULT_SYMBOL = getSymbolFromResourceString(StaticProperties.POI_SIGNATUR_DEFAULT_ICON);
         if (DEFAULT_SYMBOL != null) {
             DEFAULT_SYMBOL.setSweetSpotX(0.5d);
             DEFAULT_SYMBOL.setSweetSpotY(0.5d);
         }
     }
+
+    //~ Instance fields --------------------------------------------------------
+
+    private FeatureAnnotationSymbol symbol;
+    private boolean assigned = false;
 
     //~ Methods ----------------------------------------------------------------
 
