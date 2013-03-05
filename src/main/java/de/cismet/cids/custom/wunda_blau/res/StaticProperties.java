@@ -37,6 +37,8 @@ public final class StaticProperties {
     public static final String ALB_TEXTBLATT_URL_PREFIX;
     public static final String FORTFUEHRUNGSNACHWEISE_URL_PREFIX;
 
+    public static final String ALB_BAULAST_URL_PREFIX;
+
     // --------------
     static {
         propReader = new PropertyReader(PROPERTY_FILE_URL);
@@ -50,6 +52,7 @@ public final class StaticProperties {
         ALB_PLAN_URL_PREFIX = propReader.getProperty("alb_plan_url_prefix");
         ALB_TEXTBLATT_URL_PREFIX = propReader.getProperty("alb_textblatt_url_prefix");
         FORTFUEHRUNGSNACHWEISE_URL_PREFIX = propReader.getProperty("fortfuehrungsnachweise_url_prefix");
+        ALB_BAULAST_URL_PREFIX = propReader.getProperty("baulasten_dokumenten_url_prefix");
     }
 
     //~ Constructors -----------------------------------------------------------
