@@ -9,8 +9,6 @@ package de.cismet.cids.custom.objectrenderer.utils;
 
 import org.apache.commons.io.IOUtils;
 
-import java.io.File;
-
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -18,10 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
-
-import de.cismet.tools.collections.TypeSafeCollections;
-
-import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 
 /**
  * DOCUMENT ME!
@@ -38,7 +32,7 @@ public final class BaulastenPictureFinder {
     private static final String[] SUFFIXE = new String[] { "tif", "jpg", "tiff", "jpeg" };
     private static final String LINKEXTENSION = "txt";
 //    "TIF", "JPG", "TIFF", "JPEG"};
-    public static final String PATH = "http://s102is/Baulasten/";
+    public static final String PATH = StaticProperties.ALB_BAULAST_URL_PREFIX; // "http://s102x003/Baulasten/";
 
     //~ Methods ----------------------------------------------------------------
 
