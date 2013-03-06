@@ -47,6 +47,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.AbstractAction;
@@ -84,6 +85,9 @@ import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 import de.cismet.cids.editors.converters.SqlDateToStringConverter;
+
+import de.cismet.cids.navigator.utils.CidsBeanDropListener;
+import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
@@ -281,6 +285,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         documentURLs = new Map.Entry[2];
         documentButtons = new JToggleButton[documentURLs.length];
         initComponents();
+        new CidsBeanDropTarget((DropAwareJList)lstLandparcels);
         documentButtons[DOCUMENT_BILD] = togBild;
         documentButtons[DOCUMENT_GRENZNIEDERSCHRIFT] = togGrenzniederschrift;
 
@@ -393,7 +398,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         pnlHeaderLandparcels = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeaderLandparcels = new javax.swing.JLabel();
         scpLandparcels = new javax.swing.JScrollPane();
-        lstLandparcels = new javax.swing.JList();
+        lstLandparcels = new DropAwareJList();
         btnAddLandparcel = new javax.swing.JButton();
         btnRemoveLandparcel = new javax.swing.JButton();
         pnlControls = new de.cismet.tools.gui.RoundedPanel();
@@ -848,16 +853,16 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         lstLandparcels.addMouseListener(new java.awt.event.MouseAdapter() {
 
                 @Override
-                public void mouseClicked(final java.awt.event.MouseEvent evt) {
-                    lstLandparcelsMouseClicked(evt);
-                }
-                @Override
                 public void mousePressed(final java.awt.event.MouseEvent evt) {
                     lstLandparcelsMousePressed(evt);
                 }
                 @Override
                 public void mouseReleased(final java.awt.event.MouseEvent evt) {
                     lstLandparcelsMouseReleased(evt);
+                }
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lstLandparcelsMouseClicked(evt);
                 }
             });
         lstLandparcels.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
@@ -2768,4 +2773,54 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         }
     }
     //J+
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class DropAwareJList extends JList implements CidsBeanDropListener {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new DropAwareJList object.
+         */
+        public DropAwareJList() {
+        }
+
+        /**
+         * Creates a new DropAwareJList object.
+         *
+         * @param  dataModel  DOCUMENT ME!
+         */
+        public DropAwareJList(final ListModel dataModel) {
+            super(dataModel);
+        }
+
+        /**
+         * Creates a new DropAwareJList object.
+         *
+         * @param  listData  DOCUMENT ME!
+         */
+        public DropAwareJList(final Object[] listData) {
+            super(listData);
+        }
+
+        /**
+         * Creates a new DropAwareJList object.
+         *
+         * @param  listData  DOCUMENT ME!
+         */
+        public DropAwareJList(final Vector listData) {
+            super(listData);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void beansDropped(final ArrayList<CidsBean> beans) {
+            cidsBean.getBeanCollectionProperty("flurstuecksvermessung").addAll(beans);
+        }
+    }
 }

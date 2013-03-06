@@ -527,11 +527,14 @@
                     <BindingProperty name="elements" source="Form" sourcePath="${cidsBean.flurstuecksvermessung}" target="lstLandparcels" targetPath="elements" updateStrategy="0" immediately="false"/>
                   </BindingProperties>
                   <Events>
-                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lstLandparcelsMouseClicked"/>
                     <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lstLandparcelsMousePressed"/>
                     <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lstLandparcelsMouseReleased"/>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lstLandparcelsMouseClicked"/>
                     <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="lstLandparcelsValueChanged"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DropAwareJList();"/>
+                  </AuxValues>
                 </Component>
               </SubComponents>
             </Container>
