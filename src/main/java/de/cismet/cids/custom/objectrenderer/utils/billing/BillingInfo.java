@@ -7,11 +7,8 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.utils.billing;
 
-import org.codehaus.jackson.map.ObjectMapper;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
-
-import de.cismet.cids.navigator.utils.NavigatorMetaClassService;
 
 /**
  * DOCUMENT ME!
