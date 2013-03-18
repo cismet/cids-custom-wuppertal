@@ -685,7 +685,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
                         return;
                     }
 
-                    final String filename = product + "_" + parcelCode.replaceAll("/", "--");
+                    final String filename = product + "_" + parcelCode.replaceAll("/", "--") + "_";
                     final HttpDownload download = new HttpDownload(
                             url,
                             "",

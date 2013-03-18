@@ -641,7 +641,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
                     url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(parcelCode, product);
 
                     if (url != null) {
-                        final String filename = product + "_" + parcelCode.replaceAll("/", "--");
+                        final String filename = product + "_" + parcelCode.replaceAll("/", "--") + "_";
                         downloads.add(new HttpDownload(url, "", jobname, downloadTitle, filename, ".pdf"));
                     }
                 } catch (Exception ex) {
