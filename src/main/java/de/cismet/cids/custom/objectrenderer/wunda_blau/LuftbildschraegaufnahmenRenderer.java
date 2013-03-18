@@ -7,7 +7,6 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import Sirius.navigator.tools.BrowserLauncher;
 import Sirius.navigator.ui.ComponentRegistry;
 
 import com.vividsolutions.jts.geom.Geometry;
@@ -24,7 +23,6 @@ import org.jdesktop.swingx.graphics.ShadowRenderer;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -64,6 +62,8 @@ import de.cismet.cids.custom.deprecated.JLoadDots;
 import de.cismet.cids.custom.objectrenderer.utils.PrintingWaitDialog;
 
 import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
+
+import de.cismet.tools.BrowserLauncher;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
