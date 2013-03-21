@@ -23,6 +23,7 @@
  */
 package de.cismet.cids.custom.objectrenderer.utils.alkis.print;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -33,8 +34,6 @@ import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cismap.commons.gui.ToolbarComponentDescription;
 import de.cismet.cismap.commons.gui.ToolbarComponentsProvider;
 import de.cismet.cismap.commons.interaction.CismapBroker;
-
-import de.cismet.tools.collections.TypeSafeCollections;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -58,7 +57,7 @@ public class AlkisToobarPluginComponentProvider implements ToolbarComponentsProv
      * Creates a new AlkisToobarPluginComponentProvider object.
      */
     public AlkisToobarPluginComponentProvider() {
-        final List<ToolbarComponentDescription> preparationList = TypeSafeCollections.newArrayList();
+        final List<ToolbarComponentDescription> preparationList = new ArrayList<ToolbarComponentDescription>();
         final ToolbarComponentDescription description = new ToolbarComponentDescription(
                 "tlbMain",
                 new AlkisPrintJButton(),

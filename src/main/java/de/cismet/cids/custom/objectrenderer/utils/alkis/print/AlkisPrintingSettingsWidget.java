@@ -42,7 +42,6 @@ import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
-import de.cismet.cids.custom.objectrenderer.wunda_blau.AlkisLandparcelAggregationRenderer;
 import de.cismet.cids.custom.utils.alkis.AlkisProductDescription;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -56,8 +55,6 @@ import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.util.FormatToRealWordCalculator;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
-
-import de.cismet.tools.collections.TypeSafeCollections;
 
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
@@ -271,7 +268,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
      * @return  DOCUMENT ME!
      */
     private Collection<CidsBean> getAlkisFlurstueckBeansInMap() {
-        final Collection<CidsBean> result = TypeSafeCollections.newArrayList();
+        final Collection<CidsBean> result = new ArrayList<CidsBean>();
         for (final Feature feature : mappingComponent.getPFeatureHM().keySet()) {
             if (feature instanceof CidsFeature) {
                 final CidsFeature cidsFeature = (CidsFeature)feature;
@@ -291,7 +288,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
      * @return  DOCUMENT ME!
      */
     private Collection<CidsBean> getAlkisFlurstueckBeansFromTreeSelection() {
-        final Collection<CidsBean> result = TypeSafeCollections.newArrayList();
+        final Collection<CidsBean> result = new ArrayList<CidsBean>();
         final Collection<?> nodes = ComponentRegistry.getRegistry().getActiveCatalogue().getSelectedNodes();
         if (nodes != null) {
             for (final Object nodeObj : nodes) {

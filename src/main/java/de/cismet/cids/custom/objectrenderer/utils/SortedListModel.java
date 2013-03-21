@@ -5,31 +5,17 @@
 *              ... and it just works.
 *
 ****************************************************/
-/*
- *  Copyright (C) 2010 srichter
- *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package de.cismet.cids.custom.objectrenderer.utils;
 
 import java.text.Collator;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.TreeSet;
 
-import javax.swing.*;
-
-import de.cismet.tools.collections.TypeSafeCollections;
+import javax.swing.AbstractListModel;
 
 /**
  * DOCUMENT ME!
@@ -60,7 +46,7 @@ public final class SortedListModel extends AbstractListModel {
      * Creates a new SortedListModel object.
      */
     public SortedListModel() {
-        model = TypeSafeCollections.newTreeSet(LIST_COMPARATOR);
+        model = new TreeSet<Object>(LIST_COMPARATOR);
     }
 
     //~ Methods ----------------------------------------------------------------

@@ -61,6 +61,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -100,8 +101,6 @@ import de.cismet.cismap.navigatorplugin.CidsFeature;
 import de.cismet.security.WebAccessManager;
 
 import de.cismet.tools.CismetThreadPool;
-
-import de.cismet.tools.collections.TypeSafeCollections;
 
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
@@ -147,7 +146,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
     private static final String TEXT = "Punktliste (TEXT)";
     private static final String APMAP = "AP-Karten (PDF)";
     // Speichert Punkte ueber die Lebzeit eines Renderers hinaus
-    private static final Set<CidsBean> gehaltenePunkte = TypeSafeCollections.newLinkedHashSet();
+    private static final Set<CidsBean> gehaltenePunkte = new LinkedHashSet<CidsBean>();
 
     //~ Instance fields --------------------------------------------------------
 
@@ -621,7 +620,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
             initMap();
 
             boolean allowAPMapReport = false;
-            final List<Object[]> tableData = TypeSafeCollections.newArrayList();
+            final List<Object[]> tableData = new ArrayList<Object[]>();
             for (final CidsBean punktBean : cidsBeans) {
                 tableData.add(cidsBean2Row(punktBean));
 
@@ -758,7 +757,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
      * @return  DOCUMENT ME!
      */
     private XBoundingBox boundingBoxFromPointList(final Collection<CidsBean> lpList) {
-        final List<Geometry> allGeomList = TypeSafeCollections.newArrayList();
+        final List<Geometry> allGeomList = new ArrayList<Geometry>();
 
         for (final CidsBean parcel : lpList) {
             try {

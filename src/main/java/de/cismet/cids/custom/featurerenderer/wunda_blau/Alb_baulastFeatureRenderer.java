@@ -32,6 +32,7 @@ import java.awt.Paint;
 import java.awt.Stroke;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.JComponent;
@@ -47,8 +48,6 @@ import de.cismet.cismap.commons.gui.piccolo.FeatureAnnotationSymbol;
 import de.cismet.cismap.commons.gui.piccolo.FixedWidthStroke;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
-
-import de.cismet.tools.collections.TypeSafeCollections;
 
 /**
  * DOCUMENT ME!
@@ -68,8 +67,8 @@ public class Alb_baulastFeatureRenderer extends CustomCidsFeatureRenderer {
 
     //~ Instance fields --------------------------------------------------------
 
-    private final Set<Integer> belastetBeans = TypeSafeCollections.newHashSet();
-    private final Set<Integer> beguenstigtBeans = TypeSafeCollections.newHashSet();
+    private final Set<Integer> belastetBeans = new HashSet<Integer>();
+    private final Set<Integer> beguenstigtBeans = new HashSet<Integer>();
 
     //~ Constructors -----------------------------------------------------------
 

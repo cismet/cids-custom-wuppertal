@@ -16,7 +16,6 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
@@ -47,12 +46,16 @@ import java.awt.image.BufferedImage;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.imageio.ImageIO;
 
@@ -95,8 +98,6 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.tools.BrowserLauncher;
 import de.cismet.tools.StaticDebuggingTools;
-
-import de.cismet.tools.collections.TypeSafeCollections;
 
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
@@ -344,9 +345,9 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
      */
     public AlkisLandparcelRenderer() {
         buchungsblattPermission = AlkisUtils.validateUserHasAlkisBuchungsblattAccess();
-        buchungsblaetter = TypeSafeCollections.newConcurrentHashMap();
-        productPreviewImages = TypeSafeCollections.newHashMap();
-        gotoBeanMap = TypeSafeCollections.newHashMap();
+        buchungsblaetter = new ConcurrentHashMap<CidsBean, Buchungsblatt>();
+        productPreviewImages = new HashMap<Object, ImageIcon>();
+        gotoBeanMap = new HashMap<String, CidsBean>();
         initIcons();
         if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions()) {
             initSoapServiceAccess();
@@ -1637,7 +1638,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         if (buchungsblattPermission && !evt.getValueIsAdjusting()) {
             final Object[] selectedObjs = lstBuchungsblaetter.getSelectedValues();
             if ((selectedObjs != null) && (selectedObjs.length > 0)) {
-                final Collection<CidsBean> selectedBeans = TypeSafeCollections.newArrayList(selectedObjs.length);
+                final Collection<CidsBean> selectedBeans = new ArrayList<CidsBean>(selectedObjs.length);
                 for (final Object selectedObj : selectedObjs) {
                     if (selectedObj instanceof CidsBean) {
                         selectedBeans.add((CidsBean)selectedObj);
@@ -1844,7 +1845,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
      * DOCUMENT ME!
      */
     private void initLage() {
-        final Map<String, List<CidsBean>> streetToBeans = TypeSafeCollections.newHashMap();
+        final Map<String, List<CidsBean>> streetToBeans = new HashMap<String, List<CidsBean>>();
         final Object adressenObj = cidsBean.getProperty("adressen");
         if (adressenObj instanceof List) {
             final List<CidsBean> adressenBeans = (List<CidsBean>)adressenObj;
@@ -1855,7 +1856,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
                     final String strasse = strasseObj.toString();
                     beansWithThisStreet = streetToBeans.get(strasse);
                     if (beansWithThisStreet == null) {
-                        beansWithThisStreet = TypeSafeCollections.newArrayList();
+                        beansWithThisStreet = new ArrayList<CidsBean>();
                         streetToBeans.put(strasse, beansWithThisStreet);
                     }
                     beansWithThisStreet.add(adresse);
@@ -1865,7 +1866,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
         final StringBuilder adressenContent = new StringBuilder(
                 "<html><table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"left\" valign=\"top\">");
         // sort by street
-        final List<String> sortStrassen = TypeSafeCollections.newArrayList(streetToBeans.keySet());
+        final List<String> sortStrassen = new ArrayList<String>(streetToBeans.keySet());
         Collections.sort(sortStrassen);
         int entryCount = sortStrassen.size();
         for (final String strasse : sortStrassen) {
@@ -1883,7 +1884,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
                     }
                 });
 
-            final Map<String, CidsBean> hausnummernToBeans = TypeSafeCollections.newLinkedHashMap();
+            final Map<String, CidsBean> hausnummernToBeans = new LinkedHashMap<String, CidsBean>();
             for (final CidsBean adresse : beansWithThisStreet) {
                 final Object hausnummerObj = adresse.getProperty("nummer");
                 if (hausnummerObj != null) {

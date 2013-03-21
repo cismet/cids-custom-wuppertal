@@ -59,6 +59,7 @@ import java.awt.image.BufferedImage;
 
 import java.net.URL;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -110,8 +111,6 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.tools.BrowserLauncher;
 import de.cismet.tools.StaticDebuggingTools;
-
-import de.cismet.tools.collections.TypeSafeCollections;
 
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
@@ -265,8 +264,8 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         map = new MappingComponent();
 //        landParcelFeatureMap = TypeSafeCollections.newHashMap();
         map.setOpaque(false);
-        landParcelList = TypeSafeCollections.newArrayList();
-        productPreviewImages = TypeSafeCollections.newHashMap();
+        landParcelList = new ArrayList<LightweightLandParcel>();
+        productPreviewImages = new HashMap<Object, ImageIcon>();
 
         if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions()) {
             try {
@@ -1279,7 +1278,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                 // release cache
 // realLandParcelMetaObjectsCache = null;
                 final Object[] selObjs = lstLandparcels.getSelectedValues();
-                final List<Geometry> allSelectedGeoms = TypeSafeCollections.newArrayList();
+                final List<Geometry> allSelectedGeoms = new ArrayList<Geometry>();
                 for (final Object obj : selObjs) {
                     if (obj instanceof LightweightLandParcel) {
                         final LightweightLandParcel lwlp = (LightweightLandParcel)obj;
@@ -1674,7 +1673,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      * @return  DOCUMENT ME!
      */
     private XBoundingBox boundingBoxFromLandparcelList(final List<LightweightLandParcel> lpList) {
-        final List<Geometry> allGeomList = TypeSafeCollections.newArrayList();
+        final List<Geometry> allGeomList = new ArrayList<Geometry>();
         for (final LightweightLandParcel parcel : lpList) {
             allGeomList.add(parcel.geometry);
         }

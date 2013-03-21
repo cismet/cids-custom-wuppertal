@@ -16,6 +16,7 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -27,8 +28,6 @@ import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
-
-import de.cismet.tools.collections.TypeSafeCollections;
 
 /**
  * DOCUMENT ME!
@@ -116,7 +115,7 @@ public class Alb_baulastAggregationRendererPanel extends javax.swing.JPanel impl
     public void setCidsBeans(final Collection<CidsBean> blattBeans) {
         if (blattBeans != null) {
             this.cidsBeans = blattBeans;
-            final List<Object[]> tableData = TypeSafeCollections.newArrayList();
+            final List<Object[]> tableData = new ArrayList<Object[]>();
             for (final CidsBean blattBean : blattBeans) {
                 final Collection<CidsBean> baulastenBeans = CidsBeanSupport.getBeanCollectionFromProperty(
                         blattBean,

@@ -35,6 +35,8 @@ import Sirius.server.middleware.types.LightweightMetaObject;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -46,8 +48,6 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
-
-import de.cismet.tools.collections.TypeSafeCollections;
 
 /**
  * DOCUMENT ME!
@@ -318,7 +318,7 @@ public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements Di
      * @param  sameBuildingAdresses  DOCUMENT ME!
      */
     private void initLageLabel(final MetaObject[] sameBuildingAdresses) {
-        final Map<String, List<String>> multiMap = TypeSafeCollections.newLinkedHashMap();
+        final Map<String, List<String>> multiMap = new LinkedHashMap<String, List<String>>();
         for (final MetaObject adressMO : sameBuildingAdresses) {
             if (adressMO instanceof LightweightMetaObject) {
                 final LightweightMetaObject lwmo = (LightweightMetaObject)adressMO;
@@ -327,7 +327,7 @@ public class AlkisGebaeudeRendererPanel extends javax.swing.JPanel implements Di
                 if (strasse != null) {
                     List<String> bucket = multiMap.get(strasse.toString());
                     if (bucket == null) {
-                        bucket = TypeSafeCollections.newArrayList();
+                        bucket = new ArrayList<String>();
                         multiMap.put(strasse.toString(), bucket);
                     }
                     if (nummer != null) {

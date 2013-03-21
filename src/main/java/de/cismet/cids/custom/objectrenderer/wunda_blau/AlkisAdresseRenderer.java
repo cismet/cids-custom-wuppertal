@@ -25,6 +25,8 @@ import Sirius.server.middleware.types.MetaObject;
 
 import de.aedsicad.aaaweb.service.util.Buchungsblatt;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -41,8 +43,6 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
-
-import de.cismet.tools.collections.TypeSafeCollections;
 
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
@@ -540,7 +540,7 @@ public class AlkisAdresseRenderer extends javax.swing.JPanel implements CidsBean
      * @param  sameBuildingAdresses  DOCUMENT ME!
      */
     private void initLageLabel(final MetaObject[] sameBuildingAdresses) {
-        final Map<String, List<String>> multiMap = TypeSafeCollections.newLinkedHashMap();
+        final Map<String, List<String>> multiMap = new LinkedHashMap<String, List<String>>();
         for (final MetaObject adressMO : sameBuildingAdresses) {
             if (adressMO instanceof LightweightMetaObject) {
                 final LightweightMetaObject lwmo = (LightweightMetaObject)adressMO;
@@ -549,7 +549,7 @@ public class AlkisAdresseRenderer extends javax.swing.JPanel implements CidsBean
                 if (strasse != null) {
                     List<String> bucket = multiMap.get(strasse.toString());
                     if (bucket == null) {
-                        bucket = TypeSafeCollections.newArrayList();
+                        bucket = new ArrayList<String>();
                         multiMap.put(strasse.toString(), bucket);
                     }
                     if (nummer != null) {

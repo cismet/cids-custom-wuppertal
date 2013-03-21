@@ -64,15 +64,12 @@ import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.gui.printing.JasperDownload;
-import de.cismet.cismap.commons.gui.printing.PrintingWidget;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 
 import de.cismet.tools.CismetThreadPool;
-
-import de.cismet.tools.collections.TypeSafeCollections;
 
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
@@ -506,7 +503,7 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
 
             initMap();
 
-            final List<Object[]> tableData = TypeSafeCollections.newArrayList();
+            final List<Object[]> tableData = new ArrayList<Object[]>();
             for (final CidsBean punktBean : cidsBeans) {
                 tableData.add(cidsBean2Row(punktBean));
             }
@@ -599,7 +596,7 @@ public class NivellementPunktAggregationRenderer extends javax.swing.JPanel impl
      * @return  DOCUMENT ME!
      */
     protected XBoundingBox boundingBoxFromPointList(final Collection<CidsBean> nivellementPunkte) {
-        final List<Geometry> geometries = TypeSafeCollections.newArrayList();
+        final List<Geometry> geometries = new ArrayList<Geometry>();
 
         for (final CidsBean nivellementPunkt : nivellementPunkte) {
             try {

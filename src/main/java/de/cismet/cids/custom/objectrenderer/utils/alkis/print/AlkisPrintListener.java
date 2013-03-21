@@ -26,6 +26,7 @@ import java.awt.Cursor;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -45,8 +46,6 @@ import de.cismet.cismap.commons.gui.piccolo.PFeature;
 import de.cismet.cismap.commons.gui.piccolo.eventlistener.FeatureMoveListener;
 import de.cismet.cismap.commons.tools.PFeatureTools;
 import de.cismet.cismap.commons.util.FormatToRealWordCalculator;
-
-import de.cismet.tools.collections.TypeSafeCollections;
 
 /**
  * DOCUMENT ME!
@@ -94,12 +93,12 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
     public AlkisPrintListener(final MappingComponent mappingComponent, final AlkisPrintingSettingsWidget printWidget) {
         this.diagonal = 0d;
         this.cleared = true;
-        this.printFeatureCollection = TypeSafeCollections.newArrayList(1);
+        this.printFeatureCollection = new ArrayList<Feature>(1);
         this.mappingComponent = mappingComponent;
         this.printWidget = printWidget;
         this.featureMoveListenerDelegate = new FeatureMoveListener(mappingComponent);
-        this.backupFeature = TypeSafeCollections.newArrayList();
-        this.backupHoldFeature = TypeSafeCollections.newArrayList();
+        this.backupFeature = new ArrayList<Feature>();
+        this.backupHoldFeature = new ArrayList<Feature>();
         this.oldInteractionMode = "PAN";
         // listener to remove the template feature and reset the old state if interaction mode is changed by user
         this.mapInteractionModeListener = new PropertyChangeListener() {

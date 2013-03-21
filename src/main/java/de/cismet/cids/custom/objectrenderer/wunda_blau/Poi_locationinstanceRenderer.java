@@ -22,6 +22,7 @@ import java.awt.Cursor;
 
 import java.net.URL;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -40,8 +41,6 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.tools.BrowserLauncher;
-
-import de.cismet.tools.collections.TypeSafeCollections;
 
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
@@ -465,7 +464,7 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
      */
     private void initLocationTypeImages() {
         final Collection<CidsBean> allTypes = (Collection<CidsBean>)cidsBean.getProperty("locationtypes");
-        final List<ImageIcon> images = TypeSafeCollections.newArrayList(allTypes.size());
+        final List<ImageIcon> images = new ArrayList<ImageIcon>(allTypes.size());
         if (allTypes.size() > 0) {
             for (final CidsBean type : allTypes) {
                 try {

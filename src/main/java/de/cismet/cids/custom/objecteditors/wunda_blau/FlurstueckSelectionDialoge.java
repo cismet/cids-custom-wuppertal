@@ -19,6 +19,7 @@ import java.awt.Color;
 import java.awt.Component;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -42,8 +43,6 @@ import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.tools.CismetThreadPool;
-
-import de.cismet.tools.collections.TypeSafeCollections;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -606,7 +605,7 @@ public class FlurstueckSelectionDialoge extends javax.swing.JDialog {
     private CidsBean landParcelBeanFromComboBoxes(final String zaehlerNenner) {
         int result = JOptionPane.YES_OPTION;
         try {
-            final Map<String, Object> newLandParcelProperties = TypeSafeCollections.newHashMap();
+            final Map<String, Object> newLandParcelProperties = new HashMap<String, Object>();
             final String gemarkung = String.valueOf(cboGemarkung.getSelectedItem());
             final String flur = String.valueOf(cboFlur.getSelectedItem());
             if (flur.length() != 3) {

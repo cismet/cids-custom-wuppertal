@@ -53,8 +53,6 @@ import de.cismet.cids.editors.EditorBeanInitializerStore;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
-import de.cismet.tools.collections.TypeSafeCollections;
-
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.StaticSwingTools;
@@ -733,7 +731,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
             btnPasteBaulast.setEnabled(isPastePossible());
         }
         final Object[] selectedValues = lstLaufendeNummern.getSelectedValues();
-        final Collection<MetaObject> selectedObjects = TypeSafeCollections.newArrayList();
+        final Collection<MetaObject> selectedObjects = new ArrayList<MetaObject>();
         for (final Object obj : selectedValues) {
             if (obj instanceof CidsBean) {
                 selectedObjects.add(((CidsBean)obj).getMetaObject());
@@ -851,8 +849,8 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                 if (baulastenCol != null) {
                     boolean checkOK = true;
                     if ((laufendeNummer == null) || (String.valueOf(laufendeNummer).length() < 1)) {
-                        final Set<CidsBean> checkBelastet = TypeSafeCollections.newHashSet();
-                        final Set<CidsBean> checkBeguenstigt = TypeSafeCollections.newHashSet();
+                        final Set<CidsBean> checkBelastet = new HashSet<CidsBean>();
+                        final Set<CidsBean> checkBeguenstigt = new HashSet<CidsBean>();
                         for (final CidsBean otherBaulastenBean : baulastenCol) {
                             if (otherBaulastenBean != selectionBean) {
                                 checkBelastet.addAll(CidsBeanSupport.getBeanCollectionFromProperty(

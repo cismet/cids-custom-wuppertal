@@ -13,14 +13,13 @@ package de.cismet.cids.custom.objectrenderer.converter;
 
 import org.jdesktop.beansbinding.Converter;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.cismet.cids.dynamics.CidsBean;
-
-import de.cismet.tools.collections.TypeSafeCollections;
 
 /**
  * inputExpression can be - a single, simple property name, like : "strasse" - a pattern with property names as
@@ -83,7 +82,7 @@ public class CollectionToStringConverter extends Converter<List<CidsBean>, Strin
         if ((propName == null) || (separator == null) || (prefix == null) || (postfix == null)) {
             throw new IllegalArgumentException();
         }
-        this.foundPropertyNames = TypeSafeCollections.newHashSet();
+        this.foundPropertyNames = new HashSet<String>();
         this.inputExpression = propName;
         this.separator = separator;
         this.prefix = prefix;

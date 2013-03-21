@@ -16,7 +16,6 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import com.sun.media.jai.codec.ImageCodec;
@@ -25,7 +24,6 @@ import com.sun.media.jai.codec.TIFFDecodeParam;
 
 import com.vividsolutions.jts.geom.Geometry;
 
-import de.aedsicad.aaaweb.client.alkis.AlkisUtil;
 import de.aedsicad.aaaweb.service.alkis.info.ALKISInfoServices;
 import de.aedsicad.aaaweb.service.util.Point;
 import de.aedsicad.aaaweb.service.util.PointLocation;
@@ -33,8 +31,6 @@ import de.aedsicad.aaaweb.service.util.PointLocation;
 import org.jdesktop.beansbinding.Converter;
 import org.jdesktop.swingx.error.ErrorInfo;
 import org.jdesktop.swingx.graphics.ReflectionRenderer;
-
-import org.mortbay.jetty.SessionIdManager;
 
 import org.openide.util.Exceptions;
 
@@ -54,9 +50,11 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -106,8 +104,6 @@ import de.cismet.security.exceptions.NoHandlerForURLException;
 import de.cismet.security.exceptions.RequestFailedException;
 
 import de.cismet.tools.CismetThreadPool;
-
-import de.cismet.tools.collections.TypeSafeCollections;
 
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
@@ -453,8 +449,8 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
      * Creates new form Alkis_pointRenderer.
      */
     public AlkisPointRenderer() {
-        retrieveableLabels = TypeSafeCollections.newArrayList();
-        productPreviewImages = TypeSafeCollections.newHashMap();
+        retrieveableLabels = new ArrayList<JLabel>();
+        productPreviewImages = new HashMap<Object, ImageIcon>();
 
         if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions()) {
             try {

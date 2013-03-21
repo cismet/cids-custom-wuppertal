@@ -19,7 +19,6 @@ import Sirius.server.middleware.types.AbstractAttributeRepresentationFormater;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 import Sirius.server.newuser.User;
-import Sirius.server.newuser.UserGroup;
 import Sirius.server.newuser.permission.PermissionHolder;
 
 import org.jdesktop.swingx.error.ErrorInfo;
@@ -40,6 +39,7 @@ import java.awt.event.MouseListener;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -69,8 +69,6 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 
 import de.cismet.tools.CismetThreadPool;
-
-import de.cismet.tools.collections.TypeSafeCollections;
 
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.documents.DefaultDocument;
@@ -160,7 +158,7 @@ public class ObjectRendererUtils {
             if (clear) {
                 bigMap.getFeatureCollection().removeAllFeatures();
             }
-            final List<Feature> addedFeatures = TypeSafeCollections.newArrayList(metaObjectList.size());
+            final List<Feature> addedFeatures = new ArrayList<Feature>(metaObjectList.size());
             for (final MetaObject mo : metaObjectList) {
                 final CidsFeature newGeomFeature = new CidsFeature(mo);
                 addedFeatures.addAll(FeatureGroups.expandAll(newGeomFeature));
@@ -203,7 +201,7 @@ public class ObjectRendererUtils {
     public static void addBeanGeomAsFeatureToCismapMap(final CidsBean bean, final boolean clear) {
         if (bean != null) {
             final MetaObject mo = bean.getMetaObject();
-            final List<MetaObject> mos = TypeSafeCollections.newArrayList(1);
+            final List<MetaObject> mos = new ArrayList<MetaObject>(1);
             mos.add(mo);
             addBeanGeomsAsFeaturesToCismapMap(mos, clear);
         }
