@@ -64,11 +64,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     private javax.swing.ButtonGroup bgrNach;
     private javax.swing.ButtonGroup bgrOwner;
     private javax.swing.ButtonGroup bgrUeber;
-    private javax.swing.JCheckBox chkGeburtsnameExakt;
     private javax.swing.JCheckBox chkGeomFilter;
-    private javax.swing.JCheckBox chkNameExakt;
-    private javax.swing.JCheckBox chkVornameExakt;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -172,10 +168,6 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         optEigIstWeiblich = new javax.swing.JRadioButton();
         optEigIstFirma = new javax.swing.JRadioButton();
         optEigIstUnbekannt = new javax.swing.JRadioButton();
-        chkNameExakt = new javax.swing.JCheckBox();
-        chkGeburtsnameExakt = new javax.swing.JCheckBox();
-        chkVornameExakt = new javax.swing.JCheckBox();
-        jLabel1 = new javax.swing.JLabel();
         txtGeburtsname = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
@@ -201,9 +193,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSearch.add(panCommand, gridBagConstraints);
 
-        panSucheNach.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                javax.swing.BorderFactory.createTitledBorder("Suche nach"),
-                javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        panSucheNach.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Suche nach"), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
         panSucheNach.setLayout(new java.awt.GridBagLayout());
 
         bgrNach.add(optSucheNachFlurstuecke);
@@ -237,32 +227,26 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         gridBagConstraints.weighty = 1.0;
         panSearch.add(jPanel6, gridBagConstraints);
 
-        panSucheUeber.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                javax.swing.BorderFactory.createTitledBorder("Suche über"),
-                javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        panSucheUeber.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Suche über"), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
         panSucheUeber.setLayout(new java.awt.GridBagLayout());
 
         bgrUeber.add(optSucheUeberEigentuemer);
         optSucheUeberEigentuemer.setSelected(true);
         optSucheUeberEigentuemer.setText("Eigentümer");
         optSucheUeberEigentuemer.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    optSucheUeberEigentuemerActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                optSucheUeberEigentuemerActionPerformed(evt);
+            }
+        });
         panSucheUeber.add(optSucheUeberEigentuemer, new java.awt.GridBagConstraints());
 
         bgrUeber.add(optSucheUeberFlurstueck);
         optSucheUeberFlurstueck.setText("Flurstück");
         optSucheUeberFlurstueck.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    optSucheUeberFlurstueckActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                optSucheUeberFlurstueckActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         panSucheUeber.add(optSucheUeberFlurstueck, gridBagConstraints);
@@ -270,12 +254,10 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         bgrUeber.add(optSucheUeberGrundbuchblatt);
         optSucheUeberGrundbuchblatt.setText("Grundbuchblatt");
         optSucheUeberGrundbuchblatt.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    optSucheUeberGrundbuchblattActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                optSucheUeberGrundbuchblattActionPerformed(evt);
+            }
+        });
         panSucheUeber.add(optSucheUeberGrundbuchblatt, new java.awt.GridBagConstraints());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -292,9 +274,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
 
         panEingabe.setLayout(new java.awt.CardLayout());
 
-        panEingabeGrundbuchblatt.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                javax.swing.BorderFactory.createTitledBorder("Grundbuchblatt Suchmaske"),
-                javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        panEingabeGrundbuchblatt.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Grundbuchblatt Suchmaske"), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
         panEingabeGrundbuchblatt.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -313,8 +293,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panEingabeGrundbuchblatt.add(jLabel12, gridBagConstraints);
 
-        jLabel4.setText(
-            "<html> <p>Beispiel: 053001-003117</p><br><p>Platzhaltersymbole:</p><p>&nbsp;<b>%</b>&nbsp;&nbsp;&nbsp;&nbsp;eine beliebige Anzahl von Zeichen</p> <p>&nbsp;<b>_</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ein einzelnes Zeichen</p> </html>");
+        jLabel4.setText("<html> <p>Beispiel: 053001-003117</p><br><p>Platzhaltersymbole:</p><p>&nbsp;<b>%</b>&nbsp;&nbsp;&nbsp;&nbsp;eine beliebige Anzahl von Zeichen</p> <p>&nbsp;<b>_</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ein einzelnes Zeichen</p> </html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
@@ -325,9 +304,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
 
         panEingabe.add(panEingabeGrundbuchblatt, "grundbuchblatt");
 
-        panEingabeFlurstueck.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                javax.swing.BorderFactory.createTitledBorder("Flurstück Suchmaske"),
-                javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        panEingabeFlurstueck.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Flurstück Suchmaske"), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
         panEingabeFlurstueck.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -346,8 +323,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panEingabeFlurstueck.add(jLabel9, gridBagConstraints);
 
-        jLabel3.setText(
-            "<html> <p>Beispiel: 053001-117-00058</p><br><p>Platzhaltersymbole:</p><p>&nbsp;<b>%</b>&nbsp;&nbsp;&nbsp;&nbsp;eine beliebige Anzahl von Zeichen</p> <p>&nbsp;<b>_</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ein einzelnes Zeichen</p> </html>");
+        jLabel3.setText("<html> <p>Beispiel: 053001-117-00058</p><br><p>Platzhaltersymbole:</p><p>&nbsp;<b>%</b>&nbsp;&nbsp;&nbsp;&nbsp;eine beliebige Anzahl von Zeichen</p> <p>&nbsp;<b>_</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ein einzelnes Zeichen</p> </html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
@@ -358,18 +334,14 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
 
         panEingabe.add(panEingabeFlurstueck, "flurstueck");
 
-        panEingabeEigentuemer.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                javax.swing.BorderFactory.createTitledBorder("Eigentümer Suchmaske"),
-                javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        panEingabeEigentuemer.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Eigentümer Suchmaske"), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
         panEingabeEigentuemer.setLayout(new java.awt.GridBagLayout());
 
         txtVorname.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    txtVornameActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtVornameActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -404,9 +376,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panEingabeEigentuemer.add(jLabel8, gridBagConstraints);
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                javax.swing.BorderFactory.createTitledBorder("Eigentümer ist"),
-                javax.swing.BorderFactory.createEmptyBorder(4, 4, 4, 4)));
+        jPanel4.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Eigentümer ist"), javax.swing.BorderFactory.createEmptyBorder(4, 4, 4, 4)));
         jPanel4.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
@@ -418,12 +388,10 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         bgrOwner.add(optEigIstMaennlich);
         optEigIstMaennlich.setText("männlich");
         optEigIstMaennlich.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    optEigIstMaennlichActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                optEigIstMaennlichActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -432,12 +400,10 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         bgrOwner.add(optEigIstWeiblich);
         optEigIstWeiblich.setText("weiblich");
         optEigIstWeiblich.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    optEigIstWeiblichActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                optEigIstWeiblichActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         jPanel4.add(optEigIstWeiblich, gridBagConstraints);
@@ -445,12 +411,10 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         bgrOwner.add(optEigIstFirma);
         optEigIstFirma.setText("Firma");
         optEigIstFirma.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    optEigIstFirmaActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                optEigIstFirmaActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         jPanel4.add(optEigIstFirma, gridBagConstraints);
@@ -459,12 +423,10 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         optEigIstUnbekannt.setSelected(true);
         optEigIstUnbekannt.setText("unbekannt");
         optEigIstUnbekannt.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    optEigIstUnbekanntActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                optEigIstUnbekanntActionPerformed(evt);
+            }
+        });
         jPanel4.add(optEigIstUnbekannt, new java.awt.GridBagConstraints());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -474,40 +436,6 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         panEingabeEigentuemer.add(jPanel4, gridBagConstraints);
-
-        chkNameExakt.setToolTipText("z.Zt. vom Alkis-Dienst nicht unterstützt");
-        chkNameExakt.setEnabled(false);
-        chkNameExakt.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    chkNameExaktActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 2;
-        panEingabeEigentuemer.add(chkNameExakt, gridBagConstraints);
-
-        chkGeburtsnameExakt.setToolTipText("z.Zt. vom Alkis-Dienst nicht unterstützt");
-        chkGeburtsnameExakt.setEnabled(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 5;
-        panEingabeEigentuemer.add(chkGeburtsnameExakt, gridBagConstraints);
-
-        chkVornameExakt.setToolTipText("z.Zt. vom Alkis-Dienst nicht unterstützt");
-        chkVornameExakt.setEnabled(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 3;
-        panEingabeEigentuemer.add(chkVornameExakt, gridBagConstraints);
-
-        jLabel1.setText("exakt?");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
-        panEingabeEigentuemer.add(jLabel1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
@@ -536,12 +464,10 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
 
         txtGeburtsdatum.setToolTipText("Bsp.: 18.01.1974");
         txtGeburtsdatum.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    txtGeburtsdatumActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtGeburtsdatumActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -551,8 +477,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panEingabeEigentuemer.add(txtGeburtsdatum, gridBagConstraints);
 
-        jLabel2.setText(
-            "<html><br><p>Platzhaltersymbole:</p><p>&nbsp;<b>%</b>&nbsp;&nbsp;&nbsp;&nbsp;eine beliebige Anzahl von Zeichen</p> <p>&nbsp;<b>_</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ein einzelnes Zeichen</p> </html>");
+        jLabel2.setText("<html><br><p>Platzhaltersymbole:</p><p>&nbsp;<b>%</b>&nbsp;&nbsp;&nbsp;&nbsp;eine beliebige Anzahl von Zeichen</p> <p>&nbsp;<b>_</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ein einzelnes Zeichen</p> </html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
@@ -580,105 +505,96 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         panSearch.add(chkGeomFilter, gridBagConstraints);
 
         add(panSearch, java.awt.BorderLayout.CENTER);
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void optSucheUeberEigentuemerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_optSucheUeberEigentuemerActionPerformed
+    private void optSucheUeberEigentuemerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optSucheUeberEigentuemerActionPerformed
         ((CardLayout)panEingabe.getLayout()).show(panEingabe, "eigentuemer");
-    }                                                                                            //GEN-LAST:event_optSucheUeberEigentuemerActionPerformed
+    }//GEN-LAST:event_optSucheUeberEigentuemerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void chkNameExaktActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_chkNameExaktActionPerformed
+    private void txtVornameActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtVornameActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_chkNameExaktActionPerformed
+    }//GEN-LAST:event_txtVornameActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtVornameActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtVornameActionPerformed
+    private void txtGeburtsdatumActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGeburtsdatumActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_txtVornameActionPerformed
+    }//GEN-LAST:event_txtGeburtsdatumActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtGeburtsdatumActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtGeburtsdatumActionPerformed
-        // TODO add your handling code here:
-    } //GEN-LAST:event_txtGeburtsdatumActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void optEigIstMaennlichActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_optEigIstMaennlichActionPerformed
+    private void optEigIstMaennlichActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optEigIstMaennlichActionPerformed
         txtVorname.setEnabled(true);
         txtGeburtsname.setEnabled(true);
         txtGeburtsdatum.setEnabled(true);
-    }                                                                                      //GEN-LAST:event_optEigIstMaennlichActionPerformed
+    }//GEN-LAST:event_optEigIstMaennlichActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void optEigIstUnbekanntActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_optEigIstUnbekanntActionPerformed
+    private void optEigIstUnbekanntActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optEigIstUnbekanntActionPerformed
         txtVorname.setEnabled(true);
         txtGeburtsname.setEnabled(true);
         txtGeburtsdatum.setEnabled(true);
-    }                                                                                      //GEN-LAST:event_optEigIstUnbekanntActionPerformed
+    }//GEN-LAST:event_optEigIstUnbekanntActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void optEigIstFirmaActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_optEigIstFirmaActionPerformed
+    private void optEigIstFirmaActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optEigIstFirmaActionPerformed
         txtVorname.setEnabled(false);
         txtGeburtsname.setEnabled(false);
         txtGeburtsdatum.setEnabled(false);
-    }                                                                                  //GEN-LAST:event_optEigIstFirmaActionPerformed
+    }//GEN-LAST:event_optEigIstFirmaActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void optEigIstWeiblichActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_optEigIstWeiblichActionPerformed
+    private void optEigIstWeiblichActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optEigIstWeiblichActionPerformed
         txtVorname.setEnabled(true);
         txtGeburtsname.setEnabled(true);
         txtGeburtsdatum.setEnabled(true);
-    }                                                                                     //GEN-LAST:event_optEigIstWeiblichActionPerformed
+    }//GEN-LAST:event_optEigIstWeiblichActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void optSucheUeberFlurstueckActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_optSucheUeberFlurstueckActionPerformed
+    private void optSucheUeberFlurstueckActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optSucheUeberFlurstueckActionPerformed
         ((CardLayout)panEingabe.getLayout()).show(panEingabe, "flurstueck");
-    }                                                                                           //GEN-LAST:event_optSucheUeberFlurstueckActionPerformed
+    }//GEN-LAST:event_optSucheUeberFlurstueckActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void optSucheUeberGrundbuchblattActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_optSucheUeberGrundbuchblattActionPerformed
+    private void optSucheUeberGrundbuchblattActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optSucheUeberGrundbuchblattActionPerformed
         ((CardLayout)panEingabe.getLayout()).show(panEingabe, "grundbuchblatt");
-    }                                                                                               //GEN-LAST:event_optSucheUeberGrundbuchblattActionPerformed
+    }//GEN-LAST:event_optSucheUeberGrundbuchblattActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -747,15 +663,6 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
             String vorname = txtVorname.getText().trim();
             String geburtsname = txtGeburtsname.getText().trim();
             final String geburtsdatum = txtGeburtsdatum.getText().trim();
-            if (!chkNameExakt.isSelected() && (name.length() > 0)) {
-                name = CidsAlkisSearchStatement.WILDCARD + name + CidsAlkisSearchStatement.WILDCARD;
-            }
-            if (!chkVornameExakt.isSelected() && (vorname.length() > 0)) {
-                vorname = CidsAlkisSearchStatement.WILDCARD + vorname + CidsAlkisSearchStatement.WILDCARD;
-            }
-            if (!chkGeburtsnameExakt.isSelected() && (geburtsname.length() > 0)) {
-                geburtsname = CidsAlkisSearchStatement.WILDCARD + geburtsname + CidsAlkisSearchStatement.WILDCARD;
-            }
             return new CidsAlkisSearchStatement(resulttype, name, vorname, geburtsname, geburtsdatum, ptyp, searchgeom);
         } else if (optSucheUeberFlurstueck.isSelected()) {
             return new CidsAlkisSearchStatement(
