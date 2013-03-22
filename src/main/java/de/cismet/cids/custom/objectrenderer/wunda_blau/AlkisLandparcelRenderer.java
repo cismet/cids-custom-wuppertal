@@ -732,7 +732,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
             if (!DownloadManagerDialog.showAskingForUserTitle(this)) {
                 return;
             }
-            final String filename = downloadTitle + "_" + parcelCode.replace("/", "--") + "_";
+            final String filename = "LK_" + parcelCode.replace("/", "--") + "_";
             final HttpDownload download = new HttpDownload(
                     url,
                     "",
