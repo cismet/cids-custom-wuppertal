@@ -946,11 +946,11 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                                         url.toString(),
                                         (Geometry)null,
                                         new ProductGroupAmount(prGroup, 1))) {
-                            doDownload(url, landParcelCode);
+                            doDownload(url, selectedProduct.getCode());
                         }
                     } else {
                         log.info("no product or productgroup is matching");
-                        doDownload(url, landParcelCode);
+                        doDownload(url, selectedProduct.getCode());
                     }
                 } catch (Exception e) {
                     log.error("Error when trying to produce a alkis product", e);
@@ -970,19 +970,20 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
     /**
      * DOCUMENT ME!
      *
-     * @param  url             DOCUMENT ME!
-     * @param  landParcelCode  DOCUMENT ME!
+     * @param  url      DOCUMENT ME!
+     * @param  product  landParcelCode DOCUMENT ME!
      */
-    private void doDownload(final URL url, final String landParcelCode) {
+    private void doDownload(final URL url, final String product) {
         if (!DownloadManagerDialog.showAskingForUserTitle(this)) {
             return;
         }
+        final String filename = product.replaceAll("/", "--") + "_";
         final HttpDownload download = new HttpDownload(
                 url,
                 "",
                 DownloadManagerDialog.getJobname(),
                 "ALKIS-Druck",
-                landParcelCode.replaceAll("\\/", "-"),
+                filename,
                 ".pdf");
         DownloadManager.instance().add(download);
     }
