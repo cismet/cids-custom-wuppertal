@@ -703,7 +703,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             }
 
             if (url != null) {
-                final String filename = "LK." + parcelCode.replace("/", "--") + "_";
+                final String filename = "LK_" + parcelCode.replace("/", "--") + "_";
                 downloads.add(new HttpDownload(url, "", jobname, downloadTitle, filename, ".pdf"));
             }
         }
