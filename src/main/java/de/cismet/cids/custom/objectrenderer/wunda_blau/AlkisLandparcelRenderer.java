@@ -685,7 +685,7 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
                         return;
                     }
 
-                    final String filename = product + "_" + parcelCode.replaceAll("/", "--") + "_";
+                    final String filename = product + "." + parcelCode.replace("/", "--");
                     final HttpDownload download = new HttpDownload(
                             url,
                             "",
@@ -732,13 +732,13 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
             if (!DownloadManagerDialog.showAskingForUserTitle(this)) {
                 return;
             }
-
+            final String filename = "LK." + parcelCode.replace("/", "--");
             final HttpDownload download = new HttpDownload(
                     url,
                     "",
                     DownloadManagerDialog.getJobname(),
                     downloadTitle,
-                    parcelCode.replace('/', '_'),
+                    filename,
                     ".pdf");
             DownloadManager.instance().add(download);
         }
