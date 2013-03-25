@@ -390,7 +390,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlFlurstuecksnachweisActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlFlurstuecksnachweisActionPerformed
+    private void jxlFlurstuecksnachweisActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlFlurstuecksnachweisActionPerformed
         try {
             int stueck = 0;
             for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
@@ -408,14 +408,14 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             LOG.error("Error when trying to produce a alkis product", e);
             // Hier noch ein Fehlerdialog
         }
-    } //GEN-LAST:event_jxlFlurstuecksnachweisActionPerformed
+    }//GEN-LAST:event_jxlFlurstuecksnachweisActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlNachweisNRWActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlNachweisNRWActionPerformed
+    private void jxlNachweisNRWActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlNachweisNRWActionPerformed
         try {
             int stueck = 0;
             for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
@@ -433,14 +433,14 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             LOG.error("Error when trying to produce a alkis product", e);
             // Hier noch ein Fehlerdialog
         }
-    } //GEN-LAST:event_jxlNachweisNRWActionPerformed
+    }//GEN-LAST:event_jxlNachweisNRWActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlNachweisKommunalActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlNachweisKommunalActionPerformed
+    private void jxlNachweisKommunalActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlNachweisKommunalActionPerformed
         try {
             int stueck = 0;
             for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
@@ -458,37 +458,37 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             LOG.error("Error when trying to produce a alkis product", e);
             // Hier noch ein Fehlerdialog
         }
-    } //GEN-LAST:event_jxlNachweisKommunalActionPerformed
+    }//GEN-LAST:event_jxlNachweisKommunalActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlNachweisKommunalInternActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlNachweisKommunalInternActionPerformed
+    private void jxlNachweisKommunalInternActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlNachweisKommunalInternActionPerformed
         downloadEinzelnachweisProduct(jxlNachweisKommunalIntern.getText(),
             AlkisUtils.PRODUCTS.FLURSTUECKS_UND_EIGENTUMSNACHWEIS_KOMMUNAL_INTERN_PDF,
             PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN);
-    }                                                                                             //GEN-LAST:event_jxlNachweisKommunalInternActionPerformed
+    }//GEN-LAST:event_jxlNachweisKommunalInternActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jxlKarteActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlKarteActionPerformed
+    private void jxlKarteActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlKarteActionPerformed
         downloadKarteProduct(jxlKarte.getText());
-    }                                                                            //GEN-LAST:event_jxlKarteActionPerformed
+    }//GEN-LAST:event_jxlKarteActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblLandparcelsFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblLandparcelsFocusLost
+    private void tblLandparcelsFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblLandparcelsFocusLost
         map.gotoInitialBoundingBox();
         tblLandparcels.clearSelection();
-    }                                                                           //GEN-LAST:event_tblLandparcelsFocusLost
+    }//GEN-LAST:event_tblLandparcelsFocusLost
 
     @Override
     public Collection<CidsBean> getCidsBeans() {
@@ -641,7 +641,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
                     url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(parcelCode, product);
 
                     if (url != null) {
-                        final String filename = product + "_" + parcelCode.replace("/", "--") + "_";
+                        final String filename = product + "." + parcelCode.replace("/", "--");
                         downloads.add(new HttpDownload(url, "", jobname, downloadTitle, filename, ".pdf"));
                     }
                 } catch (Exception ex) {
@@ -703,7 +703,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             }
 
             if (url != null) {
-                final String filename = "LK_" + parcelCode.replace("/", "--") + "_";
+                final String filename = "LK." + parcelCode.replace("/", "--");
                 downloads.add(new HttpDownload(url, "", jobname, downloadTitle, filename, ".pdf"));
             }
         }
