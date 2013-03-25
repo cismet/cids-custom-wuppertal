@@ -946,11 +946,11 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                                         url.toString(),
                                         (Geometry)null,
                                         new ProductGroupAmount(prGroup, 1))) {
-                            doDownload(url, selectedProduct.getCode());
+                            doDownload(url, selectedProduct.getCode(), landParcelCode);
                         }
                     } else {
                         log.info("no product or productgroup is matching");
-                        doDownload(url, selectedProduct.getCode());
+                        doDownload(url, selectedProduct.getCode(), landParcelCode);
                     }
                 } catch (Exception e) {
                     log.error("Error when trying to produce a alkis product", e);
@@ -970,14 +970,21 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
     /**
      * DOCUMENT ME!
      *
-     * @param  url      DOCUMENT ME!
-     * @param  product  landParcelCode DOCUMENT ME!
+     * @param  url             DOCUMENT ME!
+     * @param  product         landParcelCode DOCUMENT ME!
+     * @param  landparcelCode  DOCUMENT ME!
      */
-    private void doDownload(final URL url, final String product) {
+    private void doDownload(final URL url, final String product, final String landparcelCode) {
         if (!DownloadManagerDialog.showAskingForUserTitle(this)) {
             return;
         }
-        final String filename = product.replace("/", "--") + "_";
+
+        String moreFlurstuckeSuffix = "";
+        if (flurstueckListModel.size() > 1) {
+            moreFlurstuckeSuffix = ".etAl";
+        }
+
+        final String filename = product + "." + landparcelCode.replace("/", "--") + moreFlurstuckeSuffix;
         final HttpDownload download = new HttpDownload(
                 url,
                 "",
