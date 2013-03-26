@@ -641,7 +641,7 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
                     url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(parcelCode, product);
 
                     if (url != null) {
-                        final String filename = product + "_" + parcelCode.replaceAll("/", "--") + "_";
+                        final String filename = product + "." + parcelCode.replace("/", "--");
                         downloads.add(new HttpDownload(url, "", jobname, downloadTitle, filename, ".pdf"));
                     }
                 } catch (Exception ex) {
@@ -703,7 +703,8 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
             }
 
             if (url != null) {
-                downloads.add(new HttpDownload(url, "", jobname, downloadTitle, parcelCode.replace('/', '_'), ".pdf"));
+                final String filename = "LK." + parcelCode.replace("/", "--");
+                downloads.add(new HttpDownload(url, "", jobname, downloadTitle, filename, ".pdf"));
             }
         }
 

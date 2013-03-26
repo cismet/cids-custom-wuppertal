@@ -1167,18 +1167,18 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         }
 
         try {
-            String queryID = getCompleteBuchungsblattCode();
-            if (queryID.length() > 0) {
+            String buchungsblattCode_Anhang = getCompleteBuchungsblattCode();
+            if (buchungsblattCode_Anhang.length() > 0) {
                 if (AlkisUtils.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_PDF.equals(product)
                             || AlkisUtils.PRODUCTS.GRUNDSTUECKSNACHWEIS_NRW_HTML.equals(product)) {
                     final String anhang = getCompleteLaufendeNrCode();
                     if (anhang != null) {
-                        queryID += anhang;
+                        buchungsblattCode_Anhang += anhang;
                     } else {
                         return;
                     }
                 }
-                queryID = AlkisUtils.escapeHtmlSpaces(queryID);
+                final String queryID = AlkisUtils.escapeHtmlSpaces(buchungsblattCode_Anhang);
                 final URL url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(queryID, product);
 
                 if (url != null) {
@@ -1186,12 +1186,14 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                         return;
                     }
 
+                    String filename = product + "." + buchungsblattCode_Anhang.replace("/", "--").trim();
+                    filename = filename.replaceAll(" +", "_"); // replace all whitespaces
                     final HttpDownload download = new HttpDownload(
                             url,
                             "",
                             DownloadManagerDialog.getJobname(),
                             downloadTitle,
-                            product,
+                            filename,
                             extension);
                     DownloadManager.instance().add(download);
                 }
