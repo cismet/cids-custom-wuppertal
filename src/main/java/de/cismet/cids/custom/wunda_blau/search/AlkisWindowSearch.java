@@ -64,11 +64,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     private javax.swing.ButtonGroup bgrNach;
     private javax.swing.ButtonGroup bgrOwner;
     private javax.swing.ButtonGroup bgrUeber;
-    private javax.swing.JCheckBox chkGeburtsnameExakt;
     private javax.swing.JCheckBox chkGeomFilter;
-    private javax.swing.JCheckBox chkNameExakt;
-    private javax.swing.JCheckBox chkVornameExakt;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -172,10 +168,6 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         optEigIstWeiblich = new javax.swing.JRadioButton();
         optEigIstFirma = new javax.swing.JRadioButton();
         optEigIstUnbekannt = new javax.swing.JRadioButton();
-        chkNameExakt = new javax.swing.JCheckBox();
-        chkGeburtsnameExakt = new javax.swing.JCheckBox();
-        chkVornameExakt = new javax.swing.JCheckBox();
-        jLabel1 = new javax.swing.JLabel();
         txtGeburtsname = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
@@ -474,40 +466,6 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         panEingabeEigentuemer.add(jPanel4, gridBagConstraints);
-
-        chkNameExakt.setToolTipText("z.Zt. vom Alkis-Dienst nicht unterstützt");
-        chkNameExakt.setEnabled(false);
-        chkNameExakt.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    chkNameExaktActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 2;
-        panEingabeEigentuemer.add(chkNameExakt, gridBagConstraints);
-
-        chkGeburtsnameExakt.setToolTipText("z.Zt. vom Alkis-Dienst nicht unterstützt");
-        chkGeburtsnameExakt.setEnabled(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 5;
-        panEingabeEigentuemer.add(chkGeburtsnameExakt, gridBagConstraints);
-
-        chkVornameExakt.setToolTipText("z.Zt. vom Alkis-Dienst nicht unterstützt");
-        chkVornameExakt.setEnabled(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 3;
-        panEingabeEigentuemer.add(chkVornameExakt, gridBagConstraints);
-
-        jLabel1.setText("exakt?");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
-        panEingabeEigentuemer.add(jLabel1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
@@ -590,15 +548,6 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     private void optSucheUeberEigentuemerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_optSucheUeberEigentuemerActionPerformed
         ((CardLayout)panEingabe.getLayout()).show(panEingabe, "eigentuemer");
     }                                                                                            //GEN-LAST:event_optSucheUeberEigentuemerActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void chkNameExaktActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_chkNameExaktActionPerformed
-        // TODO add your handling code here:
-    } //GEN-LAST:event_chkNameExaktActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -743,19 +692,10 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
                 ptyp = CidsAlkisSearchStatement.Personentyp.FRAU;
             }
 
-            String name = txtName.getText().trim();
-            String vorname = txtVorname.getText().trim();
-            String geburtsname = txtGeburtsname.getText().trim();
+            final String name = txtName.getText().trim();
+            final String vorname = txtVorname.getText().trim();
+            final String geburtsname = txtGeburtsname.getText().trim();
             final String geburtsdatum = txtGeburtsdatum.getText().trim();
-            if (!chkNameExakt.isSelected() && (name.length() > 0)) {
-                name = CidsAlkisSearchStatement.WILDCARD + name + CidsAlkisSearchStatement.WILDCARD;
-            }
-            if (!chkVornameExakt.isSelected() && (vorname.length() > 0)) {
-                vorname = CidsAlkisSearchStatement.WILDCARD + vorname + CidsAlkisSearchStatement.WILDCARD;
-            }
-            if (!chkGeburtsnameExakt.isSelected() && (geburtsname.length() > 0)) {
-                geburtsname = CidsAlkisSearchStatement.WILDCARD + geburtsname + CidsAlkisSearchStatement.WILDCARD;
-            }
             return new CidsAlkisSearchStatement(resulttype, name, vorname, geburtsname, geburtsdatum, ptyp, searchgeom);
         } else if (optSucheUeberFlurstueck.isSelected()) {
             return new CidsAlkisSearchStatement(
