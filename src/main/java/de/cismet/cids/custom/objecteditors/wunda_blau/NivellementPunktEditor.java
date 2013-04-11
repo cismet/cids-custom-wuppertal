@@ -647,7 +647,10 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.historisch}"),
                 chkHistorisch,
-                org.jdesktop.beansbinding.BeanProperty.create("selected"));
+                org.jdesktop.beansbinding.BeanProperty.create("selected"),
+                "");
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
