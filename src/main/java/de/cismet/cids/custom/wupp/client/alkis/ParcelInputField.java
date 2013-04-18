@@ -47,7 +47,7 @@ public class ParcelInputField extends javax.swing.JPanel {
         PARCEL_DENOMINATOR
     }
 
-    // Wird vom Designer benötigt, nicht benutzen!
+    // Wird vom Designer benoetigt, nicht benutzen!
     public ParcelInputField() {
         this(new InputConfig());
     }
@@ -67,7 +67,7 @@ public class ParcelInputField extends javax.swing.JPanel {
                 if (str == null) {
                     return;
                 }
-                str = str.replaceAll("[^-öÖüÜäÄßa-zA-Z0-9_%]", "");
+                str = str.replaceAll("[^-\\u00F6\\u00D6\\u00FC\\u00DC\\u00E4\\u00C4\\u00dfa-zA-Z0-9_%]", "");
                 String newStr = str;
                 int maxLen = config.getMaxLenTxtArea();
                 if ((txtDistrict.getDocument().getText(0, txtDistrict.getDocument().getLength()) + str).matches("^05.*")) {
@@ -113,7 +113,7 @@ public class ParcelInputField extends javax.swing.JPanel {
                         if (Character.isDigit(newStr.charAt(0))) {
                             newStr = newStr.replaceAll("[^0-9]", "");
                         } else if (Character.isLetter(newStr.charAt(0))) {
-                            newStr = newStr.replaceAll("[^öÖüÜäÄßa-zA-Z0-9]", "").substring(0, Math.min(Math.max(2 - offs, 0), newStr.length()));
+                            newStr = newStr.replaceAll("[^\\u00F6\\u00D6\\u00FC\\u00DC\\u00E4\\u00C4\\u00dfa-zA-Z0-9]", "").substring(0, Math.min(Math.max(2 - offs, 0), newStr.length()));
                             if (validDistrict(txtDistrict.getDocument().getText(0, txtDistrict.getDocument().getLength()) + newStr)) {
                                 if (changeFocus && offs + newStr.length() >= 2) {
                                     txtParcel.requestFocusInWindow();
@@ -125,8 +125,8 @@ public class ParcelInputField extends javax.swing.JPanel {
                         }
                     } else if (txtDistrict.getDocument().getText(0, txtDistrict.getDocument().getLength()).matches("^[0-9]*")) {
                         newStr = newStr.replaceAll("[^0-9]", "");
-                    } else if (txtDistrict.getDocument().getText(0, txtDistrict.getDocument().getLength()).matches("^[Ã¶Ã–Ã¼ÃœÃ¤Ã„ÃŸa-zA-Z]*")) {
-                        newStr = newStr.replaceAll("[^öÖüÜäÄßa-zA-Z0-9]", "").substring(0, Math.min(Math.max(2 - offs, 0), newStr.length()));
+                    } else if (txtDistrict.getDocument().getText(0, txtDistrict.getDocument().getLength()).matches("^[ÃƒÂ¶Ãƒâ€“ÃƒÂ¼ÃƒÅ“ÃƒÂ¤Ãƒâ€žÃƒÅ¸a-zA-Z]*")) {
+                        newStr = newStr.replaceAll("[^\\u00F6\\u00D6\\u00FC\\u00DC\\u00E4\\u00C4\\u00dfa-zA-Z0-9]", "").substring(0, Math.min(Math.max(2 - offs, 0), newStr.length()));
 
                         if (validDistrict(txtDistrict.getDocument().getText(0, txtDistrict.getDocument().getLength()) + newStr)) {
                             if (changeFocus && offs + newStr.length() >= 2) {
@@ -261,12 +261,12 @@ public class ParcelInputField extends javax.swing.JPanel {
             return;
         }
         if (parts[0].matches("^05")) {
-            if (!parts[0].matches("^05[öÖüÜäÄßa-zA-Z0-9]{" + config.getMaxLenTxtArea() + "}$")) {
+            if (!parts[0].matches("^05[\\u00F6\\u00D6\\u00FC\\u00DC\\u00E4\\u00C4\\u00dfa-zA-Z0-9]{" + config.getMaxLenTxtArea() + "}$")) {
                 validParcelNr = false;
                 return;
             }
         } else {
-            if (!parts[0].matches("^[öÖüÜäÄßa-zA-Z0-9]{" + config.getMaxLenTxtArea() + "}$")) {
+            if (!parts[0].matches("^[\\u00F6\\u00D6\\u00FC\\u00DC\\u00E4\\u00C4\\u00dfa-zA-Z0-9]{" + config.getMaxLenTxtArea() + "}$")) {
                 validParcelNr = false;
                 return;
             }
@@ -457,7 +457,7 @@ public class ParcelInputField extends javax.swing.JPanel {
 
     private void finishDistrict() {
         String text = txtDistrict.getText();
-        if (text.matches("^[öÖüÜäÄßa-zA-Z]+$")) {
+        if (text.matches("^[Ã¶Ã–Ã¼ÃœÃ¤Ã„ÃŸa-zA-Z]+$")) {
             if (validDistrict(text)) {
                 txtDistrict.setText(getDistrictNrFromAbrv(text).toString());
             } else {

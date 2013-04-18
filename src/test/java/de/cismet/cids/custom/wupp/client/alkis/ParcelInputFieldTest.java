@@ -46,13 +46,13 @@ public class ParcelInputFieldTest {
         gemarkung.put(3001, "Barmen");
         gemarkung.put(3135, "Elberfeld");
         gemarkung.put(3267, "Ronsdorf");
-        gemarkung.put(3276, "Schöller");
+        gemarkung.put(3276, "Sch\u00F6ller");
         gemarkung.put(3277, "Vohwinkel");
-        gemarkung.put(3278, "Dönberg");
+        gemarkung.put(3278, "D\u00F6nberg");
         gemarkung.put(3279, "Cronenberg");
         gemarkung.put(3485, "Beyenburg");
         gemarkung.put(3486, "Langerfeld");
-        gemarkung.put(3487, "Nächstebreck");
+        gemarkung.put(3487, "N\u00E4chstebreck");
         config.setAreaClearMap(gemarkung);
         HashMap<String, Integer> umsetzung = new HashMap<String, Integer>();
         umsetzung.put("b", 3001);
@@ -72,7 +72,7 @@ public class ParcelInputFieldTest {
 
         umsetzung.put("d", 3278);
         umsetzung.put("do", 3278);
-        umsetzung.put("dö", 3278);
+        umsetzung.put("d\u00F6", 3278);
 
         umsetzung.put("c", 3279);
         umsetzung.put("cr", 3279);
@@ -84,7 +84,7 @@ public class ParcelInputFieldTest {
 
         umsetzung.put("n", 3487);
         umsetzung.put("na", 3487);
-        umsetzung.put("nä", 3487);
+        umsetzung.put("n\u00E4", 3487);
         config.setConversionMap(umsetzung);
         field = new ParcelInputField(config);
     }
@@ -104,47 +104,51 @@ public class ParcelInputFieldTest {
         String districtNumber = "3001";
         ParcelInputField instance = field;
         instance.setDistrictNumber(districtNumber);
-        // TODO review the generated test code and remove the default call to fail.
         assertEquals(districtNumber, instance.getDistrictNumber());
+    }
+    
+    @Test
+    public void testSetDistrictNumberSpecialCharacter() {
+        System.out.println("setDistrictNumberSpecialCharacter");
+        String districtNumber = "n\u00E4";
+        ParcelInputField instance = field;
+        instance.setDistrictNumber(districtNumber);
+        assertEquals("3487", instance.getDistrictNumber());
     }
 
     @Test
     public void testSetDistrictNumberShort() {
-        System.out.println("setDistrictNumber");
+        System.out.println("setDistrictNumberShort");
         String districtNumber = "30";
         ParcelInputField instance = field;
         instance.setDistrictNumber(districtNumber);
-        // TODO review the generated test code and remove the default call to fail.
         assertEquals(null, instance.getDistrictNumber());
     }
 
     @Test
     public void testSetDistrictNumberShort2() {
-        System.out.println("setDistrictNumber");
+        System.out.println("setDistrictNumberShort2");
         String districtNumber = "ba";
         ParcelInputField instance = field;
         instance.setDistrictNumber(districtNumber);
-        // TODO review the generated test code and remove the default call to fail.
         assertEquals("3001", instance.getDistrictNumber());
     }
 
     @Test
     public void testSetDistrictNumberLong() {
-        System.out.println("setDistrictNumber");
+        System.out.println("setDistrictNumberLong");
         String districtNumber = "30017435";
         ParcelInputField instance = field;
         instance.setDistrictNumber(districtNumber);
-        // TODO review the generated test code and remove the default call to fail.
         assertEquals("3001", instance.getDistrictNumber());
     }
 
     @Test
     public void testSetDistrictNumberWrong() {
-        System.out.println("setDistrictNumber");
+        System.out.println("setDistrictNumberWrong");
         String districtNumber = "sadfh";
         ParcelInputField instance = field;
         instance.setDistrictNumber(districtNumber);
-        // TODO review the generated test code and remove the default call to fail.
         assertEquals(null, instance.getDistrictNumber());
     }
 
@@ -157,47 +161,42 @@ public class ParcelInputFieldTest {
         String currentParcel = "3135-002-00004/0003";
         ParcelInputField instance = field;
         instance.setCurrentParcel(currentParcel);
-        // TODO review the generated test code and remove the default call to fail.
         assertEquals(currentParcel, instance.getCurrentParcel());
     }
 
     @Test
     public void testSetCurrentParcelOverflow() {
-        System.out.println("setCurrentParcel");
+        System.out.println("setCurrentParcelOverflow");
         String currentParcel = "3135-002-00004/00030";
         ParcelInputField instance = field;
         instance.setCurrentParcel(currentParcel);
-        // TODO review the generated test code and remove the default call to fail.
         assertEquals("3135-002-00004/0003", instance.getCurrentParcel());
     }
 
     @Test
     public void testSetCurrentParcelDelimiterAtEnd() {
-        System.out.println("setCurrentParcel");
+        System.out.println("setCurrentParcelDelimiterAtEnd");
         String currentParcel = "3135-002-00004/00030-";
         ParcelInputField instance = field;
         instance.setCurrentParcel(currentParcel);
-        // TODO review the generated test code and remove the default call to fail.
         assertEquals("3135-002-00004/0003", instance.getCurrentParcel());
     }
 
     @Test
     public void testSetCurrentParcelShort() {
-        System.out.println("setCurrentParcel");
+        System.out.println("setCurrentParcelShort");
         String currentParcel = "3135-002-04";
         ParcelInputField instance = field;
         instance.setCurrentParcel(currentParcel);
-        // TODO review the generated test code and remove the default call to fail.
         assertEquals("3135-002-00004", instance.getCurrentParcel());
     }
 
     @Test
     public void testSetCurrentParcelShort2() {
-        System.out.println("setCurrentParcel");
+        System.out.println("setCurrentParcelShort2");
         String currentParcel = "ba-1-3";
         ParcelInputField instance = field;
         instance.setCurrentParcel(currentParcel);
-        // TODO review the generated test code and remove the default call to fail.
         assertEquals("3001-001-00003", instance.getCurrentParcel());
     }
 
@@ -210,37 +209,33 @@ public class ParcelInputFieldTest {
         String parcelDenominator = "0002";
         ParcelInputField instance = field;
         instance.setParcelDenominator(parcelDenominator);
-        // TODO review the generated test code and remove the default call to fail.
         assertEquals("0002", instance.getParcelDenominator());
     }
 
     @Test
     public void testSetParcelDenominatorShort() {
-        System.out.println("setParcelDenominator");
+        System.out.println("setParcelDenominatorShort");
         String parcelDenominator = "2";
         ParcelInputField instance = field;
         instance.setParcelDenominator(parcelDenominator);
-        // TODO review the generated test code and remove the default call to fail.
         assertEquals("0002", instance.getParcelDenominator());
     }
 
     @Test
     public void testSetParcelDenominatorLong() {
-        System.out.println("setParcelDenominator");
+        System.out.println("setParcelDenominatorLong");
         String parcelDenominator = "00020005";
         ParcelInputField instance = field;
         instance.setParcelDenominator(parcelDenominator);
-        // TODO review the generated test code and remove the default call to fail.
         assertEquals("0002", instance.getParcelDenominator());
     }
 
     @Test
     public void testSetParcelDenominatorWrong() {
-        System.out.println("setParcelDenominator");
+        System.out.println("setParcelDenominatorWrong");
         String parcelDenominator = "abced";
         ParcelInputField instance = field;
         instance.setParcelDenominator(parcelDenominator);
-        // TODO review the generated test code and remove the default call to fail.
         assertEquals("", instance.getParcelDenominator());
     }
 
@@ -253,37 +248,33 @@ public class ParcelInputFieldTest {
         String parcelNumber = "001";
         ParcelInputField instance = field;
         instance.setParcelNumber(parcelNumber);
-        // TODO review the generated test code and remove the default call to fail.
         assertEquals(parcelNumber, instance.getParcelNumber());
     }
 
     @Test
     public void testSetParcelNumberShort() {
-        System.out.println("setParcelNumber");
+        System.out.println("setParcelNumberShort");
         String parcelNumber = "1";
         ParcelInputField instance = field;
         instance.setParcelNumber(parcelNumber);
-        // TODO review the generated test code and remove the default call to fail.
         assertEquals("001", instance.getParcelNumber());
     }
 
     @Test
     public void testSetParcelNumberShortLong() {
-        System.out.println("setParcelNumber");
+        System.out.println("setParcelNumberLong");
         String parcelNumber = "10002";
         ParcelInputField instance = field;
         instance.setParcelNumber(parcelNumber);
-        // TODO review the generated test code and remove the default call to fail.
         assertEquals("100", instance.getParcelNumber());
     }
 
     @Test
     public void testSetParcelNumberShortWrong() {
-        System.out.println("setParcelNumber");
+        System.out.println("setParcelNumberWrong");
         String parcelNumber = "abc";
         ParcelInputField instance = field;
         instance.setParcelNumber(parcelNumber);
-        // TODO review the generated test code and remove the default call to fail.
         assertEquals("000", instance.getParcelNumber());
     }
 
@@ -296,37 +287,33 @@ public class ParcelInputFieldTest {
         String parcelNumerator = "00003";
         ParcelInputField instance = field;
         instance.setParcelNumerator(parcelNumerator);
-        // TODO review the generated test code and remove the default call to fail.
         assertEquals(parcelNumerator, instance.getParcelNumerator());
     }
 
     @Test
     public void testSetParcelNumeratorShort() {
-        System.out.println("setParcelNumerator");
+        System.out.println("setParcelNumeratorShort");
         String parcelNumerator = "3";
         ParcelInputField instance = field;
         instance.setParcelNumerator(parcelNumerator);
-        // TODO review the generated test code and remove the default call to fail.
         assertEquals("00003", instance.getParcelNumerator());
     }
 
     @Test
     public void testSetParcelNumeratorLong() {
-        System.out.println("setParcelNumerator");
+        System.out.println("setParcelNumeratorLong");
         String parcelNumerator = "00003674";
         ParcelInputField instance = field;
         instance.setParcelNumerator(parcelNumerator);
-        // TODO review the generated test code and remove the default call to fail.
         assertEquals("00003", instance.getParcelNumerator());
     }
 
     @Test
     public void testSetParcelNumeratorWrong() {
-        System.out.println("setParcelNumerator");
+        System.out.println("setParcelNumeratorWrong");
         String parcelNumerator = "abdvr";
         ParcelInputField instance = field;
         instance.setParcelNumerator(parcelNumerator);
-        // TODO review the generated test code and remove the default call to fail.
         assertEquals("00000", instance.getParcelNumerator());
     }
 }
