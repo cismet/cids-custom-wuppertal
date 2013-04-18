@@ -46,13 +46,13 @@ public class ParcelInputFieldTest {
         gemarkung.put(3001, "Barmen");
         gemarkung.put(3135, "Elberfeld");
         gemarkung.put(3267, "Ronsdorf");
-        gemarkung.put(3276, "Schöller");
+        gemarkung.put(3276, "SchÃ¶ller");
         gemarkung.put(3277, "Vohwinkel");
-        gemarkung.put(3278, "Dönberg");
+        gemarkung.put(3278, "DÃ¶nberg");
         gemarkung.put(3279, "Cronenberg");
         gemarkung.put(3485, "Beyenburg");
         gemarkung.put(3486, "Langerfeld");
-        gemarkung.put(3487, "Nächstebreck");
+        gemarkung.put(3487, "NÃ¤chstebreck");
         config.setAreaClearMap(gemarkung);
         HashMap<String, Integer> umsetzung = new HashMap<String, Integer>();
         umsetzung.put("b", 3001);
@@ -72,6 +72,7 @@ public class ParcelInputFieldTest {
 
         umsetzung.put("d", 3278);
         umsetzung.put("do", 3278);
+        umsetzung.put("dÃ¶", 3278);
 
         umsetzung.put("c", 3279);
         umsetzung.put("cr", 3279);
@@ -83,7 +84,7 @@ public class ParcelInputFieldTest {
 
         umsetzung.put("n", 3487);
         umsetzung.put("na", 3487);
-        umsetzung.put("nä", 3487);
+        umsetzung.put("nÃ¤", 3487);
         config.setConversionMap(umsetzung);
         field = new ParcelInputField(config);
     }
