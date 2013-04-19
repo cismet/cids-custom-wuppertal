@@ -10,21 +10,21 @@ import java.util.HashMap;
  *
  * @author mscholl
  */
-public class App extends javax.swing.JFrame {
+public class ParcelInputWindow extends javax.swing.JFrame {
 
-    private final InputConfig config;
+    private final ParcelInputFieldConfig config;
 
     /**
-     * Creates new form App
+     * Creates new form ParcelInputWindow
      */
-    public App() {
-        config = new InputConfig();
+    public ParcelInputWindow() {
+        config = new ParcelInputFieldConfig();
         config.setDelimiter1('-');
         config.setDelimiter2('/');
-        config.setMaxLenTxtArea(4);
-        config.setMaxLenTxtLand(3);
-        config.setMaxLenTxtLandParcelNumerator(5);
-        config.setMaxLenTxtLandParcelDenominator(4);
+        config.setMaxLenDistrictNumberField(4);
+        config.setMaxLenParcelNumberField(3);
+        config.setMaxLenParcelNumeratorField(5);
+        config.setMaxLenParcelDenominatorField(4);
         HashMap<Integer, String> gemarkung = new HashMap<Integer, String>();
         gemarkung.put(3001, "Barmen");
         gemarkung.put(3135, "Elberfeld");
@@ -36,7 +36,7 @@ public class App extends javax.swing.JFrame {
         gemarkung.put(3485, "Beyenburg");
         gemarkung.put(3486, "Langerfeld");
         gemarkung.put(3487, "Nächstebreck");
-        config.setAreaClearMap(gemarkung);
+        config.setDistrictNamesMap(gemarkung);
         HashMap<String, Integer> umsetzung = new HashMap<String, Integer>();
         umsetzung.put("b", 3001);
         umsetzung.put("ba", 3001);
@@ -402,13 +402,13 @@ public class App extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(App.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ParcelInputWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(App.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ParcelInputWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(App.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ParcelInputWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(App.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ParcelInputWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -417,7 +417,7 @@ public class App extends javax.swing.JFrame {
          */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new App().setVisible(true);
+                new ParcelInputWindow().setVisible(true);
             }
         });
     }

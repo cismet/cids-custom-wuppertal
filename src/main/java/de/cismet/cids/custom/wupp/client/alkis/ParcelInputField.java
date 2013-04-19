@@ -25,16 +25,18 @@ public class ParcelInputField extends javax.swing.JPanel {
     public static final String PROP_PARCEL_DENOMINATOR = "parcelDenominator";// NOI18N
     public static final String PROP_DISTRICT_NAME = "districtName";// NOI18N
     public static final String PROP_VALID_PARCEL_NUMBER = "validParcelNr";// NOI18N
-    // --- read-only bindable
+    // --- bindable
     private String currentParcel;
     private String districtNumber;
     private String parcelNumber;
     private String parcelNumerator;
     private String parcelDenominator;
+    // ---
+    // --- read-only bindable
     private String districtName;
     private boolean validParcelNr = false;
     // ---
-    private final InputConfig config;
+    private final ParcelInputFieldConfig config;
     private boolean overwritten = false;
     private boolean changeFocus = true;
     private boolean writeOver = true;
@@ -47,15 +49,15 @@ public class ParcelInputField extends javax.swing.JPanel {
         PARCEL_DENOMINATOR
     }
 
-    // Wird vom Designer benoetigt, nicht benutzen!
+    // Needed by the GUI-designer, not for usage
     public ParcelInputField() {
-        this(new InputConfig());
+        this(new ParcelInputFieldConfig());
     }
 
     /**
      * Creates new form Flurstueckseingabe
      */
-    public ParcelInputField(final InputConfig config) {
+    public ParcelInputField(final ParcelInputFieldConfig config) {
         this.config = config;
         initComponents();
 
@@ -67,13 +69,14 @@ public class ParcelInputField extends javax.swing.JPanel {
                 if (str == null) {
                     return;
                 }
+                // removes all characters except "-_%", digits, alpha charactes and german vowel mutuations
                 str = str.replaceAll("[^-\\u00F6\\u00D6\\u00FC\\u00DC\\u00E4\\u00C4\\u00dfa-zA-Z0-9_%]", "");
                 String newStr = str;
-                int maxLen = config.getMaxLenTxtArea();
+                int maxLen = config.getMaxLenDistrictNumberField();
                 if ((txtDistrict.getDocument().getText(0, txtDistrict.getDocument().getLength()) + str).matches("^05.*")) {
                     maxLen += 2;
                 }
-                if (str.length() > 0 && (str.length() > maxLen - offs || str.substring(0, Math.min(maxLen + 1 - offs, str.length())).contains(config.getDelimiter1String()))) {
+                if (str.length() > 0 && (str.length() > maxLen - offs || str.substring(0, Math.min(maxLen + 1 - offs, str.length())).contains(config.getDelimiter1AsString()))) {
                     int pos = maxLen - offs;
                     int posDel = str.indexOf(config.getDelimiter1());
                     if (posDel >= 0 && posDel < pos) {
@@ -113,7 +116,9 @@ public class ParcelInputField extends javax.swing.JPanel {
                         if (Character.isDigit(newStr.charAt(0))) {
                             newStr = newStr.replaceAll("[^0-9]", "");
                         } else if (Character.isLetter(newStr.charAt(0))) {
-                            newStr = newStr.replaceAll("[^\\u00F6\\u00D6\\u00FC\\u00DC\\u00E4\\u00C4\\u00dfa-zA-Z0-9]", "").substring(0, Math.min(Math.max(2 - offs, 0), newStr.length()));
+                            // removes all characters except alpha charactes and german vowel mutuations
+                            newStr = newStr.replaceAll("[^\\u00F6\\u00D6\\u00FC\\u00DC\\u00E4\\u00C4\\u00dfa-zA-Z]", "");
+                            newStr = newStr.substring(0, Math.min(Math.max(2 - offs, 0), newStr.length()));
                             if (validDistrict(txtDistrict.getDocument().getText(0, txtDistrict.getDocument().getLength()) + newStr)) {
                                 if (changeFocus && offs + newStr.length() >= 2) {
                                     txtParcel.requestFocusInWindow();
@@ -124,9 +129,11 @@ public class ParcelInputField extends javax.swing.JPanel {
 
                         }
                     } else if (txtDistrict.getDocument().getText(0, txtDistrict.getDocument().getLength()).matches("^[0-9]*")) {
-                        newStr = newStr.replaceAll("[^0-9]", "");
-                    } else if (txtDistrict.getDocument().getText(0, txtDistrict.getDocument().getLength()).matches("^[Ã¶Ã–Ã¼ÃœÃ¤Ã„ÃŸa-zA-Z]*")) {
-                        newStr = newStr.replaceAll("[^\\u00F6\\u00D6\\u00FC\\u00DC\\u00E4\\u00C4\\u00dfa-zA-Z0-9]", "").substring(0, Math.min(Math.max(2 - offs, 0), newStr.length()));
+                        newStr = newStr.replaceAll("[^0-9]", "");                               // checks if the entered text only contains alpha charactes and german vowel mutuations
+                    } else if (txtDistrict.getDocument().getText(0, txtDistrict.getDocument().getLength()).matches("^[\\u00F6\\u00D6\\u00FC\\u00DC\\u00E4\\u00C4\\u00dfa-zA-Z]*")) {
+                        // removes all characters except alpha charactes and german vowel mutuations
+                        newStr = newStr.replaceAll("[^\\u00F6\\u00D6\\u00FC\\u00DC\\u00E4\\u00C4\\u00dfa-zA-Z]", "");
+                        newStr = newStr.substring(0, Math.min(Math.max(2 - offs, 0), newStr.length()));
 
                         if (validDistrict(txtDistrict.getDocument().getText(0, txtDistrict.getDocument().getLength()) + newStr)) {
                             if (changeFocus && offs + newStr.length() >= 2) {
@@ -158,10 +165,10 @@ public class ParcelInputField extends javax.swing.JPanel {
                 }
                 str = str.replaceAll("[^-0-9_%]", "");
                 String newStr = str;
-                if (str.length() > 0 && (str.length() > config.getMaxLenTxtLand() - offs || str.substring(0, Math.min(config.getMaxLenTxtLand() + 1 - offs, str.length())).contains(config.getDelimiter1String()))) {
+                if (str.length() > 0 && (str.length() > config.getMaxLenParcelNumberField() - offs || str.substring(0, Math.min(config.getMaxLenParcelNumberField() + 1 - offs, str.length())).contains(config.getDelimiter1AsString()))) {
                     int pos = str.indexOf(config.getDelimiter1());
-                    if (pos < 0 || pos > config.getMaxLenTxtLand() - offs) {
-                        pos = config.getMaxLenTxtLand() - offs;
+                    if (pos < 0 || pos > config.getMaxLenParcelNumberField() - offs) {
+                        pos = config.getMaxLenParcelNumberField() - offs;
                     }
                     if (changeFocus) {
                         txtLandParcelNumerator.requestFocusInWindow();
@@ -171,7 +178,7 @@ public class ParcelInputField extends javax.swing.JPanel {
 
                     if (writeOver) {
                         String writeOverStr;
-                        if (str.indexOf(config.getDelimiter1String()) == pos) {
+                        if (str.indexOf(config.getDelimiter1AsString()) == pos) {
                             writeOverStr = str.substring(pos + 1);
                         } else {
                             writeOverStr = str.substring(pos);
@@ -198,16 +205,16 @@ public class ParcelInputField extends javax.swing.JPanel {
                 str = str.replaceAll("[^-0-9_%]", "");
                 String newStr = str;
                 if (str.length() > 0
-                        && (str.length() > config.getMaxLenTxtLandParcelNumerator() - offs
-                        || str.substring(0, Math.min(config.getMaxLenTxtLandParcelNumerator() + 1 - offs, str.length())).contains(config.getDelimiter1String())
-                        || str.substring(0, Math.min(config.getMaxLenTxtLandParcelNumerator() + 1 - offs, str.length())).contains(config.getDelimiter2String()))) {
+                        && (str.length() > config.getMaxLenParcelNumeratorField() - offs
+                        || str.substring(0, Math.min(config.getMaxLenParcelNumeratorField() + 1 - offs, str.length())).contains(config.getDelimiter1AsString())
+                        || str.substring(0, Math.min(config.getMaxLenParcelNumeratorField() + 1 - offs, str.length())).contains(config.getDelimiter2AsString()))) {
                     overwritten = true;
                     int pos = str.indexOf(config.getDelimiter1());
                     if (pos < 0 || (pos > str.indexOf(config.getDelimiter2()) && str.indexOf(config.getDelimiter2()) >= 0)) {
                         pos = str.indexOf(config.getDelimiter2());
                     }
-                    if (pos < 0 || (pos > config.getMaxLenTxtLandParcelNumerator() - offs && config.getMaxLenTxtLandParcelNumerator() - offs >= 0)) {
-                        pos = config.getMaxLenTxtLandParcelNumerator() - offs;
+                    if (pos < 0 || (pos > config.getMaxLenParcelNumeratorField() - offs && config.getMaxLenParcelNumeratorField() - offs >= 0)) {
+                        pos = config.getMaxLenParcelNumeratorField() - offs;
                     }
                     if (changeFocus) {
                         txtLandParcelDenominator.requestFocusInWindow();
@@ -216,8 +223,8 @@ public class ParcelInputField extends javax.swing.JPanel {
 
                     if (writeOver) {
                         String writeOverStr;
-                        if (str.indexOf(config.getDelimiter1String()) == pos
-                                || str.indexOf(config.getDelimiter2String()) == pos) {
+                        if (str.indexOf(config.getDelimiter1AsString()) == pos
+                                || str.indexOf(config.getDelimiter2AsString()) == pos) {
                             writeOverStr = str.substring(pos + 1);
                         } else {
                             writeOverStr = str.substring(pos);
@@ -241,8 +248,8 @@ public class ParcelInputField extends javax.swing.JPanel {
                     return;
                 }
                 str = str.replaceAll("[^0-9_%]", "");
-                if (offs + str.length() > config.getMaxLenTxtLandParcelDenominator()) {
-                    str = str.substring(0, config.getMaxLenTxtLandParcelDenominator() - offs);
+                if (offs + str.length() > config.getMaxLenParcelDenominatorField()) {
+                    str = str.substring(0, config.getMaxLenParcelDenominatorField() - offs);
                 }
                 super.insertString(offs, str, a);
                 updateParcel();
@@ -261,46 +268,46 @@ public class ParcelInputField extends javax.swing.JPanel {
             return;
         }
         if (parts[0].matches("^05")) {
-            if (!parts[0].matches("^05[\\u00F6\\u00D6\\u00FC\\u00DC\\u00E4\\u00C4\\u00dfa-zA-Z0-9]{" + config.getMaxLenTxtArea() + "}$")) {
+            if (!parts[0].matches("^05[0-9]{" + config.getMaxLenDistrictNumberField() + "}$")) {
                 validParcelNr = false;
                 return;
             }
         } else {
-            if (!parts[0].matches("^[\\u00F6\\u00D6\\u00FC\\u00DC\\u00E4\\u00C4\\u00dfa-zA-Z0-9]{" + config.getMaxLenTxtArea() + "}$")) {
+            if (!parts[0].matches("^[0-9]{" + config.getMaxLenDistrictNumberField() + "}$")) {
                 validParcelNr = false;
                 return;
             }
         }
         if (parts[1].contains("%")) {
-            if (!parts[1].matches("^[0-9_%]{1," + config.getMaxLenTxtLand() + "}$")) {
+            if (!parts[1].matches("^[0-9_%]{1," + config.getMaxLenParcelNumberField() + "}$")) {
                 validParcelNr = false;
                 return;
             }
         } else {
-            if (!parts[1].matches("^[0-9_]{" + config.getMaxLenTxtLand() + "}$")) {
+            if (!parts[1].matches("^[0-9_]{" + config.getMaxLenParcelNumberField() + "}$")) {
                 validParcelNr = false;
                 return;
             }
         }
         if (parts[2].contains("%")) {
-            if (!parts[2].matches("^[0-9_%]{1," + config.getMaxLenTxtLandParcelNumerator() + "}$")) {
+            if (!parts[2].matches("^[0-9_%]{1," + config.getMaxLenParcelNumeratorField() + "}$")) {
                 validParcelNr = false;
                 return;
             }
         } else {
-            if (!parts[2].matches("^[0-9_]{" + config.getMaxLenTxtLandParcelNumerator() + "}$")) {
+            if (!parts[2].matches("^[0-9_]{" + config.getMaxLenParcelNumeratorField() + "}$")) {
                 validParcelNr = false;
                 return;
             }
         }
         if (parts.length == 4) {
             if (parts[3].contains("%")) {
-                if (!parts[3].matches("^[0-9_%]{1," + config.getMaxLenTxtLandParcelDenominator() + "}$")) {
+                if (!parts[3].matches("^[0-9_%]{1," + config.getMaxLenParcelDenominatorField() + "}$")) {
                     validParcelNr = false;
                     return;
                 }
             } else {
-                if (!parts[3].matches("^[0-9_]{" + config.getMaxLenTxtLandParcelDenominator() + "}$")) {
+                if (!parts[3].matches("^[0-9_]{" + config.getMaxLenParcelDenominatorField() + "}$")) {
                     validParcelNr = false;
                     return;
                 }
@@ -403,13 +410,13 @@ public class ParcelInputField extends javax.swing.JPanel {
             sb.append(txtDistrict.getText());
         }
         if (txtParcel.getText() != null && !txtParcel.getText().isEmpty()) {
-            sb.append(config.getDelimiter1String()).append(txtParcel.getText());
+            sb.append(config.getDelimiter1AsString()).append(txtParcel.getText());
         }
         if (txtLandParcelNumerator.getText() != null && !txtLandParcelNumerator.getText().isEmpty()) {
-            sb.append(config.getDelimiter1String()).append(txtLandParcelNumerator.getText());
+            sb.append(config.getDelimiter1AsString()).append(txtLandParcelNumerator.getText());
         }
         if (txtLandParcelDenominator.getText() != null && !txtLandParcelDenominator.getText().isEmpty()) {
-            sb.append(config.getDelimiter2String()).append(txtLandParcelDenominator.getText());
+            sb.append(config.getDelimiter2AsString()).append(txtLandParcelDenominator.getText());
         }
 
         currentParcel = sb.toString();
@@ -466,19 +473,19 @@ public class ParcelInputField extends javax.swing.JPanel {
         }
         if (text.matches("^[0-9]+$") || text.isEmpty()) {
             if (text.matches("^05.*")) {
-                addLeadingZeroes(txtDistrict.getDocument(), config.getMaxLenTxtArea() + 2, 2);
+                addLeadingZeroes(txtDistrict.getDocument(), config.getMaxLenDistrictNumberField() + 2, 2);
             } else {
-                addLeadingZeroes(txtDistrict.getDocument(), config.getMaxLenTxtArea());
+                addLeadingZeroes(txtDistrict.getDocument(), config.getMaxLenDistrictNumberField());
             }
         }
         int intArea;
         final String oldAreaName = districtName;
         try {
-            if(txtDistrict.getText().length() > config.getMaxLenTxtArea())
+            if(txtDistrict.getText().length() > config.getMaxLenDistrictNumberField())
                 intArea = Integer.parseInt(txtDistrict.getText().substring(2));
             else
                 intArea = Integer.parseInt(txtDistrict.getText().substring(0));
-            districtName = config.getAreaClearMap().get(intArea);
+            districtName = config.getDistrictNamesMap().get(intArea);
         } catch (final NumberFormatException e) {
             districtName = null;
             // dont care, simply unknownn district, maybe insert log
@@ -491,14 +498,14 @@ public class ParcelInputField extends javax.swing.JPanel {
 
     private void finishParcel() {
         if (!txtParcel.getText().contains("%")) {
-            addLeadingZeroes(txtParcel.getDocument(), config.getMaxLenTxtLand());
+            addLeadingZeroes(txtParcel.getDocument(), config.getMaxLenParcelNumberField());
         }
         fireAreaBlockFinished(BlockType.PARCEL);
     }
 
     private void finishParcelNumerator() {
         if (!txtLandParcelNumerator.getText().contains("%")) {
-            addLeadingZeroes(txtLandParcelNumerator.getDocument(), config.getMaxLenTxtLandParcelNumerator());
+            addLeadingZeroes(txtLandParcelNumerator.getDocument(), config.getMaxLenParcelNumeratorField());
         }
         fireAreaBlockFinished(BlockType.PARCEL_NUMERATOR);
     }
@@ -506,7 +513,7 @@ public class ParcelInputField extends javax.swing.JPanel {
     private void finishParcelDenominator() {
         String text = txtLandParcelDenominator.getText();
         if (text != null && !text.isEmpty() && !txtLandParcelDenominator.getText().contains("%")) {
-            addLeadingZeroes(txtLandParcelDenominator.getDocument(), config.getMaxLenTxtLandParcelDenominator());
+            addLeadingZeroes(txtLandParcelDenominator.getDocument(), config.getMaxLenParcelDenominatorField());
         }
         fireAreaBlockFinished(BlockType.PARCEL_DENOMINATOR);
     }
@@ -521,13 +528,13 @@ public class ParcelInputField extends javax.swing.JPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        txtDistrict = new javax.swing.JTextField(config.getMaxLenTxtArea()+2);
-        lblDelimitier1 = new javax.swing.JLabel(config.getDelimiter1String());
-        txtParcel = new javax.swing.JTextField(config.getMaxLenTxtLand());
-        lblDelimitier2 = new javax.swing.JLabel(config.getDelimiter1String());
-        txtLandParcelNumerator = new javax.swing.JTextField(config.getMaxLenTxtLandParcelNumerator());
-        lblDelimitier3 = new javax.swing.JLabel(config.getDelimiter2String());
-        txtLandParcelDenominator = new javax.swing.JTextField(config.getMaxLenTxtLandParcelDenominator());
+        txtDistrict = new javax.swing.JTextField(config.getMaxLenDistrictNumberField()+2);
+        lblDelimitier1 = new javax.swing.JLabel(config.getDelimiter1AsString());
+        txtParcel = new javax.swing.JTextField(config.getMaxLenParcelNumberField());
+        lblDelimitier2 = new javax.swing.JLabel(config.getDelimiter1AsString());
+        txtLandParcelNumerator = new javax.swing.JTextField(config.getMaxLenParcelNumeratorField());
+        lblDelimitier3 = new javax.swing.JLabel(config.getDelimiter2AsString());
+        txtLandParcelDenominator = new javax.swing.JTextField(config.getMaxLenParcelDenominatorField());
 
         setLayout(new java.awt.GridBagLayout());
 

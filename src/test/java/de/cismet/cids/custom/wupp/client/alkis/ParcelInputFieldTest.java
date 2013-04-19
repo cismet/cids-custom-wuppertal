@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
 public class ParcelInputFieldTest {
 
     private ParcelInputField field;
-    private InputConfig config;
+    private ParcelInputFieldConfig config;
 
     public ParcelInputFieldTest() {
     }
@@ -35,13 +35,13 @@ public class ParcelInputFieldTest {
 
     @Before
     public void setUp() {
-        config = new InputConfig();
+        config = new ParcelInputFieldConfig();
         config.setDelimiter1('-');
         config.setDelimiter2('/');
-        config.setMaxLenTxtArea(4);
-        config.setMaxLenTxtLand(3);
-        config.setMaxLenTxtLandParcelNumerator(5);
-        config.setMaxLenTxtLandParcelDenominator(4);
+        config.setMaxLenDistrictNumberField(4);
+        config.setMaxLenParcelNumberField(3);
+        config.setMaxLenParcelNumeratorField(5);
+        config.setMaxLenParcelDenominatorField(4);
         HashMap<Integer, String> gemarkung = new HashMap<Integer, String>();
         gemarkung.put(3001, "Barmen");
         gemarkung.put(3135, "Elberfeld");
@@ -53,7 +53,7 @@ public class ParcelInputFieldTest {
         gemarkung.put(3485, "Beyenburg");
         gemarkung.put(3486, "Langerfeld");
         gemarkung.put(3487, "N\u00E4chstebreck");
-        config.setAreaClearMap(gemarkung);
+        config.setDistrictNamesMap(gemarkung);
         HashMap<String, Integer> umsetzung = new HashMap<String, Integer>();
         umsetzung.put("b", 3001);
         umsetzung.put("ba", 3001);
