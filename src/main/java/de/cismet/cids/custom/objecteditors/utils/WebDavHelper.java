@@ -113,10 +113,18 @@ public class WebDavHelper {
                     new FileInputStream(toUpload)));
         final byte[] bytes = IOUtils.toByteArray(bfis);
         try {
-            final ServerActionParameter proxySAP = new ServerActionParameter<Proxy>(WebDavTunnelAction.PARAMETER_TYPE.PROXY.toString(), proxy);
-            final ServerActionParameter usernameSAP = new ServerActionParameter<String>(WebDavTunnelAction.PARAMETER_TYPE.USERNAME.toString(), username);
-            final ServerActionParameter passwordSAP = new ServerActionParameter<String>(WebDavTunnelAction.PARAMETER_TYPE.PASSWORD.toString(), password);
-            final ServerActionParameter ntAuthSAP = new ServerActionParameter<Boolean>(WebDavTunnelAction.PARAMETER_TYPE.NTAUTH.toString(), useNtAuth);
+            final ServerActionParameter proxySAP = new ServerActionParameter<Proxy>(
+                    WebDavTunnelAction.PARAMETER_TYPE.PROXY.toString(),
+                    proxy);
+            final ServerActionParameter usernameSAP = new ServerActionParameter<String>(
+                    WebDavTunnelAction.PARAMETER_TYPE.USERNAME.toString(),
+                    username);
+            final ServerActionParameter passwordSAP = new ServerActionParameter<String>(
+                    WebDavTunnelAction.PARAMETER_TYPE.PASSWORD.toString(),
+                    password);
+            final ServerActionParameter ntAuthSAP = new ServerActionParameter<Boolean>(
+                    WebDavTunnelAction.PARAMETER_TYPE.NTAUTH.toString(),
+                    useNtAuth);
 
             final ServerActionParameter putSAP = new ServerActionParameter<String>(WebDavTunnelAction.PARAMETER_TYPE.PUT
                             .toString(),
@@ -149,10 +157,18 @@ public class WebDavHelper {
             final String webDavDirectory) {
         if ((fileName != null) && (fileName.length() > 0)) {
             try {
-                final ServerActionParameter proxySAP = new ServerActionParameter<Proxy>(WebDavTunnelAction.PARAMETER_TYPE.PROXY.toString(), proxy);
-                final ServerActionParameter usernameSAP = new ServerActionParameter<String>(WebDavTunnelAction.PARAMETER_TYPE.USERNAME.toString(), username);
-                final ServerActionParameter passwordSAP = new ServerActionParameter<String>(WebDavTunnelAction.PARAMETER_TYPE.PASSWORD.toString(), password);
-                final ServerActionParameter ntAuthSAP = new ServerActionParameter<Boolean>(WebDavTunnelAction.PARAMETER_TYPE.NTAUTH.toString(), useNtAuth);
+                final ServerActionParameter proxySAP = new ServerActionParameter<Proxy>(
+                        WebDavTunnelAction.PARAMETER_TYPE.PROXY.toString(),
+                        proxy);
+                final ServerActionParameter usernameSAP = new ServerActionParameter<String>(
+                        WebDavTunnelAction.PARAMETER_TYPE.USERNAME.toString(),
+                        username);
+                final ServerActionParameter passwordSAP = new ServerActionParameter<String>(
+                        WebDavTunnelAction.PARAMETER_TYPE.PASSWORD.toString(),
+                        password);
+                final ServerActionParameter ntAuthSAP = new ServerActionParameter<Boolean>(
+                        WebDavTunnelAction.PARAMETER_TYPE.NTAUTH.toString(),
+                        useNtAuth);
 
                 final ServerActionParameter deleteSAP = new ServerActionParameter<String>(
                         WebDavTunnelAction.PARAMETER_TYPE.DELETE.toString(),
@@ -188,10 +204,18 @@ public class WebDavHelper {
      */
     public InputStream getFileFromWebDAV(final String fileName,
             final String webDavDirectory) throws Exception {
-        final ServerActionParameter proxySAP = new ServerActionParameter<Proxy>(WebDavTunnelAction.PARAMETER_TYPE.PROXY.toString(), proxy);
-        final ServerActionParameter usernameSAP = new ServerActionParameter<String>(WebDavTunnelAction.PARAMETER_TYPE.USERNAME.toString(), username);
-        final ServerActionParameter passwordSAP = new ServerActionParameter<String>(WebDavTunnelAction.PARAMETER_TYPE.PASSWORD.toString(), password);
-        final ServerActionParameter ntAuthSAP = new ServerActionParameter<Boolean>(WebDavTunnelAction.PARAMETER_TYPE.NTAUTH.toString(), useNtAuth);
+        final ServerActionParameter proxySAP = new ServerActionParameter<Proxy>(WebDavTunnelAction.PARAMETER_TYPE.PROXY
+                        .toString(),
+                proxy);
+        final ServerActionParameter usernameSAP = new ServerActionParameter<String>(
+                WebDavTunnelAction.PARAMETER_TYPE.USERNAME.toString(),
+                username);
+        final ServerActionParameter passwordSAP = new ServerActionParameter<String>(
+                WebDavTunnelAction.PARAMETER_TYPE.PASSWORD.toString(),
+                password);
+        final ServerActionParameter ntAuthSAP = new ServerActionParameter<Boolean>(
+                WebDavTunnelAction.PARAMETER_TYPE.NTAUTH.toString(),
+                useNtAuth);
 
         final String encodedFileName = WebDavHelper.encodeURL(fileName);
         final ServerActionParameter getSAP = new ServerActionParameter<String>(WebDavTunnelAction.PARAMETER_TYPE.GET
