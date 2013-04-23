@@ -11,24 +11,30 @@
  */
 package de.cismet.cids.custom.objecteditors.utils;
 
+import Sirius.navigator.connection.SessionManager;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-
-import org.xhtmlrenderer.css.style.Length;
 
 import java.awt.Component;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
 import java.net.URLEncoder;
 
 import javax.swing.ProgressMonitorInputStream;
 
-import de.cismet.security.WebDavClient;
+import de.cismet.cids.custom.wunda_blau.search.actions.WebDavTunnelAction;
+
+import de.cismet.cids.server.actions.ServerActionParameter;
+
+import de.cismet.netutil.Proxy;
 
 /**
  * DOCUMENT ME!
@@ -41,6 +47,31 @@ public class WebDavHelper {
     //~ Static fields/initializers ---------------------------------------------
 
     private static Logger LOG = Logger.getLogger(WebDavHelper.class);
+    public static final String WEBDAV_OVER_TUNNEL = "webDavTunnelAction";
+
+    //~ Instance fields --------------------------------------------------------
+
+    final Proxy proxy;
+    final String username;
+    final String password;
+    final boolean useNtAuth;
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new WebDavHelper object.
+     *
+     * @param  proxy      DOCUMENT ME!
+     * @param  username   DOCUMENT ME!
+     * @param  password   DOCUMENT ME!
+     * @param  useNtAuth  DOCUMENT ME!
+     */
+    public WebDavHelper(final Proxy proxy, final String username, final String password, final boolean useNtAuth) {
+        this.proxy = proxy;
+        this.username = username;
+        this.password = password;
+        this.useNtAuth = useNtAuth;
+    }
 
     //~ Methods ----------------------------------------------------------------
 
@@ -68,22 +99,39 @@ public class WebDavHelper {
      * @param   fileName         DOCUMENT ME!
      * @param   toUpload         DOCUMENT ME!
      * @param   webDavDirectory  DOCUMENT ME!
-     * @param   webDavClient     DOCUMENT ME!
      * @param   parent           DOCUMENT ME!
      *
-     * @throws  IOException  DOCUMENT ME!
+     * @throws  Exception  DOCUMENT ME!
      */
-    public static void uploadFileToWebDAV(final String fileName,
+    public void uploadFileToWebDAV(final String fileName,
             final File toUpload,
             final String webDavDirectory,
-            final WebDavClient webDavClient,
-            final Component parent) throws IOException {
+            final Component parent) throws Exception {
         final BufferedInputStream bfis = new BufferedInputStream(new ProgressMonitorInputStream(
                     parent,
                     "Bild wird übertragen...",
                     new FileInputStream(toUpload)));
+        final byte[] bytes = IOUtils.toByteArray(bfis);
         try {
-            webDavClient.put(webDavDirectory + encodeURL(fileName), bfis);
+            final ServerActionParameter proxySAP = new ServerActionParameter<Proxy>(WebDavTunnelAction.PARAMETER_TYPE.PROXY.toString(), proxy);
+            final ServerActionParameter usernameSAP = new ServerActionParameter<String>(WebDavTunnelAction.PARAMETER_TYPE.USERNAME.toString(), username);
+            final ServerActionParameter passwordSAP = new ServerActionParameter<String>(WebDavTunnelAction.PARAMETER_TYPE.PASSWORD.toString(), password);
+            final ServerActionParameter ntAuthSAP = new ServerActionParameter<Boolean>(WebDavTunnelAction.PARAMETER_TYPE.NTAUTH.toString(), useNtAuth);
+
+            final ServerActionParameter putSAP = new ServerActionParameter<String>(WebDavTunnelAction.PARAMETER_TYPE.PUT
+                            .toString(),
+                    webDavDirectory
+                            + encodeURL(fileName));
+            SessionManager.getProxy()
+                    .executeTask(
+                        WEBDAV_OVER_TUNNEL,
+                        "WUNDA_BLAU",
+                        bytes,
+                        putSAP,
+                        proxySAP,
+                        usernameSAP,
+                        passwordSAP,
+                        ntAuthSAP);
         } finally {
             IOUtils.closeQuietly(bfis);
         }
@@ -93,23 +141,74 @@ public class WebDavHelper {
      * DOCUMENT ME!
      *
      * @param   fileName         DOCUMENT ME!
-     * @param   webDavClient     DOCUMENT ME!
      * @param   webDavDirectory  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static boolean deleteFileFromWebDAV(final String fileName,
-            final WebDavClient webDavClient,
+    public boolean deleteFileFromWebDAV(final String fileName,
             final String webDavDirectory) {
         if ((fileName != null) && (fileName.length() > 0)) {
             try {
-                webDavClient.delete(webDavDirectory + encodeURL(fileName));
+                final ServerActionParameter proxySAP = new ServerActionParameter<Proxy>(WebDavTunnelAction.PARAMETER_TYPE.PROXY.toString(), proxy);
+                final ServerActionParameter usernameSAP = new ServerActionParameter<String>(WebDavTunnelAction.PARAMETER_TYPE.USERNAME.toString(), username);
+                final ServerActionParameter passwordSAP = new ServerActionParameter<String>(WebDavTunnelAction.PARAMETER_TYPE.PASSWORD.toString(), password);
+                final ServerActionParameter ntAuthSAP = new ServerActionParameter<Boolean>(WebDavTunnelAction.PARAMETER_TYPE.NTAUTH.toString(), useNtAuth);
+
+                final ServerActionParameter deleteSAP = new ServerActionParameter<String>(
+                        WebDavTunnelAction.PARAMETER_TYPE.DELETE.toString(),
+                        webDavDirectory
+                                + encodeURL(fileName));
+                SessionManager.getProxy()
+                        .executeTask(
+                            WEBDAV_OVER_TUNNEL,
+                            "WUNDA_BLAU",
+                            null,
+                            deleteSAP,
+                            proxySAP,
+                            usernameSAP,
+                            passwordSAP,
+                            ntAuthSAP);
                 return true;
             } catch (Exception ex) {
                 LOG.error(ex, ex);
             }
         }
         return false;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   fileName         DOCUMENT ME!
+     * @param   webDavDirectory  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public InputStream getFileFromWebDAV(final String fileName,
+            final String webDavDirectory) throws Exception {
+        final ServerActionParameter proxySAP = new ServerActionParameter<Proxy>(WebDavTunnelAction.PARAMETER_TYPE.PROXY.toString(), proxy);
+        final ServerActionParameter usernameSAP = new ServerActionParameter<String>(WebDavTunnelAction.PARAMETER_TYPE.USERNAME.toString(), username);
+        final ServerActionParameter passwordSAP = new ServerActionParameter<String>(WebDavTunnelAction.PARAMETER_TYPE.PASSWORD.toString(), password);
+        final ServerActionParameter ntAuthSAP = new ServerActionParameter<Boolean>(WebDavTunnelAction.PARAMETER_TYPE.NTAUTH.toString(), useNtAuth);
+
+        final String encodedFileName = WebDavHelper.encodeURL(fileName);
+        final ServerActionParameter getSAP = new ServerActionParameter<String>(WebDavTunnelAction.PARAMETER_TYPE.GET
+                        .toString(),
+                webDavDirectory
+                        + encodedFileName);
+        final byte[] result = (byte[])SessionManager.getProxy()
+                    .executeTask(
+                            WebDavHelper.WEBDAV_OVER_TUNNEL,
+                            "WUNDA_BLAU",
+                            null,
+                            getSAP,
+                            proxySAP,
+                            usernameSAP,
+                            passwordSAP,
+                            ntAuthSAP);
+        return new ByteArrayInputStream(result);
     }
 
     /**
