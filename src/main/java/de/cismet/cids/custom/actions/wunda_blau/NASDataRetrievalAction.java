@@ -116,5 +116,4 @@ public class NASDataRetrievalAction extends AbstractAction implements CommonFeat
                         new NASDownload("NAS-Download", "", "nas_daten", ".xml", s, f.getGeometry()));
         }
     }
-
 }
