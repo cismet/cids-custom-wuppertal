@@ -101,17 +101,45 @@ public class NASDownload extends AbstractDownload {
         final ServerActionParameter paramGeom = new ServerActionParameter(NasDataQueryAction.PARAMETER_TYPE.GEOMETRY
                         .toString(),
                 geometry);
+        ServerActionParameter paramMethod = new ServerActionParameter(NasDataQueryAction.PARAMETER_TYPE.METHOD
+                        .toString(),
+                NasDataQueryAction.METHOD_TYPE.ADD);
+        String orderId = null;
         try {
-            content = (byte[])SessionManager.getProxy()
+            orderId = (String)SessionManager.getProxy()
                         .executeTask(
                                 SEVER_ACTION,
                                 "WUNDA_BLAU",
                                 null,
                                 paramTemplate,
-                                paramGeom);
+                                paramGeom,
+                                paramMethod);
         } catch (ConnectionException ex) {
             Exceptions.printStackTrace(ex);
         }
+        status = State.WAITING;
+        stateChanged();
+        paramMethod = new ServerActionParameter(NasDataQueryAction.PARAMETER_TYPE.METHOD.toString(),
+                NasDataQueryAction.METHOD_TYPE.GET);
+
+        final ServerActionParameter paramOrderId = new ServerActionParameter(NasDataQueryAction.PARAMETER_TYPE.ORDER_ID
+                        .toString(),
+                orderId);
+        try {
+            while (content == null) {
+                content = (byte[])SessionManager.getProxy()
+                            .executeTask(
+                                    SEVER_ACTION,
+                                    "WUNDA_BLAU",
+                                    null,
+                                    paramOrderId,
+                                    paramMethod);
+            }
+        } catch (ConnectionException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        status = State.RUNNING;
+        stateChanged();
 //        final NASProductGenerator pg = new NASProductGenerator();
 //        content = pg.executeAsynchQuery(template, geometry);
         if ((content == null) || (content.length <= 0)) {
