@@ -19,6 +19,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import de.cismet.cids.custom.nas.NASDownload;
 import de.cismet.cids.custom.wunda_blau.search.actions.NasDataQueryAction;
