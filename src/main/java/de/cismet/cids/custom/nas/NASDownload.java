@@ -16,6 +16,7 @@ import Sirius.navigator.exception.ConnectionException;
 
 import com.vividsolutions.jts.geom.Geometry;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -41,12 +42,12 @@ public class NASDownload extends AbstractDownload {
 
     //~ Instance fields --------------------------------------------------------
 
+    protected String filename = null;
     private NasDataQueryAction.PRODUCT_TEMPLATE template;
     private Geometry geometry;
     private String orderId;
     private transient byte[] content;
     private boolean omitSendingRequest = false;
-    private String filename = null;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -64,6 +65,7 @@ public class NASDownload extends AbstractDownload {
         status = State.WAITING;
         this.directory = "";
         filename = orderId;
+        fileToSaveTo = new File("" + System.currentTimeMillis());
 //        determineDestinationFile(orderId, EXTENSION);
     }
 
@@ -84,6 +86,7 @@ public class NASDownload extends AbstractDownload {
         this.title = title;
         this.directory = directory;
         status = State.WAITING;
+        fileToSaveTo = new File("" + System.currentTimeMillis());
 //        determineDestinationFile(STANDARD_FILE_NAME, EXTENSION);
     }
 
@@ -106,8 +109,15 @@ public class NASDownload extends AbstractDownload {
         this.title = title;
         this.directory = directory;
         status = State.WAITING;
+        fileToSaveTo = new File("" + System.currentTimeMillis());
         this.filename = filename;
 //        determineDestinationFile(filename, EXTENSION);
+    }
+    /**
+     * Creates a new NASDownload object.
+     */
+    private NASDownload() {
+        fileToSaveTo = new File("" + System.currentTimeMillis());
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -122,6 +132,11 @@ public class NASDownload extends AbstractDownload {
         stateChanged();
         if (!omitSendingRequest) {
             orderId = sendNasRequest();
+            if (orderId == null) {
+                log.error("nas server request returned no orderId, cannot continue with NAS download");
+                this.status = State.COMPLETED_WITH_ERROR;
+                stateChanged();
+            }
             if (filename == null) {
                 filename = orderId;
             }
@@ -139,7 +154,7 @@ public class NASDownload extends AbstractDownload {
             log.info("Downloaded content seems to be empty..");
 
             if (status == State.RUNNING) {
-                status = State.COMPLETED;
+                status = State.COMPLETED_WITH_ERROR;
                 stateChanged();
             }
             return;
@@ -198,7 +213,7 @@ public class NASDownload extends AbstractDownload {
                                 paramTemplate,
                                 paramGeom,
                                 paramMethod);
-        } catch (ConnectionException ex) {
+        } catch (Exception ex) {
             log.error("error during enqueuing nas server request", ex);
         }
         return null;
@@ -228,7 +243,7 @@ public class NASDownload extends AbstractDownload {
                                     paramOrderId,
                                     paramMethod);
             }
-        } catch (ConnectionException ex) {
+        } catch (Exception ex) {
             log.error("error during pulling nas result from server", ex);
         }
         return result;
