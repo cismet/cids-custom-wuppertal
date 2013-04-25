@@ -15,18 +15,13 @@ import com.vividsolutions.jts.geom.Geometry;
 
 import org.openide.util.lookup.ServiceProvider;
 
-import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
 
 import de.cismet.cids.custom.nas.NASDownload;
+import de.cismet.cids.custom.wunda_blau.search.actions.NasDataQueryAction;
 
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.features.CommonFeatureAction;
@@ -103,17 +98,23 @@ public class NASDataRetrievalAction extends AbstractAction implements CommonFeat
                 "Komplett");
         final Geometry g = f.getGeometry();
         CrsTransformer.transformToGivenCrs(g, DEFAULT_CRS);
-
+        NasDataQueryAction.PRODUCT_TEMPLATE template;
+        if (s.equals("Komplett")) {
+            template = NasDataQueryAction.PRODUCT_TEMPLATE.KOMPLETT;
+        } else if (s.equals("Ohne Eigentuemer")) {
+            template = NasDataQueryAction.PRODUCT_TEMPLATE.OHNE_EIGENTUEMER;
+        } else {
+            template = NasDataQueryAction.PRODUCT_TEMPLATE.POINTS;
+        }
         if (DownloadManagerDialog.showAskingForUserTitle(
                         CismapBroker.getInstance().getMappingComponent())) {
-            final String jobname = (DownloadManagerDialog.getJobname() != null) ? DownloadManagerDialog.getJobname()
-                                                                                : "foo";
+            final String jobname = (!DownloadManagerDialog.getJobname().equals("")) ? DownloadManagerDialog
+                            .getJobname() : null;
             DownloadManager.instance().add(
-                new NASDownload("NAS-Download", "", jobname, ".xml", s, f.getGeometry()));
+                new NASDownload("NAS-Download", jobname, "", template, f.getGeometry()));
         } else {
-            DownloadManager.instance()
-                    .add(
-                        new NASDownload("NAS-Download", "", "nas_daten", ".xml", s, f.getGeometry()));
+            DownloadManager.instance().add(
+                new NASDownload("NAS-Download", "", template, f.getGeometry()));
         }
     }
 }
