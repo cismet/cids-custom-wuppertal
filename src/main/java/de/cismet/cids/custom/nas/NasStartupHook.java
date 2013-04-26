@@ -66,7 +66,12 @@ public class NasStartupHook implements StartupHook {
                                             null,
                                             paramMethod);
                     } catch (ConnectionException ex) {
-                        Exceptions.printStackTrace(ex);
+                        log.error("error while getting the list of undelivered nas orders from server",ex);
+                        return;
+                    }
+                    if ((openOrderIds == null) || openOrderIds.isEmpty()) {
+                        log.info("no pending nas orders found for the logged in user");
+                        return;
                     }
                     final StringBuilder logMessageBuilder = new StringBuilder();
                     for (final String s : openOrderIds) {

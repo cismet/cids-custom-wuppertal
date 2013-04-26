@@ -136,6 +136,7 @@ public class NASDownload extends AbstractDownload {
                 log.error("nas server request returned no orderId, cannot continue with NAS download");
                 this.status = State.COMPLETED_WITH_ERROR;
                 stateChanged();
+                return;
             }
             if (filename == null) {
                 filename = orderId;
