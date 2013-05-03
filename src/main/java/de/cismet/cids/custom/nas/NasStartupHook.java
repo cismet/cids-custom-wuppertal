@@ -14,7 +14,6 @@ package de.cismet.cids.custom.nas;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 
-import org.openide.util.Exceptions;
 import org.openide.util.lookup.ServiceProvider;
 
 import java.util.HashSet;
@@ -66,7 +65,7 @@ public class NasStartupHook implements StartupHook {
                                             null,
                                             paramMethod);
                     } catch (ConnectionException ex) {
-                        log.error("error while getting the list of undelivered nas orders from server",ex);
+                        log.error("error while getting the list of undelivered nas orders from server", ex);
                         return;
                     }
                     if ((openOrderIds == null) || openOrderIds.isEmpty()) {
