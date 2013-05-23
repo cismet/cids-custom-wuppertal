@@ -117,6 +117,10 @@
         "name":"eigener Gebrauch (einmalig)",
         "key":"eigG",
         "description":"-"
+    },{
+        "name":"Wiederverkauf (einmalig)",
+        "key":"WV ein",
+        "description":"-"
     }],
     "products":[{
         "name":"Flurstücksnachweis",
@@ -126,7 +130,8 @@
             "eigG":0.75,
             "VU aL":0.0,
             "VU s":0.75,
-            "VU hV":0.0
+            "VU hV":0.0,            
+            "WV ein":1.0
         },
         "prices":{
             "ea":10.0
@@ -139,7 +144,8 @@
             "eigG":0.75,
             "VU aL":0.0,
             "VU s":0.75,
-            "VU hV":0.0
+            "VU hV":0.0,
+            "WV ein":1.0
         },
         "prices":{
             "ea":10.0
@@ -152,7 +158,8 @@
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
-            "VU hV":0.75
+            "VU hV":0.75,
+            "WV ein":1.0
         },
         "prices":{
             "ea":11.0
@@ -165,7 +172,8 @@
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
-            "VU hV":0.75
+            "VU hV":0.75,
+            "WV ein":1.0
         },
         "prices":{
             "ea":20.0
@@ -178,7 +186,8 @@
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
-            "VU hV":0.75
+            "VU hV":0.75,
+            "WV ein":1.0
         },
         "prices":{
             "ea":22.0
@@ -191,7 +200,8 @@
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
-            "VU hV":0.75
+            "VU hV":0.75,
+            "WV ein":1.0
         },
         "prices":{
             "ea":10.0
@@ -204,7 +214,8 @@
             "eigG":0.75,
             "VU aL":0.0,
             "VU s":0.75,
-            "VU hV":0.0
+            "VU hV":0.0,
+            "WV ein":1.0
         },
         "prices":{
             "eakarte_a3":20.0
@@ -217,7 +228,8 @@
             "eigG":0.75,
             "VU aL":0.0,
             "VU s":0.75,
-            "VU hV":0.0
+            "VU hV":0.0,
+            "WV ein":1.0
         },
         "prices":{
             "eakarte_a3":20.0
@@ -230,7 +242,8 @@
             "eigG":0.75,
             "VU aL":0.0,
             "VU s":0.75,
-            "VU hV":0.0
+            "VU hV":0.0,
+            "WV ein":1.0
         },
         "prices":{
             "eakarte_a2-a0":40.0
@@ -243,7 +256,8 @@
             "eigG":0.75,
             "VU aL":0.0,
             "VU s":0.75,
-            "VU hV":0.0
+            "VU hV":0.0,
+            "WV ein":1.0
         },
         "prices":{
             "eakarte_a2-a0":40.0
@@ -256,7 +270,8 @@
             "eigG":0.75,
             "VU aL":0.0,
             "VU s":0.75,
-            "VU hV":0.0
+            "VU hV":0.0,
+            "WV ein":1.0
         },
         "prices":{
             "eakarte_a2-a0":40.0
@@ -269,7 +284,8 @@
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
-            "VU hV":0.75
+            "VU hV":0.75,
+            "WV ein":1.0
         },
         "prices":{
             "eakarte_a3":22.0
@@ -282,7 +298,8 @@
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
-            "VU hV":0.75
+            "VU hV":0.75,
+            "WV ein":1.0
         },
         "prices":{
             "eakarte_a3":22.0
@@ -295,7 +312,8 @@
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
-            "VU hV":0.75
+            "VU hV":0.75,
+            "WV ein":1.0
         },
         "prices":{
             "eakarte_a2-a0":44.0
@@ -308,7 +326,8 @@
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
-            "VU hV":0.75
+            "VU hV":0.75,
+            "WV ein":1.0
         },
         "prices":{
             "eakarte_a2-a0":44.0
@@ -321,7 +340,8 @@
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
-            "VU hV":0.75
+            "VU hV":0.75,
+            "WV ein":1.0
         },
         "prices":{
             "eakarte_a2-a0":44.0
@@ -334,7 +354,8 @@
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
-            "VU hV":0.75
+            "VU hV":0.75,
+            "WV ein":1.0
         },
         "prices":{
             "eakarte_a3":20.0
@@ -347,7 +368,8 @@
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
-            "VU hV":0.75
+            "VU hV":0.75,
+            "WV ein":1.0
         },
         "prices":{
             "eakarte_a3":20.0
@@ -360,7 +382,8 @@
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
-            "VU hV":0.75
+            "VU hV":0.75,
+            "WV ein":1.0
         },
         "prices":{
             "eakarte_a2-a0":40.0
@@ -373,7 +396,8 @@
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
-            "VU hV":0.75
+            "VU hV":0.75,
+            "WV ein":1.0
         },
         "prices":{
             "eakarte_a2-a0":40.0
@@ -386,7 +410,8 @@
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
-            "VU hV":0.75
+            "VU hV":0.75,
+            "WV ein":1.0
         },
         "prices":{
             "eakarte_a2-a0":40.0
@@ -399,7 +424,8 @@
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
-            "VU hV":0.75
+            "VU hV":0.75,
+            "WV ein":1.0
         },
         "prices":{
             "eakarte_a3":15.0
@@ -412,7 +438,8 @@
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
-            "VU hV":0.75
+            "VU hV":0.75,
+            "WV ein":1.0
         },
         "prices":{
             "eakarte_a3":15.0
@@ -425,7 +452,8 @@
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
-            "VU hV":0.75
+            "VU hV":0.75,
+            "WV ein":1.0
         },
         "prices":{
             "eakarte_a2-a0":30.0
@@ -438,7 +466,8 @@
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
-            "VU hV":0.75
+            "VU hV":0.75,
+            "WV ein":1.0
         },
         "prices":{
             "eakarte_a2-a0":30.0
@@ -451,7 +480,8 @@
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
-            "VU hV":0.75
+            "VU hV":0.75,
+            "WV ein":1.0
         },
         "prices":{
             "eakarte_a2-a0":30.0
@@ -464,7 +494,8 @@
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
-            "VU hV":0.75
+            "VU hV":0.75,
+            "WV ein":1.0
         },
         "prices":{
             "eakarte_a3":22.0
@@ -477,7 +508,8 @@
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
-            "VU hV":0.75
+            "VU hV":0.75,
+            "WV ein":1.0
         },
         "prices":{
             "eakarte_a3":22.0
@@ -490,7 +522,8 @@
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
-            "VU hV":0.75
+            "VU hV":0.75,
+            "WV ein":1.0
         },
         "prices":{
             "eakarte_a2-a0":44.0
@@ -503,7 +536,8 @@
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
-            "VU hV":0.75
+            "VU hV":0.75,
+            "WV ein":1.0
         },
         "prices":{
             "eakarte_a2-a0":44.0
@@ -516,7 +550,8 @@
             "eigG":0.75,
             "VU aL":0.75,
             "VU s":0.75,
-            "VU hV":0.75
+            "VU hV":0.75,
+            "WV ein":1.0
         },
         "prices":{
             "eakarte_a2-a0":44.0
@@ -529,14 +564,15 @@
             "eigG":0.5,
             "VU aL":0.0,
             "VU s":0.5,
-            "VU hV":0.0
+            "VU hV":0.0,
+            "WV ein":1.0
         },
         "prices":{
-            "eapkt_1000":0.1,
-            "eapkt_1001-10000":0.05,
-            "eapkt_10001-100000":0.025,
-            "eapkt_100001-1000000":0.0125,
-            "eapkt_1000001":0.00625
+            "eapkt_1000":0.2,
+            "eapkt_1001-10000":0.1,
+            "eapkt_10001-100000":0.05,
+            "eapkt_100001-1000000":0.025,
+            "eapkt_1000001":0.0125
         }
     },{
         "name":"Punktnachweis (PDF)",
@@ -546,10 +582,571 @@
             "eigG":0.75,
             "VU aL":0.0,
             "VU s":0.75,
-            "VU hV":0.0
+            "VU hV":0.0,
+            "WV ein":1.0
         },
         "prices":{
             "eafifty":20.0
+        }
+    },{
+        "name":"Digitale Grundkarte (DGK) DIN A4",
+        "id":"dgkkom4",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte DGK; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a3":15.0
+        }
+    },{
+        "name":"Digitale Grundkarte (DGK) DIN A3",
+        "id":"dgkkom3",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte DGK; Formate DINA3 Hochformat oder DINA3 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a3":15.0
+        }
+    },{
+        "name":"Digitale Grundkarte (DGK) DIN A2",
+        "id":"dgkkom2",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte DGK; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a2-a0":30.0
+        }
+    },{
+        "name":"Digitale Grundkarte (DGK) DIN A1",
+        "id":"dgkkom1",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte DGK; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a2-a0":30.0
+        }
+    },{
+        "name":"Digitale Grundkarte (DGK) DIN A0",
+        "id":"dgkkom0",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte DGK; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a2-a0":30.0
+        }
+    },{
+        "name":"Orthofoto DIN A4",
+        "id":"ofkom4",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "discounts":{
+            "eigG":1.0,
+            "VU aL":1.0,
+            "VU s":1.0,
+            "VU hV":1.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a3":15.0
+        }
+    },{
+        "name":"Orthofoto DIN A3",
+        "id":"ofkom3",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto; Formate DINA3 Hochformat oder DINA3 Querformat",
+        "discounts":{
+            "eigG":1.0,
+            "VU aL":1.0,
+            "VU s":1.0,
+            "VU hV":1.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a3":15.0
+        }
+    },{
+        "name":"Orthofoto DIN A2",
+        "id":"ofkom2",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "discounts":{
+            "eigG":1.0,
+            "VU aL":1.0,
+            "VU s":1.0,
+            "VU hV":1.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a2-a0":30.0
+        }
+    },{
+        "name":"Orthofoto DIN A1",
+        "id":"ofkom1",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "discounts":{
+            "eigG":1.0,
+            "VU aL":1.0,
+            "VU s":1.0,
+            "VU hV":1.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a2-a0":30.0
+        }
+    },{
+        "name":"Orthofoto DIN A0",
+        "id":"ofkom0",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "discounts":{
+            "eigG":1.0,
+            "VU aL":1.0,
+            "VU s":1.0,
+            "VU hV":1.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a2-a0":30.0
+        }
+    },{
+        "name":"NivP-Übersicht DIN A4",
+        "id":"nivpükom4",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte NivP-Übersicht; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "discounts":{
+            "eigG":0.0,
+            "VU aL":0.0,
+            "VU s":0.0,
+            "VU hV":0.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a3":10.0
+        }
+    },{
+        "name":"NivP-Übersicht DIN A3",
+        "id":"nivpükom3",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte NivP-Übersicht; Formate DINA3 Hochformat oder DINA3 Querformat",
+        "discounts":{
+            "eigG":0.0,
+            "VU aL":0.0,
+            "VU s":0.0,
+            "VU hV":0.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a3":10.0
+        }
+    },{
+        "name":"NivP-Übersicht DIN A2",
+        "id":"nivpükom2",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte NivP-Übersicht; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "discounts":{
+            "eigG":0.0,
+            "VU aL":0.0,
+            "VU s":0.0,
+            "VU hV":0.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a2-a0":20.0
+        }
+    },{
+        "name":"NivP-Übersicht DIN A1",
+        "id":"nivpükom1",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte NivP-Übersicht; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "discounts":{
+            "eigG":0.0,
+            "VU aL":0.0,
+            "VU s":0.0,
+            "VU hV":0.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a2-a0":20.0
+        }
+    },{
+        "name":"NivP-Übersicht DIN A0",
+        "id":"nivpükom0",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte NivP-Übersicht; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "discounts":{
+            "eigG":0.0,
+            "VU aL":0.0,
+            "VU s":0.0,
+            "VU hV":0.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a2-a0":20.0
+        }
+    },{
+        "name":"AP-Übersicht DIN A4",
+        "id":"apükom4",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte AP-Übersicht; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a3":10.0
+        }
+    },{
+        "name":"AP-Übersicht DIN A3",
+        "id":"apükom3",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte AP-Übersicht; Formate DINA3 Hochformat oder DINA3 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a3":10.0
+        }
+    },{
+        "name":"AP-Übersicht DIN A2",
+        "id":"apükom2",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte AP-Übersicht; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a2-a0":20.0
+        }
+    },{
+        "name":"AP-Übersicht DIN A1",
+        "id":"apükom1",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte AP-Übersicht; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a2-a0":20.0
+        }
+    },{
+        "name":"AP-Übersicht DIN A0",
+        "id":"apükom0",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte AP-Übersicht; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a2-a0":20.0
+        }
+    },{
+        "name":"Punktnummerierungsübersicht (PNÜ) DIN A4",
+        "id":"pnükom4",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Punktnummerierungsübersicht; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a3":10.0
+        }
+    },{
+        "name":"Punktnummerierungsübersicht (PNÜ) DIN A3",
+        "id":"pnükom3",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Punktnummerierungsübersicht; Formate DINA3 Hochformat oder DINA3 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a3":10.0
+        }
+    },{
+        "name":"Punktnummerierungsübersicht (PNÜ) DIN A2",
+        "id":"pnükom2",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Punktnummerierungsübersicht; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a2-a0":20.0
+        }
+    },{
+        "name":"Punktnummerierungsübersicht (PNÜ) DIN A1",
+        "id":"pnükom1",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Punktnummerierungsübersicht; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a2-a0":20.0
+        }
+    },{
+        "name":"Punktnummerierungsübersicht (PNÜ) DIN A0",
+        "id":"pnükom0",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Punktnummerierungsübersicht; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.0,
+            "VU s":0.75,
+            "VU hV":0.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a2-a0":20.0
+        }
+    },{
+        "name":"Digitale Grundkarte mit Höhenlinien DIN A4",
+        "id":"dgkhkom4",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte DGK mit Höhenlinien; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "discounts":{
+            "eigG":1.0,
+            "VU aL":1.0,
+            "VU s":1.0,
+            "VU hV":1.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a3":15.0
+        }
+    },{
+        "name":"Digitale Grundkarte mit Höhenlinien DIN A3",
+        "id":"dgkhkom3",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte DGK mit Höhenlinien; Formate DINA3 Hochformat oder DINA3 Querformat",
+        "discounts":{
+            "eigG":1.0,
+            "VU aL":1.0,
+            "VU s":1.0,
+            "VU hV":1.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a3":15.0
+        }
+    },{
+        "name":"Digitale Grundkarte mit Höhenlinien DIN A2",
+        "id":"dgkhkom2",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte DGK mit Höhenlinien; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "discounts":{
+            "eigG":1.0,
+            "VU aL":1.0,
+            "VU s":1.0,
+            "VU hV":1.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a2-a0":30.0
+        }
+    },{
+        "name":"Digitale Grundkarte mit Höhenlinien DIN A1",
+        "id":"dgkhkom1",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte DGK mit Höhenlinien; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "discounts":{
+            "eigG":1.0,
+            "VU aL":1.0,
+            "VU s":1.0,
+            "VU hV":1.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a2-a0":30.0
+        }
+    },{
+        "name":"Digitale Grundkarte mit Höhenlinien DIN A0",
+        "id":"dgkhkom0",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte DGK mit Höhenlinien; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "discounts":{
+            "eigG":1.0,
+            "VU aL":1.0,
+            "VU s":1.0,
+            "VU hV":1.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a2-a0":30.0
+        }
+    },{
+        "name":"Stadtgrundkarte mit Höhenlinien DIN A4",
+        "id":"skhkom4",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Stadtgrundkarte mit Höhenlinien; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "discounts":{
+            "eigG":1.0,
+            "VU aL":1.0,
+            "VU s":1.0,
+            "VU hV":1.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a3":15.0
+        }
+    },{
+        "name":"Stadtgrundkarte mit Höhenlinien DIN A3",
+        "id":"skhkom3",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Stadtgrundkarte mit Höhenlinien; Formate DINA3 Hochformat oder DINA3 Querformat",
+        "discounts":{
+            "eigG":1.0,
+            "VU aL":1.0,
+            "VU s":1.0,
+            "VU hV":1.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a3":15.0
+        }
+    },{
+        "name":"Stadtgrundkarte mit Höhenlinien DIN A2",
+        "id":"skhkom2",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Stadtgrundkarte mit Höhenlinien; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "discounts":{
+            "eigG":1.0,
+            "VU aL":1.0,
+            "VU s":1.0,
+            "VU hV":1.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a2-a0":30.0
+        }
+    },{
+        "name":"Stadtgrundkarte mit Höhenlinien DIN A1",
+        "id":"skhkom1",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Stadtgrundkarte mit Höhenlinien; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "discounts":{
+            "eigG":1.0,
+            "VU aL":1.0,
+            "VU s":1.0,
+            "VU hV":1.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a2-a0":30.0
+        }
+    },{
+        "name":"Stadtgrundkarte mit Höhenlinien DIN A0",
+        "id":"skhkom0",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Stadtgrundkarte mit Höhenlinien; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "discounts":{
+            "eigG":1.0,
+            "VU aL":1.0,
+            "VU s":1.0,
+            "VU hV":1.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a2-a0":30.0
+        }
+    },{
+        "name":"Orthofoto mit Katasterdarstellung DIN A4",
+        "id":"ofkkom4",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto mit Katasterdarstellung; Formate DINA4 Hochformat oder DINA4 Querformat",
+        "discounts":{
+            "eigG":1.0,
+            "VU aL":1.0,
+            "VU s":1.0,
+            "VU hV":1.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a3":15.0
+        }
+    },{
+        "name":"Orthofoto mit Katasterdarstellung DIN A3",
+        "id":"ofkkom3",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto mit Katasterdarstellung; Formate DINA3 Hochformat oder DINA3 Querformat",
+        "discounts":{
+            "eigG":1.0,
+            "VU aL":1.0,
+            "VU s":1.0,
+            "VU hV":1.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a3":15.0
+        }
+    },{
+        "name":"Orthofoto mit Katasterdarstellung DIN A2",
+        "id":"ofkkom2",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto mit Katasterdarstellung; Formate DINA2 Hochformat oder DINA2 Querformat",
+        "discounts":{
+            "eigG":1.0,
+            "VU aL":1.0,
+            "VU s":1.0,
+            "VU hV":1.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a2-a0":30.0
+        }
+    },{
+        "name":"Orthofoto mit Katasterdarstellung DIN A1",
+        "id":"ofkkom1",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto mit Katasterdarstellung; Formate DINA1 Hochformat oder DINA1 Querformat",
+        "discounts":{
+            "eigG":1.0,
+            "VU aL":1.0,
+            "VU s":1.0,
+            "VU hV":1.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a2-a0":30.0
+        }
+    },{
+        "name":"Orthofoto mit Katasterdarstellung DIN A0",
+        "id":"ofkkom0",
+        "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto mit Katasterdarstellung; Formate DINA0 Hochformat oder DINA0 Querformat",
+        "discounts":{
+            "eigG":1.0,
+            "VU aL":1.0,
+            "VU s":1.0,
+            "VU hV":1.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eakarte_a2-a0":30.0
         }
     },{
         "name":"AP-Karte",
@@ -559,7 +1156,8 @@
             "eigG":0.75,
             "VU aL":0.0,
             "VU s":0.75,
-            "VU hV":0.0
+            "VU hV":0.0,
+            "WV ein":1.0
         },
         "prices":{
             "ea":10.0
@@ -569,10 +1167,11 @@
         "id":"nivppdf",
         "description":"[x] Einzelobjektrenderer Nivellement-Punkte / Bericht erzeugen, Einzelobjektrenderer Nivellement-Punkte / Öffnen [erst nach Umsetzung von bug tracker ID 2650]  und Aggregierender Renderer Nivellement-Punkte / Bericht erzeugen",
         "discounts":{
-            "eigG":0.75,
+            "eigG":0.0,
             "VU aL":0.0,
-            "VU s":0.75,
-            "VU hV":0.0
+            "VU s":0.0,
+            "VU hV":0.0,
+            "WV ein":1.0
         },
         "prices":{
             "ea":10.0
@@ -585,7 +1184,8 @@
             "eigG":0.75,
             "VU aL":0.0,
             "VU s":0.75,
-            "VU hV":0.0
+            "VU hV":0.0,
+            "WV ein":1.0
         },
         "prices":{
             "ea":10.0,
@@ -600,7 +1200,8 @@
             "eigG":0.75,
             "VU aL":0.0,
             "VU s":0.75,
-            "VU hV":0.0
+            "VU hV":0.0,
+            "WV ein":1.0
         },
         "prices":{
             "ea":10.0,
@@ -615,7 +1216,8 @@
             "eigG":0.5,
             "VU aL":0.5,
             "VU s":0.5,
-            "VU hV":0.0
+            "VU hV":0.0,
+            "WV ein":1.0
         },
         "prices":{
             "eaflst_1000":1.98,
@@ -642,7 +1244,8 @@
             "eigG":0.5,
             "VU aL":0.5,
             "VU s":0.5,
-            "VU hV":0.0
+            "VU hV":0.0,
+            "WV ein":1.0
         },
         "prices":{
             "eaflst_1000":1.98,
@@ -664,7 +1267,8 @@
             "eigG":0.5,
             "VU aL":0.5,
             "VU s":0.5,
-            "VU hV":0.5
+            "VU hV":0.5,
+            "WV ein":1.0
         },
         "prices":{
             "eaflst_1000":0.99,
@@ -686,7 +1290,8 @@
             "eigG":0.5,
             "VU aL":0.5,
             "VU s":0.5,
-            "VU hV":0.5
+            "VU hV":0.5,
+            "WV ein":1.0
         },
         "prices":{
             "eaflst_1000":0.495,
@@ -708,7 +1313,8 @@
             "eigG":0.5,
             "VU aL":0.5,
             "VU s":0.5,
-            "VU hV":0.5
+            "VU hV":0.5,
+            "WV ein":1.0
         },
         "prices":{
             "eaqkm":7.5
