@@ -28,6 +28,9 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.editors.BeanInitializer;
+import de.cismet.cids.editors.BeanInitializerProvider;
+import de.cismet.cids.editors.DefaultBeanInitializer;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
@@ -42,7 +45,7 @@ import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
  * @author   thorsten
  * @version  $Revision$, $Date$
  */
-public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled {
+public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled, BeanInitializerProvider {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -3379,6 +3382,44 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
                 800);
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
+        }
+    }
+
+    @Override
+    public BeanInitializer getBeanInitializer() {
+        return new CompleteBeanInitializer(cidsBean);
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class CompleteBeanInitializer extends DefaultBeanInitializer {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new CompleteBeanInitializer object.
+         *
+         * @param  template  DOCUMENT ME!
+         */
+        public CompleteBeanInitializer(final CidsBean template) {
+            super(template);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        protected void processComplexProperty(final CidsBean beanToInit,
+                final String propertyName,
+                final CidsBean complexValueToProcess) throws Exception {
+            final CompleteBeanInitializer subInitializer = new CompleteBeanInitializer(complexValueToProcess);
+            final CidsBean newBean = complexValueToProcess.getMetaObject().getMetaClass().getEmptyInstance().getBean();
+            subInitializer.initializeBean(newBean);
+            beanToInit.setProperty(propertyName, newBean);
         }
     }
 }
