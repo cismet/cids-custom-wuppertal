@@ -18,11 +18,10 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
 
-import org.jdesktop.beansbinding.Binding;
-
 import org.openide.util.Exceptions;
 
-import java.util.List;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
@@ -32,8 +31,6 @@ import de.cismet.cids.editors.BeanInitializer;
 import de.cismet.cids.editors.BeanInitializerProvider;
 import de.cismet.cids.editors.DefaultBeanInitializer;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
-import de.cismet.cids.editors.EditorClosedEvent;
-import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.tools.metaobjectrenderer.Titled;
 
@@ -45,7 +42,9 @@ import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
  * @author   thorsten
  * @version  $Revision$, $Date$
  */
-public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled, BeanInitializerProvider {
+public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled,
+    BeanInitializerProvider,
+    PropertyChangeListener {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -293,6 +292,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled,
         } else {
             cmdAddKart.setVisible(false);
         }
+        cidsBean.addPropertyChangeListener(this);
     }
 
     /**
@@ -3243,12 +3243,6 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled,
     private void cmdAddKartActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdAddKartActionPerformed
         try {
             cidsBean.fillEmptyFieldWithEmptySubInstance("kart");
-            tbpAdditionalInfo.addTab(
-                " Kartographie ",
-                new javax.swing.ImageIcon(
-                    getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wbf_vorgang.png")),
-                panKartographie);                                                  // NOI18N
-            cmdAddKart.setVisible(false);
         } catch (Exception e) {
             log.error("Error beim Erzeugen eines Kart Objektes", e);
         }
@@ -3262,12 +3256,6 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled,
     private void cmdAddSgkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdAddSgkActionPerformed
         try {
             cidsBean.fillEmptyFieldWithEmptySubInstance("alkis");
-            tbpAdditionalInfo.addTab(
-                " ALKIS ",
-                new javax.swing.ImageIcon(
-                    getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wbf_vorgang.png")),
-                panStadtgrundkarte);                                              // NOI18N
-            cmdAddSgk.setVisible(false);
         } catch (Exception e) {
             log.error("Error beim Erzeugen eines Alkis Objektes", e);
         }
@@ -3362,6 +3350,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled,
     public void dispose() {
         super.dispose();
         ((DefaultCismapGeometryComboBoxEditor)cboGeom).dispose();
+        cidsBean.removePropertyChangeListener(this);
     }
 
     /**
@@ -3387,7 +3376,31 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled,
 
     @Override
     public BeanInitializer getBeanInitializer() {
+        log.fatal("getBeanInitializer");
         return new CompleteBeanInitializer(cidsBean);
+    }
+
+    @Override
+    public void propertyChange(final PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals("kart")) {
+            if ((evt.getOldValue() == null) && (evt.getNewValue() != null)) {
+                tbpAdditionalInfo.addTab(
+                    " Kartographie ",
+                    new javax.swing.ImageIcon(
+                        getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wbf_vorgang.png")),
+                    panKartographie);    // NOI18N
+                cmdAddKart.setVisible(false);
+            }
+        } else if (evt.getPropertyName().equals("alkis")) {
+            if ((evt.getOldValue() == null) && (evt.getNewValue() != null)) {
+                tbpAdditionalInfo.addTab(
+                    " ALKIS ",
+                    new javax.swing.ImageIcon(
+                        getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wbf_vorgang.png")),
+                    panStadtgrundkarte); // NOI18N
+                cmdAddSgk.setVisible(false);
+            }
+        }
     }
 
     //~ Inner Classes ----------------------------------------------------------
