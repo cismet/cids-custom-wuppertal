@@ -3429,10 +3429,15 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled,
         protected void processComplexProperty(final CidsBean beanToInit,
                 final String propertyName,
                 final CidsBean complexValueToProcess) throws Exception {
-            final CompleteBeanInitializer subInitializer = new CompleteBeanInitializer(complexValueToProcess);
-            final CidsBean newBean = complexValueToProcess.getMetaObject().getMetaClass().getEmptyInstance().getBean();
-            subInitializer.initializeBean(newBean);
-            beanToInit.setProperty(propertyName, newBean);
+            if (complexValueToProcess != null) {
+                final CompleteBeanInitializer subInitializer = new CompleteBeanInitializer(complexValueToProcess);
+                final CidsBean newBean = complexValueToProcess.getMetaObject()
+                            .getMetaClass()
+                            .getEmptyInstance()
+                            .getBean();
+                subInitializer.initializeBean(newBean);
+                beanToInit.setProperty(propertyName, newBean);
+            }
         }
     }
 }
