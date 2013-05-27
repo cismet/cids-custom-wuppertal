@@ -136,7 +136,7 @@ public class NASDownload extends AbstractDownload implements Cancellable {
     public NASDownload(final String title,
             final String filename,
             final String directory,
-            final NasProductTemplate template,
+            final NasProductTemplate  template,
             final Geometry g) {
         this.template = template;
         geometry = g;
