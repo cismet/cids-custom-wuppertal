@@ -32,6 +32,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import de.cismet.cids.custom.utils.nas.NasProductTemplate;
 import de.cismet.cids.custom.wunda_blau.search.actions.NasDataQueryAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
@@ -76,7 +77,7 @@ public class NASDownload extends AbstractDownload implements Cancellable {
     //~ Instance fields --------------------------------------------------------
 
     protected String filename = null;
-    private NasDataQueryAction.PRODUCT_TEMPLATE template;
+    private NasProductTemplate template;
     private Geometry geometry;
     private String orderId;
     private transient byte[] content;
@@ -112,7 +113,7 @@ public class NASDownload extends AbstractDownload implements Cancellable {
      */
     public NASDownload(final String title,
             final String directory,
-            final NasDataQueryAction.PRODUCT_TEMPLATE template,
+            final NasProductTemplate template,
             final Geometry g) {
         this.template = template;
         geometry = g;
@@ -135,7 +136,7 @@ public class NASDownload extends AbstractDownload implements Cancellable {
     public NASDownload(final String title,
             final String filename,
             final String directory,
-            final NasDataQueryAction.PRODUCT_TEMPLATE template,
+            final NasProductTemplate template,
             final Geometry g) {
         this.template = template;
         geometry = g;
