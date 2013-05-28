@@ -42,7 +42,6 @@ import javax.swing.table.AbstractTableModel;
 
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.nas.NasProductTemplate;
-import de.cismet.cids.custom.wunda_blau.search.actions.NasDataQueryAction;
 
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
@@ -489,19 +488,28 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
                 @Override
                 public void run() {
                     final NasProductTemplate template = (NasProductTemplate)cbType.getSelectedItem();
+                    final String requestId = tfAuftragsnummer.getText().trim();
 
                     if (DownloadManagerDialog.showAskingForUserTitle(
                                     CismapBroker.getInstance().getMappingComponent())) {
                         final String jobname = (!DownloadManagerDialog.getJobname().equals(""))
                             ? DownloadManagerDialog.getJobname() : null;
                         DownloadManager.instance()
-                                .add(new NASDownload("NAS-Download", jobname, "", template,
+                                .add(
+                                    new NASDownload(
+                                        "NAS-Download",
+                                        jobname,
+                                        "",
+                                        requestId,
+                                        template,
                                         generateSearchGeom()));
                     } else {
                         DownloadManager.instance()
-                                .add(new NASDownload("NAS-Download", "", template,
+                                .add(
+                                    new NASDownload("NAS-Download", "", "", requestId, template,
                                         generateSearchGeom()));
                     }
+                    dispose();
                 }
             });
     } //GEN-LAST:event_btnOkActionPerformed

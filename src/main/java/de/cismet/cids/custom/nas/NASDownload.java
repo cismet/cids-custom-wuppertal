@@ -82,6 +82,7 @@ public class NASDownload extends AbstractDownload implements Cancellable {
     private String orderId;
     private transient byte[] content;
     private boolean omitSendingRequest = false;
+    private String requestId;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -107,22 +108,24 @@ public class NASDownload extends AbstractDownload implements Cancellable {
      * Creates a new NASDownload object.
      *
      * @param  title      DOCUMENT ME!
+     * @param  filename   DOCUMENT ME!
      * @param  directory  DOCUMENT ME!
+     * @param  requestId  DOCUMENT ME!
      * @param  template   DOCUMENT ME!
      * @param  g          DOCUMENT ME!
      */
-    public NASDownload(final String title,
-            final String directory,
-            final NasProductTemplate template,
-            final Geometry g) {
-        this.template = template;
-        geometry = g;
-        this.title = title;
-        this.directory = directory;
-        status = State.WAITING;
-        fileToSaveTo = new File("" + System.currentTimeMillis());
-//        determineDestinationFile(STANDARD_FILE_NAME, EXTENSION);
-    }
+// public NASDownload(final String title,
+// final String directory,
+// final NasProductTemplate template,
+// final Geometry g) {
+// this.template = template;
+// geometry = g;
+// this.title = title;
+// this.directory = directory;
+// status = State.WAITING;
+// fileToSaveTo = new File("" + System.currentTimeMillis());
+////        determineDestinationFile(STANDARD_FILE_NAME, EXTENSION);
+//    }
 
     /**
      * Creates a new NASDownload object.
@@ -130,18 +133,21 @@ public class NASDownload extends AbstractDownload implements Cancellable {
      * @param  title      DOCUMENT ME!
      * @param  filename   DOCUMENT ME!
      * @param  directory  DOCUMENT ME!
+     * @param  requestId  DOCUMENT ME!
      * @param  template   DOCUMENT ME!
      * @param  g          DOCUMENT ME!
      */
     public NASDownload(final String title,
             final String filename,
             final String directory,
-            final NasProductTemplate  template,
+            final String requestId,
+            final NasProductTemplate template,
             final Geometry g) {
         this.template = template;
         geometry = g;
         this.title = title;
         this.directory = directory;
+        this.requestId = requestId;
         status = State.WAITING;
         fileToSaveTo = new File("" + System.currentTimeMillis());
         this.filename = filename;
@@ -299,6 +305,9 @@ public class NASDownload extends AbstractDownload implements Cancellable {
         final ServerActionParameter paramMethod = new ServerActionParameter(NasDataQueryAction.PARAMETER_TYPE.METHOD
                         .toString(),
                 NasDataQueryAction.METHOD_TYPE.ADD);
+        final ServerActionParameter paramRequest = new ServerActionParameter(
+                NasDataQueryAction.PARAMETER_TYPE.REQUEST_ID.toString(),
+                requestId);
         try {
             return (String)SessionManager.getProxy()
                         .executeTask(
@@ -307,6 +316,7 @@ public class NASDownload extends AbstractDownload implements Cancellable {
                                 null,
                                 paramTemplate,
                                 paramGeom,
+                                paramRequest,
                                 paramMethod);
         } catch (Exception ex) {
             log.error("error during enqueuing nas server request", ex);
