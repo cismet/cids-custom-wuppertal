@@ -534,10 +534,10 @@
                         </Container>
                       </SubComponents>
                     </Container>
-                    <Component class="javax.swing.JLabel" name="lblEigent&#xfc;mer">
+                    <Component class="javax.swing.JLabel" name="lblEigentuemer">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="MauerEditor.lblEigent&#xfc;mer.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objecteditors/wunda_blau/Bundle.properties" key="MauerEditor.lblEigentuemer.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                       </Properties>
                       <Constraints>
@@ -1116,7 +1116,7 @@
                           <BindingProperties>
                             <BindingProperty name="date" source="Form" sourcePath="${cidsBean.bauwerksbuchfertigstellung}" target="dcBauwerksbuchfertigstellung" targetPath="date" updateStrategy="0" immediately="false">
                               <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                                <Connection code="dcNaechstePruefung.getConverter()&#xa;" type="code"/>
+                                <Connection code="dcBauwerksbuchfertigstellung.getConverter()&#xa;" type="code"/>
                               </Property>
                             </BindingProperty>
                           </BindingProperties>
@@ -1173,6 +1173,13 @@
                               <Dimension value="[124, 20]"/>
                             </Property>
                           </Properties>
+                          <BindingProperties>
+                            <BindingProperty name="date" source="Form" sourcePath="${cidsBean.datum_naechste_pruefung}" target="dcNaechstePruefung" targetPath="date" updateStrategy="0" immediately="false">
+                              <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                <Connection code="dcNaechstePruefung.getConverter()" type="code"/>
+                              </Property>
+                            </BindingProperty>
+                          </BindingProperties>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                               <GridBagConstraints gridX="1" gridY="0" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="20" anchor="17" weightX="0.0" weightY="0.0"/>
