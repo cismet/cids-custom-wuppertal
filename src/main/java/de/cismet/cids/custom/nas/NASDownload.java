@@ -37,6 +37,8 @@ import de.cismet.cids.custom.wunda_blau.search.actions.NasDataQueryAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 
+import de.cismet.cismap.commons.features.Feature;
+
 import de.cismet.tools.gui.downloadmanager.AbstractDownload;
 
 /**
@@ -51,7 +53,6 @@ public class NASDownload extends AbstractDownload implements Cancellable {
 
     private static String SEVER_ACTION = "nasDataQuery";
     private static String EXTENSION = ".xml";
-    private static String STANDARD_FILE_NAME = "nas-result";
     private static final String BASE_TITLE;
 
     static {
@@ -77,6 +78,7 @@ public class NASDownload extends AbstractDownload implements Cancellable {
     //~ Instance fields --------------------------------------------------------
 
     protected String filename = null;
+    private Future<ByteArrayWrapper> pollingFuture;
     private NasProductTemplate template;
     private Geometry geometry;
     private String orderId;
@@ -101,7 +103,11 @@ public class NASDownload extends AbstractDownload implements Cancellable {
         this.directory = "";
         filename = orderId;
         fileToSaveTo = new File("" + System.currentTimeMillis());
-//        determineDestinationFile(orderId, EXTENSION);
+        if ((filename != null) && !filename.equals("")) {
+            determineDestinationFile(filename, EXTENSION);
+        } else {
+            determineDestinationFile(requestId, EXTENSION);
+        }
     }
 
     /**
@@ -126,7 +132,6 @@ public class NASDownload extends AbstractDownload implements Cancellable {
 // fileToSaveTo = new File("" + System.currentTimeMillis());
 ////        determineDestinationFile(STANDARD_FILE_NAME, EXTENSION);
 //    }
-
     /**
      * Creates a new NASDownload object.
      *
@@ -149,9 +154,17 @@ public class NASDownload extends AbstractDownload implements Cancellable {
         this.directory = directory;
         this.requestId = requestId;
         status = State.WAITING;
-        fileToSaveTo = new File("" + System.currentTimeMillis());
+        if ((requestId != null) && !requestId.equals("")) {
+            fileToSaveTo = new File("" + requestId);
+        } else {
+            fileToSaveTo = new File("" + System.currentTimeMillis());
+        }
         this.filename = filename;
-//        determineDestinationFile(filename, EXTENSION);
+        if ((filename != null) && !filename.equals("")) {
+            determineDestinationFile(filename, EXTENSION);
+        } else {
+            determineDestinationFile(requestId, EXTENSION);
+        }
     }
 
     /**
@@ -163,11 +176,24 @@ public class NASDownload extends AbstractDownload implements Cancellable {
 
     //~ Methods ----------------------------------------------------------------
 
-    @Override
-    public boolean cancel() {
-        downloadFuture.cancel(true);
+    /**
+     * DOCUMENT ME!
+     */
+    private void setAbortedStatus() {
         status = State.ABORTED;
         stateChanged();
+    }
+
+    @Override
+    public boolean cancel() {
+        final boolean cancelled = downloadFuture.cancel(true);
+        if (pollingFuture != null) {
+            pollingFuture.cancel(true);
+        }
+        if (cancelled) {
+            status = State.ABORTED;
+            stateChanged();
+        }
         return downloadFuture.isCancelled();
     }
 
@@ -183,39 +209,53 @@ public class NASDownload extends AbstractDownload implements Cancellable {
         status = State.RUNNING;
         stateChanged();
         if (!omitSendingRequest) {
-            if (Thread.interrupted()) {
-                log.warn("NAS Download was interuppted");
+            if (!Thread.interrupted()) {
+                orderId = sendNasRequest();
+            } else {
+                doCancellationHandling(false, false);
                 return;
             }
-            orderId = sendNasRequest();
             if (orderId == null) {
                 log.error("nas server request returned no orderId, cannot continue with NAS download");
                 this.status = State.COMPLETED_WITH_ERROR;
                 stateChanged();
                 return;
             }
-            if (filename == null) {
-                filename = orderId;
+            if ((filename == null) && (requestId != null)) {
+//                filename = orderId;
+                filename = requestId;
             }
         }
-        setTitleForPhase(Phase.RETRIEVAL);
-        stateChanged();
+
+        if (!Thread.interrupted()) {
+            setTitleForPhase(Phase.RETRIEVAL);
+            stateChanged();
+        }
 
         /*
          * Phase 2: retrive the result from the cids server
          */
         if (Thread.interrupted()) {
-            log.warn("NAS Download was interuppted");
-            cancelNasRequest();
+            doCancellationHandling(true, false);
             return;
         }
         final ExecutorService executor = Executors.newSingleThreadExecutor();
-        final Future<ByteArrayWrapper> pollingFuture = executor.submit(new ServerPollingRunnable());
+        if (!Thread.interrupted()) {
+            pollingFuture = executor.submit(new ServerPollingRunnable());
+        } else {
+            doCancellationHandling(true, false);
+            return;
+        }
         try {
-            content = pollingFuture.get(1, TimeUnit.HOURS).getByteArray();
+            if (!Thread.interrupted() && (pollingFuture != null)) {
+                content = pollingFuture.get(1, TimeUnit.HOURS).getByteArray();
+            } else {
+                doCancellationHandling(true, true);
+                return;
+            }
         } catch (InterruptedException ex) {
-            log.warn("NAS Download was interuppted", ex);
-            cancelNasRequest();
+            doCancellationHandling(true, true);
+            Thread.currentThread().interrupt();
             return;
         } catch (ExecutionException ex) {
             log.warn("could not execute nas download", ex);
@@ -224,13 +264,15 @@ public class NASDownload extends AbstractDownload implements Cancellable {
             log.warn("the maximum timeout for nas download is exceeded", ex);
         }
 
-        setTitleForPhase(Phase.DOWNLOAD);
-        stateChanged();
+        if (!Thread.interrupted()) {
+            setTitleForPhase(Phase.DOWNLOAD);
+            stateChanged();
+        }
 
         if ((content == null) || (content.length <= 0)) {
             log.info("Downloaded content seems to be empty..");
 
-            if (status == State.RUNNING) {
+            if ((status == State.RUNNING) && !Thread.interrupted()) {
                 status = State.COMPLETED_WITH_ERROR;
                 stateChanged();
             }
@@ -240,21 +282,19 @@ public class NASDownload extends AbstractDownload implements Cancellable {
          * Phase 3: save the result file
          */
         if (Thread.interrupted()) {
-            log.warn("NAS Download was interuppted");
-            cancelNasRequest();
+            doCancellationHandling(false, false);
             return;
-        }
-
-        if (filename == null) {
-            determineDestinationFile(STANDARD_FILE_NAME, EXTENSION);
-        } else {
-            determineDestinationFile(filename, EXTENSION);
         }
 
         FileOutputStream out = null;
         try {
-            out = new FileOutputStream(fileToSaveTo);
-            out.write(content);
+            if (!Thread.interrupted()) {
+                out = new FileOutputStream(fileToSaveTo);
+                out.write(content);
+            } else {
+                doCancellationHandling(false, false);
+                return;
+            }
         } catch (final IOException ex) {
             log.warn("Couldn't write downloaded content to file '" + fileToSaveTo + "'.", ex);
             error(ex);
@@ -268,9 +308,29 @@ public class NASDownload extends AbstractDownload implements Cancellable {
             }
         }
 
-        setTitleForPhase(Phase.DONE);
-        status = State.COMPLETED;
-        stateChanged();
+        if (!Thread.interrupted()) {
+            setTitleForPhase(Phase.DONE);
+            status = State.COMPLETED;
+            stateChanged();
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cancelServerRequest  DOCUMENT ME!
+     * @param  cancelPollingThread  DOCUMENT ME!
+     */
+    private void doCancellationHandling(final boolean cancelServerRequest, final boolean cancelPollingThread) {
+        log.warn("NAS Download was interuppted");
+        if (cancelServerRequest) {
+            cancelNasRequest();
+        }
+        if (cancelPollingThread && (pollingFuture != null)) {
+            pollingFuture.cancel(true);
+        }
+//        setAbortedStatus();
+        deleteFile();
     }
 
     /**
@@ -287,7 +347,10 @@ public class NASDownload extends AbstractDownload implements Cancellable {
         } else if (p == Phase.DOWNLOAD) {
             appendix = NbBundle.getMessage(NASDownload.class, "NASDownload.downloadTitle.text");
         }
-        title = BASE_TITLE + " - " + appendix;
+        title = BASE_TITLE;
+        if ((appendix != null) && !appendix.equals("")) {
+            title += " - " + appendix;
+        }
     }
 
     /**
@@ -346,6 +409,15 @@ public class NASDownload extends AbstractDownload implements Cancellable {
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     */
+    private void deleteFile() {
+        if (fileToSaveTo.exists() && fileToSaveTo.isFile()) {
+            fileToSaveTo.delete();
+        }
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -368,6 +440,10 @@ public class NASDownload extends AbstractDownload implements Cancellable {
                     orderId);
             byte[] result = null;
             while (result == null) {
+                if (Thread.interrupted()) {
+                    log.info("result fetching thread was interrupted");
+                    return null;
+                }
                 try {
                     result = (byte[])SessionManager.getProxy()
                                 .executeTask(
@@ -383,7 +459,9 @@ public class NASDownload extends AbstractDownload implements Cancellable {
                     try {
                         Thread.sleep(5000);
                     } catch (InterruptedException ex) {
-                        log.error("result fetching thread was interrupted", ex);
+                        log.info("result fetching thread was interrupted", ex);
+                        Thread.currentThread().interrupt();
+                        return null;
                     }
                 }
             }
