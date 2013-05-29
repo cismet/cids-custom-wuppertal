@@ -12,12 +12,14 @@ import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
+import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.PrecisionModel;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import org.openide.util.NbBundle;
@@ -47,6 +49,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.AbstractAction;
@@ -70,6 +73,7 @@ import javax.swing.text.DocumentFilter;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.VermessungFlurstueckFinder;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
@@ -84,6 +88,10 @@ import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 import de.cismet.cids.editors.converters.SqlDateToStringConverter;
+
+import de.cismet.cids.navigator.utils.CidsBeanDropListener;
+import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
+import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
@@ -121,7 +129,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(VermessungRissEditor.class);
-
     public static final String[] SUFFIXES = new String[] {
             "tif",
             "jpg",
@@ -135,7 +142,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             "JPEG"
         };
     private static final String SUFFIX_REDUCED_SIZE = "_RS";
-
     protected static final int DOCUMENT_BILD = 0;
     protected static final int DOCUMENT_GRENZNIEDERSCHRIFT = 1;
     protected static final int NO_SELECTION = -1;
@@ -162,9 +168,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     protected static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory(new PrecisionModel(
                 PrecisionModel.FLOATING),
             CrsTransformer.extractSridFromCrs(AlkisConstants.COMMONS.SRS_SERVICE));
-
     private static Collection<CidsBean> veraenderungsarts = new LinkedList<CidsBean>();
-
     protected static final Map<Integer, Color> COLORS_GEOMETRIE_STATUS = new HashMap<Integer, Color>();
 
     static {
@@ -192,7 +196,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     protected VermessungFlurstueckSelectionDialog flurstueckDialog;
     protected volatile int currentDocument = NO_SELECTION;
     protected volatile int currentPage = NO_SELECTION;
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrControls;
     private javax.swing.ButtonGroup bgrDocument;
@@ -303,6 +306,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             btnRemoveLandparcel.setVisible(false);
             btnCombineGeometries.setVisible(false);
         } else {
+            new CidsBeanDropTarget((DropAwareJList)lstLandparcels);
             flurstueckDialog = new VermessungFlurstueckSelectionDialog();
             flurstueckDialog.pack();
             flurstueckDialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -393,7 +397,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         pnlHeaderLandparcels = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeaderLandparcels = new javax.swing.JLabel();
         scpLandparcels = new javax.swing.JScrollPane();
-        lstLandparcels = new javax.swing.JList();
+        lstLandparcels = new DropAwareJList();
         btnAddLandparcel = new javax.swing.JButton();
         btnRemoveLandparcel = new javax.swing.JButton();
         pnlControls = new de.cismet.tools.gui.RoundedPanel();
@@ -848,16 +852,16 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         lstLandparcels.addMouseListener(new java.awt.event.MouseAdapter() {
 
                 @Override
-                public void mouseClicked(final java.awt.event.MouseEvent evt) {
-                    lstLandparcelsMouseClicked(evt);
-                }
-                @Override
                 public void mousePressed(final java.awt.event.MouseEvent evt) {
                     lstLandparcelsMousePressed(evt);
                 }
                 @Override
                 public void mouseReleased(final java.awt.event.MouseEvent evt) {
                     lstLandparcelsMouseReleased(evt);
+                }
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lstLandparcelsMouseClicked(evt);
                 }
             });
         lstLandparcels.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
@@ -1496,8 +1500,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         for (final CidsBean flurstuecksvermessung : flurstuecksvermessungen) {
             final CidsBean flurstueckKicker = (CidsBean)flurstuecksvermessung.getProperty("flurstueck.flurstueck");
             if ((flurstueckKicker != null)
-                        && (flurstueckKicker.getProperty("umschreibendes_rechteck.geo_field")
-                            instanceof Geometry)) {
+                        && (flurstueckKicker.getProperty("umschreibendes_rechteck.geo_field") instanceof Geometry)) {
                 final Geometry geometry = (Geometry)flurstueckKicker.getProperty(
                         "umschreibendes_rechteck.geo_field");
                 final Geometry transformedGeometry = CrsTransformer.transformToGivenCrs(
@@ -1849,6 +1852,135 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             }
         }
 
+        try {
+            // Check if new Vermessung_Flurstuecksvermessung Objects are in the flurstuecksvermessung Collection that
+            // are created via a dropped "ALKIS_landparcel"- or "flurstueck"-Objects
+
+            // 1. Store the objects in a collection
+            final List<CidsBean> vermessungen = cidsBean.getBeanCollectionProperty("flurstuecksvermessung");
+
+            // 2. Iterate
+            for (final CidsBean entry : vermessungen) {
+                final Object tmp = entry.getProperty("tmp_lp_orig");
+                if (tmp instanceof CidsBean) {
+                    // 3. For each dropped object find the corresponding kicker
+
+                    String gemarkung = null;
+                    String flur = null;
+                    String zaehler = null;
+                    String nenner = null;
+
+                    final CidsBean tmpbean = (CidsBean)tmp;
+                    CidsBean kicker = null;
+
+                    // 3a. Alternative for flurstueck
+                    if (tmpbean.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase("flurstueck")) {
+                        gemarkung = String.valueOf(tmpbean.getProperty("gemarkungs_nr.gemarkungsnummer"));
+                        flur = String.valueOf(tmpbean.getProperty("flur"));
+                        zaehler = String.valueOf(tmpbean.getProperty("fstnr_z"));
+                        nenner = String.valueOf(tmpbean.getProperty("fstnr_n"));
+                        if (nenner == null) {
+                            zaehler = "0";
+                        }
+                    } // 3b. Alternative for ALKIS_landparcel
+                    else if (tmpbean.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase(
+                                    "ALKIS_landparcel")) {
+                        gemarkung = ((String)tmpbean.getProperty("alkis_id")).substring(2, 6);
+                        flur = (String)tmpbean.getProperty("flur");
+                        zaehler = new Integer((String)tmpbean.getProperty("fstck_zaehler")).toString();
+                        nenner = (String)tmpbean.getProperty("fstck_nenner");
+                        if (nenner == null) {
+                            nenner = "0";
+                        }
+                    }
+
+                    // get the kicker
+                    final MetaClass kickerClass = ClassCacheMultiple.getMetaClass(
+                            "WUNDA_BLAU",
+                            "vermessung_flurstueck_kicker");
+                    final StringBuffer kickerQuery = new StringBuffer("select ").append(kickerClass.getId())
+                                .append(", ")
+                                .append(kickerClass.getPrimaryKey())
+                                .append(" from ")
+                                .append(kickerClass.getTableName())
+                                .append(" where gemarkung=")
+                                .append(gemarkung)
+                                .append(" and flur='")
+                                .append(flur)
+                                .append("'")
+                                .append(" and zaehler='")
+                                .append(zaehler)
+                                .append("'")
+                                .append(" and nenner='")
+                                .append(nenner)
+                                .append("'");
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("SQL: kickerQuery:" + kickerQuery.toString());
+                    }
+                    final MetaObject[] kickers = SessionManager.getProxy()
+                                .getMetaObjectByQuery(kickerQuery.toString(), 0);
+                    if (kickers.length > 0) {
+                        kicker = kickers[0].getBean();
+                    }
+                    // if there is no kicker
+                    // create a new kicker
+                    if (kicker == null) {
+                        kicker = CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "vermessung_flurstueck_kicker");
+
+                        // retrieve the vermessung_gemarkung by id
+                        final MetaClass vermessungGemarkungClass = ClassCacheMultiple.getMetaClass(
+                                "WUNDA_BLAU",
+                                "vermessung_gemarkung");
+                        final MetaObject gemarkungObject = SessionManager.getProxy()
+                                    .getMetaObject(new Integer(gemarkung),
+                                        vermessungGemarkungClass.getId(),
+                                        "WUNDA_BLAU");
+                        final CidsBean vGemarkungBean = gemarkungObject.getBean();
+
+                        kicker.setProperty("gemarkung", vGemarkungBean);
+                        kicker.setProperty("flur", StringUtils.leftPad(flur, 3, "0"));
+                        kicker.setProperty("zaehler", zaehler);
+                        kicker.setProperty("nenner", nenner);
+
+                        // Check for a real flurstueck that matches
+                        final MetaClass flurstueckClass = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "flurstueck");
+                        final StringBuffer fQuery = new StringBuffer("select ").append(flurstueckClass.getId())
+                                    .append(", ")
+                                    .append(flurstueckClass.getPrimaryKey())
+                                    .append(" from ")
+                                    .append(flurstueckClass.getTableName())
+                                    .append(" where gemarkungs_nr=")
+                                    .append(gemarkung)
+                                    .append(" and flur='")
+                                    .append(flur)
+                                    .append("'")
+                                    .append(" and fstnr_z='")
+                                    .append(zaehler)
+                                    .append("'")
+                                    .append(" and fstnr_n='")
+                                    .append(nenner)
+                                    .append("'");
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("SQL: flurstueckQuery:" + fQuery.toString());
+                        }
+                        final MetaObject[] matchedLandparcels = SessionManager.getProxy()
+                                    .getMetaObjectByQuery(fQuery.toString(), 0);
+                        if (matchedLandparcels.length > 0) {
+                            kicker.setProperty("flurstueck", matchedLandparcels[0].getBean());
+                        }
+                    }
+                    // set it to the "flurstueck" property
+                    entry.setProperty("flurstueck", kicker);
+
+                    // delete the "tmp_lp_orig" property
+                    entry.setProperty("tmp_lp_orig", null);
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Problem when working on dropped landparcels", e);
+            save = false;
+        }
+
         if (save) {
             final CidsBean geometrieStatus = (CidsBean)cidsBean.getProperty("geometrie_status");
 
@@ -2184,26 +2316,22 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     //~ Inner Classes ----------------------------------------------------------
 
     //J-
-
     //When Wupp decides to publish the correspoding files on a WebDAV server, use following three classes.
-
     /**
      * DOCUMENT ME!
      *
-     * @version  $Revision$, $Date$
+     * @version $Revision$, $Date$
      */
     protected final class PictureReaderWorker extends SwingWorker<ListModel, Void> {
 
         //~ Instance fields ----------------------------------------------------
-
         private final URL url;
 
         //~ Constructors -------------------------------------------------------
-
         /**
          * Creates a new PictureReaderWorker object.
          *
-         * @param  url  DOCUMENT ME!
+         * @param url DOCUMENT ME!
          */
         public PictureReaderWorker(final URL url) {
             this.url = url;
@@ -2218,7 +2346,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         }
 
         //~ Methods ------------------------------------------------------------
-
         @Override
         protected ListModel doInBackground() throws Exception {
             final DefaultListModel model = new DefaultListModel();
@@ -2278,20 +2405,18 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     /**
      * DOCUMENT ME!
      *
-     * @version  $Revision$, $Date$
+     * @version $Revision$, $Date$
      */
     protected final class PictureSelectWorker extends SwingWorker<BufferedImage, Void> {
 
         //~ Instance fields ----------------------------------------------------
-
         private final int pageNumber;
 
         //~ Constructors -------------------------------------------------------
-
         /**
          * Creates a new PictureSelectWorker object.
          *
-         * @param  pageNumber  DOCUMENT ME!
+         * @param pageNumber DOCUMENT ME!
          */
         public PictureSelectWorker(final int pageNumber) {
             this.pageNumber = pageNumber;
@@ -2306,7 +2431,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         }
 
         //~ Methods ------------------------------------------------------------
-
         @Override
         protected BufferedImage doInBackground() throws Exception {
             if (pictureReader != null) {
@@ -2344,12 +2468,11 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     /**
      * DOCUMENT ME!
      *
-     * @version  $Revision$, $Date$
+     * @version $Revision$, $Date$
      */
     protected final class RefreshDocumentWorker extends SwingWorker<Void, Object> {
 
         //~ Constructors -------------------------------------------------------
-
         /**
          * Creates a new RefreshDocumentWorker object.
          */
@@ -2368,7 +2491,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         }
 
         //~ Methods ------------------------------------------------------------
-
         @Override
         protected Void doInBackground() throws Exception {
             documentURLs[DOCUMENT_BILD] = null;
@@ -2403,7 +2525,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
             //First we try to load an image of reduced size
             for (final Map.Entry<URL, URL> urlEntry : urls.entrySet()) {
-                if(urlEntry.getValue() == null) {
+                if (urlEntry.getValue() == null) {
                     continue;
                 }
 
@@ -2413,7 +2535,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                     break;
                 } catch (final Exception ex) {
                     LOG.debug("An exception occurred while opening URL '" + urlEntry.getValue().toExternalForm()
-                                + "'. Skipping this url.", ex);
+                            + "'. Skipping this url.", ex);
                 } finally {
                     if (streamToReadFrom != null) {
                         try {
@@ -2424,7 +2546,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 }
             }
 
-            if(documentURLs[type] != null) {
+            if (documentURLs[type] != null) {
                 // Found an image.
                 return;
             }
@@ -2436,7 +2558,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                     break;
                 } catch (final Exception ex) {
                     LOG.debug("An exception occurred while opening URL '" + urlEntry.getKey().toExternalForm()
-                                + "'. Skipping this url.", ex);
+                            + "'. Skipping this url.", ex);
                 } finally {
                     if (streamToReadFrom != null) {
                         try {
@@ -2447,7 +2569,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 }
             }
 
-            if(documentURLs[type] != null) {
+            if (documentURLs[type] != null) {
                 documentURLs[type].setValue(null);
             }
         }
@@ -2487,9 +2609,9 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                     }
                 }
 
-                if(currentDocument == DOCUMENT_BILD) {
+                if (currentDocument == DOCUMENT_BILD) {
                     loadBild();
-                } else if(currentDocument == DOCUMENT_GRENZNIEDERSCHRIFT) {
+                } else if (currentDocument == DOCUMENT_GRENZNIEDERSCHRIFT) {
                     loadGrenzniederschrift();
                 }
             }
@@ -2577,30 +2699,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 if (vermessung.getProperty("flurstueck") instanceof CidsBean) {
                     final CidsBean flurstueck = (CidsBean)vermessung.getProperty("flurstueck");
 
-                    if (flurstueck.getProperty("gemarkung") != null) {
-                        final Object gemarkung = flurstueck.getProperty("gemarkung.name");
-
-                        if ((gemarkung instanceof String) && (((String)gemarkung).trim().length() > 0)) {
-                            result.append(gemarkung);
-                        } else {
-                            result.append(flurstueck.getProperty("gemarkung.id"));
-                        }
-                    } else {
-                        result.append("Unbekannte Gemarkung");
-                    }
-
-                    result.append("-");
-                    result.append(flurstueck.getProperty("flur"));
-                    result.append("-");
-                    result.append(flurstueck.getProperty("zaehler"));
-                    final Object nenner = flurstueck.getProperty("nenner");
-                    result.append('/');
-                    if (nenner != null) {
-                        result.append(nenner);
-                    } else {
-                        result.append('0');
-                    }
-
                     if (flurstueck.getProperty("flurstueck") instanceof CidsBean) {
                         if (isSelected) {
                             setBackground(list.getSelectionBackground());
@@ -2610,28 +2708,20 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                             setForeground(Color.blue);
                         }
                     }
-                } else {
-                    result.append(errorWhileLoading);
-                }
-
-                if (vermessung.getProperty("veraenderungsart") != null) {
-                    result.append(" (");
-
-                    final Object vermessungsart = vermessung.getProperty("veraenderungsart.name");
-                    if ((vermessungsart instanceof String) && (((String)vermessungsart).trim().length() > 0)) {
-                        result.append(vermessungsart);
+                } else if (vermessung.getProperty("tmp_lp_orig") instanceof CidsBean) {
+                    if (isSelected) {
+                        setBackground(list.getSelectionBackground());
+                        setForeground(list.getSelectionForeground());
                     } else {
-                        result.append(vermessung.getProperty("veraenderungsart.code"));
+                        setBackground(list.getBackground());
+                        setForeground(Color.red);
                     }
-
-                    result.append(')');
                 }
+                result.append(value.toString());
+                setText(result.toString());
             } else {
                 result.append(errorWhileLoading);
             }
-
-            setText(result.toString());
-
             return this;
         }
     }
@@ -2753,6 +2843,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
     //J-
     private final class DocumentSizeFilter extends DocumentFilter {
+
         @Override
         public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
             if ((fb.getDocument().getLength() + string.length()) <= 31) {
@@ -2768,4 +2859,80 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         }
     }
     //J+
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class DropAwareJList extends JList implements CidsBeanDropListener {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new DropAwareJList object.
+         */
+        public DropAwareJList() {
+        }
+
+        /**
+         * Creates a new DropAwareJList object.
+         *
+         * @param  dataModel  DOCUMENT ME!
+         */
+        public DropAwareJList(final ListModel dataModel) {
+            super(dataModel);
+        }
+
+        /**
+         * Creates a new DropAwareJList object.
+         *
+         * @param  listData  DOCUMENT ME!
+         */
+        public DropAwareJList(final Object[] listData) {
+            super(listData);
+        }
+
+        /**
+         * Creates a new DropAwareJList object.
+         *
+         * @param  listData  DOCUMENT ME!
+         */
+        public DropAwareJList(final Vector listData) {
+            super(listData);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void beansDropped(final ArrayList<CidsBean> beans) {
+            MetaObject veraenderungsartMO = null;
+            CidsBean veraenderungsart = null;
+            // veraenderungsart aus Dialog abfragen
+
+            final MetaObject[] arten = VermessungFlurstueckFinder.getVeraenderungsarten();
+            veraenderungsartMO = (MetaObject)JOptionPane.showInputDialog(
+                    StaticSwingTools.getParentFrame(this),
+                    "Bitte Veränderungsart auswählen?",
+                    "Veränderungsart",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    arten,
+                    arten[0]);
+            veraenderungsart = veraenderungsartMO.getBean();
+            try {
+                final List<CidsBean> landparcels = cidsBean.getBeanCollectionProperty("flurstuecksvermessung");
+                for (final CidsBean dropped : beans) {
+                    final CidsBean newEntry = CidsBean.createNewCidsBeanFromTableName(
+                            "WUNDA_BLAU",
+                            "vermessung_flurstuecksvermessung");
+                    newEntry.setProperty("veraenderungsart", veraenderungsart);
+                    newEntry.setProperty("tmp_lp_orig", dropped);
+                    landparcels.add(newEntry);
+                }
+            } catch (Exception ex) {
+                LOG.error("Problem when adding the DroppedBeans", ex);
+            }
+        }
+    }
 }
