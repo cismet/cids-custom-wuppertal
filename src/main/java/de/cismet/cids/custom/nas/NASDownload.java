@@ -439,7 +439,7 @@ public class NASDownload extends AbstractDownload implements Cancellable {
                     NasDataQueryAction.PARAMETER_TYPE.ORDER_ID.toString(),
                     orderId);
             byte[] result = null;
-            while (result == null) {
+            while ((result == null) || (result.length == 0)) {
                 if (Thread.interrupted()) {
                     log.info("result fetching thread was interrupted");
                     return null;
@@ -456,6 +456,9 @@ public class NASDownload extends AbstractDownload implements Cancellable {
                     log.error("error during pulling nas result from server", ex);
                 }
                 if (result == null) {
+                    // there went something wrong on server side so abort the download
+                    return null;
+                } else if (result.length == 0) {
                     try {
                         Thread.sleep(5000);
                     } catch (InterruptedException ex) {
