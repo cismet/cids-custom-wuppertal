@@ -37,8 +37,6 @@ import de.cismet.cids.custom.wunda_blau.search.actions.NasDataQueryAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 
-import de.cismet.cismap.commons.features.Feature;
-
 import de.cismet.tools.gui.downloadmanager.AbstractDownload;
 
 /**
@@ -209,7 +207,7 @@ public class NASDownload extends AbstractDownload implements Cancellable {
         status = State.RUNNING;
         stateChanged();
         if (!omitSendingRequest) {
-            if (!Thread.interrupted()) {
+            if (!downloadFuture.isCancelled()) {
                 orderId = sendNasRequest();
             } else {
                 doCancellationHandling(false, false);
@@ -227,7 +225,7 @@ public class NASDownload extends AbstractDownload implements Cancellable {
             }
         }
 
-        if (!Thread.interrupted()) {
+        if (!downloadFuture.isCancelled()) {
             setTitleForPhase(Phase.RETRIEVAL);
             stateChanged();
         }
@@ -235,19 +233,15 @@ public class NASDownload extends AbstractDownload implements Cancellable {
         /*
          * Phase 2: retrive the result from the cids server
          */
-        if (Thread.interrupted()) {
-            doCancellationHandling(true, false);
-            return;
-        }
         final ExecutorService executor = Executors.newSingleThreadExecutor();
-        if (!Thread.interrupted()) {
+        if (!downloadFuture.isCancelled()) {
             pollingFuture = executor.submit(new ServerPollingRunnable());
         } else {
             doCancellationHandling(true, false);
             return;
         }
         try {
-            if (!Thread.interrupted() && (pollingFuture != null)) {
+            if (!downloadFuture.isCancelled() && (pollingFuture != null)) {
                 content = pollingFuture.get(1, TimeUnit.HOURS).getByteArray();
             } else {
                 doCancellationHandling(true, true);
@@ -264,7 +258,7 @@ public class NASDownload extends AbstractDownload implements Cancellable {
             log.warn("the maximum timeout for nas download is exceeded", ex);
         }
 
-        if (!Thread.interrupted()) {
+        if (!downloadFuture.isCancelled()) {
             setTitleForPhase(Phase.DOWNLOAD);
             stateChanged();
         }
@@ -281,14 +275,9 @@ public class NASDownload extends AbstractDownload implements Cancellable {
         /*
          * Phase 3: save the result file
          */
-        if (Thread.interrupted()) {
-            doCancellationHandling(false, false);
-            return;
-        }
-
         FileOutputStream out = null;
         try {
-            if (!Thread.interrupted()) {
+            if (!downloadFuture.isCancelled()) {
                 out = new FileOutputStream(fileToSaveTo);
                 out.write(content);
             } else {
@@ -308,7 +297,7 @@ public class NASDownload extends AbstractDownload implements Cancellable {
             }
         }
 
-        if (!Thread.interrupted()) {
+        if (!downloadFuture.isCancelled()) {
             setTitleForPhase(Phase.DONE);
             status = State.COMPLETED;
             stateChanged();
@@ -362,7 +351,7 @@ public class NASDownload extends AbstractDownload implements Cancellable {
         final ServerActionParameter paramTemplate = new ServerActionParameter(NasDataQueryAction.PARAMETER_TYPE.TEMPLATE
                         .toString(),
                 template);
-        final ServerActionParameter paramGeom = new ServerActionParameter(NasDataQueryAction.PARAMETER_TYPE.GEOMETRY
+        final ServerActionParameter paramGeom = new ServerActionParameter(NasDataQueryAction.PARAMETER_TYPE.GEOMETRY_COLLECTION
                         .toString(),
                 geometry);
         final ServerActionParameter paramMethod = new ServerActionParameter(NasDataQueryAction.PARAMETER_TYPE.METHOD
@@ -384,6 +373,7 @@ public class NASDownload extends AbstractDownload implements Cancellable {
         } catch (Exception ex) {
             log.error("error during enqueuing nas server request", ex);
         }
+
         return null;
     }
 
