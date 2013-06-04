@@ -12,6 +12,8 @@
 package de.cismet.cids.custom.nas;
 
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.MultiPolygon;
+import com.vividsolutions.jts.geom.Polygon;
 
 import org.apache.log4j.Logger;
 
@@ -52,6 +54,7 @@ import de.cismet.cismap.commons.features.StyledFeature;
 import de.cismet.cismap.commons.features.XStyledFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
+import de.cismet.cismap.commons.gui.piccolo.PFeature;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
@@ -130,7 +133,12 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
             } else {
                 name += f;
             }
-            geomWrappers.add(new GeomWrapper(f.getGeometry(), name, true));
+            if ((f.getGeometry() instanceof Polygon) || (f.getGeometry() instanceof MultiPolygon)) {
+                final PFeature pf = new PFeature(f, map);
+                if (!pf.hasHole()) {
+                    geomWrappers.add(new GeomWrapper(f.getGeometry(), name, true));
+                }
+            }
         }
         tableModel = new NasTableModel();
         initComponents();
