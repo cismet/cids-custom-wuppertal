@@ -14,7 +14,7 @@ package de.cismet.cids.custom.nas;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 
-import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryCollection;
 
 import org.openide.util.Cancellable;
 import org.openide.util.Exceptions;
@@ -78,7 +78,7 @@ public class NASDownload extends AbstractDownload implements Cancellable {
     protected String filename = null;
     private Future<ByteArrayWrapper> pollingFuture;
     private NasProductTemplate template;
-    private Geometry geometry;
+    private GeometryCollection geometries;
     private String orderId;
     private transient byte[] content;
     private boolean omitSendingRequest = false;
@@ -95,7 +95,7 @@ public class NASDownload extends AbstractDownload implements Cancellable {
         omitSendingRequest = true;
         this.orderId = orderId;
         template = null;
-        geometry = null;
+        geometries = null;
         this.title = BASE_TITLE;
         status = State.WAITING;
         this.directory = "";
@@ -145,9 +145,9 @@ public class NASDownload extends AbstractDownload implements Cancellable {
             final String directory,
             final String requestId,
             final NasProductTemplate template,
-            final Geometry g) {
+            final GeometryCollection g) {
         this.template = template;
-        geometry = g;
+        geometries = g;
         this.title = title;
         this.directory = directory;
         this.requestId = requestId;
@@ -351,9 +351,9 @@ public class NASDownload extends AbstractDownload implements Cancellable {
         final ServerActionParameter paramTemplate = new ServerActionParameter(NasDataQueryAction.PARAMETER_TYPE.TEMPLATE
                         .toString(),
                 template);
-        final ServerActionParameter paramGeom = new ServerActionParameter(NasDataQueryAction.PARAMETER_TYPE.GEOMETRY_COLLECTION
-                        .toString(),
-                geometry);
+        final ServerActionParameter paramGeom = new ServerActionParameter(
+                NasDataQueryAction.PARAMETER_TYPE.GEOMETRY_COLLECTION.toString(),
+                geometries);
         final ServerActionParameter paramMethod = new ServerActionParameter(NasDataQueryAction.PARAMETER_TYPE.METHOD
                         .toString(),
                 NasDataQueryAction.METHOD_TYPE.ADD);

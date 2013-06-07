@@ -12,6 +12,8 @@
 package de.cismet.cids.custom.nas;
 
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryCollection;
+import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Polygon;
 
@@ -510,12 +512,17 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
                                         "",
                                         requestId,
                                         template,
-                                        generateSearchGeom()));
+                                        generateSearchGeomCollection()));
                     } else {
                         DownloadManager.instance()
                                 .add(
-                                    new NASDownload("NAS-Download", "", "", requestId, template,
-                                        generateSearchGeom()));
+                                    new NASDownload(
+                                        "NAS-Download",
+                                        "",
+                                        "",
+                                        requestId,
+                                        template,
+                                        generateSearchGeomCollection()));
                     }
                     dispose();
                 }
@@ -884,6 +891,38 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
             }
         }
         return unionGeom;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private GeometryCollection generateSearchGeomCollection() {
+        int collectionSize = 0;
+        for (final GeomWrapper gw : geomWrappers) {
+            if (gw.isSelected()) {
+                collectionSize++;
+            }
+        }
+        final Geometry[] geoms = new Geometry[collectionSize];
+        final int buffer = jsGeomBuffer.getValue();
+        int i = 0;
+        GeometryFactory gf = null;
+        for (final GeomWrapper gw : geomWrappers) {
+            if (gw.isSelected()) {
+                Geometry g = gw.getGeometry();
+                if (buffer != 0) {
+                    g = g.buffer(buffer);
+                }
+                if (gf == null) {
+                    gf = g.getFactory();
+                }
+                geoms[i] = g;
+            }
+            i++;
+        }
+        return new GeometryCollection(geoms, gf);
     }
 
     /**
