@@ -23,22 +23,13 @@ import java.awt.image.BufferedImage;
 
 import java.io.InputStream;
 
-import java.net.URL;
-
 import java.text.NumberFormat;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
-import javax.imageio.ImageReadParam;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
-import javax.imageio.stream.ImageInputStreamImpl;
-
-import javax.swing.ImageIcon;
 
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 
@@ -77,6 +68,7 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
     private static String WEB_DAV_DIRECTORY;
     private static String WEB_DAV_USER;
     private static String WEB_DAV_PASSWORD;
+    private static final int MAP_DPI = 300;
 
     //~ Instance fields --------------------------------------------------------
 
@@ -112,8 +104,10 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
         this.webDavClient = new WebDavClient(Proxy.fromPreferences(), WEB_DAV_USER, WEB_DAV_PASSWORD, true);
         final ArrayList al = new ArrayList();
 //        final SimpleWMS s = new SimpleWMS(new SimpleWmsGetMapUrl("http://www.wms.nrw.de/geobasis/DOP?&VERSION=1.1.1&REQUEST=GetMap&WIDTH=<cismap:width>&HEIGHT=<cismap:height>&BBOX=<cismap:boundingBox>&SRS=EPSG:25832&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&LAYERS=WMS,0,Metadaten&STYLES="));
+//        final SimpleWMS s = new SimpleWMS(new SimpleWmsGetMapUrl(
+//                    "http://s102x284:8399/arcgis/services/WuNDa-Orthophoto-WUP/MapServer/WMSServer?service=WMS&VERSION=1.1.1&REQUEST=GetMap&WIDTH=<cismap:width>&HEIGHT=<cismap:height>&BBOX=<cismap:boundingBox>&SRS=EPSG:25832&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&LAYERS=6&STYLES=default"));
         final SimpleWMS s = new SimpleWMS(new SimpleWmsGetMapUrl(
-                    "http://s102x284:8399/arcgis/services/WuNDa-Orthophoto-WUP/MapServer/WMSServer?service=WMS&VERSION=1.1.1&REQUEST=GetMap&WIDTH=<cismap:width>&HEIGHT=<cismap:height>&BBOX=<cismap:boundingBox>&SRS=EPSG:25832&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&LAYERS=6&STYLES=default"));
+                    "http://S102X284:8399/arcgis/services/WuNDa-DGK/MapServer/WMSServer?&VERSION=1.1.1&REQUEST=GetMap&BBOX=<cismap:boundingBox>&WIDTH=<cismap:width>&HEIGHT=<cismap:height>&SRS=EPSG:25832&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&LAYERS=48&STYLES=default"));
 
 //        final SimpleWMS s = new SimpleWMS(new SimpleWmsGetMapUrl(
 //                    "http://S102X284:8399/arcgis/services/ALKIS-EXPRESS/MapServer/WMSServer?&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image/png&TRANSPARENT=FALSE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&LAYERS=2,4,5,6,7,8,10,11,12,13,14,16,17,18,19,20,21,22,23,25,26,27,28,29,30,31,32,33,34,35,36,37,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100&STYLES=&BBOX=<cismap:boundingBox>&WIDTH=<cismap:width>&HEIGHT=<cismap:height>&SRS="));
@@ -192,7 +186,9 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
         final int width = Integer.parseInt(NbBundle.getMessage(
                     MauernReportBeanWithMapAndImages.class,
                     "MauernReportBeanWithMapAndImages.mapWidth"));
-        map.setSize(width, height);
+        final int factor = MAP_DPI / 72;
+        map.setSize(width * factor, height * factor);
+//        map.setSize(width, height);
 //        map.setSize(540, 219);
         // initial positioning of the map
         map.setAnimationDuration(0);
@@ -208,10 +204,10 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
 
         map.zoomToFeatureCollection();
         double scale;
-        if (map.getScaleDenominator() >= 100) {
-            scale = Math.round((map.getScaleDenominator() / 100) + 0.5d) * 100;
+        if (map.getScaleDenominator() <= 750) {
+            scale = 750;
         } else {
-            scale = Math.round((map.getScaleDenominator() / 10) + 0.5) * 10;
+            scale = Math.round((map.getScaleDenominator() / 100) + 0.5d) * 100;
         }
         masstab = "1:" + NumberFormat.getIntegerInstance().format(scale);
         if (LOG.isDebugEnabled()) {
