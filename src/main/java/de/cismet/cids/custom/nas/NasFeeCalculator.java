@@ -16,11 +16,12 @@ import Sirius.navigator.exception.ConnectionException;
 
 import com.vividsolutions.jts.geom.Geometry;
 
-import org.openide.util.Exceptions;
-
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
+import de.cismet.cids.custom.utils.nas.NasProductTemplate;
 import de.cismet.cids.custom.wunda_blau.search.actions.NasZaehlObjekteSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsMeasurementPointSearchStatement;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsMeasurementPointSearchStatement.Pointtype;
@@ -165,15 +166,18 @@ public abstract class NasFeeCalculator {
             final int tmpPoints = amount - 1000000;
             fee += tmpPoints * basePrice * 0.0625;
             amount = 1000000;
-        } else if (amount > 100000) {
+        }
+        if (amount > 100000) {
             final int tmpPpoints = amount - 100000;
             fee += tmpPpoints * basePrice * 0.125;
             amount = 100000;
-        } else if (amount > 10000) {
+        }
+        if (amount > 10000) {
             final int tmpPoints = amount - 10000;
             fee += tmpPoints * basePrice * 0.25d;
             amount = 10000;
-        } else if (amount > 1000) {
+        }
+        if (amount > 1000) {
             final int tmpPoints = amount - 1000;
             fee += tmpPoints * basePrice * 0.5d;
             amount = 1000;
