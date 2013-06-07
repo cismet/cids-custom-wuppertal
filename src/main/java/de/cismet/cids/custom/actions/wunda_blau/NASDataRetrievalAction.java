@@ -32,6 +32,7 @@ import de.cismet.cids.custom.wunda_blau.search.actions.NasZaehlObjekteSearch;
 
 import de.cismet.cismap.commons.features.CommonFeatureAction;
 import de.cismet.cismap.commons.features.Feature;
+import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -60,9 +61,6 @@ public class NASDataRetrievalAction extends AbstractAction implements CommonFeat
      */
     public NASDataRetrievalAction() {
         super("NAS Daten abfragen");
-//        super.putValue(
-//            Action.SMALL_ICON,
-//            new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/wrrl-db-mv/raisePoly.png")));
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -89,11 +87,14 @@ public class NASDataRetrievalAction extends AbstractAction implements CommonFeat
 
     @Override
     public void actionPerformed(final ActionEvent e) {
-        final NasDialog dialog = new NasDialog(null, false);
         SwingUtilities.invokeLater(new Runnable() {
 
                 @Override
                 public void run() {
+                    final NasDialog dialog = new NasDialog(
+                            StaticSwingTools.getParentFrame(
+                                CismapBroker.getInstance().getMappingComponent()),
+                            false);
                     StaticSwingTools.showDialog(dialog);
                 }
             });
