@@ -171,6 +171,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             lblEigentuemerGesamt = new javax.swing.JLabel();
         }
 
+        setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
 
         lblTitle.setFont(new java.awt.Font("DejaVu Sans", 1, 14));                                               // NOI18N
@@ -345,6 +346,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             add(lblPunkteGesamt, gridBagConstraints);
         }
 
+        jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         lblGesamtValue.setFont(new java.awt.Font("DejaVu Sans", 1, 14));                                               // NOI18N
