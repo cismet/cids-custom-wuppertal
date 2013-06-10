@@ -31,6 +31,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblEigentuemer;
     private javax.swing.JLabel lblEigentuemerAnzahl;
     private javax.swing.JLabel lblEigentuemerGesamt;
+    private javax.swing.JLabel lblFiller;
     private javax.swing.JLabel lblFlurstuecke;
     private javax.swing.JLabel lblFlurstueckeAnzahl;
     private javax.swing.JLabel lblFlurstueckeGesamt;
@@ -170,6 +171,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
         if (template == NasProductTemplate.KOMPLETT) {
             lblEigentuemerGesamt = new javax.swing.JLabel();
         }
+        lblFiller = new javax.swing.JLabel();
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
@@ -185,7 +187,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 20, 10);
         add(lblTitle, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -206,7 +208,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.weightx = 0.3;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 10);
         add(lblGesamtTitle, gridBagConstraints);
 
         if (template != NasProductTemplate.POINTS) {
@@ -221,7 +223,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 2;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-            gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+            gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 0);
             add(lblFlurstuecke, gridBagConstraints);
         }
 
@@ -235,7 +237,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 3;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-            gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+            gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 0);
             add(lblGebaeude, gridBagConstraints);
         }
 
@@ -249,7 +251,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 5;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-            gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+            gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 0);
             add(lblPunkte, gridBagConstraints);
         }
 
@@ -280,7 +282,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             gridBagConstraints.gridx = 2;
             gridBagConstraints.gridy = 2;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-            gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+            gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 10);
             add(lblFlurstueckeGesamt, gridBagConstraints);
         }
 
@@ -311,7 +313,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             gridBagConstraints.gridx = 2;
             gridBagConstraints.gridy = 3;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-            gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+            gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 10);
             add(lblGebeaudeGesamt, gridBagConstraints);
         }
 
@@ -342,7 +344,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             gridBagConstraints.gridx = 2;
             gridBagConstraints.gridy = 5;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-            gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+            gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 10);
             add(lblPunkteGesamt, gridBagConstraints);
         }
 
@@ -373,8 +375,9 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
         add(jPanel1, gridBagConstraints);
 
         if (template == NasProductTemplate.KOMPLETT) {
@@ -389,7 +392,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 4;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-            gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+            gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 0);
             add(lblEigentuemer, gridBagConstraints);
         }
 
@@ -420,8 +423,20 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             gridBagConstraints.gridx = 2;
             gridBagConstraints.gridy = 4;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-            gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+            gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 10);
             add(lblEigentuemerGesamt, gridBagConstraints);
         }
-    }                                                                 // </editor-fold>//GEN-END:initComponents
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblFiller,
+            org.openide.util.NbBundle.getMessage(NasFeePreviewPanel.class, "NasFeePreviewPanel.lblFiller.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        add(lblFiller, gridBagConstraints);
+    }                                                                                                             // </editor-fold>//GEN-END:initComponents
 }
