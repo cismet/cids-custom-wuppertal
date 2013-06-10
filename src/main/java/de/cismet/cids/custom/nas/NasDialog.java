@@ -36,6 +36,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
 
+import javax.swing.JFrame;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
@@ -78,6 +79,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger log = Logger.getLogger(NasDialog.class);
+    private static final double TOTAL_MAP_BUFFER = 50d;
 
     //~ Instance fields --------------------------------------------------------
 
@@ -631,8 +633,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
                 public void run() {
                     final ActiveLayerModel mappingModel = new ActiveLayerModel();
                     mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
-                    mappingModel.addHome((XBoundingBox)CismapBroker.getInstance().getMappingComponent()
-                                .getCurrentBoundingBox());
+                    mappingModel.addHome(getBoundingBox());
 
                     final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
                                 AlkisConstants.COMMONS.MAP_CALL_STRING));
@@ -665,7 +666,12 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
                 }
 
                 private XBoundingBox getBoundingBox() {
-                    XBoundingBox result = null;
+                    final XBoundingBox currBb = (XBoundingBox)CismapBroker.getInstance().getMappingComponent()
+                                .getCurrentBoundingBox();
+                    XBoundingBox result = new XBoundingBox(currBb.getGeometry().buffer(TOTAL_MAP_BUFFER));
+//                    final double diagonalLength = Math.sqrt((result.getWidth() * result.getWidth())
+//                                    + (result.getHeight() * result.getHeight()));
+//                    final XBoundingBox bufferedBox = new XBoundingBox(result.getGeometry().buffer(TOTAL_MAP_BUFFER));
                     for (final GeomWrapper gw : geomWrappers) {
                         final Geometry geometry = CrsTransformer.transformToGivenCrs(
                                 gw.getGeometry(),
@@ -673,16 +679,12 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
 
                         if (result == null) {
                             result = new XBoundingBox(geometry.getEnvelope().buffer(
-                                        AlkisConstants.COMMONS.GEO_BUFFER),
-                                    AlkisConstants.COMMONS.SRS_SERVICE,
-                                    true);
+                                        TOTAL_MAP_BUFFER));
                             result.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
                             result.setMetric(true);
                         } else {
                             final XBoundingBox temp = new XBoundingBox(geometry.getEnvelope().buffer(
-                                        AlkisConstants.COMMONS.GEO_BUFFER),
-                                    AlkisConstants.COMMONS.SRS_SERVICE,
-                                    true);
+                                        TOTAL_MAP_BUFFER));
                             temp.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
                             temp.setMetric(true);
 
@@ -720,20 +722,18 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
 
                 @Override
                 public void run() {
-                    final XBoundingBox boxToGoto = new XBoundingBox(selectedGeomWrapper.getGeometry().getEnvelope()
-                                    .buffer(
-                                        AlkisConstants.COMMONS.GEO_BUFFER),
+                    final XBoundingBox boxToGoto = new XBoundingBox(selectedGeomWrapper.getGeometry().getEnvelope(),
                             AlkisConstants.COMMONS.SRS_SERVICE,
                             true);
-                    boxToGoto.setX1(boxToGoto.getX1()
-                                - (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
-                    boxToGoto.setX2(boxToGoto.getX2()
-                                + (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
-                    boxToGoto.setY1(boxToGoto.getY1()
-                                - (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
-                    boxToGoto.setY2(boxToGoto.getY2()
-                                + (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
-                    map.gotoBoundingBox(boxToGoto, false, true, 500);
+                    final XBoundingBox bufferedBox;
+                    if (selectedGeomWrapper != totalMapWrapper) {
+                        final double diagonalLength = Math.sqrt((boxToGoto.getWidth() * boxToGoto.getWidth())
+                                        + (boxToGoto.getHeight() * boxToGoto.getHeight()));
+                        bufferedBox = new XBoundingBox(boxToGoto.getGeometry().buffer(diagonalLength / 2));
+                    } else {
+                        bufferedBox = new XBoundingBox(boxToGoto.getGeometry().buffer(TOTAL_MAP_BUFFER));
+                    }
+                    map.gotoBoundingBox(bufferedBox, false, true, 500);
                 }
             };
 
@@ -866,9 +866,20 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
      */
     private void showError() {
 //        showWait(false);
+//        SwingUtilities.invokeLater(new Runnable() {
+//
+//                @Override
+//                public void run() {
+        pnlFee.remove(lblBusy);
         pnlFee.removeAll();
-        pnlFee.add(lblError);
+        pnlFee.add(lblError, BorderLayout.CENTER);
+        lblError.setVisible(true);
+        pnlFee.invalidate();
+        pnlFee.revalidate();
         repaint();
+//                }
+//            });
+//        repaint();
     }
 
     /**
@@ -940,7 +951,8 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
                         final NasProductTemplate selectedTemplate = (NasProductTemplate)cbType.getSelectedItem();
                         feePreview = new NasFeePreviewPanel(selectedTemplate);
                         if (result == null) {
-                            showWait(false);
+//                            showWait(false);
+                            showError();
                             return;
                         }
                         for (final String key : result.keySet()) {
@@ -965,12 +977,12 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
                             }
                         }
                     } catch (InterruptedException ex) {
-                        log.error("nas fee calculation was interrupted. showing error state", ex);
                         showError();
+                        log.error("nas fee calculation was interrupted. showing error state", ex);
                         return;
                     } catch (ExecutionException ex) {
-                        log.error("an error occured during nas fee calculation. showing error state", ex);
                         showError();
+                        log.error("an error occured during nas fee calculation. showing error state", ex);
                         return;
                     }
 
