@@ -1,0 +1,100 @@
+{
+    "productGroups":[
+        {
+            "key":"Höhendaten",
+            "butlerProducts":[
+                {
+                    "name":"1m Höhenlinie",
+                    "key":"0101",
+                    "colorDepth":"ohne"
+                },{
+                    "name":"5m Höhenlinie",
+                    "key":"0102",
+                    "colorDepth":"ohne"
+                },{
+                    "name":"10m Höhenlinie",
+                    "key":"0103",
+                    "colorDepth":"ohne"
+                },{
+                    "name":"1m Punktraster",
+                    "key":"0104",
+                    "colorDepth":"ohne"
+                },{
+                    "name":"5m Punktraster",
+                    "key":"0105",
+                    "colorDepth":"ohne"
+                },{
+                    "name":"10m Punktraster",
+                    "key":"0106",
+                    "colorDepth":"ohne"
+                },{
+                    "name":"25m Punktraster",
+                    "key":"0107",
+                    "colorDepth":"ohne"
+                },{
+                    "name":"Regengeld - Dachpunkte",
+                    "key":"0108",
+                    "colorDepth":"ohne"
+                },{
+                    "name":"Regengel - Bodenpunkte",
+                    "key":"0109",
+                    "colorDepth":"ohne"
+                }
+            ],
+            "butlerFormats":[
+                {
+                    "key":"DXF"
+                },{
+                    "key":"SHAPE"
+                }
+            ],
+            "butlerResolution":[
+                {
+                    "key":"ohne"
+                }
+            ]
+        },  {
+            "key":"DGK",
+            "butlerProducts":[
+                {
+                    "name":"2011-12 Grauwert",
+                    "key":"0201",
+                    "colorDepth":"8 Bit"
+                },{
+                    "name":"2011-12 Schwarz-Weiß",
+                    "key":"0202",
+                    "colorDepth":"1 Bit"
+                },{
+                    "name":"2011-12 Grauwert XL",
+                    "key":"0203",
+                    "colorDepth":"8 Bit"
+                },{
+                    "name":"2011-12 Schwarz-Weiß",
+                    "key":"0204",
+                    "colorDepth":"1 Bit"
+                },{
+                    "name":"2012-12 Farbe",
+                    "key":"0205",
+                    "colorDepth":"8 Bit"
+                }
+            ],
+            "butlerFormats":[
+                {
+                    "key":"TIF"
+                },{
+                    "key":"GEOTIF"
+                }
+            ],
+            "butlerResolution":[
+                {
+                    "key":"10"
+                },{
+                    "key":"15"
+                },{
+                    "key":"31"
+                }
+            ]
+        }
+    ]
+        
+}
