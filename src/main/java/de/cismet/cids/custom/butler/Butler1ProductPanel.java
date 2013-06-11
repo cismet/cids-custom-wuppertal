@@ -282,9 +282,12 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
         if (productGroup != null) {
             Binding productBinding = bindingGroup.getBinding("productBinding");
             Property productProp = productBinding.getSourceProperty();
-//            productBinding.setValue();
-            setProducts(productGroup.getButlerProducts());
-            setResolution(productGroup.getButlerResolution());
+            productProp.setValue(this, productGroup.getButlerProducts());
+            Binding resolutionBinding = bindingGroup.getBinding("resolutionBinding");
+            Property resolutionProp = resolutionBinding.getSourceProperty();
+            resolutionProp.setValue(this, productGroup.getButlerResolution());
+//            setProducts();
+//            setResolution(productGroup.getButlerResolution());
         }
     }//GEN-LAST:event_cbProduktGruppeActionPerformed
 
