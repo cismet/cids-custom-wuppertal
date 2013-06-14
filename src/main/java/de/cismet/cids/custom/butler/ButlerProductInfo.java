@@ -11,8 +11,6 @@
  */
 package de.cismet.cids.custom.butler;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.openide.util.Exceptions;
@@ -21,10 +19,6 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 
-import de.cismet.cids.custom.objectrenderer.utils.billing.BillingInfo;
-import de.cismet.cids.custom.objectrenderer.utils.billing.Product;
-import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroup;
-import de.cismet.cids.custom.objectrenderer.utils.billing.Usage;
 
 /**
  * DOCUMENT ME!

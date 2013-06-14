@@ -47,6 +47,4 @@ class ButlerResolution {
     public String toString() {
         return key;
     }
-    
-    
 }

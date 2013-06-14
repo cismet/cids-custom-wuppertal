@@ -15,6 +15,9 @@ package de.cismet.cids.custom.butler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.Property;
+
 import org.openide.util.Exceptions;
 
 import java.io.IOException;
@@ -22,8 +25,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
-import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.Property;
 
 /**
  * DOCUMENT ME!
@@ -37,15 +38,12 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
     ArrayList<ButlerProductGroup> productGroups;
     ArrayList<ButlerProduct> products;
     ArrayList<ButlerResolution> resolution;
+    ArrayList<ButlerFormats> formats;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btGroupFormat;
     private javax.swing.JComboBox cbAuflösung;
     private javax.swing.JComboBox cbProduktGruppe;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
-    private javax.swing.JRadioButton jRadioButton4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblAuflösung;
@@ -55,6 +53,10 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblProduktGruppe;
     private javax.swing.JList lstProdukt;
     private javax.swing.JPanel pnlFormat;
+    private javax.swing.JRadioButton rbDxf;
+    private javax.swing.JRadioButton rbGeoTif;
+    private javax.swing.JRadioButton rbShp;
+    private javax.swing.JRadioButton rbTif;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -86,10 +88,10 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
         lstProdukt = new javax.swing.JList();
         lblFormat = new javax.swing.JLabel();
         pnlFormat = new javax.swing.JPanel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
-        jRadioButton4 = new javax.swing.JRadioButton();
+        rbDxf = new javax.swing.JRadioButton();
+        rbShp = new javax.swing.JRadioButton();
+        rbTif = new javax.swing.JRadioButton();
+        rbGeoTif = new javax.swing.JRadioButton();
         lblFiller = new javax.swing.JLabel();
         lblAuflösung = new javax.swing.JLabel();
         cbAuflösung = new javax.swing.JComboBox();
@@ -154,47 +156,37 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
 
         pnlFormat.setLayout(new java.awt.GridBagLayout());
 
-        btGroupFormat.add(jRadioButton1);
-        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton1, org.openide.util.NbBundle.getMessage(Butler1ProductPanel.class, "Butler1ProductPanel.jRadioButton1.text")); // NOI18N
+        btGroupFormat.add(rbDxf);
+        org.openide.awt.Mnemonics.setLocalizedText(rbDxf, org.openide.util.NbBundle.getMessage(Butler1ProductPanel.class, "Butler1ProductPanel.rbDxf.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-        pnlFormat.add(jRadioButton1, gridBagConstraints);
+        pnlFormat.add(rbDxf, gridBagConstraints);
 
-        btGroupFormat.add(jRadioButton2);
-        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton2, org.openide.util.NbBundle.getMessage(Butler1ProductPanel.class, "Butler1ProductPanel.jRadioButton2.text")); // NOI18N
-        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton2ActionPerformed(evt);
-            }
-        });
+        btGroupFormat.add(rbShp);
+        org.openide.awt.Mnemonics.setLocalizedText(rbShp, org.openide.util.NbBundle.getMessage(Butler1ProductPanel.class, "Butler1ProductPanel.rbShp.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-        pnlFormat.add(jRadioButton2, gridBagConstraints);
+        pnlFormat.add(rbShp, gridBagConstraints);
 
-        btGroupFormat.add(jRadioButton3);
-        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton3, org.openide.util.NbBundle.getMessage(Butler1ProductPanel.class, "Butler1ProductPanel.jRadioButton3.text")); // NOI18N
-        jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton3ActionPerformed(evt);
-            }
-        });
+        btGroupFormat.add(rbTif);
+        org.openide.awt.Mnemonics.setLocalizedText(rbTif, org.openide.util.NbBundle.getMessage(Butler1ProductPanel.class, "Butler1ProductPanel.rbTif.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-        pnlFormat.add(jRadioButton3, gridBagConstraints);
+        pnlFormat.add(rbTif, gridBagConstraints);
 
-        btGroupFormat.add(jRadioButton4);
-        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton4, org.openide.util.NbBundle.getMessage(Butler1ProductPanel.class, "Butler1ProductPanel.jRadioButton4.text")); // NOI18N
+        btGroupFormat.add(rbGeoTif);
+        org.openide.awt.Mnemonics.setLocalizedText(rbGeoTif, org.openide.util.NbBundle.getMessage(Butler1ProductPanel.class, "Butler1ProductPanel.rbGeoTif.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-        pnlFormat.add(jRadioButton4, gridBagConstraints);
+        pnlFormat.add(rbGeoTif, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblFiller, org.openide.util.NbBundle.getMessage(Butler1ProductPanel.class, "Butler1ProductPanel.lblFiller.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -264,30 +256,17 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
      *
      * @param evt DOCUMENT ME!
      */
-    private void jRadioButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton2ActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param evt DOCUMENT ME!
-     */
-    private void jRadioButton3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton3ActionPerformed
-
-    private void cbProduktGruppeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbProduktGruppeActionPerformed
-        ButlerProductGroup productGroup = ((ButlerProductGroup) cbProduktGruppe.getSelectedItem());
+    private void cbProduktGruppeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbProduktGruppeActionPerformed
+        final ButlerProductGroup productGroup = ((ButlerProductGroup) cbProduktGruppe.getSelectedItem());
         if (productGroup != null) {
-            Binding productBinding = bindingGroup.getBinding("productBinding");
-            Property productProp = productBinding.getSourceProperty();
+            final Binding productBinding = bindingGroup.getBinding("productBinding");
+            final Property productProp = productBinding.getSourceProperty();
             productProp.setValue(this, productGroup.getButlerProducts());
-            Binding resolutionBinding = bindingGroup.getBinding("resolutionBinding");
-            Property resolutionProp = resolutionBinding.getSourceProperty();
+            final Binding resolutionBinding = bindingGroup.getBinding("resolutionBinding");
+            final Property resolutionProp = resolutionBinding.getSourceProperty();
             resolutionProp.setValue(this, productGroup.getButlerResolution());
-//            setProducts();
-//            setResolution(productGroup.getButlerResolution());
+            productGroup.getButlerFormats();
+            updateFormatButtons(productGroup.getButlerFormats());
         }
     }//GEN-LAST:event_cbProduktGruppeActionPerformed
 
@@ -308,27 +287,57 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return DOCUMENT ME!
+     */
     public ArrayList<ButlerProductGroup> getProductGroups() {
         return productGroups;
     }
 
-    public void setProductGroups(ArrayList<ButlerProductGroup> productGroups) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param productGroups DOCUMENT ME!
+     */
+    public void setProductGroups(final ArrayList<ButlerProductGroup> productGroups) {
         this.productGroups = productGroups;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return DOCUMENT ME!
+     */
     public ArrayList<ButlerProduct> getProducts() {
         return products;
     }
 
-    public void setProducts(ArrayList<ButlerProduct> products) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param products DOCUMENT ME!
+     */
+    public void setProducts(final ArrayList<ButlerProduct> products) {
         this.products = products;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return DOCUMENT ME!
+     */
     public ArrayList<ButlerResolution> getResolution() {
         return resolution;
     }
 
-    public void setResolution(ArrayList<ButlerResolution> resolution) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param resolution DOCUMENT ME!
+     */
+    public void setResolution(final ArrayList<ButlerResolution> resolution) {
         this.resolution = resolution;
     }
 
@@ -345,4 +354,24 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
         f.setVisible(true);
     }
 
+    private void updateFormatButtons(ArrayList<ButlerFormats> allowedButlerFormats) {
+        //set them all disabled
+        rbDxf.setEnabled(false);
+        rbGeoTif.setEnabled(false);
+        rbShp.setEnabled(false);
+        rbTif.setEnabled(false);
+        
+        //enable the ones that are currentyl allowed
+        for(ButlerFormats f : allowedButlerFormats){
+            if(f.getKey().equals("TIF")){
+                rbTif.setEnabled(true);
+            }else if(f.getKey().equals("GEOTIF")){
+                rbGeoTif.setEnabled(true);
+            }else if(f.getKey().equals("DXF")){
+                rbDxf.setEnabled(true);
+            }else if(f.getKey().equals("SHAPE")){
+                rbShp.setEnabled(true);
+            }
+        }
+    }
 }

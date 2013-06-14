@@ -94,6 +94,121 @@
                     "key":"31"
                 }
             ]
+        },{
+            "key":"Stadtkarte",
+            "butlerProducts":[
+                {
+                    "name":"Regional 2011-12 Grauwert",
+                    "key":"0301",
+                    "colorDepth":"8 Bit"
+                },{
+                    "name":"Regional 2011-12 Farbe",
+                    "key":"0302",
+                    "colorDepth":"8 Bit"
+                },{
+                    "name":"Regional 2011-12 Grauwert",
+                    "key":"0303",
+                    "colorDepth":"8 Bit"
+                },{
+                    "name":"Regional 2011-12 Farbe",
+                    "key":"0304",
+                    "colorDepth":"8 Bit"
+                },{
+                    "name":"Regional 2012-12 Grauwert",
+                    "key":"0305",
+                    "colorDepth":"8 Bit"
+                },{
+                    "name":"Regional 2012-12 Farbe",
+                    "key":"0306",
+                    "colorDepth":"8 Bit"
+                }
+            ],
+            "butlerFormats":[
+                {
+                    "key":"TIF"
+                },{
+                    "key":"GEOTIF"
+                }
+            ],
+            "butlerResolution":[
+                {
+                    "key":"50"
+                },{
+                    "key":"70"
+                },{
+                    "key":"150"
+                }
+            ]
+        },{
+            "key":"Orthophoto",
+            "butlerProducts":[
+                {
+                    "name":"Wuppertal 2002",
+                    "key":"0401",
+                    "colorDepth":"8 Bit"
+                },{
+                    "name":"Wuppertal 2005",
+                    "key":"0402",
+                    "colorDepth":"8 Bit"
+                },{
+                    "name":"Wuppertal 2007",
+                    "key":"0403",
+                    "colorDepth":"8 Bit"
+                },{
+                    "name":"Wuppertal 2010",
+                    "key":"0404",
+                    "colorDepth":"8 Bit"
+                },{
+                    "name":"Wuppertal 2012",
+                    "key":"0405",
+                    "colorDepth":"8 Bit"
+                }
+            ],
+            "butlerFormats":[
+                {
+                    "key":"TIF"
+                },{
+                    "key":"GEOTIF"
+                }
+            ],
+            "butlerResolution":[
+                {
+                    "key":"10"
+                },{
+                    "key":"15"
+                },{
+                    "key":"31"
+                }
+            ]
+        },{
+            "key":"Kataster",
+            "butlerProducts":[
+                {
+                    "name":"Wuppertaler Gebäude",
+                    "key":"0501",
+                    "colorDepth":"8 Bit"
+                },{
+                    "name":"Wuppertaler Flurstücke",
+                    "key":"0502",
+                    "colorDepth":"8 Bit"
+                },{
+                    "name":"Wuppertaler Adressen",
+                    "key":"0503",
+                    "colorDepth":"8 Bit"
+                }
+            ],
+            "butlerFormats":[
+                {
+                    "key":"DXF"
+                },{
+                    "key":"SHAPE"
+                }
+            ],
+            "butlerResolution":[
+                {
+                    "key":"ohne"
+                }
+            ]
         }
     ]
         
