@@ -303,7 +303,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbProduktGruppeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbProduktGruppeActionPerformed
+    private void cbProduktGruppeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbProduktGruppeActionPerformed
         final ButlerProductGroup productGroup = ((ButlerProductGroup)cbProduktGruppe.getSelectedItem());
         if (productGroup != null) {
             final Binding productBinding = bindingGroup.getBinding("productBinding");
@@ -315,7 +315,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
             productGroup.getButlerFormats();
             updateFormatButtons(productGroup.getButlerFormats());
         }
-    }//GEN-LAST:event_cbProduktGruppeActionPerformed
+    }                                                                                   //GEN-LAST:event_cbProduktGruppeActionPerformed
 
     /**
      * DOCUMENT ME!
