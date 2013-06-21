@@ -23,6 +23,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.ListSelectionModel;
+
+import de.cismet.cids.custom.utils.butler.ButlerFormat;
+import de.cismet.cids.custom.utils.butler.ButlerProduct;
+import de.cismet.cids.custom.utils.butler.ButlerResolution;
 
 /**
  * DOCUMENT ME!
@@ -36,12 +41,12 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
 
     ArrayList<ButlerProductGroup> productGroups;
     ArrayList<ButlerProduct> products;
-    ArrayList<ButlerResolution> resolution;
-    ArrayList<ButlerFormats> formats;
+    ArrayList<ButlerResolution> resolutions;
+    ArrayList<ButlerFormat> formats;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btGroupFormat;
-    private javax.swing.JComboBox cbAuflösung;
     private javax.swing.JComboBox cbProduktGruppe;
+    private javax.swing.JComboBox cbResolution;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
@@ -67,6 +72,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
     public Butler1ProductPanel() {
         loadPrductDescriptions();
         initComponents();
+        lstProdukt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -95,11 +101,12 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
         rbGeoTif = new javax.swing.JRadioButton();
         lblFiller = new javax.swing.JLabel();
         lblAuflösung = new javax.swing.JLabel();
-        cbAuflösung = new javax.swing.JComboBox();
+        cbResolution = new javax.swing.JComboBox();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel1 = new javax.swing.JPanel();
 
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        setMinimumSize(new java.awt.Dimension(400, 291));
         setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -250,12 +257,12 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 10, 40);
         add(lblAuflösung, gridBagConstraints);
 
-        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${resolution}");
+        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${resolutions}");
         jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 eLProperty,
-                cbAuflösung,
+                cbResolution,
                 "resolutionBinding");
         bindingGroup.addBinding(jComboBoxBinding);
 
@@ -264,7 +271,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-        add(cbAuflösung, gridBagConstraints);
+        add(cbResolution, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -278,7 +285,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                434,
+                414,
                 Short.MAX_VALUE));
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
@@ -303,7 +310,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbProduktGruppeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbProduktGruppeActionPerformed
+    private void cbProduktGruppeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbProduktGruppeActionPerformed
         final ButlerProductGroup productGroup = ((ButlerProductGroup)cbProduktGruppe.getSelectedItem());
         if (productGroup != null) {
             final Binding productBinding = bindingGroup.getBinding("productBinding");
@@ -311,24 +318,24 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
             productProp.setValue(this, productGroup.getButlerProducts());
             final Binding resolutionBinding = bindingGroup.getBinding("resolutionBinding");
             final Property resolutionProp = resolutionBinding.getSourceProperty();
-            resolutionProp.setValue(this, productGroup.getButlerResolution());
+            resolutionProp.setValue(this, productGroup.getButlerResolutions());
             productGroup.getButlerFormats();
             updateFormatButtons(productGroup.getButlerFormats());
         }
-    }                                                                                   //GEN-LAST:event_cbProduktGruppeActionPerformed
+    }//GEN-LAST:event_cbProduktGruppeActionPerformed
 
     /**
      * DOCUMENT ME!
      */
-    private void loadPrductDescriptions() {
-        try {
+    private void loadPrductDescriptions() { 
+       try {
             final ObjectMapper mapper = new ObjectMapper();
             final ButlerProductInfo tester = mapper.readValue(ButlerProductInfo.class.getResourceAsStream(
                         "/de/cismet/cids/custom/butler/productDescription.json"),
                     ButlerProductInfo.class);
             productGroups = tester.getProductGroups();
-//            products = productGroups.get(0).getButlerProducts();
-//            resolution = productGroups.get(0).getButlerResolution();
+            products = productGroups.get(0).getButlerProducts();
+            resolutions = productGroups.get(0).getButlerResolutions();
         } catch (IOException ex) {
             Exceptions.printStackTrace(ex);
         }
@@ -364,7 +371,30 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
     /**
      * DOCUMENT ME!
      *
-     * @param  products  DOCUMENT ME!
+     * @return  DOCUMENT ME!
+     */
+    public ButlerProduct getSelectedProduct() {
+        final ButlerProduct bp = (ButlerProduct)lstProdukt.getSelectedValue();
+        if (bp != null) {
+            if (rbDxf.isSelected()) {
+                bp.setFormat(new ButlerFormat("dxf"));
+            } else if (rbGeoTif.isSelected()) {
+                bp.setFormat(new ButlerFormat("tif"));
+            } else if (rbShp.isSelected()) {
+                bp.setFormat(new ButlerFormat("shape"));
+            } else if (rbTif.isSelected()) {
+                bp.setFormat(new ButlerFormat("tif"));
+            }
+            final ButlerResolution res = (ButlerResolution)cbResolution.getSelectedItem();
+            bp.setResolution(res);
+        }
+        return bp;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  products  args products DOCUMENT ME!
      */
     public void setProducts(final ArrayList<ButlerProduct> products) {
         this.products = products;
@@ -375,17 +405,17 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
      *
      * @return  DOCUMENT ME!
      */
-    public ArrayList<ButlerResolution> getResolution() {
-        return resolution;
+    public ArrayList<ButlerResolution> getResolutions() {
+        return resolutions;
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param  resolution  DOCUMENT ME!
+     * @param  resolution  args resolution DOCUMENT ME!
      */
-    public void setResolution(final ArrayList<ButlerResolution> resolution) {
-        this.resolution = resolution;
+    public void setResolutions(final ArrayList<ButlerResolution> resolution) {
+        this.resolutions = resolution;
     }
 
     /**
@@ -406,7 +436,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
      *
      * @param  allowedButlerFormats  DOCUMENT ME!
      */
-    private void updateFormatButtons(final ArrayList<ButlerFormats> allowedButlerFormats) {
+    private void updateFormatButtons(final ArrayList<ButlerFormat> allowedButlerFormats) {
         // remove selection for all
         btGroupFormat.clearSelection();
 
@@ -416,8 +446,8 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
         rbShp.setEnabled(false);
         rbTif.setEnabled(false);
 
-        // enable the ones that are currentyl allowed
-        for (final ButlerFormats f : allowedButlerFormats) {
+//        enable the ones that are currentyl allowed
+        for (final ButlerFormat f : allowedButlerFormats) {
             if (f.getKey().equals("TIF")) {
                 rbTif.setEnabled(true);
             } else if (f.getKey().equals("GEOTIF")) {

@@ -6,39 +6,57 @@
                 {
                     "name":"1m Höhenlinie",
                     "key":"0101",
-                    "colorDepth":"ohne"
+                    "colorDepth":null,
+                    "format":null,
+                    "resolution":null
                 },{
                     "name":"5m Höhenlinie",
                     "key":"0102",
-                    "colorDepth":"ohne"
+                    "colorDepth":null,
+                    "format":null,
+                    "resolution":null
                 },{
                     "name":"10m Höhenlinie",
                     "key":"0103",
-                    "colorDepth":"ohne"
+                    "colorDepth":null,
+                    "format":null,
+                    "resolution":null
                 },{
                     "name":"1m Punktraster",
                     "key":"0104",
-                    "colorDepth":"ohne"
+                    "colorDepth":null,
+                    "format":null,
+                    "resolution":null
                 },{
                     "name":"5m Punktraster",
                     "key":"0105",
-                    "colorDepth":"ohne"
+                    "colorDepth":null,
+                    "format":null,
+                    "resolution":null
                 },{
                     "name":"10m Punktraster",
                     "key":"0106",
-                    "colorDepth":"ohne"
+                    "colorDepth":null,
+                    "format":null,
+                    "resolution":null
                 },{
                     "name":"25m Punktraster",
                     "key":"0107",
-                    "colorDepth":"ohne"
+                    "colorDepth":null,
+                    "format":null,
+                    "resolution":null
                 },{
                     "name":"Regengeld - Dachpunkte",
                     "key":"0108",
-                    "colorDepth":"ohne"
+                    "colorDepth":null,
+                    "format":null,
+                    "resolution":null
                 },{
                     "name":"Regengel - Bodenpunkte",
                     "key":"0109",
-                    "colorDepth":"ohne"
+                    "colorDepth":null,
+                    "format":null,
+                    "resolution":null
                 }
             ],
             "butlerFormats":[
@@ -48,7 +66,7 @@
                     "key":"SHAPE"
                 }
             ],
-            "butlerResolution":[
+            "butlerResolutions":[
                 {
                     "key":"ohne"
                 }
@@ -59,23 +77,33 @@
                 {
                     "name":"2011-12 Grauwert",
                     "key":"0201",
-                    "colorDepth":"8 Bit"
+                    "colorDepth":8,
+                    "format":null,
+                    "resolution":null
                 },{
                     "name":"2011-12 Schwarz-Weiß",
                     "key":"0202",
-                    "colorDepth":"1 Bit"
+                    "colorDepth":1,
+                    "format":null,
+                    "resolution":null
                 },{
                     "name":"2011-12 Grauwert XL",
                     "key":"0203",
-                    "colorDepth":"8 Bit"
+                    "colorDepth":8,
+                    "format":null,
+                    "resolution":null
                 },{
                     "name":"2011-12 Schwarz-Weiß",
                     "key":"0204",
-                    "colorDepth":"1 Bit"
+                    "colorDepth":1,
+                    "format":null,
+                    "resolution":null
                 },{
                     "name":"2012-12 Farbe",
                     "key":"0205",
-                    "colorDepth":"8 Bit"
+                    "colorDepth":8,
+                    "format":null,
+                    "resolution":null
                 }
             ],
             "butlerFormats":[
@@ -85,7 +113,7 @@
                     "key":"GEOTIF"
                 }
             ],
-            "butlerResolution":[
+            "butlerResolutions":[
                 {
                     "key":"10"
                 },{
@@ -100,27 +128,43 @@
                 {
                     "name":"Regional 2011-12 Grauwert",
                     "key":"0301",
-                    "colorDepth":"8 Bit"
+                    "colorDepth":8,
+                    "format":null,
+                    "resolution":null
                 },{
                     "name":"Regional 2011-12 Farbe",
                     "key":"0302",
-                    "colorDepth":"8 Bit"
+                    "colorDepth":8,
+                    "format":null,
+                    "resolution":null
                 },{
                     "name":"Regional 2011-12 Grauwert",
                     "key":"0303",
-                    "colorDepth":"8 Bit"
+                    "colorDepth":8,
+                    "format":null,
+                    "resolution":null
                 },{
                     "name":"Regional 2011-12 Farbe",
                     "key":"0304",
-                    "colorDepth":"8 Bit"
+                    "colorDepth":8,
+                    "format":null,
+                    "resolution":null
                 },{
                     "name":"Regional 2012-12 Grauwert",
                     "key":"0305",
-                    "colorDepth":"8 Bit"
+                    "colorDepth":8,
+                    "format":null,
+                    "resolution":null
                 },{
                     "name":"Regional 2012-12 Farbe",
                     "key":"0306",
-                    "colorDepth":"8 Bit"
+                    "colorDepth":8,
+                    "format":{
+                        
+                    },
+                    "resolution":{
+                        
+                    }
                 }
             ],
             "butlerFormats":[
@@ -130,7 +174,7 @@
                     "key":"GEOTIF"
                 }
             ],
-            "butlerResolution":[
+            "butlerResolutions":[
                 {
                     "key":"50"
                 },{
@@ -145,23 +189,33 @@
                 {
                     "name":"Wuppertal 2002",
                     "key":"0401",
-                    "colorDepth":"8 Bit"
+                    "colorDepth":8,
+                    "format":null,
+                    "resolution":null
                 },{
                     "name":"Wuppertal 2005",
                     "key":"0402",
-                    "colorDepth":"8 Bit"
+                    "colorDepth":8,
+                    "format":null,
+                    "resolution":null
                 },{
                     "name":"Wuppertal 2007",
                     "key":"0403",
-                    "colorDepth":"8 Bit"
+                    "colorDepth":8,
+                    "format":null,
+                    "resolution":null
                 },{
                     "name":"Wuppertal 2010",
                     "key":"0404",
-                    "colorDepth":"8 Bit"
+                    "colorDepth":8,
+                    "format":null,
+                    "resolution":null
                 },{
                     "name":"Wuppertal 2012",
                     "key":"0405",
-                    "colorDepth":"8 Bit"
+                    "colorDepth":8,
+                    "format":null,
+                    "resolution":null
                 }
             ],
             "butlerFormats":[
@@ -171,7 +225,7 @@
                     "key":"GEOTIF"
                 }
             ],
-            "butlerResolution":[
+            "butlerResolutions":[
                 {
                     "key":"10"
                 },{
@@ -186,15 +240,21 @@
                 {
                     "name":"Wuppertaler Gebäude",
                     "key":"0501",
-                    "colorDepth":"8 Bit"
+                    "colorDepth":8,
+                    "format":null,
+                    "resolution":null
                 },{
                     "name":"Wuppertaler Flurstücke",
                     "key":"0502",
-                    "colorDepth":"8 Bit"
+                    "colorDepth":8 ,
+                    "format":null,
+                    "resolution":null
                 },{
                     "name":"Wuppertaler Adressen",
                     "key":"0503",
-                    "colorDepth":"8 Bit"
+                    "colorDepth":8,
+                    "format":null,
+                    "resolution":null
                 }
             ],
             "butlerFormats":[
@@ -204,7 +264,7 @@
                     "key":"SHAPE"
                 }
             ],
-            "butlerResolution":[
+            "butlerResolutions":[
                 {
                     "key":"ohne"
                 }

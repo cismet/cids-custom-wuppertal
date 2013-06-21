@@ -13,6 +13,10 @@ package de.cismet.cids.custom.butler;
 
 import java.util.ArrayList;
 
+import de.cismet.cids.custom.utils.butler.ButlerFormat;
+import de.cismet.cids.custom.utils.butler.ButlerProduct;
+import de.cismet.cids.custom.utils.butler.ButlerResolution;
+
 /**
  * DOCUMENT ME!
  *
@@ -25,8 +29,8 @@ public class ButlerProductGroup {
 
     String key;
     ArrayList<ButlerProduct> butlerProducts;
-    ArrayList<ButlerFormats> butlerFormats;
-    ArrayList<ButlerResolution> butlerResolution;
+    ArrayList<ButlerFormat> butlerFormats;
+    ArrayList<ButlerResolution> butlerResolutions;
 
     //~ Methods ----------------------------------------------------------------
 
@@ -71,7 +75,7 @@ public class ButlerProductGroup {
      *
      * @return  DOCUMENT ME!
      */
-    public ArrayList<ButlerFormats> getButlerFormats() {
+    public ArrayList<ButlerFormat> getButlerFormats() {
         return butlerFormats;
     }
 
@@ -80,7 +84,7 @@ public class ButlerProductGroup {
      *
      * @param  butlerFormats  DOCUMENT ME!
      */
-    public void setButlerFormats(final ArrayList<ButlerFormats> butlerFormats) {
+    public void setButlerFormats(final ArrayList<ButlerFormat> butlerFormats) {
         this.butlerFormats = butlerFormats;
     }
 
@@ -89,8 +93,8 @@ public class ButlerProductGroup {
      *
      * @return  DOCUMENT ME!
      */
-    public ArrayList<ButlerResolution> getButlerResolution() {
-        return butlerResolution;
+    public ArrayList<ButlerResolution> getButlerResolutions() {
+        return butlerResolutions;
     }
 
     /**
@@ -98,8 +102,8 @@ public class ButlerProductGroup {
      *
      * @param  butlerResolution  DOCUMENT ME!
      */
-    public void setButlerResolution(final ArrayList<ButlerResolution> butlerResolution) {
-        this.butlerResolution = butlerResolution;
+    public void setButlerResolutions(final ArrayList<ButlerResolution> butlerResolution) {
+        this.butlerResolutions = butlerResolution;
     }
 
     @Override

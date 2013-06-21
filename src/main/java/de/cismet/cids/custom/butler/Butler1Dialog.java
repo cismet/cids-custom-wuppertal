@@ -11,7 +11,8 @@
  */
 package de.cismet.cids.custom.butler;
 
-import java.awt.BorderLayout;
+import org.apache.log4j.Logger;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -25,11 +26,9 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -37,6 +36,7 @@ import javax.swing.plaf.TabbedPaneUI;
 import javax.swing.plaf.basic.BasicButtonUI;
 
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.utils.butler.ButlerProduct;
 
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.MappingComponent;
@@ -45,6 +45,8 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
+import de.cismet.tools.gui.downloadmanager.DownloadManager;
+
 /**
  * DOCUMENT ME!
  *
@@ -52,6 +54,10 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
  * @version  $Revision$, $Date$
  */
 public class Butler1Dialog extends javax.swing.JDialog implements DocumentListener {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final Logger LOG = Logger.getLogger(Butler1Dialog.class);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -63,7 +69,6 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnCreate;
     private de.cismet.cids.custom.butler.Butler1ProductPanel butler1ProductPanel1;
-    private de.cismet.cids.custom.butler.Butler1ProductPanel butler1ProductPanel2;
     private javax.swing.JComboBox cbSize;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JLabel lblLowerPosition;
@@ -78,7 +83,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
     private javax.swing.JTabbedPane tbpProducts;
     private javax.swing.JTextField tfLowerE;
     private javax.swing.JTextField tfLowerN;
-    private javax.swing.JTextField tfRequestNumber;
+    private javax.swing.JTextField tfOrderId;
     private javax.swing.JTextField tfUpperE;
     private javax.swing.JTextField tfUpperN;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
@@ -144,12 +149,11 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         java.awt.GridBagConstraints gridBagConstraints;
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        butler1ProductPanel2 = new de.cismet.cids.custom.butler.Butler1ProductPanel();
         pnlProductSettings = new javax.swing.JPanel();
         tbpProducts = new javax.swing.JTabbedPane();
         butler1ProductPanel1 = new de.cismet.cids.custom.butler.Butler1ProductPanel();
         lblRequestNumber = new javax.swing.JLabel();
-        tfRequestNumber = new javax.swing.JTextField();
+        tfOrderId = new javax.swing.JTextField();
         pnlMapSettings = new javax.swing.JPanel();
         lblLowerPosition = new javax.swing.JLabel();
         tfLowerE = new javax.swing.JTextField();
@@ -171,12 +175,12 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        pnlProductSettings.setMinimumSize(new java.awt.Dimension(400, 300));
-        pnlProductSettings.setPreferredSize(new java.awt.Dimension(400, 300));
+        pnlProductSettings.setMinimumSize(new java.awt.Dimension(450, 300));
+        pnlProductSettings.setPreferredSize(new java.awt.Dimension(450, 300));
         pnlProductSettings.setLayout(new java.awt.GridBagLayout());
 
         tbpProducts.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
-        tbpProducts.setMinimumSize(new java.awt.Dimension(395, 400));
+        tbpProducts.setMinimumSize(new java.awt.Dimension(400, 400));
         tbpProducts.addTab(org.openide.util.NbBundle.getMessage(
                 Butler1Dialog.class,
                 "Butler1Dialog.butler1ProductPanel1.TabConstraints.tabTitle"),
@@ -200,20 +204,22 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 10, 20);
         pnlProductSettings.add(lblRequestNumber, gridBagConstraints);
 
-        tfRequestNumber.setText(org.openide.util.NbBundle.getMessage(
-                Butler1Dialog.class,
-                "Butler1Dialog.tfRequestNumber.text")); // NOI18N
+        tfOrderId.setText(org.openide.util.NbBundle.getMessage(Butler1Dialog.class, "Butler1Dialog.tfOrderId.text")); // NOI18N
+        tfOrderId.setMinimumSize(new java.awt.Dimension(70, 27));
+        tfOrderId.setPreferredSize(new java.awt.Dimension(90, 27));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 5);
-        pnlProductSettings.add(tfRequestNumber, gridBagConstraints);
+        pnlProductSettings.add(tfOrderId, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(pnlProductSettings, gridBagConstraints);
 
@@ -230,7 +236,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
 
         tfLowerE.setText(org.openide.util.NbBundle.getMessage(Butler1Dialog.class, "Butler1Dialog.tfLowerE.text")); // NOI18N
         tfLowerE.setMinimumSize(new java.awt.Dimension(70, 27));
-        tfLowerE.setPreferredSize(new java.awt.Dimension(70, 27));
+        tfLowerE.setPreferredSize(new java.awt.Dimension(90, 27));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -239,7 +245,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
 
         tfLowerN.setText(org.openide.util.NbBundle.getMessage(Butler1Dialog.class, "Butler1Dialog.tfLowerN.text")); // NOI18N
         tfLowerN.setMinimumSize(new java.awt.Dimension(70, 27));
-        tfLowerN.setPreferredSize(new java.awt.Dimension(70, 27));
+        tfLowerN.setPreferredSize(new java.awt.Dimension(90, 27));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
@@ -278,6 +284,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
         pnlMapSettings.add(cbSize, gridBagConstraints);
 
@@ -288,12 +295,12 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         pnlMapLayout.setHorizontalGroup(
             pnlMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                333,
+                374,
                 Short.MAX_VALUE));
         pnlMapLayout.setVerticalGroup(
             pnlMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                262,
+                339,
                 Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -310,7 +317,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
 
         tfUpperE.setText(org.openide.util.NbBundle.getMessage(Butler1Dialog.class, "Butler1Dialog.tfUpperE.text")); // NOI18N
         tfUpperE.setMinimumSize(new java.awt.Dimension(70, 27));
-        tfUpperE.setPreferredSize(new java.awt.Dimension(70, 27));
+        tfUpperE.setPreferredSize(new java.awt.Dimension(90, 27));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -319,7 +326,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
 
         tfUpperN.setText(org.openide.util.NbBundle.getMessage(Butler1Dialog.class, "Butler1Dialog.tfUpperN.text")); // NOI18N
         tfUpperN.setMinimumSize(new java.awt.Dimension(70, 27));
-        tfUpperN.setPreferredSize(new java.awt.Dimension(70, 27));
+        tfUpperN.setPreferredSize(new java.awt.Dimension(90, 27));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
@@ -408,7 +415,23 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
      * @param  evt  DOCUMENT ME!
      */
     private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCreateActionPerformed
-        // TODO add your handling code here:
+        // ToDo: check input values
+        final Butler1ProductPanel productPan = (Butler1ProductPanel)tbpProducts.getSelectedComponent();
+        final ButlerProduct bp = productPan.getSelectedProduct();
+        LOG.info("Create the following Butler product:\n\t orderId: " + tfOrderId.getText()
+                    + "\n\t productId: " + bp.getKey()
+                    + "\n\t colorDepth: " + bp.getColorDepth()
+                    + "\n\t resolution: " + bp.getResolution()
+                    + "\n\t format: " + bp.getFormat());
+        final double minX = 370000d;
+        final double minY = 5680000d;
+        final double maxX = 370300d;
+        final double maxY = 5680300d;
+        final ButlerDownload download = new ButlerDownload(tfOrderId.getText(), bp, minX, minY, maxX, maxY);
+        DownloadManager.instance().add(download);
+//        this.setVisible(false);
+        this.dispose();
+//        System.exit(0);
     } //GEN-LAST:event_btnCreateActionPerformed
 
     /**
@@ -642,26 +665,26 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
-        try {
-            for (final javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Butler1Dialog.class.getName())
-                    .log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Butler1Dialog.class.getName())
-                    .log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Butler1Dialog.class.getName())
-                    .log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Butler1Dialog.class.getName())
-                    .log(java.util.logging.Level.SEVERE, null, ex);
-        }
+//        try {
+//            for (final javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(Butler1Dialog.class.getName())
+//                    .log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(Butler1Dialog.class.getName())
+//                    .log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(Butler1Dialog.class.getName())
+//                    .log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(Butler1Dialog.class.getName())
+//                    .log(java.util.logging.Level.SEVERE, null, ex);
+//        }
         //</editor-fold>
 
         /* Create and display the dialog */
