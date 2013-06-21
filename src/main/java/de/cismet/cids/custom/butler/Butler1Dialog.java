@@ -29,6 +29,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -113,7 +114,6 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                             me.getY());
                     if (tabNr == (tbpProducts.getTabCount() - 1)) {
                         addCloseableTab();
-                        tbpProducts.setSelectedIndex(tbpProducts.getTabCount() - 2);
                     }
                 }
             });
@@ -127,8 +127,9 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         addLabel.setBorder(null);
         addLabel.setFocusable(false);
         addPan.add(addLabel);
-        tbpProducts.insertTab(null, null, null, null, tbpProducts.getTabCount());
+        tbpProducts.addTab("+", null);
         tbpProducts.setTabComponentAt(tbpProducts.getTabCount() - 1, addPan);
+//        tbpProducts.setTabComponentAt(tbpProducts.getTabCount() - 1, addLabel);
         for (final PredefinedBoxes box : boxes) {
             if (box.getDisplayName().equals("keine Auswahl")) {
                 cbSize.setSelectedItem(box);
@@ -179,7 +180,6 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         pnlProductSettings.setPreferredSize(new java.awt.Dimension(450, 300));
         pnlProductSettings.setLayout(new java.awt.GridBagLayout());
 
-        tbpProducts.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         tbpProducts.setMinimumSize(new java.awt.Dimension(400, 400));
         tbpProducts.addTab(org.openide.util.NbBundle.getMessage(
                 Butler1Dialog.class,
@@ -550,8 +550,13 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         final Component tabComp = getTabComponent(true);
         final int number = tbpProducts.getTabCount();
         final String title = "Produkt " + number;
-        tbpProducts.insertTab(title, null, new Butler1ProductPanel(), null, tbpProducts.getTabCount() - 1);
-        tbpProducts.setTabComponentAt(tbpProducts.getTabCount() - 2, tabComp);
+        final int tabPos = tbpProducts.getTabCount() - 1;
+        final Component comp = new Butler1ProductPanel();
+        tbpProducts.insertTab("", null, comp, title, tabPos);
+//        tbpProducts.insertTab(null, null, comp, null, tabPos);
+        final int tabPosNew = tbpProducts.indexOfComponent(comp);
+        tbpProducts.setTabComponentAt(tabPosNew, tabComp);
+//        tbpProducts.setT
     }
 
     /**
@@ -665,26 +670,26 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
-//        try {
-//            for (final javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(Butler1Dialog.class.getName())
-//                    .log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(Butler1Dialog.class.getName())
-//                    .log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(Butler1Dialog.class.getName())
-//                    .log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(Butler1Dialog.class.getName())
-//                    .log(java.util.logging.Level.SEVERE, null, ex);
-//        }
+        try {
+            for (final javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Butler1Dialog.class.getName())
+                    .log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Butler1Dialog.class.getName())
+                    .log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Butler1Dialog.class.getName())
+                    .log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Butler1Dialog.class.getName())
+                    .log(java.util.logging.Level.SEVERE, null, ex);
+        }
         //</editor-fold>
 
         /* Create and display the dialog */
