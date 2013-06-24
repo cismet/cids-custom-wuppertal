@@ -16,6 +16,7 @@ import Sirius.navigator.exception.ConnectionException;
 
 import org.openide.util.lookup.ServiceProvider;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 import javax.swing.SwingUtilities;
@@ -56,9 +57,9 @@ public class NasStartupHook implements StartupHook {
                     final ServerActionParameter paramMethod = new ServerActionParameter(
                             NasDataQueryAction.PARAMETER_TYPE.METHOD.toString(),
                             NasDataQueryAction.METHOD_TYPE.GET_ALL);
-                    HashSet<String> openOrderIds = null;
+                    HashMap<String, Boolean> openOrderIds = null;
                     try {
-                        openOrderIds = (HashSet<String>)SessionManager.getProxy()
+                        openOrderIds = (HashMap<String, Boolean>)SessionManager.getProxy()
                                     .executeTask(
                                             SEVER_ACTION,
                                             "WUNDA_BLAU",
@@ -73,14 +74,15 @@ public class NasStartupHook implements StartupHook {
                         return;
                     }
                     final StringBuilder logMessageBuilder = new StringBuilder();
-                    for (final String s : openOrderIds) {
+                    for (final String s : openOrderIds.keySet()) {
                         logMessageBuilder.append(s);
                         logMessageBuilder.append(",");
                     }
                     log.fatal("pending nas orders found: " + logMessageBuilder.toString());
                     // generate a new NasDownload object for pending orders
-                    for (final String s : openOrderIds) {
-                        final NASDownload download = new NASDownload(s);
+                    for (final String s : openOrderIds.keySet()) {
+                        final boolean isSplitted = openOrderIds.get(s);
+                        final NASDownload download = new NASDownload(s, isSplitted);
                         DownloadManager.instance().add(download);
                     }
                 }

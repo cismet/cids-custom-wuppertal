@@ -14,6 +14,7 @@ package de.cismet.cids.custom.nas;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 
+import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.GeometryCollection;
 
 import org.openide.util.Cancellable;
@@ -50,7 +51,8 @@ public class NASDownload extends AbstractDownload implements Cancellable {
     //~ Static fields/initializers ---------------------------------------------
 
     private static String SEVER_ACTION = "nasDataQuery";
-    private static String EXTENSION = ".xml";
+    private static String XML_EXTENSION = ".xml";
+    private static String ZIP_EXTENSION = ".zip";
     private static final String BASE_TITLE;
 
     static {
@@ -89,9 +91,10 @@ public class NASDownload extends AbstractDownload implements Cancellable {
     /**
      * Creates a new NASDownload object.
      *
-     * @param  orderId  DOCUMENT ME!
+     * @param  orderId     DOCUMENT ME!
+     * @param  isSplitted  DOCUMENT ME!
      */
-    public NASDownload(final String orderId) {
+    public NASDownload(final String orderId, final boolean isSplitted) {
         omitSendingRequest = true;
         this.orderId = orderId;
         template = null;
@@ -101,10 +104,11 @@ public class NASDownload extends AbstractDownload implements Cancellable {
         this.directory = "";
         filename = orderId;
         fileToSaveTo = new File("" + System.currentTimeMillis());
+        final String extension = isSplitted ? ZIP_EXTENSION : XML_EXTENSION;
         if ((filename != null) && !filename.equals("")) {
-            determineDestinationFile(filename, EXTENSION);
+            determineDestinationFile(filename, extension);
         } else {
-            determineDestinationFile(requestId, EXTENSION);
+            determineDestinationFile(requestId, extension);
         }
     }
 
@@ -158,10 +162,11 @@ public class NASDownload extends AbstractDownload implements Cancellable {
             fileToSaveTo = new File("" + System.currentTimeMillis());
         }
         this.filename = filename;
+        final String extension = isOrderSplitted(g) ? ZIP_EXTENSION : XML_EXTENSION;
         if ((filename != null) && !filename.equals("")) {
-            determineDestinationFile(filename, EXTENSION);
+            determineDestinationFile(filename, extension);
         } else {
-            determineDestinationFile(requestId, EXTENSION);
+            determineDestinationFile(requestId, extension);
         }
     }
 
@@ -174,6 +179,23 @@ public class NASDownload extends AbstractDownload implements Cancellable {
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   geoms  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private boolean isOrderSplitted(final GeometryCollection geoms) {
+        final Envelope env = geoms.getEnvelopeInternal();
+        final double xSize = env.getMaxX() - env.getMinX();
+        final double ySize = env.getMaxY() - env.getMinY();
+
+        if ((xSize > 500) && (ySize > 500)) {
+            return true;
+        }
+        return false;
+    }
     /**
      * DOCUMENT ME!
      */
