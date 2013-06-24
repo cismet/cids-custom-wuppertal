@@ -519,9 +519,12 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
      * @param  enable  DOCUMENT ME!
      */
     private void changeButtonAvailability(final boolean enable) {
-        jxlBestandsnachweisNRW.setEnabled(enable);
-        jxlBestandsnachweisKommunal.setEnabled(enable);
-        jxlBestandsnachweisKommunalIntern.setEnabled(enable);
+        jxlBestandsnachweisNRW.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW)
+                    && BillingPopup.isBillingAllowed());
+        jxlBestandsnachweisKommunal.setEnabled(ObjectRendererUtils.checkActionTag(
+                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM) && BillingPopup.isBillingAllowed());
+        jxlBestandsnachweisKommunalIntern.setEnabled(ObjectRendererUtils.checkActionTag(
+                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN));
     }
 
     /**
@@ -551,20 +554,22 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
                 continue;
             }
 
-            String queryID = getCompleteBuchungsblattCode(cidsBeanWrapper.getCidsBean());
+            final String buchungsblattCode = getCompleteBuchungsblattCode(cidsBeanWrapper.getCidsBean());
             URL url = null;
 
-            if ((queryID == null) || (queryID.trim().length() <= 0)) {
+            if ((buchungsblattCode == null) || (buchungsblattCode.trim().length() <= 0)) {
                 continue;
             }
 
-            queryID = AlkisUtils.escapeHtmlSpaces(queryID);
+            final String queryID = AlkisUtils.escapeHtmlSpaces(buchungsblattCode);
 
             try {
                 url = AlkisUtils.PRODUCTS.productEinzelNachweisUrl(queryID, product);
 
                 if (url != null) {
-                    downloads.add(new HttpDownload(url, "", jobname, downloadTitle, product, ".pdf"));
+                    String filename = product + "." + buchungsblattCode.replace("/", "--").trim();
+                    filename = filename.replaceAll(" +", "_"); // replace all whitespaces
+                    downloads.add(new HttpDownload(url, "", jobname, downloadTitle, filename, ".pdf"));
                 }
             } catch (Exception ex) {
                 ObjectRendererUtils.showExceptionWindowToUser(

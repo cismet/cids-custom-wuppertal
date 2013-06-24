@@ -7,8 +7,6 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.utils.billing;
 
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
-
 import java.util.HashMap;
 
 /**
