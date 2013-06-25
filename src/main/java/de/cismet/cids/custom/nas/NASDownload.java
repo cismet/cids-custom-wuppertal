@@ -105,7 +105,11 @@ public class NASDownload extends AbstractDownload implements Cancellable {
         this.requestId = requestId;
         this.directory = "";
 //        filename = orderId;
-        fileToSaveTo = new File("" + System.currentTimeMillis());
+        if ((requestId != null) && !requestId.equals("")) {
+            fileToSaveTo = new File("" + requestId);
+        } else {
+            fileToSaveTo = new File("" + orderId);
+        }
         final String extension = isSplitted ? ZIP_EXTENSION : XML_EXTENSION;
         if ((filename != null) && !filename.equals("")) {
             determineDestinationFile(filename, extension);
