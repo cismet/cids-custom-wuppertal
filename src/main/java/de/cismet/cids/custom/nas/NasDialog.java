@@ -1045,8 +1045,8 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
                     gf = g.getFactory();
                 }
                 geoms[i] = g;
+                i++;
             }
-            i++;
         }
         return new GeometryCollection(geoms, gf);
     }
