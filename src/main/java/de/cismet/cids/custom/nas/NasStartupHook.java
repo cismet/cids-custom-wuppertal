@@ -21,6 +21,7 @@ import java.util.HashSet;
 
 import javax.swing.SwingUtilities;
 
+import de.cismet.cids.custom.utils.nas.NasProductInfo;
 import de.cismet.cids.custom.wunda_blau.search.actions.NasDataQueryAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
@@ -57,9 +58,9 @@ public class NasStartupHook implements StartupHook {
                     final ServerActionParameter paramMethod = new ServerActionParameter(
                             NasDataQueryAction.PARAMETER_TYPE.METHOD.toString(),
                             NasDataQueryAction.METHOD_TYPE.GET_ALL);
-                    HashMap<String, Boolean> openOrderIds = null;
+                    HashMap<String, NasProductInfo> openOrderIds = null;
                     try {
-                        openOrderIds = (HashMap<String, Boolean>)SessionManager.getProxy()
+                        openOrderIds = (HashMap<String, NasProductInfo>)SessionManager.getProxy()
                                     .executeTask(
                                             SEVER_ACTION,
                                             "WUNDA_BLAU",
@@ -80,9 +81,12 @@ public class NasStartupHook implements StartupHook {
                     }
                     log.fatal("pending nas orders found: " + logMessageBuilder.toString());
                     // generate a new NasDownload object for pending orders
-                    for (final String s : openOrderIds.keySet()) {
-                        final boolean isSplitted = openOrderIds.get(s);
-                        final NASDownload download = new NASDownload(s, isSplitted);
+                    for (final String orderId : openOrderIds.keySet()) {
+                        final NasProductInfo pInfo = (NasProductInfo)openOrderIds.get(orderId);
+                        final NASDownload download = new NASDownload(
+                                orderId,
+                                pInfo.isIsSplittet(),
+                                pInfo.getRequestName());
                         DownloadManager.instance().add(download);
                     }
                 }
