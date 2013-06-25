@@ -722,18 +722,20 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
 
                 @Override
                 public void run() {
-                    final XBoundingBox boxToGoto = new XBoundingBox(selectedGeomWrapper.getGeometry().getEnvelope(),
-                            AlkisConstants.COMMONS.SRS_SERVICE,
-                            true);
-                    final XBoundingBox bufferedBox;
-                    if (selectedGeomWrapper != totalMapWrapper) {
-                        final double diagonalLength = Math.sqrt((boxToGoto.getWidth() * boxToGoto.getWidth())
-                                        + (boxToGoto.getHeight() * boxToGoto.getHeight()));
-                        bufferedBox = new XBoundingBox(boxToGoto.getGeometry().buffer(diagonalLength / 2));
-                    } else {
-                        bufferedBox = new XBoundingBox(boxToGoto.getGeometry().buffer(TOTAL_MAP_BUFFER));
+                    if (selectedGeomWrapper != null) {
+                        final XBoundingBox boxToGoto = new XBoundingBox(selectedGeomWrapper.getGeometry().getEnvelope(),
+                                AlkisConstants.COMMONS.SRS_SERVICE,
+                                true);
+                        final XBoundingBox bufferedBox;
+                        if (selectedGeomWrapper != totalMapWrapper) {
+                            final double diagonalLength = Math.sqrt((boxToGoto.getWidth() * boxToGoto.getWidth())
+                                            + (boxToGoto.getHeight() * boxToGoto.getHeight()));
+                            bufferedBox = new XBoundingBox(boxToGoto.getGeometry().buffer(diagonalLength / 2));
+                        } else {
+                            bufferedBox = new XBoundingBox(boxToGoto.getGeometry().buffer(TOTAL_MAP_BUFFER));
+                        }
+                        map.gotoBoundingBox(bufferedBox, false, true, 500);
                     }
-                    map.gotoBoundingBox(bufferedBox, false, true, 500);
                 }
             };
 
