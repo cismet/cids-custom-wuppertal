@@ -93,16 +93,18 @@ public class NASDownload extends AbstractDownload implements Cancellable {
      *
      * @param  orderId     DOCUMENT ME!
      * @param  isSplitted  DOCUMENT ME!
+     * @param  requestId   DOCUMENT ME!
      */
-    public NASDownload(final String orderId, final boolean isSplitted) {
+    public NASDownload(final String orderId, final boolean isSplitted, final String requestId) {
         omitSendingRequest = true;
         this.orderId = orderId;
         template = null;
         geometries = null;
         this.title = BASE_TITLE;
         status = State.WAITING;
+        this.requestId = requestId;
         this.directory = "";
-        filename = orderId;
+//        filename = orderId;
         fileToSaveTo = new File("" + System.currentTimeMillis());
         final String extension = isSplitted ? ZIP_EXTENSION : XML_EXTENSION;
         if ((filename != null) && !filename.equals("")) {
@@ -196,6 +198,7 @@ public class NASDownload extends AbstractDownload implements Cancellable {
         }
         return false;
     }
+
     /**
      * DOCUMENT ME!
      */
@@ -206,7 +209,10 @@ public class NASDownload extends AbstractDownload implements Cancellable {
 
     @Override
     public boolean cancel() {
-        final boolean cancelled = downloadFuture.cancel(true);
+        boolean cancelled = true;
+        if (downloadFuture != null) {
+            cancelled = downloadFuture.cancel(true);
+        }
         if (pollingFuture != null) {
             pollingFuture.cancel(true);
         }
@@ -214,6 +220,7 @@ public class NASDownload extends AbstractDownload implements Cancellable {
             status = State.ABORTED;
             stateChanged();
         }
+
         return downloadFuture.isCancelled();
     }
 
