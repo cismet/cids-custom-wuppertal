@@ -237,6 +237,7 @@ public class NASDownload extends AbstractDownload implements Cancellable {
          * Phase 1: sending the reqeust to the server
          */
         setTitleForPhase(Phase.REQEUST_GEN);
+        titleChanged();
         status = State.RUNNING;
         stateChanged();
         if (!omitSendingRequest) {
@@ -260,7 +261,7 @@ public class NASDownload extends AbstractDownload implements Cancellable {
 
         if (!downloadFuture.isCancelled()) {
             setTitleForPhase(Phase.RETRIEVAL);
-            stateChanged();
+            titleChanged();
         }
 
         /*
@@ -293,7 +294,7 @@ public class NASDownload extends AbstractDownload implements Cancellable {
 
         if (!downloadFuture.isCancelled()) {
             setTitleForPhase(Phase.DOWNLOAD);
-            stateChanged();
+            titleChanged();
         }
 
         if ((content == null) || (content.length <= 0)) {
