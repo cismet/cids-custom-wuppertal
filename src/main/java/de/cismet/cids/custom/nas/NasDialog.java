@@ -641,7 +641,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
 
                     final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
                                 AlkisConstants.COMMONS.MAP_CALL_STRING));
-                    swms.setName("Mauer");
+                    swms.setName("NAS-Dialog");
 
                     // add the raster layer to the model
                     mappingModel.addLayer(swms);
