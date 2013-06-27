@@ -93,6 +93,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
     private ArrayList<NasProductTemplate> productTemplates = new ArrayList<NasProductTemplate>();
     private DecimalFormat formatter = new DecimalFormat("#,###,##0.00 \u00A4\u00A4");
     private boolean firstBufferCall = true;
+    private boolean isInitialized = false;
     private int pointAmount = 0;
     private int gebaeudeAmount = 0;
     private int flurstueckAmount = 0;
@@ -177,6 +178,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
         pnlMap.add(map, BorderLayout.CENTER);
         cbType.setSelectedItem(NasProductTemplate.OHNE_EIGENTUEMER);
         calculateFee();
+        isInitialized = true;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -480,35 +482,37 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
+    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         dispose();
-    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
+    }//GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblGeomFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblGeomFocusLost
+    private void tblGeomFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblGeomFocusLost
         map.gotoInitialBoundingBox();
         tblGeom.clearSelection();
-    }                                                                    //GEN-LAST:event_tblGeomFocusLost
+    }//GEN-LAST:event_tblGeomFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbTypeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbTypeActionPerformed
-        calculateFee();
-    }                                                                          //GEN-LAST:event_cbTypeActionPerformed
+    private void cbTypeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTypeActionPerformed
+        if (isInitialized) {
+            calculateFee();
+        }
+    }//GEN-LAST:event_cbTypeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOkActionPerformed
+    private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
         SwingUtilities.invokeLater(new Runnable() {
 
                 @Override
@@ -532,7 +536,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
                     }
                 }
             });
-    } //GEN-LAST:event_btnOkActionPerformed
+    }//GEN-LAST:event_btnOkActionPerformed
 
     /**
      * DOCUMENT ME!
