@@ -609,8 +609,8 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
                     .add(
                         new NASDownload(
                             "NAS-Download",
-                            jobname,
                             "",
+                            jobname,
                             requestId,
                             template,
                             generateSearchGeomCollection()));
