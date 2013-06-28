@@ -482,37 +482,37 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
         dispose();
-    }//GEN-LAST:event_btnCancelActionPerformed
+    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblGeomFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblGeomFocusLost
+    private void tblGeomFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblGeomFocusLost
         map.gotoInitialBoundingBox();
         tblGeom.clearSelection();
-    }//GEN-LAST:event_tblGeomFocusLost
+    }                                                                    //GEN-LAST:event_tblGeomFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbTypeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTypeActionPerformed
+    private void cbTypeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbTypeActionPerformed
         if (isInitialized) {
             calculateFee();
         }
-    }//GEN-LAST:event_cbTypeActionPerformed
+    }                                                                          //GEN-LAST:event_cbTypeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
+    private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOkActionPerformed
         SwingUtilities.invokeLater(new Runnable() {
 
                 @Override
@@ -536,7 +536,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
                     }
                 }
             });
-    }//GEN-LAST:event_btnOkActionPerformed
+    } //GEN-LAST:event_btnOkActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -609,8 +609,8 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
                     .add(
                         new NASDownload(
                             "NAS-Download",
-                            jobname,
                             "",
+                            jobname,
                             requestId,
                             template,
                             generateSearchGeomCollection()));
@@ -933,7 +933,12 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
                         totalFee += flurstueckFee;
                         // ToDo this is a quick and dirty way to calculate the fee for type KOMPLETT
                         if (type == NasProductTemplate.KOMPLETT) {
-                            totalFee += flurstueckFee;
+                            final double eigentuemerFee = NasFeeCalculator.getFeeForEigentuemer(flurstueckAmount);
+                            totalFee += eigentuemerFee;
+                            final ArrayList<String> eigentuemerValues = new ArrayList<String>();
+                            eigentuemerValues.add("" + flurstueckAmount);
+                            eigentuemerValues.add(formatter.format(eigentuemerFee));
+                            result.put("eigentuemer", eigentuemerValues);
                         }
                         flurstueckValues.add(formatter.format(flurstueckFee));
                         result.put("flurstuecke", flurstueckValues);
@@ -972,13 +977,15 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
                                     break;
                                 }
                             } else {
+                                if (selectedTemplate == NasProductTemplate.KOMPLETT) {
+                                    if (key.equals("eigentuemer")) {
+                                        feePreview.setEigentuemerLabels(values.get(0), values.get(1));
+                                    }
+                                }
                                 if (key.equals("gebaeude")) {
                                     feePreview.setGebaeudeLabels(values.get(0), values.get(1));
                                 } else if (key.equals("flurstuecke")) {
                                     feePreview.setFlurstueckLabels(values.get(0), values.get(1));
-                                    if (selectedTemplate == NasProductTemplate.KOMPLETT) {
-                                        feePreview.setEigentuemerLabels(values.get(0), values.get(1));
-                                    }
                                 }
                             }
                         }
