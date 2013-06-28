@@ -182,7 +182,7 @@ public abstract class NasFeeCalculator {
             fee += tmpPoints * basePrice * 0.5d;
             amount = 1000;
         }
-        fee += amount * 0.2d;
+        fee += amount * basePrice;
         return fee;
     }
 }
