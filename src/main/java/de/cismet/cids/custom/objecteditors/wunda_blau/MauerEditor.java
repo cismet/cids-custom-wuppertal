@@ -125,8 +125,6 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.netutil.Proxy;
 
-import de.cismet.security.WebDavClient;
-
 import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.PasswordEncrypter;
 
@@ -199,7 +197,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private final Timer timer;
     private ImageResizeWorker currentResizeWorker;
     private boolean resizeListenerEnabled;
-    private final WebDavClient webDavClient;
+    private final WebDavHelper webDavHelper;
     private final JFileChooser fileChooser;
     private final List<CidsBean> removedFotoBeans = new ArrayList<CidsBean>();
     private final List<CidsBean> removeNewAddedFotoBean = new ArrayList<CidsBean>();
@@ -275,7 +273,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     private javax.swing.JLabel lblBesonderheiten;
     private org.jdesktop.swingx.JXBusyLabel lblBusy;
     private javax.swing.JLabel lblDauerhaftigkeit;
-    private javax.swing.JLabel lblEigentümer;
+    private javax.swing.JLabel lblEigentuemer;
     private javax.swing.JLabel lblEingriffAnsicht;
     private javax.swing.JLabel lblEingriffAnsicht1;
     private javax.swing.JLabel lblEingriffAnsicht2;
@@ -451,7 +449,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         map = new MappingComponent();
         pnlMap.setLayout(new BorderLayout());
         pnlMap.add(map, BorderLayout.CENTER);
-        this.webDavClient = new WebDavClient(Proxy.fromPreferences(), WEB_DAV_USER, WEB_DAV_PASSWORD, true);
+        webDavHelper = new WebDavHelper(Proxy.fromPreferences(), WEB_DAV_USER, WEB_DAV_PASSWORD, true);
         setEditable();
         final LayoutManager layout = getLayout();
         if (layout instanceof CardLayout) {
@@ -548,7 +546,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         jLabel4 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         lblFiller7 = new javax.swing.JLabel();
-        lblEigentümer = new javax.swing.JLabel();
+        lblEigentuemer = new javax.swing.JLabel();
         lblNeigung = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         taLagebeschreibung = new javax.swing.JTextArea();
@@ -1085,15 +1083,15 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         pnlLeft.add(pnlHoehe, gridBagConstraints);
 
-        lblEigentümer.setText(org.openide.util.NbBundle.getMessage(
+        lblEigentuemer.setText(org.openide.util.NbBundle.getMessage(
                 MauerEditor.class,
-                "MauerEditor.lblEigentümer.text")); // NOI18N
+                "MauerEditor.lblEigentuemer.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-        pnlLeft.add(lblEigentümer, gridBagConstraints);
+        pnlLeft.add(lblEigentuemer, gridBagConstraints);
 
         lblNeigung.setText(org.openide.util.NbBundle.getMessage(MauerEditor.class, "MauerEditor.lblNeigung.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1542,7 +1540,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bauwerksbuchfertigstellung}"),
                 dcBauwerksbuchfertigstellung,
                 org.jdesktop.beansbinding.BeanProperty.create("date"));
-        binding.setConverter(dcNaechstePruefung.getConverter());
+        binding.setConverter(dcBauwerksbuchfertigstellung.getConverter());
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1580,6 +1578,16 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
 
         dcNaechstePruefung.setMinimumSize(new java.awt.Dimension(124, 20));
         dcNaechstePruefung.setPreferredSize(new java.awt.Dimension(124, 20));
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.datum_naechste_pruefung}"),
+                dcNaechstePruefung,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding.setConverter(dcNaechstePruefung.getConverter());
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -3528,8 +3536,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                 fileDir.append(deleteBean.getProperty("url.url_base_id.path").toString());
 
                 try {
-                    WebDavHelper.deleteFileFromWebDAV(fileName,
-                        webDavClient,
+                    webDavHelper.deleteFileFromWebDAV(fileName,
                         fileDir.toString());
                     deleteBean.delete();
                 } catch (Exception ex) {
@@ -3543,8 +3550,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                 fileDir.append(deleteBean.getProperty("url.url_base_id.prot_prefix").toString());
                 fileDir.append(deleteBean.getProperty("url.url_base_id.server").toString());
                 fileDir.append(deleteBean.getProperty("url.url_base_id.path").toString());
-                WebDavHelper.deleteFileFromWebDAV(fileName,
-                    webDavClient,
+                webDavHelper.deleteFileFromWebDAV(fileName,
                     fileDir.toString());
             }
         }
@@ -3867,15 +3873,10 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
      *
      * @return  DOCUMENT ME!
      *
-     * @throws  IOException  DOCUMENT ME!
+     * @throws  Exception  DOCUMENT ME!
      */
-    private BufferedImage downloadImageFromWebDAV(final String fileName) throws IOException {
-        final String encodedFileName = WebDavHelper.encodeURL(fileName);
-        final InputStream iStream = webDavClient.getInputStream(WEB_DAV_DIRECTORY
-                        + encodedFileName);
-        if (log.isDebugEnabled()) {
-            log.debug("original: " + fileName + "\nweb dav path: " + WEB_DAV_DIRECTORY + encodedFileName);
-        }
+    private BufferedImage downloadImageFromWebDAV(final String fileName) throws Exception {
+        final InputStream iStream = webDavHelper.getFileFromWebDAV(fileName, WEB_DAV_DIRECTORY);
         try {
             final ImageInputStream iiStream = ImageIO.createImageInputStream(iStream);
             final Iterator<ImageReader> itReader = ImageIO.getImageReaders(iiStream);
@@ -4171,11 +4172,10 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
             int i = lstFotos.getModel().getSize() + 1;
             for (final File imageFile : fotos) {
 //                final String webFileName = WebDavHelper.generateWebDAVFileName(FILE_PREFIX, imageFile);
-                WebDavHelper.uploadFileToWebDAV(
+                webDavHelper.uploadFileToWebDAV(
                     imageFile.getName(),
                     imageFile,
                     WEB_DAV_DIRECTORY,
-                    webDavClient,
                     MauerEditor.this);
 
                 final MetaClass MB_MC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "url_base");
