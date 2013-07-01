@@ -95,7 +95,11 @@ public class ButlerToolbarComponentProvider implements ToolbarComponentsProvider
 
                     @Override
                     public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                        StaticSwingTools.showDialog(butlerDialog);
+                        StaticSwingTools.showDialog(
+                            new Butler1Dialog(
+                                StaticSwingTools.getParentFrame(
+                                    CismapBroker.getInstance().getMappingComponent()),
+                                true));
                     }
                 });
         }
