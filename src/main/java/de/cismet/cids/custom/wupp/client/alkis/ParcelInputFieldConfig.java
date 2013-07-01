@@ -11,9 +11,14 @@
  */
 package de.cismet.cids.custom.wupp.client.alkis;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import java.io.Serializable;
 
 import java.util.HashMap;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * DOCUMENT ME!
@@ -21,7 +26,10 @@ import java.util.HashMap;
  * @author   mroncoroni
  * @version  $Revision$, $Date$
  */
+@XmlRootElement
+@JsonIgnoreProperties(value = {"delimiter1AsString", "delimiter2AsString"})
 public class ParcelInputFieldConfig implements Serializable {
+    public static final ParcelInputFieldConfig FallbackConfig = new ParcelInputFieldConfig('-', '/', 4, 3, 5, 4);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -35,6 +43,19 @@ public class ParcelInputFieldConfig implements Serializable {
 
     private HashMap<String, Integer> conversionMap;
     private HashMap<Integer, String> districtNamesMap;
+
+    private ParcelInputFieldConfig(char delimiter1, char delimiter2, int lenDistrictField, int lenParcelNumberField, int lenParcelNumeratorField, int lenParcelDenominatorField) {
+        maxLenDistrictNumberField = lenDistrictField;
+        maxLenParcelNumberField = lenParcelNumberField;
+        maxLenParcelNumeratorField = lenParcelNumeratorField;
+        maxLenParcelDenominatorField = lenParcelDenominatorField;
+        this.delimiter1 = delimiter1;
+        this.delimiter2 = delimiter2;
+        this.conversionMap = new HashMap<String, Integer>();
+        this.districtNamesMap = new HashMap<Integer, String>();
+    }
+    
+    public ParcelInputFieldConfig() {}
 
     //~ Methods ----------------------------------------------------------------
 
