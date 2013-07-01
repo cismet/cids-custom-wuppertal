@@ -105,7 +105,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
         jSeparator1 = new javax.swing.JSeparator();
         jPanel1 = new javax.swing.JPanel();
 
-        setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        setBorder(null);
         setMinimumSize(new java.awt.Dimension(400, 291));
         setLayout(new java.awt.GridBagLayout());
 
@@ -285,12 +285,12 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                414,
+                418,
                 Short.MAX_VALUE));
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                241,
+                245,
                 Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();

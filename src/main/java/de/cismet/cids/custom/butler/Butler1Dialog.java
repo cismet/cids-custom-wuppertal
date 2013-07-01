@@ -663,6 +663,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
 //        tbpProducts.insertTab(null, null, comp, null, tabPos);
         final int tabPosNew = tbpProducts.indexOfComponent(comp);
         tbpProducts.setTabComponentAt(tabPosNew, tabComp);
+        tbpProducts.setBorder(null);
     }
 
     /**
