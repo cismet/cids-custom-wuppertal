@@ -11,8 +11,15 @@
  */
 package de.cismet.cids.custom.butler;
 
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.Polygon;
+import com.vividsolutions.jts.geom.PrecisionModel;
+
 import org.apache.log4j.Logger;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -29,7 +36,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -39,7 +45,9 @@ import javax.swing.plaf.basic.BasicButtonUI;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.butler.ButlerProduct;
 
+import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
+import de.cismet.cismap.commons.features.DefaultStyledFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.interaction.CismapBroker;
@@ -65,8 +73,11 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
     // End of variables declaration
     JPanel emptyPanel = new JPanel();
     ArrayList<PredefinedBoxes> boxes;
+    final DocumentListener upperTfListeners;
+    boolean firstUpperTFChange = false;
     private MappingComponent map;
     private PredefinedBoxes noSelectionBox = null;
+    private DefaultStyledFeature rectangleFeature;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnCreate;
@@ -105,21 +116,39 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         initComponents();
         tfLowerE.getDocument().addDocumentListener(this);
         tfLowerN.getDocument().addDocumentListener(this);
-        final DocumentListener upperTfListeners = new DocumentListener() {
+        upperTfListeners = new DocumentListener() {
 
                 @Override
                 public void insertUpdate(final DocumentEvent de) {
+                    final PredefinedBoxes selectedBox = (PredefinedBoxes)cbSize.getSelectedItem();
+                    if ((selectedBox != null) && selectedBox.getDisplayName().equals("keine Auswahl")) {
+                        // change map
+                        changeMap();
+                    } else {
+                        // set the cb to keine auswahl
+                        if ((noSelectionBox != null) && !firstUpperTFChange) {
+                            firstUpperTFChange = true;
+                            cbSize.setSelectedItem(noSelectionBox);
+                        }
+                    }
                 }
 
                 @Override
                 public void removeUpdate(final DocumentEvent de) {
+                    if ((noSelectionBox != null) && !firstUpperTFChange) {
+                        firstUpperTFChange = true;
+                        cbSize.setSelectedItem(noSelectionBox);
+                    }
+                    changeMap();
                 }
 
                 @Override
                 public void changedUpdate(final DocumentEvent de) {
-                    if (noSelectionBox != null) {
+                    if ((noSelectionBox != null) && !firstUpperTFChange) {
+                        firstUpperTFChange = true;
                         cbSize.setSelectedItem(noSelectionBox);
                     }
+                    changeMap();
                 }
             };
 
@@ -159,6 +188,10 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                 break;
             }
         }
+        map = new MappingComponent();
+        initMap();
+        pnlMap.setLayout(new BorderLayout());
+        pnlMap.add(map, BorderLayout.CENTER);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -203,7 +236,10 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         pnlProductSettings.setPreferredSize(new java.awt.Dimension(450, 300));
         pnlProductSettings.setLayout(new java.awt.GridBagLayout());
 
+        tbpProducts.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         tbpProducts.setMinimumSize(new java.awt.Dimension(400, 400));
+
+        butler1ProductPanel1.setBorder(null);
         tbpProducts.addTab(org.openide.util.NbBundle.getMessage(
                 Butler1Dialog.class,
                 "Butler1Dialog.butler1ProductPanel1.TabConstraints.tabTitle"),
@@ -466,9 +502,13 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         final PredefinedBoxes selectedBox = (PredefinedBoxes)cbSize.getSelectedItem();
         if ((selectedBox != null) && !selectedBox.getDisplayName().equals("keine Auswahl")) {
             updatePositionFields();
+            changeMap();
         } else {
-            tfUpperE.setText("");
-            tfUpperN.setText("");
+            firstUpperTFChange = false;
+//            tfUpperE.setText("");
+//            tfUpperN.setText("");
+//            tfUpperE.repaint();
+//            tfUpperN.repaint();
         }
     }                                                                          //GEN-LAST:event_cbSizeActionPerformed
 
@@ -550,6 +590,35 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
 
     /**
      * DOCUMENT ME!
+     */
+    private void changeMap() {
+        final Runnable mapChangeRunnable = new Runnable() {
+
+                @Override
+                public void run() {
+                    if (rectangleFeature == null) {
+                        rectangleFeature = createFeature();
+                    }
+                    final Geometry g = createGeometry();
+                    if (g != null) {
+                        rectangleFeature.setGeometry(g);
+                        if (!map.getFeatureCollection().contains(rectangleFeature)) {
+                            map.getFeatureCollection().addFeature(rectangleFeature);
+                        }
+                        map.reconsiderFeature(rectangleFeature);
+                        map.zoomToFeatureCollection();
+                    }
+                }
+            };
+        if (EventQueue.isDispatchThread()) {
+            mapChangeRunnable.run();
+        } else {
+            EventQueue.invokeLater(mapChangeRunnable);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
@@ -580,6 +649,68 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         final int tabPosNew = tbpProducts.indexOfComponent(comp);
         tbpProducts.setTabComponentAt(tabPosNew, tabComp);
 //        tbpProducts.setT
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private Geometry createGeometry() {
+        double lowerE = 0;
+        double lowerN = 0;
+        double upperE = 0;
+        double upperN = 0;
+        try {
+            lowerE = Double.parseDouble(tfLowerE.getText());
+            lowerN = Double.parseDouble(tfLowerN.getText());
+            upperE = Double.parseDouble(tfUpperE.getText());
+            upperN = Double.parseDouble(tfUpperN.getText());
+        } catch (Exception ex) {
+            LOG.fatal("error during change map - very likely a double parsing error", ex);
+            return null;
+        }
+        final Coordinate[] coords = new Coordinate[5];
+        final Coordinate startCoord = new Coordinate(lowerE, lowerN);
+        coords[0] = new Coordinate(lowerE, lowerN);
+        final double c1 = lowerN - (Math.abs(upperN - lowerN));
+        coords[1] = new Coordinate(lowerE, c1);
+        final double c2 = lowerE + (Math.abs(lowerE - upperE));
+        coords[2] = new Coordinate(c2, c1);
+        coords[3] = new Coordinate(c2, lowerN);
+        coords[4] = startCoord;
+
+        final int currentSrid = CrsTransformer.extractSridFromCrs(map.getMappingModel().getSrs().getCode());
+        final GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(
+                    PrecisionModel.FLOATING),
+                currentSrid);
+
+        final Polygon p = new Polygon(geometryFactory.createLinearRing(coords), null, geometryFactory);
+        return p;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private DefaultStyledFeature createFeature() {
+        final DefaultStyledFeature dsf = new DefaultStyledFeature();
+        final Geometry geom = createGeometry();
+        dsf.setGeometry(geom);
+        dsf.setTransparency(0.8F);
+        dsf.setFillingPaint(new Color(192, 80, 77, 192));
+
+        return dsf;
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void updateFeature() {
+        if (rectangleFeature != null) {
+            rectangleFeature.setGeometry(createGeometry());
+        }
     }
 
     /**
@@ -738,15 +869,18 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
     @Override
     public void insertUpdate(final DocumentEvent de) {
         updatePositionFields();
+        changeMap();
     }
 
     @Override
     public void removeUpdate(final DocumentEvent de) {
         updatePositionFields();
+        changeMap();
     }
 
     @Override
     public void changedUpdate(final DocumentEvent de) {
         updatePositionFields();
+        changeMap();
     }
 }
