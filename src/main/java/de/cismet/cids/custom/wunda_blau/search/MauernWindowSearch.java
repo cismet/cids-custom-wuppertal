@@ -200,13 +200,13 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         final Dimension pre = pnlSearchCancel.getPreferredSize();
         pnlSearchCancel.setMaximumSize(new java.awt.Dimension(
                 new Double(max.getWidth()).intValue(),
-                new Double(max.getHeight() + 6).intValue()));
+                new Double(max.getHeight() + 5).intValue()));
         pnlSearchCancel.setMinimumSize(new java.awt.Dimension(
                 new Double(min.getWidth()).intValue(),
-                new Double(min.getHeight() + 6).intValue()));
+                new Double(min.getHeight() + 5).intValue()));
         pnlSearchCancel.setPreferredSize(new java.awt.Dimension(
                 new Double(pre.getWidth() + 6).intValue(),
-                new Double(pre.getHeight() + 6).intValue()));
+                new Double(pre.getHeight() + 5).intValue()));
         pnlButtons.add(pnlSearchCancel);
 
         metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "mauer");
