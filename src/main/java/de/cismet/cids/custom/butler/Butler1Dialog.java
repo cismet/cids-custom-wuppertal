@@ -35,7 +35,9 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -54,6 +56,7 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
+import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import de.cismet.tools.gui.downloadmanager.MultipleDownload;
@@ -167,6 +170,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                             me.getY());
                     if (tabNr == (tbpProducts.getTabCount() - 1)) {
                         addCloseableTab();
+                        tbpProducts.setSelectedIndex(tbpProducts.getTabCount() - 2);
                     }
                 }
             });
@@ -491,42 +495,118 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
      * @param  evt  DOCUMENT ME!
      */
     private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCreateActionPerformed
-        // ToDo: check input values
-        // for each product tab we have to create one download
-        final ArrayList<ButlerDownload> downloads = new ArrayList<ButlerDownload>();
-        for (int i = 0; i < (tbpProducts.getTabCount() - 1); i++) {
-            final Butler1ProductPanel productPanel = (Butler1ProductPanel)tbpProducts.getComponentAt(i);
-            final ButlerProduct bp = productPanel.getSelectedProduct();
-            LOG.info("Create the following Butler product:\n\t orderId: " + tfOrderId.getText()
-                        + "\n\t productId: " + bp.getKey()
-                        + "\n\t colorDepth: " + bp.getColorDepth()
-                        + "\n\t resolution: " + bp.getResolution()
-                        + "\n\t format: " + bp.getFormat());
-            final Geometry g = rectangleFeature.getGeometry();
-            final double minX = g.getEnvelopeInternal().getMinX();
-            final double minY = g.getEnvelopeInternal().getMinY();
-            final double maxX = g.getEnvelopeInternal().getMaxX();
-            final double maxY = g.getEnvelopeInternal().getMaxY();
-            final ButlerDownload download = new ButlerDownload(tfOrderId.getText() + "#" + (i + 1),
-                    bp,
-                    minX,
-                    minY,
-                    maxX,
-                    maxY);
-            downloads.add(download);
-        }
-        if (DownloadManagerDialog.showAskingForUserTitle(
-                        CismapBroker.getInstance().getMappingComponent())) {
-            final String jobname = (!DownloadManagerDialog.getJobname().equals("")) ? DownloadManagerDialog
-                            .getJobname() : null;
+        SwingUtilities.invokeLater(new Runnable() {
 
-            DownloadManager.instance().add(new MultipleDownload(downloads, jobname));
-        } else {
-            DownloadManager.instance().add(new MultipleDownload(downloads, "Butler Downloads"));
-        }
-//        this.setVisible(false);
-        this.dispose();
-//        System.exit(0);
+                @Override
+                public void run() {
+                    final StringBuilder missConfiguredProducts = new StringBuilder();
+                    boolean showErrorPane = false;
+                    int missConfigPrdCount = 0;
+                    for (int i = 0; i < (tbpProducts.getTabCount() - 1); i++) {
+                        final Butler1ProductPanel productPanel = (Butler1ProductPanel)tbpProducts.getComponentAt(i);
+                        final ButlerProduct bp = productPanel.getSelectedProduct();
+                        if (!isProductConfigurationValid(bp)) {
+                            showErrorPane = true;
+                            missConfigPrdCount++;
+                            missConfiguredProducts.append(i + 1);
+                            missConfiguredProducts.append(", ");
+                        }
+                    }
+                    if (showErrorPane) {
+                        final String productNumbers = missConfiguredProducts.toString()
+                                    .substring(0, missConfiguredProducts.toString().length() - 2);
+                        final String message = (missConfigPrdCount == 1)
+                            ? org.openide.util.NbBundle.getMessage(
+                                Butler1Dialog.class,
+                                "Butler1Dialog.ProductConfigCheck.JOptionPane.singularMessage")
+                            : org.openide.util.NbBundle.getMessage(
+                                Butler1Dialog.class,
+                                "Butler1Dialog.ProductConfigCheck.JOptionPane.multiMessage");
+                        JOptionPane.showMessageDialog(
+                            StaticSwingTools.getParentFrame(Butler1Dialog.this),
+                            String.format(
+                                message,
+                                productNumbers),                                       // NOI18N
+                            org.openide.util.NbBundle.getMessage(
+                                Butler1ProductPanel.class,
+                                "Butler1Dialog.ProductConfigCheck.JOptionPane.title"), // NOI18N
+                            JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    // check the geom coordinates
+                    if ((rectangleFeature == null) || (rectangleFeature.getGeometry() == null)) {
+                        JOptionPane.showMessageDialog(
+                            StaticSwingTools.getParentFrame(Butler1Dialog.this),
+                            org.openide.util.NbBundle.getMessage(
+                                Butler1Dialog.class,
+                                "Butler1Dialog.GeomConfigCheck.JOptionPane.message"),
+                            org.openide.util.NbBundle.getMessage(
+                                Butler1Dialog.class,
+                                "Butler1Dialog.GeomConfigCheck.JOptionPane.title"),
+                            JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    final Geometry g = rectangleFeature.getGeometry();
+                    final double minX = g.getEnvelopeInternal().getMinX();
+                    final double minY = g.getEnvelopeInternal().getMinY();
+                    final double maxX = g.getEnvelopeInternal().getMaxX();
+                    final double maxY = g.getEnvelopeInternal().getMaxY();
+
+                    if ((minX >= maxX) || (minY >= maxY)) {
+                        JOptionPane.showMessageDialog(
+                            StaticSwingTools.getParentFrame(Butler1Dialog.this),
+                            org.openide.util.NbBundle.getMessage(
+                                Butler1Dialog.class,
+                                "Butler1Dialog.GeomConfigCheck.JOptionPane.message"),
+                            org.openide.util.NbBundle.getMessage(
+                                Butler1Dialog.class,
+                                "Butler1Dialog.GeomConfigCheck.JOptionPane.title"),
+                            JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    // for each product tab we have to create one download
+                    final ArrayList<ButlerDownload> downloads = new ArrayList<ButlerDownload>();
+                    for (int i = 0; i < (tbpProducts.getTabCount() - 1); i++) {
+                        final Butler1ProductPanel productPanel = (Butler1ProductPanel)tbpProducts.getComponentAt(i);
+                        final ButlerProduct bp = productPanel.getSelectedProduct();
+
+                        LOG.info(
+                            "Create the following Butler product:\n\t orderId: "
+                                    + tfOrderId.getText()
+                                    + "\n\t productId: "
+                                    + bp.getKey()
+                                    + "\n\t colorDepth: "
+                                    + bp.getColorDepth()
+                                    + "\n\t resolution: "
+                                    + bp.getResolution()
+                                    + "\n\t format: "
+                                    + bp.getFormat());
+
+                        final ButlerDownload download = new ButlerDownload(
+                                tfOrderId.getText()
+                                        + "#"
+                                        + (i + 1),
+                                bp,
+                                minX,
+                                minY,
+                                maxX,
+                                maxY);
+                        downloads.add(download);
+                    }
+                    if (DownloadManagerDialog.showAskingForUserTitle(
+                                    CismapBroker.getInstance().getMappingComponent())) {
+                        final String jobname = (!DownloadManagerDialog.getJobname().equals(""))
+                            ? DownloadManagerDialog.getJobname() : null;
+
+                        DownloadManager.instance().add(new MultipleDownload(downloads, jobname));
+                    } else {
+                        DownloadManager.instance().add(new MultipleDownload(downloads, "Butler Downloads"));
+                    }
+
+                    Butler1Dialog.this.dispose();
+                }
+            });
     } //GEN-LAST:event_btnCreateActionPerformed
 
     /**
@@ -911,5 +991,29 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
     public void changedUpdate(final DocumentEvent de) {
         updatePositionFields();
         changeMap();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   bp  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private boolean isProductConfigurationValid(final ButlerProduct bp) {
+        if (bp == null) {
+            return false;
+        }
+        if ((bp.getKey() == null) || bp.getKey().equals("")) {
+            return false;
+        }
+        if ((bp.getFormat() == null) || (bp.getFormat().getKey() == null) || bp.getFormat().getKey().equals("")) {
+            return false;
+        }
+        if ((bp.getResolution() == null) || (bp.getResolution().getKey() == null)
+                    || bp.getResolution().getKey().equals("")) {
+            return false;
+        }
+        return true;
     }
 }
