@@ -1,12 +1,10 @@
-/**
- * *************************************************
- *
- * cismet GmbH, Saarbruecken, Germany
- * 
-* ... and it just works.
- * 
-***************************************************
- */
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -42,16 +40,19 @@ import de.cismet.tools.gui.downloadmanager.AbstractDownload;
 /**
  * DOCUMENT ME!
  *
- * @author daniel
- * @version $Revision$, $Date$
+ * @author   daniel
+ * @version  $Revision$, $Date$
  */
 public class ButlerDownload extends AbstractDownload implements Cancellable {
 
     //~ Static fields/initializers ---------------------------------------------
+
     private static final String SERVER_ACTION = "butler1Query";
     private static final String TITLE = "Butler Download";
     private static final long WAIT_PERIOD = 5000;
+
     //~ Instance fields --------------------------------------------------------
+
     private String orderId;
     private ButlerProduct product;
     private double minX;
@@ -59,17 +60,20 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
     private double maxX;
     private double maxY;
     private Future pollingFuture;
+    private boolean omitSendingRequest = false;
+    private String requestId = null;
 
     //~ Constructors -----------------------------------------------------------
+
     /**
      * Creates a new ButlerDownload object.
      *
-     * @param orderId DOCUMENT ME!
-     * @param product DOCUMENT ME!
-     * @param minX DOCUMENT ME!
-     * @param minY DOCUMENT ME!
-     * @param maxX DOCUMENT ME!
-     * @param maxY DOCUMENT ME!
+     * @param  orderId  DOCUMENT ME!
+     * @param  product  DOCUMENT ME!
+     * @param  minX     DOCUMENT ME!
+     * @param  minY     DOCUMENT ME!
+     * @param  maxX     DOCUMENT ME!
+     * @param  maxY     DOCUMENT ME!
      */
     public ButlerDownload(final String orderId,
             final ButlerProduct product,
@@ -86,13 +90,29 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
         status = State.WAITING;
         this.title = TITLE;
         final ButlerFormat format = product.getFormat();
-        // ToDo no static evaluation of the extension maybe the Butler format needs to be extended with an extension
-        // attr
+        determineDestinationFile(orderId, "." + format.getKey());
+    }
 
-        determineDestinationFile(orderId, format.getKey());
+    /**
+     * Creates a new ButlerDownload object.
+     *
+     * @param  requestId    DOCUMENT ME!
+     * @param  userOrderId  DOCUMENT ME!
+     * @param  product      DOCUMENT ME!
+     */
+    ButlerDownload(final String requestId, final String userOrderId, final ButlerProduct product) {
+        omitSendingRequest = true;
+        this.orderId = userOrderId;
+        this.requestId = requestId;
+        this.product = product;
+        status = State.WAITING;
+        this.title = TITLE;
+        final ButlerFormat format = product.getFormat();
+        determineDestinationFile(userOrderId, "." + format.getKey());
     }
 
     //~ Methods ----------------------------------------------------------------
+
     @Override
     public void run() {
         if (status != State.WAITING) {
@@ -104,9 +124,10 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
         status = State.RUNNING;
         stateChanged();
 
-        String requestId = null;
         if (!downloadFuture.isCancelled()) {
-            requestId = sendRequest();
+            if (!omitSendingRequest) {
+                requestId = sendRequest();
+            }
         } else {
             doCancellationHandling(false);
         }
@@ -127,7 +148,7 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
         }
         try {
             if (!downloadFuture.isCancelled()) {
-                result = (ArrayList<byte[]>) pollingFuture.get(1, TimeUnit.HOURS);
+                result = (ArrayList<byte[]>)pollingFuture.get(1, TimeUnit.HOURS);
             } else {
                 doCancellationHandling(true);
             }
@@ -171,7 +192,7 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
     /**
      * DOCUMENT ME!
      *
-     * @param cancelPollingThread DOCUMENT ME!
+     * @param  cancelPollingThread  DOCUMENT ME!
      */
     private void doCancellationHandling(final boolean cancelPollingThread) {
         log.warn("Butler Download was interuppted");
@@ -193,43 +214,43 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     private String sendRequest() {
         final ServerActionParameter paramMethod = new ServerActionParameter(ButlerQueryAction.PARAMETER_TYPE.METHOD
-                .toString(),
+                        .toString(),
                 ButlerQueryAction.METHOD_TYPE.ADD);
         final ServerActionParameter paramOrderId = new ServerActionParameter(ButlerQueryAction.PARAMETER_TYPE.ORDER_ID
-                .toString(),
+                        .toString(),
                 orderId);
         final ServerActionParameter paramProduct = new ServerActionParameter(
                 ButlerQueryAction.PARAMETER_TYPE.BUTLER_PRODUCT.toString(),
                 product);
         final ServerActionParameter paramMinX = new ServerActionParameter(ButlerQueryAction.PARAMETER_TYPE.MIN_X
-                .toString(),
+                        .toString(),
                 minX);
         final ServerActionParameter paramMinY = new ServerActionParameter(ButlerQueryAction.PARAMETER_TYPE.MIN_Y
-                .toString(),
+                        .toString(),
                 minY);
         final ServerActionParameter paramMaxX = new ServerActionParameter(ButlerQueryAction.PARAMETER_TYPE.MAX_X
-                .toString(),
+                        .toString(),
                 maxX);
         final ServerActionParameter paramMaxY = new ServerActionParameter(ButlerQueryAction.PARAMETER_TYPE.MAX_Y
-                .toString(),
+                        .toString(),
                 maxY);
         try {
-            return (String) SessionManager.getProxy()
-                    .executeTask(
-                    SERVER_ACTION,
-                    "WUNDA_BLAU",
-                    null,
-                    paramMethod,
-                    paramOrderId,
-                    paramProduct,
-                    paramMinX,
-                    paramMinY,
-                    paramMaxX,
-                    paramMaxY);
+            return (String)SessionManager.getProxy()
+                        .executeTask(
+                                SERVER_ACTION,
+                                "WUNDA_BLAU",
+                                null,
+                                paramMethod,
+                                paramOrderId,
+                                paramProduct,
+                                paramMinX,
+                                paramMinY,
+                                paramMaxX,
+                                paramMaxY);
         } catch (ConnectionException ex) {
             Exceptions.printStackTrace(ex);
         }
@@ -250,31 +271,35 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
     }
 
     //~ Inner Classes ----------------------------------------------------------
+
     /**
      * DOCUMENT ME!
      *
-     * @version $Revision$, $Date$
+     * @version  $Revision$, $Date$
      */
     private final class ButlerPollingRunnable implements Callable<ArrayList<byte[]>> {
 
         //~ Instance fields ----------------------------------------------------
+
         private String requestId;
 
         //~ Constructors -------------------------------------------------------
+
         /**
          * Creates a new ButlerPollingRunnable object.
          *
-         * @param requestId DOCUMENT ME!
+         * @param  requestId  DOCUMENT ME!
          */
         public ButlerPollingRunnable(final String requestId) {
             this.requestId = requestId;
         }
 
         //~ Methods ------------------------------------------------------------
+
         @Override
         public ArrayList<byte[]> call() throws Exception {
             final ServerActionParameter paramMethod = new ServerActionParameter(ButlerQueryAction.PARAMETER_TYPE.METHOD
-                    .toString(),
+                            .toString(),
                     ButlerQueryAction.METHOD_TYPE.GET);
             final ServerActionParameter paramRequestId = new ServerActionParameter(
                     ButlerQueryAction.PARAMETER_TYPE.REQUEST_ID.toString(),
@@ -284,14 +309,14 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
                     product);
             ArrayList<byte[]> files = null;
             try {
-                files = (ArrayList<byte[]>) SessionManager.getProxy()
-                        .executeTask(
-                        SERVER_ACTION,
-                        "WUNDA_BLAU",
-                        null,
-                        paramMethod,
-                        paramRequestId,
-                        paramProduct);
+                files = (ArrayList<byte[]>)SessionManager.getProxy()
+                            .executeTask(
+                                    SERVER_ACTION,
+                                    "WUNDA_BLAU",
+                                    null,
+                                    paramMethod,
+                                    paramRequestId,
+                                    paramProduct);
 
                 while (files == null) {
                     if (Thread.interrupted()) {
@@ -308,14 +333,14 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
                     } catch (InterruptedException ex) {
                         Exceptions.printStackTrace(ex);
                     }
-                    files = (ArrayList<byte[]>) SessionManager.getProxy()
-                            .executeTask(
-                            SERVER_ACTION,
-                            "WUNDA_BLAU",
-                            null,
-                            paramMethod,
-                            paramRequestId,
-                            paramProduct);
+                    files = (ArrayList<byte[]>)SessionManager.getProxy()
+                                .executeTask(
+                                        SERVER_ACTION,
+                                        "WUNDA_BLAU",
+                                        null,
+                                        paramMethod,
+                                        paramRequestId,
+                                        paramProduct);
                 }
                 return files;
             } catch (ConnectionException ex) {

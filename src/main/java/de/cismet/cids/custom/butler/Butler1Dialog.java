@@ -507,7 +507,12 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
             final double minY = g.getEnvelopeInternal().getMinY();
             final double maxX = g.getEnvelopeInternal().getMaxX();
             final double maxY = g.getEnvelopeInternal().getMaxY();
-            final ButlerDownload download = new ButlerDownload(tfOrderId.getText(), bp, minX, minY, maxX, maxY);
+            final ButlerDownload download = new ButlerDownload(tfOrderId.getText() + "#" + (i + 1),
+                    bp,
+                    minX,
+                    minY,
+                    maxX,
+                    maxY);
             downloads.add(download);
         }
         if (DownloadManagerDialog.showAskingForUserTitle(

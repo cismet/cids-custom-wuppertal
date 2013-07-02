@@ -377,13 +377,13 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
         final ButlerProduct bp = (ButlerProduct)lstProdukt.getSelectedValue();
         if (bp != null) {
             if (rbDxf.isSelected()) {
-                bp.setFormat(new ButlerFormat(".dxf"));
+                bp.setFormat(new ButlerFormat("dxf"));
             } else if (rbGeoTif.isSelected()) {
-                bp.setFormat(new ButlerFormat(".geotif"));
+                bp.setFormat(new ButlerFormat("geotif"));
             } else if (rbShp.isSelected()) {
-                bp.setFormat(new ButlerFormat(".shp"));
+                bp.setFormat(new ButlerFormat("shp"));
             } else if (rbTif.isSelected()) {
-                bp.setFormat(new ButlerFormat(".tif"));
+                bp.setFormat(new ButlerFormat("tif"));
             }
             final ButlerResolution res = (ButlerResolution)cbResolution.getSelectedItem();
             bp.setResolution(res);

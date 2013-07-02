@@ -23,11 +23,15 @@ import java.util.HashMap;
 
 import javax.swing.SwingUtilities;
 
+import de.cismet.cids.custom.utils.butler.ButlerRequestInfo;
 import de.cismet.cids.custom.wunda_blau.search.actions.ButlerQueryAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.tools.configuration.StartupHook;
+
+import de.cismet.tools.gui.downloadmanager.DownloadManager;
+import de.cismet.tools.gui.downloadmanager.MultipleDownload;
 
 /**
  * DOCUMENT ME!
@@ -63,9 +67,9 @@ public class ButlerStartUpHook implements StartupHook {
         final ServerActionParameter paramMethod = new ServerActionParameter(
                 ButlerQueryAction.PARAMETER_TYPE.METHOD.toString(),
                 ButlerQueryAction.METHOD_TYPE.GET_ALL);
-        HashMap<String, ButlerProductInfo> openRequestIds = null;
+        HashMap<String, ButlerRequestInfo> openRequestIds = null;
         try {
-            openRequestIds = (HashMap<String, ButlerProductInfo>)SessionManager.getProxy()
+            openRequestIds = (HashMap<String, ButlerRequestInfo>)SessionManager.getProxy()
                         .executeTask(
                                 SERVER_ACTION,
                                 "WUNDA_BLAU",
@@ -89,6 +93,20 @@ public class ButlerStartUpHook implements StartupHook {
         // generate a new NasDownload object for pending orders
         final ArrayList<ButlerDownload> downloads = new ArrayList<ButlerDownload>();
         for (final String requestId : openRequestIds.keySet()) {
+            final ButlerRequestInfo info = (ButlerRequestInfo)openRequestIds.get(requestId);
+            final ButlerDownload download = new ButlerDownload(requestId, info.getUserOrderId(), info.getProduct());
+            downloads.add(download);
         }
+        DownloadManager.instance().add(new MultipleDownload(downloads, "Pending Butler Downloads"));
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  args  DOCUMENT ME!
+     */
+    public static void main(final String[] args) {
+        final ButlerStartUpHook cptHook = new ButlerStartUpHook();
+        cptHook.restartPendingButler1Requests();
     }
 }
