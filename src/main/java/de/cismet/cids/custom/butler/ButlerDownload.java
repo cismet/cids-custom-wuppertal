@@ -22,7 +22,7 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 
-import de.cismet.cids.custom.nas.NASDownload;
+import de.cismet.cids.custom.utils.butler.ButlerFormat;
 import de.cismet.cids.custom.utils.butler.ButlerProduct;
 import de.cismet.cids.custom.wunda_blau.search.actions.ButlerQueryAction;
 
@@ -77,7 +77,8 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
         this.maxX = maxX;
         this.maxY = maxY;
         status = State.WAITING;
-        determineDestinationFile(orderId, EXTENSION);
+        final ButlerFormat format = product.getFormat();
+        determineDestinationFile(orderId, format.getKey());
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -96,20 +97,26 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
         final String requestId = sendRequest();
         if (requestId == null) {
             // log that something went terribly wrong...
+            return;
         }
 
         /*
          * Phase 2 : poll the result
          */
-        final ArrayList<byte[]> result = getResult(requestId);
+        ArrayList<byte[]> result = null;
+        if (!Thread.interrupted()) {
+            result = getResult(requestId);
+        }
 
         /*
          * Phase 3: save the files
          */
         FileOutputStream out = null;
         try {
-            out = new FileOutputStream(fileToSaveTo);
-            out.write(result.get(0));
+            if (!Thread.interrupted()) {
+                out = new FileOutputStream(fileToSaveTo);
+                out.write(result.get(0));
+            }
         } catch (final IOException ex) {
             log.warn("Couldn't write downloaded content to file '" + fileToSaveTo + "'.", ex);
             error(ex);
@@ -157,6 +164,12 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
                                 paramProduct);
 
             while (files == null) {
+                if (Thread.interrupted()) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("Butler download was cancelled");
+                    }
+                    return null;
+                }
                 System.out.println("Result for " + requestId + " is not finished, try later again");
                 try {
                     Thread.sleep(2000);
@@ -227,7 +240,12 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
 
     @Override
     public boolean cancel() {
-        throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose
-        // Tools | Templates.
+        boolean cancelled = false;
+        if (downloadFuture != null) {
+            cancelled = downloadFuture.cancel(true);
+        }
+        status = State.ABORTED;
+        stateChanged();
+        return cancelled;
     }
 }

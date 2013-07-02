@@ -55,6 +55,8 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
+import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
+import de.cismet.tools.gui.downloadmanager.MultipleDownload;
 
 /**
  * DOCUMENT ME!
@@ -488,32 +490,45 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
+    private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCreateActionPerformed
         // ToDo: check input values
-        final Butler1ProductPanel productPan = (Butler1ProductPanel)tbpProducts.getSelectedComponent();
-        final ButlerProduct bp = productPan.getSelectedProduct();
-        LOG.info("Create the following Butler product:\n\t orderId: " + tfOrderId.getText()
-                    + "\n\t productId: " + bp.getKey()
-                    + "\n\t colorDepth: " + bp.getColorDepth()
-                    + "\n\t resolution: " + bp.getResolution()
-                    + "\n\t format: " + bp.getFormat());
-        final double minX = 370000d;
-        final double minY = 5680000d;
-        final double maxX = 370300d;
-        final double maxY = 5680300d;
-        final ButlerDownload download = new ButlerDownload(tfOrderId.getText(), bp, minX, minY, maxX, maxY);
-        DownloadManager.instance().add(download);
+        // for each product tab we have to create one download
+        final ArrayList<ButlerDownload> downloads = new ArrayList<ButlerDownload>();
+        for (int i = 0; i < (tbpProducts.getTabCount() - 1); i++) {
+            final Butler1ProductPanel productPanel = (Butler1ProductPanel)tbpProducts.getComponentAt(i);
+            final ButlerProduct bp = productPanel.getSelectedProduct();
+            LOG.info("Create the following Butler product:\n\t orderId: " + tfOrderId.getText()
+                        + "\n\t productId: " + bp.getKey()
+                        + "\n\t colorDepth: " + bp.getColorDepth()
+                        + "\n\t resolution: " + bp.getResolution()
+                        + "\n\t format: " + bp.getFormat());
+            final Geometry g = rectangleFeature.getGeometry();
+            final double minX = g.getEnvelopeInternal().getMinX();
+            final double minY = g.getEnvelopeInternal().getMinY();
+            final double maxX = g.getEnvelopeInternal().getMaxX();
+            final double maxY = g.getEnvelopeInternal().getMaxY();
+            final ButlerDownload download = new ButlerDownload(tfOrderId.getText(), bp, minX, minY, maxX, maxY);
+            downloads.add(download);
+        }
+        if (DownloadManagerDialog.showAskingForUserTitle(
+                        CismapBroker.getInstance().getMappingComponent())) {
+            final String jobname = (!DownloadManagerDialog.getJobname().equals("")) ? DownloadManagerDialog
+                            .getJobname() : null;
+            DownloadManager.instance().add(new MultipleDownload(downloads, jobname));
+        } else {
+            DownloadManager.instance().add(new MultipleDownload(downloads, "Butler Downloads"));
+        }
 //        this.setVisible(false);
         this.dispose();
 //        System.exit(0);
-    }//GEN-LAST:event_btnCreateActionPerformed
+    } //GEN-LAST:event_btnCreateActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbSizeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSizeActionPerformed
+    private void cbSizeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbSizeActionPerformed
         final PredefinedBoxes selectedBox = (PredefinedBoxes)cbSize.getSelectedItem();
         if ((selectedBox != null) && !selectedBox.getDisplayName().equals("keine Auswahl")) {
             updatePositionFields();
@@ -525,16 +540,16 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
 //            tfUpperE.repaint();
 //            tfUpperN.repaint();
         }
-    }//GEN-LAST:event_cbSizeActionPerformed
+    }                                                                          //GEN-LAST:event_cbSizeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
         this.dispose();                                                           // TODO add your handling code here:
-    }//GEN-LAST:event_btnCancelActionPerformed
+    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * DOCUMENT ME!
