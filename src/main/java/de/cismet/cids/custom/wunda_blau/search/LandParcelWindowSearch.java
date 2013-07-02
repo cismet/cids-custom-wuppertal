@@ -59,7 +59,11 @@ PropertyChangeListener {
         
         initComponents();
         
-        jXDatePicker2.setDate(new java.util.Date(System.currentTimeMillis()));
+        java.util.Date date = new java.util.Date(System.currentTimeMillis());
+        date.setMonth(0);
+        date.setDate(1);
+        dcFrom.setDate(date);
+        dcTo.setDate(new java.util.Date(System.currentTimeMillis()));
         
         pnlSearchCancel = new SearchControlPanel(this);
         final Dimension max = pnlSearchCancel.getMaximumSize();
@@ -109,8 +113,8 @@ PropertyChangeListener {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jXDatePicker1 = new org.jdesktop.swingx.JXDatePicker();
-        jXDatePicker2 = new org.jdesktop.swingx.JXDatePicker();
+        dcFrom = new de.cismet.cids.editors.DefaultBindableDateChooser();
+        dcTo = new de.cismet.cids.editors.DefaultBindableDateChooser();
         panCommand = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         chkMap = new javax.swing.JCheckBox();
@@ -127,31 +131,50 @@ PropertyChangeListener {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panParcelType.add(chkActual, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(chkHistorical, org.openide.util.NbBundle.getMessage(LandParcelWindowSearch.class, "LandParcelWindowSearch.chkHistorical.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panParcelType.add(chkHistorical, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSearch.add(panParcelType, gridBagConstraints);
 
         panTime.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(LandParcelWindowSearch.class, "LandParcelWindowSearch.panTime.border.title"))); // NOI18N
         panTime.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(LandParcelWindowSearch.class, "LandParcelWindowSearch.jLabel1.text")); // NOI18N
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, chkHistorical, org.jdesktop.beansbinding.ELProperty.create("${selected}"), jLabel1, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panTime.add(jLabel1, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(LandParcelWindowSearch.class, "LandParcelWindowSearch.jLabel2.text")); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, chkHistorical, org.jdesktop.beansbinding.ELProperty.create("${selected}"), jLabel2, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
@@ -159,57 +182,72 @@ PropertyChangeListener {
         panTime.add(jLabel2, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(LandParcelWindowSearch.class, "LandParcelWindowSearch.jLabel3.text")); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, chkHistorical, org.jdesktop.beansbinding.ELProperty.create("${selected}"), jLabel3, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panTime.add(jLabel3, gridBagConstraints);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, chkHistorical, org.jdesktop.beansbinding.ELProperty.create("${selected}"), jXDatePicker1, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        dcFrom.setPreferredSize(new java.awt.Dimension(124, 20));
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, chkHistorical, org.jdesktop.beansbinding.ELProperty.create("${selected}"), dcFrom, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panTime.add(jXDatePicker1, gridBagConstraints);
+        panTime.add(dcFrom, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, chkHistorical, org.jdesktop.beansbinding.ELProperty.create("${selected}"), jXDatePicker2, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        dcTo.setPreferredSize(new java.awt.Dimension(124, 20));
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, chkHistorical, org.jdesktop.beansbinding.ELProperty.create("${selected}"), dcTo, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panTime.add(jXDatePicker2, gridBagConstraints);
+        panTime.add(dcTo, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSearch.add(panTime, gridBagConstraints);
 
         panCommand.setLayout(new javax.swing.BoxLayout(panCommand, javax.swing.BoxLayout.LINE_AXIS));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSearch.add(panCommand, gridBagConstraints);
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(chkMap, org.openide.util.NbBundle.getMessage(LandParcelWindowSearch.class, "LandParcelWindowSearch.chkMap.text")); // NOI18N
-        jPanel1.add(chkMap, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(chkMap, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSearch.add(jPanel1, gridBagConstraints);
 
-        add(panSearch, java.awt.BorderLayout.CENTER);
+        add(panSearch, java.awt.BorderLayout.NORTH);
 
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
@@ -217,12 +255,12 @@ PropertyChangeListener {
     private javax.swing.JCheckBox chkActual;
     private javax.swing.JCheckBox chkHistorical;
     private javax.swing.JCheckBox chkMap;
+    private de.cismet.cids.editors.DefaultBindableDateChooser dcFrom;
+    private de.cismet.cids.editors.DefaultBindableDateChooser dcTo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
-    private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
-    private org.jdesktop.swingx.JXDatePicker jXDatePicker2;
     private javax.swing.JPanel panCommand;
     private javax.swing.JPanel panParcelType;
     private javax.swing.JPanel panSearch;
@@ -250,8 +288,8 @@ PropertyChangeListener {
             }
         }
         if(chkHistorical.isSelected()) {
-            java.util.Date from = jXDatePicker1.getDate();
-            java.util.Date to = jXDatePicker2.getDate();
+            java.util.Date from = dcFrom.getDate();
+            java.util.Date to = dcTo.getDate();
             return new CidsLandParcelSearchStatement(chkActual.isSelected(), true, new java.sql.Date(from.getTime()), new java.sql.Date(to.getTime()), searchgeom);
         } else {
             return new CidsLandParcelSearchStatement(chkActual.isSelected(), searchgeom);
