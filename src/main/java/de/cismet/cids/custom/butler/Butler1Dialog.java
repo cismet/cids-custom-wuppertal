@@ -514,6 +514,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                         CismapBroker.getInstance().getMappingComponent())) {
             final String jobname = (!DownloadManagerDialog.getJobname().equals("")) ? DownloadManagerDialog
                             .getJobname() : null;
+
             DownloadManager.instance().add(new MultipleDownload(downloads, jobname));
         } else {
             DownloadManager.instance().add(new MultipleDownload(downloads, "Butler Downloads"));
