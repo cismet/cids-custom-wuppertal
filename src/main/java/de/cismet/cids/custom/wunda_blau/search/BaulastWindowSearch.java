@@ -440,7 +440,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.weighty = 1.0;
         panSearch.add(jPanel6, gridBagConstraints);
 
-        chkKartenausschnitt.setText("<html>Nur im aktuellen<br>Kartenausschnitt suchen</html>");
+        chkKartenausschnitt.setText("<html>nur im aktuellen<br>Kartenausschnitt suchen</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
