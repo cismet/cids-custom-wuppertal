@@ -14,17 +14,18 @@ package de.cismet.cids.custom.wupp.client.alkis;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import sun.awt.resources.awt;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Toolkit;
-import javax.swing.JTextField;
 
+import javax.swing.JTextField;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
-import sun.awt.resources.awt;
 
 /**
  * DOCUMENT ME!
@@ -75,7 +76,7 @@ public class ParcelInputField extends javax.swing.JPanel {
     private boolean overwritten = false;
     private boolean changeFocus = true;
     private boolean writeOver = true;
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lblDelimitier1;
     private javax.swing.JLabel lblDelimitier2;
@@ -102,7 +103,7 @@ public class ParcelInputField extends javax.swing.JPanel {
      */
     public ParcelInputField(final ParcelInputFieldConfig config) {
         this.config = config;
-        
+
         initComponents();
 
         txtDistrict.setDocument(new PlainDocument() {
@@ -185,8 +186,8 @@ public class ParcelInputField extends javax.swing.JPanel {
                             }
                         } else if (txtDistrict.getDocument().getText(0, txtDistrict.getDocument().getLength()).matches(
                                         "^[0-9]*")) {
-                            newStr = newStr.replaceAll("[^0-9]", "");    // checks if the entered text only contains
-                                                                         // alpha charactes and german vowel mutuations
+                            newStr = newStr.replaceAll("[^0-9]", ""); // checks if the entered text only contains
+                                                                      // alpha charactes and german vowel mutuations
                         } else if (txtDistrict.getDocument().getText(0, txtDistrict.getDocument().getLength()).matches(
                                         "^[\\u00F6\\u00D6\\u00FC\\u00DC\\u00E4\\u00C4\\u00dfa-zA-Z]*")) {
                             // removes all characters except alpha charactes and german vowel mutuations
@@ -572,7 +573,8 @@ public class ParcelInputField extends javax.swing.JPanel {
         if ((txtLandParcelNumerator.getText() != null) && !txtLandParcelNumerator.getText().isEmpty()) {
             sb.append(config.getDelimiter1AsString()).append(txtLandParcelNumerator.getText());
         }
-        if ((txtLandParcelDenominator.getText() != null) && !txtLandParcelDenominator.getText().isEmpty() && !txtLandParcelDenominator.getText().matches("^0+$")) {
+        if ((txtLandParcelDenominator.getText() != null) && !txtLandParcelDenominator.getText().isEmpty()
+                    && !txtLandParcelDenominator.getText().matches("^0+$")) {
             sb.append(config.getDelimiter2AsString()).append(txtLandParcelDenominator.getText());
         }
 
@@ -733,18 +735,23 @@ public class ParcelInputField extends javax.swing.JPanel {
         setLayout(new java.awt.GridBagLayout());
 
         txtDistrict.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        FontMetrics metrics = Toolkit.getDefaultToolkit().getFontMetrics(txtDistrict.getFont());
-        Dimension dim = new Dimension(metrics.stringWidth("0") * (config.getMaxLenDistrictNumberField()+4), metrics.getHeight()+4);
+        final FontMetrics metrics = Toolkit.getDefaultToolkit().getFontMetrics(txtDistrict.getFont());
+        Dimension dim = new Dimension(metrics.stringWidth("0") * (config.getMaxLenDistrictNumberField() + 4),
+                metrics.getHeight()
+                        + 4);
         txtDistrict.setMinimumSize(dim);
         txtDistrict.setPreferredSize(dim);
         txtDistrict.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtDistrictFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtDistrictFocusLost(evt);
-            }
-        });
+
+                @Override
+                public void focusGained(final java.awt.event.FocusEvent evt) {
+                    txtDistrictFocusGained(evt);
+                }
+                @Override
+                public void focusLost(final java.awt.event.FocusEvent evt) {
+                    txtDistrictFocusLost(evt);
+                }
+            });
         add(txtDistrict, new java.awt.GridBagConstraints());
 
         lblDelimitier1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -753,17 +760,22 @@ public class ParcelInputField extends javax.swing.JPanel {
         add(lblDelimitier1, gridBagConstraints);
 
         txtParcel.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        dim = new Dimension(metrics.stringWidth("0") * (config.getMaxLenParcelNumberField()+2), metrics.getHeight()+4);
+        dim = new Dimension(metrics.stringWidth("0") * (config.getMaxLenParcelNumberField() + 2),
+                metrics.getHeight()
+                        + 4);
         txtParcel.setMinimumSize(dim);
         txtParcel.setPreferredSize(dim);
         txtParcel.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtParcelFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtParcelFocusLost(evt);
-            }
-        });
+
+                @Override
+                public void focusGained(final java.awt.event.FocusEvent evt) {
+                    txtParcelFocusGained(evt);
+                }
+                @Override
+                public void focusLost(final java.awt.event.FocusEvent evt) {
+                    txtParcelFocusLost(evt);
+                }
+            });
         add(txtParcel, new java.awt.GridBagConstraints());
 
         lblDelimitier2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -772,17 +784,22 @@ public class ParcelInputField extends javax.swing.JPanel {
         add(lblDelimitier2, gridBagConstraints);
 
         txtLandParcelNumerator.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        dim = new Dimension(metrics.stringWidth("0") * (config.getMaxLenParcelNumeratorField()+2), metrics.getHeight()+4);
+        dim = new Dimension(metrics.stringWidth("0") * (config.getMaxLenParcelNumeratorField() + 2),
+                metrics.getHeight()
+                        + 4);
         txtLandParcelNumerator.setMinimumSize(dim);
         txtLandParcelNumerator.setPreferredSize(dim);
         txtLandParcelNumerator.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtLandParcelNumeratorFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtLandParcelNumeratorFocusLost(evt);
-            }
-        });
+
+                @Override
+                public void focusGained(final java.awt.event.FocusEvent evt) {
+                    txtLandParcelNumeratorFocusGained(evt);
+                }
+                @Override
+                public void focusLost(final java.awt.event.FocusEvent evt) {
+                    txtLandParcelNumeratorFocusLost(evt);
+                }
+            });
         add(txtLandParcelNumerator, new java.awt.GridBagConstraints());
 
         lblDelimitier3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -791,66 +808,71 @@ public class ParcelInputField extends javax.swing.JPanel {
         add(lblDelimitier3, gridBagConstraints);
 
         txtLandParcelDenominator.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        dim = new Dimension(metrics.stringWidth("0") * (config.getMaxLenParcelDenominatorField()+2), metrics.getHeight()+4);
+        dim = new Dimension(metrics.stringWidth("0") * (config.getMaxLenParcelDenominatorField() + 2),
+                metrics.getHeight()
+                        + 4);
         txtLandParcelDenominator.setMinimumSize(dim);
         txtLandParcelDenominator.setPreferredSize(dim);
         txtLandParcelDenominator.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtLandParcelDenominatorFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtLandParcelDenominatorFocusLost(evt);
-            }
-        });
+
+                @Override
+                public void focusGained(final java.awt.event.FocusEvent evt) {
+                    txtLandParcelDenominatorFocusGained(evt);
+                }
+                @Override
+                public void focusLost(final java.awt.event.FocusEvent evt) {
+                    txtLandParcelDenominatorFocusLost(evt);
+                }
+            });
         add(txtLandParcelDenominator, new java.awt.GridBagConstraints());
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtDistrictFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDistrictFocusLost
+    private void txtDistrictFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtDistrictFocusLost
         finishDistrict();
         txtDistrict.setCaretPosition(0);
-    }//GEN-LAST:event_txtDistrictFocusLost
+    }                                                                        //GEN-LAST:event_txtDistrictFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtParcelFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtParcelFocusLost
+    private void txtParcelFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtParcelFocusLost
         finishParcel();
         txtParcel.setCaretPosition(0);
-    }//GEN-LAST:event_txtParcelFocusLost
+    }                                                                      //GEN-LAST:event_txtParcelFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtLandParcelNumeratorFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLandParcelNumeratorFocusLost
+    private void txtLandParcelNumeratorFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtLandParcelNumeratorFocusLost
         finishParcelNumerator();
         txtLandParcelNumerator.setCaretPosition(0);
-    }//GEN-LAST:event_txtLandParcelNumeratorFocusLost
+    }                                                                                   //GEN-LAST:event_txtLandParcelNumeratorFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtLandParcelDenominatorFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLandParcelDenominatorFocusLost
+    private void txtLandParcelDenominatorFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtLandParcelDenominatorFocusLost
         finishParcelDenominator();
         txtLandParcelDenominator.setCaretPosition(0);
-    }//GEN-LAST:event_txtLandParcelDenominatorFocusLost
+    }                                                                                     //GEN-LAST:event_txtLandParcelDenominatorFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtLandParcelDenominatorFocusGained(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLandParcelDenominatorFocusGained
+    private void txtLandParcelDenominatorFocusGained(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtLandParcelDenominatorFocusGained
         final int textLenght = txtLandParcelDenominator.getText().length();
         if (overwritten) {
             overwritten = false;
@@ -860,14 +882,14 @@ public class ParcelInputField extends javax.swing.JPanel {
             txtLandParcelDenominator.setCaretPosition(0);
             txtLandParcelDenominator.moveCaretPosition(textLenght);
         }
-    }//GEN-LAST:event_txtLandParcelDenominatorFocusGained
+    }                                                                                       //GEN-LAST:event_txtLandParcelDenominatorFocusGained
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtLandParcelNumeratorFocusGained(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLandParcelNumeratorFocusGained
+    private void txtLandParcelNumeratorFocusGained(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtLandParcelNumeratorFocusGained
         final int textLength = txtLandParcelNumerator.getText().length();
         if (overwritten) {
             overwritten = false;
@@ -877,14 +899,14 @@ public class ParcelInputField extends javax.swing.JPanel {
             txtLandParcelNumerator.setCaretPosition(0);
             txtLandParcelNumerator.moveCaretPosition(textLength);
         }
-    }//GEN-LAST:event_txtLandParcelNumeratorFocusGained
+    }                                                                                     //GEN-LAST:event_txtLandParcelNumeratorFocusGained
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtParcelFocusGained(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtParcelFocusGained
+    private void txtParcelFocusGained(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtParcelFocusGained
         final int textLength = txtParcel.getText().length();
         if (overwritten) {
             overwritten = false;
@@ -894,14 +916,14 @@ public class ParcelInputField extends javax.swing.JPanel {
             txtParcel.setCaretPosition(0);
             txtParcel.moveCaretPosition(textLength);
         }
-    }//GEN-LAST:event_txtParcelFocusGained
+    }                                                                        //GEN-LAST:event_txtParcelFocusGained
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtDistrictFocusGained(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDistrictFocusGained
+    private void txtDistrictFocusGained(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtDistrictFocusGained
         final int textLength = txtDistrict.getText().length();
         if (overwritten) {
             overwritten = false;
@@ -911,5 +933,5 @@ public class ParcelInputField extends javax.swing.JPanel {
             txtDistrict.setCaretPosition(0);
             txtDistrict.moveCaretPosition(textLength);
         }
-    }//GEN-LAST:event_txtDistrictFocusGained
+    }                                                                          //GEN-LAST:event_txtDistrictFocusGained
 }

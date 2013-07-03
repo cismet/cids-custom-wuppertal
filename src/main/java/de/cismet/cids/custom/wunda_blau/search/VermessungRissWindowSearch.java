@@ -715,7 +715,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnFilterSchluesselAllActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterSchluesselAllActionPerformed
+    private void btnFilterSchluesselAllActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFilterSchluesselAllActionPerformed
         chkFilterSchluessel501.setSelected(true);
         chkFilterSchluessel502.setSelected(true);
         chkFilterSchluessel503.setSelected(true);
@@ -725,25 +725,25 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         chkFilterSchluessel507.setSelected(true);
         chkFilterSchluessel508.setSelected(true);
         chkFilterSchluessel600.setSelected(true);
-    }//GEN-LAST:event_btnFilterSchluesselAllActionPerformed
+    }                                                                                          //GEN-LAST:event_btnFilterSchluesselAllActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstFlurstueckeValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstFlurstueckeValueChanged
+    private void lstFlurstueckeValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstFlurstueckeValueChanged
         if (!evt.getValueIsAdjusting()) {
             btnRemoveFlurstueck.setEnabled(lstFlurstuecke.getSelectedIndex() > -1);
         }
-    }//GEN-LAST:event_lstFlurstueckeValueChanged
+    }                                                                                         //GEN-LAST:event_lstFlurstueckeValueChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddFlurstueckActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddFlurstueckActionPerformed
+    private void btnAddFlurstueckActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddFlurstueckActionPerformed
         final List<CidsBean> result = new ArrayList<CidsBean>(1);
 
         for (final Object flurstuecksvermessung : flurstuecksvermessungFilterModel.toArray()) {
@@ -757,26 +757,26 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this),
             flurstueckDialog,
             true);
-    }//GEN-LAST:event_btnAddFlurstueckActionPerformed
+    } //GEN-LAST:event_btnAddFlurstueckActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveFlurstueckActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveFlurstueckActionPerformed
+    private void btnRemoveFlurstueckActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveFlurstueckActionPerformed
         final Object[] selection = lstFlurstuecke.getSelectedValues();
         for (final Object flurstueck : selection) {
             flurstuecksvermessungFilterModel.removeElement(flurstueck);
         }
-    }//GEN-LAST:event_btnRemoveFlurstueckActionPerformed
+    }                                                                                       //GEN-LAST:event_btnRemoveFlurstueckActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnFilterSchluessel505To508ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterSchluessel505To508ActionPerformed
+    private void btnFilterSchluessel505To508ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFilterSchluessel505To508ActionPerformed
         chkFilterSchluessel501.setSelected(false);
         chkFilterSchluessel502.setSelected(false);
         chkFilterSchluessel503.setSelected(false);
@@ -786,7 +786,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         chkFilterSchluessel507.setSelected(true);
         chkFilterSchluessel508.setSelected(true);
         chkFilterSchluessel600.setSelected(false);
-    }//GEN-LAST:event_btnFilterSchluessel505To508ActionPerformed
+    }                                                                                               //GEN-LAST:event_btnFilterSchluessel505To508ActionPerformed
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {

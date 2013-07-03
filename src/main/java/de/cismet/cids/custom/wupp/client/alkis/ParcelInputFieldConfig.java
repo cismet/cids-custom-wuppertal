@@ -15,9 +15,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+
 import java.io.Serializable;
 
 import java.util.HashMap;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -27,8 +29,11 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @version  $Revision$, $Date$
  */
 @XmlRootElement
-@JsonIgnoreProperties(value = {"delimiter1AsString", "delimiter2AsString"})
+@JsonIgnoreProperties(value = { "delimiter1AsString", "delimiter2AsString" })
 public class ParcelInputFieldConfig implements Serializable {
+
+    //~ Static fields/initializers ---------------------------------------------
+
     public static final ParcelInputFieldConfig FallbackConfig = new ParcelInputFieldConfig('-', '/', 4, 3, 5, 4);
 
     //~ Instance fields --------------------------------------------------------
@@ -44,7 +49,30 @@ public class ParcelInputFieldConfig implements Serializable {
     private HashMap<String, Integer> conversionMap;
     private HashMap<Integer, String> districtNamesMap;
 
-    private ParcelInputFieldConfig(char delimiter1, char delimiter2, int lenDistrictField, int lenParcelNumberField, int lenParcelNumeratorField, int lenParcelDenominatorField) {
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new ParcelInputFieldConfig object.
+     */
+    public ParcelInputFieldConfig() {
+    }
+
+    /**
+     * Creates a new ParcelInputFieldConfig object.
+     *
+     * @param  delimiter1                 DOCUMENT ME!
+     * @param  delimiter2                 DOCUMENT ME!
+     * @param  lenDistrictField           DOCUMENT ME!
+     * @param  lenParcelNumberField       DOCUMENT ME!
+     * @param  lenParcelNumeratorField    DOCUMENT ME!
+     * @param  lenParcelDenominatorField  DOCUMENT ME!
+     */
+    private ParcelInputFieldConfig(final char delimiter1,
+            final char delimiter2,
+            final int lenDistrictField,
+            final int lenParcelNumberField,
+            final int lenParcelNumeratorField,
+            final int lenParcelDenominatorField) {
         maxLenDistrictNumberField = lenDistrictField;
         maxLenParcelNumberField = lenParcelNumberField;
         maxLenParcelNumeratorField = lenParcelNumeratorField;
@@ -54,8 +82,6 @@ public class ParcelInputFieldConfig implements Serializable {
         this.conversionMap = new HashMap<String, Integer>();
         this.districtNamesMap = new HashMap<Integer, String>();
     }
-    
-    public ParcelInputFieldConfig() {}
 
     //~ Methods ----------------------------------------------------------------
 

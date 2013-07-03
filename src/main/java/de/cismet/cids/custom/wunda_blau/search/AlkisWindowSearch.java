@@ -1,12 +1,10 @@
-/**
- * *************************************************
- *
- * cismet GmbH, Saarbruecken, Germany
- * 
-* ... and it just works.
- * 
-***************************************************
- */
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * BaulastWindowSearch.java
  *
@@ -20,14 +18,26 @@ import Sirius.navigator.search.dynamic.SearchControlListener;
 import Sirius.navigator.search.dynamic.SearchControlPanel;
 
 import Sirius.server.middleware.types.MetaClass;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.vividsolutions.jts.geom.Geometry;
 
-import java.awt.CardLayout;
+import org.openide.util.Exceptions;
 
+import java.awt.CardLayout;
+import java.awt.Dimension;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import java.io.IOException;
+
+import java.util.HashMap;
+
+import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
@@ -47,30 +57,26 @@ import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.piccolo.eventlistener.AbstractCreateSearchGeometryListener;
 import de.cismet.cismap.commons.interaction.CismapBroker;
-import java.awt.Dimension;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.IOException;
-import java.util.HashMap;
-import javax.swing.Box;
-import org.openide.util.Exceptions;
 
 /**
  * DOCUMENT ME!
  *
- * @author stefan
- * @version $Revision$, $Date$
+ * @author   stefan
+ * @version  $Revision$, $Date$
  */
 @org.openide.util.lookup.ServiceProvider(service = CidsWindowSearch.class)
 public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowSearch,
-        ActionTagProtected,
-        SearchControlListener,
-        PropertyChangeListener {
+    ActionTagProtected,
+    SearchControlListener,
+    PropertyChangeListener {
 
     //~ Static fields/initializers ---------------------------------------------
+
     static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisWindowSearch.class);
     private static final String ACTION_TAG = "custom.alkis.windowsearch@WUNDA_BLAU";
+
     //~ Instance fields --------------------------------------------------------
+
     private ObjectMapper mapper = new ObjectMapper();
     private MetaClass mc = null;
     private ImageIcon icon = null;
@@ -127,12 +133,15 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
+
     /**
      * Creates new form BaulastWindowSearch.
      */
     public AlkisWindowSearch() {
         try {
-            config = mapper.readValue(AlkisWindowSearch.class.getResourceAsStream("/de/cismet/cids/custom/wunda_blau/res/alkis/ParcelInputFieldConfig.json"), ParcelInputFieldConfig.class);
+            config = mapper.readValue(AlkisWindowSearch.class.getResourceAsStream(
+                        "/de/cismet/cids/custom/wunda_blau/res/alkis/ParcelInputFieldConfig.json"),
+                    ParcelInputFieldConfig.class);
         } catch (IOException ex) {
             log.warn("ParcelInputFieldConfig could not be loaded, use fallback configuration.", ex);
             config = ParcelInputFieldConfig.FallbackConfig;
@@ -142,7 +151,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
             mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "ALKIS_LANDPARCEL");
             icon = new ImageIcon(mc.getIconData());
             initComponents();
-            ((CardLayout) panEingabe.getLayout()).show(panEingabe, "eigentuemer");
+            ((CardLayout)panEingabe.getLayout()).show(panEingabe, "eigentuemer");
             pnlSearchCancel = new SearchControlPanel(this);
             final Dimension max = pnlSearchCancel.getMaximumSize();
             final Dimension min = pnlSearchCancel.getMinimumSize();
@@ -161,9 +170,16 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
             mappingComponent = CismapBroker.getInstance().getMappingComponent();
             geoSearchEnabled = mappingComponent != null;
             if (geoSearchEnabled) {
-                final AlkisCreateSearchGeometryListener alkisSearchGeometryListener = new AlkisCreateSearchGeometryListener(mappingComponent, new AlkisSearchTooltip(icon));
+                final AlkisCreateSearchGeometryListener alkisSearchGeometryListener =
+                    new AlkisCreateSearchGeometryListener(mappingComponent, new AlkisSearchTooltip(icon));
                 alkisSearchGeometryListener.addPropertyChangeListener(this);
-                btnGeoSearch = new GeoSearchButton(AlkisCreateSearchGeometryListener.ALKIS_CREATE_SEARCH_GEOMETRY, mappingComponent, null, org.openide.util.NbBundle.getMessage(AlkisWindowSearch.class, "AlkisWindowSearch.btnGeoSearch.toolTipText"));
+                btnGeoSearch = new GeoSearchButton(
+                        AlkisCreateSearchGeometryListener.ALKIS_CREATE_SEARCH_GEOMETRY,
+                        mappingComponent,
+                        null,
+                        org.openide.util.NbBundle.getMessage(
+                            AlkisWindowSearch.class,
+                            "AlkisWindowSearch.btnGeoSearch.toolTipText"));
                 btnGeoSearch.addActionListener(null);
                 panCommand.add(btnGeoSearch);
             }
@@ -178,10 +194,10 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     }
 
     //~ Methods ----------------------------------------------------------------
+
     /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -249,7 +265,9 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSearch.add(panCommand, gridBagConstraints);
 
-        panSucheNach.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Suche nach"), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        panSucheNach.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+                javax.swing.BorderFactory.createTitledBorder("Suche nach"),
+                javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
         panSucheNach.setLayout(new java.awt.GridBagLayout());
 
         bgrNach.add(optSucheNachFlurstuecke);
@@ -283,26 +301,32 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         gridBagConstraints.weighty = 1.0;
         panSearch.add(jPanel6, gridBagConstraints);
 
-        panSucheUeber.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Suche über"), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        panSucheUeber.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+                javax.swing.BorderFactory.createTitledBorder("Suche über"),
+                javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
         panSucheUeber.setLayout(new java.awt.GridBagLayout());
 
         bgrUeber.add(optSucheUeberEigentuemer);
         optSucheUeberEigentuemer.setSelected(true);
         optSucheUeberEigentuemer.setText("Eigentümer");
         optSucheUeberEigentuemer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                optSucheUeberEigentuemerActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    optSucheUeberEigentuemerActionPerformed(evt);
+                }
+            });
         panSucheUeber.add(optSucheUeberEigentuemer, new java.awt.GridBagConstraints());
 
         bgrUeber.add(optSucheUeberFlurstueck);
         optSucheUeberFlurstueck.setText("Flurstück");
         optSucheUeberFlurstueck.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                optSucheUeberFlurstueckActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    optSucheUeberFlurstueckActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         panSucheUeber.add(optSucheUeberFlurstueck, gridBagConstraints);
@@ -310,10 +334,12 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         bgrUeber.add(optSucheUeberGrundbuchblatt);
         optSucheUeberGrundbuchblatt.setText("Grundbuchblatt");
         optSucheUeberGrundbuchblatt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                optSucheUeberGrundbuchblattActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    optSucheUeberGrundbuchblattActionPerformed(evt);
+                }
+            });
         panSucheUeber.add(optSucheUeberGrundbuchblatt, new java.awt.GridBagConstraints());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -330,7 +356,9 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
 
         panEingabe.setLayout(new java.awt.CardLayout());
 
-        panEingabeGrundbuchblatt.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Grundbuchblatt Suchmaske"), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        panEingabeGrundbuchblatt.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+                javax.swing.BorderFactory.createTitledBorder("Grundbuchblatt Suchmaske"),
+                javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
         panEingabeGrundbuchblatt.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -349,7 +377,8 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panEingabeGrundbuchblatt.add(jLabel12, gridBagConstraints);
 
-        jLabel4.setText("<html> <p>Beispiel: 053001-003117</p><br><p>Platzhaltersymbole:</p><p>&nbsp;<b>%</b>&nbsp;&nbsp;&nbsp;&nbsp;eine beliebige Anzahl von Zeichen</p> <p>&nbsp;<b>_</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ein einzelnes Zeichen</p> </html>");
+        jLabel4.setText(
+            "<html> <p>Beispiel: 053001-003117</p><br><p>Platzhaltersymbole:</p><p>&nbsp;<b>%</b>&nbsp;&nbsp;&nbsp;&nbsp;eine beliebige Anzahl von Zeichen</p> <p>&nbsp;<b>_</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ein einzelnes Zeichen</p> </html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
@@ -360,7 +389,9 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
 
         panEingabe.add(panEingabeGrundbuchblatt, "grundbuchblatt");
 
-        panEingabeFlurstueck.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Flurstück Suchmaske"), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        panEingabeFlurstueck.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+                javax.swing.BorderFactory.createTitledBorder("Flurstück Suchmaske"),
+                javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
         panEingabeFlurstueck.setLayout(new java.awt.GridBagLayout());
 
         panParcelInputField.setAlignmentX(0.0F);
@@ -382,7 +413,8 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panEingabeFlurstueck.add(jLabel9, gridBagConstraints);
 
-        jLabel3.setText("<html> <p>Beispiel: 053001-117-00058</p><br><p>Platzhaltersymbole:</p><p>&nbsp;<b>%</b>&nbsp;&nbsp;&nbsp;&nbsp;eine beliebige Anzahl von Zeichen</p> <p>&nbsp;<b>_</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ein einzelnes Zeichen</p> </html>");
+        jLabel3.setText(
+            "<html> <p>Beispiel: 053001-117-00058</p><br><p>Platzhaltersymbole:</p><p>&nbsp;<b>%</b>&nbsp;&nbsp;&nbsp;&nbsp;eine beliebige Anzahl von Zeichen</p> <p>&nbsp;<b>_</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ein einzelnes Zeichen</p> </html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
@@ -391,7 +423,8 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         gridBagConstraints.insets = new java.awt.Insets(5, 12, 5, 5);
         panEingabeFlurstueck.add(jLabel3, gridBagConstraints);
 
-        jLabel1.setText("<html><b><font color=\"#FF0000\">Es ist ein Fehler beim Laden der Konfiguration aufgetreten. <br />\nDie Funktionalität ist dadurch eingeschränkt.</font></b></html>");
+        jLabel1.setText(
+            "<html><b><font color=\"#FF0000\">Es ist ein Fehler beim Laden der Konfiguration aufgetreten. <br />\nDie Funktionalität ist dadurch eingeschränkt.</font></b></html>");
         jLabel1.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -403,14 +436,18 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
 
         panEingabe.add(panEingabeFlurstueck, "flurstueck");
 
-        panEingabeEigentuemer.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Eigentümer Suchmaske"), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        panEingabeEigentuemer.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+                javax.swing.BorderFactory.createTitledBorder("Eigentümer Suchmaske"),
+                javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
         panEingabeEigentuemer.setLayout(new java.awt.GridBagLayout());
 
         txtVorname.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtVornameActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    txtVornameActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -445,7 +482,9 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panEingabeEigentuemer.add(jLabel8, gridBagConstraints);
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createTitledBorder("Eigentümer ist"), javax.swing.BorderFactory.createEmptyBorder(4, 4, 4, 4)));
+        jPanel4.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+                javax.swing.BorderFactory.createTitledBorder("Eigentümer ist"),
+                javax.swing.BorderFactory.createEmptyBorder(4, 4, 4, 4)));
         jPanel4.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
@@ -457,10 +496,12 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         bgrOwner.add(optEigIstMaennlich);
         optEigIstMaennlich.setText("männlich");
         optEigIstMaennlich.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                optEigIstMaennlichActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    optEigIstMaennlichActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -469,10 +510,12 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         bgrOwner.add(optEigIstWeiblich);
         optEigIstWeiblich.setText("weiblich");
         optEigIstWeiblich.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                optEigIstWeiblichActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    optEigIstWeiblichActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         jPanel4.add(optEigIstWeiblich, gridBagConstraints);
@@ -480,10 +523,12 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         bgrOwner.add(optEigIstFirma);
         optEigIstFirma.setText("Firma");
         optEigIstFirma.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                optEigIstFirmaActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    optEigIstFirmaActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         jPanel4.add(optEigIstFirma, gridBagConstraints);
@@ -492,10 +537,12 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         optEigIstUnbekannt.setSelected(true);
         optEigIstUnbekannt.setText("unbekannt");
         optEigIstUnbekannt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                optEigIstUnbekanntActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    optEigIstUnbekanntActionPerformed(evt);
+                }
+            });
         jPanel4.add(optEigIstUnbekannt, new java.awt.GridBagConstraints());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -533,10 +580,12 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
 
         txtGeburtsdatum.setToolTipText("Bsp.: 18.01.1974");
         txtGeburtsdatum.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtGeburtsdatumActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    txtGeburtsdatumActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -546,7 +595,8 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panEingabeEigentuemer.add(txtGeburtsdatum, gridBagConstraints);
 
-        jLabel2.setText("<html><br><p>Platzhaltersymbole:</p><p>&nbsp;<b>%</b>&nbsp;&nbsp;&nbsp;&nbsp;eine beliebige Anzahl von Zeichen</p> <p>&nbsp;<b>_</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ein einzelnes Zeichen</p> </html>");
+        jLabel2.setText(
+            "<html><br><p>Platzhaltersymbole:</p><p>&nbsp;<b>%</b>&nbsp;&nbsp;&nbsp;&nbsp;eine beliebige Anzahl von Zeichen</p> <p>&nbsp;<b>_</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ein einzelnes Zeichen</p> </html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
@@ -574,101 +624,101 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         panSearch.add(chkGeomFilter, gridBagConstraints);
 
         add(panSearch, java.awt.BorderLayout.CENTER);
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void optSucheUeberEigentuemerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optSucheUeberEigentuemerActionPerformed
-        ((CardLayout) panEingabe.getLayout()).show(panEingabe, "eigentuemer");
-    }//GEN-LAST:event_optSucheUeberEigentuemerActionPerformed
+    private void optSucheUeberEigentuemerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_optSucheUeberEigentuemerActionPerformed
+        ((CardLayout)panEingabe.getLayout()).show(panEingabe, "eigentuemer");
+    }                                                                                            //GEN-LAST:event_optSucheUeberEigentuemerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void txtVornameActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtVornameActionPerformed
+    private void txtVornameActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtVornameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtVornameActionPerformed
+    } //GEN-LAST:event_txtVornameActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void txtGeburtsdatumActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGeburtsdatumActionPerformed
+    private void txtGeburtsdatumActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtGeburtsdatumActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtGeburtsdatumActionPerformed
+    } //GEN-LAST:event_txtGeburtsdatumActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void optEigIstMaennlichActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optEigIstMaennlichActionPerformed
+    private void optEigIstMaennlichActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_optEigIstMaennlichActionPerformed
         txtVorname.setEnabled(true);
         txtGeburtsname.setEnabled(true);
         txtGeburtsdatum.setEnabled(true);
-    }//GEN-LAST:event_optEigIstMaennlichActionPerformed
+    }                                                                                      //GEN-LAST:event_optEigIstMaennlichActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void optEigIstUnbekanntActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optEigIstUnbekanntActionPerformed
+    private void optEigIstUnbekanntActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_optEigIstUnbekanntActionPerformed
         txtVorname.setEnabled(true);
         txtGeburtsname.setEnabled(true);
         txtGeburtsdatum.setEnabled(true);
-    }//GEN-LAST:event_optEigIstUnbekanntActionPerformed
+    }                                                                                      //GEN-LAST:event_optEigIstUnbekanntActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void optEigIstFirmaActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optEigIstFirmaActionPerformed
+    private void optEigIstFirmaActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_optEigIstFirmaActionPerformed
         txtVorname.setEnabled(false);
         txtGeburtsname.setEnabled(false);
         txtGeburtsdatum.setEnabled(false);
-    }//GEN-LAST:event_optEigIstFirmaActionPerformed
+    }                                                                                  //GEN-LAST:event_optEigIstFirmaActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void optEigIstWeiblichActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optEigIstWeiblichActionPerformed
+    private void optEigIstWeiblichActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_optEigIstWeiblichActionPerformed
         txtVorname.setEnabled(true);
         txtGeburtsname.setEnabled(true);
         txtGeburtsdatum.setEnabled(true);
-    }//GEN-LAST:event_optEigIstWeiblichActionPerformed
+    }                                                                                     //GEN-LAST:event_optEigIstWeiblichActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void optSucheUeberFlurstueckActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optSucheUeberFlurstueckActionPerformed
-        ((CardLayout) panEingabe.getLayout()).show(panEingabe, "flurstueck");
-    }//GEN-LAST:event_optSucheUeberFlurstueckActionPerformed
+    private void optSucheUeberFlurstueckActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_optSucheUeberFlurstueckActionPerformed
+        ((CardLayout)panEingabe.getLayout()).show(panEingabe, "flurstueck");
+    }                                                                                           //GEN-LAST:event_optSucheUeberFlurstueckActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void optSucheUeberGrundbuchblattActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optSucheUeberGrundbuchblattActionPerformed
-        ((CardLayout) panEingabe.getLayout()).show(panEingabe, "grundbuchblatt");
-    }//GEN-LAST:event_optSucheUeberGrundbuchblattActionPerformed
+    private void optSucheUeberGrundbuchblattActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_optSucheUeberGrundbuchblattActionPerformed
+        ((CardLayout)panEingabe.getLayout()).show(panEingabe, "grundbuchblatt");
+    }                                                                                               //GEN-LAST:event_optSucheUeberGrundbuchblattActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     @Override
     public ImageIcon getIcon() {
@@ -678,7 +728,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     @Override
     public String getName() {
@@ -688,13 +738,18 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     @Override
     public JComponent getSearchWindowComponent() {
         return this;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public boolean isFallbackConfig() {
         return fallbackConfig;
     }
@@ -702,7 +757,9 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @param   geometry  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
      */
     public MetaObjectNodeServerSearch getServerSearch(final Geometry geometry) {
         Geometry searchgeom = null;
@@ -710,8 +767,9 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
             searchgeom = CrsTransformer.transformToDefaultCrs(geometry);
         } else {
             if (chkGeomFilter.isSelected()) {
-                final Geometry g = ((XBoundingBox) CismapBroker.getInstance().getMappingComponent().getCurrentBoundingBox())
-                        .getGeometry();
+                final Geometry g =
+                    ((XBoundingBox)CismapBroker.getInstance().getMappingComponent().getCurrentBoundingBox())
+                            .getGeometry();
                 final Geometry transformed = CrsTransformer.transformToDefaultCrs(g);
                 // Damits auch mit -1 funzt:
                 transformed.setSRID(CismapBroker.getInstance().getDefaultCrsAlias());
@@ -758,7 +816,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     @Override
     public boolean checkActionTag() {
@@ -778,13 +836,14 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     @Override
     public MetaObjectNodeServerSearch assembleSearch() {
         return getServerSearch();
     }
 
+    @Override
     public MetaObjectNodeServerSearch getServerSearch() {
         return getServerSearch(null);
     }
@@ -799,7 +858,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     /**
      * DOCUMENT ME!
      *
-     * @param results DOCUMENT ME!
+     * @param  results  DOCUMENT ME!
      */
     @Override
     public void searchDone(final int results) {
@@ -815,7 +874,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     @Override
     public boolean suppressEmptyResultMessage() {
@@ -823,15 +882,16 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
+    public void propertyChange(final PropertyChangeEvent evt) {
         if (AbstractCreateSearchGeometryListener.PROPERTY_FORGUI_LAST_FEATURE.equals(evt.getPropertyName())
-                || AbstractCreateSearchGeometryListener.PROPERTY_FORGUI_MODE.equals(evt.getPropertyName())) {
-            btnGeoSearch.visualizeSearchMode((AlkisCreateSearchGeometryListener) mappingComponent.getInputListener(AlkisCreateSearchGeometryListener.ALKIS_CREATE_SEARCH_GEOMETRY));
+                    || AbstractCreateSearchGeometryListener.PROPERTY_FORGUI_MODE.equals(evt.getPropertyName())) {
+            btnGeoSearch.visualizeSearchMode((AlkisCreateSearchGeometryListener)mappingComponent.getInputListener(
+                    AlkisCreateSearchGeometryListener.ALKIS_CREATE_SEARCH_GEOMETRY));
         }
 
         if (MeasurementPointCreateSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
             if ((evt.getNewValue() != null) && (evt.getNewValue() instanceof Geometry)) {
-                final MetaObjectNodeServerSearch search = getServerSearch((Geometry) evt.getNewValue());
+                final MetaObjectNodeServerSearch search = getServerSearch((Geometry)evt.getNewValue());
                 CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);
             }
         }

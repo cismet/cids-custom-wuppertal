@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -8,24 +15,38 @@ import edu.umd.cs.piccolo.PNode;
 import edu.umd.cs.piccolo.nodes.PImage;
 import edu.umd.cs.piccolo.nodes.PPath;
 import edu.umd.cs.piccolo.nodes.PText;
+
+import org.openide.util.NbBundle;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.geom.RoundRectangle2D;
+
 import java.util.Collection;
 import java.util.LinkedList;
+
 import javax.swing.ImageIcon;
-import org.openide.util.NbBundle;
 
 /**
+ * DOCUMENT ME!
  *
- * @author mroncoroni
+ * @author   mroncoroni
+ * @version  $Revision$, $Date$
  */
 class LandParcelSearchTooltip extends PNode {
-    
+
+    //~ Static fields/initializers ---------------------------------------------
+
     private static final Color COLOR_BACKGROUND = new Color(255, 255, 222, 200);
-    
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new LandParcelSearchTooltip object.
+     *
+     * @param  icon  DOCUMENT ME!
+     */
     public LandParcelSearchTooltip(final ImageIcon icon) {
-        
         double leftMargin = 5;
         double offsetX = leftMargin;
         double offsetY = 5;
@@ -33,7 +54,7 @@ class LandParcelSearchTooltip extends PNode {
         double totalHeight = offsetY;
 
         final Collection<PNode> nodesToAdd = new LinkedList<PNode>();
-        
+
         if ((icon != null) && (icon.getImage() != null)) {
             final PImage imgHeader = new PImage(icon.getImage());
             imgHeader.setOffset(offsetX, offsetY);
@@ -45,7 +66,7 @@ class LandParcelSearchTooltip extends PNode {
 
             nodesToAdd.add(imgHeader);
         }
-        
+
         final PText lblHeader = new PText(NbBundle.getMessage(
                     LandParcelSearchTooltip.class,
                     "LandParcelSearchTooltip.LandParcelSearchTooltip(ImageIcon).lblHeader"));
@@ -72,7 +93,7 @@ class LandParcelSearchTooltip extends PNode {
         totalHeight = Math.max(totalHeight, offsetY + lblFilter.getHeight());
 
         nodesToAdd.add(lblFilter);
-        
+
         final PPath background = new PPath(new RoundRectangle2D.Double(
                     0,
                     0,
@@ -91,5 +112,4 @@ class LandParcelSearchTooltip extends PNode {
         setTransparency(0.85f);
         addChild(background);
     }
-    
 }

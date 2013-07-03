@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -8,22 +15,38 @@ import edu.umd.cs.piccolo.PNode;
 import edu.umd.cs.piccolo.nodes.PImage;
 import edu.umd.cs.piccolo.nodes.PPath;
 import edu.umd.cs.piccolo.nodes.PText;
+
+import org.openide.util.NbBundle;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.geom.RoundRectangle2D;
+
 import java.util.Collection;
 import java.util.LinkedList;
+
 import javax.swing.ImageIcon;
-import org.openide.util.NbBundle;
 
 /**
+ * DOCUMENT ME!
  *
- * @author mroncoroni
+ * @author   mroncoroni
+ * @version  $Revision$, $Date$
  */
 public class BaulastSearchTooltip extends PNode {
-     private static final Color COLOR_BACKGROUND = new Color(255, 255, 222, 200);
-     
-     public BaulastSearchTooltip(final ImageIcon icoMauer) {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final Color COLOR_BACKGROUND = new Color(255, 255, 222, 200);
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new BaulastSearchTooltip object.
+     *
+     * @param  icoMauer  DOCUMENT ME!
+     */
+    public BaulastSearchTooltip(final ImageIcon icoMauer) {
         double leftMargin = 5;
         double offsetX = leftMargin;
         double offsetY = 5;
