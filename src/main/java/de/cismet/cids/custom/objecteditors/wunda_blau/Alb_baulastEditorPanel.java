@@ -32,9 +32,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
 import java.sql.Date;
 
 import java.text.DateFormat;
@@ -191,13 +188,6 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         dlgAddBaulastArt.pack();
         dlgAddBaulastArt.setLocationRelativeTo(this);
         StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbBaulastArt);
-        /*
-         * if (!chkGeprueft.isSelected()      && SessionManager.getSession().getUser().getName().equals(
-         * cidsBean.getProperty("bearbeitet_von"))) { chkGeprueft.setEnabled(false); }
-         * cidsBean.addPropertyChangeListener(new PropertyChangeListener() {
-         *
-         * @Override public void propertyChange(PropertyChangeEvent evt) {
-         * if(!evt.getPropertyName().equals("gerpueft")) {         chkGeprueft.setSelected(false);     } }});*/
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -833,6 +823,8 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geprueft}"),
                 chkGeprueft,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
+        binding.setSourceNullValue(false);
+        binding.setSourceUnreadableValue(false);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
