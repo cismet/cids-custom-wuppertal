@@ -62,7 +62,7 @@ public class PredefinedBoxes {
                         Double.parseDouble(splittedVal[2])));
             }
         } catch (IOException ex) {
-            LOG.error("Could not read property file with defined boxes for butler 1",ex);
+            LOG.error("Could not read property file with defined boxes for butler 1", ex);
         }
     }
 

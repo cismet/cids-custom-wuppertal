@@ -27,6 +27,9 @@ import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -123,6 +126,15 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         initComponents();
         tfLowerE.getDocument().addDocumentListener(this);
         tfLowerN.getDocument().addDocumentListener(this);
+        final FocusListener upperTfFocusListener = new FocusAdapter() {
+
+                @Override
+                public void focusGained(final FocusEvent e) {
+                    firstUpperTFChange = false;
+                }
+            };
+        tfUpperE.addFocusListener(upperTfFocusListener);
+        tfUpperN.addFocusListener(upperTfFocusListener);
         upperTfListeners = new DocumentListener() {
 
                 @Override
@@ -618,6 +630,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
     private void cbSizeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbSizeActionPerformed
         final PredefinedBoxes selectedBox = (PredefinedBoxes)cbSize.getSelectedItem();
         if ((selectedBox != null) && !selectedBox.getDisplayName().equals("keine Auswahl")) {
+            firstUpperTFChange = true;
             updatePositionFields();
             changeMap();
         } else {
