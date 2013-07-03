@@ -1260,6 +1260,24 @@
             "eageb_1000001":0.1125
         }
     },{
+        "name":"NAS-Daten (nur Punkte)",
+        "id":"naspkt",
+        "description":"[x] NAS Datensatz nur Punkte",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.0,
+            "VU s":0.5,
+            "VU hV":0.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eapkt_1000":0.2,
+            "eapkt_1001-10000":0.1,
+            "eapkt_10001-100000":0.05,
+            "eapkt_100001-1000000":0.025,
+            "eapkt_1000001":0.0125
+        }
+    },{
         "name":"DXF-Daten (Stadtgrundkarte kommunal)",
         "id":"skmekomdxf",
         "description":"# GUI in WuNDa fehlt noch, kann noch nicht implementiert werden",
