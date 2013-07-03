@@ -305,12 +305,6 @@
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
               <SubComponents>
                 <Component class="de.cismet.cids.custom.wupp.client.alkis.ParcelInputField" name="panParcelInputField">
-                  <Properties>
-                    <Property name="alignmentX" type="float" value="0.0"/>
-                    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[70, 20]"/>
-                    </Property>
-                  </Properties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new de.cismet.cids.custom.wupp.client.alkis.ParcelInputField(config)"/>
                   </AuxValues>
