@@ -718,6 +718,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                     }
                     final Geometry g = createGeometry();
                     if (g != null) {
+                        updateGeomInAllProducts(g);
                         rectangleFeature.setGeometry(g);
                         if (!map.getFeatureCollection().contains(rectangleFeature)) {
                             map.getFeatureCollection().addFeature(rectangleFeature);
@@ -760,10 +761,13 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         final int number = tbpProducts.getTabCount();
         final String title = "Produkt " + number;
         final int tabPos = tbpProducts.getTabCount() - 1;
-        final Component comp = new Butler1ProductPanel();
-        tbpProducts.insertTab("", null, comp, title, tabPos);
+        final Butler1ProductPanel productPan = new Butler1ProductPanel();
+        if ((rectangleFeature != null) && (rectangleFeature.getGeometry() != null)) {
+            productPan.setGeometry(rectangleFeature.getGeometry());
+        }
+        tbpProducts.insertTab("", null, productPan, title, tabPos);
 //        tbpProducts.insertTab(null, null, comp, null, tabPos);
-        final int tabPosNew = tbpProducts.indexOfComponent(comp);
+        final int tabPosNew = tbpProducts.indexOfComponent(productPan);
         tbpProducts.setTabComponentAt(tabPosNew, tabComp);
         tbpProducts.setBorder(null);
     }
@@ -817,7 +821,6 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         dsf.setGeometry(geom);
         dsf.setTransparency(0.8F);
         dsf.setFillingPaint(new Color(192, 80, 77, 192));
-
         return dsf;
     }
 
@@ -1016,5 +1019,17 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
             return false;
         }
         return true;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  geom  DOCUMENT ME!
+     */
+    private void updateGeomInAllProducts(final Geometry geom) {
+        for (int i = 0; i < (tbpProducts.getTabCount() - 1); i++) {
+            final Butler1ProductPanel productPan = (Butler1ProductPanel)tbpProducts.getComponentAt(i);
+            productPan.setGeometry(geom);
+        }
     }
 }

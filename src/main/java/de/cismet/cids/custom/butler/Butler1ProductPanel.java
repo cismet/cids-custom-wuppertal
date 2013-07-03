@@ -13,6 +13,8 @@ package de.cismet.cids.custom.butler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.vividsolutions.jts.geom.Geometry;
+
 import org.jdesktop.beansbinding.Binding;
 import org.jdesktop.beansbinding.Property;
 
@@ -24,10 +26,14 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import de.cismet.cids.custom.utils.butler.ButlerFormat;
 import de.cismet.cids.custom.utils.butler.ButlerProduct;
 import de.cismet.cids.custom.utils.butler.ButlerResolution;
+
+import de.cismet.tools.StaticDecimalTools;
 
 /**
  * DOCUMENT ME!
@@ -35,7 +41,7 @@ import de.cismet.cids.custom.utils.butler.ButlerResolution;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class Butler1ProductPanel extends javax.swing.JPanel {
+public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelectionListener {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -43,11 +49,12 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
     ArrayList<ButlerProduct> products;
     ArrayList<ButlerResolution> resolutions;
     ArrayList<ButlerFormat> formats;
+    private Geometry geom;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btGroupFormat;
     private javax.swing.JComboBox cbProduktGruppe;
     private javax.swing.JComboBox cbResolution;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblAuflösung;
@@ -55,7 +62,11 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblFormat;
     private javax.swing.JLabel lblProdukt;
     private javax.swing.JLabel lblProduktGruppe;
+    private javax.swing.JLabel lblVolumeParam;
+    private javax.swing.JLabel lblVolumeParamKey;
+    private javax.swing.JLabel lblVolumeParamTitle;
     private javax.swing.JList lstProdukt;
+    private javax.swing.JPanel pnlFeeParrameter;
     private javax.swing.JPanel pnlFormat;
     private javax.swing.JRadioButton rbDxf;
     private javax.swing.JRadioButton rbGeoTif;
@@ -73,6 +84,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
         loadPrductDescriptions();
         initComponents();
         lstProdukt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        lstProdukt.addListSelectionListener(this);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -103,7 +115,11 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
         lblAuflösung = new javax.swing.JLabel();
         cbResolution = new javax.swing.JComboBox();
         jSeparator1 = new javax.swing.JSeparator();
-        jPanel1 = new javax.swing.JPanel();
+        pnlFeeParrameter = new javax.swing.JPanel();
+        lblVolumeParamTitle = new javax.swing.JLabel();
+        lblVolumeParamKey = new javax.swing.JLabel();
+        lblVolumeParam = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setBorder(null);
         setMinimumSize(new java.awt.Dimension(400, 291));
@@ -118,7 +134,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 40);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 40);
         add(lblProduktGruppe, gridBagConstraints);
 
         org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
@@ -142,7 +158,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 10, 5);
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 10);
         add(cbProduktGruppe, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -152,7 +168,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 10, 40);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 40);
         add(lblProdukt, gridBagConstraints);
 
         jScrollPane1.setMinimumSize(new java.awt.Dimension(250, 150));
@@ -175,7 +191,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 10);
         add(jScrollPane1, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -185,7 +201,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 10, 40);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 40);
         add(lblFormat, gridBagConstraints);
 
         pnlFormat.setLayout(new java.awt.GridBagLayout());
@@ -244,7 +260,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 10);
         add(pnlFormat, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -254,7 +270,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 10, 40);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 40);
         add(lblAuflösung, gridBagConstraints);
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${resolutions}");
@@ -270,28 +286,65 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
         add(cbResolution, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         add(jSeparator1, gridBagConstraints);
 
-        final javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                418,
-                Short.MAX_VALUE));
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                245,
-                Short.MAX_VALUE));
+        pnlFeeParrameter.setBackground(new java.awt.Color(255, 255, 255));
+        pnlFeeParrameter.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        pnlFeeParrameter.setLayout(new java.awt.GridBagLayout());
+
+        lblVolumeParamTitle.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblVolumeParamTitle,
+            org.openide.util.NbBundle.getMessage(
+                Butler1ProductPanel.class,
+                "Butler1ProductPanel.lblVolumeParamTitle.text"));             // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 20, 10);
+        pnlFeeParrameter.add(lblVolumeParamTitle, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblVolumeParamKey,
+            org.openide.util.NbBundle.getMessage(
+                Butler1ProductPanel.class,
+                "Butler1ProductPanel.lblVolumeParamKey.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        pnlFeeParrameter.add(lblVolumeParamKey, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblVolumeParam,
+            org.openide.util.NbBundle.getMessage(Butler1ProductPanel.class, "Butler1ProductPanel.lblVolumeParam.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        pnlFeeParrameter.add(lblVolumeParam, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel1,
+            org.openide.util.NbBundle.getMessage(Butler1ProductPanel.class, "Butler1ProductPanel.jLabel1.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.weighty = 1.0;
+        pnlFeeParrameter.add(jLabel1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -300,7 +353,8 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        add(jPanel1, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 10);
+        add(pnlFeeParrameter, gridBagConstraints);
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
@@ -458,5 +512,113 @@ public class Butler1ProductPanel extends javax.swing.JPanel {
                 rbShp.setEnabled(true);
             }
         }
+    }
+
+    @Override
+    public void valueChanged(final ListSelectionEvent e) {
+        final ButlerProduct selectedProduct = (ButlerProduct)lstProdukt.getSelectedValue();
+        if (selectedProduct != null) {
+            final String text = (selectedProduct.getVolumeParamText() == null) ? ""
+                                                                               : selectedProduct.getVolumeParamText();
+            lblVolumeParamKey.setText(text);
+            calculateVolumePram();
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void calculateVolumePram() {
+        final ButlerProduct product = (ButlerProduct)lstProdukt.getSelectedValue();
+        if ((product == null) || (geom == null)) {
+            lblVolumeParam.setText("0");
+            return;
+        }
+        final String productKey = product.getKey();
+        if (productKey != null) {
+            String volumeParamText = "";
+            if (productKey.equals("0108")) {
+                volumeParamText = getDachPunkteCount();
+            } else if (productKey.equals("0109")) {
+                volumeParamText = getBodenPuntkeCount();
+            } else if (productKey.equals("0501")) {
+                volumeParamText = getGebauedeCount();
+            } else if (productKey.equals("0502")) {
+                volumeParamText = getFlurstueckeCount();
+            } else if (productKey.equals("0503")) {
+                volumeParamText = getAdressCount();
+            } else {
+                volumeParamText = getFlaeche();
+            }
+            lblVolumeParam.setText(volumeParamText);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  g  DOCUMENT ME!
+     */
+    public void setGeometry(final Geometry g) {
+        geom = g;
+        calculateVolumePram();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private String getDachPunkteCount() {
+        return "0";
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private String getBodenPuntkeCount() {
+        return "0";
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private String getGebauedeCount() {
+        return "0";
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private String getFlurstueckeCount() {
+        return "0";
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private String getAdressCount() {
+        return "0";
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private String getFlaeche() {
+        if (geom == null) {
+            return null;
+        }
+        final double areaInKm = geom.getArea() / (1000 * 1000);
+        return StaticDecimalTools.round("0.0", areaInKm);
     }
 }

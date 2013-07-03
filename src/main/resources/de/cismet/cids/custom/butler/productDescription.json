@@ -8,55 +8,65 @@
                     "key":"0101",
                     "colorDepth":null,
                     "format":null,
-                    "resolution":null
+                    "resolution":null,
+                    "volumeParamText":"Fläche (km²):"
                 },{
                     "name":"5m Höhenlinie",
                     "key":"0102",
                     "colorDepth":null,
                     "format":null,
-                    "resolution":null
+                    "resolution":null,
+                    "volumeParamText":"Fläche (km²):"
                 },{
                     "name":"10m Höhenlinie",
                     "key":"0103",
                     "colorDepth":null,
                     "format":null,
-                    "resolution":null
+                    "resolution":null,
+                    "volumeParamText":"Fläche (km²):"
                 },{
                     "name":"1m Punktraster",
                     "key":"0104",
                     "colorDepth":null,
                     "format":null,
-                    "resolution":null
+                    "resolution":null,
+                    "volumeParamText":"Fläche (km²):"
                 },{
                     "name":"5m Punktraster",
                     "key":"0105",
                     "colorDepth":null,
                     "format":null,
-                    "resolution":null
+                    "resolution":null,
+                    "volumeParamText":"Fläche (km²):"
                 },{
                     "name":"10m Punktraster",
                     "key":"0106",
                     "colorDepth":null,
                     "format":null,
-                    "resolution":null
+                    "resolution":null,
+                    "volumeParamText":"Fläche (km²):"
                 },{
                     "name":"25m Punktraster",
                     "key":"0107",
                     "colorDepth":null,
                     "format":null,
-                    "resolution":null
+                    "resolution":null,
+                    "volumeParamText":"",
+                    "volumeParamText":"Fläche (km²):"
                 },{
                     "name":"Regengeld - Dachpunkte",
                     "key":"0108",
                     "colorDepth":null,
                     "format":null,
-                    "resolution":null
+                    "resolution":null,
+                    "volumeParamText":"Anzahl Dachpunkte:"
                 },{
                     "name":"Regengel - Bodenpunkte",
                     "key":"0109",
                     "colorDepth":null,
                     "format":null,
-                    "resolution":null
+                    "resolution":null,
+                    "volumeParamText":"Anzahl Bodenpunkte:"
                 }
             ],
             "butlerFormats":[
@@ -79,31 +89,36 @@
                     "key":"0201",
                     "colorDepth":8,
                     "format":null,
-                    "resolution":null
+                    "resolution":null,
+                    "volumeParamText":"Fläche (km²):"
                 },{
                     "name":"2011-12 Schwarz-Weiß",
                     "key":"0202",
                     "colorDepth":1,
                     "format":null,
-                    "resolution":null
+                    "resolution":null,
+                    "volumeParamText":"Fläche (km²):"
                 },{
                     "name":"2011-12 Grauwert XL",
                     "key":"0203",
                     "colorDepth":8,
                     "format":null,
-                    "resolution":null
+                    "resolution":null,
+                    "volumeParamText":"Fläche (km²):"
                 },{
                     "name":"2011-12 Schwarz-Weiß",
                     "key":"0204",
                     "colorDepth":1,
                     "format":null,
-                    "resolution":null
+                    "resolution":null,
+                    "volumeParamText":"Fläche (km²):"
                 },{
                     "name":"2012-12 Farbe",
                     "key":"0205",
                     "colorDepth":8,
                     "format":null,
-                    "resolution":null
+                    "resolution":null,
+                    "volumeParamText":"Fläche (km²):"
                 }
             ],
             "butlerFormats":[
@@ -130,41 +145,43 @@
                     "key":"0301",
                     "colorDepth":8,
                     "format":null,
-                    "resolution":null
+                    "resolution":null,
+                    "volumeParamText":"Fläche (km²):"
                 },{
                     "name":"Regional 2011-12 Farbe",
                     "key":"0302",
                     "colorDepth":8,
                     "format":null,
-                    "resolution":null
+                    "resolution":null,
+                    "volumeParamText":"Fläche (km²):"
                 },{
                     "name":"Regional 2011-12 Grauwert",
                     "key":"0303",
                     "colorDepth":8,
                     "format":null,
-                    "resolution":null
+                    "resolution":null,
+                    "volumeParamText":"Fläche (km²):"
                 },{
                     "name":"Regional 2011-12 Farbe",
                     "key":"0304",
                     "colorDepth":8,
                     "format":null,
-                    "resolution":null
+                    "resolution":null,
+                    "volumeParamText":"Fläche (km²):"
                 },{
                     "name":"Regional 2012-12 Grauwert",
                     "key":"0305",
                     "colorDepth":8,
                     "format":null,
-                    "resolution":null
+                    "resolution":null,
+                    "volumeParamText":"Fläche (km²):"
                 },{
                     "name":"Regional 2012-12 Farbe",
                     "key":"0306",
                     "colorDepth":8,
-                    "format":{
-                        
-                    },
-                    "resolution":{
-                        
-                    }
+                    "format":null,
+                    "resolution":null,
+                    "volumeParamText":"Fläche (km²):"
                 }
             ],
             "butlerFormats":[
@@ -191,31 +208,36 @@
                     "key":"0401",
                     "colorDepth":8,
                     "format":null,
-                    "resolution":null
+                    "resolution":null,
+                    "volumeParamText":"Fläche (km²):"
                 },{
                     "name":"Wuppertal 2005",
                     "key":"0402",
                     "colorDepth":8,
                     "format":null,
-                    "resolution":null
+                    "resolution":null,
+                    "volumeParamText":"Fläche (km²):"
                 },{
                     "name":"Wuppertal 2007",
                     "key":"0403",
                     "colorDepth":8,
                     "format":null,
-                    "resolution":null
+                    "resolution":null,
+                    "volumeParamText":"Fläche (km²):"
                 },{
                     "name":"Wuppertal 2010",
                     "key":"0404",
                     "colorDepth":8,
                     "format":null,
-                    "resolution":null
+                    "resolution":null,
+                    "volumeParamText":"Fläche (km²):"
                 },{
                     "name":"Wuppertal 2012",
                     "key":"0405",
                     "colorDepth":8,
                     "format":null,
-                    "resolution":null
+                    "resolution":null,
+                    "volumeParamText":"Fläche (km²):"
                 }
             ],
             "butlerFormats":[
@@ -242,19 +264,22 @@
                     "key":"0501",
                     "colorDepth":8,
                     "format":null,
-                    "resolution":null
+                    "resolution":null,
+                    "volumeParamText":"Anzahl Gebäude:"
                 },{
                     "name":"Wuppertaler Flurstücke",
                     "key":"0502",
                     "colorDepth":8 ,
                     "format":null,
-                    "resolution":null
+                    "resolution":null,
+                    "volumeParamText":"Anzahl Flurstücke:"
                 },{
                     "name":"Wuppertaler Adressen",
                     "key":"0503",
                     "colorDepth":8,
                     "format":null,
-                    "resolution":null
+                    "resolution":null,
+                    "volumeParamText":"Anzahl Adressen:"
                 }
             ],
             "butlerFormats":[
