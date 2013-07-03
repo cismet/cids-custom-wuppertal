@@ -118,6 +118,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
      */
     public Butler1Dialog(final java.awt.Frame parent, final boolean modal) {
         super(parent, modal);
+        this.setTitle(org.openide.util.NbBundle.getMessage(Butler1Dialog.class, "Butler1Dialog.title"));
         boxes = PredefinedBoxes.elements;
         initComponents();
         tfLowerE.getDocument().addDocumentListener(this);
