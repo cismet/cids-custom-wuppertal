@@ -736,7 +736,7 @@ public class ParcelInputField extends javax.swing.JPanel {
 
         txtDistrict.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         FontMetrics metrics = Toolkit.getDefaultToolkit().getFontMetrics(txtDistrict.getFont());
-        Dimension dim = new Dimension(metrics.stringWidth("0") * (config.getMaxLenDistrictNumberField()+4), metrics.getHeight()+4);
+        Dimension dim = new Dimension(metrics.stringWidth("0") * (config.getMaxLenDistrictNumberField()+4), txtDistrict.getPreferredSize().height);
         txtDistrict.setMinimumSize(dim);
         txtDistrict.setPreferredSize(dim);
         txtDistrict.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -755,7 +755,7 @@ public class ParcelInputField extends javax.swing.JPanel {
         add(lblDelimitier1, gridBagConstraints);
 
         txtParcel.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        dim = new Dimension(metrics.stringWidth("0") * (config.getMaxLenParcelNumberField()+2), metrics.getHeight()+4);
+        dim = new Dimension(metrics.stringWidth("0") * (config.getMaxLenParcelNumberField()+2), txtParcel.getPreferredSize().height);
         txtParcel.setMinimumSize(dim);
         txtParcel.setPreferredSize(dim);
         txtParcel.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -774,7 +774,7 @@ public class ParcelInputField extends javax.swing.JPanel {
         add(lblDelimitier2, gridBagConstraints);
 
         txtLandParcelNumerator.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        dim = new Dimension(metrics.stringWidth("0") * (config.getMaxLenParcelNumeratorField()+2), metrics.getHeight()+4);
+        dim = new Dimension(metrics.stringWidth("0") * (config.getMaxLenParcelNumeratorField()+2), txtLandParcelNumerator.getPreferredSize().height);
         txtLandParcelNumerator.setMinimumSize(dim);
         txtLandParcelNumerator.setPreferredSize(dim);
         txtLandParcelNumerator.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -793,7 +793,7 @@ public class ParcelInputField extends javax.swing.JPanel {
         add(lblDelimitier3, gridBagConstraints);
 
         txtLandParcelDenominator.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        dim = new Dimension(metrics.stringWidth("0") * (config.getMaxLenParcelDenominatorField()+2), metrics.getHeight()+4);
+        dim = new Dimension(metrics.stringWidth("0") * (config.getMaxLenParcelDenominatorField()+2), txtLandParcelDenominator.getPreferredSize().height);
         txtLandParcelDenominator.setMinimumSize(dim);
         txtLandParcelDenominator.setPreferredSize(dim);
         txtLandParcelDenominator.addFocusListener(new java.awt.event.FocusAdapter() {
