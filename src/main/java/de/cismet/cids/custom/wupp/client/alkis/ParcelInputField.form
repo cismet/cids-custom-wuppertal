@@ -28,7 +28,7 @@
       </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTextField()"/>
-        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="FontMetrics metrics = Toolkit.getDefaultToolkit().getFontMetrics(txtDistrict.getFont());&#xa;Dimension dim = new Dimension(metrics.stringWidth(&quot;0&quot;) * (config.getMaxLenDistrictNumberField()+4), metrics.getHeight()+4);&#xa;txtDistrict.setMinimumSize(dim);&#xa;txtDistrict.setPreferredSize(dim);"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="FontMetrics metrics = Toolkit.getDefaultToolkit().getFontMetrics(txtDistrict.getFont());&#xa;Dimension dim = new Dimension(metrics.stringWidth(&quot;0&quot;) * (config.getMaxLenDistrictNumberField()+4), txtDistrict.getPreferredSize().height);&#xa;txtDistrict.setMinimumSize(dim);&#xa;txtDistrict.setPreferredSize(dim);"/>
       </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -61,7 +61,7 @@
       </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTextField()"/>
-        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="dim = new Dimension(metrics.stringWidth(&quot;0&quot;) * (config.getMaxLenParcelNumberField()+2), metrics.getHeight()+4);&#xa;txtParcel.setMinimumSize(dim);&#xa;txtParcel.setPreferredSize(dim);"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="dim = new Dimension(metrics.stringWidth(&quot;0&quot;) * (config.getMaxLenParcelNumberField()+2), txtParcel.getPreferredSize().height);&#xa;txtParcel.setMinimumSize(dim);&#xa;txtParcel.setPreferredSize(dim);"/>
       </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -94,7 +94,7 @@
       </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTextField()"/>
-        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="dim = new Dimension(metrics.stringWidth(&quot;0&quot;) * (config.getMaxLenParcelNumeratorField()+2), metrics.getHeight()+4);&#xa;txtLandParcelNumerator.setMinimumSize(dim);&#xa;txtLandParcelNumerator.setPreferredSize(dim);"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="dim = new Dimension(metrics.stringWidth(&quot;0&quot;) * (config.getMaxLenParcelNumeratorField()+2), txtLandParcelNumerator.getPreferredSize().height);&#xa;txtLandParcelNumerator.setMinimumSize(dim);&#xa;txtLandParcelNumerator.setPreferredSize(dim);"/>
       </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -127,7 +127,7 @@
       </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTextField()"/>
-        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="dim = new Dimension(metrics.stringWidth(&quot;0&quot;) * (config.getMaxLenParcelDenominatorField()+2), metrics.getHeight()+4);&#xa;txtLandParcelDenominator.setMinimumSize(dim);&#xa;txtLandParcelDenominator.setPreferredSize(dim);"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="dim = new Dimension(metrics.stringWidth(&quot;0&quot;) * (config.getMaxLenParcelDenominatorField()+2), txtLandParcelDenominator.getPreferredSize().height);&#xa;txtLandParcelDenominator.setMinimumSize(dim);&#xa;txtLandParcelDenominator.setPreferredSize(dim);"/>
       </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
