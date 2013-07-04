@@ -579,6 +579,16 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                         return;
                     }
                     // for each product tab we have to create one download
+                    final StringBuilder jobnameBuilder = new StringBuilder();
+                    if (DownloadManagerDialog.showAskingForUserTitle(
+                                    CismapBroker.getInstance().getMappingComponent())) {
+                        final String jobname = (!DownloadManagerDialog.getJobname().equals(""))
+                            ? DownloadManagerDialog.getJobname() : null;
+                        jobnameBuilder.append(jobname);
+                    } else {
+                        jobnameBuilder.append("");
+                    }
+
                     final ArrayList<ButlerDownload> downloads = new ArrayList<ButlerDownload>();
                     for (int i = 0; i < (tbpProducts.getTabCount() - 1); i++) {
                         final Butler1ProductPanel productPanel = (Butler1ProductPanel)tbpProducts.getComponentAt(i);
@@ -595,8 +605,11 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                                     + bp.getResolution()
                                     + "\n\t format: "
                                     + bp.getFormat());
-
+                        final String title = tfOrderId.getText()
+                                    + "#"
+                                    + (i + 1);
                         final ButlerDownload download = new ButlerDownload(
+                                jobnameBuilder.toString(),
                                 tfOrderId.getText()
                                         + "#"
                                         + (i + 1),
@@ -607,15 +620,8 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                                 maxY);
                         downloads.add(download);
                     }
-                    if (DownloadManagerDialog.showAskingForUserTitle(
-                                    CismapBroker.getInstance().getMappingComponent())) {
-                        final String jobname = (!DownloadManagerDialog.getJobname().equals(""))
-                            ? DownloadManagerDialog.getJobname() : null;
-
-                        DownloadManager.instance().add(new MultipleDownload(downloads, jobname));
-                    } else {
-                        DownloadManager.instance().add(new MultipleDownload(downloads, "Butler Downloads"));
-                    }
+                    DownloadManager.instance()
+                            .add(new MultipleDownload(downloads, "Butler Downloads " + tfOrderId.getText()));
 
                     Butler1Dialog.this.dispose();
                 }
@@ -801,7 +807,9 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
             upperE = Double.parseDouble(tfUpperE.getText());
             upperN = Double.parseDouble(tfUpperN.getText());
         } catch (Exception ex) {
-            LOG.fatal("error during change map - very likely a double parsing error", ex);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("error during change map - very likely a double parsing error", ex);
+            }
             return null;
         }
         final Coordinate[] coords = new Coordinate[5];

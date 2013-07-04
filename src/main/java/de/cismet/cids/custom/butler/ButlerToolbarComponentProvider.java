@@ -11,6 +11,11 @@
  */
 package de.cismet.cids.custom.butler;
 
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
+
+import org.apache.log4j.Logger;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -32,6 +37,10 @@ import de.cismet.tools.gui.StaticSwingTools;
  */
 @org.openide.util.lookup.ServiceProvider(service = ToolbarComponentsProvider.class)
 public class ButlerToolbarComponentProvider implements ToolbarComponentsProvider {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final Logger log = Logger.getLogger(ButlerToolbarComponentProvider.class);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -62,7 +71,27 @@ public class ButlerToolbarComponentProvider implements ToolbarComponentsProvider
 
     @Override
     public Collection<ToolbarComponentDescription> getToolbarComponents() {
-        return toolbarComponents;
+        if (validateUserHasButlerAccess()) {
+            return toolbarComponents;
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static boolean validateUserHasButlerAccess() {
+        try {
+            return SessionManager.getConnection()
+                        .getConfigAttr(SessionManager.getSession().getUser(), "csa://butler1Query")
+                        != null;
+        } catch (ConnectionException ex) {
+            log.error("Could not validate action tag for Butler!", ex);
+        }
+        return false;
     }
 
     //~ Inner Classes ----------------------------------------------------------

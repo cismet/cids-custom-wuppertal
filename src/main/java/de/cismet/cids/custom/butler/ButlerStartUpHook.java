@@ -97,7 +97,12 @@ public class ButlerStartUpHook implements StartupHook {
             final ButlerDownload download = new ButlerDownload(requestId, info.getUserOrderId(), info.getProduct());
             downloads.add(download);
         }
-        DownloadManager.instance().add(new MultipleDownload(downloads, "Pending Butler Downloads"));
+        DownloadManager.instance()
+                .add(new MultipleDownload(
+                        downloads,
+                        org.openide.util.NbBundle.getMessage(
+                            ButlerStartUpHook.class,
+                            "ButlerStartUpHook.downloadTitle")));
     }
 
     /**
