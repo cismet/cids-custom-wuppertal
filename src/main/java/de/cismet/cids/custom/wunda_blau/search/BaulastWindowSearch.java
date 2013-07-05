@@ -15,16 +15,25 @@ package de.cismet.cids.custom.wunda_blau.search;
 import Sirius.navigator.actiontag.ActionTagProtected;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
+import Sirius.navigator.search.CidsSearchExecutor;
 import Sirius.navigator.search.dynamic.SearchControlListener;
 import Sirius.navigator.search.dynamic.SearchControlPanel;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
+import com.vividsolutions.jts.geom.Geometry;
+
+import java.awt.Dimension;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.swing.Box;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -52,6 +61,8 @@ import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.features.Feature;
+import de.cismet.cismap.commons.gui.MappingComponent;
+import de.cismet.cismap.commons.gui.piccolo.eventlistener.AbstractCreateSearchGeometryListener;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
@@ -68,7 +79,8 @@ import de.cismet.tools.gui.StaticSwingTools;
 public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindowSearch,
     CidsBeanDropListener,
     ActionTagProtected,
-    SearchControlListener {
+    SearchControlListener,
+    PropertyChangeListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -81,6 +93,9 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     private FlurstueckSelectionDialoge fsSelectionDialoge = null;
     private DefaultListModel flurstuecksFilterModel = null;
     private SearchControlPanel pnlSearchCancel;
+    private GeoSearchButton btnGeoSearch;
+    private MappingComponent mappingComponent;
+    private boolean geoSearchEnabled;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddFS;
     private javax.swing.JButton btnFromMapFS;
@@ -145,7 +160,38 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
             fsSelectionDialoge.pack();
 //        cmdAbort.setVisible(false);
             pnlSearchCancel = new SearchControlPanel(this);
+            final Dimension max = pnlSearchCancel.getMaximumSize();
+            final Dimension min = pnlSearchCancel.getMinimumSize();
+            final Dimension pre = pnlSearchCancel.getPreferredSize();
+            pnlSearchCancel.setMaximumSize(new java.awt.Dimension(
+                    new Double(max.getWidth()).intValue(),
+                    new Double(max.getHeight() + 5).intValue()));
+            pnlSearchCancel.setMinimumSize(new java.awt.Dimension(
+                    new Double(min.getWidth()).intValue(),
+                    new Double(min.getHeight() + 5).intValue()));
+            pnlSearchCancel.setPreferredSize(new java.awt.Dimension(
+                    new Double(pre.getWidth() + 6).intValue(),
+                    new Double(pre.getHeight() + 5).intValue()));
             panCommand.add(pnlSearchCancel);
+            panCommand.add(Box.createHorizontalStrut(5));
+
+            mappingComponent = CismapBroker.getInstance().getMappingComponent();
+            geoSearchEnabled = mappingComponent != null;
+            if (geoSearchEnabled) {
+                final BaulastCreateSearchGeometryListener baulastSearchGeometryListener =
+                    new BaulastCreateSearchGeometryListener(mappingComponent,
+                        new BaulastSearchTooltip(icon));
+                baulastSearchGeometryListener.addPropertyChangeListener(this);
+                btnGeoSearch = new GeoSearchButton(
+                        BaulastCreateSearchGeometryListener.BAULAST_CREATE_SEARCH_GEOMETRY,
+                        mappingComponent,
+                        null,
+                        org.openide.util.NbBundle.getMessage(
+                            BaulastWindowSearch.class,
+                            "BaulastWindowSearch.btnGeoSearch.toolTipText"));
+                btnGeoSearch.addActionListener(null);
+                panCommand.add(btnGeoSearch);
+            }
         } catch (Exception exception) {
             log.warn("Error in Constructor of BaulastWindowSearch", exception);
         }
@@ -197,7 +243,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         panSearch.setPreferredSize(new java.awt.Dimension(400, 150));
         panSearch.setLayout(new java.awt.GridBagLayout());
 
-        panCommand.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.TRAILING));
+        panCommand.setLayout(new javax.swing.BoxLayout(panCommand, javax.swing.BoxLayout.LINE_AXIS));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -406,7 +452,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.weighty = 1.0;
         panSearch.add(jPanel6, gridBagConstraints);
 
-        chkKartenausschnitt.setText("<html>Nur im aktuellen<br>Kartenausschnitt suchen</html>");
+        chkKartenausschnitt.setText("<html>nur im aktuellen<br>Kartenausschnitt suchen</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -532,7 +578,21 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
      */
     @Override
     public MetaObjectNodeServerSearch getServerSearch() {
+        return getServerSearch(null);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   geometry  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public MetaObjectNodeServerSearch getServerSearch(final Geometry geometry) {
         final BaulastSearchInfo bsi = getBaulastInfoFromGUI();
+        if (geometry != null) {
+            bsi.setGeometry(CrsTransformer.transformToDefaultCrs(geometry));
+        }
         for (int i = 0; i < flurstuecksFilterModel.size(); ++i) {
             final CidsBean fsBean = (CidsBean)flurstuecksFilterModel.getElementAt(i);
             try {
@@ -659,5 +719,21 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
     @Override
     public boolean suppressEmptyResultMessage() {
         return false;
+    }
+
+    @Override
+    public void propertyChange(final PropertyChangeEvent evt) {
+        if (AbstractCreateSearchGeometryListener.PROPERTY_FORGUI_LAST_FEATURE.equals(evt.getPropertyName())
+                    || AbstractCreateSearchGeometryListener.PROPERTY_FORGUI_MODE.equals(evt.getPropertyName())) {
+            btnGeoSearch.visualizeSearchMode((MauernCreateSearchGeometryListener)mappingComponent.getInputListener(
+                    MauernCreateSearchGeometryListener.MAUERN_CREATE_SEARCH_GEOMETRY));
+        }
+
+        if (MeasurementPointCreateSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
+            if ((evt.getNewValue() != null) && (evt.getNewValue() instanceof Geometry)) {
+                final MetaObjectNodeServerSearch search = getServerSearch((Geometry)evt.getNewValue());
+                CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);
+            }
+        }
     }
 }

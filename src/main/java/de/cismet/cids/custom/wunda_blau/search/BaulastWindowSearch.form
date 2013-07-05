@@ -58,9 +58,7 @@
             </Constraint>
           </Constraints>
 
-          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout">
-            <Property name="alignment" type="int" value="4"/>
-          </Layout>
+          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
         </Container>
         <Container class="javax.swing.JPanel" name="pnlAttributeFilter">
           <Properties>
@@ -333,7 +331,7 @@
         </Container>
         <Component class="javax.swing.JCheckBox" name="chkKartenausschnitt">
           <Properties>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;Nur im aktuellen&lt;br&gt;Kartenausschnitt suchen&lt;/html&gt;"/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;nur im aktuellen&lt;br&gt;Kartenausschnitt suchen&lt;/html&gt;"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
