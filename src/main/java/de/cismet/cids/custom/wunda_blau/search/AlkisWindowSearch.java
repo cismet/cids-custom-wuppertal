@@ -628,89 +628,89 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void optSucheUeberEigentuemerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optSucheUeberEigentuemerActionPerformed
+    private void optSucheUeberEigentuemerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_optSucheUeberEigentuemerActionPerformed
         ((CardLayout)panEingabe.getLayout()).show(panEingabe, "eigentuemer");
-    }//GEN-LAST:event_optSucheUeberEigentuemerActionPerformed
+    }                                                                                            //GEN-LAST:event_optSucheUeberEigentuemerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtVornameActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtVornameActionPerformed
+    private void txtVornameActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtVornameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtVornameActionPerformed
+    } //GEN-LAST:event_txtVornameActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtGeburtsdatumActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGeburtsdatumActionPerformed
+    private void txtGeburtsdatumActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtGeburtsdatumActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtGeburtsdatumActionPerformed
+    } //GEN-LAST:event_txtGeburtsdatumActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void optEigIstMaennlichActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optEigIstMaennlichActionPerformed
+    private void optEigIstMaennlichActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_optEigIstMaennlichActionPerformed
         txtVorname.setEnabled(true);
         txtGeburtsname.setEnabled(true);
         txtGeburtsdatum.setEnabled(true);
-    }//GEN-LAST:event_optEigIstMaennlichActionPerformed
+    }                                                                                      //GEN-LAST:event_optEigIstMaennlichActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void optEigIstUnbekanntActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optEigIstUnbekanntActionPerformed
+    private void optEigIstUnbekanntActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_optEigIstUnbekanntActionPerformed
         txtVorname.setEnabled(true);
         txtGeburtsname.setEnabled(true);
         txtGeburtsdatum.setEnabled(true);
-    }//GEN-LAST:event_optEigIstUnbekanntActionPerformed
+    }                                                                                      //GEN-LAST:event_optEigIstUnbekanntActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void optEigIstFirmaActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optEigIstFirmaActionPerformed
+    private void optEigIstFirmaActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_optEigIstFirmaActionPerformed
         txtVorname.setEnabled(false);
         txtGeburtsname.setEnabled(false);
         txtGeburtsdatum.setEnabled(false);
-    }//GEN-LAST:event_optEigIstFirmaActionPerformed
+    }                                                                                  //GEN-LAST:event_optEigIstFirmaActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void optEigIstWeiblichActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optEigIstWeiblichActionPerformed
+    private void optEigIstWeiblichActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_optEigIstWeiblichActionPerformed
         txtVorname.setEnabled(true);
         txtGeburtsname.setEnabled(true);
         txtGeburtsdatum.setEnabled(true);
-    }//GEN-LAST:event_optEigIstWeiblichActionPerformed
+    }                                                                                     //GEN-LAST:event_optEigIstWeiblichActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void optSucheUeberFlurstueckActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optSucheUeberFlurstueckActionPerformed
+    private void optSucheUeberFlurstueckActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_optSucheUeberFlurstueckActionPerformed
         ((CardLayout)panEingabe.getLayout()).show(panEingabe, "flurstueck");
-    }//GEN-LAST:event_optSucheUeberFlurstueckActionPerformed
+    }                                                                                           //GEN-LAST:event_optSucheUeberFlurstueckActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void optSucheUeberGrundbuchblattActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optSucheUeberGrundbuchblattActionPerformed
+    private void optSucheUeberGrundbuchblattActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_optSucheUeberGrundbuchblattActionPerformed
         ((CardLayout)panEingabe.getLayout()).show(panEingabe, "grundbuchblatt");
-    }//GEN-LAST:event_optSucheUeberGrundbuchblattActionPerformed
+    }                                                                                               //GEN-LAST:event_optSucheUeberGrundbuchblattActionPerformed
 
     /**
      * DOCUMENT ME!
