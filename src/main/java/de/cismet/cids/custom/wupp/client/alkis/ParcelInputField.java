@@ -93,7 +93,7 @@ public class ParcelInputField extends javax.swing.JPanel {
      * Needed by the GUI-designer, not for usage.
      */
     public ParcelInputField() {
-        this(new ParcelInputFieldConfig());
+        this(ParcelInputFieldConfig.FallbackConfig);
     }
 
     /**
@@ -737,8 +737,7 @@ public class ParcelInputField extends javax.swing.JPanel {
         txtDistrict.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         final FontMetrics metrics = Toolkit.getDefaultToolkit().getFontMetrics(txtDistrict.getFont());
         Dimension dim = new Dimension(metrics.stringWidth("0") * (config.getMaxLenDistrictNumberField() + 4),
-                metrics.getHeight()
-                        + 4);
+                txtDistrict.getPreferredSize().height);
         txtDistrict.setMinimumSize(dim);
         txtDistrict.setPreferredSize(dim);
         txtDistrict.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -761,8 +760,7 @@ public class ParcelInputField extends javax.swing.JPanel {
 
         txtParcel.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         dim = new Dimension(metrics.stringWidth("0") * (config.getMaxLenParcelNumberField() + 2),
-                metrics.getHeight()
-                        + 4);
+                txtParcel.getPreferredSize().height);
         txtParcel.setMinimumSize(dim);
         txtParcel.setPreferredSize(dim);
         txtParcel.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -785,8 +783,7 @@ public class ParcelInputField extends javax.swing.JPanel {
 
         txtLandParcelNumerator.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         dim = new Dimension(metrics.stringWidth("0") * (config.getMaxLenParcelNumeratorField() + 2),
-                metrics.getHeight()
-                        + 4);
+                txtLandParcelNumerator.getPreferredSize().height);
         txtLandParcelNumerator.setMinimumSize(dim);
         txtLandParcelNumerator.setPreferredSize(dim);
         txtLandParcelNumerator.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -809,8 +806,7 @@ public class ParcelInputField extends javax.swing.JPanel {
 
         txtLandParcelDenominator.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         dim = new Dimension(metrics.stringWidth("0") * (config.getMaxLenParcelDenominatorField() + 2),
-                metrics.getHeight()
-                        + 4);
+                txtLandParcelDenominator.getPreferredSize().height);
         txtLandParcelDenominator.setMinimumSize(dim);
         txtLandParcelDenominator.setPreferredSize(dim);
         txtLandParcelDenominator.addFocusListener(new java.awt.event.FocusAdapter() {
