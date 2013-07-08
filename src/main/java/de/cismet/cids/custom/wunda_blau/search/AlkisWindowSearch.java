@@ -183,13 +183,13 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
                 btnGeoSearch.addActionListener(null);
                 panCommand.add(btnGeoSearch);
             }
+            if (fallbackConfig) {
+                jLabel1.setVisible(true);
+            } else {
+                jLabel1.setVisible(false);
+            }
         } catch (Exception e) {
             log.warn("Error in Constructor of AlkisWindowSearch", e);
-        }
-        if (fallbackConfig) {
-            jLabel1.setVisible(true);
-        } else {
-            jLabel1.setVisible(false);
         }
     }
 
@@ -395,7 +395,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         panEingabeFlurstueck.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -404,7 +404,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
 
         jLabel9.setText("Flurstücksnummer:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -414,7 +414,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
             "<html> <p>Beispiel: 053001-117-00058</p><br><p>Platzhaltersymbole:</p><p>&nbsp;<b>%</b>&nbsp;&nbsp;&nbsp;&nbsp;eine beliebige Anzahl von Zeichen</p> <p>&nbsp;<b>_</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ein einzelnes Zeichen</p> </html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 12, 5, 5);
@@ -425,7 +425,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
         jLabel1.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 12, 5, 5);
