@@ -183,13 +183,13 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
                 btnGeoSearch.addActionListener(null);
                 panCommand.add(btnGeoSearch);
             }
+            if (fallbackConfig) {
+                jLabel1.setVisible(true);
+            } else {
+                jLabel1.setVisible(false);
+            }
         } catch (Exception e) {
             log.warn("Error in Constructor of AlkisWindowSearch", e);
-        }
-        if (fallbackConfig) {
-            jLabel1.setVisible(true);
-        } else {
-            jLabel1.setVisible(false);
         }
     }
 
