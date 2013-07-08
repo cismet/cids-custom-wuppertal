@@ -518,6 +518,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
                 @Override
                 public void run() {
                     try {
+                        isValidSimplePolygon();
                         final NasProductTemplate template = (NasProductTemplate)cbType.getSelectedItem();
                         final String requestId = tfAuftragsnummer.getText().trim();
                         final ArrayList<ProductGroupAmount> list = getProductGroupAmounts(template);
@@ -1012,6 +1013,28 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
      * @return  DOCUMENT ME!
      */
     private Geometry generateSearchGeom() {
+        return createUnionGeom();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private boolean isValidSimplePolygon() {
+        final Geometry unionGeom = createUnionGeom();
+        if (unionGeom instanceof MultiPolygon) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private Geometry createUnionGeom() {
         Geometry unionGeom = null;
         final int buffer = jsGeomBuffer.getValue();
         for (final GeomWrapper gw : geomWrappers) {
@@ -1027,6 +1050,11 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
                 }
             }
         }
+        final DefaultStyledFeature testDSF = new DefaultStyledFeature();
+        testDSF.setGeometry(unionGeom);
+        final PFeature pf = new PFeature(testDSF, map);
+        pf.hasHole();
+
         return unionGeom;
     }
 
@@ -1037,6 +1065,12 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
      */
     private GeometryCollection generateSearchGeomCollection() {
         int collectionSize = 0;
+        if (isValidSimplePolygon()) {
+            final Geometry unionGeom = createUnionGeom();
+            final Geometry[] geoms = new Geometry[1];
+            geoms[0] = unionGeom;
+            return new GeometryCollection(geoms, unionGeom.getFactory());
+        }
         for (final GeomWrapper gw : geomWrappers) {
             if (gw.isSelected()) {
                 collectionSize++;
