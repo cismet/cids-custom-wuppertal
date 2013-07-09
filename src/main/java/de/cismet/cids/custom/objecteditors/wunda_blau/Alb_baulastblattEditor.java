@@ -12,6 +12,7 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaObject;
@@ -443,7 +444,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
 
         panButtons.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 6, 0));
         panButtons.setOpaque(false);
-        panButtons.setLayout(new java.awt.GridLayout());
+        panButtons.setLayout(new java.awt.GridLayout(1, 0));
 
         jPanel2.setOpaque(false);
         jPanel2.setLayout(new java.awt.GridBagLayout());
@@ -463,6 +464,8 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bearbeitungsdatum}"),
                 jLabel4,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("(unbekannt)");
+        binding.setSourceUnreadableValue("(unbekannt)");
         binding.setConverter(Alb_baulastblattEditor.DATE_TO_STRING);
         bindingGroup.addBinding(binding);
 
@@ -480,8 +483,8 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bearbeitet_von}"),
                 jLabel6,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("");
-        binding.setSourceUnreadableValue("");
+        binding.setSourceNullValue("(unbekannt)");
+        binding.setSourceUnreadableValue("(unbekannt)");
         bindingGroup.addBinding(binding);
 
         jPanel1.add(jLabel6);
@@ -865,6 +868,8 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                         final CidsBean newBean = CidsBeanSupport.createNewCidsBeanFromTableName("alb_baulast");
                         newBean.setProperty("laufende_nummer", String.valueOf(laufendeNr));
                         newBean.setProperty("blattnummer", txtBlattnummer.getText());
+                        newBean.setProperty("bearbeitet_von", SessionManager.getSession().getUser().getName());
+                        newBean.setProperty("bearbeitungsdatum", new Date(System.currentTimeMillis()));
                         baulasten.add(newBean);
                         final int newIndex = lstLaufendeNummern.getModel().getSize();
                         lstLaufendeNummern.setSelectedIndex(newIndex - 1);

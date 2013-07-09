@@ -107,6 +107,8 @@
                       </Properties>
                       <BindingProperties>
                         <BindingProperty name="text" source="panBaulastEditor" sourcePath="${cidsBean.bearbeitungsdatum}" target="jLabel4" targetPath="text" updateStrategy="0" immediately="false">
+                          <Property name="nullValue" type="java.lang.String" value="(unbekannt)"/>
+                          <Property name="incompletePathValue" type="java.lang.String" value="(unbekannt)"/>
                           <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                             <Connection code="Alb_baulastblattEditor.DATE_TO_STRING" type="code"/>
                           </Property>
@@ -129,8 +131,8 @@
                       </Properties>
                       <BindingProperties>
                         <BindingProperty name="text" source="panBaulastEditor" sourcePath="${cidsBean.bearbeitet_von}" target="jLabel6" targetPath="text" updateStrategy="0" immediately="false">
-                          <Property name="nullValue" type="java.lang.String" value=""/>
-                          <Property name="incompletePathValue" type="java.lang.String" value=""/>
+                          <Property name="nullValue" type="java.lang.String" value="(unbekannt)"/>
+                          <Property name="incompletePathValue" type="java.lang.String" value="(unbekannt)"/>
                         </BindingProperty>
                       </BindingProperties>
                     </Component>

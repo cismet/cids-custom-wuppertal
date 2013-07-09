@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.2" maxVersion="1.6" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+<Form version="1.5" maxVersion="1.6" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <NonVisualComponents>
     <Container class="javax.swing.JPanel" name="panTitle">
       <Properties>
@@ -107,8 +107,8 @@
                       </Properties>
                       <BindingProperties>
                         <BindingProperty name="text" source="Form" sourcePath="${cidsBean.bearbeitungsdatum}" target="jLabel1" targetPath="text" updateStrategy="0" immediately="false">
-                          <Property name="nullValue" type="java.lang.String" value=""/>
-                          <Property name="incompletePathValue" type="java.lang.String" value=""/>
+                          <Property name="nullValue" type="java.lang.String" value="(unbekannt)"/>
+                          <Property name="incompletePathValue" type="java.lang.String" value="(unbekannt)"/>
                           <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                             <Connection code="Alb_baulastEditor.DATE_TO_STRING" type="code"/>
                           </Property>
@@ -131,8 +131,8 @@
                       </Properties>
                       <BindingProperties>
                         <BindingProperty name="text" source="Form" sourcePath="${cidsBean.bearbeitet_von}" target="jLabel4" targetPath="text" updateStrategy="0" immediately="false">
-                          <Property name="nullValue" type="java.lang.String" value=""/>
-                          <Property name="incompletePathValue" type="java.lang.String" value=""/>
+                          <Property name="nullValue" type="java.lang.String" value="(unbekannt)"/>
+                          <Property name="incompletePathValue" type="java.lang.String" value="(unbekannt)"/>
                         </BindingProperty>
                       </BindingProperties>
                     </Component>

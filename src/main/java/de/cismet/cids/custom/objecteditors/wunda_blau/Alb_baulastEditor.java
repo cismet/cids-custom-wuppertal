@@ -294,7 +294,7 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
 
         panButtons.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 6, 0));
         panButtons.setOpaque(false);
-        panButtons.setLayout(new java.awt.GridLayout());
+        panButtons.setLayout(new java.awt.GridLayout(1, 0));
 
         jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.GridBagLayout());
@@ -314,8 +314,8 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bearbeitungsdatum}"),
                 jLabel1,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("");
-        binding.setSourceUnreadableValue("");
+        binding.setSourceNullValue("(unbekannt)");
+        binding.setSourceUnreadableValue("(unbekannt)");
         binding.setConverter(Alb_baulastEditor.DATE_TO_STRING);
         bindingGroup.addBinding(binding);
 
@@ -333,8 +333,8 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bearbeitet_von}"),
                 jLabel4,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("");
-        binding.setSourceUnreadableValue("");
+        binding.setSourceNullValue("(unbekannt)");
+        binding.setSourceUnreadableValue("(unbekannt)");
         bindingGroup.addBinding(binding);
 
         jPanel2.add(jLabel4);
