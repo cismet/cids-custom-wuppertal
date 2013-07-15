@@ -827,11 +827,11 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
         final Object selectionObj = lstLaufendeNummern.getSelectedValue();
         if (selectionObj instanceof CidsBean) {
             final CidsBean selectedBean = (CidsBean)selectionObj;
-            bindingGroup.unbind();
+            // bindingGroup.unbind();
             panBaulastEditor.setCidsBean(selectedBean);
             alb_picturePanel.setCidsBean(selectedBean);
             btnPasteBaulast.setEnabled(isPastePossible());
-            bindingGroup.bind();
+            // bindingGroup.bind();
         }
         final Object[] selectedValues = lstLaufendeNummern.getSelectedValues();
         final Collection<MetaObject> selectedObjects = TypeSafeCollections.newArrayList();
@@ -841,7 +841,7 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
             }
         }
         panBaulastEditor.setAllSelectedMetaObjects(selectedObjects);
-    }                                                                                             //GEN-LAST:event_lstLaufendeNummernValueChanged
+    } //GEN-LAST:event_lstLaufendeNummernValueChanged
 
     /**
      * DOCUMENT ME!
