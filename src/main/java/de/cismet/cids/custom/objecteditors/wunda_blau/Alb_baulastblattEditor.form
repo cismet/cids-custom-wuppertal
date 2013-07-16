@@ -112,6 +112,7 @@
                           <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                             <Connection code="Alb_baulastblattEditor.DATE_TO_STRING" type="code"/>
                           </Property>
+                          <Property name="name" type="java.lang.String" value="bearbeitungsdatum"/>
                         </BindingProperty>
                       </BindingProperties>
                     </Component>
@@ -133,6 +134,7 @@
                         <BindingProperty name="text" source="panBaulastEditor" sourcePath="${cidsBean.bearbeitet_von}" target="jLabel6" targetPath="text" updateStrategy="0" immediately="false">
                           <Property name="nullValue" type="java.lang.String" value="(unbekannt)"/>
                           <Property name="incompletePathValue" type="java.lang.String" value="(unbekannt)"/>
+                          <Property name="name" type="java.lang.String" value="bearbeitet_von"/>
                         </BindingProperty>
                       </BindingProperties>
                     </Component>
