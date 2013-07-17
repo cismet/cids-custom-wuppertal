@@ -36,12 +36,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
 
-import javax.swing.JFrame;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
@@ -74,7 +75,7 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class NasDialog extends javax.swing.JDialog implements ChangeListener {
+public class NasDialog extends javax.swing.JDialog implements ChangeListener, DocumentListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -83,6 +84,9 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
 
     //~ Instance fields --------------------------------------------------------
 
+    long lastDocEvent = 0;
+    boolean ignoreNextDocEvents = false;
+    Timer docTimer = new Timer();
     GeomWrapper totalMapWrapper;
     private MappingComponent map;
     private LinkedList<GeomWrapper> geomWrappers;
@@ -119,6 +123,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
     private javax.swing.JPanel pnlSettings;
     private javax.swing.JTable tblGeom;
     private javax.swing.JTextField tfAuftragsnummer;
+    private javax.swing.JTextField tfGeomBuffer;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -172,6 +177,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
         tblGeom.getColumnModel().getColumn(0).setPreferredWidth(80);
         tblGeom.getColumnModel().getColumn(0).setMaxWidth(80);
         jsGeomBuffer.addChangeListener(this);
+        tfGeomBuffer.getDocument().addDocumentListener(this);
         map = new MappingComponent();
         initMap();
         pnlMap.setLayout(new BorderLayout());
@@ -211,6 +217,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
         lblGeomBuffer = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        tfGeomBuffer = new javax.swing.JTextField();
         pnlControls = new javax.swing.JPanel();
         btnOk = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
@@ -221,6 +228,8 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(org.openide.util.NbBundle.getMessage(NasDialog.class, "NasDialog.title")); // NOI18N
+        setMinimumSize(new java.awt.Dimension(617, 180));
+        setPreferredSize(new java.awt.Dimension(780, 520));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         pnlMap.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -270,7 +279,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
             org.openide.util.NbBundle.getMessage(NasDialog.class, "NasDialog.lblType.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         pnlSettings.add(lblType, gridBagConstraints);
@@ -294,7 +303,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 20, 10, 0);
         pnlSettings.add(cbType, gridBagConstraints);
@@ -308,7 +317,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 2;
         pnlSettings.add(jPanel1, gridBagConstraints);
 
@@ -334,7 +343,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
         pnlSettings.add(jScrollPane1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
@@ -362,6 +371,8 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
 
         pnlFee.setBackground(new java.awt.Color(254, 254, 254));
         pnlFee.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        pnlFee.setMinimumSize(new java.awt.Dimension(144, 100));
+        pnlFee.setPreferredSize(new java.awt.Dimension(144, 100));
         pnlFee.setLayout(new java.awt.BorderLayout());
 
         lblBusy.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -372,7 +383,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 1;
@@ -398,10 +409,11 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
 
         final org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                jsGeomBuffer,
-                org.jdesktop.beansbinding.ELProperty.create("${value}"),
+                tfGeomBuffer,
+                org.jdesktop.beansbinding.ELProperty.create("${text}"),
                 jLabel1,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "geomBufferBinding");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -423,6 +435,15 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         pnlSettings.add(jPanel2, gridBagConstraints);
+
+        tfGeomBuffer.setMinimumSize(new java.awt.Dimension(50, 27));
+        tfGeomBuffer.setPreferredSize(new java.awt.Dimension(50, 27));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 20, 10, 0);
+        pnlSettings.add(tfGeomBuffer, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -754,15 +775,30 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
     @Override
     public void stateChanged(final ChangeEvent ce) {
         if ((ce.getSource() == jsGeomBuffer)) {
-            final int buffer = jsGeomBuffer.getValue();
-            if (!jsGeomBuffer.getValueIsAdjusting()) {
-                // clear map visualisation and start the fee calculation
-                clearMapVisualisation(buffer);
-                calculateFee();
-            } else {
-                // visualize the buffer
-                visualizeBufferGeomsInMap(buffer);
-            }
+            handleBufferChanged();
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void handleBufferChanged() {
+        int buffer = 0;
+        try {
+            buffer = Integer.parseInt(tfGeomBuffer.getText());
+        } catch (Exception e) {
+        }
+        tfGeomBuffer.getDocument().removeDocumentListener(this);
+        tfGeomBuffer.setText("" + jsGeomBuffer.getValue());
+        tfGeomBuffer.getDocument().addDocumentListener(this);
+        if (!jsGeomBuffer.getValueIsAdjusting()) {
+            // clear map visualisation and start the fee calculation
+
+            clearMapVisualisation(buffer);
+            calculateFee();
+        } else {
+            // visualize the buffer
+            visualizeBufferGeomsInMap(buffer);
         }
     }
 
@@ -1036,7 +1072,11 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
      */
     private Geometry createUnionGeom() {
         Geometry unionGeom = null;
-        final int buffer = jsGeomBuffer.getValue();
+        int buffer = 0;
+        try {
+            buffer = Integer.parseInt(tfGeomBuffer.getText());
+        } catch (Exception e) {
+        }
         for (final GeomWrapper gw : geomWrappers) {
             if (gw.isSelected()) {
                 Geometry g = gw.getGeometry();
@@ -1077,7 +1117,11 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
             }
         }
         final Geometry[] geoms = new Geometry[collectionSize];
-        final int buffer = jsGeomBuffer.getValue();
+        int buffer = 0;
+        try {
+            buffer = Integer.parseInt(tfGeomBuffer.getText());
+        } catch (Exception e) {
+        }
         int i = 0;
         GeometryFactory gf = null;
         for (final GeomWrapper gw : geomWrappers) {
@@ -1112,6 +1156,68 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener {
      */
     public void setProductTemplates(final ArrayList<NasProductTemplate> productTemplates) {
         this.productTemplates = productTemplates;
+    }
+
+    @Override
+    public void insertUpdate(final DocumentEvent e) {
+        final long currTime = System.currentTimeMillis();
+        if ((currTime - lastDocEvent) < 800) {
+            docTimer.cancel();
+        }
+        docTimer = new Timer();
+        docTimer.schedule(new TimerTask() {
+
+                @Override
+                public void run() {
+                    foo();
+                }
+            }, 1000);
+        lastDocEvent = currTime;
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void foo() {
+        ignoreNextDocEvents = true;
+        final int buffer = Integer.parseInt(tfGeomBuffer.getText());
+        if ((buffer >= -50) && (buffer <= 50)) {
+            jsGeomBuffer.removeChangeListener(NasDialog.this);
+            jsGeomBuffer.setValue(buffer);
+            jsGeomBuffer.addChangeListener(NasDialog.this);
+        }
+        final Timer t = new Timer();
+        t.schedule(new TimerTask() {
+
+                @Override
+                public void run() {
+                    clearMapVisualisation(buffer);
+                    calculateFee();
+                    ignoreNextDocEvents = false;
+                }
+            }, 2000);
+        visualizeBufferGeomsInMap(buffer);
+    }
+
+    @Override
+    public void removeUpdate(final DocumentEvent e) {
+        final long currTime = System.currentTimeMillis();
+        if ((currTime - lastDocEvent) < 800) {
+            docTimer.cancel();
+        }
+        docTimer = new Timer();
+        docTimer.schedule(new TimerTask() {
+
+                @Override
+                public void run() {
+                    foo();
+                }
+            }, 1000);
+        lastDocEvent = currTime;
+    }
+
+    @Override
+    public void changedUpdate(final DocumentEvent e) {
     }
 
     //~ Inner Classes ----------------------------------------------------------
