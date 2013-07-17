@@ -28,6 +28,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblAnzahlTitle;
+    private javax.swing.JLabel lblDatensaetze;
     private javax.swing.JLabel lblEigentuemer;
     private javax.swing.JLabel lblEigentuemerAnzahl;
     private javax.swing.JLabel lblEigentuemerGesamt;
@@ -172,6 +173,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             lblEigentuemerGesamt = new javax.swing.JLabel();
         }
         lblFiller = new javax.swing.JLabel();
+        lblDatensaetze = new javax.swing.JLabel();
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
@@ -438,5 +440,14 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         add(lblFiller, gridBagConstraints);
-    }                                                                                                             // </editor-fold>//GEN-END:initComponents
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblDatensaetze,
+            org.openide.util.NbBundle.getMessage(NasFeePreviewPanel.class, "NasFeePreviewPanel.lblDatensaetze.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 0);
+        add(lblDatensaetze, gridBagConstraints);
+    }                                                                                                                  // </editor-fold>//GEN-END:initComponents
 }
