@@ -66,9 +66,41 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
     private boolean omitSendingRequest = false;
     private String requestId = null;
     private boolean useZipFile = false;
+    private boolean isButler2 = false;
+    private String boxSize;
 
     //~ Constructors -----------------------------------------------------------
 
+    /**
+     * Constructor for a Butler 2 request
+     *
+     * @param  directory  DOCUMENT ME!
+     * @param  orderId    DOCUMENT ME!
+     * @param  product    DOCUMENT ME!
+     * @param  boxSize    DOCUMENT ME!
+     * @param  middleX    DOCUMENT ME!
+     * @param  middleY    DOCUMENT ME!
+     */
+    public ButlerDownload(final String directory,
+            final String orderId,
+            final ButlerProduct product,
+            final String boxSize,
+            final double middleX,
+            final double middleY) {
+        isButler2 = true;
+        this.directory = directory;
+        this.orderId = orderId;
+        this.product = product;
+        this.minX = middleX;
+        this.minY = middleY;
+//        this.maxX = maxX;C
+//        this.maxY = maxY;
+        status = State.WAITING;
+        this.boxSize = boxSize;
+        this.title = orderId;
+        final ButlerFormat format = product.getFormat();
+        determineDestinationFile(orderId, "." + format.getKey());
+    }
     /**
      * Creates a new ButlerDownload object.
      *
@@ -304,33 +336,59 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
         final ServerActionParameter paramProduct = new ServerActionParameter(
                 ButlerQueryAction.PARAMETER_TYPE.BUTLER_PRODUCT.toString(),
                 product);
+
         final ServerActionParameter paramMinX = new ServerActionParameter(ButlerQueryAction.PARAMETER_TYPE.MIN_X
                         .toString(),
                 minX);
         final ServerActionParameter paramMinY = new ServerActionParameter(ButlerQueryAction.PARAMETER_TYPE.MIN_Y
                         .toString(),
                 minY);
-        final ServerActionParameter paramMaxX = new ServerActionParameter(ButlerQueryAction.PARAMETER_TYPE.MAX_X
-                        .toString(),
-                maxX);
-        final ServerActionParameter paramMaxY = new ServerActionParameter(ButlerQueryAction.PARAMETER_TYPE.MAX_Y
-                        .toString(),
-                maxY);
-        try {
-            return (String)SessionManager.getProxy()
-                        .executeTask(
-                                SERVER_ACTION,
-                                "WUNDA_BLAU",
-                                null,
-                                paramMethod,
-                                paramOrderId,
-                                paramProduct,
-                                paramMinX,
-                                paramMinY,
-                                paramMaxX,
-                                paramMaxY);
-        } catch (ConnectionException ex) {
-            Exceptions.printStackTrace(ex);
+        if (isButler2) {
+            final ServerActionParameter paramBoxSize = new ServerActionParameter(
+                    ButlerQueryAction.PARAMETER_TYPE.BOX_SIZE.toString(),
+                    boxSize);
+            final ServerActionParameter paramIsWmps = new ServerActionParameter(ButlerQueryAction.PARAMETER_TYPE.IS_WMPS
+                            .toString(),
+                    true);
+            try {
+                return (String)SessionManager.getProxy()
+                            .executeTask(
+                                    SERVER_ACTION,
+                                    "WUNDA_BLAU",
+                                    null,
+                                    paramMethod,
+                                    paramOrderId,
+                                    paramProduct,
+                                    paramMinX,
+                                    paramMinY,
+                                    paramBoxSize,
+                                    paramIsWmps);
+            } catch (ConnectionException ex) {
+                Exceptions.printStackTrace(ex);
+            }
+        } else {
+            final ServerActionParameter paramMaxX = new ServerActionParameter(ButlerQueryAction.PARAMETER_TYPE.MAX_X
+                            .toString(),
+                    maxX);
+            final ServerActionParameter paramMaxY = new ServerActionParameter(ButlerQueryAction.PARAMETER_TYPE.MAX_Y
+                            .toString(),
+                    maxY);
+            try {
+                return (String)SessionManager.getProxy()
+                            .executeTask(
+                                    SERVER_ACTION,
+                                    "WUNDA_BLAU",
+                                    null,
+                                    paramMethod,
+                                    paramOrderId,
+                                    paramProduct,
+                                    paramMinX,
+                                    paramMinY,
+                                    paramMaxX,
+                                    paramMaxY);
+            } catch (ConnectionException ex) {
+                Exceptions.printStackTrace(ex);
+            }
         }
         return null;
     }

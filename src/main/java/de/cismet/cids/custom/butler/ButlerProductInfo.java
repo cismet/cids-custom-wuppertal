@@ -29,7 +29,8 @@ public class ButlerProductInfo {
 
     //~ Instance fields --------------------------------------------------------
 
-    ArrayList<ButlerProductGroup> productGroups;
+    ArrayList<ButlerProductGroup> butler1ProductGroups;
+    ArrayList<ButlerProductGroup> butler2ProductGroups;
 
     //~ Methods ----------------------------------------------------------------
 
@@ -38,8 +39,8 @@ public class ButlerProductInfo {
      *
      * @return  DOCUMENT ME!
      */
-    public ArrayList<ButlerProductGroup> getProductGroups() {
-        return productGroups;
+    public ArrayList<ButlerProductGroup> getButler1ProductGroups() {
+        return butler1ProductGroups;
     }
 
     /**
@@ -47,8 +48,26 @@ public class ButlerProductInfo {
      *
      * @param  productGroups  DOCUMENT ME!
      */
-    public void setProductGroups(final ArrayList<ButlerProductGroup> productGroups) {
-        this.productGroups = productGroups;
+    public void setButler1ProductGroups(final ArrayList<ButlerProductGroup> productGroups) {
+        this.butler1ProductGroups = productGroups;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public ArrayList<ButlerProductGroup> getButler2ProductGroups() {
+        return butler2ProductGroups;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  butler2ProductGroups  DOCUMENT ME!
+     */
+    public void setButler2ProductGroups(final ArrayList<ButlerProductGroup> butler2ProductGroups) {
+        this.butler2ProductGroups = butler2ProductGroups;
     }
 
     /**
@@ -63,7 +82,7 @@ public class ButlerProductInfo {
             final ButlerProductInfo tester = mapper.readValue(ButlerProductInfo.class.getResourceAsStream(
                         "/de/cismet/cids/custom/butler/productDescription.json"),
                     ButlerProductInfo.class);
-            System.out.println(tester.getProductGroups());
+            System.out.println(tester.getButler1ProductGroups());
         } catch (IOException ex) {
             Exceptions.printStackTrace(ex);
         }

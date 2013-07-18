@@ -31,36 +31,19 @@ public class PredefinedBoxes {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    protected static final ArrayList<PredefinedBoxes> elements = new ArrayList<PredefinedBoxes>();
+    protected static final ArrayList<PredefinedBoxes> butler1Boxes = new ArrayList<PredefinedBoxes>();
+    protected static final ArrayList<PredefinedBoxes> butler2Boxes = new ArrayList<PredefinedBoxes>();
     private static final Logger LOG = Logger.getLogger(PredefinedBoxes.class);
 
     static {
-        final Properties prop = new Properties();
+        Properties prop = new Properties();
         try {
-            prop.load(PredefinedBoxes.class.getResourceAsStream("predefinedBoxes.properties"));
-            final Enumeration keys = prop.propertyNames();
-            final ArrayList<String> keyList = new ArrayList<String>();
-            while (keys.hasMoreElements()) {
-                final String key = (String)keys.nextElement();
-                keyList.add(key);
-            }
-            final Comparator<String> keyComp = new Comparator<String>() {
+            prop.load(PredefinedBoxes.class.getResourceAsStream("butler1Boxes.properties"));
+            loadPropertiesIntoList(butler1Boxes, prop);
 
-                    @Override
-                    public int compare(final String o1, final String o2) {
-                        final int number1 = Integer.parseInt(o1.replaceAll("box", ""));
-                        final int number2 = Integer.parseInt(o2.replaceAll("box", ""));
-                        return Integer.compare(number1, number2);
-                    }
-                };
-            Collections.sort(keyList, keyComp);
-            for (final String key : keyList) {
-                final String[] splittedVal = ((String)prop.getProperty(key)).split(";");
-                elements.add(new PredefinedBoxes(
-                        splittedVal[0],
-                        Double.parseDouble(splittedVal[1]),
-                        Double.parseDouble(splittedVal[2])));
-            }
+            prop = new Properties();
+            prop.load(PredefinedBoxes.class.getResourceAsStream("butler2Boxes.properties"));
+            loadPropertiesIntoList(butler2Boxes, prop);
         } catch (IOException ex) {
             LOG.error("Could not read property file with defined boxes for butler 1", ex);
         }
@@ -71,6 +54,7 @@ public class PredefinedBoxes {
     private final String displayName;
     private double eSize;
     private final double nSize;
+    private String key;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -116,8 +100,64 @@ public class PredefinedBoxes {
         return nSize;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public String getKey() {
+        return key;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  key  DOCUMENT ME!
+     */
+    public void setKey(final String key) {
+        this.key = key;
+    }
+
     @Override
     public String toString() {
         return displayName;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  list  DOCUMENT ME!
+     * @param  prop  DOCUMENT ME!
+     */
+    private static void loadPropertiesIntoList(final ArrayList list, final Properties prop) {
+        final Enumeration keys = prop.propertyNames();
+        final ArrayList<String> keyList = new ArrayList<String>();
+        while (keys.hasMoreElements()) {
+            final String key = (String)keys.nextElement();
+            keyList.add(key);
+        }
+        final Comparator<String> keyComp = new Comparator<String>() {
+
+                @Override
+                public int compare(final String o1, final String o2) {
+                    final int number1 = Integer.parseInt(o1.replaceAll("box", ""));
+                    final int number2 = Integer.parseInt(o2.replaceAll("box", ""));
+                    return Integer.compare(number1, number2);
+                }
+            };
+        Collections.sort(keyList, keyComp);
+        for (final String key : keyList) {
+            final String[] splittedVal = ((String)prop.getProperty(key)).split(";");
+            final double width = Double.parseDouble(splittedVal[1]);
+            final double height = Double.parseDouble(splittedVal[2]);
+            final PredefinedBoxes box = new PredefinedBoxes(
+                    splittedVal[0],
+                    width,
+                    height);
+            if (splittedVal.length == 4) {
+                box.setKey(splittedVal[3]);
+            }
+            list.add(box);
+        }
     }
 }
