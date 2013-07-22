@@ -30,6 +30,7 @@ import java.awt.EventQueue;
 import java.text.DecimalFormat;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Timer;
@@ -139,6 +140,17 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
      * @param  modal   DOCUMENT ME!
      */
     public NasDialog(final java.awt.Frame parent, final boolean modal) {
+        this(parent, modal, null);
+    }
+
+    /**
+     * Creates a new NasDialog object.
+     *
+     * @param  parent            DOCUMENT ME!
+     * @param  modal             DOCUMENT ME!
+     * @param  selectedFeatures  DOCUMENT ME!
+     */
+    public NasDialog(final java.awt.Frame parent, final boolean modal, final Collection<Feature> selectedFeatures) {
         super(parent, modal);
         productTemplates.add(NasProductTemplate.POINTS);
         productTemplates.add(NasProductTemplate.OHNE_EIGENTUEMER);
@@ -153,10 +165,20 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
             } else {
                 name += f;
             }
+            boolean selected = false;
+            if (selectedFeatures == null) {
+                selected = true;
+            } else {
+                for (final Feature featurToSelect : selectedFeatures) {
+                    if (f.equals(featurToSelect)) {
+                        selected = true;
+                    }
+                }
+            }
             if ((f.getGeometry() instanceof Polygon) || (f.getGeometry() instanceof MultiPolygon)) {
                 final PFeature pf = new PFeature(f, map);
                 if (!pf.hasHole()) {
-                    geomWrappers.add(new GeomWrapper(f.getGeometry(), name, true));
+                    geomWrappers.add(new GeomWrapper(f.getGeometry(), name, selected));
                 }
             }
         }
@@ -232,7 +254,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(org.openide.util.NbBundle.getMessage(NasDialog.class, "NasDialog.title")); // NOI18N
         setMinimumSize(new java.awt.Dimension(617, 180));
-        setPreferredSize(new java.awt.Dimension(780, 520));
+        setPreferredSize(new java.awt.Dimension(780, 540));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         pnlMap.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -242,12 +264,12 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
         pnlMapLayout.setHorizontalGroup(
             pnlMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                336,
+                345,
                 Short.MAX_VALUE));
         pnlMapLayout.setVerticalGroup(
             pnlMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                413,
+                450,
                 Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -375,7 +397,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
         pnlFee.setBackground(new java.awt.Color(254, 254, 254));
         pnlFee.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         pnlFee.setMinimumSize(new java.awt.Dimension(144, 100));
-        pnlFee.setPreferredSize(new java.awt.Dimension(144, 100));
+        pnlFee.setPreferredSize(new java.awt.Dimension(144, 150));
         pnlFee.setLayout(new java.awt.BorderLayout());
 
         lblBusy.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -686,7 +708,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                             ((XBoundingBox)CismapBroker.getInstance().getMappingComponent().getCurrentBoundingBox())
                                         .getGeometry(),
                             "kompletter Kartenausschnitt",
-                            false);
+                            geomWrappers.isEmpty() ? true : false);
 
                     geomWrappers.add(totalMapWrapper);
                     for (final GeomWrapper cidsBeanWrapper : geomWrappers) {

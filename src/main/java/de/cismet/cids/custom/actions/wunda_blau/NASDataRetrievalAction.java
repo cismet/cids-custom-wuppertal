@@ -91,10 +91,13 @@ public class NASDataRetrievalAction extends AbstractAction implements CommonFeat
 
                 @Override
                 public void run() {
+                    final LinkedList<Feature> featureToSelect = new LinkedList<Feature>();
+                    featureToSelect.add(f);
                     final NasDialog dialog = new NasDialog(
                             StaticSwingTools.getParentFrame(
                                 CismapBroker.getInstance().getMappingComponent()),
-                            false);
+                            false,
+                            featureToSelect);
                     StaticSwingTools.showDialog(dialog);
                 }
             });
