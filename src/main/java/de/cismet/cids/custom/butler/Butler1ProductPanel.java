@@ -579,7 +579,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
      * @return  DOCUMENT ME!
      */
     private String getDachPunkteCount() {
-        return "0";
+        return "noch nicht implementiert";
     }
 
     /**
@@ -588,7 +588,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
      * @return  DOCUMENT ME!
      */
     private String getBodenPuntkeCount() {
-        return "0";
+        return "noch nicht implementiert";
     }
 
     /**
@@ -603,7 +603,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
                 gebaeudeCount = NasFeeCalculator.getGebaeudeAmount(geom);
                 return "" + gebaeudeCount;
             } catch (ConnectionException ex) {
-                LOG.error("Error during Gebaeude search", ex);
+                LOG.error("Error during Gebaeude search in butler 1 prduct panel", ex);
             }
         }
         return "0";
@@ -615,6 +615,15 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
      * @return  DOCUMENT ME!
      */
     private String getFlurstueckeCount() {
+        if (geom != null) {
+            final int flurstueckCount;
+            try {
+                flurstueckCount = NasFeeCalculator.getFlurstueckAmount(geom);
+                return "" + flurstueckCount;
+            } catch (ConnectionException ex) {
+                LOG.error("Error during Flurstuecksearch in butler 1 prduct panel");
+            }
+        }
         return "0";
     }
 
@@ -624,7 +633,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
      * @return  DOCUMENT ME!
      */
     private String getAdressCount() {
-        return "0";
+        return "noch nicht implementiert";
     }
 
     /**

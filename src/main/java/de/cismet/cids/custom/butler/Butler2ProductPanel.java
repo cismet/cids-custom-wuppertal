@@ -14,13 +14,14 @@ package de.cismet.cids.custom.butler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryFactory;
 
 import org.apache.log4j.Logger;
 
-import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.Property;
-
 import org.openide.util.Exceptions;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import java.io.IOException;
 
@@ -28,12 +29,17 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import de.cismet.cids.custom.nas.NasFeePreviewPanel;
 import de.cismet.cids.custom.utils.butler.ButlerFormat;
 import de.cismet.cids.custom.utils.butler.ButlerProduct;
 import de.cismet.cids.custom.utils.butler.ButlerResolution;
+import de.cismet.cids.custom.utils.nas.NasProductTemplate;
+
+import static java.awt.image.ImageObserver.WIDTH;
 
 /**
  * DOCUMENT ME!
@@ -41,11 +47,13 @@ import de.cismet.cids.custom.utils.butler.ButlerResolution;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelectionListener {
+public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelectionListener, ActionListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(Butler1ProductPanel.class);
+    private static final double DXF_DISCOUNT = 0.5d;
+    private static final double RASTER_DISCOUNT = 0.25d;
 
     //~ Instance fields --------------------------------------------------------
 
@@ -55,19 +63,14 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelec
     private Geometry geom;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btGroupFormat;
-    private javax.swing.JComboBox cbResolution;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JLabel lblAuflösung;
     private javax.swing.JLabel lblFiller;
     private javax.swing.JLabel lblFormat;
     private javax.swing.JLabel lblProdukt;
-    private javax.swing.JLabel lblVolumeParam;
-    private javax.swing.JLabel lblVolumeParamKey;
-    private javax.swing.JLabel lblVolumeParamTitle;
     private javax.swing.JList lstProdukt;
-    private javax.swing.JPanel pnlFeeParrameter;
+    private javax.swing.JPanel pnlFee;
+    private de.cismet.cids.custom.nas.NasFeePreviewPanel pnlFeePreview;
     private javax.swing.JPanel pnlFormat;
     private javax.swing.JRadioButton rbDxf;
     private javax.swing.JRadioButton rbShp;
@@ -83,8 +86,18 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelec
     public Butler2ProductPanel() {
         loadPrductDescriptions();
         initComponents();
+        pnlFeePreview = new NasFeePreviewPanel(NasProductTemplate.OHNE_EIGENTUEMER);
         lstProdukt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lstProdukt.addListSelectionListener(this);
+        rbDxf.addActionListener(this);
+        rbShp.addActionListener(this);
+        rbTif.addActionListener(this);
+        // this fires the action event and starts the fee calculation
+        rbDxf.setSelected(true);
+        // setting an empty geometry causes the fee preview panel to show a fee of 0.
+        final GeometryFactory gf = new GeometryFactory();
+        geom = gf.createMultiPolygon(null);
+        calculateFee();
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -109,14 +122,9 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelec
         rbShp = new javax.swing.JRadioButton();
         rbTif = new javax.swing.JRadioButton();
         lblFiller = new javax.swing.JLabel();
-        lblAuflösung = new javax.swing.JLabel();
-        cbResolution = new javax.swing.JComboBox();
         jSeparator1 = new javax.swing.JSeparator();
-        pnlFeeParrameter = new javax.swing.JPanel();
-        lblVolumeParamTitle = new javax.swing.JLabel();
-        lblVolumeParamKey = new javax.swing.JLabel();
-        lblVolumeParam = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        pnlFee = new javax.swing.JPanel();
+        pnlFeePreview = new de.cismet.cids.custom.nas.NasFeePreviewPanel();
 
         setPreferredSize(new java.awt.Dimension(400, 425));
         setLayout(new java.awt.GridBagLayout());
@@ -134,7 +142,8 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelec
         jScrollPane1.setMinimumSize(new java.awt.Dimension(250, 150));
         jScrollPane1.setPreferredSize(new java.awt.Dimension(258, 150));
 
-        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${products}");
+        final org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
+                "${products}");
         final org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings
                     .createJListBinding(
                         org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -167,6 +176,7 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelec
         pnlFormat.setLayout(new java.awt.GridBagLayout());
 
         btGroupFormat.add(rbDxf);
+        rbDxf.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(
             rbDxf,
             org.openide.util.NbBundle.getMessage(Butler2ProductPanel.class, "Butler2ProductPanel.rbDxf.text")); // NOI18N
@@ -219,39 +229,6 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelec
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 10);
         add(pnlFormat, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblAuflösung,
-            org.openide.util.NbBundle.getMessage(Butler2ProductPanel.class, "Butler2ProductPanel.lblAuflösung.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 40);
-        add(lblAuflösung, gridBagConstraints);
-
-        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${resolutions}");
-        final org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings
-                    .createJComboBoxBinding(
-                        org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                        this,
-                        eLProperty,
-                        cbResolution);
-        bindingGroup.addBinding(jComboBoxBinding);
-
-        cbResolution.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    cbResolutionActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
-        add(cbResolution, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -260,55 +237,9 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelec
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         add(jSeparator1, gridBagConstraints);
 
-        pnlFeeParrameter.setBackground(new java.awt.Color(255, 255, 255));
-        pnlFeeParrameter.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        pnlFeeParrameter.setLayout(new java.awt.GridBagLayout());
-
-        lblVolumeParamTitle.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblVolumeParamTitle,
-            org.openide.util.NbBundle.getMessage(
-                Butler2ProductPanel.class,
-                "Butler2ProductPanel.lblVolumeParamTitle.text"));             // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 20, 10);
-        pnlFeeParrameter.add(lblVolumeParamTitle, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblVolumeParamKey,
-            org.openide.util.NbBundle.getMessage(
-                Butler2ProductPanel.class,
-                "Butler2ProductPanel.lblVolumeParamKey.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
-        pnlFeeParrameter.add(lblVolumeParamKey, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblVolumeParam,
-            org.openide.util.NbBundle.getMessage(Butler2ProductPanel.class, "Butler2ProductPanel.lblVolumeParam.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
-        pnlFeeParrameter.add(lblVolumeParam, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel1,
-            org.openide.util.NbBundle.getMessage(Butler2ProductPanel.class, "Butler2ProductPanel.jLabel1.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        gridBagConstraints.weighty = 1.0;
-        pnlFeeParrameter.add(jLabel1, gridBagConstraints);
+        pnlFee.setBackground(new java.awt.Color(255, 255, 255));
+        pnlFee.setLayout(new java.awt.BorderLayout());
+        pnlFee.add(pnlFeePreview, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -318,19 +249,10 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelec
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 10);
-        add(pnlFeeParrameter, gridBagConstraints);
+        add(pnlFee, gridBagConstraints);
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void cbResolutionActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbResolutionActionPerformed
-        // TODO add your handling code here:
-    } //GEN-LAST:event_cbResolutionActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -439,6 +361,7 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelec
      */
     public void setGeometry(final Geometry geom) {
         this.geom = geom;
+        calculateFee();
     }
 
     /**
@@ -451,13 +374,21 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelec
         if (bp != null) {
             if (rbDxf.isSelected()) {
                 bp.setFormat(new ButlerFormat("dxf"));
+                final ButlerResolution res = new ButlerResolution();
+                res.setKey("800");
+                bp.setResolution(res);
             } else if (rbShp.isSelected()) {
+                final ButlerResolution res = new ButlerResolution();
+                res.setKey("600");
+                bp.setResolution(res);
                 bp.setFormat(new ButlerFormat("pdf"));
             } else if (rbTif.isSelected()) {
+                final ButlerResolution res = new ButlerResolution();
+                res.setKey("600");
+
+                bp.setResolution(res);
                 bp.setFormat(new ButlerFormat("tif"));
             }
-            final ButlerResolution res = (ButlerResolution)cbResolution.getSelectedItem();
-            bp.setResolution(res);
         }
         return bp;
     }
@@ -468,7 +399,9 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelec
         if (selectedProduct != null) {
             final String productKey = selectedProduct.getKey();
             if (productKey.endsWith("g")) {
-                rbDxf.setSelected(false);
+                if (rbDxf.isSelected()) {
+                    btGroupFormat.clearSelection();
+                }
                 rbDxf.setEnabled(false);
             } else {
                 rbDxf.setEnabled(true);
@@ -479,13 +412,39 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelec
     /**
      * DOCUMENT ME!
      *
-     * @param  args  DOCUMENT ME!
+     * @param  listener  DOCUMENT ME!
      */
-    public static void main(final String[] args) {
-        final JFrame f = new JFrame();
-        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        f.getContentPane().add(new Butler2ProductPanel());
-        f.pack();
-        f.setVisible(true);
+    public void addProductListSelectionListener(final ListSelectionListener listener) {
+        lstProdukt.addListSelectionListener(listener);
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void calculateFee() {
+        pnlFee.removeAll();
+        pnlFeePreview = new NasFeePreviewPanel(NasProductTemplate.OHNE_EIGENTUEMER);
+        setDiscountInFeePreview();
+        pnlFeePreview.setGeom(geom);
+        pnlFeePreview.refresh();
+        pnlFee.add(pnlFeePreview);
+        pnlFee.revalidate();
+        pnlFee.repaint();
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void setDiscountInFeePreview() {
+        if (rbDxf.isSelected()) {
+            pnlFeePreview.setDiscount(DXF_DISCOUNT);
+        } else {
+            pnlFeePreview.setDiscount(RASTER_DISCOUNT);
+        }
+    }
+
+    @Override
+    public void actionPerformed(final ActionEvent e) {
+        calculateFee();
     }
 }

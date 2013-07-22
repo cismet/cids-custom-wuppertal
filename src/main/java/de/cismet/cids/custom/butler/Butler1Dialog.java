@@ -12,6 +12,7 @@
 package de.cismet.cids.custom.butler;
 
 import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Polygon;
@@ -90,8 +91,10 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnCreate;
     private de.cismet.cids.custom.butler.Butler1ProductPanel butler1ProductPanel1;
+    private javax.swing.JComboBox cbGeoms;
     private javax.swing.JComboBox cbSize;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblLowerPosition;
     private javax.swing.JLabel lblRequestNumber;
     private javax.swing.JLabel lblSize;
@@ -243,6 +246,8 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
+        jLabel1 = new javax.swing.JLabel();
+        cbGeoms = new ButlerGeometryComboBox(ButlerGeometryComboBox.GEOM_FILTER_TYPE.RECTANGLE);
         pnlControls = new javax.swing.JPanel();
         btnCreate = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
@@ -291,6 +296,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 5);
         pnlMapSettings.add(lblLowerPosition, gridBagConstraints);
 
@@ -317,7 +323,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
             org.openide.util.NbBundle.getMessage(Butler1Dialog.class, "Butler1Dialog.lblSize.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
         pnlMapSettings.add(lblSize, gridBagConstraints);
@@ -342,8 +348,9 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
         pnlMapSettings.add(cbSize, gridBagConstraints);
@@ -360,7 +367,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         pnlMapLayout.setVerticalGroup(
             pnlMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                352,
+                320,
                 Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -414,6 +421,36 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         pnlMapSettings.add(pnlUpperBound, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel1,
+            org.openide.util.NbBundle.getMessage(Butler1Dialog.class, "Butler1Dialog.jLabel1.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 5);
+        pnlMapSettings.add(jLabel1, gridBagConstraints);
+        jLabel1.getAccessibleContext()
+                .setAccessibleName(org.openide.util.NbBundle.getMessage(
+                        Butler1Dialog.class,
+                        "Butler1Dialog.jLabel1.AccessibleContext.accessibleName"));                   // NOI18N
+
+        cbGeoms.setPreferredSize(new java.awt.Dimension(150, 27));
+        cbGeoms.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cbGeomsActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        pnlMapSettings.add(cbGeoms, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -634,6 +671,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
     private void cbSizeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbSizeActionPerformed
         final PredefinedBoxes selectedBox = (PredefinedBoxes)cbSize.getSelectedItem();
         if ((selectedBox != null) && !selectedBox.getDisplayName().equals("keine Auswahl")) {
+            cbGeoms.setSelectedIndex(0);
             firstUpperTFChange = true;
             updatePositionFields();
             changeMap();
@@ -654,6 +692,32 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
     private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
         this.dispose();                                                           // TODO add your handling code here:
     }                                                                             //GEN-LAST:event_btnCancelActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cbGeomsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbGeomsActionPerformed
+        final Object obj = cbGeoms.getSelectedItem();
+        if ((obj != null) && (obj instanceof Geometry)) {
+            final Envelope envelope = ((Geometry)obj).getEnvelopeInternal();
+            tfLowerE.getDocument().removeDocumentListener(this);
+            tfLowerN.getDocument().removeDocumentListener(this);
+            tfUpperE.getDocument().removeDocumentListener(upperTfListeners);
+            tfUpperN.getDocument().removeDocumentListener(upperTfListeners);
+            tfLowerE.setText("" + envelope.getMinX());
+            tfLowerN.setText("" + envelope.getMinY());
+            tfUpperE.setText("" + envelope.getMaxX());
+            tfUpperN.setText("" + envelope.getMaxY());
+            cbSize.setSelectedItem(noSelectionBox);
+            changeMap();
+            tfLowerE.getDocument().addDocumentListener(this);
+            tfLowerN.getDocument().addDocumentListener(this);
+            tfUpperE.getDocument().addDocumentListener(upperTfListeners);
+            tfUpperN.getDocument().addDocumentListener(upperTfListeners);
+        }
+    }                                                                           //GEN-LAST:event_cbGeomsActionPerformed
 
     /**
      * DOCUMENT ME!

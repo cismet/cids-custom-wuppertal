@@ -18,6 +18,10 @@ import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.geom.PrecisionModel;
 
+import org.apache.log4j.Logger;
+
+import org.openide.util.Exceptions;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -29,7 +33,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import java.io.IOException;
+
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -37,9 +47,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.TabbedPaneUI;
 import javax.swing.plaf.basic.BasicButtonUI;
 
@@ -66,19 +79,42 @@ import de.cismet.tools.gui.downloadmanager.MultipleDownload;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class Butler2Dialog extends javax.swing.JDialog implements DocumentListener {
+public class Butler2Dialog extends javax.swing.JDialog implements DocumentListener, ListSelectionListener {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final Logger LOG = Logger.getLogger(Butler2Dialog.class);
+    private static HashMap<String, CoordWrapper> rahmenKartenMap = new HashMap<String, CoordWrapper>();
+    private static final String FELDVERGLEICH = "0903";
+    private static final String FELDVERGLEICH_BOX = "600m x 350m";
+
+    static {
+        final Properties prop = new Properties();
+        try {
+            prop.load(Butler2Dialog.class.getResourceAsStream("rahmenkarten.properties"));
+            loadPropertiesIntoMap(prop);
+        } catch (IOException ex) {
+            LOG.error("Could not read property file with defined boxes for butler 1", ex);
+        }
+    }
 
     //~ Instance fields --------------------------------------------------------
 
     private ArrayList<PredefinedBoxes> boxes;
     private DefaultStyledFeature rectangleFeature;
     private MappingComponent map = new MappingComponent();
+    private boolean mapInitDone = false;
+    private PredefinedBoxes feldVergleichBox = null;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnCreate;
     private de.cismet.cids.custom.butler.Butler2ProductPanel butler2ProductPanel1;
+    private javax.swing.JComboBox cbPointGeom;
     private javax.swing.JComboBox cbSize;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblLowerPosition;
+    private javax.swing.JLabel lblPointGeoms;
+    private javax.swing.JLabel lblRahmenkartenNr;
     private javax.swing.JLabel lblRequestNumber;
     private javax.swing.JLabel lblSize;
     private javax.swing.JPanel pnlControls;
@@ -90,6 +126,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
     private javax.swing.JTextField tfLowerE;
     private javax.swing.JTextField tfLowerN;
     private javax.swing.JTextField tfOrderId;
+    private javax.swing.JTextField tfRahmenkartenNr;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -106,6 +143,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
         this.setTitle(null);
         boxes = PredefinedBoxes.butler2Boxes;
         initComponents();
+        butler2ProductPanel1.addProductListSelectionListener(this);
         tfLowerE.getDocument().addDocumentListener(this);
         tfLowerN.getDocument().addDocumentListener(this);
         tbpProducts.addMouseListener(new MouseAdapter() {
@@ -125,6 +163,30 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
         tbpProducts.setBorder(null);
         tbpProducts.setTabComponentAt(0, getTabComponent(false));
         tbpProducts.setToolTipTextAt(0, "Produkt 1");
+        // if a rahmenkartennummer is provided we set middleE and middleN programmatically
+        tfRahmenkartenNr.getDocument().addDocumentListener(new DocumentListener() {
+
+                @Override
+                public void insertUpdate(final DocumentEvent e) {
+                    updateForRahmenKartenNr();
+                }
+
+                @Override
+                public void removeUpdate(final DocumentEvent e) {
+                    updateForRahmenKartenNr();
+                }
+
+                @Override
+                public void changedUpdate(final DocumentEvent e) {
+                    updateForRahmenKartenNr();
+                }
+            });
+        for (final PredefinedBoxes box : boxes) {
+            if (box.getDisplayName().equals(FELDVERGLEICH_BOX)) {
+                feldVergleichBox = box;
+                break;
+            }
+        }
         final JPanel addPan = new JPanel();
         addPan.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         addPan.setOpaque(false);
@@ -139,9 +201,55 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
         initMap();
         pnlMap.setLayout(new BorderLayout());
         pnlMap.add(map, BorderLayout.CENTER);
+        cbPointGeomActionPerformed(null);
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void updateForRahmenKartenNr() {
+        CoordWrapper coord = null;
+        if (tfRahmenkartenNr.getText().length() == 5) {
+            coord = rahmenKartenMap.get(tfRahmenkartenNr.getText());
+            if (coord != null) {
+                tfLowerE.setText("" + coord.getMiddleE());
+                tfLowerN.setText("" + coord.getMiddleN());
+            } else {
+                JOptionPane.showMessageDialog(
+                    StaticSwingTools.getParentFrame(Butler2Dialog.this),
+                    org.openide.util.NbBundle.getMessage(
+                        Butler2Dialog.class,
+                        "Butler2Dialog.RahmenkartenNrCheck.JOptionPane.message"),
+                    org.openide.util.NbBundle.getMessage(
+                        Butler2Dialog.class,
+                        "Butler2Dialog.RahmenkartenNrCheck.JOptionPane.title"),
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  prop  DOCUMENT ME!
+     */
+    private static void loadPropertiesIntoMap(final Properties prop) {
+        final Enumeration keys = prop.propertyNames();
+        final ArrayList<String> keyList = new ArrayList<String>();
+        while (keys.hasMoreElements()) {
+            final String key = (String)keys.nextElement();
+            keyList.add(key);
+        }
+        for (final String key : keyList) {
+            final String[] splittedVal = ((String)prop.getProperty(key)).split(";");
+            final double middleE = Double.parseDouble(splittedVal[0]);
+            final double middleN = Double.parseDouble(splittedVal[1]);
+            final CoordWrapper coord = new CoordWrapper(middleE, middleN);
+            rahmenKartenMap.put(key, coord);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -158,11 +266,16 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
         butler2ProductPanel1 = new de.cismet.cids.custom.butler.Butler2ProductPanel();
         pnlMapSettings = new javax.swing.JPanel();
         lblLowerPosition = new javax.swing.JLabel();
-        tfLowerE = new javax.swing.JTextField();
-        tfLowerN = new javax.swing.JTextField();
         lblSize = new javax.swing.JLabel();
         cbSize = new javax.swing.JComboBox();
         pnlMap = new javax.swing.JPanel();
+        lblRahmenkartenNr = new javax.swing.JLabel();
+        lblPointGeoms = new javax.swing.JLabel();
+        tfRahmenkartenNr = new javax.swing.JTextField();
+        cbPointGeom = new ButlerGeometryComboBox(ButlerGeometryComboBox.GEOM_FILTER_TYPE.POINT);
+        jPanel1 = new javax.swing.JPanel();
+        tfLowerN = new javax.swing.JTextField();
+        tfLowerE = new javax.swing.JTextField();
         pnlControls = new javax.swing.JPanel();
         btnCreate = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
@@ -219,34 +332,17 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
             org.openide.util.NbBundle.getMessage(Butler2Dialog.class, "Butler2Dialog.lblLowerPosition.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 5);
         pnlMapSettings.add(lblLowerPosition, gridBagConstraints);
-
-        tfLowerE.setText(org.openide.util.NbBundle.getMessage(Butler2Dialog.class, "Butler2Dialog.tfLowerE.text")); // NOI18N
-        tfLowerE.setMinimumSize(new java.awt.Dimension(70, 27));
-        tfLowerE.setPreferredSize(new java.awt.Dimension(90, 27));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 5);
-        pnlMapSettings.add(tfLowerE, gridBagConstraints);
-
-        tfLowerN.setText(org.openide.util.NbBundle.getMessage(Butler2Dialog.class, "Butler2Dialog.tfLowerN.text")); // NOI18N
-        tfLowerN.setMinimumSize(new java.awt.Dimension(70, 27));
-        tfLowerN.setPreferredSize(new java.awt.Dimension(90, 27));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
-        pnlMapSettings.add(tfLowerN, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblSize,
             org.openide.util.NbBundle.getMessage(Butler2Dialog.class, "Butler2Dialog.lblSize.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
         pnlMapSettings.add(lblSize, gridBagConstraints);
@@ -271,7 +367,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
@@ -284,12 +380,12 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
         pnlMapLayout.setHorizontalGroup(
             pnlMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                343,
+                435,
                 Short.MAX_VALUE));
         pnlMapLayout.setVerticalGroup(
             pnlMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                363,
+                299,
                 Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -301,6 +397,90 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         pnlMapSettings.add(pnlMap, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblRahmenkartenNr,
+            org.openide.util.NbBundle.getMessage(Butler2Dialog.class, "Butler2Dialog.lblRahmenkartenNr.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        pnlMapSettings.add(lblRahmenkartenNr, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblPointGeoms,
+            org.openide.util.NbBundle.getMessage(Butler2Dialog.class, "Butler2Dialog.lblPointGeoms.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        pnlMapSettings.add(lblPointGeoms, gridBagConstraints);
+
+        tfRahmenkartenNr.setText(org.openide.util.NbBundle.getMessage(
+                Butler2Dialog.class,
+                "Butler2Dialog.tfRahmenkartenNr.text")); // NOI18N
+        tfRahmenkartenNr.setEnabled(false);
+        tfRahmenkartenNr.setMinimumSize(new java.awt.Dimension(70, 27));
+        tfRahmenkartenNr.setPreferredSize(new java.awt.Dimension(90, 27));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        pnlMapSettings.add(tfRahmenkartenNr, gridBagConstraints);
+
+        final org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${rectangleFeature.geometry}"),
+                cbPointGeom,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
+        cbPointGeom.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cbPointGeomActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        pnlMapSettings.add(cbPointGeom, gridBagConstraints);
+
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        tfLowerN.setText(org.openide.util.NbBundle.getMessage(Butler2Dialog.class, "Butler2Dialog.tfLowerN.text")); // NOI18N
+        tfLowerN.setMinimumSize(new java.awt.Dimension(70, 27));
+        tfLowerN.setPreferredSize(new java.awt.Dimension(90, 27));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        jPanel1.add(tfLowerN, gridBagConstraints);
+
+        tfLowerE.setText(org.openide.util.NbBundle.getMessage(Butler2Dialog.class, "Butler2Dialog.tfLowerE.text")); // NOI18N
+        tfLowerE.setMinimumSize(new java.awt.Dimension(70, 27));
+        tfLowerE.setPreferredSize(new java.awt.Dimension(90, 27));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        jPanel1.add(tfLowerE, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        pnlMapSettings.add(jPanel1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -468,18 +648,6 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                     final double middleX = p.getX();
                     final double middleY = p.getY();
 
-//                    if ((minX >= maxX) || (minY >= maxY)) {
-//                        JOptionPane.showMessageDialog(
-//                            StaticSwingTools.getParentFrame(Butler2Dialog.this),
-//                            org.openide.util.NbBundle.getMessage(
-//                                Butler1Dialog.class,
-//                                "Butler1Dialog.GeomConfigCheck.JOptionPane.message"),
-//                            org.openide.util.NbBundle.getMessage(
-//                                Butler1Dialog.class,
-//                                "Butler1Dialog.GeomConfigCheck.JOptionPane.title"),
-//                            JOptionPane.ERROR_MESSAGE);
-//                      return;
-//                    }
                     // for each product tab we have to create one download
                     final StringBuilder jobnameBuilder = new StringBuilder();
                     if (DownloadManagerDialog.showAskingForUserTitle(
@@ -497,17 +665,6 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                         final Butler2ProductPanel productPanel = (Butler2ProductPanel)tbpProducts.getComponentAt(i);
                         final ButlerProduct bp = productPanel.getSelectedProduct();
 
-//                        LOG.info(
-//                            "Create the following Butler product:\n\t orderId: "
-//                                    + tfOrderId.getText()
-//                                    + "\n\t productId: "
-//                                    + bp.getKey()
-//                                    + "\n\t colorDepth: "
-//                                    + bp.getColorDepth()
-//                                    + "\n\t resolution: "
-//                                    + bp.getResolution()
-//                                    + "\n\t format: "
-//                                    + bp.getFormat());
                         final ButlerDownload download = new ButlerDownload(
                                 jobnameBuilder.toString(),
                                 tfOrderId.getText()
@@ -526,6 +683,25 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                 }
             });
     } //GEN-LAST:event_btnCreateActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cbPointGeomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbPointGeomActionPerformed
+        final Object obj = cbPointGeom.getSelectedItem();
+        if ((obj != null) && (obj instanceof Point)) {
+            final Point p = (Point)obj;
+            tfLowerE.getDocument().removeDocumentListener(this);
+            tfLowerN.getDocument().removeDocumentListener(this);
+            tfLowerE.setText("" + p.getX());
+            tfLowerN.setText("" + p.getY());
+            changeMap();
+            tfLowerE.getDocument().addDocumentListener(this);
+            tfLowerN.getDocument().addDocumentListener(this);
+        }
+    }                                                                               //GEN-LAST:event_cbPointGeomActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -550,13 +726,14 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                     // initial positioning of the map
                     final int duration = map.getAnimationDuration();
                     map.setAnimationDuration(0);
-                    map.gotoInitialBoundingBox();
+//                    map.gotoInitialBoundingBox();
                     // interaction mode
                     map.setInteractionMode(MappingComponent.ZOOM);
                     // finally when all configurations are done ...
                     map.unlock();
                     map.setInteractionMode("MUTE");
                     map.setAnimationDuration(duration);
+                    mapInitDone = true;
                 }
 
                 private XBoundingBox getBoundingBox() {
@@ -583,18 +760,27 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
 
                 @Override
                 public void run() {
-                    if (rectangleFeature == null) {
-                        rectangleFeature = createFeature();
-                    }
-                    final Geometry g = createGeometry();
-                    if (g != null) {
-                        updateGeomInAllProducts(g);
-                        rectangleFeature.setGeometry(g);
-                        if (!map.getFeatureCollection().contains(rectangleFeature)) {
-                            map.getFeatureCollection().addFeature(rectangleFeature);
+                    if (mapInitDone) {
+                        if (rectangleFeature == null) {
+                            rectangleFeature = createFeature();
                         }
-                        map.reconsiderFeature(rectangleFeature);
-                        map.zoomToFeatureCollection();
+                        final Geometry g = createGeometry();
+                        if (g != null) {
+                            updateGeomInAllProducts(g);
+                            rectangleFeature.setGeometry(g);
+                            if (!map.getFeatureCollection().contains(rectangleFeature)) {
+                                map.getFeatureCollection().addFeature(rectangleFeature);
+                            } else {
+                            }
+                            SwingUtilities.invokeLater(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        map.reconsiderFeature(rectangleFeature);
+                                        map.zoomToFeatureCollection();
+                                    }
+                                });
+                        }
                     }
                 }
             };
@@ -642,8 +828,15 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
         final PredefinedBoxes box = (PredefinedBoxes)cbSize.getSelectedItem();
         try {
             final double middleE = Double.parseDouble(tfLowerE.getText());
-            lowerE = middleE - (box.getEastSize() / 2);
             final double middleN = Double.parseDouble(tfLowerN.getText());
+            if (!((middleE >= 361000) && (middleE <= 384000) && (middleN >= 5669000) && (middleN <= 5687000))) {
+//                JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+//                    "Die angegebenen Koordinaten liegen außerhalb des gültigen Bereichs",
+//                    "Fehlerhafte Eingaben",
+//                    JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
+            lowerE = middleE - (box.getEastSize() / 2);
             lowerN = middleN - (box.getNorthSize() / 2);
         } catch (Exception ex) {
 //            if (LOG.isDebugEnabled()) {
@@ -700,6 +893,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
         final String title = "Produkt " + number;
         final int tabPos = tbpProducts.getTabCount() - 1;
         final Butler2ProductPanel productPan = new Butler2ProductPanel();
+        productPan.addProductListSelectionListener(this);
         if ((rectangleFeature != null) && (rectangleFeature.getGeometry() != null)) {
 //            productPan.setGeometry(rectangleFeature.getGeometry());
         }
@@ -902,5 +1096,122 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
     @Override
     public void changedUpdate(final DocumentEvent de) {
         changeMap();
+    }
+
+    @Override
+    public void valueChanged(final ListSelectionEvent e) {
+        // check if in one product tab the feldvergleich produkt is selected if so set the box size, and disable all
+        // other field else enable all other fields
+        final SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
+
+                @Override
+                protected Boolean doInBackground() throws Exception {
+                    for (int i = 0; i < (tbpProducts.getTabCount() - 1); i++) {
+                        final Butler2ProductPanel productPanel = (Butler2ProductPanel)tbpProducts.getComponentAt(i);
+                        final ButlerProduct product = productPanel.getSelectedProduct();
+                        if ((product != null) && (product.getKey() != null)) {
+                            if (product.getKey().equals(FELDVERGLEICH)) {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                }
+
+                @Override
+                protected void done() {
+                    final Boolean isFeldvergleichSelected;
+                    try {
+                        isFeldvergleichSelected = get();
+
+                        if (isFeldvergleichSelected) {
+                            tfRahmenkartenNr.setEnabled(true);
+                            cbSize.setSelectedItem(feldVergleichBox);
+                            cbSize.setEnabled(false);
+                            cbPointGeom.setEnabled(false);
+                            tfLowerE.setEnabled(false);
+                            tfLowerN.setEnabled((false));
+                        } else {
+                            tfRahmenkartenNr.setEnabled(false);
+                            cbSize.setEnabled(true);
+                            cbPointGeom.setEnabled(true);
+                            tfLowerE.setEnabled(true);
+                            tfLowerN.setEnabled((true));
+                        }
+                    } catch (InterruptedException ex) {
+                        Exceptions.printStackTrace(ex);
+                    } catch (ExecutionException ex) {
+                        Exceptions.printStackTrace(ex);
+                    }
+                }
+            };
+
+        worker.execute();
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private static final class CoordWrapper {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private double middleE;
+        private double middleN;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new CoordWrapper object.
+         *
+         * @param  middleE  DOCUMENT ME!
+         * @param  middleN  DOCUMENT ME!
+         */
+        public CoordWrapper(final double middleE, final double middleN) {
+            this.middleE = middleE;
+            this.middleN = middleN;
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public double getMiddleE() {
+            return middleE;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  middleE  DOCUMENT ME!
+         */
+        public void setMiddleE(final double middleE) {
+            this.middleE = middleE;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public double getMiddleN() {
+            return middleN;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  middleN  DOCUMENT ME!
+         */
+        public void setMiddleN(final double middleN) {
+            this.middleN = middleN;
+        }
     }
 }

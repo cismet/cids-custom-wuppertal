@@ -11,6 +11,26 @@
  */
 package de.cismet.cids.custom.nas;
 
+import com.vividsolutions.jts.geom.Geometry;
+
+import org.apache.log4j.Logger;
+
+import org.openide.util.Exceptions;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+
+import java.text.DecimalFormat;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
+
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
+
+import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.nas.NasProductTemplate;
 
 /**
@@ -21,17 +41,29 @@ import de.cismet.cids.custom.utils.nas.NasProductTemplate;
  */
 public class NasFeePreviewPanel extends javax.swing.JPanel {
 
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final Logger log = Logger.getLogger(NasFeePreviewPanel.class);
+
     //~ Instance fields --------------------------------------------------------
 
     private boolean isPointType;
     private NasProductTemplate template;
+    private Geometry geom;
+    private int pointAmount = 0;
+    private int gebaeudeAmount = 0;
+    private int flurstueckAmount = 0;
+    private DecimalFormat formatter = new DecimalFormat("#,###,##0.00 \u00A4\u00A4");
+    private double discount;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblAnzahlTitle;
+    private org.jdesktop.swingx.JXBusyLabel lblBusy;
     private javax.swing.JLabel lblDatensaetze;
     private javax.swing.JLabel lblEigentuemer;
     private javax.swing.JLabel lblEigentuemerAnzahl;
     private javax.swing.JLabel lblEigentuemerGesamt;
+    private javax.swing.JLabel lblError;
     private javax.swing.JLabel lblFiller;
     private javax.swing.JLabel lblFlurstuecke;
     private javax.swing.JLabel lblFlurstueckeAnzahl;
@@ -46,6 +78,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblPunkteAnzahl;
     private javax.swing.JLabel lblPunkteGesamt;
     private javax.swing.JLabel lblTitle;
+    private javax.swing.JPanel pnlFee;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -64,6 +97,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
      */
     public NasFeePreviewPanel(final NasProductTemplate template) {
         this.template = template;
+        this.discount = 1;
         initComponents();
     }
 
@@ -94,6 +128,15 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
     /**
      * DOCUMENT ME!
      *
+     * @param  discount  DOCUMENT ME!
+     */
+    public void setDiscount(final double discount) {
+        this.discount = discount;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param  amount  DOCUMENT ME!
      * @param  value   DOCUMENT ME!
      */
@@ -112,6 +155,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
         lblEigentuemerAnzahl.setText(amount);
         lblEigentuemerGesamt.setText(value);
     }
+
     /**
      * DOCUMENT ME!
      *
@@ -119,6 +163,266 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
      */
     public void setTotalLabel(final String value) {
         lblGesamtValue.setText(value);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  wait  DOCUMENT ME!
+     */
+    private void showWait(final boolean wait) {
+        if (wait) {
+            if (!lblBusy.isBusy()) {
+                this.removeAll();
+                this.add(lblBusy);
+                lblBusy.setBusy(true);
+                lblBusy.setVisible(true);
+            }
+        } else {
+            lblBusy.setBusy(false);
+            lblBusy.setVisible(wait);
+            this.removeAll();
+            this.add(pnlFee);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void showError() {
+        this.remove(lblBusy);
+        this.removeAll();
+        this.add(lblError, BorderLayout.CENTER);
+        lblError.setVisible(true);
+        this.invalidate();
+        this.revalidate();
+        this.repaint();
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void calculateFee() {
+        final SwingWorker<HashMap<String, ArrayList<String>>, Void> feeCalculator =
+            new SwingWorker<HashMap<String, ArrayList<String>>, Void>() {
+
+                @Override
+                protected HashMap<String, ArrayList<String>> doInBackground() throws Exception {
+                    SwingUtilities.invokeLater(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                showWait(true);
+                            }
+                        });
+                    // clear the old amount fields
+                    pointAmount = 0;
+                    flurstueckAmount = 0;
+                    gebaeudeAmount = 0;
+                    final HashMap<String, ArrayList<String>> result = new HashMap<String, ArrayList<String>>();
+                    if (geom == null) {
+//                    showError();
+                        NasFeePreviewPanel.this.revalidate();
+                        NasFeePreviewPanel.this.repaint();
+                        return null;
+                    }
+                    // do the search
+// final NasProductTemplate type = (NasProductTemplate)cbType.getSelectedItem();
+                    double totalFee = 0;
+                    if (template == NasProductTemplate.POINTS) {
+                        final ArrayList<String> values = new ArrayList<String>();
+                        pointAmount = NasFeeCalculator.getPointAmount(geom);
+                        values.add("" + pointAmount);
+                        final double pointFee = NasFeeCalculator.getFeeForPoints(pointAmount) * discount;
+                        totalFee += pointFee;
+                        values.add(formatter.format(pointFee));
+                        result.put("points", values);
+                    } else {
+                        final ArrayList<String> flurstueckValues = new ArrayList<String>();
+                        final ArrayList<String> gebaeudeValues = new ArrayList<String>();
+                        flurstueckAmount = NasFeeCalculator.getFlurstueckAmount(geom);
+                        flurstueckValues.add("" + flurstueckAmount);
+                        final double flurstueckFee = NasFeeCalculator.getFeeForFlurstuecke(flurstueckAmount) * discount;
+                        totalFee += flurstueckFee;
+                        // ToDo this is a quick and dirty way to calculate the fee for type KOMPLETT
+                        if (template == NasProductTemplate.KOMPLETT) {
+                            final double eigentuemerFee = NasFeeCalculator.getFeeForEigentuemer(flurstueckAmount)
+                                        * discount;
+                            totalFee += eigentuemerFee;
+                            final ArrayList<String> eigentuemerValues = new ArrayList<String>();
+                            eigentuemerValues.add("" + flurstueckAmount);
+                            eigentuemerValues.add(formatter.format(eigentuemerFee));
+                            result.put("eigentuemer", eigentuemerValues);
+                        }
+                        flurstueckValues.add(formatter.format(flurstueckFee));
+                        result.put("flurstuecke", flurstueckValues);
+                        gebaeudeAmount = NasFeeCalculator.getGebaeudeAmount(geom);
+                        gebaeudeValues.add("" + gebaeudeAmount);
+                        final double gebaeudeFee = NasFeeCalculator.getFeeForGebaeude(gebaeudeAmount) * discount;
+                        totalFee += gebaeudeFee;
+                        gebaeudeValues.add(formatter.format(gebaeudeFee));
+                        result.put("gebaeude", gebaeudeValues);
+                    }
+                    final ArrayList<String> totalList = new ArrayList<String>();
+                    totalList.add(formatter.format(totalFee));
+                    result.put("total", totalList);
+                    return result;
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        final HashMap<String, ArrayList<String>> result = get();
+//                    final NasProductTemplate selectedTemplate = (NasProductTemplate) cbType.getSelectedItem();
+//                    pnlFee = new NasFeePreviewPanel(selectedTemplate);
+                        if (result == null) {
+//                            showWait(false);
+                            showError();
+                            NasFeePreviewPanel.this.revalidate();
+                            NasFeePreviewPanel.this.repaint();
+                            return;
+                        }
+                        for (final String key : result.keySet()) {
+                            final ArrayList<String> values = result.get(key);
+                            if (key.equals("total")) {
+                                setTotalLabel(values.get(0));
+                            }
+                            if (template == NasProductTemplate.POINTS) {
+                                if (key.equals("points")) {
+                                    setPointLabels(values.get(0), values.get(1));
+                                    break;
+                                }
+                            } else {
+                                if (template == NasProductTemplate.KOMPLETT) {
+                                    if (key.equals("eigentuemer")) {
+                                        setEigentuemerLabels(values.get(0), values.get(1));
+                                    }
+                                }
+                                if (key.equals("gebaeude")) {
+                                    setGebaeudeLabels(values.get(0), values.get(1));
+                                } else if (key.equals("flurstuecke")) {
+                                    setFlurstueckLabels(values.get(0), values.get(1));
+                                }
+                            }
+                        }
+                        repaint();
+                    } catch (InterruptedException ex) {
+                        showError();
+                        log.error("nas fee calculation was interrupted. showing error state", ex);
+                        return;
+                    } catch (ExecutionException ex) {
+                        showError();
+                        log.error("an error occured during nas fee calculation. showing error state", ex);
+                        return;
+                    }
+
+                    showWait(false);
+                    NasFeePreviewPanel.this.revalidate();
+                    NasFeePreviewPanel.this.repaint();
+                }
+            };
+
+        feeCalculator.execute();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  geom  DOCUMENT ME!
+     */
+    public void setGeom(final Geometry geom) {
+        this.geom = geom;
+        calculateFee();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public NasProductTemplate getTemplate() {
+        return template;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public ArrayList<ProductGroupAmount> getProductGroupAmounts() {
+        final ArrayList<ProductGroupAmount> result = new ArrayList<ProductGroupAmount>();
+        if (template == NasProductTemplate.POINTS) {
+            result.addAll(getProductGroupAmountForObject("eapkt", pointAmount));
+        } else if (template == NasProductTemplate.OHNE_EIGENTUEMER) {
+            result.addAll(getProductGroupAmountForObject("eageb", gebaeudeAmount));
+            result.addAll(getProductGroupAmountForObject("eaflst", flurstueckAmount));
+        } else if (template == NasProductTemplate.KOMPLETT) {
+            result.addAll(getProductGroupAmountForObject("eageb", gebaeudeAmount));
+            result.addAll(getProductGroupAmountForObject("eaflst", flurstueckAmount));
+            result.addAll(getProductGroupAmountForObject("eaeig", flurstueckAmount));
+        }
+        return result;
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void refresh() {
+        calculateFee();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   objectBaseKey  DOCUMENT ME!
+     * @param   amount         DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private ArrayList<ProductGroupAmount> getProductGroupAmountForObject(final String objectBaseKey, int amount) {
+        final ArrayList<ProductGroupAmount> result = new ArrayList<ProductGroupAmount>();
+        if (amount > 1000000) {
+            final int tmpPoints = amount - 1000000;
+            result.add(new ProductGroupAmount(objectBaseKey + "_1000001", tmpPoints));
+            amount = 1000000;
+        }
+        if (amount > 100000) {
+            final int tmpPoints = amount - 100000;
+            result.add(new ProductGroupAmount(objectBaseKey + "_100001-1000000", tmpPoints));
+            amount = 100000;
+        }
+        if (amount > 10000) {
+            final int tmpPoints = amount - 10000;
+            result.add(new ProductGroupAmount(objectBaseKey + "_10001-100000", tmpPoints));
+            amount = 10000;
+        }
+        if (amount > 1000) {
+            final int tmpPoints = amount - 1000;
+            result.add(new ProductGroupAmount(objectBaseKey + "_1001-10000", tmpPoints));
+            amount = 1000;
+        }
+        result.add(new ProductGroupAmount(objectBaseKey + "_1000", amount));
+        return result;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  args  DOCUMENT ME!
+     */
+    public static void main(final String[] args) {
+        final JFrame f = new JFrame("foo");
+        f.setSize(500, 500);
+        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        final NasFeePreviewPanel pan = new NasFeePreviewPanel();
+        f.getContentPane().add(pan);
+        f.setVisible(true);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        pan.setGeom(null);
     }
 
     /**
@@ -130,6 +434,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        pnlFee = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
         lblAnzahlTitle = new javax.swing.JLabel();
         lblGesamtTitle = new javax.swing.JLabel();
@@ -174,9 +479,11 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
         }
         lblFiller = new javax.swing.JLabel();
         lblDatensaetze = new javax.swing.JLabel();
+        lblError = new javax.swing.JLabel();
+        lblBusy = new org.jdesktop.swingx.JXBusyLabel(new Dimension(75, 75));
 
-        setOpaque(false);
-        setLayout(new java.awt.GridBagLayout());
+        pnlFee.setOpaque(false);
+        pnlFee.setLayout(new java.awt.GridBagLayout());
 
         lblTitle.setFont(new java.awt.Font("DejaVu Sans", 1, 14));                                               // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -190,7 +497,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 20, 10);
-        add(lblTitle, gridBagConstraints);
+        pnlFee.add(lblTitle, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblAnzahlTitle,
@@ -200,7 +507,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.weightx = 0.7;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-        add(lblAnzahlTitle, gridBagConstraints);
+        pnlFee.add(lblAnzahlTitle, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblGesamtTitle,
@@ -211,7 +518,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.weightx = 0.3;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 10);
-        add(lblGesamtTitle, gridBagConstraints);
+        pnlFee.add(lblGesamtTitle, gridBagConstraints);
 
         if (template != NasProductTemplate.POINTS) {
             org.openide.awt.Mnemonics.setLocalizedText(
@@ -226,7 +533,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             gridBagConstraints.gridy = 3;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
             gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 0);
-            add(lblFlurstuecke, gridBagConstraints);
+            pnlFee.add(lblFlurstuecke, gridBagConstraints);
         }
 
         if (template != NasProductTemplate.POINTS) {
@@ -240,7 +547,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             gridBagConstraints.gridy = 2;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
             gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 0);
-            add(lblGebaeude, gridBagConstraints);
+            pnlFee.add(lblGebaeude, gridBagConstraints);
         }
 
         if (template == NasProductTemplate.POINTS) {
@@ -254,7 +561,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             gridBagConstraints.gridy = 6;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
             gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 0);
-            add(lblPunkte, gridBagConstraints);
+            pnlFee.add(lblPunkte, gridBagConstraints);
         }
 
         if (template != NasProductTemplate.POINTS) {
@@ -269,7 +576,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 3;
             gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-            add(lblFlurstueckeAnzahl, gridBagConstraints);
+            pnlFee.add(lblFlurstueckeAnzahl, gridBagConstraints);
         }
 
         if (template != NasProductTemplate.POINTS) {
@@ -285,7 +592,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             gridBagConstraints.gridy = 3;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
             gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 10);
-            add(lblFlurstueckeGesamt, gridBagConstraints);
+            pnlFee.add(lblFlurstueckeGesamt, gridBagConstraints);
         }
 
         if (template != NasProductTemplate.POINTS) {
@@ -300,7 +607,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 2;
             gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-            add(lblGebaeudeAnzahl, gridBagConstraints);
+            pnlFee.add(lblGebaeudeAnzahl, gridBagConstraints);
         }
 
         if (template != NasProductTemplate.POINTS) {
@@ -316,7 +623,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             gridBagConstraints.gridy = 2;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
             gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 10);
-            add(lblGebeaudeGesamt, gridBagConstraints);
+            pnlFee.add(lblGebeaudeGesamt, gridBagConstraints);
         }
 
         if (template == NasProductTemplate.POINTS) {
@@ -331,7 +638,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 6;
             gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-            add(lblPunkteAnzahl, gridBagConstraints);
+            pnlFee.add(lblPunkteAnzahl, gridBagConstraints);
         }
 
         if (template == NasProductTemplate.POINTS) {
@@ -347,7 +654,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             gridBagConstraints.gridy = 6;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
             gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 10);
-            add(lblPunkteGesamt, gridBagConstraints);
+            pnlFee.add(lblPunkteGesamt, gridBagConstraints);
         }
 
         jPanel1.setOpaque(false);
@@ -380,7 +687,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
         gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
-        add(jPanel1, gridBagConstraints);
+        pnlFee.add(jPanel1, gridBagConstraints);
 
         if (template == NasProductTemplate.KOMPLETT) {
             org.openide.awt.Mnemonics.setLocalizedText(
@@ -395,7 +702,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             gridBagConstraints.gridy = 5;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
             gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 0);
-            add(lblEigentuemer, gridBagConstraints);
+            pnlFee.add(lblEigentuemer, gridBagConstraints);
         }
 
         if (template == NasProductTemplate.KOMPLETT) {
@@ -410,7 +717,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 5;
             gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-            add(lblEigentuemerAnzahl, gridBagConstraints);
+            pnlFee.add(lblEigentuemerAnzahl, gridBagConstraints);
         }
 
         if (template == NasProductTemplate.KOMPLETT) {
@@ -426,7 +733,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
             gridBagConstraints.gridy = 5;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
             gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 10);
-            add(lblEigentuemerGesamt, gridBagConstraints);
+            pnlFee.add(lblEigentuemerGesamt, gridBagConstraints);
         }
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -439,7 +746,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        add(lblFiller, gridBagConstraints);
+        pnlFee.add(lblFiller, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblDatensaetze,
@@ -448,6 +755,19 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 0);
-        add(lblDatensaetze, gridBagConstraints);
-    }                                                                                                                  // </editor-fold>//GEN-END:initComponents
+        pnlFee.add(lblDatensaetze, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblError,
+            org.openide.util.NbBundle.getMessage(NasFeePreviewPanel.class, "NasFeePreviewPanel.lblError.text")); // NOI18N
+
+        setOpaque(false);
+        setLayout(new java.awt.BorderLayout());
+
+        lblBusy.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblBusy.setMaximumSize(new java.awt.Dimension(140, 40));
+        lblBusy.setMinimumSize(new java.awt.Dimension(140, 60));
+        lblBusy.setPreferredSize(new java.awt.Dimension(140, 60));
+        add(lblBusy, java.awt.BorderLayout.CENTER);
+    } // </editor-fold>//GEN-END:initComponents
 }
