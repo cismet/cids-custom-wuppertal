@@ -564,7 +564,6 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                 @Override
                 public void run() {
                     try {
-                        isValidSimplePolygon();
                         final NasProductTemplate template = (NasProductTemplate)cbType.getSelectedItem();
                         final String requestId = tfAuftragsnummer.getText().trim();
                         final ArrayList<ProductGroupAmount> list = getProductGroupAmounts(template);
@@ -1089,19 +1088,6 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
      *
      * @return  DOCUMENT ME!
      */
-    private boolean isValidSimplePolygon() {
-        final Geometry unionGeom = createUnionGeom();
-        if (unionGeom instanceof MultiPolygon) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
     private Geometry createUnionGeom() {
         Geometry unionGeom = null;
         int buffer = 0;
@@ -1122,10 +1108,12 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                 }
             }
         }
-        final DefaultStyledFeature testDSF = new DefaultStyledFeature();
-        testDSF.setGeometry(unionGeom);
-        final PFeature pf = new PFeature(testDSF, map);
-        pf.hasHole();
+        if (unionGeom != null) {
+            final DefaultStyledFeature testDSF = new DefaultStyledFeature();
+            testDSF.setGeometry(unionGeom);
+            final PFeature pf = new PFeature(testDSF, map);
+            pf.hasHole();
+        }
 
         return unionGeom;
     }
@@ -1136,38 +1124,23 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
      * @return  DOCUMENT ME!
      */
     private GeometryCollection generateSearchGeomCollection() {
-        int collectionSize = 0;
-        if (isValidSimplePolygon()) {
-            final Geometry unionGeom = createUnionGeom();
-            final Geometry[] geoms = new Geometry[1];
-            geoms[0] = unionGeom;
-            return new GeometryCollection(geoms, unionGeom.getFactory());
-        }
-        for (final GeomWrapper gw : geomWrappers) {
-            if (gw.isSelected()) {
-                collectionSize++;
-            }
-        }
-        final Geometry[] geoms = new Geometry[collectionSize];
-        int buffer = 0;
-        try {
-            buffer = Integer.parseInt(tfGeomBuffer.getText());
-        } catch (Exception e) {
-        }
-        int i = 0;
-        GeometryFactory gf = null;
-        for (final GeomWrapper gw : geomWrappers) {
-            if (gw.isSelected()) {
-                Geometry g = gw.getGeometry();
-                if (buffer != 0) {
-                    g = g.buffer(buffer);
-                }
-                if (gf == null) {
-                    gf = g.getFactory();
-                }
+        final Geometry unionGeom = createUnionGeom();
+        final GeometryFactory gf = unionGeom.getFactory();
+        Geometry[] geoms = null;
+        if (unionGeom instanceof MultiPolygon) {
+            final MultiPolygon mp = ((MultiPolygon)unionGeom);
+            geoms = new Geometry[mp.getNumGeometries()];
+            for (int i = 0; i < mp.getNumGeometries(); i++) {
+                final Geometry g = mp.getGeometryN(i);
                 geoms[i] = g;
-                i++;
             }
+        } else if (unionGeom instanceof Polygon) {
+            geoms = new Geometry[1];
+            geoms[0] = unionGeom;
+        }
+
+        if (geoms == null) {
+            return null;
         }
         return new GeometryCollection(geoms, gf);
     }
