@@ -81,6 +81,8 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
 
     private static final Logger log = Logger.getLogger(NasDialog.class);
     private static final double TOTAL_MAP_BUFFER = 50d;
+    private static final Color FEATURE_COLOR_SELECTED = new Color(1f, 0f, 0f, 0.4f);
+    private static final Color FEATURE_COLOR = new Color(0.5f, 0.5f, 0.5f, 0.1f);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -90,9 +92,10 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
     GeomWrapper totalMapWrapper;
     private MappingComponent map;
     private LinkedList<GeomWrapper> geomWrappers;
+    private HashMap<GeomWrapper, Feature> bufferedFeatures = new HashMap<GeomWrapper, Feature>();
     private NasTableModel tableModel;
     private GeomWrapper selectedGeomWrapper;
-    private HashMap<GeomWrapper, Feature> bufferFeatures = new HashMap<GeomWrapper, Feature>();
+    private HashMap<GeomWrapper, Feature> bufferFeatureMap = new HashMap<GeomWrapper, Feature>();
     private NasFeePreviewPanel feePreview = new NasFeePreviewPanel();
     private ArrayList<NasProductTemplate> productTemplates = new ArrayList<NasProductTemplate>();
     private DecimalFormat formatter = new DecimalFormat("#,###,##0.00 \u00A4\u00A4");
@@ -212,7 +215,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
         lblAuftragsnummer = new javax.swing.JLabel();
         tfAuftragsnummer = new javax.swing.JTextField();
         pnlFee = new javax.swing.JPanel();
-        lblBusy = new org.jdesktop.swingx.JXBusyLabel(new Dimension(75,75));
+        lblBusy = new org.jdesktop.swingx.JXBusyLabel(new Dimension(75, 75));
         jPanel2 = new javax.swing.JPanel();
         lblGeomBuffer = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -222,7 +225,9 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
         btnOk = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblError, org.openide.util.NbBundle.getMessage(NasDialog.class, "NasDialog.lblError.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblError,
+            org.openide.util.NbBundle.getMessage(NasDialog.class, "NasDialog.lblError.text")); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(org.openide.util.NbBundle.getMessage(NasDialog.class, "NasDialog.title")); // NOI18N
@@ -232,16 +237,18 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
 
         pnlMap.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        javax.swing.GroupLayout pnlMapLayout = new javax.swing.GroupLayout(pnlMap);
+        final javax.swing.GroupLayout pnlMapLayout = new javax.swing.GroupLayout(pnlMap);
         pnlMap.setLayout(pnlMapLayout);
         pnlMapLayout.setHorizontalGroup(
-            pnlMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 336, Short.MAX_VALUE)
-        );
+            pnlMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                336,
+                Short.MAX_VALUE));
         pnlMapLayout.setVerticalGroup(
-            pnlMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 413, Short.MAX_VALUE)
-        );
+            pnlMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                413,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -270,7 +277,9 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
         gridBagConstraints.insets = new java.awt.Insets(0, 20, 10, 0);
         pnlSettings.add(jsGeomBuffer, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblType, org.openide.util.NbBundle.getMessage(NasDialog.class, "NasDialog.lblType.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblType,
+            org.openide.util.NbBundle.getMessage(NasDialog.class, "NasDialog.lblType.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
@@ -278,15 +287,23 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         pnlSettings.add(lblType, gridBagConstraints);
 
-        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${productTemplates}");
-        org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, cbType);
+        final org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
+                "${productTemplates}");
+        final org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings
+                    .createJComboBoxBinding(
+                        org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                        this,
+                        eLProperty,
+                        cbType);
         bindingGroup.addBinding(jComboBoxBinding);
 
         cbType.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbTypeActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cbTypeActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
@@ -294,16 +311,12 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
         gridBagConstraints.insets = new java.awt.Insets(0, 20, 10, 0);
         pnlSettings.add(cbType, gridBagConstraints);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        final javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -316,10 +329,12 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
 
         tblGeom.setModel(tableModel);
         tblGeom.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                tblGeomFocusLost(evt);
-            }
-        });
+
+                @Override
+                public void focusLost(final java.awt.event.FocusEvent evt) {
+                    tblGeomFocusLost(evt);
+                }
+            });
         jScrollPane1.setViewportView(tblGeom);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -337,7 +352,9 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
         pnlSettings.add(jSeparator1, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblAuftragsnummer, org.openide.util.NbBundle.getMessage(NasDialog.class, "NasDialog.lblAuftragsnummer.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblAuftragsnummer,
+            org.openide.util.NbBundle.getMessage(NasDialog.class, "NasDialog.lblAuftragsnummer.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -345,7 +362,9 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         pnlSettings.add(lblAuftragsnummer, gridBagConstraints);
 
-        tfAuftragsnummer.setText(org.openide.util.NbBundle.getMessage(NasDialog.class, "NasDialog.tfAuftragsnummer.text")); // NOI18N
+        tfAuftragsnummer.setText(org.openide.util.NbBundle.getMessage(
+                NasDialog.class,
+                "NasDialog.tfAuftragsnummer.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -378,7 +397,9 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
         jPanel2.setPreferredSize(new java.awt.Dimension(160, 27));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblGeomBuffer, org.openide.util.NbBundle.getMessage(NasDialog.class, "NasDialog.lblGeomBuffer.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblGeomBuffer,
+            org.openide.util.NbBundle.getMessage(NasDialog.class, "NasDialog.lblGeomBuffer.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -389,7 +410,13 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
         jLabel1.setMinimumSize(new java.awt.Dimension(25, 17));
         jLabel1.setPreferredSize(new java.awt.Dimension(25, 17));
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, tfGeomBuffer, org.jdesktop.beansbinding.ELProperty.create("${text}"), jLabel1, org.jdesktop.beansbinding.BeanProperty.create("text"), "geomBufferBinding");
+        final org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                tfGeomBuffer,
+                org.jdesktop.beansbinding.ELProperty.create("${text}"),
+                jLabel1,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "geomBufferBinding");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -398,7 +425,9 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         jPanel2.add(jLabel1, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(NasDialog.class, "NasDialog.jLabel2.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel2,
+            org.openide.util.NbBundle.getMessage(NasDialog.class, "NasDialog.jLabel2.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -428,12 +457,16 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
 
         pnlControls.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(btnOk, org.openide.util.NbBundle.getMessage(NasDialog.class, "NasDialog.btnOk.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnOk,
+            org.openide.util.NbBundle.getMessage(NasDialog.class, "NasDialog.btnOk.text")); // NOI18N
         btnOk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOkActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnOkActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -441,12 +474,16 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         pnlControls.add(btnOk, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(btnCancel, org.openide.util.NbBundle.getMessage(NasDialog.class, "NasDialog.btnCancel.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnCancel,
+            org.openide.util.NbBundle.getMessage(NasDialog.class, "NasDialog.btnCancel.text")); // NOI18N
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnCancelActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -462,44 +499,44 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
         bindingGroup.bind();
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
         dispose();
-    }//GEN-LAST:event_btnCancelActionPerformed
+    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblGeomFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblGeomFocusLost
+    private void tblGeomFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblGeomFocusLost
         map.gotoInitialBoundingBox();
         tblGeom.clearSelection();
-    }//GEN-LAST:event_tblGeomFocusLost
+    }                                                                    //GEN-LAST:event_tblGeomFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbTypeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTypeActionPerformed
+    private void cbTypeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbTypeActionPerformed
         if (isInitialized) {
             calculateFee();
         }
-    }//GEN-LAST:event_cbTypeActionPerformed
+    }                                                                          //GEN-LAST:event_cbTypeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
+    private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOkActionPerformed
         SwingUtilities.invokeLater(new Runnable() {
 
                 @Override
@@ -524,7 +561,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                     }
                 }
             });
-    }//GEN-LAST:event_btnOkActionPerformed
+    } //GEN-LAST:event_btnOkActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -779,15 +816,18 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                 @Override
                 public void run() {
                     // create a new Feature for the finally buffered Geometry and add it to the map
-                    bufferFeatures.clear();
+                    bufferFeatureMap.clear();
+                    bufferedFeatures.clear();
                     firstBufferCall = true;
                     map.getFeatureCollection().removeAllFeatures();
 
                     for (final GeomWrapper geomWrapper : geomWrappers) {
-                        final GeomWrapper gw = new GeomWrapper(geomWrapper.getGeometry().buffer(buffer),
+                        final GeomWrapper bufferedGeomWrapper = new GeomWrapper(geomWrapper.getGeometry().buffer(
+                                    buffer),
                                 null,
-                                false);
-                        map.getFeatureCollection().addFeature(gw.getFeature());
+                                geomWrapper.isSelected());
+                        bufferedFeatures.put(geomWrapper, bufferedGeomWrapper.getFeature());
+                        map.getFeatureCollection().addFeature(bufferedGeomWrapper.getFeature());
                     }
                 }
             };
@@ -821,7 +861,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
             }
 //            visualizeBufferGeomsInMap(buffer);
         }
-        if (bufferFeatures.isEmpty()) {
+        if (bufferFeatureMap.isEmpty()) {
             for (final GeomWrapper gw : geomWrappers) {
                 final DefaultStyledFeature dsf = new DefaultStyledFeature();
                 final Geometry bufferGeom = gw.getGeometry().buffer(buffer);
@@ -832,16 +872,20 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                     intersectGeom = bufferGeom.intersection(gw.getGeometry());
                 }
                 dsf.setGeometry(intersectGeom);
-                dsf.setFillingPaint(new Color(212, 100, 97, 212));
+                if (gw.isSelected()) {
+                    dsf.setFillingPaint(FEATURE_COLOR_SELECTED);
+                } else {
+                    dsf.setFillingPaint(FEATURE_COLOR);
+                }
                 dsf.setTransparency(0.5f);
-                bufferFeatures.put(gw, dsf);
+                bufferFeatureMap.put(gw, dsf);
             }
-            map.getFeatureCollection().addFeatures(bufferFeatures.values());
+            map.getFeatureCollection().addFeatures(bufferFeatureMap.values());
         } else {
-            for (final GeomWrapper gw : bufferFeatures.keySet()) {
+            for (final GeomWrapper gw : bufferFeatureMap.keySet()) {
                 Geometry g = gw.getGeometry();
                 g = g.buffer(buffer);
-                final Feature f = bufferFeatures.get(gw);
+                final Feature f = bufferFeatureMap.get(gw);
                 f.setGeometry(g);
                 map.getFeatureCollection().reconsiderFeature(f);
             }
@@ -1259,6 +1303,24 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
          */
         public void setSelected(final boolean selected) {
             this.selected = selected;
+            final DefaultStyledFeature bufferedFeature = (DefaultStyledFeature)bufferedFeatures.get(this);
+            if (selected) {
+//                dsf.setTransparency(0.8F);
+                feature.setFillingPaint(FEATURE_COLOR_SELECTED);
+                if (bufferedFeature != null) {
+                    bufferedFeature.setFillingPaint(FEATURE_COLOR_SELECTED);
+                }
+            } else {
+//                dsf.setTransparency(0.9F);
+                feature.setFillingPaint(FEATURE_COLOR);
+                if (bufferedFeature != null) {
+                    bufferedFeature.setFillingPaint(FEATURE_COLOR);
+                }
+            }
+//            map.getFeatureCollection().removeFeature(feature);
+//            map.getFeatureCollection().addFeature(feature);
+            map.reconsiderFeature(feature);
+            map.reconsiderFeature(bufferedFeature);
         }
 
         /**
@@ -1306,8 +1368,13 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
         private StyledFeature generateFeature() {
             final StyledFeature dsf = new DefaultStyledFeature();
             dsf.setGeometry(this.geometry);
-            dsf.setTransparency(0.8F);
-            dsf.setFillingPaint(new Color(192, 80, 77, 192));
+            if (selected) {
+//                dsf.setTransparency(0.8F);
+                dsf.setFillingPaint(FEATURE_COLOR_SELECTED);
+            } else {
+//                dsf.setTransparency(0.9F);
+                dsf.setFillingPaint(FEATURE_COLOR);
+            }
             return dsf;
         }
     }
