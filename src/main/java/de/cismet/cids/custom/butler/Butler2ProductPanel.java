@@ -34,6 +34,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import de.cismet.cids.custom.nas.NasFeePreviewPanel;
+import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.butler.ButlerFormat;
 import de.cismet.cids.custom.utils.butler.ButlerProduct;
 import de.cismet.cids.custom.utils.butler.ButlerResolution;
@@ -446,5 +447,14 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelec
     @Override
     public void actionPerformed(final ActionEvent e) {
         calculateFee();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public ArrayList<ProductGroupAmount> getProductGroupAmounts() {
+        return pnlFeePreview.getProductGroupAmounts();
     }
 }

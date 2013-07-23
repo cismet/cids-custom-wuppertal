@@ -56,7 +56,10 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.TabbedPaneUI;
 import javax.swing.plaf.basic.BasicButtonUI;
 
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.utils.butler.ButlerFormat;
 import de.cismet.cids.custom.utils.butler.ButlerProduct;
 
 import de.cismet.cismap.commons.CrsTransformer;
@@ -87,6 +90,8 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
     private static HashMap<String, CoordWrapper> rahmenKartenMap = new HashMap<String, CoordWrapper>();
     private static final String FELDVERGLEICH = "0903";
     private static final String FELDVERGLEICH_BOX = "600m x 350m";
+    private static final String RASTER_DATEN_BILLING_KEY = "skmekomtif";
+    private static final String DXF_BILLING_KEY = "skmekomdxf";
 
     static {
         final Properties prop = new Properties();
@@ -664,7 +669,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                     for (int i = 0; i < (tbpProducts.getTabCount() - 1); i++) {
                         final Butler2ProductPanel productPanel = (Butler2ProductPanel)tbpProducts.getComponentAt(i);
                         final ButlerProduct bp = productPanel.getSelectedProduct();
-
+                        final ButlerFormat format = bp.getFormat();
                         final ButlerDownload download = new ButlerDownload(
                                 jobnameBuilder.toString(),
                                 tfOrderId.getText()
@@ -674,7 +679,22 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                                 box.getKey(),
                                 middleX,
                                 middleY);
-                        downloads.add(download);
+                        String productKey = "";
+                        if ((format != null) && format.getKey().equals("dxf")) {
+                            productKey = DXF_BILLING_KEY;
+                        } else {
+                            productKey = RASTER_DATEN_BILLING_KEY;
+                        }
+                        final String requestNr = tfOrderId.getText().trim() + "#" + i;
+                        final ArrayList<ProductGroupAmount> list = productPanel.getProductGroupAmounts();
+                        final ProductGroupAmount[] groupAmounts = list.toArray(new ProductGroupAmount[list.size()]);
+                        try {
+                            if (BillingPopup.doBilling(productKey, "butler 2", requestNr, null, groupAmounts)) {
+                                downloads.add(download);
+                            }
+                        } catch (Exception ex) {
+                            LOG.error("error during billing for ALKIS Datenausgabe", ex);
+                        }
                     }
                     DownloadManager.instance()
                             .add(new MultipleDownload(downloads, "Butler Downloads " + tfOrderId.getText()));
