@@ -114,7 +114,7 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
     public static boolean validateUserHasNasAccess() {
         try {
             return SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), "csa://nasQuery")
+                        .getConfigAttr(SessionManager.getSession().getUser(), "csa://nasDataQuery")
                         != null;
         } catch (ConnectionException ex) {
             log.error("Could not validate action tag for Butler!", ex);
@@ -185,7 +185,7 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
          * Creates a new DataExportPopupMenu object.
          */
         public DataExportPopupMenu() {
-            if (validateUserHasButler1Access()) {
+            if (validateUserHasNasAccess()) {
                 this.add(createNASMenuItem());
             }
             if (validateUserHasButler1Access()) {
