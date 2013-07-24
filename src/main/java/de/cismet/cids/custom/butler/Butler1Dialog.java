@@ -613,6 +613,20 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                             JOptionPane.ERROR_MESSAGE);
                         return;
                     }
+                    // check that the orderId only consits of [a-z], [A-Z],[0-9] and _
+                    final String orderId = tfOrderId.getText();
+                    if (!orderId.matches("[a-zA-Z0-9_]*")) {
+                        JOptionPane.showMessageDialog(
+                            StaticSwingTools.getParentFrame(Butler1Dialog.this),
+                            org.openide.util.NbBundle.getMessage(
+                                Butler1Dialog.class,
+                                "Butler1Dialog.OrderIdCheck.JOptionPane.message"),
+                            org.openide.util.NbBundle.getMessage(
+                                Butler1Dialog.class,
+                                "Butler1Dialog.OrderIdCheck.JOptionPane.title"),
+                            JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
                     // for each product tab we have to create one download
                     final StringBuilder jobnameBuilder = new StringBuilder();
                     if (DownloadManagerDialog.showAskingForUserTitle(
@@ -646,7 +660,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                         final ButlerDownload download = new ButlerDownload(
                                 jobnameBuilder.toString(),
                                 tfOrderId.getText()
-                                        + "#"
+                                        + "_"
                                         + (i + 1),
                                 bp,
                                 minX,

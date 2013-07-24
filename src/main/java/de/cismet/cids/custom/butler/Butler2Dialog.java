@@ -648,6 +648,20 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                         return;
                     }
 
+                    // check that the orderId only consits of [a-z], [A-Z],[0-9] and _
+                    final String orderId = tfOrderId.getText();
+                    if (!orderId.matches("[a-zA-Z0-9_]*")) {
+                        JOptionPane.showMessageDialog(
+                            StaticSwingTools.getParentFrame(Butler2Dialog.this),
+                            org.openide.util.NbBundle.getMessage(
+                                Butler2Dialog.class,
+                                "Butler2Dialog.OrderIdCheck.JOptionPane.message"),
+                            org.openide.util.NbBundle.getMessage(
+                                Butler2Dialog.class,
+                                "Butler2Dialog.OrderIdCheck.JOptionPane.title"),
+                            JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
                     final Geometry g = rectangleFeature.getGeometry();
                     final Point p = g.getCentroid();
                     final double middleX = p.getX();
