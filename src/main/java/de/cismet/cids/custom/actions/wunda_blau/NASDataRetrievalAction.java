@@ -53,7 +53,7 @@ public class NASDataRetrievalAction extends AbstractAction implements CommonFeat
 
     Feature f = null;
     private final transient org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
-
+    private boolean hasNasAccess = false;
     //~ Constructors -----------------------------------------------------------
 
     /**
@@ -61,6 +61,13 @@ public class NASDataRetrievalAction extends AbstractAction implements CommonFeat
      */
     public NASDataRetrievalAction() {
         super("NAS Daten abfragen");
+        try {
+            hasNasAccess = SessionManager.getConnection()
+                        .getConfigAttr(SessionManager.getSession().getUser(), "csa://nasDataQuery")
+                        != null;
+        } catch (ConnectionException ex) {
+            log.error("Could not validate nas action tag (csa://nasDataQuery)!", ex);
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -77,7 +84,7 @@ public class NASDataRetrievalAction extends AbstractAction implements CommonFeat
 
     @Override
     public boolean isActive() {
-        return true;
+        return hasNasAccess;
     }
 
     @Override
