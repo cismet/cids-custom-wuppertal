@@ -72,7 +72,7 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Constructor for a Butler 2 request
+     * Constructor for a Butler 2 request.
      *
      * @param  directory  DOCUMENT ME!
      * @param  orderId    DOCUMENT ME!
@@ -101,6 +101,7 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
         final ButlerFormat format = product.getFormat();
         determineDestinationFile(orderId, "." + format.getKey());
     }
+
     /**
      * Creates a new ButlerDownload object.
      *
@@ -489,7 +490,9 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
                     try {
                         Thread.sleep(WAIT_PERIOD);
                     } catch (InterruptedException ex) {
-                        Exceptions.printStackTrace(ex);
+                        log.info("result fetching thread was interrupted", ex);
+                        Thread.currentThread().interrupt();
+                        return null;
                     }
                     files = (Map<String, byte[]>)SessionManager.getProxy()
                                 .executeTask(

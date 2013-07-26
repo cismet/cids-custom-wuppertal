@@ -374,6 +374,7 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelec
         final ButlerProduct bp = (ButlerProduct)lstProdukt.getSelectedValue();
         if (bp != null) {
             if (rbDxf.isSelected()) {
+                // this must be dxf to find the file in the right folder
                 bp.setFormat(new ButlerFormat("dxf"));
                 final ButlerResolution res = new ButlerResolution();
                 res.setKey("800");

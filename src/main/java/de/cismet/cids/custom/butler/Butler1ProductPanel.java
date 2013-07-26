@@ -11,6 +11,7 @@
  */
 package de.cismet.cids.custom.butler;
 
+import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,6 +38,7 @@ import de.cismet.cids.custom.nas.NasFeeCalculator;
 import de.cismet.cids.custom.utils.butler.ButlerFormat;
 import de.cismet.cids.custom.utils.butler.ButlerProduct;
 import de.cismet.cids.custom.utils.butler.ButlerResolution;
+import de.cismet.cids.custom.wunda_blau.search.actions.NasZaehlObjekteSearch;
 
 import de.cismet.tools.StaticDecimalTools;
 
@@ -633,7 +635,22 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
      * @return  DOCUMENT ME!
      */
     private String getAdressCount() {
-        return "noch nicht implementiert";
+        if (geom != null) {
+            final NasZaehlObjekteSearch flurstueckSearch = new NasZaehlObjekteSearch(
+                    geom,
+                    NasZaehlObjekteSearch.NasSearchType.ADRESSE);
+
+            final ArrayList<Integer> c;
+            try {
+                c = (ArrayList<Integer>)SessionManager.getProxy()
+                            .customServerSearch(SessionManager.getSession().getUser(), flurstueckSearch);
+                return "" + c.get(0);
+            } catch (ConnectionException ex) {
+                Exceptions.printStackTrace(ex);
+            }
+            return "0";
+        }
+        return "0";
     }
 
     /**

@@ -687,7 +687,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                         final ButlerDownload download = new ButlerDownload(
                                 jobnameBuilder.toString(),
                                 tfOrderId.getText()
-                                        + "#"
+                                        + "_"
                                         + (i + 1),
                                 bp,
                                 box.getKey(),
@@ -699,7 +699,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                         } else {
                             productKey = RASTER_DATEN_BILLING_KEY;
                         }
-                        final String requestNr = tfOrderId.getText().trim() + "#" + i;
+                        final String requestNr = tfOrderId.getText().trim() + "_" + i;
                         final ArrayList<ProductGroupAmount> list = productPanel.getProductGroupAmounts();
                         final ProductGroupAmount[] groupAmounts = list.toArray(new ProductGroupAmount[list.size()]);
                         try {
