@@ -118,6 +118,10 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
 //    private boolean landParcelListInitialized = false;
     private boolean baulastArtenListInitialized = false;
     private final FlurstueckSelectionDialoge fsDialoge;
+    private boolean writePruefkommentar = false;
+    private Object oldGeprueft_Von;
+    private Object oldPruefdatum;
+    private Object oldPruefkommentar;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddArt;
     private javax.swing.JButton btnAddBeguenstigt;
@@ -906,22 +910,22 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddBelastetActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddBelastetActionPerformed
+    private void btnAddBelastetActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddBelastetActionPerformed
         fsDialoge.setCurrentListToAdd(CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "flurstuecke_belastet"));
         handleAddFlurstueck(true);
-    }                                                                                  //GEN-LAST:event_btnAddBelastetActionPerformed
+    }//GEN-LAST:event_btnAddBelastetActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddBeguenstigtActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddBeguenstigtActionPerformed
+    private void btnAddBeguenstigtActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddBeguenstigtActionPerformed
         fsDialoge.setCurrentListToAdd(CidsBeanSupport.getBeanCollectionFromProperty(
                 cidsBean,
                 "flurstuecke_beguenstigt"));
         handleAddFlurstueck(false);
-    }                                                                                     //GEN-LAST:event_btnAddBeguenstigtActionPerformed
+    }//GEN-LAST:event_btnAddBeguenstigtActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -945,7 +949,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveBeguenstigtActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveBeguenstigtActionPerformed
+    private void btnRemoveBeguenstigtActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveBeguenstigtActionPerformed
         final Object[] selection = lstFlurstueckeBeguenstigt.getSelectedValues();
         if ((selection != null) && (selection.length > 0)) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -968,14 +972,14 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                 }
             }
         }
-    }                                                                                        //GEN-LAST:event_btnRemoveBeguenstigtActionPerformed
+    }//GEN-LAST:event_btnRemoveBeguenstigtActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveBelastetActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveBelastetActionPerformed
+    private void btnRemoveBelastetActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveBelastetActionPerformed
         final Object[] selection = lstFlurstueckeBelastet.getSelectedValues();
         if ((selection != null) && (selection.length > 0)) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -998,27 +1002,27 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                 }
             }
         }
-    }                                                                                     //GEN-LAST:event_btnRemoveBelastetActionPerformed
+    }//GEN-LAST:event_btnRemoveBelastetActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddArtActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddArtActionPerformed
+    private void btnAddArtActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddArtActionPerformed
         if (!baulastArtenListInitialized) {
             CismetThreadPool.execute(new BaulastArtenComboModelWorker());
         }
 
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this), dlgAddBaulastArt, true);
-    } //GEN-LAST:event_btnAddArtActionPerformed
+    }//GEN-LAST:event_btnAddArtActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveArtActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveArtActionPerformed
+    private void btnRemoveArtActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveArtActionPerformed
         final Object[] selection = lstBaulastArt.getSelectedValues();
         if ((selection != null) && (selection.length > 0)) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -1039,23 +1043,23 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                 }
             }
         }
-    }                                                                                //GEN-LAST:event_btnRemoveArtActionPerformed
+    }//GEN-LAST:event_btnRemoveArtActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenAbort1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenAbort1ActionPerformed
+    private void btnMenAbort1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenAbort1ActionPerformed
         dlgAddBaulastArt.setVisible(false);
-    }                                                                                //GEN-LAST:event_btnMenAbort1ActionPerformed
+    }//GEN-LAST:event_btnMenAbort1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnMenOk1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMenOk1ActionPerformed
+    private void btnMenOk1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenOk1ActionPerformed
         final Object selection = cbBaulastArt.getSelectedItem();
         if (selection instanceof LightweightMetaObject) {
             final CidsBean selectedBean = ((LightweightMetaObject)selection).getBean();
@@ -1067,39 +1071,39 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
             }
         }
         dlgAddBaulastArt.setVisible(false);
-    }                                                                             //GEN-LAST:event_btnMenOk1ActionPerformed
+    }//GEN-LAST:event_btnMenOk1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstFlurstueckeBelastetMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstFlurstueckeBelastetMouseClicked
+    private void lstFlurstueckeBelastetMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstFlurstueckeBelastetMouseClicked
         if (evt.getClickCount() > 1) {
             handleJumpToListeSelectionBean(lstFlurstueckeBelastet);
         }
-    }                                                                                      //GEN-LAST:event_lstFlurstueckeBelastetMouseClicked
+    }//GEN-LAST:event_lstFlurstueckeBelastetMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstFlurstueckeBeguenstigtMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstFlurstueckeBeguenstigtMouseClicked
+    private void lstFlurstueckeBeguenstigtMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstFlurstueckeBeguenstigtMouseClicked
         if (evt.getClickCount() > 1) {
             handleJumpToListeSelectionBean(lstFlurstueckeBeguenstigt);
         }
-    }                                                                                         //GEN-LAST:event_lstFlurstueckeBeguenstigtMouseClicked
+    }//GEN-LAST:event_lstFlurstueckeBeguenstigtMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblLastInMapMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblLastInMapMouseClicked
+    private void lblLastInMapMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLastInMapMouseClicked
         ObjectRendererUtils.switchToCismapMap();
         ObjectRendererUtils.addBeanGeomsAsFeaturesToCismapMap(allSelectedObjects, editable);
-    }                                                                            //GEN-LAST:event_lblLastInMapMouseClicked
+    }//GEN-LAST:event_lblLastInMapMouseClicked
 
     /**
      * DOCUMENT ME!
@@ -1163,13 +1167,14 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                 landParcelCol = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "flurstuecke_beguenstigt");
                 Collections.sort(landParcelCol, AlphanumComparator.getInstance());
 
+                writePruefkommentar = true;
+                
                 if (editable) {
                     final User user = SessionManager.getSession().getUser();
                     final boolean finalCheckEnable = SessionManager.getProxy().hasConfigAttr(user, ATAG_FINAL_CHECK)
-                                && !SessionManager.getSession()
-                                .getUser()
-                                .getName()
-                                .equals(cidsBean.getProperty("bearbeitet_von"));
+                                && (!SessionManager.getSession().getUser().getName().equals(
+                                        cidsBean.getProperty("bearbeitet_von"))
+                                    || (cidsBean.getProperty("geprueft") != null && (Boolean)cidsBean.getProperty("geprueft")));
 
                     chkGeprueft.setEnabled(finalCheckEnable);
                     cidsBean.addPropertyChangeListener(listener);
@@ -1243,26 +1248,36 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                             public void run() {
                                 final int answer = JOptionPane.showConfirmDialog(
                                         Alb_baulastEditorPanel.this,
-                                        "<html>Das Abschließen der Prüfung speichert und schließt den aktuellen Vorgang.<br />Möchten Sie die Prüfung abschließen?</html>",
+                                        "<html>Das Abschließen der Prüfung speichert den aktuellen Vorgang.<br />Möchten Sie die Prüfung abschließen?</html>",
                                         "Prüfung abschließen",
                                         JOptionPane.YES_NO_OPTION);
                                 if (answer == JOptionPane.YES_OPTION) {
                                     try {
                                         final String name = SessionManager.getSession().getUser().getName();
                                         final Date zeit = new Date(System.currentTimeMillis());
-                                        cidsBean.setProperty(
-                                            "geprueft_von",
-                                            name);
-                                        cidsBean.setProperty("pruefdatum", zeit);
-                                        cidsBean.setProperty(
-                                            "pruefkommentar",
-                                            "Prüfung am "
-                                                    + DateFormat.getDateInstance().format(zeit)
-                                                    + " durch "
-                                                    + name);
+                                        if(writePruefkommentar) {
+                                            cidsBean.setProperty(
+                                                "geprueft_von",
+                                                name);
+                                            cidsBean.setProperty("pruefdatum", zeit);
+                                            cidsBean.setProperty(
+                                                "pruefkommentar",
+                                                "Prüfung am "
+                                                        + DateFormat.getDateInstance().format(zeit)
+                                                        + " durch "
+                                                        + name);
+                                        } else {
+                                            cidsBean.setProperty(
+                                                "geprueft_von",
+                                                oldGeprueft_Von);
+                                            cidsBean.setProperty("pruefdatum", oldPruefdatum);
+                                            cidsBean.setProperty(
+                                                "pruefkommentar",
+                                                oldPruefkommentar);
+                                        }
                                         final NavigatorAttributeEditorGui editor = ((NavigatorAttributeEditorGui)
                                                 ComponentRegistry.getRegistry().getAttributeEditor());
-                                        editor.saveIt();
+                                        editor.saveIt(false);
                                     } catch (Exception ex) {
                                         Exceptions.printStackTrace(ex);
                                     }
@@ -1275,10 +1290,15 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                         });
                 } else {
                     try {
-                        chkGeprueft.setEnabled(false);
+                        //chkGeprueft.setEnabled(false);
+                        writePruefkommentar = false;
                         final String name = SessionManager.getSession().getUser().getName();
                         final Date zeit = new Date(System.currentTimeMillis());
 
+                        oldGeprueft_Von = cidsBean.getProperty("geprueft_von");
+                        oldPruefdatum = cidsBean.getProperty("pruefdatum");
+                        oldPruefkommentar = cidsBean.getProperty("pruefkommentar");
+                        
                         cidsBean.setProperty(
                             "geprueft_von",
                             name);
