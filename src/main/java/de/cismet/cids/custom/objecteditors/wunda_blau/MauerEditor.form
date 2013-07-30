@@ -1757,7 +1757,7 @@
                                 </Property>
                               </Properties>
                               <BindingProperties>
-                                <BindingProperty name="text" source="Form" sourcePath="${cidsBeansan_massnahme_gelaender}" target="taSanMassnahmeGelaender" targetPath="text" updateStrategy="0" immediately="false">
+                                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.san_massnahme_gelaender}" target="taSanMassnahmeGelaender" targetPath="text" updateStrategy="0" immediately="false">
                                   <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
                                 </BindingProperty>
                               </BindingProperties>
