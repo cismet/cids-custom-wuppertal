@@ -1168,13 +1168,14 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                 Collections.sort(landParcelCol, AlphanumComparator.getInstance());
 
                 writePruefkommentar = true;
-                
+
                 if (editable) {
                     final User user = SessionManager.getSession().getUser();
                     final boolean finalCheckEnable = SessionManager.getProxy().hasConfigAttr(user, ATAG_FINAL_CHECK)
                                 && (!SessionManager.getSession().getUser().getName().equals(
                                         cidsBean.getProperty("bearbeitet_von"))
-                                    || (cidsBean.getProperty("geprueft") != null && (Boolean)cidsBean.getProperty("geprueft")));
+                                    || ((cidsBean.getProperty("geprueft") != null)
+                                        && (Boolean)cidsBean.getProperty("geprueft")));
 
                     chkGeprueft.setEnabled(finalCheckEnable);
                     cidsBean.addPropertyChangeListener(listener);
@@ -1255,7 +1256,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                                     try {
                                         final String name = SessionManager.getSession().getUser().getName();
                                         final Date zeit = new Date(System.currentTimeMillis());
-                                        if(writePruefkommentar) {
+                                        if (writePruefkommentar) {
                                             cidsBean.setProperty(
                                                 "geprueft_von",
                                                 name);
@@ -1290,7 +1291,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                         });
                 } else {
                     try {
-                        //chkGeprueft.setEnabled(false);
+                        // chkGeprueft.setEnabled(false);
                         writePruefkommentar = false;
                         final String name = SessionManager.getSession().getUser().getName();
                         final Date zeit = new Date(System.currentTimeMillis());
@@ -1298,7 +1299,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                         oldGeprueft_Von = cidsBean.getProperty("geprueft_von");
                         oldPruefdatum = cidsBean.getProperty("pruefdatum");
                         oldPruefkommentar = cidsBean.getProperty("pruefkommentar");
-                        
+
                         cidsBean.setProperty(
                             "geprueft_von",
                             name);
