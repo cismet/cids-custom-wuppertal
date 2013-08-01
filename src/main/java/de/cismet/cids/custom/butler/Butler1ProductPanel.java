@@ -581,7 +581,16 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
      * @return  DOCUMENT ME!
      */
     private String getDachPunkteCount() {
-        return "noch nicht implementiert";
+        if (geom != null) {
+            final int dachPunkteCount;
+            try {
+                dachPunkteCount = NasFeeCalculator.getDachPunkteAmount(geom);
+                return "" + dachPunkteCount;
+            } catch (ConnectionException ex) {
+                LOG.error("Error during Dachpunkte search in butler 1 prduct panel", ex);
+            }
+        }
+        return "0";
     }
 
     /**
@@ -590,7 +599,16 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
      * @return  DOCUMENT ME!
      */
     private String getBodenPuntkeCount() {
-        return "noch nicht implementiert";
+        if (geom != null) {
+            final int bodenPuntkeCount;
+            try {
+                bodenPuntkeCount = NasFeeCalculator.getBodenPunkteAmount(geom);
+                return "" + bodenPuntkeCount;
+            } catch (ConnectionException ex) {
+                LOG.error("Error during Dachpunkte search in butler 1 prduct panel", ex);
+            }
+        }
+        return "0";
     }
 
     /**

@@ -157,6 +157,44 @@ public abstract class NasFeeCalculator {
     /**
      * DOCUMENT ME!
      *
+     * @param   g  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  ConnectionException  DOCUMENT ME!
+     */
+    public static int getDachPunkteAmount(final Geometry g) throws ConnectionException {
+        final NasZaehlObjekteSearch dachpuntkeSearch = new NasZaehlObjekteSearch(
+                g,
+                NasZaehlObjekteSearch.NasSearchType.DACHPUNKTE);
+
+        final ArrayList<Integer> c = (ArrayList<Integer>)SessionManager.getProxy()
+                    .customServerSearch(SessionManager.getSession().getUser(), dachpuntkeSearch);
+        return c.get(0);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   g  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  ConnectionException  DOCUMENT ME!
+     */
+    public static int getBodenPunkteAmount(final Geometry g) throws ConnectionException {
+        final NasZaehlObjekteSearch bodenPunkte = new NasZaehlObjekteSearch(
+                g,
+                NasZaehlObjekteSearch.NasSearchType.BODENPUNKTE);
+
+        final ArrayList<Integer> c = (ArrayList<Integer>)SessionManager.getProxy()
+                    .customServerSearch(SessionManager.getSession().getUser(), bodenPunkte);
+        return c.get(0);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param   amount     DOCUMENT ME!
      * @param   basePrice  DOCUMENT ME!
      *
