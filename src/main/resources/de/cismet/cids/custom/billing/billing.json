@@ -1302,7 +1302,7 @@
         }
     },{
         "name":"Raster-Daten (Stadtgrundkarte kommunal)",
-        "id":"skmekomtif",
+        "id":"skmekomtiff",
         "description":"# GUI in WuNDa fehlt noch, kann noch nicht implementiert werden",
         "discounts":{
             "eigG":0.5,
