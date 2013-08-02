@@ -24,10 +24,7 @@ import org.openide.util.NbBundle;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.EventQueue;
-
-import java.text.DecimalFormat;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,11 +32,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ExecutionException;
 
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
@@ -99,7 +94,6 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
     private HashMap<GeomWrapper, Feature> bufferFeatureMap = new HashMap<GeomWrapper, Feature>();
     private NasFeePreviewPanel feePreview = new NasFeePreviewPanel();
     private ArrayList<NasProductTemplate> productTemplates = new ArrayList<NasProductTemplate>();
-    private DecimalFormat formatter = new DecimalFormat("#,###,##0.00 \u00A4\u00A4");
     private boolean firstBufferCall = true;
     private boolean isInitialized = false;
     private int pointAmount = 0;
@@ -117,10 +111,9 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSlider jsGeomBuffer;
     private javax.swing.JLabel lblAuftragsnummer;
-    private org.jdesktop.swingx.JXBusyLabel lblBusy;
-    private javax.swing.JLabel lblError;
     private javax.swing.JLabel lblGeomBuffer;
     private javax.swing.JLabel lblType;
+    private de.cismet.cids.custom.nas.NasFeePreviewPanel nasFeePreviewPanel1;
     private javax.swing.JPanel pnlControls;
     private javax.swing.JPanel pnlFee;
     private javax.swing.JPanel pnlMap;
@@ -224,7 +217,6 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
         java.awt.GridBagConstraints gridBagConstraints;
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        lblError = new javax.swing.JLabel();
         pnlMap = new javax.swing.JPanel();
         pnlSettings = new javax.swing.JPanel();
         jsGeomBuffer = new javax.swing.JSlider();
@@ -237,7 +229,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
         lblAuftragsnummer = new javax.swing.JLabel();
         tfAuftragsnummer = new javax.swing.JTextField();
         pnlFee = new javax.swing.JPanel();
-        lblBusy = new org.jdesktop.swingx.JXBusyLabel(new Dimension(75, 75));
+        nasFeePreviewPanel1 = new de.cismet.cids.custom.nas.NasFeePreviewPanel();
         jPanel2 = new javax.swing.JPanel();
         lblGeomBuffer = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -246,10 +238,6 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
         pnlControls = new javax.swing.JPanel();
         btnOk = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblError,
-            org.openide.util.NbBundle.getMessage(NasDialog.class, "NasDialog.lblError.text")); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(org.openide.util.NbBundle.getMessage(NasDialog.class, "NasDialog.title")); // NOI18N
@@ -399,12 +387,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
         pnlFee.setMinimumSize(new java.awt.Dimension(144, 100));
         pnlFee.setPreferredSize(new java.awt.Dimension(144, 150));
         pnlFee.setLayout(new java.awt.BorderLayout());
-
-        lblBusy.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblBusy.setMaximumSize(new java.awt.Dimension(140, 40));
-        lblBusy.setMinimumSize(new java.awt.Dimension(140, 60));
-        lblBusy.setPreferredSize(new java.awt.Dimension(140, 60));
-        pnlFee.add(lblBusy, java.awt.BorderLayout.CENTER);
+        pnlFee.add(nasFeePreviewPanel1, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -566,7 +549,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                     try {
                         final NasProductTemplate template = (NasProductTemplate)cbType.getSelectedItem();
                         final String requestId = tfAuftragsnummer.getText().trim();
-                        final ArrayList<ProductGroupAmount> list = getProductGroupAmounts(template);
+                        final ArrayList<ProductGroupAmount> list = feePreview.getProductGroupAmounts();
                         final ProductGroupAmount[] goupAmounts = list.toArray(new ProductGroupAmount[list.size()]);
                         if (BillingPopup.doBilling(
                                         template.getBillingKey(),
@@ -583,62 +566,6 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                 }
             });
     } //GEN-LAST:event_btnOkActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   template  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private ArrayList<ProductGroupAmount> getProductGroupAmounts(final NasProductTemplate template) {
-        final ArrayList<ProductGroupAmount> result = new ArrayList<ProductGroupAmount>();
-        if (template == NasProductTemplate.POINTS) {
-            result.addAll(getProductGroupAmountForObject("eapkt", pointAmount));
-        } else if (template == NasProductTemplate.OHNE_EIGENTUEMER) {
-            result.addAll(getProductGroupAmountForObject("eageb", gebaeudeAmount));
-            result.addAll(getProductGroupAmountForObject("eaflst", flurstueckAmount));
-        } else if (template == NasProductTemplate.KOMPLETT) {
-            result.addAll(getProductGroupAmountForObject("eageb", gebaeudeAmount));
-            result.addAll(getProductGroupAmountForObject("eaflst", flurstueckAmount));
-            result.addAll(getProductGroupAmountForObject("eaeig", flurstueckAmount));
-        }
-        return result;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   objectBaseKey  DOCUMENT ME!
-     * @param   amount         DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private ArrayList<ProductGroupAmount> getProductGroupAmountForObject(final String objectBaseKey, int amount) {
-        final ArrayList<ProductGroupAmount> result = new ArrayList<ProductGroupAmount>();
-        if (amount > 1000000) {
-            final int tmpPoints = amount - 1000000;
-            result.add(new ProductGroupAmount(objectBaseKey + "_1000001", tmpPoints));
-            amount = 1000000;
-        }
-        if (amount > 100000) {
-            final int tmpPoints = amount - 100000;
-            result.add(new ProductGroupAmount(objectBaseKey + "_100001-1000000", tmpPoints));
-            amount = 100000;
-        }
-        if (amount > 10000) {
-            final int tmpPoints = amount - 10000;
-            result.add(new ProductGroupAmount(objectBaseKey + "_10001-100000", tmpPoints));
-            amount = 10000;
-        }
-        if (amount > 1000) {
-            final int tmpPoints = amount - 1000;
-            result.add(new ProductGroupAmount(objectBaseKey + "_1001-10000", tmpPoints));
-            amount = 1000;
-        }
-        result.add(new ProductGroupAmount(objectBaseKey + "_1000", amount));
-        return result;
-    }
 
     /**
      * DOCUMENT ME!
@@ -838,7 +765,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                 public void run() {
                     // create a new Feature for the finally buffered Geometry and add it to the map
                     bufferFeatureMap.clear();
-                    bufferedFeatures.clear();
+//                    bufferedFeatures.clear();
                     firstBufferCall = true;
                     map.getFeatureCollection().removeAllFeatures();
 
@@ -915,163 +842,18 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
     }
 
     /**
-     * DOCUMENT ME!
-     *
-     * @param  wait  DOCUMENT ME!
-     */
-    private void showWait(final boolean wait) {
-        if (wait) {
-            if (!lblBusy.isBusy()) {
-                pnlFee.removeAll();
-                pnlFee.add(lblBusy);
-                lblBusy.setBusy(true);
-                lblBusy.setVisible(true);
-            }
-        } else {
-            lblBusy.setBusy(false);
-            lblBusy.setVisible(wait);
-            pnlFee.removeAll();
-            pnlFee.add(feePreview);
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     */
-    private void showError() {
-//        showWait(false);
-//        SwingUtilities.invokeLater(new Runnable() {
-//
-//                @Override
-//                public void run() {
-        pnlFee.remove(lblBusy);
-        pnlFee.removeAll();
-        pnlFee.add(lblError, BorderLayout.CENTER);
-        lblError.setVisible(true);
-        pnlFee.invalidate();
-        pnlFee.revalidate();
-        repaint();
-//                }
-//            });
-//        repaint();
-    }
-
-    /**
-     * DOCUMENT ME!
+     * /** * DOCUMENT ME!*
      */
     private void calculateFee() {
-        final SwingWorker<HashMap<String, ArrayList<String>>, Void> feeCalculator =
-            new SwingWorker<HashMap<String, ArrayList<String>>, Void>() {
-
-                @Override
-                protected HashMap<String, ArrayList<String>> doInBackground() throws Exception {
-                    SwingUtilities.invokeLater(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                showWait(true);
-                            }
-                        });
-                    // clear the old amount fields
-                    pointAmount = 0;
-                    flurstueckAmount = 0;
-                    gebaeudeAmount = 0;
-                    final HashMap<String, ArrayList<String>> result = new HashMap<String, ArrayList<String>>();
-                    final Geometry searchGeom = generateSearchGeom();
-                    if (searchGeom == null) {
-                        return null;
-                    }
-                    // do the search
-                    final NasProductTemplate type = (NasProductTemplate)cbType.getSelectedItem();
-                    double totalFee = 0;
-                    if (type == NasProductTemplate.POINTS) {
-                        final ArrayList<String> values = new ArrayList<String>();
-                        pointAmount = NasFeeCalculator.getPointAmount(searchGeom);
-                        values.add("" + pointAmount);
-                        final double pointFee = NasFeeCalculator.getFeeForPoints(pointAmount);
-                        totalFee += pointFee;
-                        values.add(formatter.format(pointFee));
-                        result.put("points", values);
-                    } else {
-                        final ArrayList<String> flurstueckValues = new ArrayList<String>();
-                        final ArrayList<String> gebaeudeValues = new ArrayList<String>();
-                        flurstueckAmount = NasFeeCalculator.getFlurstueckAmount(searchGeom);
-                        flurstueckValues.add("" + flurstueckAmount);
-                        final double flurstueckFee = NasFeeCalculator.getFeeForFlurstuecke(flurstueckAmount);
-                        totalFee += flurstueckFee;
-                        // ToDo this is a quick and dirty way to calculate the fee for type KOMPLETT
-                        if (type == NasProductTemplate.KOMPLETT) {
-                            final double eigentuemerFee = NasFeeCalculator.getFeeForEigentuemer(flurstueckAmount);
-                            totalFee += eigentuemerFee;
-                            final ArrayList<String> eigentuemerValues = new ArrayList<String>();
-                            eigentuemerValues.add("" + flurstueckAmount);
-                            eigentuemerValues.add(formatter.format(eigentuemerFee));
-                            result.put("eigentuemer", eigentuemerValues);
-                        }
-                        flurstueckValues.add(formatter.format(flurstueckFee));
-                        result.put("flurstuecke", flurstueckValues);
-                        gebaeudeAmount = NasFeeCalculator.getGebaeudeAmount(searchGeom);
-                        gebaeudeValues.add("" + gebaeudeAmount);
-                        final double gebaeudeFee = NasFeeCalculator.getFeeForGebaeude(gebaeudeAmount);
-                        totalFee += gebaeudeFee;
-                        gebaeudeValues.add(formatter.format(gebaeudeFee));
-                        result.put("gebaeude", gebaeudeValues);
-                    }
-                    final ArrayList<String> totalList = new ArrayList<String>();
-                    totalList.add(formatter.format(totalFee));
-                    result.put("total", totalList);
-                    return result;
-                }
-
-                @Override
-                protected void done() {
-                    try {
-                        final HashMap<String, ArrayList<String>> result = get();
-                        final NasProductTemplate selectedTemplate = (NasProductTemplate)cbType.getSelectedItem();
-                        feePreview = new NasFeePreviewPanel(selectedTemplate);
-                        if (result == null) {
-//                            showWait(false);
-                            showError();
-                            return;
-                        }
-                        for (final String key : result.keySet()) {
-                            final ArrayList<String> values = result.get(key);
-                            if (key.equals("total")) {
-                                feePreview.setTotalLabel(values.get(0));
-                            }
-                            if (selectedTemplate == NasProductTemplate.POINTS) {
-                                if (key.equals("points")) {
-                                    feePreview.setPointLabels(values.get(0), values.get(1));
-                                    break;
-                                }
-                            } else {
-                                if (selectedTemplate == NasProductTemplate.KOMPLETT) {
-                                    if (key.equals("eigentuemer")) {
-                                        feePreview.setEigentuemerLabels(values.get(0), values.get(1));
-                                    }
-                                }
-                                if (key.equals("gebaeude")) {
-                                    feePreview.setGebaeudeLabels(values.get(0), values.get(1));
-                                } else if (key.equals("flurstuecke")) {
-                                    feePreview.setFlurstueckLabels(values.get(0), values.get(1));
-                                }
-                            }
-                        }
-                    } catch (InterruptedException ex) {
-                        showError();
-                        log.error("nas fee calculation was interrupted. showing error state", ex);
-                        return;
-                    } catch (ExecutionException ex) {
-                        showError();
-                        log.error("an error occured during nas fee calculation. showing error state", ex);
-                        return;
-                    }
-
-                    showWait(false);
-                }
-            };
-
-        feeCalculator.execute();
+        final NasProductTemplate selectedTemplate = (NasProductTemplate)cbType.getSelectedItem();
+        final Geometry geom = generateSearchGeom();
+        pnlFee.removeAll();
+        feePreview = new NasFeePreviewPanel(selectedTemplate);
+        feePreview.setGeom(geom);
+        feePreview.refresh();
+        pnlFee.add(feePreview);
+        pnlFee.revalidate();
+        pnlFee.repaint();
     }
 
     /**

@@ -1301,7 +1301,7 @@
             "eageb_1000001":0.05625
         }
     },{
-        "name":"GEOTIFF-Daten (Stadtgrundkarte kommunal)",
+        "name":"Raster-Daten (Stadtgrundkarte kommunal)",
         "id":"skmekomtiff",
         "description":"# GUI in WuNDa fehlt noch, kann noch nicht implementiert werden",
         "discounts":{
