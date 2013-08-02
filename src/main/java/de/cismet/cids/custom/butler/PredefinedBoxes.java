@@ -142,7 +142,7 @@ public class PredefinedBoxes {
                 public int compare(final String o1, final String o2) {
                     final int number1 = Integer.parseInt(o1.replaceAll("box", ""));
                     final int number2 = Integer.parseInt(o2.replaceAll("box", ""));
-                    return Integer.compare(number1, number2);
+                    return Integer.valueOf(number1).compareTo(number2);
                 }
             };
         Collections.sort(keyList, keyComp);
