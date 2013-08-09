@@ -891,7 +891,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         final Coordinate[] coords = new Coordinate[5];
         final Coordinate startCoord = new Coordinate(lowerE, lowerN);
         coords[0] = new Coordinate(lowerE, lowerN);
-        final double c1 = lowerN - (Math.abs(upperN - lowerN));
+        final double c1 = lowerN + (Math.abs(upperN - lowerN));
         coords[1] = new Coordinate(lowerE, c1);
         final double c2 = lowerE + (Math.abs(lowerE - upperE));
         coords[2] = new Coordinate(c2, c1);
