@@ -189,8 +189,8 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
                 this.add(createNASMenuItem());
             }
             if (validateUserHasButler1Access()) {
-                this.add(createButler1MenuItem());
                 this.add(createButler2MenuItem());
+                this.add(createButler1MenuItem());
             }
         }
 
