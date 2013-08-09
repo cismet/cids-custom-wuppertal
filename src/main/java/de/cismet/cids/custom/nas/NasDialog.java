@@ -77,7 +77,8 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
 
     private static final Logger log = Logger.getLogger(NasDialog.class);
     private static final double TOTAL_MAP_BUFFER = 50d;
-    private static final Color FEATURE_COLOR_SELECTED = new Color(1f, 0f, 0f, 0.4f);
+//    private static final Color FEATURE_COLOR_SELECTED = new Color(1f, 0f, 0f, 0.4f);
+    private static final Color FEATURE_COLOR_SELECTED = new Color(1f, 0f, 0f,  0.7f);
     private static final Color FEATURE_COLOR = new Color(0.5f, 0.5f, 0.5f, 0.1f);
 
     //~ Instance fields --------------------------------------------------------
@@ -511,37 +512,37 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
+    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         dispose();
-    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
+    }//GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblGeomFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblGeomFocusLost
+    private void tblGeomFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblGeomFocusLost
         map.gotoInitialBoundingBox();
         tblGeom.clearSelection();
-    }                                                                    //GEN-LAST:event_tblGeomFocusLost
+    }//GEN-LAST:event_tblGeomFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbTypeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbTypeActionPerformed
+    private void cbTypeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTypeActionPerformed
         if (isInitialized) {
             calculateFee();
         }
-    }                                                                          //GEN-LAST:event_cbTypeActionPerformed
+    }//GEN-LAST:event_cbTypeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOkActionPerformed
+    private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
         SwingUtilities.invokeLater(new Runnable() {
 
                 @Override
@@ -565,7 +566,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                     }
                 }
             });
-    } //GEN-LAST:event_btnOkActionPerformed
+    }//GEN-LAST:event_btnOkActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -615,7 +616,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                     final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
                                 AlkisConstants.COMMONS.MAP_CALL_STRING));
                     swms.setName("NAS-Dialog");
-
+                    swms.setTranslucency(0.4f);
                     // add the raster layer to the model
                     mappingModel.addLayer(swms);
                     // set the model
