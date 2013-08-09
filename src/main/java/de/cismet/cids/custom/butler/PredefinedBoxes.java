@@ -118,6 +118,11 @@ public class PredefinedBoxes {
         this.key = key;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String toString() {
         return displayName;
