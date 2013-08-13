@@ -577,25 +577,25 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
         this.dispose();                                                           // TODO add your handling code here:
-    }//GEN-LAST:event_btnCancelActionPerformed
+    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbSizeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSizeActionPerformed
+    private void cbSizeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbSizeActionPerformed
         changeMap();
-    }//GEN-LAST:event_cbSizeActionPerformed
+    }                                                                          //GEN-LAST:event_cbSizeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
+    private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCreateActionPerformed
         SwingUtilities.invokeLater(new Runnable() {
 
                 @Override
@@ -716,14 +716,14 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                     Butler2Dialog.this.dispose();
                 }
             });
-    }//GEN-LAST:event_btnCreateActionPerformed
+    } //GEN-LAST:event_btnCreateActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbPointGeomActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPointGeomActionPerformed
+    private void cbPointGeomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbPointGeomActionPerformed
         final Object obj = cbPointGeom.getSelectedItem();
         if ((obj != null) && (obj instanceof Point)) {
             final Point p = (Point)obj;
@@ -735,7 +735,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
             tfLowerE.getDocument().addDocumentListener(this);
             tfLowerN.getDocument().addDocumentListener(this);
         }
-    }//GEN-LAST:event_cbPointGeomActionPerformed
+    }                                                                               //GEN-LAST:event_cbPointGeomActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -884,7 +884,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
         final Coordinate[] coords = new Coordinate[5];
         final Coordinate startCoord = new Coordinate(lowerE, lowerN);
         coords[0] = new Coordinate(lowerE, lowerN);
-        final double c1 = lowerN - (Math.abs(upperN - lowerN));
+        final double c1 = lowerN + (Math.abs(upperN - lowerN));
         coords[1] = new Coordinate(lowerE, c1);
         final double c2 = lowerE + (Math.abs(lowerE - upperE));
         coords[2] = new Coordinate(c2, c1);
@@ -1117,21 +1117,41 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
             });
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  de  DOCUMENT ME!
+     */
     @Override
     public void insertUpdate(final DocumentEvent de) {
         changeMap();
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  de  DOCUMENT ME!
+     */
     @Override
     public void removeUpdate(final DocumentEvent de) {
         changeMap();
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  de  DOCUMENT ME!
+     */
     @Override
     public void changedUpdate(final DocumentEvent de) {
         changeMap();
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  e  DOCUMENT ME!
+     */
     @Override
     public void valueChanged(final ListSelectionEvent e) {
         // check if in one product tab the feldvergleich produkt is selected if so set the box size, and disable all
