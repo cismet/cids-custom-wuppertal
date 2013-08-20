@@ -19,13 +19,9 @@ import Sirius.navigator.search.dynamic.SearchControlPanel;
 
 import Sirius.server.middleware.types.MetaClass;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.vividsolutions.jts.geom.Geometry;
-
-import org.openide.util.Exceptions;
 
 import java.awt.CardLayout;
 import java.awt.Dimension;
@@ -34,8 +30,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import java.io.IOException;
-
-import java.util.HashMap;
 
 import javax.swing.Box;
 import javax.swing.ImageIcon;
@@ -55,8 +49,9 @@ import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.MappingComponent;
-import de.cismet.cismap.commons.gui.piccolo.eventlistener.AbstractCreateSearchGeometryListener;
 import de.cismet.cismap.commons.interaction.CismapBroker;
+
+import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 
 /**
  * DOCUMENT ME!
@@ -180,7 +175,6 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
                         org.openide.util.NbBundle.getMessage(
                             AlkisWindowSearch.class,
                             "AlkisWindowSearch.btnGeoSearch.toolTipText"));
-                btnGeoSearch.addActionListener(null);
                 panCommand.add(btnGeoSearch);
             }
             if (fallbackConfig) {
@@ -880,13 +874,7 @@ public class AlkisWindowSearch extends javax.swing.JPanel implements CidsWindowS
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-        if (AbstractCreateSearchGeometryListener.PROPERTY_FORGUI_LAST_FEATURE.equals(evt.getPropertyName())
-                    || AbstractCreateSearchGeometryListener.PROPERTY_FORGUI_MODE.equals(evt.getPropertyName())) {
-            btnGeoSearch.visualizeSearchMode((AlkisCreateSearchGeometryListener)mappingComponent.getInputListener(
-                    AlkisCreateSearchGeometryListener.ALKIS_CREATE_SEARCH_GEOMETRY));
-        }
-
-        if (MeasurementPointCreateSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
+        if (AlkisCreateSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
             if ((evt.getNewValue() != null) && (evt.getNewValue() instanceof Geometry)) {
                 final MetaObjectNodeServerSearch search = getServerSearch((Geometry)evt.getNewValue());
                 CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);

@@ -40,8 +40,9 @@ import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.MappingComponent;
-import de.cismet.cismap.commons.gui.piccolo.eventlistener.AbstractCreateSearchGeometryListener;
 import de.cismet.cismap.commons.interaction.CismapBroker;
+
+import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 
 /**
  * DOCUMENT ME!
@@ -130,7 +131,6 @@ public class LandParcelWindowSearch extends javax.swing.JPanel implements CidsWi
                         org.openide.util.NbBundle.getMessage(
                             LandParcelWindowSearch.class,
                             "LandParcelWindowSearch.btnGeoSearch.toolTipText"));
-                btnGeoSearch.addActionListener(null);
                 panCommand.add(btnGeoSearch);
             }
         } catch (Exception exception) {
@@ -423,13 +423,7 @@ public class LandParcelWindowSearch extends javax.swing.JPanel implements CidsWi
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-        if (AbstractCreateSearchGeometryListener.PROPERTY_FORGUI_LAST_FEATURE.equals(evt.getPropertyName())
-                    || AbstractCreateSearchGeometryListener.PROPERTY_FORGUI_MODE.equals(evt.getPropertyName())) {
-            btnGeoSearch.visualizeSearchMode((AlkisCreateSearchGeometryListener)mappingComponent.getInputListener(
-                    AlkisCreateSearchGeometryListener.ALKIS_CREATE_SEARCH_GEOMETRY));
-        }
-
-        if (MeasurementPointCreateSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
+        if (LandParcelSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
             if ((evt.getNewValue() != null) && (evt.getNewValue() instanceof Geometry)) {
                 final MetaObjectNodeServerSearch search = getServerSearch((Geometry)evt.getNewValue());
                 CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);
