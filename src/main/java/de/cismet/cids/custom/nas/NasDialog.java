@@ -14,7 +14,9 @@ package de.cismet.cids.custom.nas;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.MultiPolygon;
+import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
 
 import org.apache.log4j.Logger;
@@ -171,12 +173,16 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                     }
                 }
             }
-            if ((f.getGeometry() instanceof Polygon) || (f.getGeometry() instanceof MultiPolygon)) {
-                final PFeature pf = new PFeature(f, map);
-                if (!pf.hasHole()) {
-                    geomWrappers.add(new GeomWrapper(f.getGeometry(), name, selected));
-                }
+//            if ((f.getGeometry() instanceof Polygon) || (f.getGeometry() instanceof MultiPolygon)) {
+            double buffer = 0;
+            if ((f.getGeometry() instanceof Point) || (f.getGeometry() instanceof LineString)) {
+                buffer = 0.00000001;
             }
+            final PFeature pf = new PFeature(f, map);
+            if (!pf.hasHole()) {
+                geomWrappers.add(new GeomWrapper(f.getGeometry().buffer(buffer), name, selected));
+            }
+//            }
         }
         tableModel = new NasTableModel();
         initComponents();
@@ -933,7 +939,17 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                     geoms[geoms.length - 1] = g;
                     unionGeom = new GeometryCollection(geoms, gc.getFactory());
                 } else {
-                    unionGeom = unionGeom.union(g);
+                    if (unionGeom instanceof GeometryCollection) {
+                        GeometryCollection gc = (GeometryCollection)unionGeom;
+                        final Geometry[] geoms = new Geometry[unionGeom.getNumGeometries() + 1];
+                        for (int i = 0; i < gc.getNumGeometries(); i++) {
+                            geoms[i] = gc.getGeometryN(i);
+                        }
+                        geoms[geoms.length - 1] = g;
+                        gc = new GeometryCollection(geoms, gc.getFactory());
+                    } else {
+                        unionGeom = unionGeom.union(g);
+                    }
                 }
             }
         }
