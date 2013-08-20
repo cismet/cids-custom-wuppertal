@@ -24,11 +24,14 @@ import org.apache.log4j.Logger;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -61,6 +64,7 @@ import de.cismet.cismap.commons.features.StyledFeature;
 import de.cismet.cismap.commons.features.XStyledFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
+import de.cismet.cismap.commons.gui.piccolo.FeatureAnnotationSymbol;
 import de.cismet.cismap.commons.gui.piccolo.PFeature;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
@@ -99,6 +103,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
     private HashMap<GeomWrapper, Feature> bufferFeatureMap = new HashMap<GeomWrapper, Feature>();
     private NasFeePreviewPanel feePreview = new NasFeePreviewPanel();
     private ArrayList<NasProductTemplate> productTemplates = new ArrayList<NasProductTemplate>();
+    private ArrayList<DefaultStyledFeature> pointFeatures = new ArrayList<DefaultStyledFeature>();
     private boolean firstBufferCall = true;
     private boolean isInitialized = false;
     private int pointAmount = 0;
@@ -176,7 +181,24 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
 //            if ((f.getGeometry() instanceof Polygon) || (f.getGeometry() instanceof MultiPolygon)) {
             double buffer = 0;
             if ((f.getGeometry() instanceof Point) || (f.getGeometry() instanceof LineString)) {
-                buffer = 0.00000001;
+                buffer = 0.0001;
+                if (f.getGeometry() instanceof Point) {
+                    final DefaultStyledFeature dsf = new DefaultStyledFeature();
+                    dsf.setGeometry(f.getGeometry());
+                    final BufferedImage bi = new BufferedImage(9, 9, BufferedImage.TYPE_4BYTE_ABGR);
+                    final Graphics2D g = (Graphics2D)bi.getGraphics().create();
+                    g.setStroke(new BasicStroke(1f));
+                    g.setColor(Color.black);
+                    g.drawOval(0, 0, 5, 5);
+                    final FeatureAnnotationSymbol fas = new FeatureAnnotationSymbol(
+                            new javax.swing.ImageIcon(
+                                getClass().getResource("/de/cismet/cids/custom/nas/icon-circlerecordempty.png"))
+                                        .getImage());
+                    fas.setSweetSpotX(0.5);
+                    fas.setSweetSpotY(0.5);
+                    dsf.setPointAnnotationSymbol(fas);
+                    pointFeatures.add(dsf);
+                }
             }
             final PFeature pf = new PFeature(f, map);
             if (!pf.hasHole()) {
@@ -659,6 +681,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                     for (final GeomWrapper cidsBeanWrapper : geomWrappers) {
                         map.getFeatureCollection().addFeature(cidsBeanWrapper.getFeature());
                     }
+                    map.getFeatureCollection().addFeatures(pointFeatures);
                 }
 
                 private XBoundingBox getBoundingBox() {
@@ -791,6 +814,9 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
 //                    bufferedFeatures.clear();
                     firstBufferCall = true;
                     map.getFeatureCollection().removeAllFeatures();
+                    if ((jsGeomBuffer.getValue() == 0)) {
+                        map.getFeatureCollection().addFeatures(pointFeatures);
+                    }
 
                     for (final GeomWrapper geomWrapper : geomWrappers) {
                         final GeomWrapper bufferedGeomWrapper = new GeomWrapper(geomWrapper.getGeometry().buffer(
@@ -827,6 +853,10 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
             firstBufferCall = false;
             // visualize the original geometries in map
             map.getFeatureCollection().removeAllFeatures();
+//            if ((jsGeomBuffer.getValue() >= 0) && (jsGeomBuffer.getValue() < 5)) {
+            map.getFeatureCollection().addFeatures(pointFeatures);
+//            }
+
             for (final GeomWrapper geomWrapper : geomWrappers) {
                 map.getFeatureCollection().addFeature(geomWrapper.getFeature());
             }
