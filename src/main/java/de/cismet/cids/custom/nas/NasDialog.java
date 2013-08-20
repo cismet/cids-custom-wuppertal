@@ -25,6 +25,8 @@ import org.openide.util.NbBundle;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -76,7 +78,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger log = Logger.getLogger(NasDialog.class);
-    private static final double TOTAL_MAP_BUFFER = 50d;
+    private static final double MAP_BUFFER = 50d;
 //    private static final Color FEATURE_COLOR_SELECTED = new Color(1f, 0f, 0f, 0.4f);
     private static final Color FEATURE_COLOR_SELECTED = new Color(1f, 0f, 0f, 0.7f);
     private static final Color FEATURE_COLOR = new Color(0.5f, 0.5f, 0.5f, 0.1f);
@@ -91,7 +93,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
     private LinkedList<GeomWrapper> geomWrappers;
     private HashMap<GeomWrapper, Feature> bufferedFeatures = new HashMap<GeomWrapper, Feature>();
     private NasTableModel tableModel;
-    private GeomWrapper selectedGeomWrapper;
+    private ArrayList<GeomWrapper> selectedGeomWrappers = new ArrayList<GeomWrapper>();
     private HashMap<GeomWrapper, Feature> bufferFeatureMap = new HashMap<GeomWrapper, Feature>();
     private NasFeePreviewPanel feePreview = new NasFeePreviewPanel();
     private ArrayList<NasProductTemplate> productTemplates = new ArrayList<NasProductTemplate>();
@@ -184,10 +186,12 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                 public void valueChanged(final ListSelectionEvent e) {
                     final ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 
-                    if (lsm.isSelectionEmpty()) {
-                        selectedGeomWrapper = null;
-                    } else {
-                        selectedGeomWrapper = tableModel.get(lsm.getLeadSelectionIndex());
+//                    selectedGeomWrapper = tableModel.get(lsm.getLeadSelectionIndex());
+                    selectedGeomWrappers.clear();
+                    for (int i = lsm.getMinSelectionIndex(); i <= lsm.getMaxSelectionIndex(); i++) {
+                        if (lsm.isSelectedIndex(i)) {
+                            selectedGeomWrappers.add(tableModel.get(i));
+                        }
                     }
 
                     changeMap();
@@ -204,6 +208,14 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
         cbType.setSelectedItem(NasProductTemplate.OHNE_EIGENTUEMER);
         calculateFee();
         isInitialized = true;
+        map.addMouseListener(new MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final MouseEvent e) {
+                    map.zoomToFeatureCollection();
+                    tblGeom.clearSelection();
+                }
+            });
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -522,9 +534,9 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
      * @param  evt  DOCUMENT ME!
      */
     private void tblGeomFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblGeomFocusLost
-        map.gotoInitialBoundingBox();
-        tblGeom.clearSelection();
-    }                                                                    //GEN-LAST:event_tblGeomFocusLost
+//        map.gotoInitialBoundingBox();
+//        tblGeom.clearSelection();
+    } //GEN-LAST:event_tblGeomFocusLost
 
     /**
      * DOCUMENT ME!
@@ -646,7 +658,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                 private XBoundingBox getBoundingBox() {
                     final XBoundingBox currBb = (XBoundingBox)CismapBroker.getInstance().getMappingComponent()
                                 .getCurrentBoundingBox();
-                    XBoundingBox result = new XBoundingBox(currBb.getGeometry().buffer(TOTAL_MAP_BUFFER));
+                    XBoundingBox result = new XBoundingBox(currBb.getGeometry().buffer(MAP_BUFFER));
 //                    final double diagonalLength = Math.sqrt((result.getWidth() * result.getWidth())
 //                                    + (result.getHeight() * result.getHeight()));
 //                    final XBoundingBox bufferedBox = new XBoundingBox(result.getGeometry().buffer(TOTAL_MAP_BUFFER));
@@ -657,12 +669,12 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
 
                         if (result == null) {
                             result = new XBoundingBox(geometry.getEnvelope().buffer(
-                                        TOTAL_MAP_BUFFER));
+                                        MAP_BUFFER));
                             result.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
                             result.setMetric(true);
                         } else {
                             final XBoundingBox temp = new XBoundingBox(geometry.getEnvelope().buffer(
-                                        TOTAL_MAP_BUFFER));
+                                        MAP_BUFFER));
                             temp.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
                             temp.setMetric(true);
 
@@ -700,20 +712,23 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
 
                 @Override
                 public void run() {
-                    if (selectedGeomWrapper != null) {
-                        final XBoundingBox boxToGoto = new XBoundingBox(selectedGeomWrapper.getGeometry().getEnvelope(),
-                                AlkisConstants.COMMONS.SRS_SERVICE,
-                                true);
-                        final XBoundingBox bufferedBox;
-                        if (selectedGeomWrapper != totalMapWrapper) {
-                            final double diagonalLength = Math.sqrt((boxToGoto.getWidth() * boxToGoto.getWidth())
-                                            + (boxToGoto.getHeight() * boxToGoto.getHeight()));
-                            bufferedBox = new XBoundingBox(boxToGoto.getGeometry().buffer(diagonalLength / 2));
-                        } else {
-                            bufferedBox = new XBoundingBox(boxToGoto.getGeometry().buffer(TOTAL_MAP_BUFFER));
+                    Geometry g;
+                    if (!selectedGeomWrappers.isEmpty()) {
+                        g = createUnionGeom(selectedGeomWrappers, true);
+                        // if the buffer geometries is empty use the original geoms as fallback
+                        if (g.isEmpty()) {
+                            g = createUnionGeom(selectedGeomWrappers, false);
                         }
-                        map.gotoBoundingBox(bufferedBox, false, true, 500);
+                    } else {
+                        g = totalMapWrapper.getGeometry();
                     }
+                    final XBoundingBox boxToGoto = new XBoundingBox(g.getEnvelope(),
+                            AlkisConstants.COMMONS.SRS_SERVICE,
+                            true);
+                    final XBoundingBox bufferedBox;
+//                            bufferedBox = new XBoundingBox(boxToGoto.getGeometry().buffer(diagonalLength / 2));
+                    bufferedBox = new XBoundingBox(boxToGoto.getGeometry().buffer(MAP_BUFFER));
+                    map.gotoBoundingBox(bufferedBox, false, true, 500);
                 }
             };
 
@@ -747,6 +762,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
             // clear map visualisation and start the fee calculation
 
             clearMapVisualisation(buffer);
+            changeMap();
             calculateFee();
         } else {
             // visualize the buffer
@@ -839,7 +855,8 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                 map.getFeatureCollection().reconsiderFeature(f);
             }
         }
-        map.zoomToFeatureCollection();
+//        changeMap();
+//        map.zoomToFeatureCollection();
     }
 
     /**
@@ -872,20 +889,49 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
      * @return  DOCUMENT ME!
      */
     private Geometry createUnionGeom() {
+        final ArrayList<GeomWrapper> geoms = new ArrayList<GeomWrapper>();
+        for (final GeomWrapper gw : geomWrappers) {
+            if (gw.isSelected()) {
+                geoms.add(gw);
+            }
+        }
+        return createUnionGeom(geoms, true);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   gWrappers    DOCUMENT ME!
+     * @param   bufferGeoms  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private Geometry createUnionGeom(final Collection<GeomWrapper> gWrappers, final boolean bufferGeoms) {
         Geometry unionGeom = null;
         int buffer = 0;
         try {
             buffer = Integer.parseInt(tfGeomBuffer.getText());
         } catch (Exception e) {
         }
-        for (final GeomWrapper gw : geomWrappers) {
-            if (gw.isSelected()) {
-                Geometry g = gw.getGeometry();
-                if (buffer != 0) {
-                    g = g.buffer(buffer);
-                }
-                if (unionGeom == null) {
-                    unionGeom = g;
+        for (final GeomWrapper gw : gWrappers) {
+            Geometry g = gw.getGeometry();
+            if (bufferGeoms && (buffer != 0)) {
+                g = g.buffer(buffer);
+            }
+            if (unionGeom == null) {
+                unionGeom = g;
+            } else {
+                if (unionGeom instanceof MultiPolygon) {
+                    unionGeom = unionGeom.union(g);
+                    continue;
+                } else if (unionGeom instanceof GeometryCollection) {
+                    final GeometryCollection gc = (GeometryCollection)unionGeom;
+                    final Geometry[] geoms = new Geometry[unionGeom.getNumGeometries() + 1];
+                    for (int i = 0; i < gc.getNumGeometries(); i++) {
+                        geoms[i] = gc.getGeometryN(i);
+                    }
+                    geoms[geoms.length - 1] = g;
+                    unionGeom = new GeometryCollection(geoms, gc.getFactory());
                 } else {
                     unionGeom = unionGeom.union(g);
                 }
@@ -985,6 +1031,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                 }
             }, 2000);
         visualizeBufferGeomsInMap(buffer);
+        changeMap();
     }
 
     @Override
