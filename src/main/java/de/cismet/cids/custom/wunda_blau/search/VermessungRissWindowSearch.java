@@ -11,24 +11,16 @@ import Sirius.navigator.actiontag.ActionTagProtected;
 import Sirius.navigator.search.CidsSearchExecutor;
 import Sirius.navigator.search.dynamic.SearchControlListener;
 import Sirius.navigator.search.dynamic.SearchControlPanel;
-import Sirius.navigator.types.treenode.DefaultMetaTreeNode;
-import Sirius.navigator.types.treenode.ObjectTreeNode;
-import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.MetaClass;
-import Sirius.server.middleware.types.MetaObject;
 
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryCollection;
-import com.vividsolutions.jts.geom.GeometryFactory;
 
 import org.apache.log4j.Logger;
 
 import org.openide.util.NbBundle;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -42,13 +34,11 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.Box;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JOptionPane;
 
 import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungFlurstueckSelectionDialog;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
@@ -58,7 +48,6 @@ import de.cismet.cids.custom.wunda_blau.search.server.CidsVermessungRissSearchSt
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
@@ -67,23 +56,11 @@ import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
 
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
-import de.cismet.cismap.commons.features.DefaultFeatureCollection;
-import de.cismet.cismap.commons.features.PureNewFeature;
-import de.cismet.cismap.commons.features.SearchFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
-import de.cismet.cismap.commons.gui.piccolo.PFeature;
-import de.cismet.cismap.commons.gui.piccolo.eventlistener.AbstractCreateSearchGeometryListener;
-import de.cismet.cismap.commons.gui.piccolo.eventlistener.CreateGeometryListenerInterface;
-import de.cismet.cismap.commons.gui.piccolo.eventlistener.CreateSearchGeometryListener;
-import de.cismet.cismap.commons.gui.piccolo.eventlistener.MetaSearchCreateSearchGeometryListener;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
-import de.cismet.cismap.navigatorplugin.CidsFeature;
+import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 
-import de.cismet.cismap.tools.gui.CidsBeanDropJPopupMenuButton;
-
-import de.cismet.tools.gui.HighlightingRadioButtonMenuItem;
-import de.cismet.tools.gui.JPopupMenuButton;
 import de.cismet.tools.gui.StaticSwingTools;
 
 /**
@@ -790,13 +767,6 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-        if (AbstractCreateSearchGeometryListener.PROPERTY_FORGUI_LAST_FEATURE.equals(evt.getPropertyName())
-                    || AbstractCreateSearchGeometryListener.PROPERTY_FORGUI_MODE.equals(evt.getPropertyName())) {
-            btnGeoSearch.visualizeSearchMode((VermessungRissCreateSearchGeometryListener)
-                mappingComponent.getInputListener(
-                    VermessungRissCreateSearchGeometryListener.VERMESSUNGRISS_CREATE_SEARCH_GEOMETRY));
-        }
-
         if (VermessungRissCreateSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
             if ((evt.getNewValue() != null) && (evt.getNewValue() instanceof Geometry)) {
                 final MetaObjectNodeServerSearch search = getServerSearch((Geometry)evt.getNewValue());
