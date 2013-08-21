@@ -682,6 +682,6 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
             return null;
         }
         final double areaInKm = geom.getArea() / (1000 * 1000);
-        return StaticDecimalTools.round("0.0", areaInKm);
+        return StaticDecimalTools.round("0.0##", areaInKm);
     }
 }
