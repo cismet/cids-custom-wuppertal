@@ -11,11 +11,13 @@
  */
 package de.cismet.cids.custom.butler;
 
+import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 
-import java.awt.Color;
 import java.awt.Component;
+
+import java.text.DecimalFormatSymbols;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +25,7 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.ListCellRenderer;
 
 import de.cismet.cismap.commons.features.Feature;
 import de.cismet.cismap.commons.features.FeatureCollection;
@@ -148,7 +148,18 @@ public class ButlerGeometryComboBox extends JComboBox {
                     text = value.toString();
                 }
             } else if (filter == GEOM_FILTER_TYPE.RECTANGLE) {
-                text = value.toString();
+                if (value instanceof Geometry) {
+                    final Envelope g = ((Geometry)value).getEnvelopeInternal();
+                    final DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols();
+                    formatSymbols.setDecimalSeparator('.');
+                    final java.text.DecimalFormat myFormatter = new java.text.DecimalFormat("#.###", formatSymbols);
+                    text = "Polygon (" + "(" + myFormatter.format(g.getMinX()) + "," + myFormatter.format(g.getMinY())
+                                + ")"
+                                + "(" + myFormatter.format(g.getMaxX()) + "," + myFormatter.format(g.getMaxY()) + ")"
+                                + ")";
+                } else {
+                    text = value.toString();
+                }
             }
 
             setText(text);
