@@ -34,6 +34,8 @@ import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import java.text.DecimalFormatSymbols;
+
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -84,6 +86,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
     ArrayList<PredefinedBoxes> boxes;
     final DocumentListener upperTfListeners;
     boolean firstUpperTFChange = false;
+    final java.text.DecimalFormat coordFormatter = new java.text.DecimalFormat("#.###");
     private MappingComponent map;
     private PredefinedBoxes noSelectionBox = null;
     private DefaultStyledFeature rectangleFeature;
@@ -124,6 +127,9 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
      */
     public Butler1Dialog(final java.awt.Frame parent, final boolean modal) {
         super(parent, modal);
+        final DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols();
+        formatSymbols.setDecimalSeparator('.');
+        coordFormatter.setDecimalFormatSymbols(formatSymbols);
         boxes = PredefinedBoxes.butler1Boxes;
         initComponents();
         tfLowerE.getDocument().addDocumentListener(this);
@@ -720,10 +726,10 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
             tfLowerN.getDocument().removeDocumentListener(this);
             tfUpperE.getDocument().removeDocumentListener(upperTfListeners);
             tfUpperN.getDocument().removeDocumentListener(upperTfListeners);
-            tfLowerE.setText("" + envelope.getMinX());
-            tfLowerN.setText("" + envelope.getMinY());
-            tfUpperE.setText("" + envelope.getMaxX());
-            tfUpperN.setText("" + envelope.getMaxY());
+            tfLowerE.setText("" + coordFormatter.format(envelope.getMinX()));
+            tfLowerN.setText("" + coordFormatter.format(envelope.getMinY()));
+            tfUpperE.setText("" + coordFormatter.format(envelope.getMaxX()));
+            tfUpperN.setText("" + coordFormatter.format(envelope.getMaxY()));
             cbSize.setSelectedItem(noSelectionBox);
             changeMap();
             tfLowerE.getDocument().addDocumentListener(this);
