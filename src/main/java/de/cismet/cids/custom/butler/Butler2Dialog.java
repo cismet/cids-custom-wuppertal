@@ -35,6 +35,8 @@ import java.awt.event.MouseEvent;
 
 import java.io.IOException;
 
+import java.text.DecimalFormatSymbols;
+
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -105,6 +107,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
 
     //~ Instance fields --------------------------------------------------------
 
+    final java.text.DecimalFormat coordFormatter = new java.text.DecimalFormat("#.###");
     private ArrayList<PredefinedBoxes> boxes;
     private DefaultStyledFeature rectangleFeature;
     private MappingComponent map = new MappingComponent();
@@ -145,6 +148,9 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
      */
     public Butler2Dialog(final java.awt.Frame parent, final boolean modal) {
         super(parent, modal);
+        final DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols();
+        formatSymbols.setDecimalSeparator('.');
+        coordFormatter.setDecimalFormatSymbols(formatSymbols);
         this.setTitle(null);
         boxes = PredefinedBoxes.butler2Boxes;
         initComponents();
@@ -729,8 +735,8 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
             final Point p = (Point)obj;
             tfLowerE.getDocument().removeDocumentListener(this);
             tfLowerN.getDocument().removeDocumentListener(this);
-            tfLowerE.setText("" + p.getX());
-            tfLowerN.setText("" + p.getY());
+            tfLowerE.setText(coordFormatter.format(p.getX()));
+            tfLowerN.setText(coordFormatter.format(p.getY()));
             changeMap();
             tfLowerE.getDocument().addDocumentListener(this);
             tfLowerN.getDocument().addDocumentListener(this);
