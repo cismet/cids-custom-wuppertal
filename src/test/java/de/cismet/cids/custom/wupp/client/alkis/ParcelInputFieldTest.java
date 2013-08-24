@@ -104,7 +104,7 @@ public class ParcelInputFieldTest {
         String districtNumber = "3001";
         ParcelInputField instance = field;
         instance.setDistrictNumber(districtNumber);
-        assertEquals(districtNumber, instance.getDistrictNumber());
+        assertEquals("053001", instance.getDistrictNumber());
     }
     
     @Test
@@ -113,7 +113,7 @@ public class ParcelInputFieldTest {
         String districtNumber = "n\u00E4";
         ParcelInputField instance = field;
         instance.setDistrictNumber(districtNumber);
-        assertEquals("3487", instance.getDistrictNumber());
+        assertEquals("053487", instance.getDistrictNumber());
     }
 
     @Test
@@ -131,7 +131,7 @@ public class ParcelInputFieldTest {
         String districtNumber = "ba";
         ParcelInputField instance = field;
         instance.setDistrictNumber(districtNumber);
-        assertEquals("3001", instance.getDistrictNumber());
+        assertEquals("053001", instance.getDistrictNumber());
     }
 
     @Test
@@ -140,7 +140,7 @@ public class ParcelInputFieldTest {
         String districtNumber = "30017435";
         ParcelInputField instance = field;
         instance.setDistrictNumber(districtNumber);
-        assertEquals("3001", instance.getDistrictNumber());
+        assertEquals("053001", instance.getDistrictNumber());
     }
 
     @Test
@@ -158,7 +158,7 @@ public class ParcelInputFieldTest {
     @Test
     public void testSetCurrentParcel() {
         System.out.println("setCurrentParcel");
-        String currentParcel = "3135-002-00004/0003";
+        String currentParcel = "053135-002-00004/0003";
         ParcelInputField instance = field;
         instance.setCurrentParcel(currentParcel);
         assertEquals(currentParcel, instance.getCurrentParcel());
@@ -170,7 +170,7 @@ public class ParcelInputFieldTest {
         String currentParcel = "3135-002-00004/00030";
         ParcelInputField instance = field;
         instance.setCurrentParcel(currentParcel);
-        assertEquals("3135-002-00004/0003", instance.getCurrentParcel());
+        assertEquals("053135-002-00004/0003", instance.getCurrentParcel());
     }
 
     @Test
@@ -179,7 +179,7 @@ public class ParcelInputFieldTest {
         String currentParcel = "3135-002-00004/00030-";
         ParcelInputField instance = field;
         instance.setCurrentParcel(currentParcel);
-        assertEquals("3135-002-00004/0003", instance.getCurrentParcel());
+        assertEquals("053135-002-00004/0003", instance.getCurrentParcel());
     }
 
     @Test
@@ -188,7 +188,7 @@ public class ParcelInputFieldTest {
         String currentParcel = "3135-002-04";
         ParcelInputField instance = field;
         instance.setCurrentParcel(currentParcel);
-        assertEquals("3135-002-00004", instance.getCurrentParcel());
+        assertEquals("053135-002-00004", instance.getCurrentParcel());
     }
 
     @Test
@@ -197,7 +197,7 @@ public class ParcelInputFieldTest {
         String currentParcel = "ba-1-3";
         ParcelInputField instance = field;
         instance.setCurrentParcel(currentParcel);
-        assertEquals("3001-001-00003", instance.getCurrentParcel());
+        assertEquals("053001-001-00003", instance.getCurrentParcel());
     }
 
     /**

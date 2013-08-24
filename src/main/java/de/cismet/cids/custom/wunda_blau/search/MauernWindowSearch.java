@@ -75,8 +75,9 @@ import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.MappingComponent;
-import de.cismet.cismap.commons.gui.piccolo.eventlistener.AbstractCreateSearchGeometryListener;
 import de.cismet.cismap.commons.interaction.CismapBroker;
+
+import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 
 /**
  * DOCUMENT ME!
@@ -192,101 +193,108 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
      * Creates new form MauernWindowSearch.
      */
     public MauernWindowSearch() {
-        initComponents();
-        // todo just for debug
-        pnlSearchCancel = new SearchControlPanel(this);
-        final Dimension max = pnlSearchCancel.getMaximumSize();
-        final Dimension min = pnlSearchCancel.getMinimumSize();
-        final Dimension pre = pnlSearchCancel.getPreferredSize();
-        pnlSearchCancel.setMaximumSize(new java.awt.Dimension(
-                new Double(max.getWidth()).intValue(),
-                new Double(max.getHeight() + 6).intValue()));
-        pnlSearchCancel.setMinimumSize(new java.awt.Dimension(
-                new Double(min.getWidth()).intValue(),
-                new Double(min.getHeight() + 6).intValue()));
-        pnlSearchCancel.setPreferredSize(new java.awt.Dimension(
-                new Double(pre.getWidth() + 6).intValue(),
-                new Double(pre.getHeight() + 6).intValue()));
-        pnlButtons.add(pnlSearchCancel);
+        try {
+            initComponents();
+            // todo just for debug
+            pnlSearchCancel = new SearchControlPanel(this);
+            final Dimension max = pnlSearchCancel.getMaximumSize();
+            final Dimension min = pnlSearchCancel.getMinimumSize();
+            final Dimension pre = pnlSearchCancel.getPreferredSize();
+            pnlSearchCancel.setMaximumSize(new java.awt.Dimension(
+                    new Double(max.getWidth()).intValue(),
+                    new Double(max.getHeight() + 5).intValue()));
+            pnlSearchCancel.setMinimumSize(new java.awt.Dimension(
+                    new Double(min.getWidth()).intValue(),
+                    new Double(min.getHeight() + 5).intValue()));
+            pnlSearchCancel.setPreferredSize(new java.awt.Dimension(
+                    new Double(pre.getWidth() + 6).intValue(),
+                    new Double(pre.getHeight() + 5).intValue()));
+            pnlButtons.add(pnlSearchCancel);
 
-        metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "mauer");
+            metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "mauer");
 
-        byte[] iconDataFromMetaclass = new byte[] {};
+            byte[] iconDataFromMetaclass = new byte[] {};
 
-        if (metaClass != null) {
-            iconDataFromMetaclass = metaClass.getIconData();
-        }
-
-        if (iconDataFromMetaclass.length > 0) {
-            LOG.info("Using icon from metaclass.");
-            icon = new ImageIcon(metaClass.getIconData());
-        } else {
-            LOG.warn("Metaclass icon is not set. Trying to load default icon.");
-            final URL urlToIcon = getClass().getResource("/de/cismet/cids/custom/wunda_blau/search/search.png");
-
-            if (urlToIcon != null) {
-                icon = new ImageIcon(urlToIcon);
-            } else {
-                icon = new ImageIcon(new byte[] {});
+            if (metaClass != null) {
+                iconDataFromMetaclass = metaClass.getIconData();
             }
-        }
 
-        pnlButtons.add(Box.createHorizontalStrut(5));
+            if (iconDataFromMetaclass.length > 0) {
+                LOG.info("Using icon from metaclass.");
+                icon = new ImageIcon(metaClass.getIconData());
+            } else {
+                LOG.warn("Metaclass icon is not set. Trying to load default icon.");
+                final URL urlToIcon = getClass().getResource("/de/cismet/cids/custom/wunda_blau/search/search.png");
 
-        mappingComponent = CismapBroker.getInstance().getMappingComponent();
-        geoSearchEnabled = mappingComponent != null;
-        if (geoSearchEnabled) {
-            final MauernCreateSearchGeometryListener mauernSearchGeometryListener =
-                new MauernCreateSearchGeometryListener(mappingComponent,
-                    new MauernSearchTooltip(icon));
-            mauernSearchGeometryListener.addPropertyChangeListener(this);
-            btnGeoSearch = new GeoSearchButton(
-                    MauernCreateSearchGeometryListener.MAUERN_CREATE_SEARCH_GEOMETRY,
-                    mappingComponent,
-                    null,
-                    org.openide.util.NbBundle.getMessage(
-                        MauernWindowSearch.class,
-                        "MauernWindowSearch.btnGeoSearch.toolTipText"));
-            btnGeoSearch.addActionListener(null);
-            pnlButtons.add(btnGeoSearch);
-        }
-
-        fillEigentuemerListModel();
-        fillLastKlasseListModel();
-        lstEigentuemer.setModel(eigentuemerListModel);
-        lstEigentuemer.setCellRenderer(new CheckboxCellRenderer());
-        lstEigentuemer.setSelectionModel(new ListToggleSelectionModel());
-        lstEigentuemer.addListSelectionListener(new ListSelectionListener() {
-
-                @Override
-                public void valueChanged(final ListSelectionEvent lse) {
-                    lblselectedEigentuemer.setText("" + lstEigentuemer.getSelectedIndices().length);
-                    if (lstEigentuemer.getSelectedIndices().length != 1) {
-                        lblselectedEigentuemer.setText(lblselectedEigentuemer.getText() + " selektierte Eigentümer");
-                    } else {
-                        lblselectedEigentuemer.setText(lblselectedEigentuemer.getText() + " selektierter Eigentümer");
-                    }
+                if (urlToIcon != null) {
+                    icon = new ImageIcon(urlToIcon);
+                } else {
+                    icon = new ImageIcon(new byte[] {});
                 }
-            });
-        lstLastklasse.setModel(lastKlasseListModel);
-        lstLastklasse.setCellRenderer(new CheckboxCellRenderer());
-        lstLastklasse.setSelectionModel(new ListToggleSelectionModel());
-        lstLastklasse.addListSelectionListener(new ListSelectionListener() {
+            }
 
-                @Override
-                public void valueChanged(final ListSelectionEvent lse) {
-                    lblSelektierteLastklassen.setText("" + lstLastklasse.getSelectedIndices().length);
-                    if (lstLastklasse.getSelectedIndices().length != 1) {
-                        lblSelektierteLastklassen.setText(
-                            lblSelektierteLastklassen.getText()
-                                    + " selektierte Lastklassen");
-                    } else {
-                        lblSelektierteLastklassen.setText(
-                            lblSelektierteLastklassen.getText()
-                                    + " selektierte Lastklasse");
+            pnlButtons.add(Box.createHorizontalStrut(5));
+
+            mappingComponent = CismapBroker.getInstance().getMappingComponent();
+            geoSearchEnabled = mappingComponent != null;
+            if (geoSearchEnabled) {
+                final MauernCreateSearchGeometryListener mauernSearchGeometryListener =
+                    new MauernCreateSearchGeometryListener(mappingComponent,
+                        new MauernSearchTooltip(icon));
+                mauernSearchGeometryListener.addPropertyChangeListener(this);
+                btnGeoSearch = new GeoSearchButton(
+                        MauernCreateSearchGeometryListener.MAUERN_CREATE_SEARCH_GEOMETRY,
+                        mappingComponent,
+                        null,
+                        org.openide.util.NbBundle.getMessage(
+                            MauernWindowSearch.class,
+                            "MauernWindowSearch.btnGeoSearch.toolTipText"));
+                pnlButtons.add(btnGeoSearch);
+            }
+
+            fillEigentuemerListModel();
+            fillLastKlasseListModel();
+            lstEigentuemer.setModel(eigentuemerListModel);
+            lstEigentuemer.setCellRenderer(new CheckboxCellRenderer());
+            lstEigentuemer.setSelectionModel(new ListToggleSelectionModel());
+            lstEigentuemer.addListSelectionListener(new ListSelectionListener() {
+
+                    @Override
+                    public void valueChanged(final ListSelectionEvent lse) {
+                        lblselectedEigentuemer.setText("" + lstEigentuemer.getSelectedIndices().length);
+                        if (lstEigentuemer.getSelectedIndices().length != 1) {
+                            lblselectedEigentuemer.setText(
+                                lblselectedEigentuemer.getText()
+                                        + " selektierte Eigentümer");
+                        } else {
+                            lblselectedEigentuemer.setText(
+                                lblselectedEigentuemer.getText()
+                                        + " selektierter Eigentümer");
+                        }
                     }
-                }
-            });
+                });
+            lstLastklasse.setModel(lastKlasseListModel);
+            lstLastklasse.setCellRenderer(new CheckboxCellRenderer());
+            lstLastklasse.setSelectionModel(new ListToggleSelectionModel());
+            lstLastklasse.addListSelectionListener(new ListSelectionListener() {
+
+                    @Override
+                    public void valueChanged(final ListSelectionEvent lse) {
+                        lblSelektierteLastklassen.setText("" + lstLastklasse.getSelectedIndices().length);
+                        if (lstLastklasse.getSelectedIndices().length != 1) {
+                            lblSelektierteLastklassen.setText(
+                                lblSelektierteLastklassen.getText()
+                                        + " selektierte Lastklassen");
+                        } else {
+                            lblSelektierteLastklassen.setText(
+                                lblSelektierteLastklassen.getText()
+                                        + " selektierte Lastklasse");
+                        }
+                    }
+                });
+        } catch (Throwable e) {
+            LOG.warn("Error in Constructor of MauernWindowSearch. Search will not work properly.", e);
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -1473,13 +1481,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-        if (AbstractCreateSearchGeometryListener.PROPERTY_FORGUI_LAST_FEATURE.equals(evt.getPropertyName())
-                    || AbstractCreateSearchGeometryListener.PROPERTY_FORGUI_MODE.equals(evt.getPropertyName())) {
-            btnGeoSearch.visualizeSearchMode((MauernCreateSearchGeometryListener)mappingComponent.getInputListener(
-                    MauernCreateSearchGeometryListener.MAUERN_CREATE_SEARCH_GEOMETRY));
-        }
-
-        if (MeasurementPointCreateSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
+        if (MauernCreateSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
             if ((evt.getNewValue() != null) && (evt.getNewValue() instanceof Geometry)) {
                 final MetaObjectNodeServerSearch search = getServerSearch((Geometry)evt.getNewValue());
                 CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);

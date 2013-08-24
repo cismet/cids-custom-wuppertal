@@ -1226,12 +1226,12 @@
             "eaflst_100001-1000000":0.2475,
             "eaflst_1000001":0.12375,
             "eageb_1000":1.8,
-            "eafgeb_1001-10000":0.9,
+            "eageb_1001-10000":0.9,
             "eageb_10001-100000":0.45,
             "eageb_100001-1000000":0.225,
             "eageb_1000001":0.1125,
             "eaeig_1000":0.9,
-            "eafeig_1001-10000":0.45,
+            "eaeig_1001-10000":0.45,
             "eaeig_10001-100000":0.225,
             "eaeig_100001-1000000":0.1125,
             "eaeig_1000001":0.05625
@@ -1254,10 +1254,28 @@
             "eaflst_100001-1000000":0.2475,
             "eaflst_1000001":0.12375,
             "eageb_1000":1.8,
-            "eafgeb_1001-10000":0.9,
+            "eageb_1001-10000":0.9,
             "eageb_10001-100000":0.45,
             "eageb_100001-1000000":0.225,
             "eageb_1000001":0.1125
+        }
+    },{
+        "name":"NAS-Daten (nur Punkte)",
+        "id":"naspkt",
+        "description":"[x] NAS Datensatz nur Punkte",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.0,
+            "VU s":0.5,
+            "VU hV":0.0,
+            "WV ein":1.0
+        },
+        "prices":{
+            "eapkt_1000":0.2,
+            "eapkt_1001-10000":0.1,
+            "eapkt_10001-100000":0.05,
+            "eapkt_100001-1000000":0.025,
+            "eapkt_1000001":0.0125
         }
     },{
         "name":"DXF-Daten (Stadtgrundkarte kommunal)",
@@ -1277,13 +1295,13 @@
             "eaflst_100001-1000000":0.12375,
             "eaflst_1000001":0.061875,
             "eageb_1000":0.9,
-            "eafgeb_1001-10000":0.45,
+            "eageb_1001-10000":0.45,
             "eageb_10001-100000":0.225,
             "eageb_100001-1000000":0.1125,
             "eageb_1000001":0.05625
         }
     },{
-        "name":"GEOTIFF-Daten (Stadtgrundkarte kommunal)",
+        "name":"Raster-Daten (Stadtgrundkarte kommunal)",
         "id":"skmekomtiff",
         "description":"# GUI in WuNDa fehlt noch, kann noch nicht implementiert werden",
         "discounts":{
@@ -1300,7 +1318,7 @@
             "eaflst_100001-1000000":0.061875,
             "eaflst_1000001":0.0309375,
             "eageb_1000":0.45,
-            "eafgeb_1001-10000":0.225,
+            "eageb_1001-10000":0.225,
             "eageb_10001-100000":0.1125,
             "eageb_100001-1000000":0.05625,
             "eageb_1000001":0.028125

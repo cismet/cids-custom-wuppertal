@@ -14,8 +14,14 @@ package de.cismet.cids.custom.wupp.client.alkis;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import java.awt.Color;
+import sun.awt.resources.awt;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FontMetrics;
+import java.awt.Toolkit;
+
+import javax.swing.JTextField;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
@@ -70,6 +76,7 @@ public class ParcelInputField extends javax.swing.JPanel {
     private boolean overwritten = false;
     private boolean changeFocus = true;
     private boolean writeOver = true;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lblDelimitier1;
     private javax.swing.JLabel lblDelimitier2;
@@ -86,7 +93,7 @@ public class ParcelInputField extends javax.swing.JPanel {
      * Needed by the GUI-designer, not for usage.
      */
     public ParcelInputField() {
-        this(new ParcelInputFieldConfig());
+        this(ParcelInputFieldConfig.FallbackConfig);
     }
 
     /**
@@ -96,6 +103,7 @@ public class ParcelInputField extends javax.swing.JPanel {
      */
     public ParcelInputField(final ParcelInputFieldConfig config) {
         this.config = config;
+
         initComponents();
 
         txtDistrict.setDocument(new PlainDocument() {
@@ -178,8 +186,8 @@ public class ParcelInputField extends javax.swing.JPanel {
                             }
                         } else if (txtDistrict.getDocument().getText(0, txtDistrict.getDocument().getLength()).matches(
                                         "^[0-9]*")) {
-                            newStr = newStr.replaceAll("[^0-9]", "");    // checks if the entered text only contains
-                                                                         // alpha charactes and german vowel mutuations
+                            newStr = newStr.replaceAll("[^0-9]", ""); // checks if the entered text only contains
+                                                                      // alpha charactes and german vowel mutuations
                         } else if (txtDistrict.getDocument().getText(0, txtDistrict.getDocument().getLength()).matches(
                                         "^[\\u00F6\\u00D6\\u00FC\\u00DC\\u00E4\\u00C4\\u00dfa-zA-Z]*")) {
                             // removes all characters except alpha charactes and german vowel mutuations
@@ -565,7 +573,8 @@ public class ParcelInputField extends javax.swing.JPanel {
         if ((txtLandParcelNumerator.getText() != null) && !txtLandParcelNumerator.getText().isEmpty()) {
             sb.append(config.getDelimiter1AsString()).append(txtLandParcelNumerator.getText());
         }
-        if ((txtLandParcelDenominator.getText() != null) && !txtLandParcelDenominator.getText().isEmpty()) {
+        if ((txtLandParcelDenominator.getText() != null) && !txtLandParcelDenominator.getText().isEmpty()
+                    && !txtLandParcelDenominator.getText().matches("^0+$")) {
             sb.append(config.getDelimiter2AsString()).append(txtLandParcelDenominator.getText());
         }
 
@@ -640,20 +649,21 @@ public class ParcelInputField extends javax.swing.JPanel {
      * DOCUMENT ME!
      */
     private void finishDistrict() {
-        final String text = txtDistrict.getText();
+        String text = txtDistrict.getText();
         if (text.matches("^[öÖüÜäÄßa-zA-Z]+$")) {
             if (validDistrict(text)) {
                 txtDistrict.setText(getDistrictNrFromAbrv(text).toString());
+                text = txtDistrict.getText();
             } else {
                 txtDistrict.setForeground(Color.red);
             }
         }
         if (text.matches("^[0-9]+$") || text.isEmpty()) {
-            if (text.matches("^05.*")) {
-                addLeadingZeroes(txtDistrict.getDocument(), config.getMaxLenDistrictNumberField() + 2, 2);
-            } else {
-                addLeadingZeroes(txtDistrict.getDocument(), config.getMaxLenDistrictNumberField());
+            if (!text.matches("^05.*")) // Leading 05 in districtNr
+            {
+                txtDistrict.setText("05" + text);
             }
+            addLeadingZeroes(txtDistrict.getDocument(), config.getMaxLenDistrictNumberField() + 2, 2);
         }
         int intArea;
         final String oldAreaName = districtName;
@@ -714,17 +724,22 @@ public class ParcelInputField extends javax.swing.JPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        txtDistrict = new javax.swing.JTextField(config.getMaxLenDistrictNumberField() + 2);
+        txtDistrict = new javax.swing.JTextField();
         lblDelimitier1 = new javax.swing.JLabel(config.getDelimiter1AsString());
-        txtParcel = new javax.swing.JTextField(config.getMaxLenParcelNumberField());
+        txtParcel = new javax.swing.JTextField();
         lblDelimitier2 = new javax.swing.JLabel(config.getDelimiter1AsString());
-        txtLandParcelNumerator = new javax.swing.JTextField(config.getMaxLenParcelNumeratorField());
+        txtLandParcelNumerator = new javax.swing.JTextField();
         lblDelimitier3 = new javax.swing.JLabel(config.getDelimiter2AsString());
-        txtLandParcelDenominator = new javax.swing.JTextField(config.getMaxLenParcelDenominatorField());
+        txtLandParcelDenominator = new javax.swing.JTextField();
 
         setLayout(new java.awt.GridBagLayout());
 
         txtDistrict.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        final FontMetrics metrics = Toolkit.getDefaultToolkit().getFontMetrics(txtDistrict.getFont());
+        Dimension dim = new Dimension(metrics.stringWidth("0") * (config.getMaxLenDistrictNumberField() + 4),
+                txtDistrict.getPreferredSize().height);
+        txtDistrict.setMinimumSize(dim);
+        txtDistrict.setPreferredSize(dim);
         txtDistrict.addFocusListener(new java.awt.event.FocusAdapter() {
 
                 @Override
@@ -744,6 +759,10 @@ public class ParcelInputField extends javax.swing.JPanel {
         add(lblDelimitier1, gridBagConstraints);
 
         txtParcel.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        dim = new Dimension(metrics.stringWidth("0") * (config.getMaxLenParcelNumberField() + 2),
+                txtParcel.getPreferredSize().height);
+        txtParcel.setMinimumSize(dim);
+        txtParcel.setPreferredSize(dim);
         txtParcel.addFocusListener(new java.awt.event.FocusAdapter() {
 
                 @Override
@@ -763,6 +782,10 @@ public class ParcelInputField extends javax.swing.JPanel {
         add(lblDelimitier2, gridBagConstraints);
 
         txtLandParcelNumerator.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        dim = new Dimension(metrics.stringWidth("0") * (config.getMaxLenParcelNumeratorField() + 2),
+                txtLandParcelNumerator.getPreferredSize().height);
+        txtLandParcelNumerator.setMinimumSize(dim);
+        txtLandParcelNumerator.setPreferredSize(dim);
         txtLandParcelNumerator.addFocusListener(new java.awt.event.FocusAdapter() {
 
                 @Override
@@ -782,6 +805,10 @@ public class ParcelInputField extends javax.swing.JPanel {
         add(lblDelimitier3, gridBagConstraints);
 
         txtLandParcelDenominator.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        dim = new Dimension(metrics.stringWidth("0") * (config.getMaxLenParcelDenominatorField() + 2),
+                txtLandParcelDenominator.getPreferredSize().height);
+        txtLandParcelDenominator.setMinimumSize(dim);
+        txtLandParcelDenominator.setPreferredSize(dim);
         txtLandParcelDenominator.addFocusListener(new java.awt.event.FocusAdapter() {
 
                 @Override
