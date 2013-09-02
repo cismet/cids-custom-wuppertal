@@ -57,6 +57,7 @@ import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.nas.NasProductTemplate;
 
+import de.cismet.cismap.commons.Crs;
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.features.DefaultStyledFeature;
@@ -707,7 +708,9 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                 private XBoundingBox getBoundingBox() {
                     final XBoundingBox currBb = (XBoundingBox)CismapBroker.getInstance().getMappingComponent()
                                 .getCurrentBoundingBox();
-                    XBoundingBox result = new XBoundingBox(currBb.getGeometry().buffer(MAP_BUFFER));
+                    final Geometry transformedGeom = CrsTransformer.transformToGivenCrs(currBb.getGeometry(),
+                            AlkisConstants.COMMONS.SRS_SERVICE);
+                    XBoundingBox result = new XBoundingBox(transformedGeom.buffer(MAP_BUFFER));
 //                    final double diagonalLength = Math.sqrt((result.getWidth() * result.getWidth())
 //                                    + (result.getHeight() * result.getHeight()));
 //                    final XBoundingBox bufferedBox = new XBoundingBox(result.getGeometry().buffer(TOTAL_MAP_BUFFER));

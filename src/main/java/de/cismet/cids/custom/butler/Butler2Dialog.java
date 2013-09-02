@@ -784,7 +784,9 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                 private XBoundingBox getBoundingBox() {
                     final XBoundingBox currBb = (XBoundingBox)CismapBroker.getInstance().getMappingComponent()
                                 .getCurrentBoundingBox();
-                    final XBoundingBox result = new XBoundingBox(currBb.getGeometry().buffer(20));
+                    final Geometry transformedGeom = CrsTransformer.transformToGivenCrs(currBb.getGeometry(),
+                            AlkisConstants.COMMONS.SRS_SERVICE);
+                    final XBoundingBox result = new XBoundingBox(transformedGeom.buffer(20));
 
                     return result;
                 }
