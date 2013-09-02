@@ -311,7 +311,7 @@
         {"key": "Butler2",
             "butlerProducts": [
                 {
-                    "name": "Stadtgrundkarte mit kommunalen Ergänzungen, farbig"
+                    "name": "Stadtgrundkarte mit kommunalen Ergänzungen, farbig",
                     "key": "0901",
                     "colorDepth": null,
                     "format": null,
