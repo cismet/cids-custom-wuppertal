@@ -16,6 +16,8 @@ import Sirius.navigator.exception.ConnectionException;
 
 import org.apache.log4j.Logger;
 
+import org.openide.util.NbBundle;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -146,6 +148,9 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
         public DataExportButton() {
             super();
             super.setIcon(exportIcon);
+            super.setToolTipText(NbBundle.getMessage(
+                    DigitalDataExportToolbarComponentProvider.class,
+                    "DigitalDataExportToolbarComponentProvider.DataExportButton.tooltip"));
             super.setPopupMenu(popUpMenu);
             setFocusPainted(false);
             setBorderPainted(false);
