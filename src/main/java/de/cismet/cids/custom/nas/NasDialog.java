@@ -84,7 +84,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger log = Logger.getLogger(NasDialog.class);
-    private static final double MAP_BUFFER = 50d;
+    private static double MAP_BUFFER = 50d;
 //    private static final Color FEATURE_COLOR_SELECTED = new Color(1f, 0f, 0f, 0.4f);
     private static final Color FEATURE_COLOR_SELECTED = new Color(1f, 0f, 0f, 0.7f);
     private static final Color FEATURE_COLOR = new Color(0.5f, 0.5f, 0.5f, 0.1f);
@@ -155,6 +155,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
      */
     public NasDialog(final java.awt.Frame parent, final boolean modal, final Collection<Feature> selectedFeatures) {
         super(parent, modal);
+        MAP_BUFFER = Double.parseDouble(NbBundle.getMessage(NasDialog.class, "NasDialog.selectedGeomMapBuffer"));
         productTemplates.add(NasProductTemplate.POINTS);
         productTemplates.add(NasProductTemplate.OHNE_EIGENTUEMER);
         productTemplates.add(NasProductTemplate.KOMPLETT);
@@ -181,7 +182,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
 //            if ((f.getGeometry() instanceof Polygon) || (f.getGeometry() instanceof MultiPolygon)) {
             double buffer = 0;
             if ((f.getGeometry() instanceof Point) || (f.getGeometry() instanceof LineString)) {
-                buffer = 0.0001;
+                buffer = 0.001;
                 if (f.getGeometry() instanceof Point) {
                     final DefaultStyledFeature dsf = new DefaultStyledFeature();
                     dsf.setGeometry(f.getGeometry());
@@ -969,17 +970,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                     geoms[geoms.length - 1] = g;
                     unionGeom = new GeometryCollection(geoms, gc.getFactory());
                 } else {
-                    if (unionGeom instanceof GeometryCollection) {
-                        GeometryCollection gc = (GeometryCollection)unionGeom;
-                        final Geometry[] geoms = new Geometry[unionGeom.getNumGeometries() + 1];
-                        for (int i = 0; i < gc.getNumGeometries(); i++) {
-                            geoms[i] = gc.getGeometryN(i);
-                        }
-                        geoms[geoms.length - 1] = g;
-                        gc = new GeometryCollection(geoms, gc.getFactory());
-                    } else {
-                        unionGeom = unionGeom.union(g);
-                    }
+                    unionGeom = unionGeom.union(g);
                 }
             }
         }
