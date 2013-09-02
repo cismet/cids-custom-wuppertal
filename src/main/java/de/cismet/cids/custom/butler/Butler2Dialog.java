@@ -166,7 +166,12 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                             me.getX(),
                             me.getY());
                     if (tabNr == (tbpProducts.getTabCount() - 1)) {
+                        // if we have only 1 tab we need to enable the clear button on the first tab
+                        if (tbpProducts.getTabCount() == 2) {
+                            tbpProducts.setTabComponentAt(0, getTabComponent(true, 1));
+                        }
                         addCloseableTab();
+
                         tbpProducts.setSelectedIndex(tbpProducts.getTabCount() - 2);
                     }
                 }
@@ -1010,7 +1015,11 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                             tbpProducts.remove(i);
                         }
                         if (i == tbpProducts.getSelectedIndex()) {
-                            tbpProducts.setSelectedIndex(i - 1);
+                            if (i == 0) {
+                                tbpProducts.setSelectedIndex(0);
+                            } else {
+                                tbpProducts.setSelectedIndex(i - 1);
+                            }
                         }
                         updateTabComponents();
                     }
@@ -1042,9 +1051,14 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
      * DOCUMENT ME!
      */
     private void updateTabComponents() {
-        for (int i = 1; i < (tbpProducts.getTabCount() - 1); i++) {
-            tbpProducts.setTabComponentAt(i, getTabComponent(true, i + 1));
-            tbpProducts.setToolTipTextAt(i, "Produkt " + (i + 1));
+        // check for the first button if we need to set the clear button
+        if (tbpProducts.getTabCount() <= 2) {
+            tbpProducts.setTabComponentAt(0, getTabComponent(false, 1));
+        } else {
+            for (int i = 0; i < (tbpProducts.getTabCount() - 1); i++) {
+                tbpProducts.setTabComponentAt(i, getTabComponent(true, i + 1));
+                tbpProducts.setToolTipTextAt(i, "Produkt " + (i + 1));
+            }
         }
     }
 
