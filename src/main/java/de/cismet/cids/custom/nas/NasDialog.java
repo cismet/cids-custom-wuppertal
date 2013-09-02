@@ -40,6 +40,7 @@ import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
@@ -50,6 +51,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 
+import de.cismet.cids.custom.butler.Butler2Dialog;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
@@ -70,6 +72,7 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
+import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 
@@ -591,6 +594,22 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                     try {
                         final NasProductTemplate template = (NasProductTemplate)cbType.getSelectedItem();
                         final String requestId = tfAuftragsnummer.getText().trim();
+                        if ((requestId != null) && requestId.contains(System.getProperty("file.separator"))) {
+                            JOptionPane.showMessageDialog(
+                                StaticSwingTools.getParentFrame(NasDialog.this),
+                                org.openide.util.NbBundle.getMessage(
+                                    NasDialog.class,
+                                    "NasDialog.OrderIdCheck.JOptionPane.message")
+                                        + " '"
+                                        + System.getProperty("file.separator")
+                                        + "'",
+                                org.openide.util.NbBundle.getMessage(
+                                    NasDialog.class,
+                                    "NasDialog.OrderIdCheck.JOptionPane.title"),
+                                JOptionPane.ERROR_MESSAGE);
+                            tfAuftragsnummer.requestFocus();
+                            return;
+                        }
                         final ArrayList<ProductGroupAmount> list = feePreview.getProductGroupAmounts();
                         final ProductGroupAmount[] goupAmounts = list.toArray(new ProductGroupAmount[list.size()]);
                         if (BillingPopup.doBilling(
