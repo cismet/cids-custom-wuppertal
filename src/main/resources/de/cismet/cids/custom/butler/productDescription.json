@@ -78,7 +78,8 @@
             ],
             "butlerResolutions": [
                 {
-                    "key": "ohne"
+                    "key": "ohne",
+                    "description":""
                 }
             ]
         }, {
@@ -130,11 +131,14 @@
             ],
             "butlerResolutions": [
                 {
-                    "key": "10"
+                    "key": "10",
+                    "description":"10 cm/Pixel (Beste Qualität)"
                 }, {
-                    "key": "15"
+                    "key": "15",
+                    "description":"15 cm/Pixel (Normale Qualität)"
                 }, {
-                    "key": "31"
+                    "key": "31",
+                    "description":"31 cm/Pixel (Entwurfsqualität)"
                 }
             ]
         }, {
@@ -193,11 +197,14 @@
             ],
             "butlerResolutions": [
                 {
-                    "key": "50"
+                    "key": "50",
+                    "description":"50 cm/Pixel (Beste Qualität)"
                 }, {
-                    "key": "70"
+                    "key": "70",
+                    "description":"70 cm/Pixel (Normale Qualität)"
                 }, {
-                    "key": "150"
+                    "key": "150",
+                    "description":"150 cm/Pixel (Entwurfsqualität)"
                 }
             ]
         }, {
@@ -249,11 +256,14 @@
             ],
             "butlerResolutions": [
                 {
-                    "key": "10"
+                    "key": "10",
+                    "description":"10 cm/Pixel (Beste Qualität)"
                 }, {
-                    "key": "15"
+                    "key": "15",
+                    "description":"15 cm/Pixel (Normale Qualität)"
                 }, {
-                    "key": "31"
+                    "key": "31",
+                    "description":"31 cm/Pixel (Entwurfsqualität)"
                 }
             ]
         }, {
@@ -291,7 +301,8 @@
             ],
             "butlerResolutions": [
                 {
-                    "key": "ohne"
+                    "key": "ohne",
+                    "description":""
                 }
             ]
         }
@@ -333,7 +344,8 @@
             ],
             "butlerResolutions": [
                 {
-                    "key": "ohne"
+                    "key": "ohne",
+                    "description":""
                 }
             ]
 
