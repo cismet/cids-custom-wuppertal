@@ -311,14 +311,14 @@
         {"key": "Butler2",
             "butlerProducts": [
                 {
-                    "name": "NRW-Kommunal Stadtgrundkarte mit kommunalen Ergänzungen, farbig",
+                    "name": "Stadtgrundkarte mit kommunalen Ergänzungen, farbig"
                     "key": "0901",
                     "colorDepth": null,
                     "format": null,
                     "resolution": null,
                     "volumeParamText": "Fläche (km²):"
                 }, {
-                    "name": "NRW-Kommunal Stadtgrundkarte mit kommunalen Ergänzungen, grau",
+                    "name": "Stadtgrundkarte mit kommunalen Ergänzungen, grau",
                     "key": "0902g",
                     "colorDepth": null,
                     "format": null,
