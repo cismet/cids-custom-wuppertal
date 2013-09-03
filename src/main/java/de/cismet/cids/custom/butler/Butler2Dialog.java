@@ -120,6 +120,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
     private javax.swing.JComboBox cbPointGeom;
     private javax.swing.JComboBox cbSize;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblGeomTitle;
     private javax.swing.JLabel lblLowerPosition;
     private javax.swing.JLabel lblPointGeoms;
     private javax.swing.JLabel lblRahmenkartenNr;
@@ -292,6 +293,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
         jPanel1 = new javax.swing.JPanel();
         tfLowerN = new javax.swing.JTextField();
         tfLowerE = new javax.swing.JTextField();
+        lblGeomTitle = new javax.swing.JLabel();
         pnlControls = new javax.swing.JPanel();
         btnCreate = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
@@ -396,12 +398,12 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
         pnlMapLayout.setHorizontalGroup(
             pnlMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                435,
+                481,
                 Short.MAX_VALUE));
         pnlMapLayout.setVerticalGroup(
             pnlMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                299,
+                320,
                 Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -498,13 +500,24 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
         pnlMapSettings.add(jPanel1, gridBagConstraints);
 
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblGeomTitle,
+            org.openide.util.NbBundle.getMessage(Butler2Dialog.class, "Butler2Dialog.lblGeomTitle.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 15, 0);
+        pnlMapSettings.add(lblGeomTitle, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(45, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(18, 10, 10, 10);
         getContentPane().add(pnlMapSettings, gridBagConstraints);
 
         pnlControls.setLayout(new java.awt.GridBagLayout());
