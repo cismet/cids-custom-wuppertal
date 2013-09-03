@@ -34,6 +34,8 @@ import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import java.text.DecimalFormatSymbols;
+
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -84,6 +86,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
     ArrayList<PredefinedBoxes> boxes;
     final DocumentListener upperTfListeners;
     boolean firstUpperTFChange = false;
+    final java.text.DecimalFormat coordFormatter = new java.text.DecimalFormat("#.###");
     private MappingComponent map;
     private PredefinedBoxes noSelectionBox = null;
     private DefaultStyledFeature rectangleFeature;
@@ -95,6 +98,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
     private javax.swing.JComboBox cbSize;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel lblLowerPosition;
     private javax.swing.JLabel lblRequestNumber;
     private javax.swing.JLabel lblSize;
@@ -124,6 +128,9 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
      */
     public Butler1Dialog(final java.awt.Frame parent, final boolean modal) {
         super(parent, modal);
+        final DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols();
+        formatSymbols.setDecimalSeparator('.');
+        coordFormatter.setDecimalFormatSymbols(formatSymbols);
         boxes = PredefinedBoxes.butler1Boxes;
         initComponents();
         tfLowerE.getDocument().addDocumentListener(this);
@@ -184,7 +191,12 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                             me.getX(),
                             me.getY());
                     if (tabNr == (tbpProducts.getTabCount() - 1)) {
+                        // if we have only 1 tab we need to enable the clear button on the first tab
+                        if (tbpProducts.getTabCount() == 2) {
+                            tbpProducts.setTabComponentAt(0, getTabComponent(true, 1));
+                        }
                         addCloseableTab();
+
                         tbpProducts.setSelectedIndex(tbpProducts.getTabCount() - 2);
                     }
                 }
@@ -248,6 +260,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                 new java.awt.Dimension(32767, 0));
         jLabel1 = new javax.swing.JLabel();
         cbGeoms = new ButlerGeometryComboBox(ButlerGeometryComboBox.GEOM_FILTER_TYPE.RECTANGLE);
+        jLabel2 = new javax.swing.JLabel();
         pnlControls = new javax.swing.JPanel();
         btnCreate = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
@@ -295,7 +308,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
             org.openide.util.NbBundle.getMessage(Butler1Dialog.class, "Butler1Dialog.lblLowerPosition.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 5);
         pnlMapSettings.add(lblLowerPosition, gridBagConstraints);
@@ -305,7 +318,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         tfLowerE.setPreferredSize(new java.awt.Dimension(90, 27));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 5);
         pnlMapSettings.add(tfLowerE, gridBagConstraints);
 
@@ -314,7 +327,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         tfLowerN.setPreferredSize(new java.awt.Dimension(90, 27));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
         pnlMapSettings.add(tfLowerN, gridBagConstraints);
 
@@ -323,7 +336,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
             org.openide.util.NbBundle.getMessage(Butler1Dialog.class, "Butler1Dialog.lblSize.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
         pnlMapSettings.add(lblSize, gridBagConstraints);
@@ -348,7 +361,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -362,17 +375,17 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         pnlMapLayout.setHorizontalGroup(
             pnlMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                375,
+                479,
                 Short.MAX_VALUE));
         pnlMapLayout.setVerticalGroup(
             pnlMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                320,
+                290,
                 Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -416,7 +429,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
@@ -427,7 +440,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
             org.openide.util.NbBundle.getMessage(Butler1Dialog.class, "Butler1Dialog.jLabel1.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 5);
         pnlMapSettings.add(jLabel1, gridBagConstraints);
         jLabel1.getAccessibleContext()
@@ -445,12 +458,23 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
         pnlMapSettings.add(cbGeoms, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel2,
+            org.openide.util.NbBundle.getMessage(Butler1Dialog.class, "Butler1Dialog.jLabel2.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 15, 0);
+        pnlMapSettings.add(jLabel2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -720,10 +744,10 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
             tfLowerN.getDocument().removeDocumentListener(this);
             tfUpperE.getDocument().removeDocumentListener(upperTfListeners);
             tfUpperN.getDocument().removeDocumentListener(upperTfListeners);
-            tfLowerE.setText("" + envelope.getMinX());
-            tfLowerN.setText("" + envelope.getMinY());
-            tfUpperE.setText("" + envelope.getMaxX());
-            tfUpperN.setText("" + envelope.getMaxY());
+            tfLowerE.setText("" + coordFormatter.format(envelope.getMinX()));
+            tfLowerN.setText("" + coordFormatter.format(envelope.getMinY()));
+            tfUpperE.setText("" + coordFormatter.format(envelope.getMaxX()));
+            tfUpperN.setText("" + coordFormatter.format(envelope.getMaxY()));
             cbSize.setSelectedItem(noSelectionBox);
             changeMap();
             tfLowerE.getDocument().addDocumentListener(this);
@@ -787,7 +811,9 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                 private XBoundingBox getBoundingBox() {
                     final XBoundingBox currBb = (XBoundingBox)CismapBroker.getInstance().getMappingComponent()
                                 .getCurrentBoundingBox();
-                    final XBoundingBox result = new XBoundingBox(currBb.getGeometry().buffer(20));
+                    final Geometry transformedGeom = CrsTransformer.transformToGivenCrs(currBb.getGeometry(),
+                            AlkisConstants.COMMONS.SRS_SERVICE);
+                    final XBoundingBox result = new XBoundingBox(transformedGeom.buffer(20));
 
                     return result;
                 }
@@ -987,7 +1013,11 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                             tbpProducts.remove(i);
                         }
                         if (i == tbpProducts.getSelectedIndex()) {
-                            tbpProducts.setSelectedIndex(i - 1);
+                            if (i == 0) {
+                                tbpProducts.setSelectedIndex(0);
+                            } else {
+                                tbpProducts.setSelectedIndex(i - 1);
+                            }
                         }
                         updateTabComponents();
                     }
@@ -1019,9 +1049,14 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
      * DOCUMENT ME!
      */
     private void updateTabComponents() {
-        for (int i = 1; i < (tbpProducts.getTabCount() - 1); i++) {
-            tbpProducts.setTabComponentAt(i, getTabComponent(true, i + 1));
-            tbpProducts.setToolTipTextAt(i, "Produkt " + (i + 1));
+        // check for the first button if we need to set the clear button
+        if (tbpProducts.getTabCount() <= 2) {
+            tbpProducts.setTabComponentAt(0, getTabComponent(false, 1));
+        } else {
+            for (int i = 0; i < (tbpProducts.getTabCount() - 1); i++) {
+                tbpProducts.setTabComponentAt(i, getTabComponent(true, i + 1));
+                tbpProducts.setToolTipTextAt(i, "Produkt " + (i + 1));
+            }
         }
     }
 
