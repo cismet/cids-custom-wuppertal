@@ -132,13 +132,13 @@
             "butlerResolutions": [
                 {
                     "key": "10",
-                    "description":"10 cm/Pixel (Beste Qualität)"
+                    "description":"cm/Pixel (Beste Qualität)"
                 }, {
                     "key": "15",
-                    "description":"15 cm/Pixel (Normale Qualität)"
+                    "description":"cm/Pixel (Normale Qualität)"
                 }, {
                     "key": "31",
-                    "description":"31 cm/Pixel (Entwurfsqualität)"
+                    "description":"cm/Pixel (Entwurfsqualität)"
                 }
             ]
         }, {
@@ -186,6 +186,20 @@
                     "format": null,
                     "resolution": null,
                     "volumeParamText": "Fläche (km²):"
+                }, {
+                    "name": "Regional 2013-06 Grauwert",
+                    "key": "0307",
+                    "colorDepth": 8,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                }, {
+                    "name": "Regional 2013-06 Farbe",
+                    "key": "0308",
+                    "colorDepth": 8,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
                 }
             ],
             "butlerFormats": [
@@ -198,13 +212,13 @@
             "butlerResolutions": [
                 {
                     "key": "50",
-                    "description":"50 cm/Pixel (Beste Qualität)"
+                    "description":"cm/Pixel (Beste Qualität)"
                 }, {
                     "key": "70",
-                    "description":"70 cm/Pixel (Normale Qualität)"
+                    "description":"cm/Pixel (Normale Qualität)"
                 }, {
                     "key": "150",
-                    "description":"150 cm/Pixel (Entwurfsqualität)"
+                    "description":"cm/Pixel (Entwurfsqualität)"
                 }
             ]
         }, {
@@ -257,13 +271,13 @@
             "butlerResolutions": [
                 {
                     "key": "10",
-                    "description":"10 cm/Pixel (Beste Qualität)"
+                    "description":"cm/Pixel (Beste Qualität)"
                 }, {
                     "key": "15",
-                    "description":"15 cm/Pixel (Normale Qualität)"
+                    "description":"cm/Pixel (Normale Qualität)"
                 }, {
                     "key": "31",
-                    "description":"31 cm/Pixel (Entwurfsqualität)"
+                    "description":"cm/Pixel (Entwurfsqualität)"
                 }
             ]
         }, {
