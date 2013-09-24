@@ -40,6 +40,7 @@ import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
@@ -70,6 +71,7 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
+import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 
@@ -84,7 +86,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger log = Logger.getLogger(NasDialog.class);
-    private static final double MAP_BUFFER = 50d;
+    private static double MAP_BUFFER = 50d;
 //    private static final Color FEATURE_COLOR_SELECTED = new Color(1f, 0f, 0f, 0.4f);
     private static final Color FEATURE_COLOR_SELECTED = new Color(1f, 0f, 0f, 0.7f);
     private static final Color FEATURE_COLOR = new Color(0.5f, 0.5f, 0.5f, 0.1f);
@@ -155,6 +157,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
      */
     public NasDialog(final java.awt.Frame parent, final boolean modal, final Collection<Feature> selectedFeatures) {
         super(parent, modal);
+        MAP_BUFFER = Double.parseDouble(NbBundle.getMessage(NasDialog.class, "NasDialog.selectedGeomMapBuffer"));
         productTemplates.add(NasProductTemplate.POINTS);
         productTemplates.add(NasProductTemplate.OHNE_EIGENTUEMER);
         productTemplates.add(NasProductTemplate.KOMPLETT);
@@ -181,7 +184,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
 //            if ((f.getGeometry() instanceof Polygon) || (f.getGeometry() instanceof MultiPolygon)) {
             double buffer = 0;
             if ((f.getGeometry() instanceof Point) || (f.getGeometry() instanceof LineString)) {
-                buffer = 0.0001;
+                buffer = 0.001;
                 if (f.getGeometry() instanceof Point) {
                     final DefaultStyledFeature dsf = new DefaultStyledFeature();
                     dsf.setGeometry(f.getGeometry());
@@ -590,6 +593,34 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                     try {
                         final NasProductTemplate template = (NasProductTemplate)cbType.getSelectedItem();
                         final String requestId = tfAuftragsnummer.getText().trim();
+                        if ((requestId != null)) {
+                            boolean containsWrongChar = false;
+                            String wrongChar = "";
+                            if (requestId.contains("/")) {
+                                containsWrongChar = true;
+                                wrongChar += "/";
+                            } else if (requestId.contains("\\")) {
+                                containsWrongChar = true;
+                                wrongChar += "\\";
+                            }
+
+                            if (containsWrongChar) {
+                                JOptionPane.showMessageDialog(
+                                    StaticSwingTools.getParentFrame(NasDialog.this),
+                                    org.openide.util.NbBundle.getMessage(
+                                        NasDialog.class,
+                                        "NasDialog.OrderIdCheck.JOptionPane.message")
+                                            + " '"
+                                            + wrongChar
+                                            + "'",
+                                    org.openide.util.NbBundle.getMessage(
+                                        NasDialog.class,
+                                        "NasDialog.OrderIdCheck.JOptionPane.title"),
+                                    JOptionPane.ERROR_MESSAGE);
+                                tfAuftragsnummer.requestFocus();
+                                return;
+                            }
+                        }
                         final ArrayList<ProductGroupAmount> list = feePreview.getProductGroupAmounts();
                         final ProductGroupAmount[] goupAmounts = list.toArray(new ProductGroupAmount[list.size()]);
                         if (BillingPopup.doBilling(
@@ -687,7 +718,9 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                 private XBoundingBox getBoundingBox() {
                     final XBoundingBox currBb = (XBoundingBox)CismapBroker.getInstance().getMappingComponent()
                                 .getCurrentBoundingBox();
-                    XBoundingBox result = new XBoundingBox(currBb.getGeometry().buffer(MAP_BUFFER));
+                    final Geometry transformedGeom = CrsTransformer.transformToGivenCrs(currBb.getGeometry(),
+                            AlkisConstants.COMMONS.SRS_SERVICE);
+                    XBoundingBox result = new XBoundingBox(transformedGeom.buffer(MAP_BUFFER));
 //                    final double diagonalLength = Math.sqrt((result.getWidth() * result.getWidth())
 //                                    + (result.getHeight() * result.getHeight()));
 //                    final XBoundingBox bufferedBox = new XBoundingBox(result.getGeometry().buffer(TOTAL_MAP_BUFFER));
@@ -969,17 +1002,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                     geoms[geoms.length - 1] = g;
                     unionGeom = new GeometryCollection(geoms, gc.getFactory());
                 } else {
-                    if (unionGeom instanceof GeometryCollection) {
-                        GeometryCollection gc = (GeometryCollection)unionGeom;
-                        final Geometry[] geoms = new Geometry[unionGeom.getNumGeometries() + 1];
-                        for (int i = 0; i < gc.getNumGeometries(); i++) {
-                            geoms[i] = gc.getGeometryN(i);
-                        }
-                        geoms[geoms.length - 1] = g;
-                        gc = new GeometryCollection(geoms, gc.getFactory());
-                    } else {
-                        unionGeom = unionGeom.union(g);
-                    }
+                    unionGeom = unionGeom.union(g);
                 }
             }
         }

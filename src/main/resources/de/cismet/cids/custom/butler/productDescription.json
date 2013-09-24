@@ -78,7 +78,8 @@
             ],
             "butlerResolutions": [
                 {
-                    "key": "ohne"
+                    "key": "ohne",
+                    "description":""
                 }
             ]
         }, {
@@ -130,11 +131,14 @@
             ],
             "butlerResolutions": [
                 {
-                    "key": "10"
+                    "key": "10",
+                    "description":"cm/Pixel (Beste Qualität)"
                 }, {
-                    "key": "15"
+                    "key": "15",
+                    "description":"cm/Pixel (Normale Qualität)"
                 }, {
-                    "key": "31"
+                    "key": "31",
+                    "description":"cm/Pixel (Entwurfsqualität)"
                 }
             ]
         }, {
@@ -182,6 +186,20 @@
                     "format": null,
                     "resolution": null,
                     "volumeParamText": "Fläche (km²):"
+                }, {
+                    "name": "Regional 2013-06 Grauwert",
+                    "key": "0307",
+                    "colorDepth": 8,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
+                }, {
+                    "name": "Regional 2013-06 Farbe",
+                    "key": "0308",
+                    "colorDepth": 8,
+                    "format": null,
+                    "resolution": null,
+                    "volumeParamText": "Fläche (km²):"
                 }
             ],
             "butlerFormats": [
@@ -193,11 +211,14 @@
             ],
             "butlerResolutions": [
                 {
-                    "key": "50"
+                    "key": "50",
+                    "description":"cm/Pixel (Beste Qualität)"
                 }, {
-                    "key": "70"
+                    "key": "70",
+                    "description":"cm/Pixel (Normale Qualität)"
                 }, {
-                    "key": "150"
+                    "key": "150",
+                    "description":"cm/Pixel (Entwurfsqualität)"
                 }
             ]
         }, {
@@ -249,11 +270,14 @@
             ],
             "butlerResolutions": [
                 {
-                    "key": "10"
+                    "key": "10",
+                    "description":"cm/Pixel (Beste Qualität)"
                 }, {
-                    "key": "15"
+                    "key": "15",
+                    "description":"cm/Pixel (Normale Qualität)"
                 }, {
-                    "key": "31"
+                    "key": "31",
+                    "description":"cm/Pixel (Entwurfsqualität)"
                 }
             ]
         }, {
@@ -291,7 +315,8 @@
             ],
             "butlerResolutions": [
                 {
-                    "key": "ohne"
+                    "key": "ohne",
+                    "description":""
                 }
             ]
         }
@@ -300,14 +325,14 @@
         {"key": "Butler2",
             "butlerProducts": [
                 {
-                    "name": "NRW-Kommunal Stadtgrundkarte mit kommunalen Ergänzungen, farbig",
+                    "name": "Stadtgrundkarte mit kommunalen Ergänzungen, farbig",
                     "key": "0901",
                     "colorDepth": null,
                     "format": null,
                     "resolution": null,
                     "volumeParamText": "Fläche (km²):"
                 }, {
-                    "name": "NRW-Kommunal Stadtgrundkarte mit kommunalen Ergänzungen, grau",
+                    "name": "Stadtgrundkarte mit kommunalen Ergänzungen, grau",
                     "key": "0902g",
                     "colorDepth": null,
                     "format": null,
@@ -333,7 +358,8 @@
             ],
             "butlerResolutions": [
                 {
-                    "key": "ohne"
+                    "key": "ohne",
+                    "description":""
                 }
             ]
 

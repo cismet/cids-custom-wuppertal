@@ -11,11 +11,13 @@
  */
 package de.cismet.cids.custom.butler;
 
+import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 
-import java.awt.Color;
 import java.awt.Component;
+
+import java.text.DecimalFormatSymbols;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +25,11 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.ListCellRenderer;
 
+import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+
+import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.features.Feature;
 import de.cismet.cismap.commons.features.FeatureCollection;
 import de.cismet.cismap.commons.gui.MappingComponent;
@@ -67,7 +70,7 @@ public class ButlerGeometryComboBox extends JComboBox {
         final List objects = new ArrayList();
         objects.add("keine Auswahl");
         for (final Feature f : fc.getAllFeatures()) {
-            final Geometry g = f.getGeometry();
+            final Geometry g = CrsTransformer.transformToGivenCrs(f.getGeometry(), AlkisConstants.COMMONS.SRS_SERVICE);
             // todo check that the geoms are in the right crs
             if (validatesFilter(g, filter)) {
                 objects.add(g);
@@ -148,7 +151,18 @@ public class ButlerGeometryComboBox extends JComboBox {
                     text = value.toString();
                 }
             } else if (filter == GEOM_FILTER_TYPE.RECTANGLE) {
-                text = value.toString();
+                if (value instanceof Geometry) {
+                    final Envelope g = ((Geometry)value).getEnvelopeInternal();
+                    final DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols();
+                    formatSymbols.setDecimalSeparator('.');
+                    final java.text.DecimalFormat myFormatter = new java.text.DecimalFormat("#.###", formatSymbols);
+                    text = "Polygon (" + "(" + myFormatter.format(g.getMinX()) + "," + myFormatter.format(g.getMinY())
+                                + ")"
+                                + "(" + myFormatter.format(g.getMaxX()) + "," + myFormatter.format(g.getMaxY()) + ")"
+                                + ")";
+                } else {
+                    text = value.toString();
+                }
             }
 
             setText(text);
