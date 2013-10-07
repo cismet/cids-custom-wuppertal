@@ -398,24 +398,17 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                 }
             } else if (format.equalsIgnoreCase(TEXT)) {
                 try {
-                    final String eapkt;
-                    if (numOfPoints <= 1000) {
-                        eapkt = "eapkt_1000";
-                    } else if (numOfPoints <= 10000) {
-                        eapkt = "eapkt_1001-10000";
-                    } else if (numOfPoints <= 100000) {
-                        eapkt = "eapkt_10001-100000";
-                    } else if (numOfPoints <= 1000000) {
-                        eapkt = "eapkt_100001-1000000";
-                    } else {
-                        eapkt = "eapkt_1000001";
-                    }
+                    final ArrayList<ProductGroupAmount> productGroupAmounts = getProductGroupAmountForObject(
+                            "eapkt",
+                            numOfPoints);
+                    final ProductGroupAmount[] groupAmounts = productGroupAmounts.toArray(
+                            new ProductGroupAmount[productGroupAmounts.size()]);
 
                     if (BillingPopup.doBilling(
                                     "pktlsttxt",
                                     "no.yet",
                                     (Geometry)null,
-                                    new ProductGroupAmount(eapkt, numOfPoints))) {
+                                    groupAmounts)) {
                         CismetThreadPool.execute(new GenerateProduct(format, selectedAlkisPoints));
                     }
                 } catch (Exception e) {
@@ -440,6 +433,40 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
             }
         }
     } //GEN-LAST:event_btnCreateActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   objectBaseKey  DOCUMENT ME!
+     * @param   amount         DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private ArrayList<ProductGroupAmount> getProductGroupAmountForObject(final String objectBaseKey, int amount) {
+        final ArrayList<ProductGroupAmount> result = new ArrayList<ProductGroupAmount>();
+        if (amount > 1000000) {
+            final int tmpPoints = amount - 1000000;
+            result.add(new ProductGroupAmount(objectBaseKey + "_1000001", tmpPoints));
+            amount = 1000000;
+        }
+        if (amount > 100000) {
+            final int tmpPoints = amount - 100000;
+            result.add(new ProductGroupAmount(objectBaseKey + "_100001-1000000", tmpPoints));
+            amount = 100000;
+        }
+        if (amount > 10000) {
+            final int tmpPoints = amount - 10000;
+            result.add(new ProductGroupAmount(objectBaseKey + "_10001-100000", tmpPoints));
+            amount = 10000;
+        }
+        if (amount > 1000) {
+            final int tmpPoints = amount - 1000;
+            result.add(new ProductGroupAmount(objectBaseKey + "_1001-10000", tmpPoints));
+            amount = 1000;
+        }
+        result.add(new ProductGroupAmount(objectBaseKey + "_1000", amount));
+        return result;
+    }
 
     /**
      * DOCUMENT ME!

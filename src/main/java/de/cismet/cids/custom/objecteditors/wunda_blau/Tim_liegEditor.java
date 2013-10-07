@@ -18,8 +18,18 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
 
+import org.openide.util.Exceptions;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import de.cismet.cids.client.tools.DevelopmentTools;
+
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.editors.BeanInitializer;
+import de.cismet.cids.editors.BeanInitializerProvider;
+import de.cismet.cids.editors.DefaultBeanInitializer;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 
 import de.cismet.cids.tools.metaobjectrenderer.Titled;
@@ -32,12 +42,16 @@ import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
  * @author   thorsten
  * @version  $Revision$, $Date$
  */
-public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled {
+public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled,
+    BeanInitializerProvider,
+    PropertyChangeListener {
 
     //~ Instance fields --------------------------------------------------------
 
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBodenschaetzung_ueb_von;
+    private javax.swing.JButton btnSchlusspruefung_von;
     private javax.swing.JComboBox cboGeom;
     private javax.swing.JButton cmdAddKart;
     private javax.swing.JButton cmdAddSgk;
@@ -73,6 +87,18 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextArea2;
+    private javax.swing.JTextArea jTextArea3;
+    private javax.swing.JTextArea jTextArea4;
+    private javax.swing.JTextArea jTextArea5;
+    private javax.swing.JTextArea jTextArea6;
     private de.cismet.cids.custom.objecteditors.commons.JaNeinNullCombo jnAlb_rel;
     private de.cismet.cids.custom.objecteditors.commons.JaNeinNullCombo jnAlk_bod;
     private de.cismet.cids.custom.objecteditors.commons.JaNeinNullCombo jnAlk_geb;
@@ -89,6 +115,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
     private org.jdesktop.swingx.JXDatePicker jxdAlk_beginn_dat;
     private org.jdesktop.swingx.JXDatePicker jxdAlk_ent_dat;
     private org.jdesktop.swingx.JXDatePicker jxdAlk_ueb_dat;
+    private org.jdesktop.swingx.JXDatePicker jxdBodenschaetzung_ueb_am;
     private org.jdesktop.swingx.JXDatePicker jxdCity_ueb_dat;
     private org.jdesktop.swingx.JXDatePicker jxdComliste_dat;
     private org.jdesktop.swingx.JXDatePicker jxdDgk_ueb_dat;
@@ -101,6 +128,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
     private org.jdesktop.swingx.JXDatePicker jxdPruef_gebeinmess_rueckgabe;
     private org.jdesktop.swingx.JXDatePicker jxdRealn_ueb_am;
     private org.jdesktop.swingx.JXDatePicker jxdScan_dat;
+    private org.jdesktop.swingx.JXDatePicker jxdSchlusspruefung_am;
     private org.jdesktop.swingx.JXDatePicker jxdStadt_ent_dat;
     private org.jdesktop.swingx.JXDatePicker jxdStadt_ueb_dat;
     private org.jdesktop.swingx.JXDatePicker jxdTim_erled_dat;
@@ -110,6 +138,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
     private org.jdesktop.swingx.JXDatePicker jxdTop_grund_beginn;
     private org.jdesktop.swingx.JXDatePicker jxdUeber_ueb_dat;
     private org.jdesktop.swingx.JXDatePicker jxdUebersicht_liste_erled_dat;
+    private javax.swing.JLabel lblAbschluss_registrierung_bem;
     private javax.swing.JLabel lblAlb_rel;
     private javax.swing.JLabel lblAlb_ueb_beab;
     private javax.swing.JLabel lblAlb_ueb_dat;
@@ -118,11 +147,11 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
     private javax.swing.JLabel lblAlk_bod;
     private javax.swing.JLabel lblAlk_ent_beab;
     private javax.swing.JLabel lblAlk_ent_dat;
-    private javax.swing.JLabel lblAlk_feld;
     private javax.swing.JLabel lblAlk_geb;
     private javax.swing.JLabel lblAlk_luft;
     private javax.swing.JLabel lblAlk_nutz;
     private javax.swing.JLabel lblAlk_prio;
+    private javax.swing.JLabel lblAlk_projekt_name;
     private javax.swing.JLabel lblAlk_rel;
     private javax.swing.JLabel lblAlk_son1;
     private javax.swing.JLabel lblAlk_son2;
@@ -133,6 +162,8 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
     private javax.swing.JLabel lblAlkis_rel;
     private javax.swing.JLabel lblAuftraggeber;
     private javax.swing.JLabel lblBereich_lage_riss;
+    private javax.swing.JLabel lblBodenschaetzung_ueb_am;
+    private javax.swing.JLabel lblBodenschaetzung_ueb_von;
     private javax.swing.JLabel lblCity_bem;
     private javax.swing.JLabel lblCity_rel;
     private javax.swing.JLabel lblCity_ueb_beab;
@@ -163,11 +194,14 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
     private javax.swing.JLabel lblLoe_grund;
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblPruef_gebeinmess_abgabe;
+    private javax.swing.JLabel lblPruef_gebeinmess_bem;
     private javax.swing.JLabel lblPruef_gebeinmess_rueckgabe;
     private javax.swing.JLabel lblPruefung_von;
     private javax.swing.JLabel lblRealn_ueb_am;
     private javax.swing.JLabel lblRealn_ueb_von;
     private javax.swing.JLabel lblScan_dat;
+    private javax.swing.JLabel lblSchlusspruefung_am;
+    private javax.swing.JLabel lblSchlusspruefung_von;
     private javax.swing.JLabel lblStadt_bem;
     private javax.swing.JLabel lblStadt_ent_beab;
     private javax.swing.JLabel lblStadt_ent_dat;
@@ -179,28 +213,30 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
     private javax.swing.JLabel lblTop_aussen_beginn;
     private javax.swing.JLabel lblTop_grund_beendet;
     private javax.swing.JLabel lblTop_grund_beginn;
+    private javax.swing.JLabel lblTop_grund_bem;
     private javax.swing.JLabel lblUeber_bem;
     private javax.swing.JLabel lblUeber_rel;
     private javax.swing.JLabel lblUeber_ueb_beab;
     private javax.swing.JLabel lblUeber_ueb_dat;
+    private javax.swing.JLabel lblUebern_innen_bem;
     private javax.swing.JLabel lblUebersicht_liste_erled_dat;
+    private javax.swing.JLabel lbl_Bereich_lage_riss_nummer;
     private javax.swing.JPanel panKartographie;
     private javax.swing.JPanel panStadtgrundkarte;
     private javax.swing.JScrollPane scpKartographie;
     private javax.swing.JScrollPane scpStadtgrundkarte;
     private javax.swing.JTabbedPane tbpAdditionalInfo;
     private javax.swing.JTextField txtAlb_ueb_beab;
-    private javax.swing.JTextField txtAlk_bem;
     private javax.swing.JTextField txtAlk_ent_beab;
-    private javax.swing.JTextField txtAlk_feld;
     private javax.swing.JTextField txtAlk_luft;
     private javax.swing.JTextField txtAlk_prio;
-    private javax.swing.JTextField txtAlk_son1;
+    private javax.swing.JTextField txtAlk_projekt_name;
     private javax.swing.JTextField txtAlk_son2;
     private javax.swing.JTextField txtAlk_ueb_beab;
     private javax.swing.JTextField txtAlk_ver;
     private javax.swing.JTextField txtAuftraggeber;
     private javax.swing.JTextField txtBereich_lage_riss;
+    private javax.swing.JTextField txtBodenschaetzung_ueb_von;
     private javax.swing.JTextField txtCity_bem;
     private javax.swing.JTextField txtCity_ueb_beab;
     private javax.swing.JTextField txtDgk_ueb_beab;
@@ -214,11 +250,13 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtPruefung_von;
     private javax.swing.JTextField txtRealn_ueb_von;
+    private javax.swing.JTextField txtSchlusspruefung_von;
     private javax.swing.JTextField txtStadt_bem;
     private javax.swing.JTextField txtStadt_ent_beab;
     private javax.swing.JTextField txtStadt_ueb_beab;
     private javax.swing.JTextField txtUeber_bem;
     private javax.swing.JTextField txtUeber_ueb_beab;
+    private javax.swing.JTextField txt_Bereich_lage_riss_nummer;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -254,6 +292,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         } else {
             cmdAddKart.setVisible(false);
         }
+        cidsBean.addPropertyChangeListener(this);
     }
 
     /**
@@ -299,8 +338,11 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         txtAlk_prio = new javax.swing.JTextField();
         lblBereich_lage_riss = new javax.swing.JLabel();
         txtBereich_lage_riss = new javax.swing.JTextField();
+        lbl_Bereich_lage_riss_nummer = new javax.swing.JLabel();
+        txt_Bereich_lage_riss_nummer = new javax.swing.JTextField();
+        lblAlk_projekt_name = new javax.swing.JLabel();
+        txtAlk_projekt_name = new javax.swing.JTextField();
         lblAlk_bem = new javax.swing.JLabel();
-        txtAlk_bem = new javax.swing.JTextField();
         lblAlk_top = new javax.swing.JLabel();
         jnAlk_top = new de.cismet.cids.custom.objecteditors.commons.JaNeinNullCombo();
         lblAlk_geb = new javax.swing.JLabel();
@@ -310,11 +352,8 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         lblAlk_bod = new javax.swing.JLabel();
         jnAlk_bod = new de.cismet.cids.custom.objecteditors.commons.JaNeinNullCombo();
         lblAlk_son1 = new javax.swing.JLabel();
-        txtAlk_son1 = new javax.swing.JTextField();
         lblAlk_ver = new javax.swing.JLabel();
         txtAlk_ver = new javax.swing.JTextField();
-        lblAlk_feld = new javax.swing.JLabel();
-        txtAlk_feld = new javax.swing.JTextField();
         lblTop_aussen_beginn = new javax.swing.JLabel();
         jxdTop_aussen_beginn = new org.jdesktop.swingx.JXDatePicker();
         lblTop_aussen_beendet = new javax.swing.JLabel();
@@ -390,6 +429,32 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
         jButton10 = new javax.swing.JButton();
+        lblTop_grund_bem = new javax.swing.JLabel();
+        lblPruef_gebeinmess_bem = new javax.swing.JLabel();
+        lblUebern_innen_bem = new javax.swing.JLabel();
+        lblAbschluss_registrierung_bem = new javax.swing.JLabel();
+        lblBodenschaetzung_ueb_von = new javax.swing.JLabel();
+        txtBodenschaetzung_ueb_von = new javax.swing.JTextField();
+        btnBodenschaetzung_ueb_von = new javax.swing.JButton();
+        lblBodenschaetzung_ueb_am = new javax.swing.JLabel();
+        jxdBodenschaetzung_ueb_am = new org.jdesktop.swingx.JXDatePicker();
+        lblSchlusspruefung_von = new javax.swing.JLabel();
+        txtSchlusspruefung_von = new javax.swing.JTextField();
+        btnSchlusspruefung_von = new javax.swing.JButton();
+        lblSchlusspruefung_am = new javax.swing.JLabel();
+        jxdSchlusspruefung_am = new org.jdesktop.swingx.JXDatePicker();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextArea2 = new javax.swing.JTextArea();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTextArea3 = new javax.swing.JTextArea();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTextArea4 = new javax.swing.JTextArea();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jTextArea5 = new javax.swing.JTextArea();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jTextArea6 = new javax.swing.JTextArea();
         panKartographie = new javax.swing.JPanel();
         scpKartographie = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
@@ -651,8 +716,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 2, 2);
         add(jButton2, gridBagConstraints);
 
-        tbpAdditionalInfo.setFont(new java.awt.Font("Lucida Grande", 0, 18));
-        tbpAdditionalInfo.setForeground(new java.awt.Color(51, 51, 51));
+        tbpAdditionalInfo.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         tbpAdditionalInfo.setPreferredSize(new java.awt.Dimension(1000, 103));
 
         panStadtgrundkarte.setFocusable(false);
@@ -663,7 +727,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        lblAlkis_rel.setText("Stadtgrundkarte relevant");
+        lblAlkis_rel.setText("ALKIS relevant");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -794,7 +858,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(txtAlk_prio, gridBagConstraints);
 
-        lblBereich_lage_riss.setText("Bereich, Lagebezeichnung, Riss-Nr.");
+        lblBereich_lage_riss.setText("Bereich, Lagebezeichnung");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
@@ -820,21 +884,21 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(txtBereich_lage_riss, gridBagConstraints);
 
-        lblAlk_bem.setText("Bemerkungen");
+        lbl_Bereich_lage_riss_nummer.setText("Riss-Nummer");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
-        jPanel2.add(lblAlk_bem, gridBagConstraints);
+        jPanel2.add(lbl_Bereich_lage_riss_nummer, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_bem}"),
-                txtAlk_bem,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.riss_nummer}"),
+                txt_Bereich_lage_riss_nummer,
                 org.jdesktop.beansbinding.BeanProperty.create("text"),
-                "bndAlk_bem");
+                "");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -844,12 +908,46 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
-        jPanel2.add(txtAlk_bem, gridBagConstraints);
+        jPanel2.add(txt_Bereich_lage_riss_nummer, gridBagConstraints);
+
+        lblAlk_projekt_name.setText("ALKIS-Projektname");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel2.add(lblAlk_projekt_name, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_bem}"),
+                txtAlk_projekt_name,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "bndAlk_bem");
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel2.add(txtAlk_projekt_name, gridBagConstraints);
+
+        lblAlk_bem.setText("Bemerkungen");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel2.add(lblAlk_bem, gridBagConstraints);
 
         lblAlk_top.setText("Topographie");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_top, gridBagConstraints);
@@ -866,7 +964,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -876,7 +974,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         lblAlk_geb.setText("Gebäude");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_geb, gridBagConstraints);
@@ -893,7 +991,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -903,7 +1001,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         lblAlk_nutz.setText("Nutzungsarten");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_nutz, gridBagConstraints);
@@ -920,7 +1018,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -930,7 +1028,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         lblAlk_bod.setText("Bodenschätzung");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_bod, gridBagConstraints);
@@ -947,7 +1045,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -957,33 +1055,15 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         lblAlk_son1.setText("Bemerkungen");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 18;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_son1, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_son1}"),
-                txtAlk_son1,
-                org.jdesktop.beansbinding.BeanProperty.create("text"),
-                "bndAlk_son1");
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 12;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
-        jPanel2.add(txtAlk_son1, gridBagConstraints);
-
-        lblAlk_ver.setText("Vermessung");
+        lblAlk_ver.setText("Außendienst Bearbeiter");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 15;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_ver, gridBagConstraints);
@@ -999,43 +1079,17 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 15;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(txtAlk_ver, gridBagConstraints);
 
-        lblAlk_feld.setText("Feldvergleich");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 14;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
-        jPanel2.add(lblAlk_feld, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_feld}"),
-                txtAlk_feld,
-                org.jdesktop.beansbinding.BeanProperty.create("text"),
-                "bndAlk_feld");
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 14;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
-        jPanel2.add(txtAlk_feld, gridBagConstraints);
-
         lblTop_aussen_beginn.setText("begonnen am");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridy = 16;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblTop_aussen_beginn, gridBagConstraints);
@@ -1052,7 +1106,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridy = 16;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -1062,7 +1116,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         lblTop_aussen_beendet.setText("beendet am");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 16;
+        gridBagConstraints.gridy = 17;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblTop_aussen_beendet, gridBagConstraints);
@@ -1079,7 +1133,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 16;
+        gridBagConstraints.gridy = 17;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -1089,7 +1143,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         lblAlk_luft.setText("Luftbildauswertung / sonstige Erfassung");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 19;
+        gridBagConstraints.gridy = 22;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_luft, gridBagConstraints);
@@ -1105,7 +1159,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 19;
+        gridBagConstraints.gridy = 22;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -1115,7 +1169,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         lblAlk_son2.setText("Bearbeiter");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridy = 21;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_son2, gridBagConstraints);
@@ -1131,7 +1185,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridy = 21;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
@@ -1140,7 +1194,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         lblTop_grund_beginn.setText("begonnen am");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 20;
+        gridBagConstraints.gridy = 23;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblTop_grund_beginn, gridBagConstraints);
@@ -1157,7 +1211,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 20;
+        gridBagConstraints.gridy = 23;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -1167,7 +1221,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         lblTop_grund_beendet.setText("beendet am");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 21;
+        gridBagConstraints.gridy = 24;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblTop_grund_beendet, gridBagConstraints);
@@ -1184,7 +1238,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 21;
+        gridBagConstraints.gridy = 24;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -1194,7 +1248,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         lblPruef_gebeinmess_abgabe.setText("Prüfung Geb.-Einm., Abgabe am");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 23;
+        gridBagConstraints.gridy = 28;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblPruef_gebeinmess_abgabe, gridBagConstraints);
@@ -1211,7 +1265,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 23;
+        gridBagConstraints.gridy = 28;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -1221,7 +1275,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         lblPruef_gebeinmess_rueckgabe.setText("Prüfung Geb.-Einm., Rückgabe am");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 24;
+        gridBagConstraints.gridy = 29;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblPruef_gebeinmess_rueckgabe, gridBagConstraints);
@@ -1238,7 +1292,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 24;
+        gridBagConstraints.gridy = 29;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -1248,7 +1302,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         lblAlk_rel.setText("ALK relevant");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 26;
+        gridBagConstraints.gridy = 33;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_rel, gridBagConstraints);
@@ -1265,7 +1319,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 26;
+        gridBagConstraints.gridy = 33;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -1275,7 +1329,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         lblAlk_ueb_beab.setText("Topografie übernommen von");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 27;
+        gridBagConstraints.gridy = 34;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_ueb_beab, gridBagConstraints);
@@ -1291,7 +1345,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 27;
+        gridBagConstraints.gridy = 34;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
@@ -1300,7 +1354,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         lblAlk_beginn_dat.setText("Topografie begonnen am");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 28;
+        gridBagConstraints.gridy = 35;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_beginn_dat, gridBagConstraints);
@@ -1317,17 +1371,17 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 28;
+        gridBagConstraints.gridy = 35;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(jxdAlk_beginn_dat, gridBagConstraints);
 
-        lblAlk_ueb_dat.setText("Topografie übernommen am");
+        lblAlk_ueb_dat.setText("Topografie erledigt am");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 29;
+        gridBagConstraints.gridy = 36;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlk_ueb_dat, gridBagConstraints);
@@ -1344,17 +1398,17 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 29;
+        gridBagConstraints.gridy = 36;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(jxdAlk_ueb_dat, gridBagConstraints);
 
-        lblAlb_rel.setText("ALB relevant");
+        lblAlb_rel.setText("(ALB relevant)");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 30;
+        gridBagConstraints.gridy = 37;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlb_rel, gridBagConstraints);
@@ -1371,17 +1425,17 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 30;
+        gridBagConstraints.gridy = 37;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(jnAlb_rel, gridBagConstraints);
 
-        lblAlb_ueb_beab.setText("ALB übernommen von");
+        lblAlb_ueb_beab.setText("(ALB übernommen von)");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 31;
+        gridBagConstraints.gridy = 38;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlb_ueb_beab, gridBagConstraints);
@@ -1397,16 +1451,16 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 31;
+        gridBagConstraints.gridy = 38;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(txtAlb_ueb_beab, gridBagConstraints);
 
-        lblAlb_ueb_dat.setText("ALB übernommen am");
+        lblAlb_ueb_dat.setText("(ALB übernommen am)");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 32;
+        gridBagConstraints.gridy = 39;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblAlb_ueb_dat, gridBagConstraints);
@@ -1423,17 +1477,17 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 32;
+        gridBagConstraints.gridy = 39;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(jxdAlb_ueb_dat, gridBagConstraints);
 
-        lblRealn_ueb_von.setText("Realnutzung übernommen von");
+        lblRealn_ueb_von.setText("Tatsächliche Nutzung übernommen von");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 33;
+        gridBagConstraints.gridy = 40;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblRealn_ueb_von, gridBagConstraints);
@@ -1449,16 +1503,16 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 33;
+        gridBagConstraints.gridy = 40;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(txtRealn_ueb_von, gridBagConstraints);
 
-        lblRealn_ueb_am.setText("Realnutzung übernommen am");
+        lblRealn_ueb_am.setText("Tatsächliche Nutzung übernommen am");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 34;
+        gridBagConstraints.gridy = 41;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblRealn_ueb_am, gridBagConstraints);
@@ -1475,17 +1529,17 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 34;
+        gridBagConstraints.gridy = 41;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(jxdRealn_ueb_am, gridBagConstraints);
 
-        lblLinkbase_ueb_von.setText("Übernahme in Linkbase von");
+        lblLinkbase_ueb_von.setText("Übernahme in Rissarchiv von");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 35;
+        gridBagConstraints.gridy = 46;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblLinkbase_ueb_von, gridBagConstraints);
@@ -1501,16 +1555,16 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 35;
+        gridBagConstraints.gridy = 46;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(txtLinkbase_ueb_von, gridBagConstraints);
 
-        lblLinkbase_ueb_am.setText("Übernahme in Linkbase am");
+        lblLinkbase_ueb_am.setText("Übernahme in Rissarchiv am");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 36;
+        gridBagConstraints.gridy = 47;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblLinkbase_ueb_am, gridBagConstraints);
@@ -1527,17 +1581,17 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 36;
+        gridBagConstraints.gridy = 47;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(jxdLinkbase_ueb_am, gridBagConstraints);
 
-        lblDgk_rel.setText("DGK relevant");
+        lblDgk_rel.setText("ABK (DGK) relevant");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 37;
+        gridBagConstraints.gridy = 48;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblDgk_rel, gridBagConstraints);
@@ -1554,17 +1608,17 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 37;
+        gridBagConstraints.gridy = 48;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(jnDgk_rel, gridBagConstraints);
 
-        lblDgk_ueb_beab.setText("DGK abgeleitet von");
+        lblDgk_ueb_beab.setText("ABK (DGK) abgeleitet von");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 38;
+        gridBagConstraints.gridy = 49;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblDgk_ueb_beab, gridBagConstraints);
@@ -1580,16 +1634,16 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 38;
+        gridBagConstraints.gridy = 49;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(txtDgk_ueb_beab, gridBagConstraints);
 
-        lblDgk_ueb_dat.setText("DGK abgeleitet am");
+        lblDgk_ueb_dat.setText("ABK (DGK) abgeleitet am");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 39;
+        gridBagConstraints.gridy = 50;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblDgk_ueb_dat, gridBagConstraints);
@@ -1606,7 +1660,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 39;
+        gridBagConstraints.gridy = 50;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -1616,7 +1670,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         lblScan_dat.setText("gescannt am");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 40;
+        gridBagConstraints.gridy = 51;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblScan_dat, gridBagConstraints);
@@ -1633,17 +1687,17 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 40;
+        gridBagConstraints.gridy = 51;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(jxdScan_dat, gridBagConstraints);
 
-        lblPruefung_von.setText("Schlussprüfung von");
+        lblPruefung_von.setText("Abschlussprüfung von");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 42;
+        gridBagConstraints.gridy = 55;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblPruefung_von, gridBagConstraints);
@@ -1659,16 +1713,16 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 42;
+        gridBagConstraints.gridy = 55;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(txtPruefung_von, gridBagConstraints);
 
-        lblComliste_dat.setText("Eintragung COM-Liste am");
+        lblComliste_dat.setText("Projektarchivierung (alt COM-Liste)");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 43;
+        gridBagConstraints.gridy = 56;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblComliste_dat, gridBagConstraints);
@@ -1685,7 +1739,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 43;
+        gridBagConstraints.gridy = 56;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -1695,7 +1749,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         lblTim_erled_dat.setText("TIM erledigt am");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 44;
+        gridBagConstraints.gridy = 57;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblTim_erled_dat, gridBagConstraints);
@@ -1712,7 +1766,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 44;
+        gridBagConstraints.gridy = 57;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -1722,7 +1776,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         lblLaufzettel_erled_dat.setText("Laufzettel erledigt am");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 45;
+        gridBagConstraints.gridy = 58;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblLaufzettel_erled_dat, gridBagConstraints);
@@ -1739,7 +1793,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 45;
+        gridBagConstraints.gridy = 58;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -1749,7 +1803,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         lblUebersicht_liste_erled_dat.setText("Übersicht und Liste erledigt am");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 46;
+        gridBagConstraints.gridy = 59;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblUebersicht_liste_erled_dat, gridBagConstraints);
@@ -1766,56 +1820,52 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 46;
+        gridBagConstraints.gridy = 59;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(jxdUebersicht_liste_erled_dat, gridBagConstraints);
 
-        jLabel2.setFont(new java.awt.Font("Lucida Grande", 0, 18));
-        jLabel2.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel2.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         jLabel2.setText("<html>Topographie Erfassung<br>Außendienst</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 20);
         jPanel2.add(jLabel2, gridBagConstraints);
 
-        jLabel3.setFont(new java.awt.Font("Lucida Grande", 0, 18));
-        jLabel3.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel3.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         jLabel3.setText("<html>Topographie Erfassung<br>andere Grundlagen</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridy = 21;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 20);
         jPanel2.add(jLabel3, gridBagConstraints);
 
-        jLabel4.setFont(new java.awt.Font("Lucida Grande", 0, 18));
-        jLabel4.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel4.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         jLabel4.setText("<html>Prüfung<br>Gebäudeeinmessung</html>");
         jLabel4.setPreferredSize(new java.awt.Dimension(140, 44));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 23;
+        gridBagConstraints.gridy = 28;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 20);
         jPanel2.add(jLabel4, gridBagConstraints);
 
-        jLabel5.setFont(new java.awt.Font("Lucida Grande", 0, 18));
-        jLabel5.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel5.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         jLabel5.setText("<html>Übernahme<br>Innendienst</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 26;
+        gridBagConstraints.gridy = 33;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -1823,20 +1873,18 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 20);
         jPanel2.add(jLabel5, gridBagConstraints);
 
-        lblJumpSchlusspruefung.setFont(new java.awt.Font("Lucida Grande", 0, 18));
-        lblJumpSchlusspruefung.setForeground(new java.awt.Color(51, 51, 51));
-        lblJumpSchlusspruefung.setText("<html>Schlussprüfung</html>");
+        lblJumpSchlusspruefung.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
+        lblJumpSchlusspruefung.setText("<html>Abschluss und<br />Registrierung</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 42;
+        gridBagConstraints.gridy = 55;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(lblJumpSchlusspruefung, gridBagConstraints);
 
-        lblJumpAuftrag.setFont(new java.awt.Font("Lucida Grande", 0, 18));
-        lblJumpAuftrag.setForeground(new java.awt.Color(51, 51, 51));
+        lblJumpAuftrag.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         lblJumpAuftrag.setText("Auftrag");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1852,7 +1900,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         jPanel3.setPreferredSize(new java.awt.Dimension(100, 3));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 17;
+        gridBagConstraints.gridy = 20;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -1864,7 +1912,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         jPanel4.setPreferredSize(new java.awt.Dimension(100, 3));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 22;
+        gridBagConstraints.gridy = 27;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -1876,7 +1924,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         jPanel5.setPreferredSize(new java.awt.Dimension(100, 3));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 41;
+        gridBagConstraints.gridy = 54;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -1888,7 +1936,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         jPanel6.setPreferredSize(new java.awt.Dimension(100, 3));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 25;
+        gridBagConstraints.gridy = 32;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -1900,7 +1948,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         jPanel7.setPreferredSize(new java.awt.Dimension(100, 3));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -1933,7 +1981,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 27;
+        gridBagConstraints.gridy = 34;
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 2, 2);
         jPanel2.add(jButton4, gridBagConstraints);
 
@@ -1948,7 +1996,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 35;
+        gridBagConstraints.gridy = 46;
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 2, 2);
         jPanel2.add(jButton5, gridBagConstraints);
 
@@ -1963,7 +2011,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 31;
+        gridBagConstraints.gridy = 38;
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 2, 2);
         jPanel2.add(jButton6, gridBagConstraints);
 
@@ -1978,7 +2026,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 33;
+        gridBagConstraints.gridy = 40;
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 2, 2);
         jPanel2.add(jButton7, gridBagConstraints);
 
@@ -1993,7 +2041,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 38;
+        gridBagConstraints.gridy = 49;
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 2, 2);
         jPanel2.add(jButton8, gridBagConstraints);
 
@@ -2008,7 +2056,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 42;
+        gridBagConstraints.gridy = 55;
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 2, 2);
         jPanel2.add(jButton9, gridBagConstraints);
 
@@ -2023,16 +2071,316 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridy = 21;
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 2, 2);
         jPanel2.add(jButton10, gridBagConstraints);
+
+        lblTop_grund_bem.setText("Bemerkungen");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 25;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel2.add(lblTop_grund_bem, gridBagConstraints);
+
+        lblPruef_gebeinmess_bem.setText("Bemerkungen");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 30;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel2.add(lblPruef_gebeinmess_bem, gridBagConstraints);
+
+        lblUebern_innen_bem.setText("Bemerkungen");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 52;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel2.add(lblUebern_innen_bem, gridBagConstraints);
+
+        lblAbschluss_registrierung_bem.setText("Bemerkungen");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 60;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel2.add(lblAbschluss_registrierung_bem, gridBagConstraints);
+
+        lblBodenschaetzung_ueb_von.setText("Bodenschätzung übernommen von");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 42;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel2.add(lblBodenschaetzung_ueb_von, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.bodenschaetzung_ueb_von}"),
+                txtBodenschaetzung_ueb_von,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 42;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel2.add(txtBodenschaetzung_ueb_von, gridBagConstraints);
+
+        btnBodenschaetzung_ueb_von.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
+        btnBodenschaetzung_ueb_von.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnBodenschaetzung_ueb_vonActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 42;
+        gridBagConstraints.insets = new java.awt.Insets(2, 6, 2, 2);
+        jPanel2.add(btnBodenschaetzung_ueb_von, gridBagConstraints);
+
+        lblBodenschaetzung_ueb_am.setText("Bodenschätzung übernommen am");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 43;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel2.add(lblBodenschaetzung_ueb_am, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.bodenschaetzung_ueb_am}"),
+                jxdBodenschaetzung_ueb_am,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding.setConverter(new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter());
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 43;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel2.add(jxdBodenschaetzung_ueb_am, gridBagConstraints);
+
+        lblSchlusspruefung_von.setText("Schlussprüfung von");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 44;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel2.add(lblSchlusspruefung_von, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.schlusspruefung_von}"),
+                txtSchlusspruefung_von,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 44;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel2.add(txtSchlusspruefung_von, gridBagConstraints);
+
+        btnSchlusspruefung_von.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/user_green.png"))); // NOI18N
+        btnSchlusspruefung_von.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnSchlusspruefung_vonActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 44;
+        gridBagConstraints.insets = new java.awt.Insets(2, 6, 2, 2);
+        jPanel2.add(btnSchlusspruefung_von, gridBagConstraints);
+
+        lblSchlusspruefung_am.setText("Schlussprüfung am");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 45;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel2.add(lblSchlusspruefung_am, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.schlusspruefung_am}"),
+                jxdSchlusspruefung_am,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding.setConverter(new de.cismet.cids.editors.converters.SqlTimestampToUtilDateConverter());
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 45;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel2.add(jxdSchlusspruefung_am, gridBagConstraints);
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(3);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.top_aussen_bem}"),
+                jTextArea1,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jScrollPane1.setViewportView(jTextArea1);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel2.add(jScrollPane1, gridBagConstraints);
+
+        jTextArea2.setColumns(20);
+        jTextArea2.setRows(3);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.top_grund_bem}"),
+                jTextArea2,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jScrollPane2.setViewportView(jTextArea2);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 25;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel2.add(jScrollPane2, gridBagConstraints);
+
+        jTextArea3.setColumns(20);
+        jTextArea3.setRows(3);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.uebernahme_innendienst_bem}"),
+                jTextArea3,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jScrollPane3.setViewportView(jTextArea3);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 52;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel2.add(jScrollPane3, gridBagConstraints);
+
+        jTextArea4.setColumns(20);
+        jTextArea4.setRows(3);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.abschluss_registrierung_bem}"),
+                jTextArea4,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jScrollPane4.setViewportView(jTextArea4);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 60;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel2.add(jScrollPane4, gridBagConstraints);
+
+        jTextArea5.setColumns(20);
+        jTextArea5.setRows(3);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.pruef_gebeinmess_bem}"),
+                jTextArea5,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jScrollPane5.setViewportView(jTextArea5);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 30;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel2.add(jScrollPane5, gridBagConstraints);
+
+        jTextArea6.setColumns(20);
+        jTextArea6.setRows(3);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.auftrag_bemerkungen}"),
+                jTextArea6,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jScrollPane6.setViewportView(jTextArea6);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel2.add(jScrollPane6, gridBagConstraints);
 
         scpStadtgrundkarte.setViewportView(jPanel2);
 
         panStadtgrundkarte.add(scpStadtgrundkarte, java.awt.BorderLayout.CENTER);
 
         tbpAdditionalInfo.addTab(
-            " Stadtgrundkarte ",
+            "ALKIS",
             new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wbf_vorgang.png")),
             panStadtgrundkarte); // NOI18N
@@ -2526,8 +2874,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel1.add(jxdFreizeit_ueb_dat, gridBagConstraints);
 
-        lblJumpAuftrag1.setFont(new java.awt.Font("Lucida Grande", 0, 18));
-        lblJumpAuftrag1.setForeground(new java.awt.Color(51, 51, 51));
+        lblJumpAuftrag1.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         lblJumpAuftrag1.setText("Citypläne");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -2614,8 +2961,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 7, 3, 3);
         jPanel1.add(jButton15, gridBagConstraints);
 
-        lblJumpAuftrag2.setFont(new java.awt.Font("Lucida Grande", 0, 18));
-        lblJumpAuftrag2.setForeground(new java.awt.Color(51, 51, 51));
+        lblJumpAuftrag2.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         lblJumpAuftrag2.setText("Übersichtspläne");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -2627,8 +2973,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 20);
         jPanel1.add(lblJumpAuftrag2, gridBagConstraints);
 
-        lblJumpAuftrag3.setFont(new java.awt.Font("Lucida Grande", 0, 18));
-        lblJumpAuftrag3.setForeground(new java.awt.Color(51, 51, 51));
+        lblJumpAuftrag3.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         lblJumpAuftrag3.setText("Freizeitkarte");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -2640,8 +2985,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 20);
         jPanel1.add(lblJumpAuftrag3, gridBagConstraints);
 
-        lblJumpAuftrag4.setFont(new java.awt.Font("Lucida Grande", 0, 18));
-        lblJumpAuftrag4.setForeground(new java.awt.Color(51, 51, 51));
+        lblJumpAuftrag4.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         lblJumpAuftrag4.setText("Stadtkarte");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -2740,7 +3084,7 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
 
         cmdAddSgk.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
-        cmdAddSgk.setText("Stadtgrundkarte");
+        cmdAddSgk.setText("ALKIS");
         cmdAddSgk.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -2899,12 +3243,6 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
     private void cmdAddKartActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdAddKartActionPerformed
         try {
             cidsBean.fillEmptyFieldWithEmptySubInstance("kart");
-            tbpAdditionalInfo.addTab(
-                " Kartographie ",
-                new javax.swing.ImageIcon(
-                    getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wbf_vorgang.png")),
-                panKartographie);                                                  // NOI18N
-            cmdAddKart.setVisible(false);
         } catch (Exception e) {
             log.error("Error beim Erzeugen eines Kart Objektes", e);
         }
@@ -2918,12 +3256,6 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
     private void cmdAddSgkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdAddSgkActionPerformed
         try {
             cidsBean.fillEmptyFieldWithEmptySubInstance("alkis");
-            tbpAdditionalInfo.addTab(
-                " Stadtgrundkarte ",
-                new javax.swing.ImageIcon(
-                    getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wbf_vorgang.png")),
-                panStadtgrundkarte);                                              // NOI18N
-            cmdAddSgk.setVisible(false);
         } catch (Exception e) {
             log.error("Error beim Erzeugen eines Alkis Objektes", e);
         }
@@ -2977,6 +3309,24 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
     /**
      * DOCUMENT ME!
      *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnBodenschaetzung_ueb_vonActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBodenschaetzung_ueb_vonActionPerformed
+        txtBodenschaetzung_ueb_von.setText(getCurrentUser());
+    }                                                                                              //GEN-LAST:event_btnBodenschaetzung_ueb_vonActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnSchlusspruefung_vonActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnSchlusspruefung_vonActionPerformed
+        txtSchlusspruefung_von.setText(getCurrentUser());
+    }                                                                                          //GEN-LAST:event_btnSchlusspruefung_vonActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
     @Override
@@ -3000,5 +3350,94 @@ public class Tim_liegEditor extends DefaultCustomObjectEditor implements Titled 
     public void dispose() {
         super.dispose();
         ((DefaultCismapGeometryComboBoxEditor)cboGeom).dispose();
+        cidsBean.removePropertyChangeListener(this);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  args  DOCUMENT ME!
+     */
+    public static void main(final String[] args) {
+        try {
+            DevelopmentTools.createEditorInFrameFromRMIConnectionOnLocalhost(
+                "WUNDA_BLAU",
+                "Administratoren",
+                "admin",
+                "kif",
+                "tim_lieg",
+                2003,
+                1200,
+                800);
+        } catch (Exception ex) {
+            Exceptions.printStackTrace(ex);
+        }
+    }
+
+    @Override
+    public BeanInitializer getBeanInitializer() {
+        log.fatal("getBeanInitializer");
+        return new CompleteBeanInitializer(cidsBean);
+    }
+
+    @Override
+    public void propertyChange(final PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals("kart")) {
+            if ((evt.getOldValue() == null) && (evt.getNewValue() != null)) {
+                tbpAdditionalInfo.addTab(
+                    " Kartographie ",
+                    new javax.swing.ImageIcon(
+                        getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wbf_vorgang.png")),
+                    panKartographie);    // NOI18N
+                cmdAddKart.setVisible(false);
+            }
+        } else if (evt.getPropertyName().equals("alkis")) {
+            if ((evt.getOldValue() == null) && (evt.getNewValue() != null)) {
+                tbpAdditionalInfo.addTab(
+                    " ALKIS ",
+                    new javax.swing.ImageIcon(
+                        getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wbf_vorgang.png")),
+                    panStadtgrundkarte); // NOI18N
+                cmdAddSgk.setVisible(false);
+            }
+        }
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class CompleteBeanInitializer extends DefaultBeanInitializer {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new CompleteBeanInitializer object.
+         *
+         * @param  template  DOCUMENT ME!
+         */
+        public CompleteBeanInitializer(final CidsBean template) {
+            super(template);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        protected void processComplexProperty(final CidsBean beanToInit,
+                final String propertyName,
+                final CidsBean complexValueToProcess) throws Exception {
+            if (complexValueToProcess != null) {
+                final CompleteBeanInitializer subInitializer = new CompleteBeanInitializer(complexValueToProcess);
+                final CidsBean newBean = complexValueToProcess.getMetaObject()
+                            .getMetaClass()
+                            .getEmptyInstance()
+                            .getBean();
+                subInitializer.initializeBean(newBean);
+                beanToInit.setProperty(propertyName, newBean);
+            }
+        }
     }
 }

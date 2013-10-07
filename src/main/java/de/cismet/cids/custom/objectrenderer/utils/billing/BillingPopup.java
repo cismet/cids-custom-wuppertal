@@ -13,11 +13,9 @@ import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.newuser.User;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.vividsolutions.jts.geom.Geometry;
-
-import org.codehaus.jackson.map.ObjectMapper;
-
-import org.openide.util.Exceptions;
 
 import java.io.IOException;
 
@@ -174,6 +172,45 @@ public class BillingPopup extends javax.swing.JDialog {
             }
             instance = new BillingPopup(f, true);
         }
+        final User user = SessionManager.getSession().getUser();
+        final String modus = SessionManager.getConnection().getConfigAttr(user, MODE_CONFIG_ATTR);
+        if (modus != null) {
+            instance.initialize(product, request, geom, amounts);
+            return instance.shouldGoOn;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   product  DOCUMENT ME!
+     * @param   request  DOCUMENT ME!
+     * @param   gBuchNr  DOCUMENT ME!
+     * @param   geom     DOCUMENT ME!
+     * @param   amounts  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public static boolean doBilling(
+            final String product,
+            final String request,
+            final String gBuchNr,
+            final Geometry geom,
+            final ProductGroupAmount... amounts) throws Exception {
+        if (instance == null) {
+            JFrame f = null;
+            try {
+                f = ComponentRegistry.getRegistry().getMainWindow();
+            } catch (Exception e) {
+                // Developmenttime
+            }
+            instance = new BillingPopup(f, true);
+        }
+        instance.txtGBuchNr.setText(gBuchNr);
         final User user = SessionManager.getSession().getUser();
         final String modus = SessionManager.getConnection().getConfigAttr(user, MODE_CONFIG_ATTR);
         if (modus != null) {

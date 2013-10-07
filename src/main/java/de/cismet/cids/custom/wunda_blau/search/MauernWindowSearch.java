@@ -14,6 +14,7 @@ package de.cismet.cids.custom.wunda_blau.search;
 import Sirius.navigator.actiontag.ActionTagProtected;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
+import Sirius.navigator.search.CidsSearchExecutor;
 import Sirius.navigator.search.dynamic.SearchControlListener;
 import Sirius.navigator.search.dynamic.SearchControlPanel;
 
@@ -27,20 +28,20 @@ import org.apache.log4j.Logger;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
-import sun.security.jca.JCAUtil;
-
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import java.net.URL;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import javax.swing.Box;
 import javax.swing.DefaultListModel;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.ImageIcon;
@@ -49,6 +50,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -72,7 +74,10 @@ import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
 
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
+import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
+
+import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 
 /**
  * DOCUMENT ME!
@@ -83,13 +88,14 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 @org.openide.util.lookup.ServiceProvider(service = CidsWindowSearch.class)
 public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindowSearch,
     ActionTagProtected,
-    SearchControlListener {
+    SearchControlListener,
+    PropertyChangeListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(MauernWindowSearch.class);
     // End of variables declaration
-    private static final String ACTION_TAG = "custom.alkis.windowsearch@WUNDA_BLAU";
+    private static final String ACTION_TAG = "custom.mauern.search@WUNDA_BLAU";
 
     //~ Instance fields --------------------------------------------------------
 
@@ -98,6 +104,9 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
     private MetaClass metaClass;
     private ImageIcon icon;
     private JPanel pnlSearchCancel;
+    private GeoSearchButton btnGeoSearch;
+    private MappingComponent mappingComponent;
+    private boolean geoSearchEnabled;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox cbMapSearch;
@@ -117,6 +126,8 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
     private javax.swing.JLabel lblFiller2;
     private javax.swing.JLabel lblFiller3;
     private javax.swing.JLabel lblFiller4;
+    private javax.swing.JLabel lblFiller5;
+    private javax.swing.JLabel lblFiller6;
     private javax.swing.JLabel lblGelaende;
     private javax.swing.JLabel lblGruendung;
     private javax.swing.JLabel lblHoeheBis;
@@ -182,79 +193,108 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
      * Creates new form MauernWindowSearch.
      */
     public MauernWindowSearch() {
-        initComponents();
-        // todo just for debug
-        pnlSearchCancel = new SearchControlPanel(this);
-        final Dimension max = pnlSearchCancel.getMaximumSize();
-        final Dimension min = pnlSearchCancel.getMinimumSize();
-        final Dimension pre = pnlSearchCancel.getPreferredSize();
-        pnlSearchCancel.setMaximumSize(new java.awt.Dimension(
-                new Double(max.getWidth()).intValue(),
-                new Double(max.getHeight() + 6).intValue()));
-        pnlSearchCancel.setMinimumSize(new java.awt.Dimension(
-                new Double(min.getWidth()).intValue(),
-                new Double(min.getHeight() + 6).intValue()));
-        pnlSearchCancel.setPreferredSize(new java.awt.Dimension(
-                new Double(pre.getWidth() + 6).intValue(),
-                new Double(pre.getHeight() + 6).intValue()));
-        pnlButtons.add(pnlSearchCancel);
+        try {
+            initComponents();
+            // todo just for debug
+            pnlSearchCancel = new SearchControlPanel(this);
+            final Dimension max = pnlSearchCancel.getMaximumSize();
+            final Dimension min = pnlSearchCancel.getMinimumSize();
+            final Dimension pre = pnlSearchCancel.getPreferredSize();
+            pnlSearchCancel.setMaximumSize(new java.awt.Dimension(
+                    new Double(max.getWidth()).intValue(),
+                    new Double(max.getHeight() + 5).intValue()));
+            pnlSearchCancel.setMinimumSize(new java.awt.Dimension(
+                    new Double(min.getWidth()).intValue(),
+                    new Double(min.getHeight() + 5).intValue()));
+            pnlSearchCancel.setPreferredSize(new java.awt.Dimension(
+                    new Double(pre.getWidth() + 6).intValue(),
+                    new Double(pre.getHeight() + 5).intValue()));
+            pnlButtons.add(pnlSearchCancel);
 
-        metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "mauer");
+            metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "mauer");
 
-        byte[] iconDataFromMetaclass = new byte[] {};
+            byte[] iconDataFromMetaclass = new byte[] {};
 
-        if (metaClass != null) {
-            iconDataFromMetaclass = metaClass.getIconData();
-        }
-
-        if (iconDataFromMetaclass.length > 0) {
-            LOG.info("Using icon from metaclass.");
-            icon = new ImageIcon(metaClass.getIconData());
-        } else {
-            LOG.warn("Metaclass icon is not set. Trying to load default icon.");
-            final URL urlToIcon = getClass().getResource("/de/cismet/cids/custom/wunda_blau/search/search.png");
-
-            if (urlToIcon != null) {
-                icon = new ImageIcon(urlToIcon);
-            } else {
-                icon = new ImageIcon(new byte[] {});
+            if (metaClass != null) {
+                iconDataFromMetaclass = metaClass.getIconData();
             }
+
+            if (iconDataFromMetaclass.length > 0) {
+                LOG.info("Using icon from metaclass.");
+                icon = new ImageIcon(metaClass.getIconData());
+            } else {
+                LOG.warn("Metaclass icon is not set. Trying to load default icon.");
+                final URL urlToIcon = getClass().getResource("/de/cismet/cids/custom/wunda_blau/search/search.png");
+
+                if (urlToIcon != null) {
+                    icon = new ImageIcon(urlToIcon);
+                } else {
+                    icon = new ImageIcon(new byte[] {});
+                }
+            }
+
+            pnlButtons.add(Box.createHorizontalStrut(5));
+
+            mappingComponent = CismapBroker.getInstance().getMappingComponent();
+            geoSearchEnabled = mappingComponent != null;
+            if (geoSearchEnabled) {
+                final MauernCreateSearchGeometryListener mauernSearchGeometryListener =
+                    new MauernCreateSearchGeometryListener(mappingComponent,
+                        new MauernSearchTooltip(icon));
+                mauernSearchGeometryListener.addPropertyChangeListener(this);
+                btnGeoSearch = new GeoSearchButton(
+                        MauernCreateSearchGeometryListener.MAUERN_CREATE_SEARCH_GEOMETRY,
+                        mappingComponent,
+                        null,
+                        org.openide.util.NbBundle.getMessage(
+                            MauernWindowSearch.class,
+                            "MauernWindowSearch.btnGeoSearch.toolTipText"));
+                pnlButtons.add(btnGeoSearch);
+            }
+
+            fillEigentuemerListModel();
+            fillLastKlasseListModel();
+            lstEigentuemer.setModel(eigentuemerListModel);
+            lstEigentuemer.setCellRenderer(new CheckboxCellRenderer());
+            lstEigentuemer.setSelectionModel(new ListToggleSelectionModel());
+            lstEigentuemer.addListSelectionListener(new ListSelectionListener() {
+
+                    @Override
+                    public void valueChanged(final ListSelectionEvent lse) {
+                        lblselectedEigentuemer.setText("" + lstEigentuemer.getSelectedIndices().length);
+                        if (lstEigentuemer.getSelectedIndices().length != 1) {
+                            lblselectedEigentuemer.setText(
+                                lblselectedEigentuemer.getText()
+                                        + " selektierte Eigentümer");
+                        } else {
+                            lblselectedEigentuemer.setText(
+                                lblselectedEigentuemer.getText()
+                                        + " selektierter Eigentümer");
+                        }
+                    }
+                });
+            lstLastklasse.setModel(lastKlasseListModel);
+            lstLastklasse.setCellRenderer(new CheckboxCellRenderer());
+            lstLastklasse.setSelectionModel(new ListToggleSelectionModel());
+            lstLastklasse.addListSelectionListener(new ListSelectionListener() {
+
+                    @Override
+                    public void valueChanged(final ListSelectionEvent lse) {
+                        lblSelektierteLastklassen.setText("" + lstLastklasse.getSelectedIndices().length);
+                        if (lstLastklasse.getSelectedIndices().length != 1) {
+                            lblSelektierteLastklassen.setText(
+                                lblSelektierteLastklassen.getText()
+                                        + " selektierte Lastklassen");
+                        } else {
+                            lblSelektierteLastklassen.setText(
+                                lblSelektierteLastklassen.getText()
+                                        + " selektierte Lastklasse");
+                        }
+                    }
+                });
+        } catch (Throwable e) {
+            LOG.warn("Error in Constructor of MauernWindowSearch. Search will not work properly.", e);
         }
-
-        fillEigentuemerListModel();
-        fillLastKlasseListModel();
-        lstEigentuemer.setModel(eigentuemerListModel);
-        lstEigentuemer.setCellRenderer(new CheckboxCellRenderer());
-        lstEigentuemer.setSelectionModel(new ListToggleSelectionModel());
-        lstEigentuemer.addListSelectionListener(new ListSelectionListener() {
-
-                @Override
-                public void valueChanged(final ListSelectionEvent lse) {
-                    lblselectedEigentuemer.setText("" + lstEigentuemer.getSelectedIndices().length);
-                    if (lstEigentuemer.getSelectedIndices().length != 1) {
-                        lblselectedEigentuemer.setText(lblselectedEigentuemer.getText() + " selektierte Eigentümer");
-                    } else {
-                        lblselectedEigentuemer.setText(lblselectedEigentuemer.getText() + " selektierter Eigentümer");
-                    }
-                }
-            });
-        lstLastklasse.addListSelectionListener(new ListSelectionListener() {
-
-                @Override
-                public void valueChanged(final ListSelectionEvent lse) {
-                    lblSelektierteLastklassen.setText("" + lstLastklasse.getSelectedIndices().length);
-                    if (lstLastklasse.getSelectedIndices().length != 1) {
-                        lblSelektierteLastklassen.setText(
-                            lblSelektierteLastklassen.getText()
-                                    + " selektierte Lastklassen");
-                    } else {
-                        lblSelektierteLastklassen.setText(
-                            lblSelektierteLastklassen.getText()
-                                    + " selektierte Lastklasse");
-                    }
-                }
-            });
-        lstLastklasse.setCellRenderer(new CheckboxCellRenderer());
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -312,6 +352,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         jLabel1 = new javax.swing.JLabel();
         rbAll = new javax.swing.JRadioButton();
         rbOne = new javax.swing.JRadioButton();
+        lblFiller5 = new javax.swing.JLabel();
         pnlEigetuemer = new javax.swing.JPanel();
         scpListEigentuemer = new javax.swing.JScrollPane();
         lstEigentuemer = new javax.swing.JList();
@@ -343,6 +384,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         lblHoeheBis = new javax.swing.JLabel();
         tfHoeheBis = new javax.swing.JTextField();
         lblFiller3 = new javax.swing.JLabel();
+        lblFiller6 = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(70, 20));
         setLayout(new java.awt.BorderLayout());
@@ -671,8 +713,8 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlScrollPane.add(pnlNoten, gridBagConstraints);
@@ -699,18 +741,22 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         lblSelektierteLastklassen.setText(org.openide.util.NbBundle.getMessage(
                 MauernWindowSearch.class,
-                "MauernWindowSearch.lblSelektierteLastklassen.text")); // NOI18N
+                "MauernWindowSearch.lblSelektierteLastklassen.text"));                                     // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         pnlLastklasse.add(lblSelektierteLastklassen, gridBagConstraints);
+        lblSelektierteLastklassen.getAccessibleContext()
+                .setAccessibleName(org.openide.util.NbBundle.getMessage(
+                        MauernWindowSearch.class,
+                        "MauernWindowSearch.lblSelektierteLastklassen.AccessibleContext.accessibleName")); // NOI18N
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlScrollPane.add(pnlLastklasse, gridBagConstraints);
@@ -744,9 +790,21 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         pnlSearchMode.add(rbOne, gridBagConstraints);
 
+        lblFiller5.setText(org.openide.util.NbBundle.getMessage(
+                MauernWindowSearch.class,
+                "MauernWindowSearch.lblFiller5.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        pnlSearchMode.add(lblFiller5, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 25, 0, 25);
         pnlScrollPane.add(pnlSearchMode, gridBagConstraints);
@@ -789,8 +847,8 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlScrollPane.add(pnlEigetuemer, gridBagConstraints);
@@ -914,8 +972,8 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlScrollPane.add(pnlGesamtnoten, gridBagConstraints);
 
@@ -970,8 +1028,8 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlScrollPane.add(pnlPruefung, gridBagConstraints);
@@ -979,10 +1037,8 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         pnlButtons.setLayout(new javax.swing.BoxLayout(pnlButtons, javax.swing.BoxLayout.LINE_AXIS));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlScrollPane.add(pnlButtons, gridBagConstraints);
 
@@ -991,7 +1047,8 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
                 "MauernWindowSearch.cbMapSearch.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 25, 0, 25);
         pnlScrollPane.add(cbMapSearch, gridBagConstraints);
@@ -1055,11 +1112,21 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlScrollPane.add(pnlHoehe, gridBagConstraints);
+
+        lblFiller6.setText(org.openide.util.NbBundle.getMessage(
+                MauernWindowSearch.class,
+                "MauernWindowSearch.lblFiller6.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        pnlScrollPane.add(lblFiller6, gridBagConstraints);
 
         jScrollPane1.setViewportView(pnlScrollPane);
 
@@ -1074,10 +1141,11 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
     /**
      * DOCUMENT ME!
      *
+     * @param   geometry  DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
-    @Override
-    public MetaObjectNodeServerSearch getServerSearch() {
+    private MetaObjectNodeServerSearch getServerSearch(final Geometry geometry) {
         Geometry geometryToSearchFor = null;
         SearchMode mode = null;
         LinkedList<Integer> eigentuemer = null;
@@ -1088,12 +1156,21 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         } else {
             mode = SearchMode.OR_SEARCH;
         }
-
-        if (cbMapSearch.isSelected()) {
-            geometryToSearchFor =
-                ((XBoundingBox)CismapBroker.getInstance().getMappingComponent().getCurrentBoundingBox()).getGeometry();
-            geometryToSearchFor = CrsTransformer.transformToDefaultCrs(geometryToSearchFor);
-            geometryToSearchFor.setSRID(CismapBroker.getInstance().getDefaultCrsAlias());
+        if (geometry != null) {
+            geometryToSearchFor = geometry;
+        } else {
+            if (cbMapSearch.isSelected()) {
+                geometryToSearchFor =
+                    ((XBoundingBox)CismapBroker.getInstance().getMappingComponent().getCurrentBoundingBox())
+                            .getGeometry();
+            }
+        }
+        final Geometry transformedBoundingBox;
+        if (geometryToSearchFor != null) {
+            transformedBoundingBox = CrsTransformer.transformToDefaultCrs(geometryToSearchFor);
+            transformedBoundingBox.setSRID(CismapBroker.getInstance().getDefaultCrsAlias());
+        } else {
+            transformedBoundingBox = null;
         }
 
         final Object[] selectedEigentuemer = lstEigentuemer.getSelectedValues();
@@ -1120,7 +1197,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         if ((tfHoeheVon.getText() != null) && !tfHoeheVon.getText().equals("")) {
             try {
-                final double hv = Double.parseDouble(tfHoeheVon.getText());
+                final double hv = Double.parseDouble(tfHoeheVon.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.HOEHE_VON, hv);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfHoeheVon.getText(), ex);
@@ -1129,7 +1206,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         if ((tfHoeheBis.getText() != null) && !tfHoeheBis.getText().equals("")) {
             try {
-                final double hv = Double.parseDouble(tfHoeheBis.getText());
+                final double hv = Double.parseDouble(tfHoeheBis.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.HOEHE_BIS, hv);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfHoeheBis.getText(), ex);
@@ -1138,7 +1215,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         if ((tfGelaenderVon.getText() != null) && !tfGelaenderVon.getText().equals("")) {
             try {
-                final double gelaenderVon = Double.parseDouble(tfGelaenderVon.getText());
+                final double gelaenderVon = Double.parseDouble(tfGelaenderVon.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.GELAENDER_VON, gelaenderVon);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfGelaenderVon.getText(), ex);
@@ -1146,7 +1223,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         }
         if ((tfGelaenderBis.getText() != null) && !tfGelaenderBis.getText().equals("")) {
             try {
-                final double gelaenderBis = Double.parseDouble(tfGelaenderBis.getText());
+                final double gelaenderBis = Double.parseDouble(tfGelaenderBis.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.GELAENDER_BIS, gelaenderBis);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfGelaenderBis.getText(), ex);
@@ -1155,7 +1232,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         if ((tfWandkopfVon.getText() != null) && !tfWandkopfVon.getText().equals("")) {
             try {
-                final double wandkopfVon = Double.parseDouble(tfWandkopfVon.getText());
+                final double wandkopfVon = Double.parseDouble(tfWandkopfVon.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.WANDKOPF_VON, wandkopfVon);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfWandkopfVon.getText(), ex);
@@ -1163,7 +1240,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         }
         if ((tfWandkopfBis.getText() != null) && !tfWandkopfBis.getText().equals("")) {
             try {
-                final double gelaenderBis = Double.parseDouble(tfWandkopfBis.getText());
+                final double gelaenderBis = Double.parseDouble(tfWandkopfBis.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.WANDKOPF_BIS, gelaenderBis);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfWandkopfBis.getText(), ex);
@@ -1172,7 +1249,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         if ((tfAnsichtVon.getText() != null) && !tfAnsichtVon.getText().equals("")) {
             try {
-                final double gelaenderVon = Double.parseDouble(tfAnsichtVon.getText());
+                final double gelaenderVon = Double.parseDouble(tfAnsichtVon.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.ANSICHT_VON, gelaenderVon);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfAnsichtVon.getText(), ex);
@@ -1180,7 +1257,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         }
         if ((tfAnsichtBis.getText() != null) && !tfAnsichtBis.getText().equals("")) {
             try {
-                final double gelaenderBis = Double.parseDouble(tfAnsichtBis.getText());
+                final double gelaenderBis = Double.parseDouble(tfAnsichtBis.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.ANSICHT_BIS, gelaenderBis);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfAnsichtBis.getText(), ex);
@@ -1189,7 +1266,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         if ((tfGruendungVon.getText() != null) && !tfGruendungVon.getText().equals("")) {
             try {
-                final double gelaenderVon = Double.parseDouble(tfGruendungVon.getText());
+                final double gelaenderVon = Double.parseDouble(tfGruendungVon.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.GRUENDUNG_VON, gelaenderVon);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfGruendungVon.getText(), ex);
@@ -1197,7 +1274,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         }
         if ((tfGruendungBis.getText() != null) && !tfGruendungBis.getText().equals("")) {
             try {
-                final double gelaenderBis = Double.parseDouble(tfGruendungBis.getText());
+                final double gelaenderBis = Double.parseDouble(tfGruendungBis.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.GRUENDUNG_BIS, gelaenderBis);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfGruendungBis.getText(), ex);
@@ -1206,7 +1283,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         if ((tfVerformungVon.getText() != null) && !tfVerformungVon.getText().equals("")) {
             try {
-                final double gelaenderVon = Double.parseDouble(tfVerformungVon.getText());
+                final double gelaenderVon = Double.parseDouble(tfVerformungVon.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.VERFORMUNG_VON, gelaenderVon);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfVerformungVon.getText(), ex);
@@ -1214,7 +1291,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         }
         if ((tfVerformungBis.getText() != null) && !tfVerformungBis.getText().equals("")) {
             try {
-                final double gelaenderBis = Double.parseDouble(tfVerformungBis.getText());
+                final double gelaenderBis = Double.parseDouble(tfVerformungBis.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.VERFORMUNG_BIS, gelaenderBis);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfVerformungBis.getText(), ex);
@@ -1223,7 +1300,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         if ((tfGelaendeVon.getText() != null) && !tfGelaendeVon.getText().equals("")) {
             try {
-                final double gelaenderVon = Double.parseDouble(tfGelaendeVon.getText());
+                final double gelaenderVon = Double.parseDouble(tfGelaendeVon.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.GELAENDE_VON, gelaenderVon);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfGelaendeVon.getText(), ex);
@@ -1231,7 +1308,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         }
         if ((tfGelaendeBis.getText() != null) && !tfGelaendeBis.getText().equals("")) {
             try {
-                final double gelaenderBis = Double.parseDouble(tfGelaendeBis.getText());
+                final double gelaenderBis = Double.parseDouble(tfGelaendeBis.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.GELAENDE_BIS, gelaenderBis);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfGelaendeBis.getText(), ex);
@@ -1240,7 +1317,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         if ((tfBausubstanzVon.getText() != null) && !tfBausubstanzVon.getText().equals("")) {
             try {
-                final double gelaenderVon = Double.parseDouble(tfBausubstanzVon.getText());
+                final double gelaenderVon = Double.parseDouble(tfBausubstanzVon.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.BAUSUBSTANZ_VON, gelaenderVon);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfBausubstanzVon.getText(), ex);
@@ -1248,7 +1325,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         }
         if ((tfBausubstanzBis.getText() != null) && !tfBausubstanzBis.getText().equals("")) {
             try {
-                final double gelaenderBis = Double.parseDouble(tfBausubstanzBis.getText());
+                final double gelaenderBis = Double.parseDouble(tfBausubstanzBis.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.BAUSUBSTANZ_BIS, gelaenderBis);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfBausubstanzBis.getText(), ex);
@@ -1257,7 +1334,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
 
         if ((tfSanierungVon.getText() != null) && !tfSanierungVon.getText().equals("")) {
             try {
-                final double gelaenderVon = Double.parseDouble(tfSanierungVon.getText());
+                final double gelaenderVon = Double.parseDouble(tfSanierungVon.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.SANIERUNG_VON, gelaenderVon);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfSanierungVon.getText(), ex);
@@ -1265,7 +1342,7 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         }
         if ((tfSanierungBis.getText() != null) && !tfSanierungBis.getText().equals("")) {
             try {
-                final double gelaenderBis = Double.parseDouble(tfSanierungBis.getText());
+                final double gelaenderBis = Double.parseDouble(tfSanierungBis.getText().replace(',', '.'));
                 filterProps.put(PropertyKeys.SANIERUNG_BIS, gelaenderBis);
             } catch (NumberFormatException ex) {
                 LOG.warn("Could not read Double value from " + tfSanierungBis.getText(), ex);
@@ -1277,9 +1354,19 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
                 dcPruefVon.getDate(),
                 dcPruefBis.getDate(),
                 lastklassen,
-                geometryToSearchFor,
+                transformedBoundingBox,
                 mode,
                 filterProps);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Override
+    public MetaObjectNodeServerSearch getServerSearch() {
+        return getServerSearch(null);
     }
 
     @Override
@@ -1317,7 +1404,8 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
                 "Administratoren",
                 "admin",
                 "kif");
-            DevelopmentTools.showTestFrame(new MauernWindowSearch(), 800, 1000);
+            final JScrollPane jsp = new JScrollPane(new MauernWindowSearch());
+            DevelopmentTools.showTestFrame(jsp, 800, 1000);
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
         }
@@ -1391,6 +1479,16 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
         this.eigentuemerListModel = eigentuemerListModel;
     }
 
+    @Override
+    public void propertyChange(final PropertyChangeEvent evt) {
+        if (MauernCreateSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
+            if ((evt.getNewValue() != null) && (evt.getNewValue() instanceof Geometry)) {
+                final MetaObjectNodeServerSearch search = getServerSearch((Geometry)evt.getNewValue());
+                CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);
+            }
+        }
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -1413,10 +1511,11 @@ public class MauernWindowSearch extends javax.swing.JPanel implements CidsWindow
             final JCheckBox cb = new JCheckBox();
             cb.setSelected(isSelected);
             cb.setOpaque(false);
+//            cb.setBorder(new EmptyBorder(new Insets(1, 5, 1, 5)));
             pnl.add(cb, BorderLayout.WEST);
             pnl.add(new JLabel(o.toString()), BorderLayout.CENTER);
             pnl.setOpaque(false);
-            pnl.setBorder(new EmptyBorder(new Insets(0, 0, 0, 5)));
+            pnl.setBorder(new EmptyBorder(new Insets(0, 5, 0, 0)));
             return pnl;
         }
     }

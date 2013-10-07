@@ -16,8 +16,6 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import Sirius.navigator.tools.BrowserLauncher;
-
 import org.apache.log4j.Logger;
 
 import java.awt.Cursor;
@@ -40,6 +38,8 @@ import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+
+import de.cismet.tools.BrowserLauncher;
 
 import de.cismet.tools.collections.TypeSafeCollections;
 

@@ -11,6 +11,8 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.ui.RequestsFullSizeComponent;
+
 import com.vividsolutions.jts.geom.Geometry;
 
 import org.apache.log4j.Logger;
@@ -69,7 +71,8 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class MauerAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer {
+public class MauerAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer,
+    RequestsFullSizeComponent {
 
     //~ Static fields/initializers ---------------------------------------------
 

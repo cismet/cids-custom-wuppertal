@@ -685,12 +685,13 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
                         return;
                     }
 
+                    final String filename = product + "." + parcelCode.replace("/", "--");
                     final HttpDownload download = new HttpDownload(
                             url,
                             "",
                             DownloadManagerDialog.getJobname(),
                             downloadTitle,
-                            product,
+                            filename,
                             extension);
                     DownloadManager.instance().add(download);
                 }
@@ -731,13 +732,13 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
             if (!DownloadManagerDialog.showAskingForUserTitle(this)) {
                 return;
             }
-
+            final String filename = "LK.GDBNRW.A.F." + parcelCode.replace("/", "--");
             final HttpDownload download = new HttpDownload(
                     url,
                     "",
                     DownloadManagerDialog.getJobname(),
                     downloadTitle,
-                    parcelCode.replace('/', '_'),
+                    filename,
                     ".pdf");
             DownloadManager.instance().add(download);
         }

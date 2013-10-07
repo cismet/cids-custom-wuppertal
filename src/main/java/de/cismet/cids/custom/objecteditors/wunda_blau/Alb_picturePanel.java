@@ -53,6 +53,8 @@ import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.tools.StaticCidsUtilities;
+
 import de.cismet.cismap.commons.Crs;
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
@@ -63,6 +65,7 @@ import de.cismet.cismap.commons.gui.measuring.MeasuringComponent;
 import de.cismet.cismap.commons.gui.piccolo.eventlistener.MessenGeometryListener;
 
 import de.cismet.tools.CismetThreadPool;
+import de.cismet.tools.StaticDebuggingTools;
 import de.cismet.tools.StaticDecimalTools;
 
 import de.cismet.tools.gui.MultiPagePictureReader;
@@ -85,6 +88,8 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 //    private static final String[] MD5_PROPERTY_NAMES = new String[]{"lageplan_md5", "textblatt_md5"};
     private static final String TEXTBLATT_PROPERTY = "textblatt";
     private static final String LAGEPLAN_PROPERTY = "lageplan";
+    public static final String BLATTNUMMER_PROPERTY = "blattnummer";
+    public static final String LFDNUMMER_PROPERTY = "laufende_nummer";
     private static final int LAGEPLAN_DOCUMENT = 0;
     private static final int TEXTBLATT_DOCUMENT = 1;
     private static final int NO_SELECTION = -1;
@@ -119,7 +124,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     private PictureSelectWorker currentPictureSelectWorker = null;
     private MultiPagePictureReader pictureReader;
     private CidsBean cidsBean;
-    private File[] documentFiles;
+    private URL[] documentURLs;
     private JButton[] documentButtons;
     private transient PropertyChangeListener updatePicturePathListener = null;
     private JButton currentSelectedButton;
@@ -185,8 +190,8 @@ public class Alb_picturePanel extends javax.swing.JPanel {
      */
     public Alb_picturePanel(final boolean selfPersisting) {
         this.selfPersisting = selfPersisting;
-        documentFiles = new File[2];
-        documentButtons = new JButton[documentFiles.length];
+        documentURLs = new URL[2];
+        documentButtons = new JButton[documentURLs.length];
         initComponents();
         documentButtons[LAGEPLAN_DOCUMENT] = btnPlan;
         documentButtons[TEXTBLATT_DOCUMENT] = btnTextblatt;
@@ -238,6 +243,10 @@ public class Alb_picturePanel extends javax.swing.JPanel {
      * @param  cidsBean  the cidsBean to set
      */
     public void setCidsBean(final CidsBean cidsBean) {
+        documentURLs = new URL[2];
+        lstPictures.setModel(new DefaultListModel());
+        measureComponent.removeAllFeatures();
+        setEnabled(false);
         this.cidsBean = cidsBean;
         if (cidsBean != null) {
             updatePicturePathListener = new PropertyChangeListener() {
@@ -666,6 +675,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 
         add(panCenter, java.awt.BorderLayout.CENTER);
     } // </editor-fold>//GEN-END:initComponents
+
     /**
      * DOCUMENT ME!
      *
@@ -794,33 +804,28 @@ public class Alb_picturePanel extends javax.swing.JPanel {
      * @param  evt  DOCUMENT ME!
      */
     private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
-        if ((currentDocument == NO_SELECTION) || (documentFiles == null) || (currentDocument >= documentFiles.length)
+        if ((currentDocument == NO_SELECTION) || (documentURLs == null) || (currentDocument >= documentURLs.length)
                     || (currentDocument < 0)) {
             return;
         }
 
-        final File current = documentFiles[currentDocument];
+        final URL current = documentURLs[currentDocument];
 
         if (current == null) {
             return;
         }
 
-        final String path = current.getAbsolutePath();
+        final String path = current.toExternalForm();
 
         final URL url;
-        try {
-            url = current.toURI().toURL();
-        } catch (MalformedURLException ex) {
-            log.info("Couldn't download baulast from '" + path + "'.", ex);
-            return;
-        }
+        url = current;
 
         CismetThreadPool.execute(new Runnable() {
 
                 @Override
                 public void run() {
+                    final String filename = path.substring(path.lastIndexOf("/") + 1);
                     if (DownloadManagerDialog.showAskingForUserTitle(Alb_picturePanel.this)) {
-                        final String filename = path.substring(path.lastIndexOf(File.separator) + 1);
                         DownloadManager.instance()
                                 .add(
                                     new HttpDownload(
@@ -889,7 +894,9 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                         newBean.setProperty("page_number", pageNo);
                         newBean.setProperty("geometry", geometry);
                         pageGeoCollection.add(newBean);
-                        log.fatal(newBean.getMetaObject().getDebugString());
+                        if (log.isDebugEnabled()) {
+                            log.debug(newBean.getMetaObject().getDebugString());
+                        }
                     }
                     if (selfPersisting) {
                         persistBean();
@@ -910,7 +917,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         currentSelectedButton = btnPlan;
         lblCurrentViewTitle.setText("Lageplan");
         currentDocument = LAGEPLAN_DOCUMENT;
-        CismetThreadPool.execute(new PictureReaderWorker(documentFiles[currentDocument]));
+        CismetThreadPool.execute(new PictureReaderWorker(documentURLs[currentDocument]));
         lstPictures.setEnabled(true);
     }
 
@@ -921,7 +928,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         currentSelectedButton = btnTextblatt;
         lblCurrentViewTitle.setText("Textblatt");
         currentDocument = TEXTBLATT_DOCUMENT;
-        CismetThreadPool.execute(new PictureReaderWorker(documentFiles[currentDocument]));
+        CismetThreadPool.execute(new PictureReaderWorker(documentURLs[currentDocument]));
         lstPictures.setEnabled(true);
     }
 
@@ -931,9 +938,9 @@ public class Alb_picturePanel extends javax.swing.JPanel {
      * @param  enabled  DOCUMENT ME!
      */
     private void setControlsEnabled(final boolean enabled) {
-        for (int i = 0; i < documentFiles.length; ++i) {
+        for (int i = 0; i < documentURLs.length; ++i) {
             final JButton current = documentButtons[i];
-            current.setEnabled((documentFiles[i] != null) && enabled && (currentSelectedButton != current));
+            current.setEnabled((documentURLs[i] != null) && enabled && (currentSelectedButton != current));
         }
     }
 
@@ -1127,21 +1134,35 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         @Override
         protected List[] doInBackground() throws Exception {
             final List[] result = new List[2];
-            final Object blattObj = getCidsBean().getProperty(TEXTBLATT_PROPERTY);
-            final Object planObj = getCidsBean().getProperty(LAGEPLAN_PROPERTY);
-            log.info("Found blatt property " + blattObj);
-            log.info("Found plan property " + planObj);
-            if (blattObj != null) {
-                result[TEXTBLATT_DOCUMENT] =
-                        BaulastenPictureFinder.findTextblattPicture(
-                        blattObj.toString().replaceAll("\\\\", "/"));
-            }
-            if (planObj != null) {
-                result[LAGEPLAN_DOCUMENT] =
-                        BaulastenPictureFinder.findPlanPicture(
-                        planObj.toString().replaceAll("\\\\", "/"));
-            }
+//            if (!StaticDebuggingTools.checkHomeForFile("BAULASTENHTTPDOCPREVIEW")) {
+//                final Object blattObj = getCidsBean().getProperty(TEXTBLATT_PROPERTY);
+//                final Object planObj = getCidsBean().getProperty(LAGEPLAN_PROPERTY);
+//                log.info("Found blatt property " + blattObj);
+//                log.info("Found plan property " + planObj);
+//                if (blattObj != null) {
+//                    result[TEXTBLATT_DOCUMENT] =
+//                            BaulastenPictureFinder.findTextblattPicture(
+//                            blattObj.toString().replaceAll("\\\\", "/"));
+//                }
+//                if (planObj != null) {
+//                    result[LAGEPLAN_DOCUMENT] =
+//                            BaulastenPictureFinder.findPlanPicture(
+//                            planObj.toString().replaceAll("\\\\", "/"));
+//                }
+//
+//            }
+//            else {
+
+            String blattnummer = (String) getCidsBean().getProperty(BLATTNUMMER_PROPERTY);
+            String lfdNummer = (String) getCidsBean().getProperty(LFDNUMMER_PROPERTY);
+
+            result[TEXTBLATT_DOCUMENT] = BaulastenPictureFinder.findTextblattPicture(blattnummer, lfdNummer);
+            result[LAGEPLAN_DOCUMENT] = BaulastenPictureFinder.findPlanPicture(blattnummer, lfdNummer);
+
+            log.debug("Textblätter:" + result[TEXTBLATT_DOCUMENT]);
+            log.debug("Lagepläne:" + result[LAGEPLAN_DOCUMENT]);
             return result;
+
         }
 
         @Override
@@ -1151,7 +1172,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                 final StringBuffer collisionLists = new StringBuffer();
                 for (int i = 0; i < result.length; ++i) {
                     //cast!
-                    final List<File> current = result[i];
+                    final List<URL> current = result[i];
                     if (current != null) {
                         if (current.size() > 0) {
                             if (current.size() > 1) {
@@ -1160,7 +1181,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                                 }
                                 collisionLists.append(current);
                             }
-                            documentFiles[i] = current.get(0);
+                            documentURLs[i] = current.get(0);
                         }
                     }
                 }
@@ -1183,8 +1204,8 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                 setControlsEnabled(true);
                 pathsChanged = false;
                 setEnabled(true);
-                for (int i = 0; i < documentFiles.length; ++i) {
-                    documentButtons[i].setEnabled(documentFiles[i] != null);
+                for (int i = 0; i < documentURLs.length; ++i) {
+                    documentButtons[i].setEnabled(documentURLs[i] != null);
                 }
                 if (btnTextblatt.isEnabled()) {
                     loadTextBlatt();
@@ -1209,7 +1230,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 
         //~ Instance fields ----------------------------------------------------
 
-        private final File pictureFile;
+        private final URL pictureURL;
 //        private boolean md5OK = false;
 
         //~ Constructors -------------------------------------------------------
@@ -1217,12 +1238,12 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         /**
          * Creates a new PictureReaderWorker object.
          *
-         * @param  pictureFile  DOCUMENT ME!
+         * @param  pictureURL  DOCUMENT ME!
          */
-        public PictureReaderWorker(final File pictureFile) {
-            this.pictureFile = pictureFile;
+        public PictureReaderWorker(final URL pictureURL) {
+            this.pictureURL = pictureURL;
             if (log.isDebugEnabled()) {
-                log.debug("prepare picture reader for file " + this.pictureFile);
+                log.debug("prepare picture reader for file " + this.pictureURL);
             }
             lstPictures.setModel(LADEN_MODEL);
             measureComponent.removeAllFeatures();
@@ -1246,7 +1267,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
             readPageGeometriesIntoMap(getPages());
 
             closeReader();
-            pictureReader = new MultiPagePictureReader(pictureFile);
+            pictureReader = new MultiPagePictureReader(pictureURL);
 //            pictureReader.setCaching(false);
             final int numberOfPages = pictureReader.getNumberOfPages();
             for (int i = 0; i < numberOfPages; ++i) {

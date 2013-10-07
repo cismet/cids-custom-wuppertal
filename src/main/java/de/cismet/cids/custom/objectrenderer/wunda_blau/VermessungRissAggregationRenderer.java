@@ -532,7 +532,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         } catch (final Exception ex) {
                             // TODO: User feedback?
                             LOG.warn("Could not include raster document for vermessungsriss '"
-                                        + vermessungsriss.toJSONString()
+                                        + vermessungsriss.toJSONString(true)
                                         + "'.",
                                 ex);
                             continue;
