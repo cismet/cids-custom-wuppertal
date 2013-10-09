@@ -1023,7 +1023,8 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
      */
     private GeometryCollection generateSearchGeomCollection() {
         final Geometry unionGeom = createUnionGeom();
-        final GeometryFactory gf = unionGeom.getFactory();
+
+        final GeometryFactory gf = new GeometryFactory(unionGeom.getPrecisionModel(), unionGeom.getSRID());
         Geometry[] geoms = null;
         if (unionGeom instanceof MultiPolygon) {
             final MultiPolygon mp = ((MultiPolygon)unionGeom);
