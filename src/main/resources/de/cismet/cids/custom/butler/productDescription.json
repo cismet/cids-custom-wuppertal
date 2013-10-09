@@ -326,14 +326,14 @@
             "butlerProducts": [
                 {
                     "name": "Stadtgrundkarte mit kommunalen Ergänzungen, farbig",
-                    "key": "0901",
+                    "key": "0901g",
                     "colorDepth": null,
                     "format": null,
                     "resolution": null,
                     "volumeParamText": "Fläche (km²):"
                 }, {
                     "name": "Stadtgrundkarte mit kommunalen Ergänzungen, grau",
-                    "key": "0902g",
+                    "key": "0902",
                     "colorDepth": null,
                     "format": null,
                     "resolution": null,
