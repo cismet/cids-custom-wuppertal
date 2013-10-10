@@ -1809,7 +1809,11 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private void displayBuchungsblattInfos(final Buchungsblatt buchungsblatt) {
         if (buchungsblatt != null) {
             final Offices offices = buchungsblatt.getOffices();
-//            buchungsblatt.getBuchungsstellen()[0].getLandParcel()[0].getAdministrativeDistricts().get;
+            final String bezirk = AlkisUtils.getBuchungsblattbezirkFromBuchungsblattnummer(
+                    buchungsblatt.getBuchungsblattCode());
+            if (bezirk != null) {
+                lblGrundbuchbezirk.setText(bezirk);
+            }
             if (offices != null) {
                 lblAmtgericht.setText(surroundWithHTMLTags(
                         AlkisUtils.arrayToSeparatedString(offices.getDistrictCourtName(), "<br>")));
