@@ -28,13 +28,22 @@ import Sirius.navigator.exception.ConnectionException;
 
 import Sirius.server.middleware.impls.domainserver.DomainServerImpl;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import de.aedsicad.aaaweb.service.util.Address;
 import de.aedsicad.aaaweb.service.util.Buchungsblatt;
 import de.aedsicad.aaaweb.service.util.Buchungsstelle;
 import de.aedsicad.aaaweb.service.util.Owner;
 import de.aedsicad.aaaweb.service.util.Point;
 
+import javafx.beans.binding.StringBinding;
+
+import org.openide.util.Exceptions;
+
 import java.io.BufferedReader;
+import java.io.IOException;
 
 import java.net.URL;
 
@@ -74,6 +83,19 @@ public class AlkisUtils {
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisUtils.class);
     public static final String ALKIS_HTML_PRODUCTS_ENABLED = "custom.alkis.products.html.enabled";
     public static final String ALKIS_SOAP_OVER_CSA = "alkisSoapTunnelAction";
+    static final ObjectMapper mapper = new ObjectMapper();
+    static Buchungsblattbezirke buchungsblattbezirke;
+
+    static {
+        try {
+            buchungsblattbezirke = mapper.readValue(Buchungsblattbezirke.class.getResourceAsStream(
+                        "/de/cismet/cids/custom/wunda_blau/res/alkis/buchungsblattbezirke.json"),
+                    Buchungsblattbezirke.class);
+        } catch (Exception ex) {
+            log.error("Problem while reading the Buchungsblattbezirke.", ex);
+            buchungsblattbezirke = new Buchungsblattbezirke();
+        }
+    }
 
     //~ Methods ----------------------------------------------------------------
 
@@ -100,6 +122,25 @@ public class AlkisUtils {
             return result.toString();
         }
         return "";
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   buchungsblattnummer  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String getBuchungsblattbezirkFromBuchungsblattnummer(final String buchungsblattnummer) {
+        try {
+            final String bezirksNr = buchungsblattnummer.substring(0, buchungsblattnummer.indexOf("-"));
+            final String bezirksname = buchungsblattbezirke.getDistrictNamesMap().get(bezirksNr);
+            final StringBuffer b = new StringBuffer(bezirksname).append(" (").append(bezirksNr).append(')');
+            return b.toString();
+        } catch (Exception e) {
+            log.error("Error in getBuchungsblattbezirkFromBuchungsblattnummer(" + buchungsblattnummer + ")", e);
+            return null;
+        }
     }
 
     /**
