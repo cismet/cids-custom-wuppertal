@@ -51,13 +51,11 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 
-import de.cismet.cids.custom.butler.Butler2Dialog;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.nas.NasProductTemplate;
 
-import de.cismet.cismap.commons.Crs;
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.features.DefaultStyledFeature;
@@ -595,21 +593,33 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                     try {
                         final NasProductTemplate template = (NasProductTemplate)cbType.getSelectedItem();
                         final String requestId = tfAuftragsnummer.getText().trim();
-                        if ((requestId != null) && requestId.contains(System.getProperty("file.separator"))) {
-                            JOptionPane.showMessageDialog(
-                                StaticSwingTools.getParentFrame(NasDialog.this),
-                                org.openide.util.NbBundle.getMessage(
-                                    NasDialog.class,
-                                    "NasDialog.OrderIdCheck.JOptionPane.message")
-                                        + " '"
-                                        + System.getProperty("file.separator")
-                                        + "'",
-                                org.openide.util.NbBundle.getMessage(
-                                    NasDialog.class,
-                                    "NasDialog.OrderIdCheck.JOptionPane.title"),
-                                JOptionPane.ERROR_MESSAGE);
-                            tfAuftragsnummer.requestFocus();
-                            return;
+                        if ((requestId != null)) {
+                            boolean containsWrongChar = false;
+                            String wrongChar = "";
+                            if (requestId.contains("/")) {
+                                containsWrongChar = true;
+                                wrongChar += "/";
+                            } else if (requestId.contains("\\")) {
+                                containsWrongChar = true;
+                                wrongChar += "\\";
+                            }
+
+                            if (containsWrongChar) {
+                                JOptionPane.showMessageDialog(
+                                    StaticSwingTools.getParentFrame(NasDialog.this),
+                                    org.openide.util.NbBundle.getMessage(
+                                        NasDialog.class,
+                                        "NasDialog.OrderIdCheck.JOptionPane.message")
+                                            + " '"
+                                            + wrongChar
+                                            + "'",
+                                    org.openide.util.NbBundle.getMessage(
+                                        NasDialog.class,
+                                        "NasDialog.OrderIdCheck.JOptionPane.title"),
+                                    JOptionPane.ERROR_MESSAGE);
+                                tfAuftragsnummer.requestFocus();
+                                return;
+                            }
                         }
                         final ArrayList<ProductGroupAmount> list = feePreview.getProductGroupAmounts();
                         final ProductGroupAmount[] goupAmounts = list.toArray(new ProductGroupAmount[list.size()]);
@@ -1013,7 +1023,8 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
      */
     private GeometryCollection generateSearchGeomCollection() {
         final Geometry unionGeom = createUnionGeom();
-        final GeometryFactory gf = unionGeom.getFactory();
+
+        final GeometryFactory gf = new GeometryFactory(unionGeom.getPrecisionModel(), unionGeom.getSRID());
         Geometry[] geoms = null;
         if (unionGeom instanceof MultiPolygon) {
             final MultiPolygon mp = ((MultiPolygon)unionGeom);
