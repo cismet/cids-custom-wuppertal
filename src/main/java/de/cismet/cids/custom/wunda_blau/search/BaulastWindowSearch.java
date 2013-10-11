@@ -62,10 +62,10 @@ import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.features.Feature;
 import de.cismet.cismap.commons.gui.MappingComponent;
-import de.cismet.cismap.commons.gui.piccolo.eventlistener.AbstractCreateSearchGeometryListener;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
+import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -189,7 +189,6 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
                         org.openide.util.NbBundle.getMessage(
                             BaulastWindowSearch.class,
                             "BaulastWindowSearch.btnGeoSearch.toolTipText"));
-                btnGeoSearch.addActionListener(null);
                 panCommand.add(btnGeoSearch);
             }
         } catch (Exception exception) {
@@ -723,13 +722,7 @@ public class BaulastWindowSearch extends javax.swing.JPanel implements CidsWindo
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-        if (AbstractCreateSearchGeometryListener.PROPERTY_FORGUI_LAST_FEATURE.equals(evt.getPropertyName())
-                    || AbstractCreateSearchGeometryListener.PROPERTY_FORGUI_MODE.equals(evt.getPropertyName())) {
-            btnGeoSearch.visualizeSearchMode((MauernCreateSearchGeometryListener)mappingComponent.getInputListener(
-                    MauernCreateSearchGeometryListener.MAUERN_CREATE_SEARCH_GEOMETRY));
-        }
-
-        if (MeasurementPointCreateSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
+        if (BaulastCreateSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
             if ((evt.getNewValue() != null) && (evt.getNewValue() instanceof Geometry)) {
                 final MetaObjectNodeServerSearch search = getServerSearch((Geometry)evt.getNewValue());
                 CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);

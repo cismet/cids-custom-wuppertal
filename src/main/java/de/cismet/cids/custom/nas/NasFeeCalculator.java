@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingInfo;
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.nas.NasProductTemplate;
 import de.cismet.cids.custom.wunda_blau.search.actions.NasZaehlObjekteSearch;
@@ -149,6 +151,44 @@ public abstract class NasFeeCalculator {
 
         final ArrayList<Integer> c = (ArrayList<Integer>)SessionManager.getProxy()
                     .customServerSearch(SessionManager.getSession().getUser(), gebaeudeSearch);
+        return c.get(0);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   g  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  ConnectionException  DOCUMENT ME!
+     */
+    public static int getDachPunkteAmount(final Geometry g) throws ConnectionException {
+        final NasZaehlObjekteSearch dachpuntkeSearch = new NasZaehlObjekteSearch(
+                g,
+                NasZaehlObjekteSearch.NasSearchType.DACHPUNKTE);
+
+        final ArrayList<Integer> c = (ArrayList<Integer>)SessionManager.getProxy()
+                    .customServerSearch(SessionManager.getSession().getUser(), dachpuntkeSearch);
+        return c.get(0);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   g  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  ConnectionException  DOCUMENT ME!
+     */
+    public static int getBodenPunkteAmount(final Geometry g) throws ConnectionException {
+        final NasZaehlObjekteSearch bodenPunkte = new NasZaehlObjekteSearch(
+                g,
+                NasZaehlObjekteSearch.NasSearchType.BODENPUNKTE);
+
+        final ArrayList<Integer> c = (ArrayList<Integer>)SessionManager.getProxy()
+                    .customServerSearch(SessionManager.getSession().getUser(), bodenPunkte);
         return c.get(0);
     }
 

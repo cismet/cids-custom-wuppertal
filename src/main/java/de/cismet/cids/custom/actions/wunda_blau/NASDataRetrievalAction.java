@@ -53,6 +53,7 @@ public class NASDataRetrievalAction extends AbstractAction implements CommonFeat
 
     Feature f = null;
     private final transient org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
+    private boolean hasNasAccess = false;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -61,40 +62,76 @@ public class NASDataRetrievalAction extends AbstractAction implements CommonFeat
      */
     public NASDataRetrievalAction() {
         super("NAS Daten abfragen");
+        try {
+            hasNasAccess = SessionManager.getConnection()
+                        .getConfigAttr(SessionManager.getSession().getUser(), "csa://nasDataQuery")
+                        != null;
+        } catch (Exception ex) {
+            log.error("Could not validate nas action tag (csa://nasDataQuery)!", ex);
+            hasNasAccess = false;
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public int getSorter() {
         return 10;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Feature getSourceFeature() {
         return f;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public boolean isActive() {
-        return true;
+        return hasNasAccess;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  source  DOCUMENT ME!
+     */
     @Override
     public void setSourceFeature(final Feature source) {
         f = source;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  e  DOCUMENT ME!
+     */
     @Override
     public void actionPerformed(final ActionEvent e) {
         SwingUtilities.invokeLater(new Runnable() {
 
                 @Override
                 public void run() {
+                    final LinkedList<Feature> featureToSelect = new LinkedList<Feature>();
+                    featureToSelect.add(f);
                     final NasDialog dialog = new NasDialog(
                             StaticSwingTools.getParentFrame(
                                 CismapBroker.getInstance().getMappingComponent()),
-                            false);
+                            false,
+                            featureToSelect);
                     StaticSwingTools.showDialog(dialog);
                 }
             });

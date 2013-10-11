@@ -118,7 +118,7 @@ final class AlkisPrintJButton extends JButton {
         }
 //        setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/frameprint.png"))); // NOI18N
         setText(null);
-        setToolTipText("Alkis Drucken");
+        setToolTipText("ALKIS Drucken");
         setName("alkis_print");
         setBorderPainted(false);
         setFocusable(false);
