@@ -168,7 +168,7 @@ public class AlkisUtils {
         if ((owners != null) && (owners.size() > 0)) {
             final StringBuilder infoBuilder = new StringBuilder();
             infoBuilder.append(
-                "<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"left\" valign=\"top\">");
+                "<table border=\"1px solid black\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"left\" valign=\"top\">");
 //            infoBuilder.append("<tr><td width=\"200\"><b><a href=\"").append(generateBuchungsblattLinkInfo(buchungsblatt)).append("\">").append(buchungsblatt.getBuchungsblattCode()).append("</a></b></td><td>");
             infoBuilder.append("<tr><td width=\"200\">Nr. " + pos + " auf  <b>")
                     .append(generateLinkFromCidsBean(buchungsblattBean, buchungsblatt.getBuchungsblattCode()))
@@ -379,8 +379,17 @@ public class AlkisUtils {
             if (owner.getDateOfBirth() != null) {
                 ownerStringBuilder.append(", *").append(owner.getDateOfBirth());
             }
+            ownerStringBuilder.append("</td><td>");
+            if (owner.getPart() != null) {
+                ownerStringBuilder.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; zu ").append(owner.getPart());
+            }
+            ownerStringBuilder.append("</td>");
+
             if (owner.getNameOfBirth() != null) {
-                ownerStringBuilder.append(AlkisConstants.NEWLINE + "geb. ").append(owner.getNameOfBirth());
+                ownerStringBuilder.append("<tr><td></td><td>")
+                        .append("geb. ")
+                        .append(owner.getNameOfBirth())
+                        .append("</td><td></tr>");
             }
             ownerStringBuilder.append(AlkisConstants.NEWLINE).append("</td></tr>");
             final Address[] addresses = owner.getAddresses();
@@ -389,7 +398,7 @@ public class AlkisUtils {
                     if (address != null) {
                         ownerStringBuilder.append("<tr><td></td>").append(spacing).append("<td>");
                         ownerStringBuilder.append(addressToString(address)).append(AlkisConstants.NEWLINE);
-                        ownerStringBuilder.append("</td></tr>");
+                        ownerStringBuilder.append("</td><td></td></tr>");
                     }
                 }
             }
