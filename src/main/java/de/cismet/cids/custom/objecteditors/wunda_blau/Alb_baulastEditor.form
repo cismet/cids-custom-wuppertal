@@ -91,7 +91,7 @@
                         <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalStrut"/>
                       </AuxValues>
                     </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel2">
+                    <Component class="javax.swing.JLabel" name="lblLetzteBearbeitung">
                       <Properties>
                         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="cc" green="cc" red="cc" type="rgb"/>
@@ -99,14 +99,14 @@
                         <Property name="text" type="java.lang.String" value="Letzte Bearbeitung am"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel1">
+                    <Component class="javax.swing.JLabel" name="lblBearbeiter">
                       <Properties>
                         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="cc" green="cc" red="cc" type="rgb"/>
                         </Property>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.bearbeitungsdatum}" target="jLabel1" targetPath="text" updateStrategy="0" immediately="false">
+                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.bearbeitungsdatum}" target="lblBearbeiter" targetPath="text" updateStrategy="0" immediately="false">
                           <Property name="nullValue" type="java.lang.String" value="(unbekannt)"/>
                           <Property name="incompletePathValue" type="java.lang.String" value="(unbekannt)"/>
                           <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -115,7 +115,7 @@
                         </BindingProperty>
                       </BindingProperties>
                     </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel3">
+                    <Component class="javax.swing.JLabel" name="lblDurch">
                       <Properties>
                         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="cc" green="cc" red="cc" type="rgb"/>
@@ -123,14 +123,14 @@
                         <Property name="text" type="java.lang.String" value="durch"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel4">
+                    <Component class="javax.swing.JLabel" name="lblBearbeitetAm">
                       <Properties>
                         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="cc" green="cc" red="cc" type="rgb"/>
                         </Property>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.bearbeitet_von}" target="jLabel4" targetPath="text" updateStrategy="0" immediately="false">
+                        <BindingProperty name="text" source="Form" sourcePath="${cidsBean.bearbeitet_von}" target="lblBearbeitetAm" targetPath="text" updateStrategy="0" immediately="false">
                           <Property name="nullValue" type="java.lang.String" value="(unbekannt)"/>
                           <Property name="incompletePathValue" type="java.lang.String" value="(unbekannt)"/>
                         </BindingProperty>
