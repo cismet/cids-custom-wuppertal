@@ -139,6 +139,7 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         this.initComponents();
         initFooterElements();
         cardLayout = (CardLayout)getLayout();
+        jPanel2.setVisible(editable);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -451,29 +452,29 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblBackMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblBackMouseClicked
+    private void lblBackMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBackMouseClicked
         btnBackActionPerformed(null);
-    }                                                                       //GEN-LAST:event_lblBackMouseClicked
+    }//GEN-LAST:event_lblBackMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBackActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBackActionPerformed
+    private void btnBackActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         cardLayout.show(this, "card1");
         btnBack.setEnabled(false);
         btnForward.setEnabled(true);
         lblBack.setEnabled(false);
         lblForw.setEnabled(true);
-    }                                                                           //GEN-LAST:event_btnBackActionPerformed
+    }//GEN-LAST:event_btnBackActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnForwardActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnForwardActionPerformed
+    private void btnForwardActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnForwardActionPerformed
         cardLayout.show(this, "card2");
         btnBack.setEnabled(true);
         btnForward.setEnabled(false);
@@ -489,16 +490,16 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
                 JOptionPane.WARNING_MESSAGE);
         }
         alb_picturePanel.clearCollisionWarning();
-    }                                                                              //GEN-LAST:event_btnForwardActionPerformed
+    }//GEN-LAST:event_btnForwardActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblForwMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblForwMouseClicked
+    private void lblForwMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblForwMouseClicked
         btnForwardActionPerformed(null);
-    }                                                                       //GEN-LAST:event_lblForwMouseClicked
+    }//GEN-LAST:event_lblForwMouseClicked
 
     /**
      * DOCUMENT ME!
