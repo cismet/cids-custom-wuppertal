@@ -100,15 +100,15 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnForward;
     private javax.swing.Box.Filler filler1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel lblBack;
+    private javax.swing.JLabel lblBearbeiter;
+    private javax.swing.JLabel lblBearbeitetAm;
+    private javax.swing.JLabel lblDurch;
     private javax.swing.JLabel lblForw;
+    private javax.swing.JLabel lblLetzteBearbeitung;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JPanel panButtons;
     private javax.swing.JPanel panFooter;
@@ -139,7 +139,10 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         this.initComponents();
         initFooterElements();
         cardLayout = (CardLayout)getLayout();
-        jPanel2.setVisible(editable);
+        lblBearbeiter.setVisible(editable);
+        lblLetzteBearbeitung.setVisible(editable);
+        lblDurch.setVisible(editable);
+        lblBearbeitetAm.setVisible(editable);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -261,13 +264,11 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         panButtons = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0),
-                new java.awt.Dimension(20, 0),
-                new java.awt.Dimension(20, 32767));
-        jLabel2 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
+        lblLetzteBearbeitung = new javax.swing.JLabel();
+        lblBearbeiter = new javax.swing.JLabel();
+        lblDurch = new javax.swing.JLabel();
+        lblBearbeitetAm = new javax.swing.JLabel();
         panFooterLeft = new javax.swing.JPanel();
         lblBack = new javax.swing.JLabel();
         btnBack = new javax.swing.JButton();
@@ -303,42 +304,32 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         jPanel2.setOpaque(false);
         jPanel2.add(filler1);
 
-        jLabel2.setForeground(new java.awt.Color(204, 204, 204));
-        jLabel2.setText("Letzte Bearbeitung am");
-        jPanel2.add(jLabel2);
+        lblLetzteBearbeitung.setForeground(new java.awt.Color(204, 204, 204));
+        lblLetzteBearbeitung.setText("Letzte Bearbeitung am");
+        jPanel2.add(lblLetzteBearbeitung);
 
-        jLabel1.setForeground(new java.awt.Color(204, 204, 204));
+        lblBearbeiter.setForeground(new java.awt.Color(204, 204, 204));
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bearbeitungsdatum}"),
-                jLabel1,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bearbeitungsdatum}"), lblBearbeiter, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("(unbekannt)");
         binding.setSourceUnreadableValue("(unbekannt)");
         binding.setConverter(Alb_baulastEditor.DATE_TO_STRING);
         bindingGroup.addBinding(binding);
 
-        jPanel2.add(jLabel1);
+        jPanel2.add(lblBearbeiter);
 
-        jLabel3.setForeground(new java.awt.Color(204, 204, 204));
-        jLabel3.setText("durch");
-        jPanel2.add(jLabel3);
+        lblDurch.setForeground(new java.awt.Color(204, 204, 204));
+        lblDurch.setText("durch");
+        jPanel2.add(lblDurch);
 
-        jLabel4.setForeground(new java.awt.Color(204, 204, 204));
+        lblBearbeitetAm.setForeground(new java.awt.Color(204, 204, 204));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bearbeitet_von}"),
-                jLabel4,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bearbeitet_von}"), lblBearbeitetAm, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("(unbekannt)");
         binding.setSourceUnreadableValue("(unbekannt)");
         bindingGroup.addBinding(binding);
 
-        jPanel2.add(jLabel4);
+        jPanel2.add(lblBearbeitetAm);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -356,16 +347,13 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         lblBack.setText("Info");
         lblBack.setEnabled(false);
         lblBack.addMouseListener(new java.awt.event.MouseAdapter() {
-
-                @Override
-                public void mouseClicked(final java.awt.event.MouseEvent evt) {
-                    lblBackMouseClicked(evt);
-                }
-            });
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblBackMouseClicked(evt);
+            }
+        });
         panFooterLeft.add(lblBack);
 
-        btnBack.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left.png"))); // NOI18N
+        btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left.png"))); // NOI18N
         btnBack.setBorder(null);
         btnBack.setBorderPainted(false);
         btnBack.setContentAreaFilled(false);
@@ -375,12 +363,10 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         btnBack.setMinimumSize(new java.awt.Dimension(30, 30));
         btnBack.setPreferredSize(new java.awt.Dimension(30, 30));
         btnBack.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnBackActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
         panFooterLeft.add(btnBack);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -397,8 +383,7 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         panFooterRight.setOpaque(false);
         panFooterRight.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 5));
 
-        btnForward.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-right.png"))); // NOI18N
+        btnForward.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-right.png"))); // NOI18N
         btnForward.setBorder(null);
         btnForward.setBorderPainted(false);
         btnForward.setContentAreaFilled(false);
@@ -407,24 +392,20 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         btnForward.setMinimumSize(new java.awt.Dimension(30, 30));
         btnForward.setPreferredSize(new java.awt.Dimension(30, 30));
         btnForward.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnForwardActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnForwardActionPerformed(evt);
+            }
+        });
         panFooterRight.add(btnForward);
 
         lblForw.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblForw.setForeground(new java.awt.Color(255, 255, 255));
         lblForw.setText("Dokumente");
         lblForw.addMouseListener(new java.awt.event.MouseAdapter() {
-
-                @Override
-                public void mouseClicked(final java.awt.event.MouseEvent evt) {
-                    lblForwMouseClicked(evt);
-                }
-            });
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblForwMouseClicked(evt);
+            }
+        });
         panFooterRight.add(lblForw);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -445,7 +426,7 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         add(alb_picturePanel, "card2");
 
         bindingGroup.bind();
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
