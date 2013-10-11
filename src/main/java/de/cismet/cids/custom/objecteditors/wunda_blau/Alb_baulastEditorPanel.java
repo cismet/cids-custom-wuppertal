@@ -28,9 +28,16 @@ import org.apache.log4j.Logger;
 
 import org.jdesktop.beansbinding.Converter;
 
+import org.jfree.util.Log;
+
+import org.openide.util.Exceptions;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import java.sql.Date;
 
@@ -50,11 +57,10 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
-import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
-import de.cismet.cids.custom.objectrenderer.utils.BaulastenPictureFinder;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 
@@ -62,6 +68,7 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 
 import de.cismet.cids.editors.DefaultBindableDateChooser;
+import de.cismet.cids.editors.NavigatorAttributeEditorGui;
 
 import de.cismet.tools.CismetThreadPool;
 
@@ -103,6 +110,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
 
     //~ Instance fields --------------------------------------------------------
 
+    final PropertyChangeListener listener = new CidsBeanListener();
     private CidsBean cidsBean;
     private Collection<MetaObject> allSelectedObjects;
     private final boolean editable;
@@ -110,6 +118,10 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
 //    private boolean landParcelListInitialized = false;
     private boolean baulastArtenListInitialized = false;
     private final FlurstueckSelectionDialoge fsDialoge;
+    private boolean writePruefkommentar = false;
+    private Object oldGeprueft_Von;
+    private Object oldPruefdatum;
+    private Object oldPruefkommentar;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddArt;
     private javax.swing.JButton btnAddBeguenstigt;
@@ -845,17 +857,18 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.pruefdatum}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.pruefkommentar}"),
                 lblLetzteAenderung,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("");
         binding.setSourceUnreadableValue("");
-        binding.setConverter(DATE_TO_STRING);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(11, 6, 6, 6);
         rpInfo.add(lblLetzteAenderung, gridBagConstraints);
@@ -1143,6 +1156,9 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                 final Collection<MetaObject> selObj = new ArrayList<MetaObject>(1);
                 selObj.add(cidsBean.getMetaObject());
                 setAllSelectedMetaObjects(selObj);
+                if (this.cidsBean != null) {
+                    this.cidsBean.removePropertyChangeListener(listener);
+                }
                 this.cidsBean = cidsBean;
                 List<CidsBean> landParcelCol = CidsBeanSupport.getBeanCollectionFromProperty(
                         cidsBean,
@@ -1151,11 +1167,17 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                 landParcelCol = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "flurstuecke_beguenstigt");
                 Collections.sort(landParcelCol, AlphanumComparator.getInstance());
 
+                writePruefkommentar = true;
+
                 if (editable) {
                     final User user = SessionManager.getSession().getUser();
-                    final boolean finalCheckEnable = SessionManager.getProxy().hasConfigAttr(user, ATAG_FINAL_CHECK);
+                    final boolean finalCheckEnable = SessionManager.getProxy().hasConfigAttr(user, ATAG_FINAL_CHECK)
+                                && (!user.getName().equals(cidsBean.getProperty("bearbeitet_von"))
+                                    || ((cidsBean.getProperty("geprueft") != null)
+                                        && (Boolean)cidsBean.getProperty("geprueft")));
 
                     chkGeprueft.setEnabled(finalCheckEnable);
+                    cidsBean.addPropertyChangeListener(listener);
                 } else {
                     final Object geprueftObj = cidsBean.getProperty("geprueft");
                     if ((geprueftObj instanceof Boolean) && ((Boolean)geprueftObj)) {
@@ -1188,12 +1210,120 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
      */
     @Override
     public void dispose() {
+        if (cidsBean != null) {
+            cidsBean.removePropertyChangeListener(listener);
+        }
         dlgAddBaulastArt.dispose();
         fsDialoge.dispose();
         bindingGroup.unbind();
     }
 
     //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class CidsBeanListener implements PropertyChangeListener {
+
+        //~ Methods ------------------------------------------------------------
+
+        // Object lastEvt = null;
+        @Override
+        public void propertyChange(final PropertyChangeEvent evt) {
+            /*if(evt == lastEvt)
+             *  return; else lastEvt = evt;*/
+            final String propName = evt.getPropertyName();
+            if (propName.equals("geprueft_von") || propName.equals("pruefdatum")
+                        || propName.equals("pruefkommentar") || propName.equals("bearbeitet_von")
+                        || propName.equals("bearbeitungsdatum")) {
+                return;
+            }
+            if (propName.equals("geprueft")) {
+                if (evt.getNewValue().equals(true)) {
+                    SwingUtilities.invokeLater(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                final int answer = JOptionPane.showConfirmDialog(
+                                        Alb_baulastEditorPanel.this,
+                                        "<html>Das Abschließen der Prüfung speichert den aktuellen Vorgang.<br />Möchten Sie die Prüfung abschließen?</html>",
+                                        "Prüfung abschließen",
+                                        JOptionPane.YES_NO_OPTION);
+                                if (answer == JOptionPane.YES_OPTION) {
+                                    try {
+                                        final String name = SessionManager.getSession().getUser().getName();
+                                        final Date zeit = new Date(System.currentTimeMillis());
+                                        if (writePruefkommentar) {
+                                            cidsBean.setProperty(
+                                                "geprueft_von",
+                                                name);
+                                            cidsBean.setProperty("pruefdatum", zeit);
+                                            cidsBean.setProperty(
+                                                "pruefkommentar",
+                                                "Prüfung am "
+                                                        + DateFormat.getDateInstance().format(zeit)
+                                                        + " durch "
+                                                        + name);
+                                        } else {
+                                            cidsBean.setProperty(
+                                                "geprueft_von",
+                                                oldGeprueft_Von);
+                                            cidsBean.setProperty("pruefdatum", oldPruefdatum);
+                                            cidsBean.setProperty(
+                                                "pruefkommentar",
+                                                oldPruefkommentar);
+                                        }
+                                        final NavigatorAttributeEditorGui editor = ((NavigatorAttributeEditorGui)
+                                                ComponentRegistry.getRegistry().getAttributeEditor());
+                                        editor.saveIt(false);
+                                    } catch (Exception ex) {
+                                        Exceptions.printStackTrace(ex);
+                                    }
+                                } else {
+                                    cidsBean.removePropertyChangeListener(listener);
+                                    chkGeprueft.setSelected(false);
+                                    cidsBean.addPropertyChangeListener(listener);
+                                }
+                            }
+                        });
+                } else {
+                    try {
+                        // chkGeprueft.setEnabled(false);
+                        writePruefkommentar = false;
+                        final String name = SessionManager.getSession().getUser().getName();
+                        final Date zeit = new Date(System.currentTimeMillis());
+
+                        oldGeprueft_Von = cidsBean.getProperty("geprueft_von");
+                        oldPruefdatum = cidsBean.getProperty("pruefdatum");
+                        oldPruefkommentar = cidsBean.getProperty("pruefkommentar");
+
+                        cidsBean.setProperty(
+                            "geprueft_von",
+                            name);
+                        cidsBean.setProperty("pruefdatum", zeit);
+                        cidsBean.setProperty(
+                            "pruefkommentar",
+                            "Von "
+                                    + name
+                                    + " am "
+                                    + DateFormat.getDateInstance().format(zeit)
+                                    + " auf ungeprüft gesetzt");
+                    } catch (Exception ex) {
+                        Log.error("cannot set CidsBean property", ex);
+                    }
+                }
+            } else {
+                if (chkGeprueft.isSelected()) {
+                    chkGeprueft.setEnabled(false);
+                    chkGeprueft.setSelected(false);
+                } else {
+                    chkGeprueft.setEnabled(false);
+                }
+            }
+        }
+    }
 
     /**
      * DOCUMENT ME!
