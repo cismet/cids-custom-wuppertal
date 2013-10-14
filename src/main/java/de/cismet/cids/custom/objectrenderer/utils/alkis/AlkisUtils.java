@@ -28,13 +28,22 @@ import Sirius.navigator.exception.ConnectionException;
 
 import Sirius.server.middleware.impls.domainserver.DomainServerImpl;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import de.aedsicad.aaaweb.service.util.Address;
 import de.aedsicad.aaaweb.service.util.Buchungsblatt;
 import de.aedsicad.aaaweb.service.util.Buchungsstelle;
 import de.aedsicad.aaaweb.service.util.Owner;
 import de.aedsicad.aaaweb.service.util.Point;
 
+import javafx.beans.binding.StringBinding;
+
+import org.openide.util.Exceptions;
+
 import java.io.BufferedReader;
+import java.io.IOException;
 
 import java.net.URL;
 
@@ -74,6 +83,19 @@ public class AlkisUtils {
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AlkisUtils.class);
     public static final String ALKIS_HTML_PRODUCTS_ENABLED = "custom.alkis.products.html.enabled";
     public static final String ALKIS_SOAP_OVER_CSA = "alkisSoapTunnelAction";
+    static final ObjectMapper mapper = new ObjectMapper();
+    static Buchungsblattbezirke buchungsblattbezirke;
+
+    static {
+        try {
+            buchungsblattbezirke = mapper.readValue(Buchungsblattbezirke.class.getResourceAsStream(
+                        "/de/cismet/cids/custom/wunda_blau/res/alkis/buchungsblattbezirke.json"),
+                    Buchungsblattbezirke.class);
+        } catch (Exception ex) {
+            log.error("Problem while reading the Buchungsblattbezirke.", ex);
+            buchungsblattbezirke = new Buchungsblattbezirke();
+        }
+    }
 
     //~ Methods ----------------------------------------------------------------
 
@@ -105,6 +127,25 @@ public class AlkisUtils {
     /**
      * DOCUMENT ME!
      *
+     * @param   buchungsblattnummer  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String getBuchungsblattbezirkFromBuchungsblattnummer(final String buchungsblattnummer) {
+        try {
+            final String bezirksNr = buchungsblattnummer.substring(0, buchungsblattnummer.indexOf("-"));
+            final String bezirksname = buchungsblattbezirke.getDistrictNamesMap().get(bezirksNr);
+            final StringBuffer b = new StringBuffer(bezirksname).append(" (").append(bezirksNr).append(')');
+            return b.toString();
+        } catch (Exception e) {
+            log.error("Error in getBuchungsblattbezirkFromBuchungsblattnummer(" + buchungsblattnummer + ")", e);
+            return null;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param   originatingFlurstueck  DOCUMENT ME!
      * @param   buchungsblatt          DOCUMENT ME!
      * @param   buchungsblattBean      DOCUMENT ME!
@@ -127,7 +168,7 @@ public class AlkisUtils {
         if ((owners != null) && (owners.size() > 0)) {
             final StringBuilder infoBuilder = new StringBuilder();
             infoBuilder.append(
-                "<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"left\" valign=\"top\">");
+                "<table border=\"1px solid black\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"left\" valign=\"top\">");
 //            infoBuilder.append("<tr><td width=\"200\"><b><a href=\"").append(generateBuchungsblattLinkInfo(buchungsblatt)).append("\">").append(buchungsblatt.getBuchungsblattCode()).append("</a></b></td><td>");
             infoBuilder.append("<tr><td width=\"200\">Nr. " + pos + " auf  <b>")
                     .append(generateLinkFromCidsBean(buchungsblattBean, buchungsblatt.getBuchungsblattCode()))
@@ -338,8 +379,17 @@ public class AlkisUtils {
             if (owner.getDateOfBirth() != null) {
                 ownerStringBuilder.append(", *").append(owner.getDateOfBirth());
             }
+            ownerStringBuilder.append("</td><td>");
+            if (owner.getPart() != null) {
+                ownerStringBuilder.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; zu ").append(owner.getPart());
+            }
+            ownerStringBuilder.append("</td>");
+
             if (owner.getNameOfBirth() != null) {
-                ownerStringBuilder.append(AlkisConstants.NEWLINE + "geb. ").append(owner.getNameOfBirth());
+                ownerStringBuilder.append("<tr><td></td><td>")
+                        .append("geb. ")
+                        .append(owner.getNameOfBirth())
+                        .append("</td><td></tr>");
             }
             ownerStringBuilder.append(AlkisConstants.NEWLINE).append("</td></tr>");
             final Address[] addresses = owner.getAddresses();
@@ -348,7 +398,7 @@ public class AlkisUtils {
                     if (address != null) {
                         ownerStringBuilder.append("<tr><td></td>").append(spacing).append("<td>");
                         ownerStringBuilder.append(addressToString(address)).append(AlkisConstants.NEWLINE);
-                        ownerStringBuilder.append("</td></tr>");
+                        ownerStringBuilder.append("</td><td></td></tr>");
                     }
                 }
             }

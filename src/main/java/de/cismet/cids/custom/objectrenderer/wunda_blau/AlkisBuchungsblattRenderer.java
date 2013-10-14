@@ -542,7 +542,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         panTitle.setOpaque(false);
         panTitle.setLayout(new java.awt.GridBagLayout());
 
-        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18));
+        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblTitle.setText("TITLE");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -568,7 +568,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         panFooterLeft.setPreferredSize(new java.awt.Dimension(124, 40));
         panFooterLeft.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 10, 5));
 
-        lblBack.setFont(new java.awt.Font("Tahoma", 1, 14));
+        lblBack.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblBack.setForeground(new java.awt.Color(255, 255, 255));
         lblBack.setText("Info");
         lblBack.setEnabled(false);
@@ -630,7 +630,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
             });
         panFooterRight.add(btnForward);
 
-        lblForw.setFont(new java.awt.Font("Tahoma", 1, 14));
+        lblForw.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblForw.setForeground(new java.awt.Color(255, 255, 255));
         lblForw.setText("Produkte");
         lblForw.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -658,7 +658,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        lblDescKatasteramt.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblDescKatasteramt.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblDescKatasteramt.setText("Katasteramt:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -667,7 +667,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         jPanel1.add(lblDescKatasteramt, gridBagConstraints);
 
-        lblDescAmtsgericht.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblDescAmtsgericht.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblDescAmtsgericht.setText("Amtsgericht:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -676,7 +676,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 5);
         jPanel1.add(lblDescAmtsgericht, gridBagConstraints);
 
-        lblDescGrundbuchbezirk.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblDescGrundbuchbezirk.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblDescGrundbuchbezirk.setText("Grundbuchbezirk:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -723,7 +723,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         gridBagConstraints.weightx = 1.0;
         jPanel1.add(jPanel6, gridBagConstraints);
 
-        lblDescBlattart.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblDescBlattart.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblDescBlattart.setText("Blattart:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -740,7 +740,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblBlattart, gridBagConstraints);
 
-        lblDescBuchungsart.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblDescBuchungsart.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblDescBuchungsart.setText("Buchungsart:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -788,9 +788,9 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         scpOwner.setOpaque(false);
         scpOwner.setPreferredSize(new java.awt.Dimension(200, 135));
 
-        epOwner.setBorder(null);
-        epOwner.setContentType("text/html");
         epOwner.setEditable(false);
+        epOwner.setBorder(null);
+        epOwner.setContentType("text/html"); // NOI18N
         epOwner.setOpaque(false);
         scpOwner.setViewportView(epOwner);
 
@@ -1809,7 +1809,11 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private void displayBuchungsblattInfos(final Buchungsblatt buchungsblatt) {
         if (buchungsblatt != null) {
             final Offices offices = buchungsblatt.getOffices();
-//            buchungsblatt.getBuchungsstellen()[0].getLandParcel()[0].getAdministrativeDistricts().get;
+            final String bezirk = AlkisUtils.getBuchungsblattbezirkFromBuchungsblattnummer(
+                    buchungsblatt.getBuchungsblattCode());
+            if (bezirk != null) {
+                lblGrundbuchbezirk.setText(bezirk);
+            }
             if (offices != null) {
                 lblAmtgericht.setText(surroundWithHTMLTags(
                         AlkisUtils.arrayToSeparatedString(offices.getDistrictCourtName(), "<br>")));
@@ -2026,11 +2030,11 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                         displayBuchungsblattInfos(buchungsblatt);
                         final Owner[] owners = buchungsblatt.getOwners();
 //                    final StringBuilder ownerBuilder = new StringBuilder("<html>");
-                        final StringBuilder ownerBuilder = new StringBuilder("<html>");
+                        final StringBuilder ownerBuilder = new StringBuilder("<html><table>");
                         for (final Owner owner : owners) {
                             ownerBuilder.append(AlkisUtils.ownerToString(owner, ""));
                         }
-                        ownerBuilder.append("</html>");
+                        ownerBuilder.append("</table></html>");
                         epOwner.setText(ownerBuilder.toString());
                         // enable products that depend on soap info
                         hlGrundstuecksnachweisNrwPdf.setEnabled(true);

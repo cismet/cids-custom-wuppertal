@@ -14,14 +14,11 @@ package de.cismet.cids.custom.wupp.client.alkis;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import sun.awt.resources.awt;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Toolkit;
 
-import javax.swing.JTextField;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
