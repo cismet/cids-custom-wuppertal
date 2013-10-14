@@ -66,10 +66,10 @@ public class NasStartupHook implements StartupHook {
                                             "WUNDA_BLAU",
                                             null,
                                             paramMethod);
-                    } catch (ConnectionException ex) {
+                    } catch (Exception ex) {
                         log.error("error while getting the list of undelivered nas orders from server", ex);
-                        return;
                     }
+
                     if ((openOrderIds == null) || openOrderIds.isEmpty()) {
                         log.info("no pending nas orders found for the logged in user");
                         return;
