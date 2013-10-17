@@ -362,7 +362,7 @@ public class AlkisUtils {
     public static String ownerToString(final Owner owner, final String spacing) {
         if (owner != null) {
             final StringBuilder ownerStringBuilder = new StringBuilder();
-            ownerStringBuilder.append("<tr><td width=\"75\">").append(spacing);
+            ownerStringBuilder.append("<tr><td width=\"50\">").append(spacing);
             if (owner.getNameNumber() != null) {
                 ownerStringBuilder.append(normalizeNameNumber(owner.getNameNumber()));
             }
@@ -379,9 +379,9 @@ public class AlkisUtils {
             if (owner.getDateOfBirth() != null) {
                 ownerStringBuilder.append(", *").append(owner.getDateOfBirth());
             }
-            ownerStringBuilder.append("</td><td>");
+            ownerStringBuilder.append("</td><td width=\"15\"></td><td>");
             if (owner.getPart() != null) {
-                ownerStringBuilder.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; zu ").append(owner.getPart());
+                ownerStringBuilder.append("<nobr>").append("zu ").append(owner.getPart()).append("</nobr>");
             }
             ownerStringBuilder.append("</td>");
 
@@ -398,7 +398,7 @@ public class AlkisUtils {
                     if (address != null) {
                         ownerStringBuilder.append("<tr><td></td>").append(spacing).append("<td>");
                         ownerStringBuilder.append(addressToString(address)).append(AlkisConstants.NEWLINE);
-                        ownerStringBuilder.append("</td><td></td></tr>");
+                        ownerStringBuilder.append("</td><td></td><td></td></tr>");
                     }
                 }
             }
