@@ -29,7 +29,6 @@ public class Boden_vorkaufsrechtEditor extends de.cismet.tools.gui.RoundedPanel 
     private static final Logger LOG = Logger.getLogger(Boden_vorkaufsrechtEditor.class);
     private CidsBean cidsBean;
     private final boolean editable;
-    private final FlurstueckSelectionDialoge fsDialoge;
 
     /**
      * Creates new form BodenVorkaufsrechtEditor
@@ -44,9 +43,6 @@ public class Boden_vorkaufsrechtEditor extends de.cismet.tools.gui.RoundedPanel 
     public Boden_vorkaufsrechtEditor(final boolean editable) {
         this.editable = editable;
         this.initComponents();
-        fsDialoge = new FlurstueckSelectionDialoge();
-        fsDialoge.pack();
-        fsDialoge.setLocationRelativeTo(this);
     }
 
     /**
@@ -63,12 +59,12 @@ public class Boden_vorkaufsrechtEditor extends de.cismet.tools.gui.RoundedPanel 
         setAlpha(0);
         setMaximumSize(new java.awt.Dimension(50000, 420));
         setMinimumSize(new java.awt.Dimension(515, 420));
-        setPreferredSize(new java.awt.Dimension(575, 420));
+        setPreferredSize(new java.awt.Dimension(515, 420));
 
         panEditor.setMaximumSize(new java.awt.Dimension(5000, 500));
         panEditor.setMinimumSize(new java.awt.Dimension(515, 500));
         panEditor.setPreferredSize(new java.awt.Dimension(515, 500));
-        add(panEditor, java.awt.BorderLayout.NORTH);
+        add(panEditor, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.custom.objecteditors.wunda_blau.Boden_VorkaufsrechtEditorPanel panEditor;
@@ -84,8 +80,6 @@ public class Boden_vorkaufsrechtEditor extends de.cismet.tools.gui.RoundedPanel 
        
         if (cidsBean != null) {
             this.cidsBean = cidsBean;
-            this.initComponents();
-//            cidsBean.getMetaObject().getDebugString();
             this.panEditor.setCidsBean(cidsBean);
         }
    

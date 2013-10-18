@@ -4,24 +4,26 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.ComponentRegistry;
 
-import Sirius.server.middleware.types.AbstractAttributeRepresentationFormater;
-import Sirius.server.middleware.types.LightweightMetaObject;
 import Sirius.server.middleware.types.MetaObject;
-import Sirius.server.newuser.User;
+import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
-import de.cismet.cids.editors.DefaultBindableDateChooser;
+import de.cismet.tools.gui.StaticSwingTools;
+import java.awt.Color;
 
-import java.sql.Date;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import javax.swing.JComponent;
-import org.jdesktop.beansbinding.Converter;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -33,23 +35,13 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
     private final boolean editable;
     private final Collection<JComponent> editableComponents;
     private final FlurstueckSelectionDialoge fsDialoge;
-    
-    private static final Converter<java.sql.Date, String> DATE_TO_STRING = new Converter<Date, String>() {
+    public static final String ATAG_FINAL_CHECK = "navigator.baulasten.final_check"; // NOI18N
+    private static final Logger LOG = Logger.getLogger(Boden_VorkaufsrechtEditorPanel.class);
 
-            @Override
-            public String convertForward(final Date value) {
-                if (value != null) {
-                    return "(" + DateFormat.getDateInstance().format(value) + ")";
-                } else {
-                    return "";
-                }
-            }
 
-            @Override
-            public Date convertReverse(final String value) {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-        };
+   
+   
+
     
     /**
      * Creates new form Boden_VorkaufsrechtEditorPanel
@@ -62,6 +54,7 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
      * Creates new form Boden_VorkaufsrechtEditorPanel
      */
     public Boden_VorkaufsrechtEditorPanel(final boolean editable) {
+        
         this.editable = editable;
         this.editableComponents = new ArrayList<JComponent>();
         initComponents();
@@ -80,76 +73,88 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
         java.awt.GridBagConstraints gridBagConstraints;
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        jLabel2 = new javax.swing.JLabel();
-        sqlDateToStringConverter1 = new de.cismet.cids.editors.converters.SqlDateToStringConverter();
-        roundedPanel1 = new de.cismet.tools.gui.RoundedPanel();
+        sqlDateToUtilDateConverter = new de.cismet.cids.editors.converters.SqlDateToUtilDateConverter();
+        rpInfo = new de.cismet.tools.gui.RoundedPanel();
         semiRoundedPanel1 = new de.cismet.tools.gui.SemiRoundedPanel();
-        jLabel1 = new javax.swing.JLabel();
+        lblInfo = new javax.swing.JLabel();
+        lblFlInMap = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        aktenzeichen = new javax.swing.JTextField();
         defaultBindableDateChooser1 = new de.cismet.cids.editors.DefaultBindableDateChooser();
-        roundedPanel2 = new de.cismet.tools.gui.RoundedPanel();
-        semiRoundedPanel2 = new de.cismet.tools.gui.SemiRoundedPanel();
-        jLabel5 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
-        jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        rpFlurstuecke = new de.cismet.tools.gui.RoundedPanel();
+        srpHeadFlurstuecke = new de.cismet.tools.gui.SemiRoundedPanel();
+        lblHeadFlurstuecke = new javax.swing.JLabel();
+        scpFlurstuecke = new javax.swing.JScrollPane();
+        lstFlurstuecke = new javax.swing.JList();
+        panFlurstuecke = new javax.swing.JPanel();
+        btnAddFlurstueck = new javax.swing.JButton();
+        btnRemoveFlurstueck = new javax.swing.JButton();
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(Boden_VorkaufsrechtEditorPanel.class, "Boden_VorkaufsrechtEditorPanel.jLabel2.text")); // NOI18N
+        setMaximumSize(new java.awt.Dimension(5000, 5000));
+        setMinimumSize(new java.awt.Dimension(500, 440));
+        setName(""); // NOI18N
+        setOpaque(false);
+        setPreferredSize(new java.awt.Dimension(500, 440));
+        setLayout(new java.awt.GridBagLayout());
 
-        setMaximumSize(new java.awt.Dimension(500, 500));
-        setMinimumSize(new java.awt.Dimension(300, 300));
-        setPreferredSize(new java.awt.Dimension(500, 300));
-        java.awt.GridBagLayout layout = new java.awt.GridBagLayout();
-        layout.columnWidths = new int[] {0, 5, 0};
-        layout.rowHeights = new int[] {0, 5, 0, 5, 0};
-        setLayout(layout);
+        rpInfo.setMaximumSize(new java.awt.Dimension(5000, 105));
+        rpInfo.setMinimumSize(new java.awt.Dimension(500, 105));
+        rpInfo.setPreferredSize(new java.awt.Dimension(500, 105));
+        rpInfo.setLayout(new java.awt.GridBagLayout());
 
-        roundedPanel1.setMaximumSize(new java.awt.Dimension(500, 500));
-        roundedPanel1.setMinimumSize(new java.awt.Dimension(300, 300));
-        roundedPanel1.setPreferredSize(new java.awt.Dimension(500, 200));
-        roundedPanel1.setLayout(new java.awt.GridBagLayout());
-
-        semiRoundedPanel1.setBackground(new java.awt.Color(0, 153, 153));
+        semiRoundedPanel1.setBackground(new java.awt.Color(255, 155, 51));
         semiRoundedPanel1.setForeground(new java.awt.Color(255, 255, 0));
-        semiRoundedPanel1.setMaximumSize(new java.awt.Dimension(500, 30));
+        semiRoundedPanel1.setMaximumSize(new java.awt.Dimension(5000, 5000));
         semiRoundedPanel1.setMinimumSize(new java.awt.Dimension(500, 30));
         semiRoundedPanel1.setName("xxx"); // NOI18N
-        semiRoundedPanel1.setPreferredSize(new java.awt.Dimension(500, 300));
+        semiRoundedPanel1.setPreferredSize(new java.awt.Dimension(500, 200));
         semiRoundedPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setBackground(new java.awt.Color(102, 102, 255));
-        jLabel1.setForeground(new java.awt.Color(255, 51, 102));
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(Boden_VorkaufsrechtEditorPanel.class, "Boden_VorkaufsrechtEditorPanel.jLabel1.text")); // NOI18N
-        jLabel1.setMaximumSize(new java.awt.Dimension(50, 50));
-        jLabel1.setMinimumSize(new java.awt.Dimension(50, 50));
-        jLabel1.setPreferredSize(new java.awt.Dimension(50, 14));
+        lblInfo.setBackground(new java.awt.Color(255, 155, 51));
+        lblInfo.setForeground(new java.awt.Color(0, 0, 0));
+        org.openide.awt.Mnemonics.setLocalizedText(lblInfo, org.openide.util.NbBundle.getMessage(Boden_VorkaufsrechtEditorPanel.class, "Boden_VorkaufsrechtEditorPanel.lblInfo.text")); // NOI18N
+        lblInfo.setMaximumSize(new java.awt.Dimension(50, 50));
+        lblInfo.setMinimumSize(new java.awt.Dimension(50, 50));
+        lblInfo.setPreferredSize(new java.awt.Dimension(50, 14));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
-        semiRoundedPanel1.add(jLabel1, gridBagConstraints);
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        semiRoundedPanel1.add(lblInfo, gridBagConstraints);
+
+        lblFlInMap.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblFlInMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom-best-fit.png"))); // NOI18N
+        lblFlInMap.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblFlINMapMouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        semiRoundedPanel1.add(lblFlInMap, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        roundedPanel1.add(semiRoundedPanel1, gridBagConstraints);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        rpInfo.add(semiRoundedPanel1, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(Boden_VorkaufsrechtEditorPanel.class, "Boden_VorkaufsrechtEditorPanel.jLabel3.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        roundedPanel1.add(jLabel3, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
+        rpInfo.add(jLabel3, gridBagConstraints);
         jLabel3.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(Boden_VorkaufsrechtEditorPanel.class, "Boden_VorkaufsrechtEditorPanel.jLabel3.AccessibleContext.accessibleName")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(Boden_VorkaufsrechtEditorPanel.class, "Boden_VorkaufsrechtEditorPanel.jLabel4.text")); // NOI18N
@@ -158,9 +163,9 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        roundedPanel1.add(jLabel4, gridBagConstraints);
+        rpInfo.add(jLabel4, gridBagConstraints);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.name}"), jTextField1, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.name}"), aktenzeichen, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -169,9 +174,12 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        roundedPanel1.add(jTextField1, gridBagConstraints);
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
+        rpInfo.add(aktenzeichen, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("{cidsBean.eingang_antrag}"), defaultBindableDateChooser1, org.jdesktop.beansbinding.BeanProperty.create("date"), "");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.eingang_anfrage}"), defaultBindableDateChooser1, org.jdesktop.beansbinding.BeanProperty.create("date"), "");
+        binding.setConverter(sqlDateToUtilDateConverter);
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -180,126 +188,274 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        roundedPanel1.add(defaultBindableDateChooser1, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        rpInfo.add(defaultBindableDateChooser1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 5;
-        gridBagConstraints.ipady = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        add(roundedPanel1, gridBagConstraints);
-        roundedPanel1.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(Boden_VorkaufsrechtEditorPanel.class, "Boden_VorkaufsrechtEditorPanel.roundedPanel1.AccessibleContext.accessibleName")); // NOI18N
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        add(rpInfo, gridBagConstraints);
+        rpInfo.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(Boden_VorkaufsrechtEditorPanel.class, "Boden_VorkaufsrechtEditorPanel.rpInfo.AccessibleContext.accessibleName")); // NOI18N
 
-        roundedPanel2.setMinimumSize(new java.awt.Dimension(100, 300));
-        roundedPanel2.setPreferredSize(new java.awt.Dimension(100, 300));
-        roundedPanel2.setLayout(new java.awt.GridBagLayout());
+        rpFlurstuecke.setMinimumSize(new java.awt.Dimension(100, 350));
+        rpFlurstuecke.setPreferredSize(new java.awt.Dimension(100, 350));
+        rpFlurstuecke.setLayout(new java.awt.GridBagLayout());
 
-        semiRoundedPanel2.setBackground(new java.awt.Color(255, 153, 51));
-        semiRoundedPanel2.setMaximumSize(new java.awt.Dimension(100, 2000));
-        semiRoundedPanel2.setMinimumSize(new java.awt.Dimension(100, 20));
-        semiRoundedPanel2.setPreferredSize(new java.awt.Dimension(100, 20));
-        semiRoundedPanel2.setLayout(new java.awt.GridBagLayout());
+        srpHeadFlurstuecke.setBackground(new java.awt.Color(255, 155, 51));
+        srpHeadFlurstuecke.setMaximumSize(new java.awt.Dimension(100, 2000));
+        srpHeadFlurstuecke.setMinimumSize(new java.awt.Dimension(100, 20));
+        srpHeadFlurstuecke.setPreferredSize(new java.awt.Dimension(100, 20));
+        srpHeadFlurstuecke.setRequestFocusEnabled(false);
+        srpHeadFlurstuecke.setLayout(new java.awt.GridBagLayout());
 
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(Boden_VorkaufsrechtEditorPanel.class, "Boden_VorkaufsrechtEditorPanel.jLabel5.text")); // NOI18N
-        semiRoundedPanel2.add(jLabel5, new java.awt.GridBagConstraints());
+        lblHeadFlurstuecke.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(lblHeadFlurstuecke, org.openide.util.NbBundle.getMessage(Boden_VorkaufsrechtEditorPanel.class, "Boden_VorkaufsrechtEditorPanel.lblHeadFlurstuecke.text")); // NOI18N
+        srpHeadFlurstuecke.add(lblHeadFlurstuecke, new java.awt.GridBagConstraints());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        roundedPanel2.add(semiRoundedPanel2, gridBagConstraints);
+        rpFlurstuecke.add(srpHeadFlurstuecke, gridBagConstraints);
 
-        jScrollPane1.setMaximumSize(new java.awt.Dimension(100, 300));
-        jScrollPane1.setMinimumSize(new java.awt.Dimension(100, 200));
-        jScrollPane1.setOpaque(false);
-        jScrollPane1.setPreferredSize(new java.awt.Dimension(100, 300));
+        scpFlurstuecke.setMaximumSize(new java.awt.Dimension(100, 300));
+        scpFlurstuecke.setMinimumSize(new java.awt.Dimension(100, 200));
+        scpFlurstuecke.setOpaque(false);
+        scpFlurstuecke.setPreferredSize(new java.awt.Dimension(100, 300));
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
+        lstFlurstuecke.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane1.setViewportView(jList1);
+
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ref_flurstuecke}");
+        org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, lstFlurstuecke);
+        jListBinding.setSourceNullValue(null);
+        jListBinding.setSourceUnreadableValue(null);
+        bindingGroup.addBinding(jListBinding);
+
+        lstFlurstuecke.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lstFlurstueckeMouseClicked(evt);
+            }
+        });
+        scpFlurstuecke.setViewportView(lstFlurstuecke);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridheight = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 5.0;
-        roundedPanel2.add(jScrollPane1, gridBagConstraints);
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
+        rpFlurstuecke.add(scpFlurstuecke, gridBagConstraints);
 
-        jPanel1.setMinimumSize(new java.awt.Dimension(50, 25));
-        jPanel1.setLayout(new java.awt.GridBagLayout());
+        panFlurstuecke.setMinimumSize(new java.awt.Dimension(50, 25));
+        panFlurstuecke.setLayout(new java.awt.GridBagLayout());
 
-        jButton1.setBackground(java.awt.Color.green);
-        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(Boden_VorkaufsrechtEditorPanel.class, "Boden_VorkaufsrechtEditorPanel.jButton1.text")); // NOI18N
-        jButton1.setToolTipText(org.openide.util.NbBundle.getMessage(Boden_VorkaufsrechtEditorPanel.class, "Boden_VorkaufsrechtEditorPanel.jButton1.toolTipText")); // NOI18N
-        jPanel1.add(jButton1, new java.awt.GridBagConstraints());
+        btnAddFlurstueck.setBackground(java.awt.Color.green);
+        btnAddFlurstueck.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        btnAddFlurstueck.setToolTipText(org.openide.util.NbBundle.getMessage(Boden_VorkaufsrechtEditorPanel.class, "Boden_VorkaufsrechtEditorPanel.btnAddFlurstueck.toolTipText")); // NOI18N
+        btnAddFlurstueck.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddFlurstueckActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panFlurstuecke.add(btnAddFlurstueck, gridBagConstraints);
 
-        jButton2.setBackground(java.awt.Color.red);
-        org.openide.awt.Mnemonics.setLocalizedText(jButton2, org.openide.util.NbBundle.getMessage(Boden_VorkaufsrechtEditorPanel.class, "Boden_VorkaufsrechtEditorPanel.jButton2.text")); // NOI18N
-        jPanel1.add(jButton2, new java.awt.GridBagConstraints());
+        btnRemoveFlurstueck.setBackground(java.awt.Color.red);
+        btnRemoveFlurstueck.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemoveFlurstueck.setToolTipText(org.openide.util.NbBundle.getMessage(Boden_VorkaufsrechtEditorPanel.class, "Boden_VorkaufsrechtEditorPanel.btnRemoveFlurstueck.toolTipText")); // NOI18N
+        btnRemoveFlurstueck.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveFlurstueckActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panFlurstuecke.add(btnRemoveFlurstueck, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        roundedPanel2.add(jPanel1, gridBagConstraints);
+        rpFlurstuecke.add(panFlurstuecke, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridheight = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        add(roundedPanel2, gridBagConstraints);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weighty = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 5);
+        add(rpFlurstuecke, gridBagConstraints);
 
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAddFlurstueckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddFlurstueckActionPerformed
+        
+        fsDialoge.setCurrentListToAdd(CidsBeanSupport.getBeanCollectionFromProperty(
+                cidsBean,
+                "ref_flurstuecke"));
+        fsDialoge.setTitle("Flurstück hinzufügen");
+        
+        StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this),
+            fsDialoge,
+            true);
+    }//GEN-LAST:event_btnAddFlurstueckActionPerformed
+
+    private void btnRemoveFlurstueckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveFlurstueckActionPerformed
+        final Object[] selection = lstFlurstuecke.getSelectedValues();
+        if ((selection != null) && (selection.length > 0)) {
+            final int answer = JOptionPane.showConfirmDialog(
+                    StaticSwingTools.getParentFrame(this),
+                    "Soll das Flurstück wirklich gelöscht werden?",
+                    "Flurstück entfernen",
+                    JOptionPane.YES_NO_OPTION);
+            if (answer == JOptionPane.YES_OPTION) {
+                final Collection flurstueckCol = CidsBeanSupport.getBeanCollectionFromProperty(
+                        cidsBean,
+                        "ref_flurstuecke");
+                if (flurstueckCol != null) {
+                    for (final Object cur : selection) {
+                        try {
+                            flurstueckCol.remove(cur);
+                        } catch (Exception e) {
+                            ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Löschen", e, this);
+                        }
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_btnRemoveFlurstueckActionPerformed
+
+    
+    private void lstFlurstueckeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstFlurstueckeMouseClicked
+        if (evt.getClickCount() > 1) {
+            handleJumpToListeSelectionBean(lstFlurstuecke);
+        }
+    }//GEN-LAST:event_lstFlurstueckeMouseClicked
+
+    private void lblFlINMapMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblFlINMapMouseClicked
+        ObjectRendererUtils.switchToCismapMap();
+        ObjectRendererUtils.addBeanGeomsAsFeaturesToCismapMap(allSelectedObjects, editable);
+    }//GEN-LAST:event_lblFlINMapMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField aktenzeichen;
+    private javax.swing.JButton btnAddFlurstueck;
+    private javax.swing.JButton btnRemoveFlurstueck;
     private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooser1;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JList jList1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
-    private de.cismet.tools.gui.RoundedPanel roundedPanel1;
-    private de.cismet.tools.gui.RoundedPanel roundedPanel2;
+    private javax.swing.JLabel lblFlInMap;
+    private javax.swing.JLabel lblHeadFlurstuecke;
+    private javax.swing.JLabel lblInfo;
+    private javax.swing.JList lstFlurstuecke;
+    private javax.swing.JPanel panFlurstuecke;
+    private de.cismet.tools.gui.RoundedPanel rpFlurstuecke;
+    private de.cismet.tools.gui.RoundedPanel rpInfo;
+    private javax.swing.JScrollPane scpFlurstuecke;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel1;
-    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel2;
-    private de.cismet.cids.editors.converters.SqlDateToStringConverter sqlDateToStringConverter1;
+    private de.cismet.cids.editors.converters.SqlDateToUtilDateConverter sqlDateToUtilDateConverter;
+    private de.cismet.tools.gui.SemiRoundedPanel srpHeadFlurstuecke;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
+        private void handleJumpToListeSelectionBean(final JList list) {
+        final Object selectedObj = list.getSelectedValue();
+        if (selectedObj instanceof CidsBean) {
+            final Object realFSBean = ((CidsBean)selectedObj).getProperty("ref_flurstuecke");
+            if (realFSBean instanceof CidsBean) {
+                final MetaObject selMO = ((CidsBean)realFSBean).getMetaObject();
+                ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObject(selMO, "");
+            }
+        }
+    }
+        
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
     }
 
-    @Override
-    public void setCidsBean(CidsBean cb) {
-        if (cidsBean != null) {
-            this.cidsBean = cidsBean;
-        }
+    
+    public void setAllSelectedMetaObjects(final Collection<MetaObject> selection) {
+        this.allSelectedObjects = selection;
     }
+    
+    /**
+     *
+     * @param cidsBean
+     */
+    @Override
+    public void setCidsBean(final CidsBean cidsBean) {
+        
+        
+        try {
+            bindingGroup.unbind();
+            if (cidsBean != null) {
+                final int[] flstIdx = lstFlurstuecke.getSelectedIndices();
+                final Collection<MetaObject> selObj = new ArrayList<MetaObject>(1);
+                selObj.add(cidsBean.getMetaObject());
+                setAllSelectedMetaObjects(selObj);
+                this.cidsBean = cidsBean;
+                List<CidsBean> flurstueckeCol = CidsBeanSupport.getBeanCollectionFromProperty(
+                        cidsBean,
+                        "ref_flurstuecke");
+                Collections.sort(flurstueckeCol, AlphanumComparator.getInstance());
+                flurstueckeCol = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "ref_flurstuecke");
+                Collections.sort(flurstueckeCol, AlphanumComparator.getInstance());
+
+               
+                
+
+                bindingGroup.bind();
+                lstFlurstuecke.setSelectedIndices(flstIdx);
+                cidsBean.getMetaObject().getDebugString();
+            }
+        
+        } catch (final Exception x) {
+            LOG.error("cannot initialise Boden_VorkaufsrechtEditorPanel", x); // NOI18N
+        }
+}
+    
 
     @Override
     public void dispose() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        fsDialoge.dispose();
+        bindingGroup.unbind();
     }
 
     private void initEditableComponents() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        editableComponents.add(aktenzeichen);
+        editableComponents.add(defaultBindableDateChooser1);
+        
+        for (final JComponent editableComponent : editableComponents) {
+            editableComponent.setOpaque(editable);
+            if (!editable) {
+                panFlurstuecke.setVisible(false);              
+                aktenzeichen.setEditable(false);
+                defaultBindableDateChooser1.setEnabled(false);
+                defaultBindableDateChooser1.getEditor().setDisabledTextColor(Color.BLACK);
+                defaultBindableDateChooser1.getEditor().setOpaque(false);
+                defaultBindableDateChooser1.getEditor().setBorder(null);
+            }
+        }
+          
     }
-    
-    
 }
+    
+    
+       
+   
+    
+
