@@ -984,7 +984,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
          */
         @Override
         public boolean isCellEditable(final int row, final int column) {
-            return column == 0;
+            return false;
         }
 
         /**
@@ -996,11 +996,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
          */
         @Override
         public Class<?> getColumnClass(final int columnIndex) {
-            if (columnIndex == 0) {
-                return Boolean.class;
-            } else {
-                return super.getColumnClass(columnIndex);
-            }
+            return super.getColumnClass(columnIndex);
         }
     }
 }
