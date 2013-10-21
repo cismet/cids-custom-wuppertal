@@ -17,22 +17,30 @@ import Sirius.navigator.exception.ConnectionException;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.apache.log4j.Logger;
 
 import org.openide.util.Exceptions;
 
 import java.awt.CardLayout;
 
+import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
+import javax.swing.JCheckBox;
 import javax.swing.table.DefaultTableModel;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingInfo;
+import de.cismet.cids.custom.objectrenderer.utils.billing.Usage;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -51,6 +59,27 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(BillingKundeRenderer.class);
+
+    private static BillingInfo billingInfo;
+    private static ObjectMapper mapper = new ObjectMapper();
+    private static HashMap<String, Usage> usages = new HashMap<String, Usage>();
+    private static HashMap<JCheckBox, Usage> mappingJCheckboxToUsages = new HashMap<JCheckBox, Usage>();
+
+    static {
+        try {
+            billingInfo = mapper.readValue(BillingInfo.class.getResourceAsStream(
+                        "/de/cismet/cids/custom/billing/billing.json"),
+                    BillingInfo.class);
+
+            final ArrayList<Usage> lu = billingInfo.getUsages();
+            for (final Usage u : lu) {
+                usages.put(u.getKey(), u);
+            }
+        } catch (IOException ioException) {
+            LOG.error("Error when trying to read the billingInfo.json", ioException);
+        }
+    }
+
     // column headers
     private static final String[] AGR_COMLUMN_NAMES = new String[] {
             "Geschäftsbuchnummer",
@@ -96,10 +125,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBox4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -115,7 +140,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
@@ -131,6 +155,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     private javax.swing.JPanel pnlTimeFilters;
     private javax.swing.JPanel pnlToday;
     private javax.swing.JPanel pnlVerwendungszweck;
+    private javax.swing.JPanel pnlVerwendungszweckCheckBoxes;
     private de.cismet.tools.gui.SemiRoundedPanel smiplFilter;
     private de.cismet.tools.gui.SemiRoundedPanel smiplTable;
     private javax.swing.JTable tblBillings;
@@ -160,6 +185,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     public BillingKundeRenderer(final boolean editable) {
         this.editable = editable;
         initComponents();
+        initVerwendungszweckCheckBoxes();
         setTimeRelatedModels();
         changeVisibleTimeFilterPanel();
     }
@@ -222,11 +248,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         jLabel4 = new javax.swing.JLabel();
         cboBenutzer = new javax.swing.JComboBox();
         pnlVerwendungszweck = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
-        jCheckBox4 = new javax.swing.JCheckBox();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        pnlVerwendungszweckCheckBoxes = new javax.swing.JPanel();
         pnlKostenart = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         cboKostenfrei = new javax.swing.JCheckBox();
@@ -613,35 +635,16 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
                 javax.swing.border.TitledBorder.DEFAULT_POSITION)); // NOI18N
         pnlVerwendungszweck.setLayout(new java.awt.BorderLayout());
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
-        jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.PAGE_AXIS));
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jCheckBox2,
-            org.openide.util.NbBundle.getMessage(BillingKundeRenderer.class, "BillingKundeRenderer.jCheckBox2.text")); // NOI18N
-        jPanel4.add(jCheckBox2);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jCheckBox3,
-            org.openide.util.NbBundle.getMessage(BillingKundeRenderer.class, "BillingKundeRenderer.jCheckBox3.text")); // NOI18N
-        jPanel4.add(jCheckBox3);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jCheckBox4,
-            org.openide.util.NbBundle.getMessage(BillingKundeRenderer.class, "BillingKundeRenderer.jCheckBox4.text")); // NOI18N
-        jPanel4.add(jCheckBox4);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jCheckBox1,
-            org.openide.util.NbBundle.getMessage(BillingKundeRenderer.class, "BillingKundeRenderer.jCheckBox1.text")); // NOI18N
-        jPanel4.add(jCheckBox1);
-
-        pnlVerwendungszweck.add(jPanel4, java.awt.BorderLayout.CENTER);
+        pnlVerwendungszweckCheckBoxes.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
+        pnlVerwendungszweckCheckBoxes.setLayout(new javax.swing.BoxLayout(
+                pnlVerwendungszweckCheckBoxes,
+                javax.swing.BoxLayout.PAGE_AXIS));
+        pnlVerwendungszweck.add(pnlVerwendungszweckCheckBoxes, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         pnlFilters.add(pnlVerwendungszweck, gridBagConstraints);
 
@@ -831,54 +834,54 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboYear_MonthActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboYear_MonthActionPerformed
+    private void cboYear_MonthActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboYear_MonthActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cboYear_MonthActionPerformed
+    } //GEN-LAST:event_cboYear_MonthActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnTodayActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnTodayActionPerformed
+    private void tbtnTodayActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnTodayActionPerformed
         changeVisibleTimeFilterPanel();
-    }//GEN-LAST:event_tbtnTodayActionPerformed
+    }                                                                             //GEN-LAST:event_tbtnTodayActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnMonthActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnMonthActionPerformed
+    private void tbtnMonthActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnMonthActionPerformed
         changeVisibleTimeFilterPanel();
-    }//GEN-LAST:event_tbtnMonthActionPerformed
+    }                                                                             //GEN-LAST:event_tbtnMonthActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnQuarterActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnQuarterActionPerformed
+    private void tbtnQuarterActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnQuarterActionPerformed
         changeVisibleTimeFilterPanel();
-    }//GEN-LAST:event_tbtnQuarterActionPerformed
+    }                                                                               //GEN-LAST:event_tbtnQuarterActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnDateRangeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnDateRangeActionPerformed
+    private void tbtnDateRangeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnDateRangeActionPerformed
         changeVisibleTimeFilterPanel();
-    }//GEN-LAST:event_tbtnDateRangeActionPerformed
+    }                                                                                 //GEN-LAST:event_tbtnDateRangeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtGeschäftsbuchnummerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGeschäftsbuchnummerActionPerformed
+    private void txtGeschäftsbuchnummerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtGeschäftsbuchnummerActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtGeschäftsbuchnummerActionPerformed
+    } //GEN-LAST:event_txtGeschäftsbuchnummerActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
@@ -1042,6 +1045,21 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
             return result;
         }
         return new Object[0];
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void initVerwendungszweckCheckBoxes() {
+        for (final Usage usage : usages.values()) {
+            final JCheckBox checkBox = new JCheckBox();
+            checkBox.setSelected(false);
+            checkBox.setText(usage.getName());
+            checkBox.setToolTipText(usage.getKey());
+
+            mappingJCheckboxToUsages.put(checkBox, usage);
+            pnlVerwendungszweckCheckBoxes.add(checkBox);
+        }
     }
 
     //~ Inner Classes ----------------------------------------------------------
