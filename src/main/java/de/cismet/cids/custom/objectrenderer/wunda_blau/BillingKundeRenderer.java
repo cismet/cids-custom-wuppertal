@@ -850,54 +850,54 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboYear_MonthActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboYear_MonthActionPerformed
+    private void cboYear_MonthActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboYear_MonthActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_cboYear_MonthActionPerformed
+    }//GEN-LAST:event_cboYear_MonthActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnTodayActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnTodayActionPerformed
+    private void tbtnTodayActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnTodayActionPerformed
         changeVisibleTimeFilterPanel();
-    }                                                                             //GEN-LAST:event_tbtnTodayActionPerformed
+    }//GEN-LAST:event_tbtnTodayActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnMonthActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnMonthActionPerformed
+    private void tbtnMonthActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnMonthActionPerformed
         changeVisibleTimeFilterPanel();
-    }                                                                             //GEN-LAST:event_tbtnMonthActionPerformed
+    }//GEN-LAST:event_tbtnMonthActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnQuarterActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnQuarterActionPerformed
+    private void tbtnQuarterActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnQuarterActionPerformed
         changeVisibleTimeFilterPanel();
-    }                                                                               //GEN-LAST:event_tbtnQuarterActionPerformed
+    }//GEN-LAST:event_tbtnQuarterActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnDateRangeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnDateRangeActionPerformed
+    private void tbtnDateRangeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnDateRangeActionPerformed
         changeVisibleTimeFilterPanel();
-    }                                                                                 //GEN-LAST:event_tbtnDateRangeActionPerformed
+    }//GEN-LAST:event_tbtnDateRangeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtGeschäftsbuchnummerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtGeschäftsbuchnummerActionPerformed
+    private void txtGeschäftsbuchnummerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGeschäftsbuchnummerActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_txtGeschäftsbuchnummerActionPerformed
+    }//GEN-LAST:event_txtGeschäftsbuchnummerActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
@@ -1114,7 +1114,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
 
         String geschaeftsbuchnummer;
         String projekt;
-        String user;
+        CidsBean userBean;
         ArrayList<String> verwendungszweckKeys = new ArrayList<String>();
         Kostenart kostenart = Kostenart.IGNORIEREN;
         Date from;
@@ -1147,7 +1147,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
          */
         private void appendWhereClauseAndUsernames() {
             query.append(" WHERE angelegt_durch ");
-            if (user == null) {
+            if (userBean == null) {
                 final List<CidsBean> benutzerBeans = cidsBean.getBeanCollectionProperty("benutzer");
                 if (!benutzerBeans.isEmpty()) {
                     final StringBuilder userListString = new StringBuilder("in (");
@@ -1163,7 +1163,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
                     LOG.error("This customer has no users, that should not happen.");
                 }
             } else {
-                query.append(" = '" + user + "' ");
+                query.append(" = " + userBean.getProperty("id") + " ");
             }
         }
 
@@ -1259,8 +1259,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
          *
          * @return  DOCUMENT ME!
          */
-        public String getUser() {
-            return user;
+        public CidsBean getUser() {
+            return userBean;
         }
 
         /**
@@ -1268,8 +1268,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
          *
          * @param  user  DOCUMENT ME!
          */
-        public void setUser(final String user) {
-            this.user = user;
+        public void setUser(final CidsBean user) {
+            this.userBean = user;
         }
 
         /**
