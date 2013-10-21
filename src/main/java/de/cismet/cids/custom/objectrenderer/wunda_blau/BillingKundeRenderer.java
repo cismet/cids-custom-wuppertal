@@ -27,6 +27,8 @@ import java.awt.CardLayout;
 
 import java.io.IOException;
 
+import java.sql.Date;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -103,6 +105,20 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
             "ts",
             "angelegt_durch.login_name"
         };
+
+    //~ Enums ------------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    enum Kostenart {
+
+        //~ Enum constants -----------------------------------------------------
+
+        KOSTENPFLICHTIG, KOSTENFREI, IGNORIEREN
+    }
 
     //~ Instance fields --------------------------------------------------------
 
@@ -895,21 +911,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
             cidsBean = kundeBean;
             bindingGroup.bind();
             try {
-                final List<CidsBean> benutzerBeans = kundeBean.getBeanCollectionProperty("benutzer");
-                final String benutzerIDs = benutzerBeans.get(0).getProperty("id").toString();
-
-                final MetaClass MB_MC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "billing_billing");
-                String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " ";
-                query += "FROM " + MB_MC.getTableName();
-                query += " WHERE angelegt_durch = " + benutzerIDs;
-                final MetaObject[] metaObjects = SessionManager.getProxy().getMetaObjectByQuery(query, 0);
-
-                final List<CidsBean> billingBeans = new ArrayList<CidsBean>(metaObjects.length);
-                for (final MetaObject mo : metaObjects) {
-                    billingBeans.add(mo.getBean());
-                }
-
-                fillBillingTable(billingBeans);
+                filterBuchungen();
             } catch (ConnectionException ex) {
                 Exceptions.printStackTrace(ex);
             }
@@ -1062,7 +1064,286 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @throws  ConnectionException  DOCUMENT ME!
+     */
+    private void filterBuchungen() throws ConnectionException {
+        final QueryBuilder queryBuilder = new QueryBuilder();
+
+        final MetaObject[] metaObjects = SessionManager.getProxy()
+                    .getMetaObjectByQuery(queryBuilder.generateQuery(), 0);
+
+        if ((metaObjects != null) && (metaObjects.length > 0)) {
+            final List<CidsBean> billingBeans = new ArrayList<CidsBean>(metaObjects.length);
+            for (final MetaObject mo : metaObjects) {
+                billingBeans.add(mo.getBean());
+            }
+
+            fillBillingTable(billingBeans);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private ArrayList<String> createSelectedVerwendungszweckKeysStringArray() {
+        final ArrayList<String> ret = new ArrayList<String>();
+        for (final JCheckBox jCheckBox : mappingJCheckboxToUsages.keySet()) {
+            if (jCheckBox.isSelected()) {
+                final Usage usage = mappingJCheckboxToUsages.get(jCheckBox);
+                ret.add(usage.getKey());
+            }
+        }
+        return ret;
+    }
+
     //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class QueryBuilder {
+
+        //~ Instance fields ----------------------------------------------------
+
+        String geschaeftsbuchnummer;
+        String projekt;
+        String user;
+        ArrayList<String> verwendungszweckKeys = new ArrayList<String>();
+        Kostenart kostenart = Kostenart.IGNORIEREN;
+        Date from;
+        Date till;
+        StringBuilder query;
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public String generateQuery() {
+            final MetaClass MB_MC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "billing_billing");
+            query = new StringBuilder();
+            query.append("SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " ");
+            query.append("FROM " + MB_MC.getTableName());
+            appendWhereClauseAndUsernames();
+            appendGeschaeftsbuchnummer();
+            appendProjekt();
+            appendVerwendungszweckKeys();
+            appendKostenart();
+
+            return query.toString();
+        }
+
+        /**
+         * DOCUMENT ME!
+         */
+        private void appendWhereClauseAndUsernames() {
+            query.append(" WHERE angelegt_durch ");
+            if (user == null) {
+                final List<CidsBean> benutzerBeans = cidsBean.getBeanCollectionProperty("benutzer");
+                if (!benutzerBeans.isEmpty()) {
+                    final StringBuilder userListString = new StringBuilder("in (");
+                    for (final CidsBean benutzer : benutzerBeans) {
+                        userListString.append(benutzer.getProperty("id"));
+                        userListString.append(",");
+                    }
+                    // remove last comma
+                    userListString.deleteCharAt(userListString.length() - 1);
+                    userListString.append(")");
+                    query.append(userListString.toString());
+                } else {
+                    LOG.error("This customer has no users, that should not happen.");
+                }
+            } else {
+                query.append(" = '" + user + "' ");
+            }
+        }
+
+        /**
+         * DOCUMENT ME!
+         */
+        private void appendGeschaeftsbuchnummer() {
+            if (geschaeftsbuchnummer != null) {
+                query.append("and geschaeftsbuchnummer = '" + geschaeftsbuchnummer + "'");
+            }
+        }
+
+        /**
+         * DOCUMENT ME!
+         */
+        private void appendProjekt() {
+            if (geschaeftsbuchnummer != null) {
+                query.append("and geschaeftsbuchnummer ilike '" + geschaeftsbuchnummer + "'");
+            }
+        }
+
+        /**
+         * DOCUMENT ME!
+         */
+        private void appendVerwendungszweckKeys() {
+            if (!verwendungszweckKeys.isEmpty()) {
+                final StringBuilder verwendungszweckListString = new StringBuilder("(");
+                for (final String verwendungszweckKey : verwendungszweckKeys) {
+                    verwendungszweckListString.append(verwendungszweckKey);
+                    verwendungszweckListString.append(",");
+                }
+                // remove last comma
+                verwendungszweckListString.deleteCharAt(verwendungszweckListString.length() - 1);
+                verwendungszweckListString.append(")");
+                query.append("and verwendungskey in " + verwendungszweckListString.toString() + " ");
+            }
+        }
+
+        /**
+         * DOCUMENT ME!
+         */
+        private void appendKostenart() {
+            switch (kostenart) {
+                case KOSTENFREI: {
+                    query.append("and gebuehrenpflichtig is false");
+                    break;
+                }
+                case KOSTENPFLICHTIG: {
+                    query.append("and gebuehrenpflichtig is true");
+                    break;
+                }
+            }
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public String getGeschaeftsbuchnummer() {
+            return geschaeftsbuchnummer;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  geschaeftsbuchnummer  DOCUMENT ME!
+         */
+        public void setGeschaeftsbuchnummer(final String geschaeftsbuchnummer) {
+            this.geschaeftsbuchnummer = geschaeftsbuchnummer;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public String getProjekt() {
+            return projekt;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  projekt  DOCUMENT ME!
+         */
+        public void setProjekt(final String projekt) {
+            this.projekt = projekt;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public String getUser() {
+            return user;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  user  DOCUMENT ME!
+         */
+        public void setUser(final String user) {
+            this.user = user;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public ArrayList<String> getVerwendungszweckKeys() {
+            return verwendungszweckKeys;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  verwendungszweckKeys  DOCUMENT ME!
+         */
+        public void setVerwendungszweckKeys(final ArrayList<String> verwendungszweckKeys) {
+            this.verwendungszweckKeys = verwendungszweckKeys;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public Kostenart getKostenart() {
+            return kostenart;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  kostenart  DOCUMENT ME!
+         */
+        public void setKostenart(final Kostenart kostenart) {
+            this.kostenart = kostenart;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public Date getFrom() {
+            return from;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  from  DOCUMENT ME!
+         */
+        public void setFrom(final Date from) {
+            this.from = from;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public Date getTill() {
+            return till;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  till  DOCUMENT ME!
+         */
+        public void setTill(final Date till) {
+            this.till = till;
+        }
+    }
 
     /**
      * DOCUMENT ME!
