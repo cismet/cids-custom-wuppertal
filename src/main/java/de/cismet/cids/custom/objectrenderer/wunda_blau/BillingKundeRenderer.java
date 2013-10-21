@@ -799,8 +799,26 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     }
 
     @Override
-    public void setCidsBean(final CidsBean cidsBean) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void setCidsBean(final CidsBean kundeBean) {
+        try {
+            final List<CidsBean> benutzerBeans = kundeBean.getBeanCollectionProperty("benutzer");
+            final String benutzerIDs = benutzerBeans.get(0).getProperty("id").toString();
+
+            final MetaClass MB_MC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "billing_billing");
+            String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " ";
+            query += "FROM " + MB_MC.getTableName();
+            query += " WHERE angelegt_durch = " + benutzerIDs;
+            final MetaObject[] metaObjects = SessionManager.getProxy().getMetaObjectByQuery(query, 0);
+
+            final List<CidsBean> billingBeans = new ArrayList<CidsBean>(metaObjects.length);
+            for (final MetaObject mo : metaObjects) {
+                billingBeans.add(mo.getBean());
+            }
+
+            fillBillingTable(billingBeans);
+        } catch (ConnectionException ex) {
+            Exceptions.printStackTrace(ex);
+        }
     }
 
     @Override
@@ -914,19 +932,18 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
      * Extracts the date from a CidsBean into an Object[] -> table row. (Collection attributes are flatened to
      * comaseparated lists)
      *
-     * @param   baulastBean  DOCUMENT ME!
+     * @param   billingBean  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    private Object[] cidsBean2Row(final CidsBean baulastBean) {
-        if (baulastBean != null) {
+    private Object[] cidsBean2Row(final CidsBean billingBean) {
+        if (billingBean != null) {
             final Object[] result = new Object[AGR_COMLUMN_NAMES.length];
-            result[0] = Boolean.TRUE;
             for (int i = 0; i < AGR_PROPERTY_NAMES.length; ++i) {
-                final Object property = baulastBean.getProperty(AGR_PROPERTY_NAMES[i]);
+                final Object property = billingBean.getProperty(AGR_PROPERTY_NAMES[i]);
                 final String propertyString;
                 propertyString = ObjectRendererUtils.propertyPrettyPrint(property);
-                result[i + 1] = propertyString;
+                result[i] = propertyString;
             }
             return result;
         }
