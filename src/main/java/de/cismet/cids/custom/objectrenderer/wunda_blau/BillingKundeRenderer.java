@@ -79,7 +79,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
 
     private boolean editable;
     private BillingTableModel tableModel;
-
+    private CidsBean cidsBean;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuchungsbeleg;
     private javax.swing.JButton btnRechnungsanlage;
@@ -794,30 +794,34 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
 
     @Override
     public CidsBean getCidsBean() {
-        return null;
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return cidsBean;
     }
 
     @Override
     public void setCidsBean(final CidsBean kundeBean) {
-        try {
-            final List<CidsBean> benutzerBeans = kundeBean.getBeanCollectionProperty("benutzer");
-            final String benutzerIDs = benutzerBeans.get(0).getProperty("id").toString();
+        bindingGroup.unbind();
+        if (kundeBean != null) {
+            cidsBean = kundeBean;
+            bindingGroup.bind();
+            try {
+                final List<CidsBean> benutzerBeans = kundeBean.getBeanCollectionProperty("benutzer");
+                final String benutzerIDs = benutzerBeans.get(0).getProperty("id").toString();
 
-            final MetaClass MB_MC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "billing_billing");
-            String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " ";
-            query += "FROM " + MB_MC.getTableName();
-            query += " WHERE angelegt_durch = " + benutzerIDs;
-            final MetaObject[] metaObjects = SessionManager.getProxy().getMetaObjectByQuery(query, 0);
+                final MetaClass MB_MC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "billing_billing");
+                String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " ";
+                query += "FROM " + MB_MC.getTableName();
+                query += " WHERE angelegt_durch = " + benutzerIDs;
+                final MetaObject[] metaObjects = SessionManager.getProxy().getMetaObjectByQuery(query, 0);
 
-            final List<CidsBean> billingBeans = new ArrayList<CidsBean>(metaObjects.length);
-            for (final MetaObject mo : metaObjects) {
-                billingBeans.add(mo.getBean());
+                final List<CidsBean> billingBeans = new ArrayList<CidsBean>(metaObjects.length);
+                for (final MetaObject mo : metaObjects) {
+                    billingBeans.add(mo.getBean());
+                }
+
+                fillBillingTable(billingBeans);
+            } catch (ConnectionException ex) {
+                Exceptions.printStackTrace(ex);
             }
-
-            fillBillingTable(billingBeans);
-        } catch (ConnectionException ex) {
-            Exceptions.printStackTrace(ex);
         }
     }
 
@@ -881,15 +885,15 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
      * DOCUMENT ME!
      */
     private void changeVisibleTimeFilterPanel() {
-        final CardLayout cardLayout = (CardLayout)jPanel1.getLayout();
+        final CardLayout cardLayout = (CardLayout)pnlTimeFilterCards.getLayout();
         if (tbtnToday.isSelected()) {
-            cardLayout.show(jPanel1, "pnlToday");
+            cardLayout.show(pnlTimeFilterCards, "pnlToday");
         } else if (tbtnMonth.isSelected()) {
-            cardLayout.show(jPanel1, "pnlMonth");
+            cardLayout.show(pnlTimeFilterCards, "pnlMonth");
         } else if (tbtnQuarter.isSelected()) {
-            cardLayout.show(jPanel1, "pnlQuarter");
+            cardLayout.show(pnlTimeFilterCards, "pnlQuarter");
         } else if (tbtnDateRange.isSelected()) {
-            cardLayout.show(jPanel1, "pnlDateRange");
+            cardLayout.show(pnlTimeFilterCards, "pnlDateRange");
         } else {
             LOG.warn("No toggle button, to show a time filter, is selected. This should never happen.");
         }
@@ -914,6 +918,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
             return months;
         }
     }
+
     /**
      * DOCUMENT ME!
      *
