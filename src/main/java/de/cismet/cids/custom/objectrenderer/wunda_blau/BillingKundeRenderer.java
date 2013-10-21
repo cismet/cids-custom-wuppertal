@@ -69,8 +69,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
             "projektbezeichnung",
             "verwendungskey",
             "produktbezeichnung",
-            "gebuehr",
-            "???",
+            "netto_summe",
+            "mwst_satz",
             "ts",
             "angelegt_durch.login_name"
         };
