@@ -84,6 +84,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     private javax.swing.JButton btnBuchungsbeleg;
     private javax.swing.JButton btnRechnungsanlage;
     private javax.swing.ButtonGroup btngTimeFilters;
+    private javax.swing.JComboBox cboBenutzer;
     private javax.swing.JCheckBox cboKostenfrei;
     private javax.swing.JCheckBox cboKostenpflichtig;
     private javax.swing.JComboBox cboMonth;
@@ -99,7 +100,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JCheckBox jCheckBox4;
-    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -115,6 +115,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
     private org.jdesktop.swingx.JXDatePicker jXDatePicker2;
@@ -124,9 +126,13 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     private javax.swing.JPanel pnlKostenart;
     private javax.swing.JPanel pnlMonth;
     private javax.swing.JPanel pnlQuarter;
+    private javax.swing.JPanel pnlTimeButtons;
+    private javax.swing.JPanel pnlTimeFilterCards;
     private javax.swing.JPanel pnlTimeFilters;
     private javax.swing.JPanel pnlToday;
     private javax.swing.JPanel pnlVerwendungszweck;
+    private de.cismet.tools.gui.SemiRoundedPanel smiplFilter;
+    private de.cismet.tools.gui.SemiRoundedPanel smiplTable;
     private javax.swing.JTable tblBillings;
     private javax.swing.JToggleButton tbtnDateRange;
     private javax.swing.JToggleButton tbtnMonth;
@@ -134,6 +140,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     private javax.swing.JToggleButton tbtnToday;
     private javax.swing.JTextField txtGeschäftsbuchnummer;
     private javax.swing.JTextField txtProjekt;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -167,17 +174,12 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         btngTimeFilters = new javax.swing.ButtonGroup();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         pnlFilters = new javax.swing.JPanel();
         pnlTimeFilters = new javax.swing.JPanel();
-        tbtnDateRange = new javax.swing.JToggleButton();
-        tbtnQuarter = new javax.swing.JToggleButton();
-        tbtnMonth = new javax.swing.JToggleButton();
-        tbtnToday = new javax.swing.JToggleButton();
-        jPanel1 = new javax.swing.JPanel();
+        pnlTimeFilterCards = new javax.swing.JPanel();
         pnlToday = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(1, 0),
@@ -207,132 +209,54 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
+        pnlTimeButtons = new javax.swing.JPanel();
+        tbtnToday = new javax.swing.JToggleButton();
+        tbtnMonth = new javax.swing.JToggleButton();
+        tbtnDateRange = new javax.swing.JToggleButton();
+        tbtnQuarter = new javax.swing.JToggleButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         txtGeschäftsbuchnummer = new javax.swing.JTextField();
         txtProjekt = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox();
         jLabel4 = new javax.swing.JLabel();
+        cboBenutzer = new javax.swing.JComboBox();
         pnlVerwendungszweck = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
         jCheckBox2 = new javax.swing.JCheckBox();
         jCheckBox3 = new javax.swing.JCheckBox();
         jCheckBox4 = new javax.swing.JCheckBox();
         jCheckBox1 = new javax.swing.JCheckBox();
         pnlKostenart = new javax.swing.JPanel();
-        cboKostenpflichtig = new javax.swing.JCheckBox();
+        jPanel1 = new javax.swing.JPanel();
         cboKostenfrei = new javax.swing.JCheckBox();
+        cboKostenpflichtig = new javax.swing.JCheckBox();
         filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        lblFilterResult = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblBillings = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         btnBuchungsbeleg = new javax.swing.JButton();
         btnRechnungsanlage = new javax.swing.JButton();
+        smiplFilter = new de.cismet.tools.gui.SemiRoundedPanel();
+        jLabel2 = new javax.swing.JLabel();
+        smiplTable = new de.cismet.tools.gui.SemiRoundedPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblBillings = new javax.swing.JTable();
+        lblFilterResult = new javax.swing.JLabel();
 
         setBorder(javax.swing.BorderFactory.createEmptyBorder(7, 7, 7, 7));
         setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel1,
-            org.openide.util.NbBundle.getMessage(BillingKundeRenderer.class, "BillingKundeRenderer.jLabel1.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
-        add(jLabel1, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel2,
-            org.openide.util.NbBundle.getMessage(BillingKundeRenderer.class, "BillingKundeRenderer.jLabel2.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 0);
-        add(jLabel2, gridBagConstraints);
-
+        pnlFilters.setBorder(javax.swing.BorderFactory.createEmptyBorder(6, 6, 6, 6));
         pnlFilters.setLayout(new java.awt.GridBagLayout());
 
         pnlTimeFilters.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 2, 0, 2));
         pnlTimeFilters.setLayout(new java.awt.GridBagLayout());
 
-        btngTimeFilters.add(tbtnDateRange);
-        org.openide.awt.Mnemonics.setLocalizedText(
-            tbtnDateRange,
-            org.openide.util.NbBundle.getMessage(
-                BillingKundeRenderer.class,
-                "BillingKundeRenderer.tbtnDateRange.text")); // NOI18N
-        tbtnDateRange.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    tbtnDateRangeActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        pnlTimeFilters.add(tbtnDateRange, gridBagConstraints);
-
-        btngTimeFilters.add(tbtnQuarter);
-        org.openide.awt.Mnemonics.setLocalizedText(
-            tbtnQuarter,
-            org.openide.util.NbBundle.getMessage(BillingKundeRenderer.class, "BillingKundeRenderer.tbtnQuarter.text")); // NOI18N
-        tbtnQuarter.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    tbtnQuarterActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        pnlTimeFilters.add(tbtnQuarter, gridBagConstraints);
-
-        btngTimeFilters.add(tbtnMonth);
-        org.openide.awt.Mnemonics.setLocalizedText(
-            tbtnMonth,
-            org.openide.util.NbBundle.getMessage(BillingKundeRenderer.class, "BillingKundeRenderer.tbtnMonth.text")); // NOI18N
-        tbtnMonth.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    tbtnMonthActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        pnlTimeFilters.add(tbtnMonth, gridBagConstraints);
-
-        btngTimeFilters.add(tbtnToday);
-        tbtnToday.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(
-            tbtnToday,
-            org.openide.util.NbBundle.getMessage(BillingKundeRenderer.class, "BillingKundeRenderer.tbtnToday.text")); // NOI18N
-        tbtnToday.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    tbtnTodayActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        pnlTimeFilters.add(tbtnToday, gridBagConstraints);
-
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
-        jPanel1.setLayout(new java.awt.CardLayout());
+        pnlTimeFilterCards.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        pnlTimeFilterCards.setLayout(new java.awt.CardLayout());
 
         pnlToday.setLayout(new java.awt.GridBagLayout());
 
@@ -353,7 +277,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.weightx = 1.0;
         pnlToday.add(filler2, gridBagConstraints);
 
-        jPanel1.add(pnlToday, "pnlToday");
+        pnlTimeFilterCards.add(pnlToday, "pnlToday");
 
         pnlMonth.setLayout(new java.awt.GridBagLayout());
 
@@ -405,7 +329,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.weightx = 1.0;
         pnlMonth.add(filler1, gridBagConstraints);
 
-        jPanel1.add(pnlMonth, "pnlMonth");
+        pnlTimeFilterCards.add(pnlMonth, "pnlMonth");
 
         pnlQuarter.setLayout(new java.awt.GridBagLayout());
 
@@ -451,7 +375,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.weightx = 1.0;
         pnlQuarter.add(filler4, gridBagConstraints);
 
-        jPanel1.add(pnlQuarter, "pnlQuarter");
+        pnlTimeFilterCards.add(pnlQuarter, "pnlQuarter");
 
         pnlDateRange.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -489,21 +413,113 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.weightx = 1.0;
         pnlDateRange.add(filler3, gridBagConstraints);
 
-        jPanel1.add(pnlDateRange, "pnlDateRange");
+        pnlTimeFilterCards.add(pnlDateRange, "pnlDateRange");
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        pnlTimeFilters.add(jPanel1, gridBagConstraints);
+        gridBagConstraints.weightx = 0.5;
+        pnlTimeFilters.add(pnlTimeFilterCards, gridBagConstraints);
+
+        pnlTimeButtons.setLayout(new java.awt.GridBagLayout());
+
+        btngTimeFilters.add(tbtnToday);
+        tbtnToday.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            tbtnToday,
+            org.openide.util.NbBundle.getMessage(BillingKundeRenderer.class, "BillingKundeRenderer.tbtnToday.text")); // NOI18N
+        tbtnToday.setMaximumSize(new java.awt.Dimension(500, 25));
+        tbtnToday.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    tbtnTodayActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.5;
+        pnlTimeButtons.add(tbtnToday, gridBagConstraints);
+
+        btngTimeFilters.add(tbtnMonth);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            tbtnMonth,
+            org.openide.util.NbBundle.getMessage(BillingKundeRenderer.class, "BillingKundeRenderer.tbtnMonth.text")); // NOI18N
+        tbtnMonth.setMaximumSize(new java.awt.Dimension(500, 25));
+        tbtnMonth.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    tbtnMonthActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.5;
+        pnlTimeButtons.add(tbtnMonth, gridBagConstraints);
+
+        btngTimeFilters.add(tbtnDateRange);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            tbtnDateRange,
+            org.openide.util.NbBundle.getMessage(
+                BillingKundeRenderer.class,
+                "BillingKundeRenderer.tbtnDateRange.text")); // NOI18N
+        tbtnDateRange.setMaximumSize(new java.awt.Dimension(500, 25));
+        tbtnDateRange.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    tbtnDateRangeActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.5;
+        pnlTimeButtons.add(tbtnDateRange, gridBagConstraints);
+
+        btngTimeFilters.add(tbtnQuarter);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            tbtnQuarter,
+            org.openide.util.NbBundle.getMessage(BillingKundeRenderer.class, "BillingKundeRenderer.tbtnQuarter.text")); // NOI18N
+        tbtnQuarter.setMaximumSize(new java.awt.Dimension(500, 25));
+        tbtnQuarter.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    tbtnQuarterActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.5;
+        pnlTimeButtons.add(tbtnQuarter, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.5;
+        pnlTimeFilters.add(pnlTimeButtons, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.5;
         pnlFilters.add(pnlTimeFilters, gridBagConstraints);
 
         jPanel3.setLayout(new java.awt.GridBagLayout());
@@ -513,6 +529,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
             org.openide.util.NbBundle.getMessage(BillingKundeRenderer.class, "BillingKundeRenderer.jLabel6.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 8, 3, 6);
         jPanel3.add(jLabel6, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -522,6 +539,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(3, 8, 3, 6);
         jPanel3.add(jLabel5, gridBagConstraints);
 
         txtGeschäftsbuchnummer.setText(org.openide.util.NbBundle.getMessage(
@@ -537,6 +555,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 3, 0);
         jPanel3.add(txtGeschäftsbuchnummer, gridBagConstraints);
 
         txtProjekt.setText(org.openide.util.NbBundle.getMessage(
@@ -547,16 +566,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(3, 0, 3, 0);
         jPanel3.add(txtProjekt, gridBagConstraints);
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(
-                new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        jPanel3.add(jComboBox1, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel4,
@@ -565,7 +576,25 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(3, 8, 0, 6);
         jPanel3.add(jLabel4, gridBagConstraints);
+
+        final org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
+                "${cidsBean.benutzer}");
+        final org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings
+                    .createJComboBoxBinding(
+                        org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                        this,
+                        eLProperty,
+                        cboBenutzer);
+        bindingGroup.addBinding(jComboBoxBinding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(3, 0, 0, 0);
+        jPanel3.add(cboBenutzer, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -576,50 +605,54 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         pnlFilters.add(jPanel3, gridBagConstraints);
 
         pnlVerwendungszweck.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                null,
                 org.openide.util.NbBundle.getMessage(
                     BillingKundeRenderer.class,
-                    "BillingKundeRenderer.pnlVerwendungszweck.border.title"))); // NOI18N
-        pnlVerwendungszweck.setLayout(new javax.swing.BoxLayout(pnlVerwendungszweck, javax.swing.BoxLayout.Y_AXIS));
+                    "BillingKundeRenderer.pnlVerwendungszweck.border.title"),
+                javax.swing.border.TitledBorder.LEADING,
+                javax.swing.border.TitledBorder.DEFAULT_POSITION)); // NOI18N
+        pnlVerwendungszweck.setLayout(new java.awt.BorderLayout());
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
+        jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.PAGE_AXIS));
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jCheckBox2,
             org.openide.util.NbBundle.getMessage(BillingKundeRenderer.class, "BillingKundeRenderer.jCheckBox2.text")); // NOI18N
-        pnlVerwendungszweck.add(jCheckBox2);
+        jPanel4.add(jCheckBox2);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jCheckBox3,
             org.openide.util.NbBundle.getMessage(BillingKundeRenderer.class, "BillingKundeRenderer.jCheckBox3.text")); // NOI18N
-        pnlVerwendungszweck.add(jCheckBox3);
+        jPanel4.add(jCheckBox3);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jCheckBox4,
             org.openide.util.NbBundle.getMessage(BillingKundeRenderer.class, "BillingKundeRenderer.jCheckBox4.text")); // NOI18N
-        pnlVerwendungszweck.add(jCheckBox4);
+        jPanel4.add(jCheckBox4);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jCheckBox1,
             org.openide.util.NbBundle.getMessage(BillingKundeRenderer.class, "BillingKundeRenderer.jCheckBox1.text")); // NOI18N
-        pnlVerwendungszweck.add(jCheckBox1);
+        jPanel4.add(jCheckBox1);
+
+        pnlVerwendungszweck.add(jPanel4, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
         pnlFilters.add(pnlVerwendungszweck, gridBagConstraints);
 
         pnlKostenart.setBorder(javax.swing.BorderFactory.createTitledBorder(
                 org.openide.util.NbBundle.getMessage(
                     BillingKundeRenderer.class,
                     "BillingKundeRenderer.pnlKostenart.border.title"))); // NOI18N
-        pnlKostenart.setLayout(new javax.swing.BoxLayout(pnlKostenart, javax.swing.BoxLayout.Y_AXIS));
+        pnlKostenart.setLayout(new java.awt.BorderLayout());
 
-        cboKostenpflichtig.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(
-            cboKostenpflichtig,
-            org.openide.util.NbBundle.getMessage(
-                BillingKundeRenderer.class,
-                "BillingKundeRenderer.cboKostenpflichtig.text")); // NOI18N
-        pnlKostenart.add(cboKostenpflichtig);
+        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
+        jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.PAGE_AXIS));
 
         cboKostenfrei.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -627,13 +660,24 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
             org.openide.util.NbBundle.getMessage(
                 BillingKundeRenderer.class,
                 "BillingKundeRenderer.cboKostenfrei.text")); // NOI18N
-        pnlKostenart.add(cboKostenfrei);
+        jPanel1.add(cboKostenfrei);
+
+        cboKostenpflichtig.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            cboKostenpflichtig,
+            org.openide.util.NbBundle.getMessage(
+                BillingKundeRenderer.class,
+                "BillingKundeRenderer.cboKostenpflichtig.text")); // NOI18N
+        jPanel1.add(cboKostenpflichtig);
+
+        pnlKostenart.add(jPanel1, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.5;
         pnlFilters.add(pnlKostenart, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -645,24 +689,77 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 0);
         add(pnlFilters, gridBagConstraints);
 
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
         org.openide.awt.Mnemonics.setLocalizedText(
-            lblFilterResult,
+            btnBuchungsbeleg,
             org.openide.util.NbBundle.getMessage(
                 BillingKundeRenderer.class,
-                "BillingKundeRenderer.lblFilterResult.text")); // NOI18N
+                "BillingKundeRenderer.btnBuchungsbeleg.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 0);
+        jPanel2.add(btnBuchungsbeleg, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnRechnungsanlage,
+            org.openide.util.NbBundle.getMessage(
+                BillingKundeRenderer.class,
+                "BillingKundeRenderer.btnRechnungsanlage.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(15, 0, 2, 0);
-        add(lblFilterResult, gridBagConstraints);
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
+        jPanel2.add(btnRechnungsanlage, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        add(jPanel2, gridBagConstraints);
+
+        smiplFilter.setBackground(new java.awt.Color(51, 51, 51));
+        smiplFilter.setLayout(new java.awt.FlowLayout());
+
+        jLabel2.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel2,
+            org.openide.util.NbBundle.getMessage(BillingKundeRenderer.class, "BillingKundeRenderer.jLabel2.text")); // NOI18N
+        smiplFilter.add(jLabel2);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        add(smiplFilter, gridBagConstraints);
+
+        smiplTable.setBackground(new java.awt.Color(51, 51, 51));
+        smiplTable.setLayout(new java.awt.FlowLayout());
+
+        jLabel1.setBackground(new java.awt.Color(51, 51, 51));
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel1,
+            org.openide.util.NbBundle.getMessage(BillingKundeRenderer.class, "BillingKundeRenderer.jLabel1.text")); // NOI18N
+        smiplTable.add(jLabel1);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        add(smiplTable, gridBagConstraints);
+
+        jPanel5.setBorder(javax.swing.BorderFactory.createEmptyBorder(6, 6, 6, 6));
+        jPanel5.setLayout(new java.awt.GridBagLayout());
 
         jScrollPane1.setMinimumSize(new java.awt.Dimension(453, 275));
 
@@ -698,44 +795,35 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 10, 0);
-        add(jScrollPane1, gridBagConstraints);
-
-        jPanel2.setLayout(new java.awt.GridBagLayout());
+        jPanel5.add(jScrollPane1, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
-            btnBuchungsbeleg,
+            lblFilterResult,
             org.openide.util.NbBundle.getMessage(
                 BillingKundeRenderer.class,
-                "BillingKundeRenderer.btnBuchungsbeleg.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 0);
-        jPanel2.add(btnBuchungsbeleg, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            btnRechnungsanlage,
-            org.openide.util.NbBundle.getMessage(
-                BillingKundeRenderer.class,
-                "BillingKundeRenderer.btnRechnungsanlage.text")); // NOI18N
+                "BillingKundeRenderer.lblFilterResult.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
-        jPanel2.add(btnRechnungsanlage, gridBagConstraints);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
+        jPanel5.add(lblFilterResult, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        add(jPanel2, gridBagConstraints);
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        add(jPanel5, gridBagConstraints);
+
+        bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
 
     /**
