@@ -30,7 +30,7 @@
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.jLabel1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.jLabel1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
       <Constraints>
@@ -42,7 +42,7 @@
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.jLabel2.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.jLabel2.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
       <Constraints>
@@ -82,7 +82,7 @@
                   <ComponentRef name="btngTimeFilters"/>
                 </Property>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.tbtnDateRange.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.tbtnDateRange.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
               <Events>
@@ -100,7 +100,7 @@
                   <ComponentRef name="btngTimeFilters"/>
                 </Property>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.tbtnQuarter.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.tbtnQuarter.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
               <Events>
@@ -118,7 +118,7 @@
                   <ComponentRef name="btngTimeFilters"/>
                 </Property>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.tbtnMonth.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.tbtnMonth.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
               <Events>
@@ -137,7 +137,7 @@
                 </Property>
                 <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.tbtnToday.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.tbtnToday.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
               <Events>
@@ -177,7 +177,7 @@
                     <Component class="javax.swing.JLabel" name="jLabel9">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.jLabel9.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.jLabel9.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                       </Properties>
                       <Constraints>
@@ -221,7 +221,7 @@
                     <Component class="javax.swing.JLabel" name="jLabel3">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.jLabel3.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.jLabel3.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                       </Properties>
                       <Constraints>
@@ -233,7 +233,7 @@
                     <Component class="javax.swing.JLabel" name="jLabel10">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.jLabel10.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.jLabel10.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                       </Properties>
                       <Constraints>
@@ -310,7 +310,7 @@
                     <Component class="javax.swing.JLabel" name="jLabel11">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.jLabel11.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.jLabel11.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                       </Properties>
                       <Constraints>
@@ -322,7 +322,7 @@
                     <Component class="javax.swing.JLabel" name="jLabel12">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.jLabel12.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.jLabel12.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                       </Properties>
                       <Constraints>
@@ -404,7 +404,7 @@
                     <Component class="javax.swing.JLabel" name="jLabel7">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.jLabel7.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.jLabel7.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                       </Properties>
                       <Constraints>
@@ -416,7 +416,7 @@
                     <Component class="javax.swing.JLabel" name="jLabel8">
                       <Properties>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.jLabel8.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.jLabel8.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                       </Properties>
                       <Constraints>
@@ -465,7 +465,7 @@
             <Component class="javax.swing.JLabel" name="jLabel6">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.jLabel6.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.jLabel6.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
               <Constraints>
@@ -477,7 +477,7 @@
             <Component class="javax.swing.JLabel" name="jLabel5">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.jLabel5.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.jLabel5.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
               <Constraints>
@@ -489,7 +489,7 @@
             <Component class="javax.swing.JTextField" name="txtGesch&#xe4;ftsbuchnummer">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.txtGesch&#xe4;ftsbuchnummer.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.txtGesch&#xe4;ftsbuchnummer.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
               <Events>
@@ -504,7 +504,7 @@
             <Component class="javax.swing.JTextField" name="txtProjekt">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.txtProjekt.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.txtProjekt.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
               <Constraints>
@@ -533,7 +533,7 @@
             <Component class="javax.swing.JLabel" name="jLabel4">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.jLabel4.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.jLabel4.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
               <Constraints>
@@ -549,7 +549,7 @@
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
                 <TitledBorder title="Verwendungszweck">
-                  <ResourceString PropertyName="titleX" bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.pnlVerwendungszweck.border.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString PropertyName="titleX" bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.pnlVerwendungszweck.border.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </TitledBorder>
               </Border>
             </Property>
@@ -567,28 +567,28 @@
             <Component class="javax.swing.JCheckBox" name="jCheckBox2">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.jCheckBox2.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.jCheckBox2.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JCheckBox" name="jCheckBox3">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.jCheckBox3.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.jCheckBox3.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JCheckBox" name="jCheckBox4">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.jCheckBox4.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.jCheckBox4.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JCheckBox" name="jCheckBox1">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.jCheckBox1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.jCheckBox1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
             </Component>
@@ -599,7 +599,7 @@
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
                 <TitledBorder title="Kostenart">
-                  <ResourceString PropertyName="titleX" bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.pnlKostenart.border.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString PropertyName="titleX" bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.pnlKostenart.border.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </TitledBorder>
               </Border>
             </Property>
@@ -618,7 +618,7 @@
               <Properties>
                 <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.cboKostenpflichtig.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.cboKostenpflichtig.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
             </Component>
@@ -626,7 +626,7 @@
               <Properties>
                 <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.cboKostenfrei.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.cboKostenfrei.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
             </Component>
@@ -652,7 +652,7 @@
     <Component class="javax.swing.JLabel" name="lblFilterResult">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.lblFilterResult.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.lblFilterResult.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
       <Constraints>
@@ -692,28 +692,28 @@
               <TableColumnModel selectionModel="0">
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                   <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                    <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.tblBillings.columnModel.title0" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                    <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.tblBillings.columnModel.title0" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                   </Title>
                   <Editor/>
                   <Renderer/>
                 </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                   <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                    <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.tblBillings.columnModel.title1" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                    <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.tblBillings.columnModel.title1" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                   </Title>
                   <Editor/>
                   <Renderer/>
                 </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                   <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                    <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.tblBillings.columnModel.title2" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                    <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.tblBillings.columnModel.title2" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                   </Title>
                   <Editor/>
                   <Renderer/>
                 </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                   <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                    <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.tblBillings.columnModel.title3" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                    <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.tblBillings.columnModel.title3" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                   </Title>
                   <Editor/>
                   <Renderer/>
@@ -739,7 +739,7 @@
         <Component class="javax.swing.JButton" name="btnBuchungsbeleg">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.btnBuchungsbeleg.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.btnBuchungsbeleg.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -751,7 +751,7 @@
         <Component class="javax.swing.JButton" name="btnRechnungsanlage">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/cids/custom/objectrenderer/utils/billing/Bundle.properties" key="KundeRenderer.btnRechnungsanlage.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="BillingKundeRenderer.btnRechnungsanlage.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
