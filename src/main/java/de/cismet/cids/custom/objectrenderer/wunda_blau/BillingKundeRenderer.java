@@ -861,19 +861,20 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
      * @throws  Exception  DOCUMENT ME!
      */
     public static void main(final String[] args) throws Exception {
-        final JFrame frame = new JFrame();
-        frame.add(new KundeRenderer());
-        frame.pack();
-        frame.setVisible(true);
-//        DevelopmentTools.createEditorInFrameFromRMIConnectionOnLocalhost(
-//            "WUNDA_BLAU",
-//            "Administratoren",
-//            "admin",
-//            "kif",
-//            "kunde",
-//            1,
-//            1280,
-//            1024);
+//        final JFrame frame = new JFrame();
+//        frame.add(new KundeRenderer());
+//        frame.pack();
+//        frame.setVisible(true);
+        DevelopmentTools.createRendererInFrameFromRMIConnectionOnLocalhost(
+            "WUNDA_BLAU",
+            "Administratoren",
+            "admin",
+            "kif",
+            "billing_kunde",
+            1,
+            "Foo",
+            1280,
+            1024);
     }
 
     /**
