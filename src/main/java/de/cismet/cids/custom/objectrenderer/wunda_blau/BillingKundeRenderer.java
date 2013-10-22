@@ -24,6 +24,8 @@ import org.apache.log4j.Logger;
 import org.openide.util.Exceptions;
 
 import java.awt.CardLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import java.io.IOException;
 
@@ -37,6 +39,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JCheckBox;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
@@ -65,7 +69,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
 
     private static BillingInfo billingInfo;
     private static ObjectMapper mapper = new ObjectMapper();
-    private static HashMap<String, Usage> usages = new HashMap<String, Usage>();
+    private static final HashMap<String, Usage> usages = new HashMap<String, Usage>();
     private static HashMap<JCheckBox, Usage> mappingJCheckboxToUsages = new HashMap<JCheckBox, Usage>();
 
     static {
@@ -180,7 +184,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     private javax.swing.JToggleButton tbtnMonth;
     private javax.swing.JToggleButton tbtnQuarter;
     private javax.swing.JToggleButton tbtnToday;
-    private javax.swing.JTextField txtGeschäftsbuchnummer;
+    private javax.swing.JTextField txtGeschaeftsbuchnummer;
     private javax.swing.JTextField txtProjekt;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
@@ -203,6 +207,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         this.editable = editable;
         initComponents();
         initVerwendungszweckCheckBoxes();
+        tableModel = new BillingTableModel(new Object[0][], AGR_COMLUMN_NAMES);
+        tblBillings.setModel(tableModel);
         setTimeRelatedModels();
         changeVisibleTimeFilterPanel();
     }
@@ -260,7 +266,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         jPanel3 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        txtGeschäftsbuchnummer = new javax.swing.JTextField();
+        txtGeschaeftsbuchnummer = new javax.swing.JTextField();
         txtProjekt = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         cboBenutzer = new javax.swing.JComboBox();
@@ -339,6 +345,13 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         pnlMonth.add(jLabel10, gridBagConstraints);
 
         cboMonth.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Januar", "Februar", "März" }));
+        cboMonth.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cboMonthActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.5;
@@ -392,6 +405,13 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
 
         cboQuarter.setModel(new javax.swing.DefaultComboBoxModel(
                 new String[] { "Januar - März", "April - Juni", "Juli - September", "Oktober - Dezember" }));
+        cboQuarter.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cboQuarterActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.5;
@@ -399,6 +419,13 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         pnlQuarter.add(cboQuarter, gridBagConstraints);
 
         cboYear_Quarter.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "2013" }));
+        cboYear_Quarter.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cboYear_QuarterActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -417,6 +444,14 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         pnlTimeFilterCards.add(pnlQuarter, "pnlQuarter");
 
         pnlDateRange.setLayout(new java.awt.GridBagLayout());
+
+        dpTill.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    dpTillActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -440,6 +475,14 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(3, 6, 10, 3);
         pnlDateRange.add(jLabel8, gridBagConstraints);
+
+        dpFrom.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    dpFromActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.5;
@@ -581,21 +624,22 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.insets = new java.awt.Insets(3, 8, 3, 6);
         jPanel3.add(jLabel5, gridBagConstraints);
 
-        txtGeschäftsbuchnummer.setText(org.openide.util.NbBundle.getMessage(
+        txtGeschaeftsbuchnummer.setText(org.openide.util.NbBundle.getMessage(
                 BillingKundeRenderer.class,
-                "BillingKundeRenderer.txtGeschäftsbuchnummer.text")); // NOI18N
-        txtGeschäftsbuchnummer.addActionListener(new java.awt.event.ActionListener() {
+                "BillingKundeRenderer.txtGeschaeftsbuchnummer.text")); // NOI18N
+        txtGeschaeftsbuchnummer.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    txtGeschäftsbuchnummerActionPerformed(evt);
+                    txtGeschaeftsbuchnummerActionPerformed(evt);
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 3, 0);
-        jPanel3.add(txtGeschäftsbuchnummer, gridBagConstraints);
+        jPanel3.add(txtGeschaeftsbuchnummer, gridBagConstraints);
+        txtGeschaeftsbuchnummer.getDocument().addDocumentListener(new FilterBuchungenDocumentListener());
 
         txtProjekt.setText(org.openide.util.NbBundle.getMessage(
                 BillingKundeRenderer.class,
@@ -607,6 +651,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 0, 3, 0);
         jPanel3.add(txtProjekt, gridBagConstraints);
+        txtProjekt.getDocument().addDocumentListener(new FilterBuchungenDocumentListener());
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel4,
@@ -628,6 +673,13 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
                         cboBenutzer);
         bindingGroup.addBinding(jComboBoxBinding);
 
+        cboBenutzer.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cboBenutzerActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -680,6 +732,13 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
             org.openide.util.NbBundle.getMessage(
                 BillingKundeRenderer.class,
                 "BillingKundeRenderer.cboKostenfrei.text")); // NOI18N
+        cboKostenfrei.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cboKostenfreiActionPerformed(evt);
+                }
+            });
         jPanel1.add(cboKostenfrei);
 
         cboKostenpflichtig.setSelected(true);
@@ -688,6 +747,13 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
             org.openide.util.NbBundle.getMessage(
                 BillingKundeRenderer.class,
                 "BillingKundeRenderer.cboKostenpflichtig.text")); // NOI18N
+        cboKostenpflichtig.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cboKostenpflichtigActionPerformed(evt);
+                }
+            });
         jPanel1.add(cboKostenpflichtig);
 
         pnlKostenart.add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -852,8 +918,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
      * @param  evt  DOCUMENT ME!
      */
     private void cboYear_MonthActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboYear_MonthActionPerformed
-        // TODO add your handling code here:
-    } //GEN-LAST:event_cboYear_MonthActionPerformed
+        filterBuchungen_placeHolder();
+    }                                                                                 //GEN-LAST:event_cboYear_MonthActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -862,6 +928,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
      */
     private void tbtnTodayActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnTodayActionPerformed
         changeVisibleTimeFilterPanel();
+        filterBuchungen_placeHolder();
     }                                                                             //GEN-LAST:event_tbtnTodayActionPerformed
 
     /**
@@ -896,9 +963,92 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtGeschäftsbuchnummerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtGeschäftsbuchnummerActionPerformed
+    private void txtGeschaeftsbuchnummerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtGeschaeftsbuchnummerActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_txtGeschäftsbuchnummerActionPerformed
+    } //GEN-LAST:event_txtGeschaeftsbuchnummerActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cboMonthActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboMonthActionPerformed
+        filterBuchungen_placeHolder();
+    }                                                                            //GEN-LAST:event_cboMonthActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cboQuarterActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboQuarterActionPerformed
+        filterBuchungen_placeHolder();
+    }                                                                              //GEN-LAST:event_cboQuarterActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cboYear_QuarterActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboYear_QuarterActionPerformed
+        filterBuchungen_placeHolder();
+    }                                                                                   //GEN-LAST:event_cboYear_QuarterActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cboKostenfreiActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboKostenfreiActionPerformed
+        filterBuchungen_placeHolder();
+    }                                                                                 //GEN-LAST:event_cboKostenfreiActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cboKostenpflichtigActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboKostenpflichtigActionPerformed
+        filterBuchungen_placeHolder();
+    }                                                                                      //GEN-LAST:event_cboKostenpflichtigActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cboBenutzerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboBenutzerActionPerformed
+        filterBuchungen_placeHolder();
+    }                                                                               //GEN-LAST:event_cboBenutzerActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void dpFromActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_dpFromActionPerformed
+        checkDateRange();
+    }                                                                          //GEN-LAST:event_dpFromActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void dpTillActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_dpTillActionPerformed
+        checkDateRange();
+    }                                                                          //GEN-LAST:event_dpTillActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void checkDateRange() {
+        final Date from = dpFrom.getDate();
+        final Date till = dpTill.getDate();
+        if (((from != null) && (till != null) && from.before(till)) || from.equals(till)) {
+            filterBuchungen_placeHolder();
+        }
+    }
 
     @Override
     public CidsBean getCidsBean() {
@@ -1055,10 +1205,24 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
             checkBox.setSelected(false);
             checkBox.setText(usage.getName());
             checkBox.setToolTipText(usage.getKey());
+            checkBox.addActionListener(new ActionListener() {
+
+                    @Override
+                    public void actionPerformed(final ActionEvent e) {
+                        filterBuchungen_placeHolder();
+                    }
+                });
 
             mappingJCheckboxToUsages.put(checkBox, usage);
             pnlVerwendungszweckCheckBoxes.add(checkBox);
         }
+    }
+
+    /**
+     * a placeholder which can be used if the filterBuchungen has to be executed in a SwingWorker etc...
+     */
+    private void filterBuchungen_placeHolder() {
+        filterBuchungen();
     }
 
     /**
@@ -1078,7 +1242,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         try {
             final QueryBuilder queryBuilder = new QueryBuilder();
             if (!ignoreFilters) {
-                queryBuilder.setGeschaeftsbuchnummer(txtGeschäftsbuchnummer.getText());
+                queryBuilder.setGeschaeftsbuchnummer(txtGeschaeftsbuchnummer.getText());
                 queryBuilder.setProjekt(txtProjekt.getText());
                 queryBuilder.setUser((CidsBean)cboBenutzer.getSelectedItem());
                 queryBuilder.setVerwendungszweckKeys(createSelectedVerwendungszweckKeysStringArray());
@@ -1098,6 +1262,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
                 }
 
                 fillBillingTable(billingBeans);
+            } else {
+                LOG.error("No Billing metaobjects found.");
             }
         } catch (ConnectionException ex) {
             LOG.error("Error while filtering the billings.", ex);
@@ -1480,6 +1646,31 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         @Override
         public Class<?> getColumnClass(final int columnIndex) {
             return super.getColumnClass(columnIndex);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class FilterBuchungenDocumentListener implements DocumentListener {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void insertUpdate(final DocumentEvent e) {
+            filterBuchungen_placeHolder();
+        }
+
+        @Override
+        public void removeUpdate(final DocumentEvent e) {
+            filterBuchungen_placeHolder();
+        }
+
+        @Override
+        public void changedUpdate(final DocumentEvent e) {
+            filterBuchungen_placeHolder();
         }
     }
 }
