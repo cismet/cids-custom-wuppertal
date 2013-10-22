@@ -137,6 +137,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     private javax.swing.JComboBox cboQuarter;
     private javax.swing.JComboBox cboYear_Month;
     private javax.swing.JComboBox cboYear_Quarter;
+    private org.jdesktop.swingx.JXDatePicker dpFrom;
+    private org.jdesktop.swingx.JXDatePicker dpTill;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
@@ -159,8 +161,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
-    private org.jdesktop.swingx.JXDatePicker jXDatePicker2;
     private javax.swing.JLabel lblFilterResult;
     private javax.swing.JPanel pnlDateRange;
     private javax.swing.JPanel pnlFilters;
@@ -245,10 +245,10 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
                 new java.awt.Dimension(1, 0),
                 new java.awt.Dimension(1, 32767));
         pnlDateRange = new javax.swing.JPanel();
-        jXDatePicker1 = new org.jdesktop.swingx.JXDatePicker();
+        dpTill = new org.jdesktop.swingx.JXDatePicker();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jXDatePicker2 = new org.jdesktop.swingx.JXDatePicker();
+        dpFrom = new org.jdesktop.swingx.JXDatePicker();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
@@ -423,7 +423,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 10, 0);
-        pnlDateRange.add(jXDatePicker1, gridBagConstraints);
+        pnlDateRange.add(dpTill, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel7,
@@ -444,7 +444,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(10, 3, 4, 0);
-        pnlDateRange.add(jXDatePicker2, gridBagConstraints);
+        pnlDateRange.add(dpFrom, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -851,54 +851,54 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboYear_MonthActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboYear_MonthActionPerformed
+    private void cboYear_MonthActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboYear_MonthActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cboYear_MonthActionPerformed
+    } //GEN-LAST:event_cboYear_MonthActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnTodayActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnTodayActionPerformed
+    private void tbtnTodayActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnTodayActionPerformed
         changeVisibleTimeFilterPanel();
-    }//GEN-LAST:event_tbtnTodayActionPerformed
+    }                                                                             //GEN-LAST:event_tbtnTodayActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnMonthActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnMonthActionPerformed
+    private void tbtnMonthActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnMonthActionPerformed
         changeVisibleTimeFilterPanel();
-    }//GEN-LAST:event_tbtnMonthActionPerformed
+    }                                                                             //GEN-LAST:event_tbtnMonthActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnQuarterActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnQuarterActionPerformed
+    private void tbtnQuarterActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnQuarterActionPerformed
         changeVisibleTimeFilterPanel();
-    }//GEN-LAST:event_tbtnQuarterActionPerformed
+    }                                                                               //GEN-LAST:event_tbtnQuarterActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnDateRangeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnDateRangeActionPerformed
+    private void tbtnDateRangeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnDateRangeActionPerformed
         changeVisibleTimeFilterPanel();
-    }//GEN-LAST:event_tbtnDateRangeActionPerformed
+    }                                                                                 //GEN-LAST:event_tbtnDateRangeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtGeschäftsbuchnummerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGeschäftsbuchnummerActionPerformed
+    private void txtGeschäftsbuchnummerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtGeschäftsbuchnummerActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtGeschäftsbuchnummerActionPerformed
+    } //GEN-LAST:event_txtGeschäftsbuchnummerActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
@@ -911,11 +911,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         if (kundeBean != null) {
             cidsBean = kundeBean;
             bindingGroup.bind();
-            try {
-                filterBuchungen();
-            } catch (ConnectionException ex) {
-                Exceptions.printStackTrace(ex);
-            }
+            filterBuchungen(true);
         }
     }
 
@@ -943,12 +939,12 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         cboMonth.setModel(new javax.swing.DefaultComboBoxModel(months));
 
         final int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        final String[] years = new String[100];
+        final Integer[] years = new Integer[100];
         for (int i = 0; i < 100; i++) {
-            years[i] = Integer.toString(currentYear - i);
+            years[i] = new Integer(currentYear - i);
         }
-        cboYear_Month.setModel(new javax.swing.DefaultComboBoxModel(years));
-        cboYear_Quarter.setModel(new javax.swing.DefaultComboBoxModel(years));
+        cboYear_Month.setModel(new javax.swing.DefaultComboBoxModel<Integer>(years));
+        cboYear_Quarter.setModel(new javax.swing.DefaultComboBoxModel<Integer>(years));
     }
 
     /**
@@ -1067,22 +1063,44 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
 
     /**
      * DOCUMENT ME!
-     *
-     * @throws  ConnectionException  DOCUMENT ME!
      */
-    private void filterBuchungen() throws ConnectionException {
-        final QueryBuilder queryBuilder = new QueryBuilder();
+    private void filterBuchungen() {
+        filterBuchungen(false);
+    }
 
-        final MetaObject[] metaObjects = SessionManager.getProxy()
-                    .getMetaObjectByQuery(queryBuilder.generateQuery(), 0);
-
-        if ((metaObjects != null) && (metaObjects.length > 0)) {
-            final List<CidsBean> billingBeans = new ArrayList<CidsBean>(metaObjects.length);
-            for (final MetaObject mo : metaObjects) {
-                billingBeans.add(mo.getBean());
+    /**
+     * Runs a query to get the billings, which match the filters, and adds them to the table. If <code>
+     * ignoreFilters</code> is true, then the filters will be ignored and the default values will be used.
+     *
+     * @param  ignoreFilters  DOCUMENT ME!
+     */
+    private void filterBuchungen(final boolean ignoreFilters) {
+        try {
+            final QueryBuilder queryBuilder = new QueryBuilder();
+            if (!ignoreFilters) {
+                queryBuilder.setGeschaeftsbuchnummer(txtGeschäftsbuchnummer.getText());
+                queryBuilder.setProjekt(txtProjekt.getText());
+                queryBuilder.setUser((CidsBean)cboBenutzer.getSelectedItem());
+                queryBuilder.setVerwendungszweckKeys(createSelectedVerwendungszweckKeysStringArray());
+                queryBuilder.setKostenart(chooseKostenart());
+                final Date[] fromDate_tillDate = chooseDates();
+                queryBuilder.setFrom(fromDate_tillDate[0]);
+                queryBuilder.setTill(fromDate_tillDate[1]);
             }
 
-            fillBillingTable(billingBeans);
+            final MetaObject[] metaObjects = SessionManager.getProxy()
+                        .getMetaObjectByQuery(queryBuilder.generateQuery(), 0);
+
+            if ((metaObjects != null) && (metaObjects.length > 0)) {
+                final List<CidsBean> billingBeans = new ArrayList<CidsBean>(metaObjects.length);
+                for (final MetaObject mo : metaObjects) {
+                    billingBeans.add(mo.getBean());
+                }
+
+                fillBillingTable(billingBeans);
+            }
+        } catch (ConnectionException ex) {
+            LOG.error("Error while filtering the billings.", ex);
         }
     }
 
@@ -1100,6 +1118,57 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
             }
         }
         return ret;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private Kostenart chooseKostenart() {
+        if (cboKostenfrei.isSelected() == cboKostenpflichtig.isSelected()) {
+            return Kostenart.IGNORIEREN;
+        } else if (cboKostenfrei.isSelected()) {
+            return Kostenart.KOSTENFREI;
+        } else {
+            return Kostenart.KOSTENPFLICHTIG;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private Date[] chooseDates() {
+        // default value is today
+        final Date[] fromDate_tillDate = new Date[] { new Date(), null };
+        if (tbtnMonth.isSelected()) {
+            final Calendar calendar = Calendar.getInstance();
+            calendar.clear();
+            calendar.set(Calendar.MONTH, cboMonth.getSelectedIndex());
+            calendar.set(Calendar.YEAR, (Integer)cboYear_Month.getSelectedItem());
+            fromDate_tillDate[0] = calendar.getTime();
+            calendar.add(Calendar.MONTH, 1);
+            calendar.add(Calendar.DAY_OF_MONTH, -1);
+            fromDate_tillDate[1] = calendar.getTime();
+        } else if (tbtnQuarter.isSelected()) {
+            final Calendar calendar = Calendar.getInstance();
+            calendar.clear();
+            calendar.set(Calendar.MONTH, cboQuarter.getSelectedIndex() * 3);
+            calendar.set(Calendar.YEAR, (Integer)cboYear_Quarter.getSelectedItem());
+            fromDate_tillDate[0] = calendar.getTime();
+            calendar.add(Calendar.MONTH, 3);
+            calendar.add(Calendar.DAY_OF_MONTH, -1);
+            fromDate_tillDate[1] = calendar.getTime();
+        } else if (tbtnDateRange.isSelected()) {
+            final Date from = dpFrom.getDate();
+            if (from != null) {
+                fromDate_tillDate[0] = from;
+                fromDate_tillDate[1] = dpTill.getDate();
+            }
+        }
+        return fromDate_tillDate;
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -1223,6 +1292,25 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
 
         /**
          * DOCUMENT ME!
+         */
+        private void appendDates() {
+            // check if there is a second date or if they are the same day
+            if ((till == null) || postgresDateFormat.format(from).equals(postgresDateFormat.format(till))) {
+                query.append(" and date_trunc('day',ts) = '");
+                query.append(postgresDateFormat.format(from));
+                query.append("' ");
+            } else { // create query for a time period
+                query.append(" and date_trunc('day',ts) >= '");
+                query.append(postgresDateFormat.format(from));
+                query.append("' ");
+                query.append(" and date_trunc('day',ts) <= '");
+                query.append(postgresDateFormat.format(till));
+                query.append("' ");
+            }
+        }
+
+        /**
+         * DOCUMENT ME!
          *
          * @return  DOCUMENT ME!
          */
@@ -1273,25 +1361,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
          */
         public void setUser(final CidsBean user) {
             this.userBean = user;
-        }
-
-        /**
-         * DOCUMENT ME!
-         */
-        private void appendDates() {
-            // check if there is a second date or if they are the same day
-            if ((till == null) || postgresDateFormat.format(from).equals(postgresDateFormat.format(till))) {
-                query.append(" and date_trunc('day',ts) = '");
-                query.append(postgresDateFormat.format(from));
-                query.append("' ");
-            } else { // create query for a time period
-                query.append(" and date_trunc('day',ts) >= '");
-                query.append(postgresDateFormat.format(from));
-                query.append("' ");
-                query.append(" and date_trunc('day',ts) <= '");
-                query.append(postgresDateFormat.format(till));
-                query.append("' ");
-            }
         }
 
         /**
