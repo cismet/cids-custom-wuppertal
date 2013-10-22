@@ -1174,7 +1174,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
          * DOCUMENT ME!
          */
         private void appendGeschaeftsbuchnummer() {
-            if (geschaeftsbuchnummer != null) {
+            if ((geschaeftsbuchnummer != null) && !geschaeftsbuchnummer.equals("")) {
                 query.append("and geschaeftsbuchnummer = '" + geschaeftsbuchnummer + "'");
             }
         }
@@ -1183,8 +1183,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
          * DOCUMENT ME!
          */
         private void appendProjekt() {
-            if (geschaeftsbuchnummer != null) {
-                query.append("and geschaeftsbuchnummer ilike '" + geschaeftsbuchnummer + "'");
+            if ((projekt != null) && !projekt.equals("")) {
+                query.append("and geschaeftsbuchnummer ilike '" + projekt + "'");
             }
         }
 
@@ -1277,24 +1277,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
 
         /**
          * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public ArrayList<String> getVerwendungszweckKeys() {
-            return verwendungszweckKeys;
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  verwendungszweckKeys  DOCUMENT ME!
-         */
-        public void setVerwendungszweckKeys(final ArrayList<String> verwendungszweckKeys) {
-            this.verwendungszweckKeys = verwendungszweckKeys;
-        }
-
-        /**
-         * DOCUMENT ME!
          */
         private void appendDates() {
             // check if there is a second date or if they are the same day
@@ -1310,6 +1292,24 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
                 query.append(postgresDateFormat.format(till));
                 query.append("' ");
             }
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public ArrayList<String> getVerwendungszweckKeys() {
+            return verwendungszweckKeys;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  verwendungszweckKeys  DOCUMENT ME!
+         */
+        public void setVerwendungszweckKeys(final ArrayList<String> verwendungszweckKeys) {
+            this.verwendungszweckKeys = verwendungszweckKeys;
         }
 
         /**
