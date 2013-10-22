@@ -643,7 +643,10 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
 
         txtProjekt.setText(org.openide.util.NbBundle.getMessage(
                 BillingKundeRenderer.class,
-                "BillingKundeRenderer.txtProjekt.text")); // NOI18N
+                "BillingKundeRenderer.txtProjekt.text"));        // NOI18N
+        txtProjekt.setToolTipText(org.openide.util.NbBundle.getMessage(
+                BillingKundeRenderer.class,
+                "BillingKundeRenderer.txtProjekt.toolTipText")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
