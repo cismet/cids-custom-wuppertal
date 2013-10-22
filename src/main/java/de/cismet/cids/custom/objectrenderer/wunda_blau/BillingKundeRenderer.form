@@ -888,6 +888,9 @@
                   <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                 </Property>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="tblBillings.setDefaultRenderer(Usage.class, new UsageRenderer());"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>
