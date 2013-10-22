@@ -917,127 +917,127 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboYear_MonthActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboYear_MonthActionPerformed
+    private void cboYear_MonthActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboYear_MonthActionPerformed
         filterBuchungen_placeHolder();
-    }                                                                                 //GEN-LAST:event_cboYear_MonthActionPerformed
+    }//GEN-LAST:event_cboYear_MonthActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnTodayActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnTodayActionPerformed
+    private void tbtnTodayActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnTodayActionPerformed
         changeVisibleTimeFilterPanel();
         filterBuchungen_placeHolder();
-    }                                                                             //GEN-LAST:event_tbtnTodayActionPerformed
+    }//GEN-LAST:event_tbtnTodayActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnMonthActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnMonthActionPerformed
+    private void tbtnMonthActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnMonthActionPerformed
         changeVisibleTimeFilterPanel();
-    }                                                                             //GEN-LAST:event_tbtnMonthActionPerformed
+    }//GEN-LAST:event_tbtnMonthActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnQuarterActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnQuarterActionPerformed
+    private void tbtnQuarterActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnQuarterActionPerformed
         changeVisibleTimeFilterPanel();
-    }                                                                               //GEN-LAST:event_tbtnQuarterActionPerformed
+    }//GEN-LAST:event_tbtnQuarterActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnDateRangeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnDateRangeActionPerformed
+    private void tbtnDateRangeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnDateRangeActionPerformed
         changeVisibleTimeFilterPanel();
-    }                                                                                 //GEN-LAST:event_tbtnDateRangeActionPerformed
+    }//GEN-LAST:event_tbtnDateRangeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtGeschaeftsbuchnummerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtGeschaeftsbuchnummerActionPerformed
+    private void txtGeschaeftsbuchnummerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGeschaeftsbuchnummerActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_txtGeschaeftsbuchnummerActionPerformed
+    }//GEN-LAST:event_txtGeschaeftsbuchnummerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboMonthActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboMonthActionPerformed
+    private void cboMonthActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboMonthActionPerformed
         filterBuchungen_placeHolder();
-    }                                                                            //GEN-LAST:event_cboMonthActionPerformed
+    }//GEN-LAST:event_cboMonthActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboQuarterActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboQuarterActionPerformed
+    private void cboQuarterActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboQuarterActionPerformed
         filterBuchungen_placeHolder();
-    }                                                                              //GEN-LAST:event_cboQuarterActionPerformed
+    }//GEN-LAST:event_cboQuarterActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboYear_QuarterActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboYear_QuarterActionPerformed
+    private void cboYear_QuarterActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboYear_QuarterActionPerformed
         filterBuchungen_placeHolder();
-    }                                                                                   //GEN-LAST:event_cboYear_QuarterActionPerformed
+    }//GEN-LAST:event_cboYear_QuarterActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboKostenfreiActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboKostenfreiActionPerformed
+    private void cboKostenfreiActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboKostenfreiActionPerformed
         filterBuchungen_placeHolder();
-    }                                                                                 //GEN-LAST:event_cboKostenfreiActionPerformed
+    }//GEN-LAST:event_cboKostenfreiActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboKostenpflichtigActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboKostenpflichtigActionPerformed
+    private void cboKostenpflichtigActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboKostenpflichtigActionPerformed
         filterBuchungen_placeHolder();
-    }                                                                                      //GEN-LAST:event_cboKostenpflichtigActionPerformed
+    }//GEN-LAST:event_cboKostenpflichtigActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboBenutzerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboBenutzerActionPerformed
+    private void cboBenutzerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboBenutzerActionPerformed
         filterBuchungen_placeHolder();
-    }                                                                               //GEN-LAST:event_cboBenutzerActionPerformed
+    }//GEN-LAST:event_cboBenutzerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void dpFromActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_dpFromActionPerformed
+    private void dpFromActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dpFromActionPerformed
         checkDateRange();
-    }                                                                          //GEN-LAST:event_dpFromActionPerformed
+    }//GEN-LAST:event_dpFromActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void dpTillActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_dpTillActionPerformed
+    private void dpTillActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dpTillActionPerformed
         checkDateRange();
-    }                                                                          //GEN-LAST:event_dpTillActionPerformed
+    }//GEN-LAST:event_dpTillActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1255,15 +1255,16 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
             final MetaObject[] metaObjects = SessionManager.getProxy()
                         .getMetaObjectByQuery(queryBuilder.generateQuery(), 0);
 
-            if ((metaObjects != null) && (metaObjects.length > 0)) {
+            if (metaObjects == null){
+                LOG.error("Billing metaobjects was null.");
+            } else if(metaObjects.length == 0) {
+                LOG.error("No Billing metaobjects found.");
+            } else {
                 final List<CidsBean> billingBeans = new ArrayList<CidsBean>(metaObjects.length);
                 for (final MetaObject mo : metaObjects) {
                     billingBeans.add(mo.getBean());
                 }
-
                 fillBillingTable(billingBeans);
-            } else {
-                LOG.error("No Billing metaobjects found.");
             }
         } catch (ConnectionException ex) {
             LOG.error("Error while filtering the billings.", ex);
