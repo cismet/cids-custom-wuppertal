@@ -1252,13 +1252,18 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
                 queryBuilder.setTill(fromDate_tillDate[1]);
             }
 
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Query to get the billings: " + queryBuilder.generateQuery());
+            }
+
             final MetaObject[] metaObjects = SessionManager.getProxy()
                         .getMetaObjectByQuery(queryBuilder.generateQuery(), 0);
 
-            if (metaObjects == null){
+            if (metaObjects == null) {
                 LOG.error("Billing metaobjects was null.");
-            } else if(metaObjects.length == 0) {
-                LOG.error("No Billing metaobjects found.");
+            } else if (metaObjects.length == 0) {
+                LOG.info("No Billing metaobjects found.");
+                fillBillingTable(new ArrayList<CidsBean>());
             } else {
                 final List<CidsBean> billingBeans = new ArrayList<CidsBean>(metaObjects.length);
                 for (final MetaObject mo : metaObjects) {
