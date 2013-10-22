@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
 
 import org.openide.util.Exceptions;
+import org.openide.util.NbBundle;
 
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
@@ -39,6 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
@@ -55,13 +57,15 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
+import de.cismet.tools.gui.TitleComponentProvider;
+
 /**
  * DOCUMENT ME!
  *
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBeanRenderer {
+public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBeanRenderer, TitleComponentProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -130,6 +134,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     private boolean editable;
     private BillingTableModel tableModel;
     private CidsBean cidsBean;
+    private String title;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuchungsbeleg;
     private javax.swing.JButton btnRechnungsanlage;
@@ -166,6 +171,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblFilterResult;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JPanel panTitle;
     private javax.swing.JPanel pnlDateRange;
     private javax.swing.JPanel pnlFilters;
     private javax.swing.JPanel pnlKostenart;
@@ -226,6 +233,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         btngTimeFilters = new javax.swing.ButtonGroup();
+        panTitle = new javax.swing.JPanel();
+        lblTitle = new javax.swing.JLabel();
         pnlFilters = new javax.swing.JPanel();
         pnlTimeFilters = new javax.swing.JPanel();
         pnlTimeFilterCards = new javax.swing.JPanel();
@@ -290,6 +299,19 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         jScrollPane1 = new javax.swing.JScrollPane();
         tblBillings = new javax.swing.JTable();
         lblFilterResult = new javax.swing.JLabel();
+
+        panTitle.setOpaque(false);
+        panTitle.setLayout(new java.awt.GridBagLayout());
+
+        lblTitle.setFont(new java.awt.Font("DejaVu Sans", 1, 18)); // NOI18N
+        lblTitle.setForeground(new java.awt.Color(255, 255, 255));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        panTitle.add(lblTitle, gridBagConstraints);
 
         setBorder(javax.swing.BorderFactory.createEmptyBorder(7, 7, 7, 7));
         setLayout(new java.awt.GridBagLayout());
@@ -1071,6 +1093,9 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
             cidsBean = kundeBean;
             bindingGroup.bind();
             filterBuchungen(true);
+            this.title = NbBundle.getMessage(BillingKundeRenderer.class, "BillingKundeRenderer.lblTitle.prefix") + " "
+                        + kundeBean.toString();
+            lblTitle.setText(this.title);
         }
     }
 
@@ -1081,15 +1106,22 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
 
     @Override
     public String getTitle() {
-        return "Kunden Test";
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return String.valueOf(cidsBean);
     }
 
     @Override
-    public void setTitle(final String title) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public JComponent getTitleComponent() {
+        return panTitle;
     }
 
+    @Override
+    public void setTitle(String title) {
+        if (title == null) {
+            title = "<Error>";
+        }
+        this.title = NbBundle.getMessage(BillingKundeRenderer.class, "BillingKundeRenderer.lblTitle.prefix") + title;
+        lblTitle.setText(this.title);
+    }
     /**
      * DOCUMENT ME!
      */
