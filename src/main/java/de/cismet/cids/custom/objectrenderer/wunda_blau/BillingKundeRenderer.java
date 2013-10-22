@@ -1416,7 +1416,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
          */
         private void appendGeschaeftsbuchnummer() {
             if ((geschaeftsbuchnummer != null) && !geschaeftsbuchnummer.equals("")) {
-                query.append("and geschaeftsbuchnummer = '" + geschaeftsbuchnummer + "'");
+                query.append("and geschaeftsbuchnummer = '" + geschaeftsbuchnummer + "' ");
             }
         }
 
@@ -1425,7 +1425,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
          */
         private void appendProjekt() {
             if ((projekt != null) && !projekt.equals("")) {
-                query.append("and geschaeftsbuchnummer ilike '" + projekt + "'");
+                query.append("and projektbezeichnung ilike '%" + projekt + "%' ");
             }
         }
 
