@@ -27,11 +27,12 @@ import java.awt.CardLayout;
 
 import java.io.IOException;
 
-import java.sql.Date;
+import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -1117,9 +1118,10 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         CidsBean userBean;
         ArrayList<String> verwendungszweckKeys = new ArrayList<String>();
         Kostenart kostenart = Kostenart.IGNORIEREN;
-        Date from;
+        Date from = new Date();
         Date till;
         StringBuilder query;
+        SimpleDateFormat postgresDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         //~ Methods ------------------------------------------------------------
 
@@ -1138,6 +1140,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
             appendProjekt();
             appendVerwendungszweckKeys();
             appendKostenart();
+            appendDates();
 
             return query.toString();
         }
@@ -1288,6 +1291,25 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
          */
         public void setVerwendungszweckKeys(final ArrayList<String> verwendungszweckKeys) {
             this.verwendungszweckKeys = verwendungszweckKeys;
+        }
+
+        /**
+         * DOCUMENT ME!
+         */
+        private void appendDates() {
+            // check if there is a second date or if they are the same day
+            if ((till == null) || postgresDateFormat.format(from).equals(postgresDateFormat.format(till))) {
+                query.append(" and date_trunc('day',ts) = '");
+                query.append(postgresDateFormat.format(from));
+                query.append("' ");
+            } else { // create query for a time period
+                query.append(" and date_trunc('day',ts) >= '");
+                query.append(postgresDateFormat.format(from));
+                query.append("' ");
+                query.append(" and date_trunc('day',ts) <= '");
+                query.append(postgresDateFormat.format(till));
+                query.append("' ");
+            }
         }
 
         /**
