@@ -1208,14 +1208,25 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     private void initVerwendungszweckCheckBoxes() {
         for (final Usage usage : usages.values()) {
             final JCheckBox checkBox = new JCheckBox();
-            checkBox.setSelected(false);
+            checkBox.setSelected(true);
             checkBox.setText(usage.getName());
             checkBox.setToolTipText(usage.getKey());
             checkBox.addActionListener(new ActionListener() {
 
                     @Override
                     public void actionPerformed(final ActionEvent e) {
-                        filterBuchungen_placeHolder();
+                        boolean noneSelected = true;
+                        for (final JCheckBox cb : mappingJCheckboxToUsages.keySet()) {
+                            if (cb.isSelected()) {
+                                noneSelected = false;
+                                break;
+                            }
+                        }
+                        if (noneSelected) {
+                            ((JCheckBox)e.getSource()).setSelected(true);
+                        } else {
+                            filterBuchungen_placeHolder();
+                        }
                     }
                 });
 
@@ -1442,8 +1453,9 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
             if (!verwendungszweckKeys.isEmpty()) {
                 final StringBuilder verwendungszweckListString = new StringBuilder("(");
                 for (final String verwendungszweckKey : verwendungszweckKeys) {
+                    verwendungszweckListString.append(" '");
                     verwendungszweckListString.append(verwendungszweckKey);
-                    verwendungszweckListString.append(",");
+                    verwendungszweckListString.append("',");
                 }
                 // remove last comma
                 verwendungszweckListString.deleteCharAt(verwendungszweckListString.length() - 1);
