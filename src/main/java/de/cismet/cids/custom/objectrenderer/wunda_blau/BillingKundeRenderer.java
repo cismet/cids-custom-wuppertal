@@ -30,6 +30,10 @@ import java.awt.event.ActionListener;
 
 import java.io.IOException;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
+
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -1344,7 +1348,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
             final Date[] fromDate_tillDate = chooseDates();
             final Date from = fromDate_tillDate[0];
             final Date till = fromDate_tillDate[1];
-            final double totalSum = calculateTotalSumFromBillings(billingBeans);
+            final BigDecimal totalSum = calculateTotalSumFromBillings(billingBeans);
             final DateFormat df = DateFormat.getDateInstance();
             final NumberFormat euroFormatter = NumberFormat.getCurrencyInstance(Locale.GERMANY);
 
@@ -1393,25 +1397,32 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
      *
      * @return  DOCUMENT ME!
      */
-    private double calculateTotalSumFromBillings(final Collection<CidsBean> billingBeans) {
-        final HashMap<Double, Double> mwstSatz_nettoSum = new HashMap<Double, Double>();
+    private BigDecimal calculateTotalSumFromBillings(final Collection<CidsBean> billingBeans) {
+        final HashMap<BigDecimal, BigDecimal> mwstSatz_nettoSum = new HashMap<BigDecimal, BigDecimal>();
+
+        // calculate the netto sum of every mwst_satz
         for (final CidsBean billing : billingBeans) {
-            final Double netto_summe = (Double)billing.getProperty("netto_summe");
-            final Double mwst_satz = (Double)billing.getProperty("mwst_satz");
+            final BigDecimal netto_summe = new BigDecimal(billing.getProperty("netto_summe").toString());
+            final BigDecimal mwst_satz = new BigDecimal(billing.getProperty("mwst_satz").toString());
             if (mwstSatz_nettoSum.containsKey(mwst_satz)) {
-                Double subtotal = mwstSatz_nettoSum.get(mwst_satz);
-                subtotal += netto_summe;
-                mwstSatz_nettoSum.put(mwst_satz, subtotal);
+                final BigDecimal subtotal = mwstSatz_nettoSum.get(mwst_satz);
+                final BigDecimal newSubtotal = subtotal.add(netto_summe);
+                mwstSatz_nettoSum.put(mwst_satz, newSubtotal);
             } else {
                 mwstSatz_nettoSum.put(mwst_satz, netto_summe);
             }
         }
 
-        double totalSum = 0;
-        for (final Double mwst_satz : mwstSatz_nettoSum.keySet()) {
-            final Double nettoSum = mwstSatz_nettoSum.get(mwst_satz);
-            final double bruttoSum = nettoSum + (nettoSum * (mwst_satz / 100));
-            totalSum += bruttoSum;
+        // calculate the brutto sum from each netto_sum
+        BigDecimal totalSum = new BigDecimal("0");
+        for (final BigDecimal mwst_satz : mwstSatz_nettoSum.keySet()) {
+            // calculate: bruttoSum = nettoSum + (nettoSum * (mwst_satz / 100))
+            final BigDecimal nettoSum = mwstSatz_nettoSum.get(mwst_satz);
+            final BigDecimal percent = mwst_satz.divide(new BigDecimal("100"));
+            final BigDecimal mwstValue = nettoSum.multiply(percent);
+            BigDecimal bruttoSum = nettoSum.add(mwstValue);
+            bruttoSum = bruttoSum.setScale(2, BigDecimal.ROUND_HALF_UP);
+            totalSum = totalSum.add(bruttoSum);
         }
         return totalSum;
     }
