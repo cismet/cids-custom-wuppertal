@@ -12,7 +12,6 @@
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
-import Sirius.navigator.exception.ConnectionException;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
@@ -31,8 +30,6 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -45,10 +42,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -144,6 +143,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     private CidsBean cidsBean;
     private String title;
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private org.jdesktop.swingx.JXBusyLabel blblBusy;
     private javax.swing.JButton btnBuchungsbeleg;
     private javax.swing.JButton btnRechnungsanlage;
     private javax.swing.ButtonGroup btngTimeFilters;
@@ -176,16 +176,18 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblFilterResult;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JPanel panTitle;
+    private javax.swing.JPanel pnlBusyLable;
     private javax.swing.JPanel pnlDateRange;
     private javax.swing.JPanel pnlFilters;
     private javax.swing.JPanel pnlKostenart;
     private javax.swing.JPanel pnlMonth;
     private javax.swing.JPanel pnlQuarter;
+    private javax.swing.JPanel pnlTable;
     private javax.swing.JPanel pnlTimeButtons;
     private javax.swing.JPanel pnlTimeFilterCards;
     private javax.swing.JPanel pnlTimeFilters;
@@ -311,10 +313,13 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         jLabel2 = new javax.swing.JLabel();
         smiplTable = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel1 = new javax.swing.JLabel();
-        jPanel5 = new javax.swing.JPanel();
+        pnlTable = new javax.swing.JPanel();
+        pnlBusyLable = new javax.swing.JPanel();
+        blblBusy = new org.jdesktop.swingx.JXBusyLabel();
+        jPanel4 = new javax.swing.JPanel();
+        lblFilterResult = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblBillings = new javax.swing.JTable();
-        lblFilterResult = new javax.swing.JLabel();
 
         panTitle.setOpaque(false);
         panTitle.setLayout(new java.awt.GridBagLayout());
@@ -888,8 +893,33 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         add(smiplTable, gridBagConstraints);
 
-        jPanel5.setBorder(javax.swing.BorderFactory.createEmptyBorder(6, 6, 6, 6));
-        jPanel5.setLayout(new java.awt.GridBagLayout());
+        pnlTable.setBorder(javax.swing.BorderFactory.createEmptyBorder(6, 6, 6, 6));
+        pnlTable.setLayout(new java.awt.CardLayout());
+
+        pnlBusyLable.setLayout(new java.awt.BorderLayout());
+
+        blblBusy.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            blblBusy,
+            org.openide.util.NbBundle.getMessage(BillingKundeRenderer.class, "BillingKundeRenderer.blblBusy.text")); // NOI18N
+        blblBusy.setBusy(true);
+        pnlBusyLable.add(blblBusy, java.awt.BorderLayout.CENTER);
+
+        pnlTable.add(pnlBusyLable, "busy");
+
+        jPanel4.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblFilterResult,
+            org.openide.util.NbBundle.getMessage(
+                BillingKundeRenderer.class,
+                "BillingKundeRenderer.lblFilterResult.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
+        jPanel4.add(lblFilterResult, gridBagConstraints);
 
         jScrollPane1.setMinimumSize(new java.awt.Dimension(453, 275));
 
@@ -950,19 +980,9 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 10, 0);
-        jPanel5.add(jScrollPane1, gridBagConstraints);
+        jPanel4.add(jScrollPane1, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblFilterResult,
-            org.openide.util.NbBundle.getMessage(
-                BillingKundeRenderer.class,
-                "BillingKundeRenderer.lblFilterResult.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
-        jPanel5.add(lblFilterResult, gridBagConstraints);
+        pnlTable.add(jPanel4, "table");
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -971,7 +991,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        add(jPanel5, gridBagConstraints);
+        add(pnlTable, gridBagConstraints);
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
@@ -1493,43 +1513,65 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
      * @param  ignoreFilters  DOCUMENT ME!
      */
     private void filterBuchungen(final boolean ignoreFilters) {
-        try {
-            final QueryBuilder queryBuilder = new QueryBuilder();
-            if (!ignoreFilters) {
-                queryBuilder.setGeschaeftsbuchnummer(txtGeschaeftsbuchnummer.getText());
-                queryBuilder.setProjekt(txtProjekt.getText());
-                queryBuilder.setUser((CidsBean)cboBenutzer.getSelectedItem());
-                queryBuilder.setVerwendungszweckKeys(createSelectedVerwendungszweckKeysStringArray());
-                queryBuilder.setKostenart(chooseKostenart());
-                final Date[] fromDate_tillDate = chooseDates();
-                queryBuilder.setFrom(fromDate_tillDate[0]);
-                queryBuilder.setTill(fromDate_tillDate[1]);
-            }
-
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Query to get the billings: " + queryBuilder.generateQuery());
-            }
-
-            final MetaObject[] metaObjects = SessionManager.getProxy()
-                        .getMetaObjectByQuery(queryBuilder.generateQuery(), 0);
-
-            if (metaObjects == null) {
-                LOG.error("Billing metaobjects was null.");
-            } else if (metaObjects.length == 0) {
-                LOG.info("No Billing metaobjects found.");
-                fillBillingTable(new ArrayList<CidsBean>());
-                lblFilterResult.setText(generateFilterResultText(new ArrayList<CidsBean>()));
-            } else {
-                final List<CidsBean> billingBeans = new ArrayList<CidsBean>(metaObjects.length);
-                for (final MetaObject mo : metaObjects) {
-                    billingBeans.add(mo.getBean());
-                }
-                fillBillingTable(billingBeans);
-                lblFilterResult.setText(generateFilterResultText(billingBeans));
-            }
-        } catch (ConnectionException ex) {
-            LOG.error("Error while filtering the billings.", ex);
+        final QueryBuilder queryBuilder = new QueryBuilder();
+        if (!ignoreFilters) {
+            queryBuilder.setGeschaeftsbuchnummer(txtGeschaeftsbuchnummer.getText());
+            queryBuilder.setProjekt(txtProjekt.getText());
+            queryBuilder.setUser((CidsBean)cboBenutzer.getSelectedItem());
+            queryBuilder.setVerwendungszweckKeys(createSelectedVerwendungszweckKeysStringArray());
+            queryBuilder.setKostenart(chooseKostenart());
+            final Date[] fromDate_tillDate = chooseDates();
+            queryBuilder.setFrom(fromDate_tillDate[0]);
+            queryBuilder.setTill(fromDate_tillDate[1]);
         }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Query to get the billings: " + queryBuilder.generateQuery());
+        }
+
+        blblBusy.setBusy(true);
+        ((CardLayout)pnlTable.getLayout()).show(pnlTable, "busy");
+        btnBuchungsbeleg.setEnabled(false);
+        btnRechnungsanlage.setEnabled(false);
+        final SwingWorker<MetaObject[], Void> swingWorker = new SwingWorker<MetaObject[], Void>() {
+
+                @Override
+                protected MetaObject[] doInBackground() throws Exception {
+                    return SessionManager.getProxy().getMetaObjectByQuery(queryBuilder.generateQuery(), 0);
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        final MetaObject[] metaObjects = get();
+
+                        if (metaObjects == null) {
+                            LOG.error("Billing metaobjects was null.");
+                        } else if (metaObjects.length == 0) {
+                            LOG.info("No Billing metaobjects found.");
+                            fillBillingTable(new ArrayList<CidsBean>());
+                            lblFilterResult.setText(generateFilterResultText(new ArrayList<CidsBean>()));
+                        } else {
+                            final List<CidsBean> billingBeans = new ArrayList<CidsBean>(metaObjects.length);
+                            for (final MetaObject mo : metaObjects) {
+                                billingBeans.add(mo.getBean());
+                            }
+                            fillBillingTable(billingBeans);
+                            lblFilterResult.setText(generateFilterResultText(billingBeans));
+                        }
+                    } catch (InterruptedException ex) {
+                        LOG.error("Error while filtering the billings.", ex);
+                    } catch (ExecutionException ex) {
+                        LOG.error("Error while filtering the billings.", ex);
+                    } finally {
+                        ((CardLayout)pnlTable.getLayout()).show(pnlTable, "table");
+                        btnBuchungsbeleg.setEnabled(true);
+                        btnRechnungsanlage.setEnabled(true);
+                        blblBusy.setBusy(false);
+                    }
+                }
+            };
+        swingWorker.execute();
     }
 
     /**
