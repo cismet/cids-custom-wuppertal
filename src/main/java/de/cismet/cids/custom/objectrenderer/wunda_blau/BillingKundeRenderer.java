@@ -657,7 +657,10 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
 
         txtGeschaeftsbuchnummer.setText(org.openide.util.NbBundle.getMessage(
                 BillingKundeRenderer.class,
-                "BillingKundeRenderer.txtGeschaeftsbuchnummer.text")); // NOI18N
+                "BillingKundeRenderer.txtGeschaeftsbuchnummer.text"));        // NOI18N
+        txtGeschaeftsbuchnummer.setToolTipText(org.openide.util.NbBundle.getMessage(
+                BillingKundeRenderer.class,
+                "BillingKundeRenderer.txtGeschaeftsbuchnummer.toolTipText")); // NOI18N
         txtGeschaeftsbuchnummer.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -1599,7 +1602,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
          */
         private void appendGeschaeftsbuchnummer() {
             if ((geschaeftsbuchnummer != null) && !geschaeftsbuchnummer.equals("")) {
-                query.append("and geschaeftsbuchnummer = '" + geschaeftsbuchnummer + "' ");
+                query.append("and geschaeftsbuchnummer ilike '%" + geschaeftsbuchnummer + "%' ");
             }
         }
 
@@ -1912,6 +1915,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
 
                 final String request = dateRequestTuple.getRequest();
                 if ((request != null) && !request.equals("")) {
+                    // url is just a placeholder
                     setText("<html><a href=\"http://www.cismet.de\">" + text + "</a></html>");
                 } else {
                     setText(text);
