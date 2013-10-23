@@ -101,7 +101,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
             "Projektbezeichnung",
             "Verwendung",
             "Produkt",
-            "Preis",
+            "Preis (netto)",
             "MwSt-Satz",
             "Datum",
             "Benutzer"
