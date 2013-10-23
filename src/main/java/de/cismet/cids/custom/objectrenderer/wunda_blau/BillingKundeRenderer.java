@@ -133,7 +133,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
 
     //~ Instance fields --------------------------------------------------------
 
-    private boolean editable;
     private BillingTableModel tableModel;
     private CidsBean cidsBean;
     private String title;
@@ -213,7 +212,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
      * @param  editable  DOCUMENT ME!
      */
     public BillingKundeRenderer(final boolean editable) {
-        this.editable = editable;
         initComponents();
         initVerwendungszweckCheckBoxes();
         tableModel = new BillingTableModel(new Object[0][], AGR_COMLUMN_NAMES);
