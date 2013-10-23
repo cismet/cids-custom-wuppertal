@@ -44,6 +44,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -203,7 +204,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     private javax.swing.JToggleButton tbtnToday;
     private javax.swing.JTextField txtGeschaeftsbuchnummer;
     private javax.swing.JTextField txtProjekt;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -248,7 +248,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
-        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         btngTimeFilters = new javax.swing.ButtonGroup();
         panTitle = new javax.swing.JPanel();
@@ -712,16 +711,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.insets = new java.awt.Insets(3, 8, 0, 6);
         jPanel3.add(jLabel4, gridBagConstraints);
 
-        final org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create(
-                "${cidsBean.benutzer}");
-        final org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings
-                    .createJComboBoxBinding(
-                        org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                        this,
-                        eLProperty,
-                        cboBenutzer);
-        bindingGroup.addBinding(jComboBoxBinding);
-
         cboBenutzer.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -992,8 +981,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         add(pnlTable, gridBagConstraints);
-
-        bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
 
     /**
@@ -1187,18 +1174,32 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  kundeBean  DOCUMENT ME!
+     */
     @Override
     public void setCidsBean(final CidsBean kundeBean) {
-        bindingGroup.unbind();
         if (kundeBean != null) {
             cidsBean = kundeBean;
-            bindingGroup.bind();
-//            cboBenutzer.insertItemAt("", 0);
+
+            cboBenutzer.setModel(new DefaultComboBoxModel());
+            cboBenutzer.addItem("");
+            for (final CidsBean benutzerBean : cidsBean.getBeanCollectionProperty("benutzer")) {
+                cboBenutzer.addItem(benutzerBean);
+            }
+
             filterBuchungen(true);
             this.title = NbBundle.getMessage(BillingKundeRenderer.class, "BillingKundeRenderer.lblTitle.prefix") + " "
                         + kundeBean.toString();
@@ -1206,21 +1207,39 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void dispose() {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getTitle() {
         return String.valueOf(cidsBean);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getTitleComponent() {
         return panTitle;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  title  DOCUMENT ME!
+     */
     @Override
     public void setTitle(String title) {
         if (title == null) {
@@ -1517,7 +1536,14 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         if (!ignoreFilters) {
             queryBuilder.setGeschaeftsbuchnummer(txtGeschaeftsbuchnummer.getText());
             queryBuilder.setProjekt(txtProjekt.getText());
-            queryBuilder.setUser((CidsBean)cboBenutzer.getSelectedItem());
+
+            final Object user = cboBenutzer.getSelectedItem();
+            String userID = "";
+            if (user instanceof CidsBean) {
+                userID = ((CidsBean)user).getProperty("id").toString();
+            }
+            queryBuilder.setUserID(userID);
+
             queryBuilder.setVerwendungszweckKeys(createSelectedVerwendungszweckKeysStringArray());
             queryBuilder.setKostenart(chooseKostenart());
             final Date[] fromDate_tillDate = chooseDates();
@@ -1700,7 +1726,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
 
         String geschaeftsbuchnummer;
         String projekt;
-        CidsBean userBean;
+        String userID;
         ArrayList<String> verwendungszweckKeys = new ArrayList<String>();
         Kostenart kostenart = Kostenart.IGNORIEREN;
         Date from = new Date();
@@ -1735,7 +1761,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
          */
         private void appendWhereClauseAndUsernames() {
             query.append(" WHERE angelegt_durch ");
-            if (userBean == null) {
+            if ((userID == null) || userID.equals("")) {
                 final List<CidsBean> benutzerBeans = cidsBean.getBeanCollectionProperty("benutzer");
                 if (!benutzerBeans.isEmpty()) {
                     final StringBuilder userListString = new StringBuilder("in (");
@@ -1751,7 +1777,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
                     LOG.error("This customer has no users, that should not happen.");
                 }
             } else {
-                query.append(" = " + userBean.getProperty("id") + " ");
+                query.append(" = " + userID + " ");
             }
         }
 
@@ -1867,17 +1893,17 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
          *
          * @return  DOCUMENT ME!
          */
-        public CidsBean getUser() {
-            return userBean;
+        public String getUserID() {
+            return userID;
         }
 
         /**
          * DOCUMENT ME!
          *
-         * @param  user  DOCUMENT ME!
+         * @param  userID  DOCUMENT ME!
          */
-        public void setUser(final CidsBean user) {
-            this.userBean = user;
+        public void setUserID(final String userID) {
+            this.userID = userID;
         }
 
         /**
@@ -2009,16 +2035,31 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  e  DOCUMENT ME!
+         */
         @Override
         public void insertUpdate(final DocumentEvent e) {
             filterBuchungen_placeHolder();
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  e  DOCUMENT ME!
+         */
         @Override
         public void removeUpdate(final DocumentEvent e) {
             filterBuchungen_placeHolder();
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  e  DOCUMENT ME!
+         */
         @Override
         public void changedUpdate(final DocumentEvent e) {
             filterBuchungen_placeHolder();
@@ -2034,6 +2075,11 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  value  DOCUMENT ME!
+         */
         @Override
         protected void setValue(final Object value) {
             if (value == null) {
@@ -2059,6 +2105,11 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  value  DOCUMENT ME!
+         */
         @Override
         public void setValue(final Object value) {
             if (value == null) {

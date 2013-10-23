@@ -588,9 +588,6 @@
                   <StringArray count="0"/>
                 </Property>
               </Properties>
-              <BindingProperties>
-                <BindingProperty name="elements" source="Form" sourcePath="${cidsBean.benutzer}" target="cboBenutzer" targetPath="elements" updateStrategy="0" immediately="false"/>
-              </BindingProperties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cboBenutzerActionPerformed"/>
               </Events>
