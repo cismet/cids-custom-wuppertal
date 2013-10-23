@@ -48,6 +48,7 @@ import java.util.Locale;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -1449,6 +1450,17 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
                         }
                         if (noneSelected) {
                             ((JCheckBox)e.getSource()).setSelected(true);
+                            final String title = NbBundle.getMessage(
+                                    BillingKundeRenderer.class,
+                                    "BillingKundeRenderer.initVerwendungszweckCheckBoxes().actionPerformed().dialog.title");
+                            final String message = NbBundle.getMessage(
+                                    BillingKundeRenderer.class,
+                                    "BillingKundeRenderer.initVerwendungszweckCheckBoxes().actionPerformed().dialog.message");
+                            JOptionPane.showMessageDialog(
+                                BillingKundeRenderer.this,
+                                message,
+                                title,
+                                JOptionPane.INFORMATION_MESSAGE);
                         } else {
                             filterBuchungen_placeHolder();
                         }
