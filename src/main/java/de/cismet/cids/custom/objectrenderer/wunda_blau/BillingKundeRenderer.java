@@ -19,18 +19,18 @@ import Sirius.server.middleware.types.MetaObject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.l2fprod.common.swing.renderer.DateRenderer;
-
 import org.apache.log4j.Logger;
 
 import org.openide.util.NbBundle;
 
 import java.awt.CardLayout;
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.io.IOException;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
@@ -897,6 +897,17 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
                 public void mouseClicked(final java.awt.event.MouseEvent evt) {
                     tblBillingsMouseClicked(evt);
                 }
+                @Override
+                public void mouseExited(final java.awt.event.MouseEvent evt) {
+                    tblBillingsMouseExited(evt);
+                }
+            });
+        tblBillings.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+
+                @Override
+                public void mouseMoved(final java.awt.event.MouseEvent evt) {
+                    tblBillingsMouseMoved(evt);
+                }
             });
         jScrollPane1.setViewportView(tblBillings);
         tblBillings.getColumnModel()
@@ -1097,13 +1108,43 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         final int row = tblBillings.convertRowIndexToModel(tblBillings.getSelectedRow());
         final int column = tblBillings.convertColumnIndexToModel(tblBillings.getSelectedColumn());
         if (column == 6) {
-            final DateRequestTuple bt = (DateRequestTuple)tblBillings.getValueAt(row, column);
+            final DateRequestTuple bt = (DateRequestTuple)tblBillings.getModel().getValueAt(row, column);
             final String request = bt.getRequest();
             if ((request != null) && !request.equals("")) {
                 doDownload(request);
             }
         }
     }                                                                           //GEN-LAST:event_tblBillingsMouseClicked
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void tblBillingsMouseMoved(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_tblBillingsMouseMoved
+        final int row = tblBillings.convertRowIndexToModel(tblBillings.rowAtPoint(evt.getPoint()));
+        final int column = tblBillings.convertColumnIndexToModel(tblBillings.columnAtPoint(evt.getPoint()));
+        if (column == 6) {
+            final DateRequestTuple bt = (DateRequestTuple)tblBillings.getModel().getValueAt(row, column);
+            final String request = bt.getRequest();
+            if ((request != null) && !request.equals("")) {
+                setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            } else {
+                setCursor(Cursor.getDefaultCursor());
+            }
+        } else {
+            setCursor(Cursor.getDefaultCursor());
+        }
+    }                                                                         //GEN-LAST:event_tblBillingsMouseMoved
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void tblBillingsMouseExited(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_tblBillingsMouseExited
+        setCursor(Cursor.getDefaultCursor());
+    }                                                                          //GEN-LAST:event_tblBillingsMouseExited
 
     /**
      * DOCUMENT ME!
@@ -1835,10 +1876,10 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         @Override
         protected void setValue(final Object value) {
             if (value == null) {
-                setText("-");
+                setText(ObjectRendererUtils.propertyPrettyPrint(value));
             } else {
                 final Usage usage = (Usage)value;
-                setText(usage.getKey());
+                setText(ObjectRendererUtils.propertyPrettyPrint(usage.getKey()));
                 setToolTipText(usage.getName());
             }
         }
@@ -1849,18 +1890,32 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
      *
      * @version  $Revision$, $Date$
      */
-    private class DateRequestTupleRenderer extends DateRenderer {
+    private class DateRequestTupleRenderer extends DefaultTableCellRenderer {
+
+        //~ Instance fields ----------------------------------------------------
+
+        DateFormat formatter;
 
         //~ Methods ------------------------------------------------------------
 
         @Override
         public void setValue(final Object value) {
-            final DateRequestTuple dateRequestTuple = (DateRequestTuple)value;
-            super.setValue(dateRequestTuple.getDate());
+            if (value == null) {
+                setText(ObjectRendererUtils.propertyPrettyPrint(value));
+            } else {
+                if (formatter == null) {
+                    formatter = DateFormat.getDateInstance();
+                }
+                final DateRequestTuple dateRequestTuple = (DateRequestTuple)value;
+                final String formattedDate = formatter.format(dateRequestTuple.getDate());
+                final String text = ObjectRendererUtils.propertyPrettyPrint(formattedDate);
 
-            final String request = dateRequestTuple.getRequest();
-            if ((request != null) && !request.equals("")) {
-                setText("<html><u><font color='blue'>" + getText() + "</font color='blue'></u></html>");
+                final String request = dateRequestTuple.getRequest();
+                if ((request != null) && !request.equals("")) {
+                    setText("<html><a href=\"http://www.cismet.de\">" + text + "</a></html>");
+                } else {
+                    setText(text);
+                }
             }
         }
     }
