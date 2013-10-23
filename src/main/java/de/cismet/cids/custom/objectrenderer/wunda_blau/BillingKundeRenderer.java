@@ -31,6 +31,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -74,7 +76,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     private static final Logger LOG = Logger.getLogger(BillingKundeRenderer.class);
 
     private static BillingInfo billingInfo;
-    private static ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper mapper = new ObjectMapper();
     private static final HashMap<String, Usage> usages = new HashMap<String, Usage>();
     private static HashMap<JCheckBox, Usage> mappingJCheckboxToUsages = new HashMap<JCheckBox, Usage>();
 
@@ -1327,6 +1329,95 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
 
     /**
      * DOCUMENT ME!
+     *
+     * @param   billingBeans  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private String generateFilterResultText(final Collection<CidsBean> billingBeans) {
+        if (billingBeans.isEmpty()) {
+            return NbBundle.getMessage(
+                    BillingKundeRenderer.class,
+                    "BillingKundeRenderer.generateFilterResultText().noBillings");
+        } else {
+            final int amountBillings = billingBeans.size();
+            final Date[] fromDate_tillDate = chooseDates();
+            final Date from = fromDate_tillDate[0];
+            final Date till = fromDate_tillDate[1];
+            final double totalSum = calculateTotalSumFromBillings(billingBeans);
+            final DateFormat df = DateFormat.getDateInstance();
+            final NumberFormat euroFormatter = NumberFormat.getCurrencyInstance(Locale.GERMANY);
+
+            final StringBuilder text = new StringBuilder(NbBundle.getMessage(
+                        BillingKundeRenderer.class,
+                        "BillingKundeRenderer.generateFilterResultText().billings1"));
+            text.append(euroFormatter.format(totalSum));
+            text.append(NbBundle.getMessage(
+                    BillingKundeRenderer.class,
+                    "BillingKundeRenderer.generateFilterResultText().billings2"));
+            if (amountBillings == 1) {
+                text.append(NbBundle.getMessage(
+                        BillingKundeRenderer.class,
+                        "BillingKundeRenderer.generateFilterResultText().billings3.oneBilling"));
+            } else {
+                text.append(amountBillings);
+                text.append(NbBundle.getMessage(
+                        BillingKundeRenderer.class,
+                        "BillingKundeRenderer.generateFilterResultText().billings3.moreBillings"));
+            }
+            if (till == null) {
+                text.append(NbBundle.getMessage(
+                        BillingKundeRenderer.class,
+                        "BillingKundeRenderer.generateFilterResultText().billings4.oneDate"));
+                text.append(df.format(from));
+                text.append(".");
+            } else {
+                text.append(NbBundle.getMessage(
+                        BillingKundeRenderer.class,
+                        "BillingKundeRenderer.generateFilterResultText().billings4.twoDates1"));
+                text.append(df.format(from));
+                text.append(NbBundle.getMessage(
+                        BillingKundeRenderer.class,
+                        "BillingKundeRenderer.generateFilterResultText().billings4.twoDates2"));
+                text.append(df.format(till));
+                text.append(".");
+            }
+            return text.toString();
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   billingBeans  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private double calculateTotalSumFromBillings(final Collection<CidsBean> billingBeans) {
+        final HashMap<Double, Double> mwstSatz_nettoSum = new HashMap<Double, Double>();
+        for (final CidsBean billing : billingBeans) {
+            final Double netto_summe = (Double)billing.getProperty("netto_summe");
+            final Double mwst_satz = (Double)billing.getProperty("mwst_satz");
+            if (mwstSatz_nettoSum.containsKey(mwst_satz)) {
+                Double subtotal = mwstSatz_nettoSum.get(mwst_satz);
+                subtotal += netto_summe;
+                mwstSatz_nettoSum.put(mwst_satz, subtotal);
+            } else {
+                mwstSatz_nettoSum.put(mwst_satz, netto_summe);
+            }
+        }
+
+        double totalSum = 0;
+        for (final Double mwst_satz : mwstSatz_nettoSum.keySet()) {
+            final Double nettoSum = mwstSatz_nettoSum.get(mwst_satz);
+            final double bruttoSum = nettoSum + (nettoSum * (mwst_satz / 100));
+            totalSum += bruttoSum;
+        }
+        return totalSum;
+    }
+
+    /**
+     * DOCUMENT ME!
      */
     private void initVerwendungszweckCheckBoxes() {
         for (final Usage usage : usages.values()) {
@@ -1404,12 +1495,14 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
             } else if (metaObjects.length == 0) {
                 LOG.info("No Billing metaobjects found.");
                 fillBillingTable(new ArrayList<CidsBean>());
+                lblFilterResult.setText(generateFilterResultText(new ArrayList<CidsBean>()));
             } else {
                 final List<CidsBean> billingBeans = new ArrayList<CidsBean>(metaObjects.length);
                 for (final MetaObject mo : metaObjects) {
                     billingBeans.add(mo.getBean());
                 }
                 fillBillingTable(billingBeans);
+                lblFilterResult.setText(generateFilterResultText(billingBeans));
             }
         } catch (ConnectionException ex) {
             LOG.error("Error while filtering the billings.", ex);
