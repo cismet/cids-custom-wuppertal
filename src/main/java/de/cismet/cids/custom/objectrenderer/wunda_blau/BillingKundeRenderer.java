@@ -502,6 +502,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 10, 0);
         pnlDateRange.add(dpTill, gridBagConstraints);
+        dpTill.setFormats(DATE_FORMAT);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel7,
@@ -531,6 +532,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(10, 3, 4, 0);
         pnlDateRange.add(dpFrom, gridBagConstraints);
+        dpFrom.setFormats(DATE_FORMAT);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
