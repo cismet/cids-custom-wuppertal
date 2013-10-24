@@ -84,6 +84,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final HashMap<String, Usage> usages = new HashMap<String, Usage>();
     private static HashMap<JCheckBox, Usage> mappingJCheckboxToUsages = new HashMap<JCheckBox, Usage>();
+    private static DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
 
     static {
         try {
@@ -1389,7 +1390,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
             final Date from = fromDate_tillDate[0];
             final Date till = fromDate_tillDate[1];
             final BigDecimal totalSum = calculateTotalSumFromBillings(billingBeans);
-            final DateFormat df = DateFormat.getDateInstance();
             final NumberFormat euroFormatter = NumberFormat.getCurrencyInstance(Locale.GERMANY);
 
             final StringBuilder text = new StringBuilder(NbBundle.getMessage(
@@ -1413,17 +1413,17 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
                 text.append(NbBundle.getMessage(
                         BillingKundeRenderer.class,
                         "BillingKundeRenderer.generateFilterResultText().billings4.oneDate"));
-                text.append(df.format(from));
+                text.append(DATE_FORMAT.format(from));
                 text.append(".");
             } else {
                 text.append(NbBundle.getMessage(
                         BillingKundeRenderer.class,
                         "BillingKundeRenderer.generateFilterResultText().billings4.twoDates1"));
-                text.append(df.format(from));
+                text.append(DATE_FORMAT.format(from));
                 text.append(NbBundle.getMessage(
                         BillingKundeRenderer.class,
                         "BillingKundeRenderer.generateFilterResultText().billings4.twoDates2"));
-                text.append(df.format(till));
+                text.append(DATE_FORMAT.format(till));
                 text.append(".");
             }
             return text.toString();
@@ -2099,10 +2099,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
      */
     private class DateRequestTupleRenderer extends DefaultTableCellRenderer {
 
-        //~ Instance fields ----------------------------------------------------
-
-        DateFormat formatter;
-
         //~ Methods ------------------------------------------------------------
 
         /**
@@ -2115,11 +2111,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
             if (value == null) {
                 setText(ObjectRendererUtils.propertyPrettyPrint(value));
             } else {
-                if (formatter == null) {
-                    formatter = DateFormat.getDateInstance();
-                }
                 final DateRequestTuple dateRequestTuple = (DateRequestTuple)value;
-                final String formattedDate = formatter.format(dateRequestTuple.getDate());
+                final String formattedDate = DATE_FORMAT.format(dateRequestTuple.getDate());
                 final String text = ObjectRendererUtils.propertyPrettyPrint(formattedDate);
 
                 final String request = dateRequestTuple.getRequest();
