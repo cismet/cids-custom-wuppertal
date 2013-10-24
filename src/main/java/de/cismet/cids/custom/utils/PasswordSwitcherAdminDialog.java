@@ -345,6 +345,7 @@ public class PasswordSwitcherAdminDialog extends javax.swing.JDialog {
                                 }
                             });
                         StaticSwingTools.showDialog(dialog);
+                        System.exit(0);
                     } catch (final Exception ex) {
                         LOG.fatal("Fehler beim Starten des Password-Changer.", ex);
                         final ErrorInfo errorInfo = new ErrorInfo(
@@ -356,6 +357,7 @@ public class PasswordSwitcherAdminDialog extends javax.swing.JDialog {
                                 Level.ALL,
                                 null);
                         JXErrorPane.showDialog(null, errorInfo);
+                        System.exit(1);
                     }
                 }
             });
