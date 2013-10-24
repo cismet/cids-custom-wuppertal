@@ -1013,6 +1013,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
      */
     private void tbtnMonthActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnMonthActionPerformed
         changeVisibleTimeFilterPanel();
+        filterBuchungen_placeHolder();
     }                                                                             //GEN-LAST:event_tbtnMonthActionPerformed
 
     /**
@@ -1022,6 +1023,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
      */
     private void tbtnQuarterActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnQuarterActionPerformed
         changeVisibleTimeFilterPanel();
+        filterBuchungen_placeHolder();
     }                                                                               //GEN-LAST:event_tbtnQuarterActionPerformed
 
     /**
