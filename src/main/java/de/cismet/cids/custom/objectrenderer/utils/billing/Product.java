@@ -91,11 +91,21 @@ public class Product {
         this.name = name;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public Double getMwst() {
         return mwst;
     }
 
-    public void setMwst(Double mwst) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  mwst  DOCUMENT ME!
+     */
+    public void setMwst(final Double mwst) {
         this.mwst = mwst;
     }
 

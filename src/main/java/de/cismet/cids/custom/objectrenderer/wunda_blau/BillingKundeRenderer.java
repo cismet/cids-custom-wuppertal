@@ -1288,7 +1288,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
             "admin",
             "kif",
             "billing_kunde",
-            1,
+            12,
             "Foo",
             1280,
             1024);
@@ -1447,8 +1447,23 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
 
         // calculate the netto sum of every mwst_satz
         for (final CidsBean billing : billingBeans) {
-            final BigDecimal netto_summe = new BigDecimal(billing.getProperty("netto_summe").toString());
-            final BigDecimal mwst_satz = new BigDecimal(billing.getProperty("mwst_satz").toString());
+            BigDecimal netto_summe;
+            BigDecimal mwst_satz;
+
+            final Double netto_summe_bean = (Double)billing.getProperty("netto_summe");
+            if (netto_summe_bean != null) {
+                netto_summe = new BigDecimal(netto_summe_bean.toString());
+            } else {
+                netto_summe = new BigDecimal("0");
+            }
+
+            final Double mwst_satz_bean = (Double)billing.getProperty("mwst_satz");
+            if (mwst_satz_bean != null) {
+                mwst_satz = new BigDecimal(mwst_satz_bean.toString());
+            } else {
+                mwst_satz = new BigDecimal("0");
+            }
+
             if (mwstSatz_nettoSum.containsKey(mwst_satz)) {
                 final BigDecimal subtotal = mwstSatz_nettoSum.get(mwst_satz);
                 final BigDecimal newSubtotal = subtotal.add(netto_summe);
