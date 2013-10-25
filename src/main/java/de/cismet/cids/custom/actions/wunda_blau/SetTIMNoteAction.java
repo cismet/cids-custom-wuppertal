@@ -97,7 +97,7 @@ public class SetTIMNoteAction extends AbstractAction implements CommonFeatureAct
             final MetaClassCacheService classcache = Lookup.getDefault().lookup(MetaClassCacheService.class);
             timLiegMetaClass = classcache.getMetaClass("WUNDA_BLAU", "tim_lieg");
             isCurrentUserAllowedToSetHint = timLiegMetaClass.getPermissions()
-                        .hasWritePermission(SessionManager.getSession().getUser());
+                        .hasWritePermission(SessionManager.getSession().getUser().getUserGroup());
         } catch (Exception e) {
             LOG.error(
                 "An error occurred while trying to set up SetTIMNoteAction. There was a problem with the lookup mechanism or session handling.",
