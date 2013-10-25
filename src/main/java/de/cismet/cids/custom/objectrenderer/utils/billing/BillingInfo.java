@@ -146,6 +146,6 @@ public class BillingInfo {
         final BillingInfo tester = mapper.readValue(BillingInfo.class.getResourceAsStream(
                     "/de/cismet/cids/custom/billing/billing.json"),
                 BillingInfo.class);
-        System.out.println(tester.getProducts().get(0).id);
+        System.out.println(tester.getProducts().get(0).id + " mwst: " + tester.getProducts().get(0).mwst);
     }
 }

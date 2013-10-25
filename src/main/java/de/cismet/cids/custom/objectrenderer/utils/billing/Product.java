@@ -22,6 +22,7 @@ public class Product {
     String id;
     String name;
     String description;
+    Double mwst;
     final HashMap<String, Double> prices = new HashMap<String, Double>();
     final HashMap<String, Double> discounts = new HashMap<String, Double>();
 
@@ -88,6 +89,14 @@ public class Product {
      */
     public void setName(final String name) {
         this.name = name;
+    }
+
+    public Double getMwst() {
+        return mwst;
+    }
+
+    public void setMwst(Double mwst) {
+        this.mwst = mwst;
     }
 
     /**
