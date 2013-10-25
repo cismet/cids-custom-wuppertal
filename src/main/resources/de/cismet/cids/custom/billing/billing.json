@@ -751,9 +751,9 @@
             "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a3":15.0
+            "eakarte_a3":12.60
         },
-        "mwst":0.0
+        "mwst":19.0
     },{
         "name":"Orthofoto DIN A3",
         "id":"ofkom3",
@@ -767,9 +767,9 @@
             "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a3":15.0
+            "eakarte_a3":12.60
         },
-        "mwst":0.0
+        "mwst":19.0
     },{
         "name":"Orthofoto DIN A2",
         "id":"ofkom2",
@@ -783,9 +783,9 @@
             "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a2-a0":30.0
+            "eakarte_a2-a0":25.21
         },
-        "mwst":0.0
+        "mwst":19.0
     },{
         "name":"Orthofoto DIN A1",
         "id":"ofkom1",
@@ -799,9 +799,9 @@
             "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a2-a0":30.0
+            "eakarte_a2-a0":25.21
         },
-        "mwst":0.0
+        "mwst":19.0
     },{
         "name":"Orthofoto DIN A0",
         "id":"ofkom0",
@@ -815,9 +815,9 @@
             "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a2-a0":30.0
+            "eakarte_a2-a0":25.21
         },
-        "mwst":0.0
+        "mwst":19.0
     },{
         "name":"NivP-Übersicht DIN A4",
         "id":"nivpükom4",
@@ -1071,9 +1071,9 @@
             "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a3":15.0
+            "eakarte_a3":12.60
         },
-        "mwst":0.0
+        "mwst":19.0
     },{
         "name":"Digitale Grundkarte mit Höhenlinien DIN A3",
         "id":"dgkhkom3",
@@ -1087,9 +1087,9 @@
             "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a3":15.0
+            "eakarte_a3":12.60
         },
-        "mwst":0.0
+        "mwst":19.0
     },{
         "name":"Digitale Grundkarte mit Höhenlinien DIN A2",
         "id":"dgkhkom2",
@@ -1103,9 +1103,9 @@
             "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a2-a0":30.0
+            "eakarte_a2-a0":25.21
         },
-        "mwst":0.0
+        "mwst":19.0
     },{
         "name":"Digitale Grundkarte mit Höhenlinien DIN A1",
         "id":"dgkhkom1",
@@ -1119,9 +1119,9 @@
             "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a2-a0":30.0
+            "eakarte_a2-a0":25.21
         },
-        "mwst":0.0
+        "mwst":19.0
     },{
         "name":"Digitale Grundkarte mit Höhenlinien DIN A0",
         "id":"dgkhkom0",
@@ -1135,9 +1135,9 @@
             "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a2-a0":30.0
+            "eakarte_a2-a0":25.21
         },
-        "mwst":0.0
+        "mwst":19.0
     },{
         "name":"Stadtgrundkarte mit Höhenlinien DIN A4",
         "id":"skhkom4",
@@ -1151,9 +1151,9 @@
             "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a3":15.0
+            "eakarte_a3":12.60
         },
-        "mwst":0.0
+        "mwst":19.0
     },{
         "name":"Stadtgrundkarte mit Höhenlinien DIN A3",
         "id":"skhkom3",
@@ -1167,9 +1167,9 @@
             "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a3":15.0
+            "eakarte_a3":12.60
         },
-        "mwst":0.0
+        "mwst":19.0
     },{
         "name":"Stadtgrundkarte mit Höhenlinien DIN A2",
         "id":"skhkom2",
@@ -1183,9 +1183,9 @@
             "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a2-a0":30.0
+            "eakarte_a2-a0":25.21
         },
-        "mwst":0.0
+        "mwst":19.0
     },{
         "name":"Stadtgrundkarte mit Höhenlinien DIN A1",
         "id":"skhkom1",
@@ -1199,9 +1199,9 @@
             "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a2-a0":30.0
+            "eakarte_a2-a0":25.21
         },
-        "mwst":0.0
+        "mwst":19.0
     },{
         "name":"Stadtgrundkarte mit Höhenlinien DIN A0",
         "id":"skhkom0",
@@ -1215,9 +1215,9 @@
             "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a2-a0":30.0
+            "eakarte_a2-a0":25.21
         },
-        "mwst":0.0
+        "mwst":19.0
     },{
         "name":"Orthofoto mit Katasterdarstellung DIN A4",
         "id":"ofkkom4",
@@ -1231,9 +1231,9 @@
             "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a3":15.0
+            "eakarte_a3":12.60
         },
-        "mwst":0.0
+        "mwst":19.0
     },{
         "name":"Orthofoto mit Katasterdarstellung DIN A3",
         "id":"ofkkom3",
@@ -1247,9 +1247,9 @@
             "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a3":15.0
+            "eakarte_a3":12.60
         },
-        "mwst":0.0
+        "mwst":19.0
     },{
         "name":"Orthofoto mit Katasterdarstellung DIN A2",
         "id":"ofkkom2",
@@ -1263,9 +1263,9 @@
             "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a2-a0":30.0
+            "eakarte_a2-a0":25.21
         },
-        "mwst":0.0
+        "mwst":19.0
     },{
         "name":"Orthofoto mit Katasterdarstellung DIN A1",
         "id":"ofkkom1",
@@ -1279,9 +1279,9 @@
             "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a2-a0":30.0
+            "eakarte_a2-a0":25.21
         },
-        "mwst":0.0
+        "mwst":19.0
     },{
         "name":"Orthofoto mit Katasterdarstellung DIN A0",
         "id":"ofkkom0",
@@ -1295,9 +1295,9 @@
             "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a2-a0":30.0
+            "eakarte_a2-a0":25.21
         },
-        "mwst":0.0
+        "mwst":19.0
     },{
         "name":"AP-Karte",
         "id":"appdf",
