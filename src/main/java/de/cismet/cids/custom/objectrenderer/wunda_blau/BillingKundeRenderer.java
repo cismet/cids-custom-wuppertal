@@ -53,6 +53,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
@@ -67,8 +69,6 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.tools.gui.TitleComponentProvider;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
 
 /**
  * DOCUMENT ME!
@@ -994,142 +994,142 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboYear_MonthActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboYear_MonthActionPerformed
+    private void cboYear_MonthActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboYear_MonthActionPerformed
         filterBuchungen_placeHolder();
-    }//GEN-LAST:event_cboYear_MonthActionPerformed
+    }                                                                                 //GEN-LAST:event_cboYear_MonthActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnTodayActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnTodayActionPerformed
+    private void tbtnTodayActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnTodayActionPerformed
         changeVisibleTimeFilterPanel();
         filterBuchungen_placeHolder();
-    }//GEN-LAST:event_tbtnTodayActionPerformed
+    }                                                                             //GEN-LAST:event_tbtnTodayActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnMonthActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnMonthActionPerformed
+    private void tbtnMonthActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnMonthActionPerformed
         changeVisibleTimeFilterPanel();
         filterBuchungen_placeHolder();
-    }//GEN-LAST:event_tbtnMonthActionPerformed
+    }                                                                             //GEN-LAST:event_tbtnMonthActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnQuarterActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnQuarterActionPerformed
+    private void tbtnQuarterActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnQuarterActionPerformed
         changeVisibleTimeFilterPanel();
         filterBuchungen_placeHolder();
-    }//GEN-LAST:event_tbtnQuarterActionPerformed
+    }                                                                               //GEN-LAST:event_tbtnQuarterActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnDateRangeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnDateRangeActionPerformed
+    private void tbtnDateRangeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnDateRangeActionPerformed
         changeVisibleTimeFilterPanel();
-    }//GEN-LAST:event_tbtnDateRangeActionPerformed
+    }                                                                                 //GEN-LAST:event_tbtnDateRangeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtGeschaeftsbuchnummerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGeschaeftsbuchnummerActionPerformed
+    private void txtGeschaeftsbuchnummerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtGeschaeftsbuchnummerActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtGeschaeftsbuchnummerActionPerformed
+    } //GEN-LAST:event_txtGeschaeftsbuchnummerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboMonthActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboMonthActionPerformed
+    private void cboMonthActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboMonthActionPerformed
         filterBuchungen_placeHolder();
-    }//GEN-LAST:event_cboMonthActionPerformed
+    }                                                                            //GEN-LAST:event_cboMonthActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboQuarterActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboQuarterActionPerformed
+    private void cboQuarterActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboQuarterActionPerformed
         filterBuchungen_placeHolder();
-    }//GEN-LAST:event_cboQuarterActionPerformed
+    }                                                                              //GEN-LAST:event_cboQuarterActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboYear_QuarterActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboYear_QuarterActionPerformed
+    private void cboYear_QuarterActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboYear_QuarterActionPerformed
         filterBuchungen_placeHolder();
-    }//GEN-LAST:event_cboYear_QuarterActionPerformed
+    }                                                                                   //GEN-LAST:event_cboYear_QuarterActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboKostenfreiActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboKostenfreiActionPerformed
+    private void cboKostenfreiActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboKostenfreiActionPerformed
         if (!cboKostenfrei.isSelected() && !cboKostenpflichtig.isSelected()) {
             cboKostenpflichtig.setSelected(true);
         }
         filterBuchungen_placeHolder();
-    }//GEN-LAST:event_cboKostenfreiActionPerformed
+    }                                                                                 //GEN-LAST:event_cboKostenfreiActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboKostenpflichtigActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboKostenpflichtigActionPerformed
+    private void cboKostenpflichtigActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboKostenpflichtigActionPerformed
         if (!cboKostenfrei.isSelected() && !cboKostenpflichtig.isSelected()) {
             cboKostenfrei.setSelected(true);
         }
         filterBuchungen_placeHolder();
-    }//GEN-LAST:event_cboKostenpflichtigActionPerformed
+    }                                                                                      //GEN-LAST:event_cboKostenpflichtigActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboBenutzerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboBenutzerActionPerformed
+    private void cboBenutzerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboBenutzerActionPerformed
         filterBuchungen_placeHolder();
-    }//GEN-LAST:event_cboBenutzerActionPerformed
+    }                                                                               //GEN-LAST:event_cboBenutzerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void dpFromActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dpFromActionPerformed
+    private void dpFromActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_dpFromActionPerformed
         checkDateRange();
-    }//GEN-LAST:event_dpFromActionPerformed
+    }                                                                          //GEN-LAST:event_dpFromActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void dpTillActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dpTillActionPerformed
+    private void dpTillActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_dpTillActionPerformed
         checkDateRange();
-    }//GEN-LAST:event_dpTillActionPerformed
+    }                                                                          //GEN-LAST:event_dpTillActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblBillingsMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBillingsMouseClicked
+    private void tblBillingsMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_tblBillingsMouseClicked
         final int row = tblBillings.convertRowIndexToModel(tblBillings.getSelectedRow());
         final int column = tblBillings.convertColumnIndexToModel(tblBillings.getSelectedColumn());
         if (column == 6) {
@@ -1139,14 +1139,14 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
                 doDownload(request);
             }
         }
-    }//GEN-LAST:event_tblBillingsMouseClicked
+    }                                                                           //GEN-LAST:event_tblBillingsMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblBillingsMouseMoved(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBillingsMouseMoved
+    private void tblBillingsMouseMoved(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_tblBillingsMouseMoved
         final int row = tblBillings.convertRowIndexToModel(tblBillings.rowAtPoint(evt.getPoint()));
         final int column = tblBillings.convertColumnIndexToModel(tblBillings.columnAtPoint(evt.getPoint()));
         if (column == 6) {
@@ -1160,16 +1160,16 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         } else {
             setCursor(Cursor.getDefaultCursor());
         }
-    }//GEN-LAST:event_tblBillingsMouseMoved
+    }                                                                         //GEN-LAST:event_tblBillingsMouseMoved
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblBillingsMouseExited(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBillingsMouseExited
+    private void tblBillingsMouseExited(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_tblBillingsMouseExited
         setCursor(Cursor.getDefaultCursor());
-    }//GEN-LAST:event_tblBillingsMouseExited
+    }                                                                          //GEN-LAST:event_tblBillingsMouseExited
 
     /**
      * DOCUMENT ME!
@@ -1347,9 +1347,9 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         }
         tableModel = new BillingTableModel(tableData.toArray(new Object[tableData.size()][]), AGR_COMLUMN_NAMES);
         tblBillings.setModel(tableModel);
-        if(!tableData.isEmpty()){
-        TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tblBillings.getModel());
-        tblBillings.setRowSorter(sorter);
+        if (!tableData.isEmpty()) {
+            final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tblBillings.getModel());
+            tblBillings.setRowSorter(sorter);
         } else {
             tblBillings.setRowSorter(null);
         }
@@ -1702,7 +1702,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
      *
      * @version  $Revision$, $Date$
      */
-    private class DateRequestTuple implements Comparable<DateRequestTuple>{
+    private class DateRequestTuple implements Comparable<DateRequestTuple> {
 
         //~ Instance fields ----------------------------------------------------
 
@@ -1743,7 +1743,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         }
 
         @Override
-        public int compareTo(DateRequestTuple o) {
+        public int compareTo(final DateRequestTuple o) {
             return date.compareTo(o.getDate());
         }
     }
