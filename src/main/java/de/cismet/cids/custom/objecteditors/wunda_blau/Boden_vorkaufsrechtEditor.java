@@ -23,9 +23,8 @@ import org.apache.log4j.Logger;
  * @author verkenis
  */
 public class Boden_vorkaufsrechtEditor extends de.cismet.tools.gui.RoundedPanel implements DisposableCidsBeanStore,
-    EditorSaveListener,RequestsFullSizeComponent
-    {
-    
+        EditorSaveListener, RequestsFullSizeComponent {
+
     private static final Logger LOG = Logger.getLogger(Boden_vorkaufsrechtEditor.class);
     private CidsBean cidsBean;
     private final boolean editable;
@@ -36,7 +35,7 @@ public class Boden_vorkaufsrechtEditor extends de.cismet.tools.gui.RoundedPanel 
     public Boden_vorkaufsrechtEditor() {
         this(true);
     }
-    
+
     /**
      * Creates new form BodenVorkaufsrechtEditor
      */
@@ -77,12 +76,12 @@ public class Boden_vorkaufsrechtEditor extends de.cismet.tools.gui.RoundedPanel 
 
     @Override
     public void setCidsBean(CidsBean cidsBean) {
-       
+
         if (cidsBean != null) {
             this.cidsBean = cidsBean;
             this.panEditor.setCidsBean(cidsBean);
         }
-   
+
     }
 
     @Override
@@ -92,20 +91,26 @@ public class Boden_vorkaufsrechtEditor extends de.cismet.tools.gui.RoundedPanel 
 
     @Override
     public void editorClosed(EditorClosedEvent ece) {
-        
     }
 
     @Override
     public boolean prepareForSave() {
-        
-    try {
+
+        try {
             final ArrayList<String> errors = new ArrayList<String>();
-            final String aktenzeichen = (String)cidsBean.getProperty("name");
-            
+            final String aktenzeichen = (String) cidsBean.getProperty("name");
+
             if ((aktenzeichen == null) || aktenzeichen.trim().equals("")) {
                 errors.add("Aktenzeichen muss eingegeben werden!\n");
             }
-            if ((cidsBean.getProperty("eingang_anfrage") == null) ) {
+
+            if (aktenzeichen != null) {
+                if (aktenzeichen.length() > 20) {
+                    errors.add("Aktenzeichen darf maximal 20 Zeichen lang sein!\n");
+                }
+            }
+
+            if ((cidsBean.getProperty("eingang_anfrage") == null)) {
                 errors.add("Das Feld Antragsdatum muss ausgefüllt sein!\n");
             }
 
@@ -116,39 +121,38 @@ public class Boden_vorkaufsrechtEditor extends de.cismet.tools.gui.RoundedPanel 
                 }
                 errorOutput = errorOutput.substring(0, errorOutput.length() - 1);
                 JOptionPane.showMessageDialog(
-                    StaticSwingTools.getParentFrame(this),
-                    errorOutput,
-                    "Fehler aufgetreten",
-                    JOptionPane.WARNING_MESSAGE);
+                        StaticSwingTools.getParentFrame(this),
+                        errorOutput,
+                        "Fehler aufgetreten",
+                        JOptionPane.WARNING_MESSAGE);
                 return false;
-            } 
-            
+            }
+
             return true;
-            
+
         } catch (Exception ex) {
             ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Speichern", ex, this);
             throw new RuntimeException(ex);
-        }    
-        
-    }  
-    
+        }
+
+    }
+
     /**
      * DOCUMENT ME!
      *
-     * @param   args  DOCUMENT ME!
+     * @param args DOCUMENT ME!
      *
-     * @throws  Exception  DOCUMENT ME!
+     * @throws Exception DOCUMENT ME!
      */
     public static void main(final String[] args) throws Exception {
         DevelopmentTools.createEditorInFrameFromRMIConnectionOnLocalhost(
-            "WUNDA_BLAU",
-            "Administratoren",
-            "admin",
-            "krissenich",
-            "BODEN_VORKAUFSRECHT",
-            20,
-            1000,
-            800);
+                "WUNDA_BLAU",
+                "Administratoren",
+                "admin",
+                "krissenich",
+                "BODEN_VORKAUFSRECHT",
+                20,
+                1000,
+                800);
     }
-
 }

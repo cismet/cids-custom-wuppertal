@@ -7,14 +7,32 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.MetaObject;
+import com.vividsolutions.jts.geom.Geometry;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
+import de.cismet.cismap.commons.CrsTransformer;
+import de.cismet.cismap.commons.XBoundingBox;
+import de.cismet.cismap.commons.features.DefaultStyledFeature;
+import de.cismet.cismap.commons.features.Feature;
+import de.cismet.cismap.commons.features.FeatureGroups;
+import de.cismet.cismap.commons.features.StyledFeature;
+import de.cismet.cismap.commons.gui.MappingComponent;
+import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
+import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
+import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
+import de.cismet.cismap.navigatorplugin.CidsFeature;
+import de.cismet.tools.collections.TypeSafeCollections;
 import de.cismet.tools.gui.StaticSwingTools;
+import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
+import edu.umd.cs.piccolo.event.PInputEvent;
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.EventQueue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,6 +53,7 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
     private final boolean editable;
     private final Collection<JComponent> editableComponents;
     private final FlurstueckSelectionDialoge fsDialoge;
+    private final MappingComponent map;
     public static final String ATAG_FINAL_CHECK = "navigator.baulasten.final_check"; // NOI18N
     private static final Logger LOG = Logger.getLogger(Boden_VorkaufsrechtEditorPanel.class);
 
@@ -59,6 +78,11 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
         this.editableComponents = new ArrayList<JComponent>();
         initComponents();
         initEditableComponents();
+        //initMap();
+        map = new MappingComponent();
+        if (!editable) {
+        panMap.add(map, BorderLayout.CENTER);
+        }
         fsDialoge = new FlurstueckSelectionDialoge();
     }
 
@@ -90,6 +114,7 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
         panFlurstuecke = new javax.swing.JPanel();
         btnAddFlurstueck = new javax.swing.JButton();
         btnRemoveFlurstueck = new javax.swing.JButton();
+        panMap = new javax.swing.JPanel();
 
         setMaximumSize(new java.awt.Dimension(5000, 5000));
         setMinimumSize(new java.awt.Dimension(500, 440));
@@ -165,6 +190,8 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         rpInfo.add(jLabel4, gridBagConstraints);
 
+        aktenzeichen.setToolTipText(org.openide.util.NbBundle.getMessage(Boden_VorkaufsrechtEditorPanel.class, "Boden_VorkaufsrechtEditorPanel.aktenzeichen.toolTipText")); // NOI18N
+
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.name}"), aktenzeichen, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
@@ -177,6 +204,8 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
         rpInfo.add(aktenzeichen, gridBagConstraints);
+
+        defaultBindableDateChooser1.setToolTipText(org.openide.util.NbBundle.getMessage(Boden_VorkaufsrechtEditorPanel.class, "Boden_VorkaufsrechtEditorPanel.defaultBindableDateChooser1.toolTipText")); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${cidsBean.eingang_anfrage}"), defaultBindableDateChooser1, org.jdesktop.beansbinding.BeanProperty.create("date"), "");
         binding.setConverter(sqlDateToUtilDateConverter);
@@ -194,6 +223,7 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -201,20 +231,23 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
         add(rpInfo, gridBagConstraints);
         rpInfo.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(Boden_VorkaufsrechtEditorPanel.class, "Boden_VorkaufsrechtEditorPanel.rpInfo.AccessibleContext.accessibleName")); // NOI18N
 
-        rpFlurstuecke.setMinimumSize(new java.awt.Dimension(100, 350));
-        rpFlurstuecke.setPreferredSize(new java.awt.Dimension(100, 350));
+        rpFlurstuecke.setMinimumSize(new java.awt.Dimension(150, 350));
+        rpFlurstuecke.setPreferredSize(new java.awt.Dimension(150, 350));
         rpFlurstuecke.setLayout(new java.awt.GridBagLayout());
 
         srpHeadFlurstuecke.setBackground(new java.awt.Color(255, 155, 51));
-        srpHeadFlurstuecke.setMaximumSize(new java.awt.Dimension(100, 2000));
-        srpHeadFlurstuecke.setMinimumSize(new java.awt.Dimension(100, 20));
-        srpHeadFlurstuecke.setPreferredSize(new java.awt.Dimension(100, 20));
+        srpHeadFlurstuecke.setMaximumSize(new java.awt.Dimension(200, 2000));
+        srpHeadFlurstuecke.setMinimumSize(new java.awt.Dimension(150, 20));
+        srpHeadFlurstuecke.setPreferredSize(new java.awt.Dimension(150, 20));
         srpHeadFlurstuecke.setRequestFocusEnabled(false);
         srpHeadFlurstuecke.setLayout(new java.awt.GridBagLayout());
 
         lblHeadFlurstuecke.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         org.openide.awt.Mnemonics.setLocalizedText(lblHeadFlurstuecke, org.openide.util.NbBundle.getMessage(Boden_VorkaufsrechtEditorPanel.class, "Boden_VorkaufsrechtEditorPanel.lblHeadFlurstuecke.text")); // NOI18N
-        srpHeadFlurstuecke.add(lblHeadFlurstuecke, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        srpHeadFlurstuecke.add(lblHeadFlurstuecke, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -222,10 +255,10 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         rpFlurstuecke.add(srpHeadFlurstuecke, gridBagConstraints);
 
-        scpFlurstuecke.setMaximumSize(new java.awt.Dimension(100, 300));
-        scpFlurstuecke.setMinimumSize(new java.awt.Dimension(100, 200));
+        scpFlurstuecke.setMaximumSize(new java.awt.Dimension(150, 300));
+        scpFlurstuecke.setMinimumSize(new java.awt.Dimension(150, 200));
         scpFlurstuecke.setOpaque(false);
-        scpFlurstuecke.setPreferredSize(new java.awt.Dimension(100, 300));
+        scpFlurstuecke.setPreferredSize(new java.awt.Dimension(150, 300));
 
         lstFlurstuecke.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -297,6 +330,19 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 5);
         add(rpFlurstuecke, gridBagConstraints);
 
+        panMap.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        panMap.setLayout(new java.awt.BorderLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
+        add(panMap, gridBagConstraints);
+
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -361,6 +407,7 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
     private javax.swing.JLabel lblInfo;
     private javax.swing.JList lstFlurstuecke;
     private javax.swing.JPanel panFlurstuecke;
+    private javax.swing.JPanel panMap;
     private de.cismet.tools.gui.RoundedPanel rpFlurstuecke;
     private de.cismet.tools.gui.RoundedPanel rpInfo;
     private javax.swing.JScrollPane scpFlurstuecke;
@@ -413,13 +460,13 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
                 Collections.sort(flurstueckeCol, AlphanumComparator.getInstance());
                 flurstueckeCol = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "ref_flurstuecke");
                 Collections.sort(flurstueckeCol, AlphanumComparator.getInstance());
-
-               
                 
-
                 bindingGroup.bind();
                 lstFlurstuecke.setSelectedIndices(flstIdx);
                 cidsBean.getMetaObject().getDebugString();
+                if (!editable) {
+                initMap();
+                }
             }
         
         } catch (final Exception x) {
@@ -431,6 +478,7 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
     @Override
     public void dispose() {
         fsDialoge.dispose();
+        map.dispose();
         bindingGroup.unbind();
     }
 
@@ -452,10 +500,113 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
         }
           
     }
+    
+    private void initMap() {
+        
+        
+        List<CidsBean> flurstuecke = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "ref_flurstuecke");
+        final Object geoObj = flurstuecke.get(0).getProperty("fs_referenz.umschreibendes_rechteck.geo_field");
+        
+        if (geoObj instanceof Geometry) {
+            final Geometry pureGeom = CrsTransformer.transformToGivenCrs((Geometry) geoObj,
+                    AlkisConstants.COMMONS.SRS_SERVICE);
+
+            final Runnable mapRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    final ActiveLayerModel mappingModel = new ActiveLayerModel();
+                    mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                    mappingModel.addHome(getBoundingBox());
+                    final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
+                            AlkisConstants.COMMONS.MAP_CALL_STRING));
+                    swms.setName("Flurstueck");
+
+                    final Collection<MetaObject> selObj = new ArrayList<MetaObject>(1);
+                    selObj.add(cidsBean.getMetaObject());
+                    setAllSelectedMetaObjects(selObj);
+                    final List<Feature> addedFeatures = TypeSafeCollections.newArrayList(selObj.size());
+                    for (final MetaObject mo : selObj) {
+                        final CidsFeature newGeomFeature = new CidsFeature(mo);
+                        addedFeatures.addAll(FeatureGroups.expandAll(newGeomFeature));
+                    }
+                    
+
+                    mappingModel.addLayer(swms);
+                    // set the model
+                    map.setMappingModel(mappingModel);
+                    // initial positioning of the map
+                    final int duration = map.getAnimationDuration();
+                    map.setAnimationDuration(0);
+                    map.gotoInitialBoundingBox();
+                    // interaction mode
+                    map.setInteractionMode(MappingComponent.ZOOM);
+                    // finally when all configurations are done ...
+                    map.unlock();
+                    map.addCustomInputListener("MUTE", new PBasicInputEventHandler() {
+                        @Override
+                        public void mouseClicked(final PInputEvent evt) {
+                            if (evt.getClickCount() > 1) {
+                                final CidsBean bean = cidsBean;
+                                ObjectRendererUtils.switchToCismapMap();
+                                ObjectRendererUtils.addBeanGeomAsFeatureToCismapMap(bean, false);
+                            }
+                        }
+                    });
+                    map.setInteractionMode("MUTE");
+                    map.getFeatureCollection().addFeatures(addedFeatures);
+                    map.setAnimationDuration(duration);
+                }
+            };
+            if (EventQueue.isDispatchThread()) {
+                mapRunnable.run();
+            } else {
+                EventQueue.invokeLater(mapRunnable);
+            }
+        }
+    }
+
+    private XBoundingBox getBoundingBox() {
+
+        XBoundingBox result = null;
+
+        List<CidsBean> flurstuecke = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "ref_flurstuecke");
+        //this.cidsBean=cidsBean;
+
+        for (final CidsBean flurstueck : flurstuecke) {
+
+
+            if (flurstueck.getProperty("fs_referenz.umschreibendes_rechteck.geo_field") instanceof Geometry) {
+                Geometry geometry = CrsTransformer.transformToGivenCrs((Geometry) flurstueck.getProperty(
+                        "fs_referenz.umschreibendes_rechteck.geo_field"),
+                        AlkisConstants.COMMONS.SRS_SERVICE);
+
+
+                if (result == null) {
+                    result = new XBoundingBox(geometry.getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER), AlkisConstants.COMMONS.SRS_SERVICE, true);
+                } else {
+                    final XBoundingBox temp = new XBoundingBox(geometry.getEnvelope().buffer(
+                            AlkisConstants.COMMONS.GEO_BUFFER));
+                    temp.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                    temp.setMetric(true);
+
+                    if (temp.getX1() < result.getX1()) {
+                        result.setX1(temp.getX1());
+                    }
+                    if (temp.getY1() < result.getY1()) {
+                        result.setY1(temp.getY1());
+                    }
+                    if (temp.getX2() > result.getX2()) {
+                        result.setX2(temp.getX2());
+                    }
+                    if (temp.getY2() > result.getY2()) {
+                        result.setY2(temp.getY2());
+                    }
+                    System.out.println(result.getSrs());
+                }
+            }
+        }
+        
+        return result;
+    }
 }
     
-    
-       
-   
-    
-

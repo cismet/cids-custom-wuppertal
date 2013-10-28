@@ -6,6 +6,7 @@ package de.cismet.cids.custom.featurerenderer.wunda_blau;
 
 import Sirius.navigator.exception.ConnectionException;
 import Sirius.server.middleware.types.MetaObject;
+import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.featurerenderer.CustomCidsFeatureRenderer;
@@ -131,5 +132,6 @@ public class Boden_vorkaufsrechtFeatureRenderer  extends CustomCidsFeatureRender
     public void assign() {
         
     }
+    
     
 }
