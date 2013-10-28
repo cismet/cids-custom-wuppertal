@@ -29,7 +29,7 @@ import javax.swing.Action;
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class TimeFilterPanel extends javax.swing.JPanel {
+public class TimeFilterPanel extends javax.swing.JPanel implements FilterActionTrigger {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -568,6 +568,7 @@ public class TimeFilterPanel extends javax.swing.JPanel {
      *
      * @return  DOCUMENT ME!
      */
+    @Override
     public Action getFilterAction() {
         return filterAction;
     }
@@ -577,6 +578,7 @@ public class TimeFilterPanel extends javax.swing.JPanel {
      *
      * @param  filterAction  DOCUMENT ME!
      */
+    @Override
     public void setFilterAction(final Action filterAction) {
         this.filterAction = filterAction;
     }

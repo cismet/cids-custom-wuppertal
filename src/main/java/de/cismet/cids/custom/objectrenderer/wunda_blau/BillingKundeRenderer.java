@@ -15,10 +15,6 @@ import Sirius.navigator.connection.SessionManager;
 
 import Sirius.server.middleware.types.MetaObject;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import groovy.swing.impl.DefaultAction;
-
 import org.apache.log4j.Logger;
 
 import org.openide.util.NbBundle;
@@ -26,9 +22,6 @@ import org.openide.util.NbBundle;
 import java.awt.CardLayout;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import java.io.IOException;
 
 import java.math.BigDecimal;
 
@@ -37,7 +30,6 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -48,9 +40,7 @@ import java.util.concurrent.ExecutionException;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JCheckBox;
 import javax.swing.JComponent;
-import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -62,8 +52,8 @@ import javax.swing.table.TableRowSorter;
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.objectrenderer.utils.billing.BillingInfo;
 import de.cismet.cids.custom.objectrenderer.utils.billing.Usage;
+import de.cismet.cids.custom.objectrenderer.utils.billing.VerwendungszweckPanel;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement.Kostenart;
 
@@ -85,26 +75,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
 
     private static final Logger LOG = Logger.getLogger(BillingKundeRenderer.class);
 
-    private static BillingInfo billingInfo;
-    private static final ObjectMapper mapper = new ObjectMapper();
-    private static final HashMap<String, Usage> usages = new HashMap<String, Usage>();
-    private static HashMap<JCheckBox, Usage> mappingJCheckboxToUsages = new HashMap<JCheckBox, Usage>();
     private static DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
-
-    static {
-        try {
-            billingInfo = mapper.readValue(BillingInfo.class.getResourceAsStream(
-                        "/de/cismet/cids/custom/billing/billing.json"),
-                    BillingInfo.class);
-
-            final ArrayList<Usage> lu = billingInfo.getUsages();
-            for (final Usage u : lu) {
-                usages.put(u.getKey(), u);
-            }
-        } catch (IOException ioException) {
-            LOG.error("Error when trying to read the billingInfo.json", ioException);
-        }
-    }
 
     // column headers
     private static final String[] AGR_COMLUMN_NAMES = new String[] {
@@ -161,8 +132,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     private javax.swing.JPanel pnlKostenart;
     private javax.swing.JPanel pnlTable;
     private de.cismet.cids.custom.objectrenderer.utils.billing.TimeFilterPanel pnlTimeFilters;
-    private javax.swing.JPanel pnlVerwendungszweck;
-    private javax.swing.JPanel pnlVerwendungszweckCheckBoxes;
+    private de.cismet.cids.custom.objectrenderer.utils.billing.VerwendungszweckPanel pnlVerwendungszweck;
     private de.cismet.tools.gui.SemiRoundedPanel smiplFilter;
     private de.cismet.tools.gui.SemiRoundedPanel smiplTable;
     private javax.swing.JTable tblBillings;
@@ -186,7 +156,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
      */
     public BillingKundeRenderer(final boolean editable) {
         initComponents();
-        initVerwendungszweckCheckBoxes();
         tableModel = new BillingTableModel(new Object[0][], AGR_COMLUMN_NAMES);
         tblBillings.setModel(tableModel);
         setFilterActionInExternalPanels();
@@ -223,8 +192,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         txtProjekt = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         cboBenutzer = new javax.swing.JComboBox();
-        pnlVerwendungszweck = new javax.swing.JPanel();
-        pnlVerwendungszweckCheckBoxes = new javax.swing.JPanel();
         pnlKostenart = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         cboKostenfrei = new javax.swing.JCheckBox();
@@ -232,6 +199,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
+        pnlVerwendungszweck = new de.cismet.cids.custom.objectrenderer.utils.billing.VerwendungszweckPanel();
         jPanel2 = new javax.swing.JPanel();
         btnBuchungsbeleg = new javax.swing.JButton();
         btnRechnungsanlage = new javax.swing.JButton();
@@ -357,28 +325,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.weightx = 1.0;
         pnlFilters.add(jPanel3, gridBagConstraints);
 
-        pnlVerwendungszweck.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                null,
-                org.openide.util.NbBundle.getMessage(
-                    BillingKundeRenderer.class,
-                    "BillingKundeRenderer.pnlVerwendungszweck.border.title"),
-                javax.swing.border.TitledBorder.LEADING,
-                javax.swing.border.TitledBorder.DEFAULT_POSITION)); // NOI18N
-        pnlVerwendungszweck.setLayout(new java.awt.BorderLayout());
-
-        pnlVerwendungszweckCheckBoxes.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
-        pnlVerwendungszweckCheckBoxes.setLayout(new javax.swing.BoxLayout(
-                pnlVerwendungszweckCheckBoxes,
-                javax.swing.BoxLayout.PAGE_AXIS));
-        pnlVerwendungszweck.add(pnlVerwendungszweckCheckBoxes, java.awt.BorderLayout.CENTER);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        pnlFilters.add(pnlVerwendungszweck, gridBagConstraints);
-
         pnlKostenart.setBorder(javax.swing.BorderFactory.createTitledBorder(
                 org.openide.util.NbBundle.getMessage(
                     BillingKundeRenderer.class,
@@ -434,6 +380,14 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
         pnlFilters.add(filler5, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        pnlFilters.add(pnlVerwendungszweck, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -829,7 +783,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
             for (int i = 0; i < AGR_PROPERTY_NAMES.length; ++i) {
                 final Object property = billingBean.getProperty(AGR_PROPERTY_NAMES[i]);
                 if (AGR_PROPERTY_NAMES[i].equals("verwendungskey")) {
-                    result[i] = usages.get((String)property);
+                    result[i] = VerwendungszweckPanel.getUsages().get((String)property);
                 } else if (AGR_PROPERTY_NAMES[i].equals("ts")) {
                     final String request = (String)billingBean.getProperty("request");
                     final DateRequestTuple dateRequestTuple = new DateRequestTuple((Date)property, request);
@@ -956,50 +910,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     }
 
     /**
-     * DOCUMENT ME!
-     */
-    private void initVerwendungszweckCheckBoxes() {
-        for (final Usage usage : usages.values()) {
-            final JCheckBox checkBox = new JCheckBox();
-            checkBox.setSelected(true);
-            checkBox.setText(usage.getName());
-            checkBox.setToolTipText(usage.getKey());
-            checkBox.addActionListener(new ActionListener() {
-
-                    @Override
-                    public void actionPerformed(final ActionEvent e) {
-                        boolean noneSelected = true;
-                        for (final JCheckBox cb : mappingJCheckboxToUsages.keySet()) {
-                            if (cb.isSelected()) {
-                                noneSelected = false;
-                                break;
-                            }
-                        }
-                        if (noneSelected) {
-                            ((JCheckBox)e.getSource()).setSelected(true);
-                            final String title = NbBundle.getMessage(
-                                    BillingKundeRenderer.class,
-                                    "BillingKundeRenderer.initVerwendungszweckCheckBoxes().actionPerformed().dialog.title");
-                            final String message = NbBundle.getMessage(
-                                    BillingKundeRenderer.class,
-                                    "BillingKundeRenderer.initVerwendungszweckCheckBoxes().actionPerformed().dialog.message");
-                            JOptionPane.showMessageDialog(
-                                BillingKundeRenderer.this,
-                                message,
-                                title,
-                                JOptionPane.INFORMATION_MESSAGE);
-                        } else {
-                            filterBuchungen_placeHolder();
-                        }
-                    }
-                });
-
-            mappingJCheckboxToUsages.put(checkBox, usage);
-            pnlVerwendungszweckCheckBoxes.add(checkBox);
-        }
-    }
-
-    /**
      * a placeholder which can be used if the filterBuchungen has to be executed in a SwingWorker etc...
      */
     private void filterBuchungen_placeHolder() {
@@ -1034,7 +944,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
             }
             cidsBillingSearchStatement.setUserID(userID);
 
-            cidsBillingSearchStatement.setVerwendungszweckKeys(createSelectedVerwendungszweckKeysStringArray());
+            cidsBillingSearchStatement.setVerwendungszweckKeys(
+                pnlVerwendungszweck.createSelectedVerwendungszweckKeysStringArray());
             cidsBillingSearchStatement.setKostenart(chooseKostenart());
             final Date[] fromDate_tillDate = pnlTimeFilters.chooseDates();
             cidsBillingSearchStatement.setFrom(fromDate_tillDate[0]);
@@ -1097,22 +1008,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
      *
      * @return  DOCUMENT ME!
      */
-    private ArrayList<String> createSelectedVerwendungszweckKeysStringArray() {
-        final ArrayList<String> ret = new ArrayList<String>();
-        for (final JCheckBox jCheckBox : mappingJCheckboxToUsages.keySet()) {
-            if (jCheckBox.isSelected()) {
-                final Usage usage = mappingJCheckboxToUsages.get(jCheckBox);
-                ret.add(usage.getKey());
-            }
-        }
-        return ret;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
     private Kostenart chooseKostenart() {
         if (cboKostenfrei.isSelected() == cboKostenpflichtig.isSelected()) {
             return Kostenart.IGNORIEREN;
@@ -1135,6 +1030,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
                 }
             };
         pnlTimeFilters.setFilterAction(filterAction);
+        pnlVerwendungszweck.setFilterAction(filterAction);
     }
 
     //~ Inner Classes ----------------------------------------------------------
