@@ -61,6 +61,8 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingInfo;
 import de.cismet.cids.custom.objectrenderer.utils.billing.Usage;
+import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement;
+import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement.Kostenart;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -126,20 +128,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
             "ts",
             "angelegt_durch.name"
         };
-
-    //~ Enums ------------------------------------------------------------------
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    enum Kostenart {
-
-        //~ Enum constants -----------------------------------------------------
-
-        KOSTENPFLICHTIG, KOSTENFREI, IGNORIEREN
-    }
 
     //~ Instance fields --------------------------------------------------------
 
@@ -1560,53 +1548,57 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
      * @param  ignoreFilters  DOCUMENT ME!
      */
     private void filterBuchungen(final boolean ignoreFilters) {
-        final QueryBuilder queryBuilder = new QueryBuilder();
+        final CidsBillingSearchStatement cidsBillingSearchStatement = new CidsBillingSearchStatement(
+                cidsBean.getMetaObject(),
+                SessionManager.getSession().getUser());
         if (!ignoreFilters) {
-            queryBuilder.setGeschaeftsbuchnummer(txtGeschaeftsbuchnummer.getText());
-            queryBuilder.setProjekt(txtProjekt.getText());
+            cidsBillingSearchStatement.setGeschaeftsbuchnummer(txtGeschaeftsbuchnummer.getText());
+            cidsBillingSearchStatement.setProjekt(txtProjekt.getText());
 
             final Object user = cboBenutzer.getSelectedItem();
             String userID = "";
             if (user instanceof CidsBean) {
                 userID = ((CidsBean)user).getProperty("id").toString();
             }
-            queryBuilder.setUserID(userID);
+            cidsBillingSearchStatement.setUserID(userID);
 
-            queryBuilder.setVerwendungszweckKeys(createSelectedVerwendungszweckKeysStringArray());
-            queryBuilder.setKostenart(chooseKostenart());
+            cidsBillingSearchStatement.setVerwendungszweckKeys(createSelectedVerwendungszweckKeysStringArray());
+            cidsBillingSearchStatement.setKostenart(chooseKostenart());
             final Date[] fromDate_tillDate = chooseDates();
-            queryBuilder.setFrom(fromDate_tillDate[0]);
-            queryBuilder.setTill(fromDate_tillDate[1]);
+            cidsBillingSearchStatement.setFrom(fromDate_tillDate[0]);
+            cidsBillingSearchStatement.setTill(fromDate_tillDate[1]);
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Query to get the billings: " + queryBuilder.generateQuery());
+            LOG.debug("Query to get the billings: " + cidsBillingSearchStatement.generateQuery());
         }
 
         blblBusy.setBusy(true);
         ((CardLayout)pnlTable.getLayout()).show(pnlTable, "busy");
         btnBuchungsbeleg.setEnabled(false);
         btnRechnungsanlage.setEnabled(false);
-        final SwingWorker<MetaObject[], Void> swingWorker = new SwingWorker<MetaObject[], Void>() {
+        final SwingWorker<Collection<MetaObject>, Void> swingWorker = new SwingWorker<Collection<MetaObject>, Void>() {
 
                 @Override
-                protected MetaObject[] doInBackground() throws Exception {
-                    return SessionManager.getProxy().getMetaObjectByQuery(queryBuilder.generateQuery(), 0);
+                protected Collection<MetaObject> doInBackground() throws Exception {
+                    // return cidsBillingSearchStatement.performServerSearch();
+                    return SessionManager.getProxy()
+                                .customServerSearch(SessionManager.getSession().getUser(), cidsBillingSearchStatement);
                 }
 
                 @Override
                 protected void done() {
                     try {
-                        final MetaObject[] metaObjects = get();
+                        final Collection<MetaObject> metaObjects = get();
 
                         if (metaObjects == null) {
                             LOG.error("Billing metaobjects was null.");
-                        } else if (metaObjects.length == 0) {
+                        } else if (metaObjects.isEmpty()) {
                             LOG.info("No Billing metaobjects found.");
                             fillBillingTable(new ArrayList<CidsBean>());
                             lblFilterResult.setText(generateFilterResultText(new ArrayList<CidsBean>()));
                         } else {
-                            final List<CidsBean> billingBeans = new ArrayList<CidsBean>(metaObjects.length);
+                            final List<CidsBean> billingBeans = new ArrayList<CidsBean>(metaObjects.size());
                             for (final MetaObject mo : metaObjects) {
                                 billingBeans.add(mo.getBean());
                             }
@@ -1745,270 +1737,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         @Override
         public int compareTo(final DateRequestTuple o) {
             return date.compareTo(o.getDate());
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    private class QueryBuilder {
-
-        //~ Instance fields ----------------------------------------------------
-
-        String geschaeftsbuchnummer;
-        String projekt;
-        String userID;
-        ArrayList<String> verwendungszweckKeys = new ArrayList<String>();
-        Kostenart kostenart = Kostenart.IGNORIEREN;
-        Date from = new Date();
-        Date till;
-        StringBuilder query;
-        SimpleDateFormat postgresDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-        //~ Methods ------------------------------------------------------------
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public String generateQuery() {
-            final MetaClass MB_MC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "billing_billing");
-            query = new StringBuilder();
-            query.append("SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " ");
-            query.append("FROM " + MB_MC.getTableName());
-            appendWhereClauseAndUsernames();
-            appendGeschaeftsbuchnummer();
-            appendProjekt();
-            appendVerwendungszweckKeys();
-            appendKostenart();
-            appendDates();
-
-            return query.toString();
-        }
-
-        /**
-         * DOCUMENT ME!
-         */
-        private void appendWhereClauseAndUsernames() {
-            query.append(" WHERE angelegt_durch ");
-            if ((userID == null) || userID.equals("")) {
-                final List<CidsBean> benutzerBeans = cidsBean.getBeanCollectionProperty("benutzer");
-                if (!benutzerBeans.isEmpty()) {
-                    final StringBuilder userListString = new StringBuilder("in (");
-                    for (final CidsBean benutzer : benutzerBeans) {
-                        userListString.append(benutzer.getProperty("id"));
-                        userListString.append(",");
-                    }
-                    // remove last comma
-                    userListString.deleteCharAt(userListString.length() - 1);
-                    userListString.append(")");
-                    query.append(userListString.toString());
-                } else {
-                    LOG.error("This customer has no users, that should not happen.");
-                }
-            } else {
-                query.append(" = " + userID + " ");
-            }
-        }
-
-        /**
-         * DOCUMENT ME!
-         */
-        private void appendGeschaeftsbuchnummer() {
-            if ((geschaeftsbuchnummer != null) && !geschaeftsbuchnummer.equals("")) {
-                query.append("and geschaeftsbuchnummer ilike '%" + geschaeftsbuchnummer + "%' ");
-            }
-        }
-
-        /**
-         * DOCUMENT ME!
-         */
-        private void appendProjekt() {
-            if ((projekt != null) && !projekt.equals("")) {
-                query.append("and projektbezeichnung ilike '%" + projekt + "%' ");
-            }
-        }
-
-        /**
-         * DOCUMENT ME!
-         */
-        private void appendVerwendungszweckKeys() {
-            if (!verwendungszweckKeys.isEmpty()) {
-                final StringBuilder verwendungszweckListString = new StringBuilder("(");
-                for (final String verwendungszweckKey : verwendungszweckKeys) {
-                    verwendungszweckListString.append(" '");
-                    verwendungszweckListString.append(verwendungszweckKey);
-                    verwendungszweckListString.append("',");
-                }
-                // remove last comma
-                verwendungszweckListString.deleteCharAt(verwendungszweckListString.length() - 1);
-                verwendungszweckListString.append(")");
-                query.append("and verwendungskey in " + verwendungszweckListString.toString() + " ");
-            }
-        }
-
-        /**
-         * DOCUMENT ME!
-         */
-        private void appendKostenart() {
-            switch (kostenart) {
-                case KOSTENFREI: {
-                    query.append("and gebuehrenpflichtig is false");
-                    break;
-                }
-                case KOSTENPFLICHTIG: {
-                    query.append("and gebuehrenpflichtig is true");
-                    break;
-                }
-            }
-        }
-
-        /**
-         * DOCUMENT ME!
-         */
-        private void appendDates() {
-            // check if there is a second date or if they are the same day
-            if ((till == null) || postgresDateFormat.format(from).equals(postgresDateFormat.format(till))) {
-                query.append(" and date_trunc('day',ts) = '");
-                query.append(postgresDateFormat.format(from));
-                query.append("' ");
-            } else { // create query for a time period
-                query.append(" and date_trunc('day',ts) >= '");
-                query.append(postgresDateFormat.format(from));
-                query.append("' ");
-                query.append(" and date_trunc('day',ts) <= '");
-                query.append(postgresDateFormat.format(till));
-                query.append("' ");
-            }
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public String getGeschaeftsbuchnummer() {
-            return geschaeftsbuchnummer;
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  geschaeftsbuchnummer  DOCUMENT ME!
-         */
-        public void setGeschaeftsbuchnummer(final String geschaeftsbuchnummer) {
-            this.geschaeftsbuchnummer = geschaeftsbuchnummer;
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public String getProjekt() {
-            return projekt;
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  projekt  DOCUMENT ME!
-         */
-        public void setProjekt(final String projekt) {
-            this.projekt = projekt;
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public String getUserID() {
-            return userID;
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  userID  DOCUMENT ME!
-         */
-        public void setUserID(final String userID) {
-            this.userID = userID;
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public ArrayList<String> getVerwendungszweckKeys() {
-            return verwendungszweckKeys;
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  verwendungszweckKeys  DOCUMENT ME!
-         */
-        public void setVerwendungszweckKeys(final ArrayList<String> verwendungszweckKeys) {
-            this.verwendungszweckKeys = verwendungszweckKeys;
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public Kostenart getKostenart() {
-            return kostenart;
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  kostenart  DOCUMENT ME!
-         */
-        public void setKostenart(final Kostenart kostenart) {
-            this.kostenart = kostenart;
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public Date getFrom() {
-            return from;
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  from  DOCUMENT ME!
-         */
-        public void setFrom(final Date from) {
-            this.from = from;
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public Date getTill() {
-            return till;
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @param  till  DOCUMENT ME!
-         */
-        public void setTill(final Date till) {
-            this.till = till;
         }
     }
 
