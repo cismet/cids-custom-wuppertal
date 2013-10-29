@@ -151,6 +151,7 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
 
         lblFlInMap.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblFlInMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom-best-fit.png"))); // NOI18N
+        lblFlInMap.setToolTipText(org.openide.util.NbBundle.getMessage(Boden_VorkaufsrechtEditorPanel.class, "Boden_VorkaufsrechtEditorPanel.lblFlInMap.toolTipText")); // NOI18N
         lblFlInMap.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblFlINMapMouseClicked(evt);
