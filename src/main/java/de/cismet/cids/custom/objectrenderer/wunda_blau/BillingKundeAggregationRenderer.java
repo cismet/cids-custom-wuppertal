@@ -693,38 +693,6 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         return aggregatedData;
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param billingBeans DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    private Double getNettoSumOfBillingBeans(final Collection<CidsBean> billingBeans) {
-        double netto_sum = 0.0;
-        for (final CidsBean billingBean : billingBeans) {
-            netto_sum += (Double) billingBean.getProperty("netto_summe");
-        }
-        return netto_sum;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param billingBeans DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    private Object getAmountOfBillingsWithCosts(final Collection<CidsBean> billingBeans) {
-        int amount = 0;
-        for (final CidsBean billingBean : billingBeans) {
-            if ((Double) billingBean.getProperty("netto_summe") > 0) {
-                amount += 1;
-            }
-        }
-        return amount;
-    }
-
     @Override
     public void dispose() {
     }
@@ -803,7 +771,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
          */
         @Override
         public boolean isCellEditable(final int row, final int column) {
-            if (row == 1) {
+            if (column == 1) {
                 return true;
             } else {
                 return false;
