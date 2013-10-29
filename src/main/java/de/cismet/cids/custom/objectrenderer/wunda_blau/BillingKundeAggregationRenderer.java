@@ -20,9 +20,16 @@ import Sirius.server.middleware.types.MetaObject;
 import org.apache.log4j.Logger;
 
 import org.openide.util.Exceptions;
+import org.openide.util.NbBundle;
 
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
+
+import java.math.BigDecimal;
+
+import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,6 +37,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.AbstractAction;
@@ -75,6 +83,8 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
             "kostenpflichtige Downloads",
         };
 
+    private static DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
+
     //~ Instance fields --------------------------------------------------------
 
     private Collection<CidsBean> cidsBeans = null;
@@ -97,6 +107,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAgrTitle;
+    private javax.swing.JLabel lblFilterResult;
     private javax.swing.JPanel panTitle;
     private javax.swing.JPanel panTitleString;
     private javax.swing.JPanel pnlBusyLable;
@@ -108,7 +119,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
     private de.cismet.cids.custom.objectrenderer.utils.billing.VerwendungszweckPanel pnlVerwendungszweck;
     private de.cismet.tools.gui.SemiRoundedPanel smiplFilter;
     private de.cismet.tools.gui.SemiRoundedPanel smiplTable;
-    private javax.swing.JTable tblBillings;
+    private javax.swing.JTable tblCustomers;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -145,7 +156,8 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         blblBusy = new org.jdesktop.swingx.JXBusyLabel();
         pnlFilterResults = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblBillings = new javax.swing.JTable();
+        tblCustomers = new javax.swing.JTable();
+        lblFilterResult = new javax.swing.JLabel();
         pnlFilters = new javax.swing.JPanel();
         btnShowResults = new javax.swing.JButton();
         pnlTimeFilters = new de.cismet.cids.custom.objectrenderer.utils.billing.TimeFilterPanel();
@@ -244,7 +256,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
 
         jScrollPane1.setMinimumSize(new java.awt.Dimension(453, 275));
 
-        tblBillings.setModel(new javax.swing.table.DefaultTableModel(
+        tblCustomers.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][] {
                     { null, null, null, null },
                     { null, null, null, null },
@@ -252,25 +264,25 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                     { null, null, null, null }
                 },
                 new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
-        tblBillings.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblCustomers.addMouseListener(new java.awt.event.MouseAdapter() {
 
                 @Override
                 public void mouseClicked(final java.awt.event.MouseEvent evt) {
-                    tblBillingsMouseClicked(evt);
+                    tblCustomersMouseClicked(evt);
                 }
                 @Override
                 public void mouseExited(final java.awt.event.MouseEvent evt) {
-                    tblBillingsMouseExited(evt);
+                    tblCustomersMouseExited(evt);
                 }
             });
-        tblBillings.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+        tblCustomers.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
 
                 @Override
                 public void mouseMoved(final java.awt.event.MouseEvent evt) {
-                    tblBillingsMouseMoved(evt);
+                    tblCustomersMouseMoved(evt);
                 }
             });
-        jScrollPane1.setViewportView(tblBillings);
+        jScrollPane1.setViewportView(tblCustomers);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -280,6 +292,18 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 10, 0);
         pnlFilterResults.add(jScrollPane1, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblFilterResult,
+            org.openide.util.NbBundle.getMessage(
+                BillingKundeAggregationRenderer.class,
+                "BillingKundeAggregationRenderer.lblFilterResult.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
+        pnlFilterResults.add(lblFilterResult, gridBagConstraints);
 
         pnlTable.add(pnlFilterResults, "table");
 
@@ -476,24 +500,24 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblBillingsMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_tblBillingsMouseClicked
-    }                                                                           //GEN-LAST:event_tblBillingsMouseClicked
+    private void tblCustomersMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_tblCustomersMouseClicked
+    }                                                                            //GEN-LAST:event_tblCustomersMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblBillingsMouseExited(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_tblBillingsMouseExited
-    }                                                                          //GEN-LAST:event_tblBillingsMouseExited
+    private void tblCustomersMouseExited(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_tblCustomersMouseExited
+    }                                                                           //GEN-LAST:event_tblCustomersMouseExited
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblBillingsMouseMoved(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_tblBillingsMouseMoved
-    }                                                                         //GEN-LAST:event_tblBillingsMouseMoved
+    private void tblCustomersMouseMoved(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_tblCustomersMouseMoved
+    }                                                                          //GEN-LAST:event_tblCustomersMouseMoved
 
     /**
      * DOCUMENT ME!
@@ -631,12 +655,14 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                         } else if (metaObjects.isEmpty()) {
                             LOG.info("No Billing metaobjects found.");
                             fillCustomerTable(new ArrayList<CidsBean>());
+                            lblFilterResult.setText(generateFilterResultText(new ArrayList<CidsBean>()));
                         } else {
                             final List<CidsBean> billingBeans = new ArrayList<CidsBean>(metaObjects.size());
                             for (final MetaObject mo : metaObjects) {
                                 billingBeans.add(mo.getBean());
                             }
                             fillCustomerTable(billingBeans);
+                            lblFilterResult.setText(generateFilterResultText(billingBeans));
                         }
                     } catch (InterruptedException ex) {
                         LOG.error("Error while filtering the billings.", ex);
@@ -672,6 +698,47 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
     /**
      * DOCUMENT ME!
      *
+     * @param   billingBeans  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private String generateFilterResultText(final Collection<CidsBean> billingBeans) {
+        if (billingBeans.isEmpty()) {
+            return NbBundle.getMessage(
+                    BillingKundeRenderer.class,
+                    "BillingKundeRenderer.generateFilterResultText().noBillings");
+        } else {
+            final Date[] fromDate_tillDate = pnlTimeFilters.chooseDates();
+            final Date from = fromDate_tillDate[0];
+            final Date till = fromDate_tillDate[1];
+
+            final StringBuilder text = new StringBuilder(NbBundle.getMessage(
+                        BillingKundeRenderer.class,
+                        "BillingKundeAggregationRenderer.generateFilterResultText().billings1"));
+            if ((till == null) || from.equals(till)) {
+                text.append(NbBundle.getMessage(
+                        BillingKundeRenderer.class,
+                        "BillingKundeAggregationRenderer.generateFilterResultText().billings2.oneDate"));
+                text.append(DATE_FORMAT.format(from));
+                text.append(".");
+            } else {
+                text.append(NbBundle.getMessage(
+                        BillingKundeRenderer.class,
+                        "BillingKundeAggregationRenderer.generateFilterResultText().billings2.twoDates1"));
+                text.append(DATE_FORMAT.format(from));
+                text.append(NbBundle.getMessage(
+                        BillingKundeRenderer.class,
+                        "BillingKundeAggregationRenderer.generateFilterResultText().billings2.twoDates2"));
+                text.append(DATE_FORMAT.format(till));
+                text.append(".");
+            }
+            return text.toString();
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param  billingBeans  DOCUMENT ME!
      */
     private void fillCustomerTable(final Collection<CidsBean> billingBeans) {
@@ -681,12 +748,12 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         final AggregatedBillingTableModel tableModel = new AggregatedBillingTableModel(
                 tableData.toArray(new Object[tableData.size()][]),
                 AGR_COMLUMN_NAMES);
-        tblBillings.setModel(tableModel);
+        tblCustomers.setModel(tableModel);
         if (!tableData.isEmpty()) {
-            final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tblBillings.getModel());
-            tblBillings.setRowSorter(sorter);
+            final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tblCustomers.getModel());
+            tblCustomers.setRowSorter(sorter);
         } else {
-            tblBillings.setRowSorter(null);
+            tblCustomers.setRowSorter(null);
         }
     }
 

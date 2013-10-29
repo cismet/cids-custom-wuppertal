@@ -867,7 +867,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
                         BillingKundeRenderer.class,
                         "BillingKundeRenderer.generateFilterResultText().billings3.moreBillings"));
             }
-            if (till == null) {
+            if ((till == null) || from.equals(till)) {
                 text.append(NbBundle.getMessage(
                         BillingKundeRenderer.class,
                         "BillingKundeRenderer.generateFilterResultText().billings4.oneDate"));
