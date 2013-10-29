@@ -120,12 +120,12 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblFilterResult;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JPanel panTitle;
     private javax.swing.JPanel pnlBusyLable;
+    private javax.swing.JPanel pnlFilterResults;
     private javax.swing.JPanel pnlFilters;
     private javax.swing.JPanel pnlKostenart;
     private javax.swing.JPanel pnlTable;
@@ -209,7 +209,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         pnlTable = new javax.swing.JPanel();
         pnlBusyLable = new javax.swing.JPanel();
         blblBusy = new org.jdesktop.swingx.JXBusyLabel();
-        jPanel4 = new javax.swing.JPanel();
+        pnlFilterResults = new javax.swing.JPanel();
         lblFilterResult = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblBillings = new javax.swing.JTable();
@@ -495,7 +495,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
 
         pnlTable.add(pnlBusyLable, "busy");
 
-        jPanel4.setLayout(new java.awt.GridBagLayout());
+        pnlFilterResults.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblFilterResult,
@@ -507,7 +507,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
-        jPanel4.add(lblFilterResult, gridBagConstraints);
+        pnlFilterResults.add(lblFilterResult, gridBagConstraints);
 
         jScrollPane1.setMinimumSize(new java.awt.Dimension(453, 275));
 
@@ -568,9 +568,9 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 10, 0);
-        jPanel4.add(jScrollPane1, gridBagConstraints);
+        pnlFilterResults.add(jScrollPane1, gridBagConstraints);
 
-        pnlTable.add(jPanel4, "table");
+        pnlTable.add(pnlFilterResults, "table");
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -587,49 +587,49 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtGeschaeftsbuchnummerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGeschaeftsbuchnummerActionPerformed
+    private void txtGeschaeftsbuchnummerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtGeschaeftsbuchnummerActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtGeschaeftsbuchnummerActionPerformed
+    } //GEN-LAST:event_txtGeschaeftsbuchnummerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboKostenfreiActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboKostenfreiActionPerformed
+    private void cboKostenfreiActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboKostenfreiActionPerformed
         if (!cboKostenfrei.isSelected() && !cboKostenpflichtig.isSelected()) {
             cboKostenpflichtig.setSelected(true);
         }
         filterBuchungen_placeHolder();
-    }//GEN-LAST:event_cboKostenfreiActionPerformed
+    }                                                                                 //GEN-LAST:event_cboKostenfreiActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboKostenpflichtigActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboKostenpflichtigActionPerformed
+    private void cboKostenpflichtigActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboKostenpflichtigActionPerformed
         if (!cboKostenfrei.isSelected() && !cboKostenpflichtig.isSelected()) {
             cboKostenfrei.setSelected(true);
         }
         filterBuchungen_placeHolder();
-    }//GEN-LAST:event_cboKostenpflichtigActionPerformed
+    }                                                                                      //GEN-LAST:event_cboKostenpflichtigActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboBenutzerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboBenutzerActionPerformed
+    private void cboBenutzerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboBenutzerActionPerformed
         filterBuchungen_placeHolder();
-    }//GEN-LAST:event_cboBenutzerActionPerformed
+    }                                                                               //GEN-LAST:event_cboBenutzerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblBillingsMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBillingsMouseClicked
+    private void tblBillingsMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_tblBillingsMouseClicked
         final int row = tblBillings.convertRowIndexToModel(tblBillings.getSelectedRow());
         final int column = tblBillings.convertColumnIndexToModel(tblBillings.getSelectedColumn());
         if (column == 6) {
@@ -639,14 +639,14 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
                 doDownload(request);
             }
         }
-    }//GEN-LAST:event_tblBillingsMouseClicked
+    }                                                                           //GEN-LAST:event_tblBillingsMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblBillingsMouseMoved(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBillingsMouseMoved
+    private void tblBillingsMouseMoved(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_tblBillingsMouseMoved
         final int row = tblBillings.convertRowIndexToModel(tblBillings.rowAtPoint(evt.getPoint()));
         final int column = tblBillings.convertColumnIndexToModel(tblBillings.columnAtPoint(evt.getPoint()));
         if (column == 6) {
@@ -660,25 +660,25 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         } else {
             setCursor(Cursor.getDefaultCursor());
         }
-    }//GEN-LAST:event_tblBillingsMouseMoved
+    }                                                                         //GEN-LAST:event_tblBillingsMouseMoved
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblBillingsMouseExited(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBillingsMouseExited
+    private void tblBillingsMouseExited(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_tblBillingsMouseExited
         setCursor(Cursor.getDefaultCursor());
-    }//GEN-LAST:event_tblBillingsMouseExited
+    }                                                                          //GEN-LAST:event_tblBillingsMouseExited
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnShowResultsActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowResultsActionPerformed
+    private void btnShowResultsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnShowResultsActionPerformed
         filterBuchungen(false);
-    }//GEN-LAST:event_btnShowResultsActionPerformed
+    }                                                                                  //GEN-LAST:event_btnShowResultsActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -702,7 +702,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
 
             cboBenutzer.setModel(new DefaultComboBoxModel());
             cboBenutzer.addItem("");
-            for (final CidsBean benutzerBean : cidsBean.getBeanCollectionProperty("benutzer")) {
+            for (final CidsBean benutzerBean : cidsBean.getBeanCollectionProperty("benutzer_n")) {
                 cboBenutzer.addItem(benutzerBean);
             }
 
