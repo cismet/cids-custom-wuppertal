@@ -36,6 +36,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -745,6 +746,15 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
     @Override
     public JComponent getTitleComponent() {
         return panTitle;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public JLabel getTitleLabel() {
+        return lblAgrTitle;
     }
 
     /**
