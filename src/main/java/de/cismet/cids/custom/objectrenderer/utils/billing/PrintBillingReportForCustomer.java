@@ -11,6 +11,8 @@
  */
 package de.cismet.cids.custom.objectrenderer.utils.billing;
 
+import org.apache.log4j.Logger;
+
 import java.math.BigDecimal;
 
 import java.util.ArrayList;
@@ -29,13 +31,19 @@ import de.cismet.cids.dynamics.CidsBean;
  */
 public class PrintBillingReportForCustomer {
 
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final Logger LOG = Logger.getLogger(PrintBillingReportForCustomer.class);
+
     //~ Instance fields --------------------------------------------------------
 
     private HashMap<Double, HashMap<String, Object>> billingInformation;
     private CidsBean kundeBean;
     private BigDecimal totalSum;
     private Date[] fromDate_tillDate;
+    private Collection<CidsBean> billingsBeans;
     private boolean isRechnungsanlage;
+    private boolean markBillingsAsBilled;
     private int amountTotalDownloads = 0;
     private int amountWithCosts = 0;
     private int amountWithoutCosts = 0;
@@ -48,19 +56,23 @@ public class PrintBillingReportForCustomer {
     /**
      * Creates a new StartReportForCustomer object.
      *
-     * @param  kundeBean          DOCUMENT ME!
-     * @param  billingsBeans      DOCUMENT ME!
-     * @param  fromDate_tillDate  DOCUMENT ME!
-     * @param  isRechnungsanlage  DOCUMENT ME!
+     * @param  kundeBean             DOCUMENT ME!
+     * @param  billingsBeans         DOCUMENT ME!
+     * @param  fromDate_tillDate     DOCUMENT ME!
+     * @param  isRechnungsanlage     DOCUMENT ME!
+     * @param  markBillingsAsBilled  DOCUMENT ME!
      */
     public PrintBillingReportForCustomer(final CidsBean kundeBean,
             final Collection<CidsBean> billingsBeans,
             final Date[] fromDate_tillDate,
-            final boolean isRechnungsanlage) {
+            final boolean isRechnungsanlage,
+            final boolean markBillingsAsBilled) {
         this.kundeBean = kundeBean;
         this.fromDate_tillDate = fromDate_tillDate;
         totalSum = generateStatisticsForTheReport(billingsBeans);
         this.isRechnungsanlage = isRechnungsanlage;
+        this.markBillingsAsBilled = markBillingsAsBilled;
+        this.billingsBeans = billingsBeans;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -111,6 +123,10 @@ public class PrintBillingReportForCustomer {
                     amountVUhoheitlicheVermessung,
                     amountVUsonstige);
             report.print();
+
+            if (isRechnungsanlage && markBillingsAsBilled) {
+                markBillings();
+            }
         }
     }
 
@@ -207,6 +223,20 @@ public class PrintBillingReportForCustomer {
             amountVUhoheitlicheVermessung++;
         } else if (verwendungsKey.equals("VU s")) {
             amountVUsonstige++;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void markBillings() {
+        for (final CidsBean billing : billingsBeans) {
+            try {
+                billing.setProperty("abgerechnet", Boolean.TRUE);
+                billing.persist();
+            } catch (Exception ex) {
+                LOG.error("Errer while setting value or persist of billing.", ex);
+            }
         }
     }
 }
