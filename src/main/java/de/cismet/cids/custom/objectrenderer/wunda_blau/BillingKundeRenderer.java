@@ -61,7 +61,7 @@ import javax.swing.table.TableRowSorter;
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.objectrenderer.utils.billing.StartReportForCustomer;
+import de.cismet.cids.custom.objectrenderer.utils.billing.PrintBillingReportForCustomer;
 import de.cismet.cids.custom.objectrenderer.utils.billing.Usage;
 import de.cismet.cids.custom.objectrenderer.utils.billing.VerwendungszweckPanel;
 import de.cismet.cids.custom.reports.wunda_blau.BillingBuchungsbelegReport;
@@ -759,6 +759,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
      * @param  evt  DOCUMENT ME!
      */
     private void btnRechnungsanlageActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRechnungsanlageActionPerformed
+        new PrintBillingReportForCustomer(cidsBean, filteredBuchungen, fromDate_tillDate, true).print();
     }                                                                                      //GEN-LAST:event_btnRechnungsanlageActionPerformed
 
     /**
@@ -767,7 +768,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
      * @param  evt  DOCUMENT ME!
      */
     private void btnBuchungsbelegActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBuchungsbelegActionPerformed
-        new StartReportForCustomer(cidsBean, filteredBuchungen, fromDate_tillDate);
+        new PrintBillingReportForCustomer(cidsBean, filteredBuchungen, fromDate_tillDate, false).print();
     }                                                                                    //GEN-LAST:event_btnBuchungsbelegActionPerformed
 
     /**

@@ -15,14 +15,18 @@
 	<parameter name="netto_summe_19" class="java.math.BigDecimal"/>
 	<parameter name="brutto_summe_19" class="java.math.BigDecimal"/>
 	<parameter name="end_summe" class="java.math.BigDecimal"/>
+	<parameter name="isRechnungsanlage" class="java.lang.Boolean"/>
+	<parameter name="amountTotalDownloads" class="java.lang.Integer"/>
+	<parameter name="amountWithCosts" class="java.lang.Integer"/>
+	<parameter name="amountWithoutCosts" class="java.lang.Integer"/>
+	<parameter name="amountVUamtlicherLageplan" class="java.lang.Integer"/>
+	<parameter name="amountVUhoheitlicheVermessung" class="java.lang.Integer"/>
+	<parameter name="amountVUsonstige" class="java.lang.Integer"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="79" splitType="Stretch"/>
-	</title>
-	<pageHeader>
-		<band height="79" splitType="Stretch">
+		<band height="261" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="373" height="20"/>
 				<textElement/>
@@ -43,15 +47,83 @@
 				<textElement/>
 				<textFieldExpression class="java.util.Date"><![CDATA[$P{till}]]></textFieldExpression>
 			</textField>
+			<frame>
+				<reportElement x="0" y="81" width="555" height="159">
+					<printWhenExpression><![CDATA[$P{isRechnungsanlage}]]></printWhenExpression>
+				</reportElement>
+				<textField>
+					<reportElement x="114" y="0" width="230" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountTotalDownloads}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="114" y="20" width="230" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountWithCosts}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="114" y="40" width="230" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountWithoutCosts}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="114" y="73" width="230" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountVUamtlicherLageplan}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="114" y="93" width="230" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountVUhoheitlicheVermessung}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="114" y="113" width="230" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountVUsonstige}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="0" width="100" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA["Downloads ohne WV"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="40" width="100" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA["kostenfrei"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="20" width="100" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA["kostenpflichtig"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="73" width="100" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA["VU aL"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="113" width="100" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA["VU s"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="93" width="100" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA["VU hV"]]></textFieldExpression>
+				</textField>
+			</frame>
 		</band>
+	</title>
+	<pageHeader>
+		<band height="4" splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="30" splitType="Stretch"/>
+		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="130" splitType="Stretch">
+		<band height="92" splitType="Stretch">
 			<subreport>
-				<reportElement positionType="Float" x="0" y="86" width="555" height="44"/>
+				<reportElement positionType="Float" x="0" y="44" width="555" height="44"/>
 				<subreportParameter name="brutto_summe">
 					<subreportParameterExpression><![CDATA[$P{brutto_summe_19}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -65,7 +137,7 @@
 				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "buchungsbeleg_mwst.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement positionType="Float" x="0" y="20" width="555" height="44"/>
+				<reportElement positionType="Float" x="0" y="0" width="555" height="44"/>
 				<subreportParameter name="mwst">
 					<subreportParameterExpression><![CDATA[$P{mwst_0}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -78,31 +150,21 @@
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource((Collection)$P{billingBeans_mwst0})]]></dataSourceExpression>
 				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "buchungsbeleg_mwst.jasper"]]></subreportExpression>
 			</subreport>
-			<textField>
-				<reportElement positionType="Float" x="0" y="0" width="100" height="20"/>
-				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA["mwst 0"]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement positionType="Float" x="0" y="66" width="100" height="20"/>
-				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA["mwst 19"]]></textFieldExpression>
-			</textField>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="23" splitType="Stretch">
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="2" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="27" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="3" width="100" height="20"/>
+				<reportElement x="0" y="0" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{end_summe}]]></textFieldExpression>
 			</textField>
 		</band>
-	</columnFooter>
-	<pageFooter>
-		<band height="54" splitType="Stretch"/>
-	</pageFooter>
-	<summary>
-		<band height="42" splitType="Stretch"/>
 	</summary>
 </jasperReport>

@@ -48,7 +48,7 @@ import javax.swing.table.TableRowSorter;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
-import de.cismet.cids.custom.objectrenderer.utils.billing.StartReportForCustomer;
+import de.cismet.cids.custom.objectrenderer.utils.billing.PrintBillingReportForCustomer;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement.Kostenart;
 
@@ -552,6 +552,13 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
             org.openide.util.NbBundle.getMessage(
                 BillingKundeAggregationRenderer.class,
                 "BillingKundeAggregationRenderer.btnRechnungsanlage.text")); // NOI18N
+        btnRechnungsanlage.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnRechnungsanlageActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -665,9 +672,23 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
     private void btnBuchungsbelegActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBuchungsbelegActionPerformed
         final HashMap<CidsBean, Collection<CidsBean>> billingsOfCustomers = createBillingsOfCostumersForReports();
         for (final CidsBean kundeBean : billingsOfCustomers.keySet()) {
-            new StartReportForCustomer(kundeBean, billingsOfCustomers.get(kundeBean), fromDate_tillDate);
+            new PrintBillingReportForCustomer(kundeBean, billingsOfCustomers.get(kundeBean), fromDate_tillDate, false)
+                    .print();
         }
     }                                                                                    //GEN-LAST:event_btnBuchungsbelegActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnRechnungsanlageActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRechnungsanlageActionPerformed
+        final HashMap<CidsBean, Collection<CidsBean>> billingsOfCustomers = createBillingsOfCostumersForReports();
+        for (final CidsBean kundeBean : billingsOfCustomers.keySet()) {
+            new PrintBillingReportForCustomer(kundeBean, billingsOfCustomers.get(kundeBean), fromDate_tillDate, true)
+                    .print();
+        }
+    }                                                                                      //GEN-LAST:event_btnRechnungsanlageActionPerformed
 
     /**
      * DOCUMENT ME!

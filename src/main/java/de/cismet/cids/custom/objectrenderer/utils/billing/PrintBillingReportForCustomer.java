@@ -27,12 +27,21 @@ import de.cismet.cids.dynamics.CidsBean;
  *
  * @version  $Revision$, $Date$
  */
-public class StartReportForCustomer {
+public class PrintBillingReportForCustomer {
 
     //~ Instance fields --------------------------------------------------------
 
     private HashMap<Double, HashMap<String, Object>> billingInformation;
+    private CidsBean kundeBean;
     private BigDecimal totalSum;
+    private Date[] fromDate_tillDate;
+    private boolean isRechnungsanlage;
+    private int amountTotalDownloads = 0;
+    private int amountWithCosts = 0;
+    private int amountWithoutCosts = 0;
+    private int amountVUamtlicherLageplan = 0;
+    private int amountVUhoheitlicheVermessung = 0;
+    private int amountVUsonstige = 0;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -42,12 +51,24 @@ public class StartReportForCustomer {
      * @param  kundeBean          DOCUMENT ME!
      * @param  billingsBeans      DOCUMENT ME!
      * @param  fromDate_tillDate  DOCUMENT ME!
+     * @param  isRechnungsanlage  DOCUMENT ME!
      */
-    public StartReportForCustomer(final CidsBean kundeBean,
+    public PrintBillingReportForCustomer(final CidsBean kundeBean,
             final Collection<CidsBean> billingsBeans,
-            final Date[] fromDate_tillDate) {
-        totalSum = calculateTotalSumFromBillings(billingsBeans);
+            final Date[] fromDate_tillDate,
+            final boolean isRechnungsanlage) {
+        this.kundeBean = kundeBean;
+        this.fromDate_tillDate = fromDate_tillDate;
+        totalSum = generateStatisticsForTheReport(billingsBeans);
+        this.isRechnungsanlage = isRechnungsanlage;
+    }
 
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void print() {
         Collection<CidsBean> filteredBuchungen_mwst0 = new ArrayList<CidsBean>();
         BigDecimal nettoSum_0 = null;
         BigDecimal bruttoSum_0 = null;
@@ -81,12 +102,17 @@ public class StartReportForCustomer {
                     bruttoSum_19,
                     fromDate_tillDate[0],
                     fromDate_tillDate[1],
-                    totalSum);
+                    totalSum,
+                    isRechnungsanlage,
+                    amountTotalDownloads,
+                    amountWithCosts,
+                    amountWithoutCosts,
+                    amountVUamtlicherLageplan,
+                    amountVUhoheitlicheVermessung,
+                    amountVUsonstige);
             report.print();
         }
     }
-
-    //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!
@@ -95,7 +121,7 @@ public class StartReportForCustomer {
      *
      * @return  DOCUMENT ME!
      */
-    private BigDecimal calculateTotalSumFromBillings(final Collection<CidsBean> billingBeans) {
+    private BigDecimal generateStatisticsForTheReport(final Collection<CidsBean> billingBeans) {
         final HashMap<BigDecimal, BigDecimal> mwstSatz_nettoSum = new HashMap<BigDecimal, BigDecimal>();
         billingInformation = new HashMap<Double, HashMap<String, Object>>();
 
@@ -126,6 +152,7 @@ public class StartReportForCustomer {
                 mwstSatz_nettoSum.put(mwst_satz, netto_summe);
             }
 
+            // add the billing to the right MwSt-category
             if (!billingInformation.containsKey(mwst_satz.doubleValue())) {
                 final HashMap<String, Object> information = new HashMap<String, Object>();
                 final Collection<CidsBean> billings = new ArrayList<CidsBean>();
@@ -135,6 +162,8 @@ public class StartReportForCustomer {
             } else {
                 ((Collection)billingInformation.get(mwst_satz.doubleValue()).get("billings")).add(billing);
             }
+
+            setCountersDependingOnVerwendungszweck(billing);
         }
 
         // calculate the brutto sum from each netto_sum
@@ -152,5 +181,32 @@ public class StartReportForCustomer {
             billingInformation.get(mwst_satz.doubleValue()).put("brutto_summe", bruttoSum);
         }
         return totalSum;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  billing  DOCUMENT ME!
+     */
+    private void setCountersDependingOnVerwendungszweck(final CidsBean billing) {
+        final String verwendungsKey = (String)billing.getProperty("verwendungskey");
+        if (verwendungsKey.startsWith("WV")) {
+            // the total amount of downloads is without the Wiederverkauf
+            return;
+        }
+        amountTotalDownloads++;
+        final Double nettoSum = (Double)billing.getProperty("netto_summe");
+        if (nettoSum > 0) {
+            amountWithCosts++;
+        } else {
+            amountWithoutCosts++;
+        }
+        if (verwendungsKey.equals("VU aL")) {
+            amountVUamtlicherLageplan++;
+        } else if (verwendungsKey.equals("VU hV")) {
+            amountVUhoheitlicheVermessung++;
+        } else if (verwendungsKey.equals("VU s")) {
+            amountVUsonstige++;
+        }
     }
 }

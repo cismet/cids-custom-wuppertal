@@ -49,6 +49,13 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
     private Date from;
     private Date till;
     private BigDecimal totalSum;
+    private boolean isRechnungsanlage;
+    private int amountTotalDownloads;
+    private int amountWithCosts;
+    private int amountWithoutCosts;
+    private int amountVUamtlicherLageplan;
+    private int amountVUhoheitlicheVermessung;
+    private int amountVUsonstige;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -77,6 +84,64 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
             final Date from,
             final Date till,
             final BigDecimal totalSum) {
+        this(
+            kundeBean,
+            billingBeans_mwst0,
+            netto_summe_0,
+            brutto_summe_0,
+            billingBeans_mwst19,
+            netto_summe_19,
+            brutto_summe_19,
+            from,
+            till,
+            totalSum,
+            false,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0);
+    }
+    /**
+     * Creates a new BillingBuchungsbelegReport object.
+     *
+     * @param  kundeBean                      DOCUMENT ME!
+     * @param  billingBeans_mwst0             DOCUMENT ME!
+     * @param  netto_summe_0                  DOCUMENT ME!
+     * @param  brutto_summe_0                 DOCUMENT ME!
+     * @param  billingBeans_mwst19            DOCUMENT ME!
+     * @param  netto_summe_19                 DOCUMENT ME!
+     * @param  brutto_summe_19                DOCUMENT ME!
+     * @param  from                           DOCUMENT ME!
+     * @param  till                           DOCUMENT ME!
+     * @param  totalSum                       DOCUMENT ME!
+     * @param  isRechnungsanlage              DOCUMENT ME!
+     * @param  amountTotalDownloads           DOCUMENT ME!
+     * @param  amountWithCosts                DOCUMENT ME!
+     * @param  amountWithoutCosts             DOCUMENT ME!
+     * @param  amountVUamtlicherLageplan      DOCUMENT ME!
+     * @param  amountVUhoheitlicheVermessung  DOCUMENT ME!
+     * @param  amountVUsonstige               DOCUMENT ME!
+     */
+    public BillingBuchungsbelegReport(
+            final CidsBean kundeBean,
+            final Collection<CidsBean> billingBeans_mwst0,
+            final BigDecimal netto_summe_0,
+            final BigDecimal brutto_summe_0,
+            final Collection<CidsBean> billingBeans_mwst19,
+            final BigDecimal netto_summe_19,
+            final BigDecimal brutto_summe_19,
+            final Date from,
+            final Date till,
+            final BigDecimal totalSum,
+            final boolean isRechnungsanlage,
+            final int amountTotalDownloads,
+            final int amountWithCosts,
+            final int amountWithoutCosts,
+            final int amountVUamtlicherLageplan,
+            final int amountVUhoheitlicheVermessung,
+            final int amountVUsonstige) {
         super(REPORT_URL, kundeBean);
 
         this.kundeBean = kundeBean;
@@ -103,6 +168,15 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
         this.till = till;
 
         this.totalSum = totalSum;
+
+        this.isRechnungsanlage = isRechnungsanlage;
+
+        this.amountTotalDownloads = amountTotalDownloads;
+        this.amountWithCosts = amountWithCosts;
+        this.amountWithoutCosts = amountWithoutCosts;
+        this.amountVUamtlicherLageplan = amountVUamtlicherLageplan;
+        this.amountVUhoheitlicheVermessung = amountVUhoheitlicheVermessung;
+        this.amountVUsonstige = amountVUsonstige;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -129,6 +203,15 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
         }
 
         params.put("end_summe", totalSum);
+
+        params.put("isRechnungsanlage", isRechnungsanlage);
+
+        params.put("amountTotalDownloads", amountTotalDownloads);
+        params.put("amountWithCosts", amountWithCosts);
+        params.put("amountWithoutCosts", amountWithoutCosts);
+        params.put("amountVUamtlicherLageplan", amountVUamtlicherLageplan);
+        params.put("amountVUhoheitlicheVermessung", amountVUhoheitlicheVermessung);
+        params.put("amountVUsonstige", amountVUsonstige);
 
         return params;
     }
