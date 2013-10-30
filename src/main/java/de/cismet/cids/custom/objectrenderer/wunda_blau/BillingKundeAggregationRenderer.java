@@ -25,10 +25,7 @@ import org.openide.util.NbBundle;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 
-import java.math.BigDecimal;
-
 import java.text.DateFormat;
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
@@ -37,7 +34,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.AbstractAction;
@@ -52,6 +48,7 @@ import javax.swing.table.TableRowSorter;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
+import de.cismet.cids.custom.objectrenderer.utils.billing.StartReportForCustomer;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement.Kostenart;
 
@@ -82,13 +79,14 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
             "aggregierter Preis",
             "kostenpflichtige Downloads",
         };
-
     private static DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
 
     //~ Instance fields --------------------------------------------------------
 
     private Collection<CidsBean> cidsBeans = null;
     private Collection<Object[]> tableData;
+    private List<CidsBean> filteredBillingBeans;
+    private Date[] fromDate_tillDate;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXBusyLabel blblBusy;
     private javax.swing.JButton btnBuchungsbeleg;
@@ -110,8 +108,6 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAgrTitle;
     private javax.swing.JLabel lblFilterResult;
@@ -124,6 +120,8 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
     private javax.swing.JPanel pnlTable;
     private de.cismet.cids.custom.objectrenderer.utils.billing.TimeFilterPanel pnlTimeFilters;
     private de.cismet.cids.custom.objectrenderer.utils.billing.VerwendungszweckPanel pnlVerwendungszweck;
+    private javax.swing.JRadioButton rdbAllDownloads;
+    private javax.swing.JRadioButton rdbOnlyDownloadsWithCosts;
     private de.cismet.tools.gui.SemiRoundedPanel smiplFilter;
     private de.cismet.tools.gui.SemiRoundedPanel smiplTable;
     private javax.swing.JTable tblCustomers;
@@ -185,8 +183,8 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         pnlVerwendungszweck = new de.cismet.cids.custom.objectrenderer.utils.billing.VerwendungszweckPanel();
         jPanel5 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        rdbAllDownloads = new javax.swing.JRadioButton();
+        rdbOnlyDownloadsWithCosts = new javax.swing.JRadioButton();
         cboBillDownloads = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         btnBuchungsbeleg = new javax.swing.JButton();
@@ -482,25 +480,25 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
 
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
-        btngWithCosts.add(jRadioButton1);
+        btngWithCosts.add(rdbAllDownloads);
         org.openide.awt.Mnemonics.setLocalizedText(
-            jRadioButton1,
+            rdbAllDownloads,
             org.openide.util.NbBundle.getMessage(
                 BillingKundeAggregationRenderer.class,
-                "BillingKundeAggregationRenderer.jRadioButton1.text")); // NOI18N
+                "BillingKundeAggregationRenderer.rdbAllDownloads.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
-        jPanel4.add(jRadioButton1, gridBagConstraints);
+        jPanel4.add(rdbAllDownloads, gridBagConstraints);
 
-        btngWithCosts.add(jRadioButton2);
-        jRadioButton2.setSelected(true);
+        btngWithCosts.add(rdbOnlyDownloadsWithCosts);
+        rdbOnlyDownloadsWithCosts.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(
-            jRadioButton2,
+            rdbOnlyDownloadsWithCosts,
             org.openide.util.NbBundle.getMessage(
                 BillingKundeAggregationRenderer.class,
-                "BillingKundeAggregationRenderer.jRadioButton2.text")); // NOI18N
-        jPanel4.add(jRadioButton2, new java.awt.GridBagConstraints());
+                "BillingKundeAggregationRenderer.rdbOnlyDownloadsWithCosts.text")); // NOI18N
+        jPanel4.add(rdbOnlyDownloadsWithCosts, new java.awt.GridBagConstraints());
 
         org.openide.awt.Mnemonics.setLocalizedText(
             cboBillDownloads,
@@ -665,6 +663,10 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
      * @param  evt  DOCUMENT ME!
      */
     private void btnBuchungsbelegActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBuchungsbelegActionPerformed
+        final HashMap<CidsBean, Collection<CidsBean>> billingsOfCustomers = createBillingsOfCostumersForReports();
+        for (final CidsBean kundeBean : billingsOfCustomers.keySet()) {
+            new StartReportForCustomer(kundeBean, billingsOfCustomers.get(kundeBean), fromDate_tillDate);
+        }
     }                                                                                    //GEN-LAST:event_btnBuchungsbelegActionPerformed
 
     /**
@@ -702,7 +704,6 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
             filterBuchungen(true);
         }
     }
-
     /**
      * DOCUMENT ME!
      *
@@ -720,7 +721,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
             cidsBillingSearchStatement.setVerwendungszweckKeys(
                 pnlVerwendungszweck.createSelectedVerwendungszweckKeysStringArray());
             cidsBillingSearchStatement.setKostenart(chooseKostenart());
-            final Date[] fromDate_tillDate = pnlTimeFilters.chooseDates();
+            fromDate_tillDate = pnlTimeFilters.chooseDates();
             cidsBillingSearchStatement.setFrom(fromDate_tillDate[0]);
             cidsBillingSearchStatement.setTill(fromDate_tillDate[1]);
 
@@ -760,7 +761,8 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                             LOG.error("Billing metaobjects was null.");
                         } else if (metaObjects.isEmpty()) {
                             LOG.info("No Billing metaobjects found.");
-                            fillCustomerTable(new ArrayList<CidsBean>());
+                            filteredBillingBeans = new ArrayList<CidsBean>();
+                            fillCustomerTable(filteredBillingBeans);
                             lblFilterResult.setText(generateFilterResultText(new ArrayList<CidsBean>()));
                         } else {
                             final List<CidsBean> billingBeans = new ArrayList<CidsBean>(metaObjects.size());
@@ -768,6 +770,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                                 billingBeans.add(mo.getBean());
                             }
                             fillCustomerTable(billingBeans);
+                            filteredBillingBeans = billingBeans;
                             lblFilterResult.setText(generateFilterResultText(billingBeans));
                         }
                     } catch (InterruptedException ex) {
@@ -814,7 +817,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                     BillingKundeRenderer.class,
                     "BillingKundeRenderer.generateFilterResultText().noBillings");
         } else {
-            final Date[] fromDate_tillDate = pnlTimeFilters.chooseDates();
+            fromDate_tillDate = pnlTimeFilters.chooseDates();
             final Date from = fromDate_tillDate[0];
             final Date till = fromDate_tillDate[1];
 
@@ -893,8 +896,31 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                 aggregatedData.put(kundeBean, dataForCustomer);
             }
         }
-
         return aggregatedData;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private HashMap<CidsBean, Collection<CidsBean>> createBillingsOfCostumersForReports() {
+        final HashMap<CidsBean, Collection<CidsBean>> billingsOfCustomers =
+            new HashMap<CidsBean, Collection<CidsBean>>();
+        for (final CidsBean billingBean : filteredBillingBeans) {
+            final Double nettoSum = (Double)billingBean.getProperty("netto_summe");
+            if (rdbAllDownloads.isSelected() || (nettoSum > 0)) {
+                final CidsBean kundeBean = (CidsBean)billingBean.getProperty("angelegt_durch.kunde");
+                if (billingsOfCustomers.containsKey(kundeBean)) {
+                    billingsOfCustomers.get(kundeBean).add(billingBean);
+                } else {
+                    final ArrayList<CidsBean> billings = new ArrayList<CidsBean>();
+                    billings.add(billingBean);
+                    billingsOfCustomers.put(kundeBean, billings);
+                }
+            }
+        }
+        return billingsOfCustomers;
     }
 
     @Override

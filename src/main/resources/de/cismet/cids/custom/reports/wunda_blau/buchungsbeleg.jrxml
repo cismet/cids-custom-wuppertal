@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<parameter name="kundeBean" class="de.cismet.cids.dynamics.CidsBean"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/gbaatz/git/210-cids-custom-wuppertal/src/main/resources/de/cismet/cids/custom/reports/wunda_blau/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="billingBeans_mwst0" class="java.util.Collection"/>
+	<parameter name="from" class="java.util.Date"/>
+	<parameter name="till" class="java.util.Date"/>
+	<parameter name="billingBeans_mwst19" class="java.util.Collection"/>
+	<parameter name="mwst_0" class="java.lang.Double"/>
+	<parameter name="netto_summe_0" class="java.math.BigDecimal"/>
+	<parameter name="brutto_summe_0" class="java.math.BigDecimal"/>
+	<parameter name="mwst_19" class="java.lang.Double"/>
+	<parameter name="netto_summe_19" class="java.math.BigDecimal"/>
+	<parameter name="brutto_summe_19" class="java.math.BigDecimal"/>
+	<parameter name="end_summe" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="79" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="373" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{kundeBean}.getProperty("name")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="20" width="373" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{kundeBean}.getProperty("vertragskennzeichen")]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="0" y="40" width="63" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$P{from}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="114" y="40" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$P{till}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="30" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="130" splitType="Stretch">
+			<subreport>
+				<reportElement positionType="Float" x="0" y="86" width="555" height="44"/>
+				<subreportParameter name="brutto_summe">
+					<subreportParameterExpression><![CDATA[$P{brutto_summe_19}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="mwst">
+					<subreportParameterExpression><![CDATA[$P{mwst_19}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="total_netto_summe">
+					<subreportParameterExpression><![CDATA[$P{netto_summe_19}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource((Collection)$P{billingBeans_mwst19})]]></dataSourceExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "buchungsbeleg_mwst.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="20" width="555" height="44"/>
+				<subreportParameter name="mwst">
+					<subreportParameterExpression><![CDATA[$P{mwst_0}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="brutto_summe">
+					<subreportParameterExpression><![CDATA[$P{brutto_summe_0}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="total_netto_summe">
+					<subreportParameterExpression><![CDATA[$P{netto_summe_0}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource((Collection)$P{billingBeans_mwst0})]]></dataSourceExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "buchungsbeleg_mwst.jasper"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement positionType="Float" x="0" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["mwst 0"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="0" y="66" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["mwst 19"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="23" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="3" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{end_summe}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

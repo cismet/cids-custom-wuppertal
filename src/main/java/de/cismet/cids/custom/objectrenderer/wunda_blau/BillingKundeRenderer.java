@@ -61,8 +61,10 @@ import javax.swing.table.TableRowSorter;
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.billing.StartReportForCustomer;
 import de.cismet.cids.custom.objectrenderer.utils.billing.Usage;
 import de.cismet.cids.custom.objectrenderer.utils.billing.VerwendungszweckPanel;
+import de.cismet.cids.custom.reports.wunda_blau.BillingBuchungsbelegReport;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement.Kostenart;
 
@@ -115,6 +117,9 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     private BillingTableModel tableModel;
     private CidsBean cidsBean;
     private String title;
+    private List<CidsBean> filteredBuchungen;
+    private Date[] fromDate_tillDate;
+    private BigDecimal totalSum;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXBusyLabel blblBusy;
     private javax.swing.JButton btnBuchungsbeleg;
@@ -479,6 +484,13 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
             org.openide.util.NbBundle.getMessage(
                 BillingKundeRenderer.class,
                 "BillingKundeRenderer.btnBuchungsbeleg.text")); // NOI18N
+        btnBuchungsbeleg.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnBuchungsbelegActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -491,6 +503,13 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
             org.openide.util.NbBundle.getMessage(
                 BillingKundeRenderer.class,
                 "BillingKundeRenderer.btnRechnungsanlage.text")); // NOI18N
+        btnRechnungsanlage.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnRechnungsanlageActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -737,6 +756,23 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
     /**
      * DOCUMENT ME!
      *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnRechnungsanlageActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRechnungsanlageActionPerformed
+    }                                                                                      //GEN-LAST:event_btnRechnungsanlageActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnBuchungsbelegActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBuchungsbelegActionPerformed
+        new StartReportForCustomer(cidsBean, filteredBuchungen, fromDate_tillDate);
+    }                                                                                    //GEN-LAST:event_btnBuchungsbelegActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
     @Override
@@ -893,15 +929,16 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
      */
     private String generateFilterResultText(final Collection<CidsBean> billingBeans) {
         if (billingBeans.isEmpty()) {
+            totalSum = new BigDecimal("0");
             return NbBundle.getMessage(
                     BillingKundeRenderer.class,
                     "BillingKundeRenderer.generateFilterResultText().noBillings");
         } else {
             final int amountBillings = billingBeans.size();
-            final Date[] fromDate_tillDate = pnlTimeFilters.chooseDates();
+            fromDate_tillDate = pnlTimeFilters.chooseDates();
             final Date from = fromDate_tillDate[0];
             final Date till = fromDate_tillDate[1];
-            final BigDecimal totalSum = calculateTotalSumFromBillings(billingBeans);
+            totalSum = calculateTotalSumFromBillings(billingBeans);
             final NumberFormat euroFormatter = NumberFormat.getCurrencyInstance(Locale.GERMANY);
 
             final StringBuilder text = new StringBuilder(NbBundle.getMessage(
@@ -981,9 +1018,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
         }
 
         // calculate the brutto sum from each netto_sum
-        BigDecimal totalSum = new BigDecimal("0");
+        totalSum = new BigDecimal("0");
         for (final BigDecimal mwst_satz : mwstSatz_nettoSum.keySet()) {
-            // calculate: bruttoSum = nettoSum + (nettoSum * (mwst_satz / 100))
             final BigDecimal nettoSum = mwstSatz_nettoSum.get(mwst_satz);
             final BigDecimal percent = mwst_satz.divide(new BigDecimal("100"));
             final BigDecimal mwstValue = nettoSum.multiply(percent);
@@ -1032,7 +1068,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
             cidsBillingSearchStatement.setVerwendungszweckKeys(
                 pnlVerwendungszweck.createSelectedVerwendungszweckKeysStringArray());
             cidsBillingSearchStatement.setKostenart(chooseKostenart());
-            final Date[] fromDate_tillDate = pnlTimeFilters.chooseDates();
+            fromDate_tillDate = pnlTimeFilters.chooseDates();
             cidsBillingSearchStatement.setFrom(fromDate_tillDate[0]);
             cidsBillingSearchStatement.setTill(fromDate_tillDate[1]);
         }
@@ -1064,13 +1100,15 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
                             LOG.error("Billing metaobjects was null.");
                         } else if (metaObjects.isEmpty()) {
                             LOG.info("No Billing metaobjects found.");
-                            fillBillingTable(new ArrayList<CidsBean>());
+                            filteredBuchungen = new ArrayList<CidsBean>();
+                            fillBillingTable(filteredBuchungen);
                             lblFilterResult.setText(generateFilterResultText(new ArrayList<CidsBean>()));
                         } else {
                             final List<CidsBean> billingBeans = new ArrayList<CidsBean>(metaObjects.size());
                             for (final MetaObject mo : metaObjects) {
                                 billingBeans.add(mo.getBean());
                             }
+                            filteredBuchungen = billingBeans;
                             fillBillingTable(billingBeans);
                             lblFilterResult.setText(generateFilterResultText(billingBeans));
                         }
