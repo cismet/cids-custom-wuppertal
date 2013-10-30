@@ -932,16 +932,36 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
             final Double nettoSum = (Double)billingBean.getProperty("netto_summe");
             if (rdbAllDownloads.isSelected() || (nettoSum > 0)) {
                 final CidsBean kundeBean = (CidsBean)billingBean.getProperty("angelegt_durch.kunde");
-                if (billingsOfCustomers.containsKey(kundeBean)) {
-                    billingsOfCustomers.get(kundeBean).add(billingBean);
-                } else {
-                    final ArrayList<CidsBean> billings = new ArrayList<CidsBean>();
-                    billings.add(billingBean);
-                    billingsOfCustomers.put(kundeBean, billings);
+                if (isCustomerSelectedToBeIncludedIntoReport(kundeBean)) {
+                    if (billingsOfCustomers.containsKey(kundeBean)) {
+                        billingsOfCustomers.get(kundeBean).add(billingBean);
+                    } else {
+                        final ArrayList<CidsBean> billings = new ArrayList<CidsBean>();
+                        billings.add(billingBean);
+                        billingsOfCustomers.put(kundeBean, billings);
+                    }
                 }
             }
         }
         return billingsOfCustomers;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   kundeBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private boolean isCustomerSelectedToBeIncludedIntoReport(final CidsBean kundeBean) {
+        final AggregatedBillingTableModel model = (AggregatedBillingTableModel)tblCustomers.getModel();
+        for (int i = 0; i < model.getRowCount(); i++) {
+            final CidsBean kundeFromTable = (CidsBean)model.getValueAt(i, 1);
+            if (kundeFromTable.equals(kundeBean)) {
+                return (Boolean)model.getValueAt(i, 0);
+            }
+        }
+        return false;
     }
 
     @Override
@@ -1053,7 +1073,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
          */
         @Override
         public boolean isCellEditable(final int row, final int column) {
-            if (column == 1) {
+            if (column == 0) {
                 return true;
             } else {
                 return false;
