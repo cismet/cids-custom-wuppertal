@@ -17,13 +17,20 @@ import Sirius.server.middleware.types.MetaObject;
 
 import org.apache.log4j.Logger;
 
+import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 import java.awt.CardLayout;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 
+import java.io.UnsupportedEncodingException;
+
 import java.math.BigDecimal;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLDecoder;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -33,8 +40,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.AbstractAction;
@@ -62,6 +71,9 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.tools.gui.TitleComponentProvider;
+import de.cismet.tools.gui.downloadmanager.DownloadManager;
+import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
+import de.cismet.tools.gui.downloadmanager.HttpDownload;
 
 /**
  * DOCUMENT ME!
@@ -167,7 +179,48 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
      * @param  request  DOCUMENT ME!
      */
     private void doDownload(final String request) {
-        LOG.fatal("Not supported yet.", new Exception());
+        try {
+            final URL url = new URL(request);
+            String filename = "alkis_druck";
+            try {
+                final Map<String, String> urlQuery = splitQuery(url);
+                filename = urlQuery.get("product") + "." + urlQuery.get("landparcel").replace("/", "--");
+            } catch (UnsupportedEncodingException ex) {
+                Exceptions.printStackTrace(ex);
+            }
+
+            final HttpDownload download = new HttpDownload(
+                    url,
+                    "",
+                    DownloadManagerDialog.getJobname(),
+                    "ALKIS-Druck",
+                    filename,
+                    ".pdf");
+            DownloadManager.instance().add(download);
+        } catch (MalformedURLException ex) {
+            LOG.error(ex.getMessage(), ex);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   url  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  UnsupportedEncodingException  DOCUMENT ME!
+     */
+    private static Map<String, String> splitQuery(final URL url) throws UnsupportedEncodingException {
+        final Map<String, String> query_pairs = new LinkedHashMap<String, String>();
+        final String query = url.getQuery();
+        final String[] pairs = query.split("&");
+        for (final String pair : pairs) {
+            final int idx = pair.indexOf("=");
+            query_pairs.put(URLDecoder.decode(pair.substring(0, idx), "UTF-8"),
+                URLDecoder.decode(pair.substring(idx + 1), "UTF-8"));
+        }
+        return query_pairs;
     }
 
     /**
@@ -1256,7 +1309,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBean
                 final String text = ObjectRendererUtils.propertyPrettyPrint(formattedDate);
 
                 final String request = dateRequestTuple.getRequest();
-                if ((request != null) && !request.equals("")) {
+                if ((request != null) && request.startsWith("http://")) {
                     // url is just a placeholder
                     setText("<html><a href=\"http://www.cismet.de\">" + text + "</a></html>");
                 } else {

@@ -557,12 +557,12 @@ public class BillingPopup extends javax.swing.JDialog {
         final MetaClass MB_MC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "billing_kunden_logins");
         String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " ";
         query += "FROM " + MB_MC.getTableName();
-        query += " WHERE name = " + SessionManager.getSession().getUser().getName();
+        query += " WHERE name = '" + SessionManager.getSession().getUser().getName() + "'";
 
         CidsBean externalUser = null;
         try {
             final MetaObject[] metaObjects = SessionManager.getProxy().getMetaObjectByQuery(query, 0);
-            if (!((metaObjects == null) || (metaObjects.length == 0))) {
+            if ((metaObjects != null) && (metaObjects.length > 0)) {
                 externalUser = metaObjects[0].getBean();
             }
         } catch (ConnectionException ex) {
@@ -753,6 +753,8 @@ public class BillingPopup extends javax.swing.JDialog {
         setTitle(org.openide.util.NbBundle.getMessage(BillingPopup.class, "BillingPopup.title") + " (" + user + ")");
 
         calculateNettoPrice();
+
+        this.request = request;
 
         pack();
         setVisible(true);
