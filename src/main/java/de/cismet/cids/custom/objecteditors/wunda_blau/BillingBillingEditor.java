@@ -65,7 +65,7 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
     private de.cismet.cids.editors.DefaultBindableJTextField defaultBindableJTextField5;
     private de.cismet.cids.editors.DefaultBindableJTextField defaultBindableJTextField7;
     private de.cismet.cids.editors.DefaultBindableJTextField defaultBindableJTextField8;
-    private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -79,7 +79,6 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -92,7 +91,7 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel2;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel3;
     private de.cismet.cids.editors.DefaultBindableJTextField txtAngelegt_am;
-    private de.cismet.cids.editors.DefaultBindableJTextField txtAngelegt_durch1;
+    private de.cismet.cids.editors.DefaultBindableJTextField txtAngelegt_durch;
     private de.cismet.cids.editors.DefaultBindableJTextField txtGeschaeftsbuchnummer;
     private de.cismet.cids.editors.DefaultBindableJTextField txtModus;
     private de.cismet.cids.editors.DefaultBindableJTextField txtProjektbezeichnung;
@@ -126,9 +125,6 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         txtGeschaeftsbuchnummer.setEnabled(editable);
         txtProjektbezeichnung.setEnabled(editable);
         coboStornogrund.setEnabled(editable);
-
-        txtGeschaeftsbuchnummer.getDocument().addDocumentListener(new GBNRDocumentlistener());
-        txtProjektbezeichnung.getDocument().addDocumentListener(new ProjektDocumentlistener());
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -143,7 +139,6 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         java.awt.GridBagConstraints gridBagConstraints;
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        jPanel1 = new javax.swing.JPanel();
         semiRoundedPanel1 = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -183,15 +178,14 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         txtaAenderung = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtaBerechnung = new javax.swing.JTextArea();
-        txtAngelegt_durch1 = new de.cismet.cids.editors.DefaultBindableJTextField();
+        txtAngelegt_durch = new de.cismet.cids.editors.DefaultBindableJTextField();
         jLabel13 = new javax.swing.JLabel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
 
+        setBorder(javax.swing.BorderFactory.createEmptyBorder(7, 7, 7, 7));
         setLayout(new java.awt.GridBagLayout());
-
-        jPanel1.setLayout(new java.awt.GridBagLayout());
 
         semiRoundedPanel1.setBackground(new java.awt.Color(51, 51, 51));
         semiRoundedPanel1.setLayout(new java.awt.FlowLayout());
@@ -206,7 +200,7 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        jPanel1.add(semiRoundedPanel1, gridBagConstraints);
+        add(semiRoundedPanel1, gridBagConstraints);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(7, 7, 7, 7));
         jPanel2.setLayout(new java.awt.GridBagLayout());
@@ -238,24 +232,26 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         jPanel2.add(coboStornogrund, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            btnStornoBuchung,
-            org.openide.util.NbBundle.getMessage(
-                BillingBillingEditor.class,
-                "BillingBillingEditor.btnStornoBuchung.text")); // NOI18N
-        btnStornoBuchung.addActionListener(new java.awt.event.ActionListener() {
+        if (editable) {
+            org.openide.awt.Mnemonics.setLocalizedText(
+                btnStornoBuchung,
+                org.openide.util.NbBundle.getMessage(
+                    BillingBillingEditor.class,
+                    "BillingBillingEditor.btnStornoBuchung.text")); // NOI18N
+            btnStornoBuchung.addActionListener(new java.awt.event.ActionListener() {
 
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnStornoBuchungActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
-        jPanel2.add(btnStornoBuchung, gridBagConstraints);
+                    @Override
+                    public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                        btnStornoBuchungActionPerformed(evt);
+                    }
+                });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridy = 2;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+            gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+            jPanel2.add(btnStornoBuchung, gridBagConstraints);
+        }
 
         org.openide.awt.Mnemonics.setLocalizedText(
             cboStorno,
@@ -284,7 +280,7 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        jPanel1.add(jPanel2, gridBagConstraints);
+        add(jPanel2, gridBagConstraints);
 
         semiRoundedPanel2.setBackground(new java.awt.Color(51, 51, 51));
         semiRoundedPanel2.setLayout(new java.awt.FlowLayout());
@@ -299,7 +295,8 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        jPanel1.add(semiRoundedPanel2, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        add(semiRoundedPanel2, gridBagConstraints);
 
         jPanel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(7, 7, 7, 7));
         jPanel3.setLayout(new java.awt.GridBagLayout());
@@ -375,7 +372,7 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.5;
-        jPanel1.add(jPanel3, gridBagConstraints);
+        add(jPanel3, gridBagConstraints);
 
         semiRoundedPanel3.setBackground(new java.awt.Color(51, 51, 51));
         semiRoundedPanel3.setLayout(new java.awt.FlowLayout());
@@ -390,7 +387,8 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        jPanel1.add(semiRoundedPanel3, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        add(semiRoundedPanel3, gridBagConstraints);
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(7, 7, 7, 7));
         jPanel4.setLayout(new java.awt.GridBagLayout());
@@ -644,18 +642,18 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
         jPanel4.add(jScrollPane2, gridBagConstraints);
 
-        txtAngelegt_durch1.setBorder(null);
-        txtAngelegt_durch1.setText(org.openide.util.NbBundle.getMessage(
+        txtAngelegt_durch.setBorder(null);
+        txtAngelegt_durch.setText(org.openide.util.NbBundle.getMessage(
                 BillingBillingEditor.class,
-                "BillingBillingEditor.txtAngelegt_durch1.text")); // NOI18N
-        txtAngelegt_durch1.setEnabled(false);
+                "BillingBillingEditor.txtAngelegt_durch.text")); // NOI18N
+        txtAngelegt_durch.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
-        jPanel4.add(txtAngelegt_durch1, gridBagConstraints);
+        jPanel4.add(txtAngelegt_durch, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel13,
@@ -671,23 +669,13 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        jPanel1.add(jPanel4, gridBagConstraints);
-
+        add(jPanel4, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.gridheight = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.weightx = 0.5;
-        add(jPanel1, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 1.0;
-        add(filler1, gridBagConstraints);
+        add(filler2, gridBagConstraints);
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
@@ -752,7 +740,13 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
 
     @Override
     public String getTitle() {
-        return "";
+        String title = "Buchung";
+        final String desc = String.valueOf(cidsBean);
+        if (desc != null) {
+            title += ": " + desc;
+        }
+
+        return title;
     }
 
     @Override
@@ -765,7 +759,25 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
 
     @Override
     public boolean prepareForSave() {
-        return false;
+        try {
+            if (!txtGeschaeftsbuchnummer.getText().equals(originalGeschaeftsbuchnummer)) {
+                cidsBean.setProperty("geaendert_am", new java.sql.Timestamp(System.currentTimeMillis()));
+                cidsBean.setProperty("geaendert_von", SessionManager.getSession().getUser().toString());
+                cidsBean.setProperty("aenderung_attribut", "Geschäftsbuchnummer");
+                cidsBean.setProperty("aenderung_alter_wert", originalGeschaeftsbuchnummer);
+                cidsBean.setProperty("aenderung_neuer_wert", txtGeschaeftsbuchnummer.getText());
+            } else if (!txtProjektbezeichnung.getText().equals(originalProjektbezeichnung)) {
+                cidsBean.setProperty("geaendert_am", new java.sql.Timestamp(System.currentTimeMillis()));
+                cidsBean.setProperty("geaendert_von", SessionManager.getSession().getUser().toString());
+                cidsBean.setProperty("aenderung_attribut", "Projektbezeichnung");
+                cidsBean.setProperty("aenderung_alter_wert", originalProjektbezeichnung);
+                cidsBean.setProperty("aenderung_neuer_wert", txtProjektbezeichnung.getText());
+            }
+            return true;
+        } catch (Exception ex) {
+            LOG.error(ex.getMessage(), ex);
+            return false;
+        }
     }
 
     /**
@@ -795,7 +807,7 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         if (user == null) {
             user = cidsBean.getProperty("username");
         }
-        txtVerwendungszweck.setText(user.toString());
+        txtAngelegt_durch.setText(user.toString());
 
         String text = "";
         final Date geaendert_am = (Date)cidsBean.getProperty("geaendert_am");
@@ -825,87 +837,5 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
                         + " )";
         }
         cboStorno.setText(text);
-    }
-
-    //~ Inner Classes ----------------------------------------------------------
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    class GBNRDocumentlistener implements DocumentListener {
-
-        //~ Methods ------------------------------------------------------------
-
-        @Override
-        public void insertUpdate(final DocumentEvent e) {
-            setChange();
-        }
-
-        @Override
-        public void removeUpdate(final DocumentEvent e) {
-            setChange();
-        }
-
-        @Override
-        public void changedUpdate(final DocumentEvent e) {
-            setChange();
-        }
-
-        /**
-         * DOCUMENT ME!
-         */
-        private void setChange() {
-            try {
-                cidsBean.setProperty("geaendert_am", new java.sql.Timestamp(System.currentTimeMillis()));
-                cidsBean.setProperty("geaendert_von", SessionManager.getSession().getUser().toString());
-                cidsBean.setProperty("aenderung_attribut", "Geschäftsbuchnummer");
-                cidsBean.setProperty("aenderung_alter_wert", originalGeschaeftsbuchnummer);
-                cidsBean.setProperty("aenderung_neuer_wert", txtGeschaeftsbuchnummer.getText());
-            } catch (Exception ex) {
-                Exceptions.printStackTrace(ex);
-            }
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    class ProjektDocumentlistener implements DocumentListener {
-
-        //~ Methods ------------------------------------------------------------
-
-        @Override
-        public void insertUpdate(final DocumentEvent e) {
-            setChange();
-        }
-
-        @Override
-        public void removeUpdate(final DocumentEvent e) {
-            setChange();
-        }
-
-        @Override
-        public void changedUpdate(final DocumentEvent e) {
-            setChange();
-        }
-
-        /**
-         * DOCUMENT ME!
-         */
-        private void setChange() {
-            try {
-                cidsBean.setProperty("geaendert_am", new java.sql.Timestamp(System.currentTimeMillis()));
-                cidsBean.setProperty("geaendert_von", SessionManager.getSession().getUser().toString());
-                cidsBean.setProperty("aenderung_attribut", "Projektbezeichnung");
-                cidsBean.setProperty("aenderung_alter_wert", originalProjektbezeichnung);
-                cidsBean.setProperty("aenderung_neuer_wert", txtProjektbezeichnung.getText());
-            } catch (Exception ex) {
-                Exceptions.printStackTrace(ex);
-            }
-        }
     }
 }
