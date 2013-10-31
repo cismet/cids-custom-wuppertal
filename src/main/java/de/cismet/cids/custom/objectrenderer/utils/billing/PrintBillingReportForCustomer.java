@@ -235,7 +235,7 @@ public class PrintBillingReportForCustomer {
                 billing.setProperty("abgerechnet", Boolean.TRUE);
                 billing.persist();
             } catch (Exception ex) {
-                LOG.error("Errer while setting value or persist of billing.", ex);
+                LOG.error("Error while setting value or persisting of billing.", ex);
             }
         }
     }

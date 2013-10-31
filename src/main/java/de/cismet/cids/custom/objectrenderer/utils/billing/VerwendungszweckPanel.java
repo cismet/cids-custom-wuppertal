@@ -11,6 +11,8 @@
  */
 package de.cismet.cids.custom.objectrenderer.utils.billing;
 
+import Sirius.navigator.ui.ComponentRegistry;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.log4j.Logger;
@@ -109,7 +111,7 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterA
                                     VerwendungszweckPanel.class,
                                     "VerwendungszweckPanel.initVerwendungszweckCheckBoxes().actionPerformed().dialog.message");
                             JOptionPane.showMessageDialog(
-                                VerwendungszweckPanel.this,
+                                VerwendungszweckPanel.this.getTopLevelAncestor(),
                                 message,
                                 title,
                                 JOptionPane.INFORMATION_MESSAGE);
