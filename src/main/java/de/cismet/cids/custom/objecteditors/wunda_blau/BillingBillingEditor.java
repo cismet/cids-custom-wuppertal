@@ -12,10 +12,10 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import org.apache.log4j.Logger;
 
-import org.openide.util.Exceptions;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -23,8 +23,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.JOptionPane;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
@@ -44,7 +42,7 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class BillingBillingEditor extends javax.swing.JPanel implements CidsBeanRenderer, EditorSaveListener {
+public class BillingBillingEditor extends javax.swing.JPanel implements CidsBeanRenderer, EditorSaveListener, RequestsFullSizeComponent {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -685,16 +683,16 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtProjektbezeichnungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtProjektbezeichnungActionPerformed
+    private void txtProjektbezeichnungActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProjektbezeichnungActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_txtProjektbezeichnungActionPerformed
+    }//GEN-LAST:event_txtProjektbezeichnungActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnStornoBuchungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnStornoBuchungActionPerformed
+    private void btnStornoBuchungActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStornoBuchungActionPerformed
         if (
             JOptionPane.showConfirmDialog(
                         this.getTopLevelAncestor(),
@@ -710,7 +708,7 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
                 LOG.error("Error while setting 'storniert' of billing", ex);
             }
         }
-    }                                                                                    //GEN-LAST:event_btnStornoBuchungActionPerformed
+    }//GEN-LAST:event_btnStornoBuchungActionPerformed
 
     @Override
     public CidsBean getCidsBean() {

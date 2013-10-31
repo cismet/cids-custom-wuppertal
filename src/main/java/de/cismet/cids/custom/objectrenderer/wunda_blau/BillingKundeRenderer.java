@@ -12,6 +12,7 @@
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaObject;
 
@@ -64,7 +65,6 @@ import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.PrintBillingReportForCustomer;
 import de.cismet.cids.custom.objectrenderer.utils.billing.Usage;
 import de.cismet.cids.custom.objectrenderer.utils.billing.VerwendungszweckPanel;
-import de.cismet.cids.custom.reports.wunda_blau.BillingBuchungsbelegReport;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement.Kostenart;
 
@@ -83,7 +83,9 @@ import de.cismet.tools.gui.downloadmanager.HttpDownload;
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class BillingKundeRenderer extends javax.swing.JPanel implements CidsBeanRenderer, TitleComponentProvider {
+public class BillingKundeRenderer extends javax.swing.JPanel implements RequestsFullSizeComponent,
+    CidsBeanRenderer,
+    TitleComponentProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 

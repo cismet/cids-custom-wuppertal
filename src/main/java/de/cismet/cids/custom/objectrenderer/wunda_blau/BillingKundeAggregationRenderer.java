@@ -13,6 +13,7 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
+import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
@@ -66,7 +67,8 @@ import de.cismet.tools.gui.TitleComponentProvider;
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class BillingKundeAggregationRenderer extends javax.swing.JPanel implements CidsBeanAggregationRenderer,
+public class BillingKundeAggregationRenderer extends javax.swing.JPanel implements RequestsFullSizeComponent,
+    CidsBeanAggregationRenderer,
     TitleComponentProvider {
 
     //~ Static fields/initializers ---------------------------------------------
