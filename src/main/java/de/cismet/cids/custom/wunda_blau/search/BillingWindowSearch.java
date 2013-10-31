@@ -412,6 +412,9 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
      * @param  evt  DOCUMENT ME!
      */
     private void cboKostenfreiActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboKostenfreiActionPerformed
+        if (!cboKostenfrei.isSelected() && !cboKostenpflichtig.isSelected()) {
+            cboKostenpflichtig.setSelected(true);
+        }
     }                                                                                 //GEN-LAST:event_cboKostenfreiActionPerformed
 
     /**
@@ -420,6 +423,9 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
      * @param  evt  DOCUMENT ME!
      */
     private void cboKostenpflichtigActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboKostenpflichtigActionPerformed
+        if (!cboKostenfrei.isSelected() && !cboKostenpflichtig.isSelected()) {
+            cboKostenfrei.setSelected(true);
+        }
     }                                                                                      //GEN-LAST:event_cboKostenpflichtigActionPerformed
 
     /**
