@@ -605,6 +605,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                 true,
                 cboBillDownloads.isSelected()).print();
         }
+        filterBuchungen();
     }                                                                                      //GEN-LAST:event_btnRechnungsanlageActionPerformed
 
     /**
@@ -642,6 +643,14 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
             filterBuchungen(true);
         }
     }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void filterBuchungen() {
+        filterBuchungen(false);
+    }
+
     /**
      * DOCUMENT ME!
      *
