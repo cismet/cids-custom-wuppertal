@@ -1014,7 +1014,9 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
                         BillingKundeRenderer.class,
                         "BillingKundeRenderer.generateFilterResultText().billings3.moreBillings"));
             }
-            if ((till == null) || from.equals(till)) {
+            if (from == null) {
+                text.append(".");
+            } else if ((till == null) || from.equals(till)) {
                 text.append(NbBundle.getMessage(
                         BillingKundeRenderer.class,
                         "BillingKundeRenderer.generateFilterResultText().billings4.oneDate"));

@@ -755,7 +755,9 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
             final StringBuilder text = new StringBuilder(NbBundle.getMessage(
                         BillingKundeRenderer.class,
                         "BillingKundeAggregationRenderer.generateFilterResultText().billings1"));
-            if ((till == null) || from.equals(till)) {
+            if (from == null) {
+                text.append(".");
+            } else if ((till == null) || from.equals(till)) {
                 text.append(NbBundle.getMessage(
                         BillingKundeRenderer.class,
                         "BillingKundeAggregationRenderer.generateFilterResultText().billings2.oneDate"));
