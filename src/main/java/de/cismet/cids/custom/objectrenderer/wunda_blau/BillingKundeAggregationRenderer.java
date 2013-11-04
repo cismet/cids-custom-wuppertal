@@ -897,10 +897,10 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
 
     @Override
     public void setTitle(final String title) {
-        String desc = "Kunden";
+        String desc = "Kundenaggregationsrenderer: ";
         final Collection<CidsBean> beans = cidsBeans;
         if ((beans != null) && (beans.size() > 0)) {
-            desc += " - " + beans.size() + " Kunden ausgewählt";
+            desc += beans.size() + " Kunden ausgewählt";
         }
         lblAgrTitle.setText(desc);
     }

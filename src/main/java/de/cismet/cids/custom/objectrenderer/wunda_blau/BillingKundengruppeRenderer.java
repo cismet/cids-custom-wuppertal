@@ -44,6 +44,7 @@ public class BillingKundengruppeRenderer extends BillingKundeAggregationRenderer
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
+        this.cidsBean = cidsBean;
         if (cidsBean != null) {
             final Collection<CidsBean> kundeBeans = cidsBean.getBeanCollectionProperty("kunden_arr");
             super.setCidsBeans(kundeBeans);
@@ -57,11 +58,19 @@ public class BillingKundengruppeRenderer extends BillingKundeAggregationRenderer
 
     @Override
     public void setTitle(final String title) {
-        String desc = "Kundengruppe";
-        final Collection<CidsBean> beans = getCidsBeans();
-        if ((beans != null) && (beans.size() > 0)) {
-            desc += " - " + beans.size() + " Kunden ausgewählt";
+        String desc = "Kundengruppe: ";
+        if (cidsBean != null) {
+            desc = "Kundengruppe " + cidsBean.toString() + ": ";
         }
+
+        final Collection<CidsBean> beans = getCidsBeans();
+        int amountBeans = 0;
+        if ((beans != null) && (beans.size() > 0)) {
+            amountBeans = beans.size();
+        }
+
+        desc += "beinhaltet " + amountBeans + " Kunden";
+
         getTitleLabel().setText(desc);
     }
 }
