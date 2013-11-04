@@ -684,16 +684,16 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtProjektbezeichnungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtProjektbezeichnungActionPerformed
+    private void txtProjektbezeichnungActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProjektbezeichnungActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_txtProjektbezeichnungActionPerformed
+    }//GEN-LAST:event_txtProjektbezeichnungActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnStornoBuchungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnStornoBuchungActionPerformed
+    private void btnStornoBuchungActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStornoBuchungActionPerformed
         if (
             JOptionPane.showConfirmDialog(
                         this.getTopLevelAncestor(),
@@ -709,7 +709,7 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
                 LOG.error("Error while setting 'storniert' of billing", ex);
             }
         }
-    }                                                                                    //GEN-LAST:event_btnStornoBuchungActionPerformed
+    }//GEN-LAST:event_btnStornoBuchungActionPerformed
 
     @Override
     public CidsBean getCidsBean() {
@@ -831,9 +831,9 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         if ((storniert != null) && storniert.booleanValue()) {
             final Date storno_am = (Date)cidsBean.getProperty("storno_datum");
             final String storniert_durch = (String)cidsBean.getProperty("storniert_durch");
-            text += "(von " + storniert_durch
+            text += " (von " + storniert_durch
                         + " am " + DATE_FORMAT.format(storno_am)
-                        + " )";
+                        + ")";
         }
         cboStorno.setText(text);
     }
