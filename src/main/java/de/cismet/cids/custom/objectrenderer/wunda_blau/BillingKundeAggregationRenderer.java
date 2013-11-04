@@ -97,15 +97,11 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
     private javax.swing.ButtonGroup btngWithCosts;
     private javax.swing.JComboBox cboAbrechnungsturnus;
     private javax.swing.JCheckBox cboBillDownloads;
-    private javax.swing.JCheckBox cboKostenfrei;
-    private javax.swing.JCheckBox cboKostenpflichtig;
-    private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -118,7 +114,6 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
     private javax.swing.JPanel pnlBusyLable;
     private javax.swing.JPanel pnlFilterResults;
     private javax.swing.JPanel pnlFilters;
-    private javax.swing.JPanel pnlKostenart;
     private javax.swing.JPanel pnlTable;
     private de.cismet.cids.custom.objectrenderer.utils.billing.TimeFilterPanel pnlTimeFilters;
     private de.cismet.cids.custom.objectrenderer.utils.billing.VerwendungszweckPanel pnlVerwendungszweck;
@@ -172,13 +167,6 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         jPanel3 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         cboAbrechnungsturnus = new javax.swing.JComboBox();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
-        pnlKostenart = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        cboKostenfrei = new javax.swing.JCheckBox();
-        cboKostenpflichtig = new javax.swing.JCheckBox();
         filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
@@ -359,6 +347,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
         pnlFilters.add(pnlTimeFilters, gridBagConstraints);
 
+        jPanel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 12, 2, 3));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -370,7 +359,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(10, 8, 0, 6);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 3);
         jPanel3.add(jLabel4, gridBagConstraints);
 
         cboAbrechnungsturnus.addActionListener(new java.awt.event.ActionListener() {
@@ -385,74 +374,14 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 5);
         jPanel3.add(cboAbrechnungsturnus, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        gridBagConstraints.weighty = 1.0;
-        jPanel3.add(filler1, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         pnlFilters.add(jPanel3, gridBagConstraints);
-
-        pnlKostenart.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                org.openide.util.NbBundle.getMessage(
-                    BillingKundeAggregationRenderer.class,
-                    "BillingKundeAggregationRenderer.pnlKostenart.border.title"))); // NOI18N
-        pnlKostenart.setLayout(new java.awt.BorderLayout());
-
-        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
-        jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.PAGE_AXIS));
-
-        cboKostenfrei.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(
-            cboKostenfrei,
-            org.openide.util.NbBundle.getMessage(
-                BillingKundeAggregationRenderer.class,
-                "BillingKundeAggregationRenderer.cboKostenfrei.text")); // NOI18N
-        cboKostenfrei.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    cboKostenfreiActionPerformed(evt);
-                }
-            });
-        jPanel1.add(cboKostenfrei);
-
-        cboKostenpflichtig.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(
-            cboKostenpflichtig,
-            org.openide.util.NbBundle.getMessage(
-                BillingKundeAggregationRenderer.class,
-                "BillingKundeAggregationRenderer.cboKostenpflichtig.text")); // NOI18N
-        cboKostenpflichtig.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    cboKostenpflichtigActionPerformed(evt);
-                }
-            });
-        jPanel1.add(cboKostenpflichtig);
-
-        pnlKostenart.add(jPanel1, java.awt.BorderLayout.CENTER);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new java.awt.Insets(2, 0, 0, 0);
-        pnlFilters.add(pnlKostenart, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -462,12 +391,13 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         pnlFilters.add(filler5, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 0, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(16, 0, 0, 0);
         pnlFilters.add(pnlVerwendungszweck, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -630,30 +560,6 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboKostenfreiActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboKostenfreiActionPerformed
-        if (!cboKostenfrei.isSelected() && !cboKostenpflichtig.isSelected()) {
-            cboKostenpflichtig.setSelected(true);
-        }
-        filterBuchungen_placeHolder();
-    }                                                                                 //GEN-LAST:event_cboKostenfreiActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void cboKostenpflichtigActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboKostenpflichtigActionPerformed
-        if (!cboKostenfrei.isSelected() && !cboKostenpflichtig.isSelected()) {
-            cboKostenfrei.setSelected(true);
-        }
-        filterBuchungen_placeHolder();
-    }                                                                                      //GEN-LAST:event_cboKostenpflichtigActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
     private void btnShowResultsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnShowResultsActionPerformed
         filterBuchungen(false);
     }                                                                                  //GEN-LAST:event_btnShowResultsActionPerformed
@@ -752,7 +658,6 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         if (!ignoreFilters) {
             cidsBillingSearchStatement.setVerwendungszweckKeys(
                 pnlVerwendungszweck.createSelectedVerwendungszweckKeysStringArray());
-            cidsBillingSearchStatement.setKostenart(chooseKostenart());
             fromDate_tillDate = pnlTimeFilters.chooseDates();
             cidsBillingSearchStatement.setFrom(fromDate_tillDate[0]);
             cidsBillingSearchStatement.setTill(fromDate_tillDate[1]);
@@ -819,21 +724,6 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                 }
             };
         swingWorker.execute();
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private Kostenart chooseKostenart() {
-        if (cboKostenfrei.isSelected() == cboKostenpflichtig.isSelected()) {
-            return Kostenart.IGNORIEREN;
-        } else if (cboKostenfrei.isSelected()) {
-            return Kostenart.KOSTENFREI;
-        } else {
-            return Kostenart.KOSTENPFLICHTIG;
-        }
     }
 
     /**
