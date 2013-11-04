@@ -22,6 +22,9 @@
 	<parameter name="amountVUamtlicherLageplan" class="java.lang.Integer"/>
 	<parameter name="amountVUhoheitlicheVermessung" class="java.lang.Integer"/>
 	<parameter name="amountVUsonstige" class="java.lang.Integer"/>
+	<parameter name="amountVUamtlicherLageplanGB" class="java.lang.Integer"/>
+	<parameter name="amountVUhoheitlicheVermessungGB" class="java.lang.Integer"/>
+	<parameter name="amountVUsonstigeGB" class="java.lang.Integer"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -111,6 +114,26 @@
 					<textElement/>
 					<textFieldExpression class="java.lang.String"><![CDATA["VU hV"]]></textFieldExpression>
 				</textField>
+				<textField>
+					<reportElement x="357" y="73" width="198" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountVUamtlicherLageplanGB}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="357" y="93" width="198" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountVUhoheitlicheVermessungGB}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="357" y="113" width="198" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountVUsonstigeGB}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="357" y="40" width="100" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA["GB"]]></textFieldExpression>
+				</textField>
 			</frame>
 		</band>
 	</title>
@@ -124,11 +147,11 @@
 		<band height="92" splitType="Stretch">
 			<subreport>
 				<reportElement positionType="Float" x="0" y="44" width="555" height="44"/>
-				<subreportParameter name="brutto_summe">
-					<subreportParameterExpression><![CDATA[$P{brutto_summe_19}]]></subreportParameterExpression>
-				</subreportParameter>
 				<subreportParameter name="mwst">
 					<subreportParameterExpression><![CDATA[$P{mwst_19}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="brutto_summe">
+					<subreportParameterExpression><![CDATA[$P{brutto_summe_19}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="total_netto_summe">
 					<subreportParameterExpression><![CDATA[$P{netto_summe_19}]]></subreportParameterExpression>

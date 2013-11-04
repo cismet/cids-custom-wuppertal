@@ -50,6 +50,9 @@ public class PrintBillingReportForCustomer {
     private int amountVUamtlicherLageplan = 0;
     private int amountVUhoheitlicheVermessung = 0;
     private int amountVUsonstige = 0;
+    private int amountVUamtlicherLageplanGB = 0;
+    private int amountVUhoheitlicheVermessungGB = 0;
+    private int amountVUsonstigeGB = 0;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -121,7 +124,10 @@ public class PrintBillingReportForCustomer {
                     amountWithoutCosts,
                     amountVUamtlicherLageplan,
                     amountVUhoheitlicheVermessung,
-                    amountVUsonstige);
+                    amountVUsonstige,
+                    amountVUamtlicherLageplanGB,
+                    amountVUhoheitlicheVermessungGB,
+                    amountVUsonstigeGB);
             report.print();
 
             if (isRechnungsanlage && markBillingsAsBilled) {
@@ -217,12 +223,28 @@ public class PrintBillingReportForCustomer {
         } else {
             amountWithoutCosts++;
         }
+
+        final String geschaeftsbuchnummer = (String)billing.getProperty("geschaeftsbuchnummer");
+        boolean geschaeftsbuchnummerIsValid = false;
+        if (!geschaeftsbuchnummer.trim().equals("")) {
+            geschaeftsbuchnummerIsValid = true;
+        }
+
         if (verwendungsKey.equals("VU aL")) {
             amountVUamtlicherLageplan++;
+            if (geschaeftsbuchnummerIsValid) {
+                amountVUamtlicherLageplanGB++;
+            }
         } else if (verwendungsKey.equals("VU hV")) {
             amountVUhoheitlicheVermessung++;
+            if (geschaeftsbuchnummerIsValid) {
+                amountVUhoheitlicheVermessungGB++;
+            }
         } else if (verwendungsKey.equals("VU s")) {
             amountVUsonstige++;
+            if (geschaeftsbuchnummerIsValid) {
+                amountVUsonstigeGB++;
+            }
         }
     }
 

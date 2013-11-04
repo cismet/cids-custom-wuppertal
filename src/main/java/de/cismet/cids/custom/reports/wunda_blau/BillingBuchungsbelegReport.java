@@ -56,6 +56,9 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
     private int amountVUamtlicherLageplan;
     private int amountVUhoheitlicheVermessung;
     private int amountVUsonstige;
+    private int amountVUamtlicherLageplanGB = 0;
+    private int amountVUhoheitlicheVermessungGB = 0;
+    private int amountVUsonstigeGB = 0;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -101,28 +104,34 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
             0,
             0,
             0,
+            0,
+            0,
+            0,
             0);
     }
     /**
      * Creates a new BillingBuchungsbelegReport object.
      *
-     * @param  kundeBean                      DOCUMENT ME!
-     * @param  billingBeans_mwst0             DOCUMENT ME!
-     * @param  netto_summe_0                  DOCUMENT ME!
-     * @param  brutto_summe_0                 DOCUMENT ME!
-     * @param  billingBeans_mwst19            DOCUMENT ME!
-     * @param  netto_summe_19                 DOCUMENT ME!
-     * @param  brutto_summe_19                DOCUMENT ME!
-     * @param  from                           DOCUMENT ME!
-     * @param  till                           DOCUMENT ME!
-     * @param  totalSum                       DOCUMENT ME!
-     * @param  isRechnungsanlage              DOCUMENT ME!
-     * @param  amountTotalDownloads           DOCUMENT ME!
-     * @param  amountWithCosts                DOCUMENT ME!
-     * @param  amountWithoutCosts             DOCUMENT ME!
-     * @param  amountVUamtlicherLageplan      DOCUMENT ME!
-     * @param  amountVUhoheitlicheVermessung  DOCUMENT ME!
-     * @param  amountVUsonstige               DOCUMENT ME!
+     * @param  kundeBean                        DOCUMENT ME!
+     * @param  billingBeans_mwst0               DOCUMENT ME!
+     * @param  netto_summe_0                    DOCUMENT ME!
+     * @param  brutto_summe_0                   DOCUMENT ME!
+     * @param  billingBeans_mwst19              DOCUMENT ME!
+     * @param  netto_summe_19                   DOCUMENT ME!
+     * @param  brutto_summe_19                  DOCUMENT ME!
+     * @param  from                             DOCUMENT ME!
+     * @param  till                             DOCUMENT ME!
+     * @param  totalSum                         DOCUMENT ME!
+     * @param  isRechnungsanlage                DOCUMENT ME!
+     * @param  amountTotalDownloads             DOCUMENT ME!
+     * @param  amountWithCosts                  DOCUMENT ME!
+     * @param  amountWithoutCosts               DOCUMENT ME!
+     * @param  amountVUamtlicherLageplan        DOCUMENT ME!
+     * @param  amountVUhoheitlicheVermessung    DOCUMENT ME!
+     * @param  amountVUsonstige                 DOCUMENT ME!
+     * @param  amountVUamtlicherLageplanGB      DOCUMENT ME!
+     * @param  amountVUhoheitlicheVermessungGB  DOCUMENT ME!
+     * @param  amountVUsonstigeGB               DOCUMENT ME!
      */
     public BillingBuchungsbelegReport(
             final CidsBean kundeBean,
@@ -141,7 +150,10 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
             final int amountWithoutCosts,
             final int amountVUamtlicherLageplan,
             final int amountVUhoheitlicheVermessung,
-            final int amountVUsonstige) {
+            final int amountVUsonstige,
+            final int amountVUamtlicherLageplanGB,
+            final int amountVUhoheitlicheVermessungGB,
+            final int amountVUsonstigeGB) {
         super(REPORT_URL, kundeBean);
 
         this.kundeBean = kundeBean;
@@ -177,6 +189,9 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
         this.amountVUamtlicherLageplan = amountVUamtlicherLageplan;
         this.amountVUhoheitlicheVermessung = amountVUhoheitlicheVermessung;
         this.amountVUsonstige = amountVUsonstige;
+        this.amountVUamtlicherLageplanGB = amountVUamtlicherLageplanGB;
+        this.amountVUhoheitlicheVermessungGB = amountVUhoheitlicheVermessungGB;
+        this.amountVUsonstigeGB = amountVUsonstigeGB;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -212,6 +227,10 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
         params.put("amountVUamtlicherLageplan", amountVUamtlicherLageplan);
         params.put("amountVUhoheitlicheVermessung", amountVUhoheitlicheVermessung);
         params.put("amountVUsonstige", amountVUsonstige);
+
+        params.put("amountVUamtlicherLageplanGB", amountVUamtlicherLageplanGB);
+        params.put("amountVUhoheitlicheVermessungGB", amountVUhoheitlicheVermessungGB);
+        params.put("amountVUsonstigeGB", amountVUsonstigeGB);
 
         return params;
     }
