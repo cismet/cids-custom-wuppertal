@@ -77,7 +77,7 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel panCommand;
-    private javax.swing.JPanel pnlKostenart;
+    private javax.swing.JPanel pnlKostentyp;
     private de.cismet.cids.custom.objectrenderer.utils.billing.TimeFilterPanel pnlTimeFilters;
     private de.cismet.cids.custom.objectrenderer.utils.billing.VerwendungszweckPanel pnlVerwendungszweck;
     private javax.swing.JTextField txtCustomerName;
@@ -124,7 +124,7 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel2 = new javax.swing.JPanel();
-        pnlKostenart = new javax.swing.JPanel();
+        pnlKostentyp = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         cboKostenfrei = new javax.swing.JCheckBox();
         cboKostenpflichtig = new javax.swing.JCheckBox();
@@ -152,11 +152,11 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
         jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(7, 14, 7, 14));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        pnlKostenart.setBorder(javax.swing.BorderFactory.createTitledBorder(
+        pnlKostentyp.setBorder(javax.swing.BorderFactory.createTitledBorder(
                 org.openide.util.NbBundle.getMessage(
                     BillingWindowSearch.class,
-                    "BillingWindowSearch.pnlKostenart.border.title"))); // NOI18N
-        pnlKostenart.setLayout(new java.awt.BorderLayout());
+                    "BillingWindowSearch.pnlKostentyp.border.title"))); // NOI18N
+        pnlKostentyp.setLayout(new java.awt.BorderLayout());
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
         jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.PAGE_AXIS));
@@ -189,7 +189,7 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
             });
         jPanel1.add(cboKostenpflichtig);
 
-        pnlKostenart.add(jPanel1, java.awt.BorderLayout.CENTER);
+        pnlKostentyp.add(jPanel1, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -198,7 +198,7 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
-        jPanel2.add(pnlKostenart, gridBagConstraints);
+        jPanel2.add(pnlKostentyp, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
@@ -471,7 +471,7 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
         metaObjectNodesBillingSearchStatement.setVerwendungszweckKeys(
             pnlVerwendungszweck.createSelectedVerwendungszweckKeysStringArray());
 
-        metaObjectNodesBillingSearchStatement.setKostenart(chooseKostenart());
+        metaObjectNodesBillingSearchStatement.setKostentyp(chooseKostentyp());
 
         return metaObjectNodesBillingSearchStatement;
     }
@@ -546,13 +546,13 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
      *
      * @return  DOCUMENT ME!
      */
-    private CidsBillingSearchStatement.Kostenart chooseKostenart() {
+    private CidsBillingSearchStatement.Kostentyp chooseKostentyp() {
         if (cboKostenfrei.isSelected() == cboKostenpflichtig.isSelected()) {
-            return CidsBillingSearchStatement.Kostenart.IGNORIEREN;
+            return CidsBillingSearchStatement.Kostentyp.IGNORIEREN;
         } else if (cboKostenfrei.isSelected()) {
-            return CidsBillingSearchStatement.Kostenart.KOSTENFREI;
+            return CidsBillingSearchStatement.Kostentyp.KOSTENFREI;
         } else {
-            return CidsBillingSearchStatement.Kostenart.KOSTENPFLICHTIG;
+            return CidsBillingSearchStatement.Kostentyp.KOSTENPFLICHTIG;
         }
     }
 

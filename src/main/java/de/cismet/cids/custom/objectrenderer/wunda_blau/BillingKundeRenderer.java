@@ -66,7 +66,7 @@ import de.cismet.cids.custom.objectrenderer.utils.billing.PrintBillingReportForC
 import de.cismet.cids.custom.objectrenderer.utils.billing.Usage;
 import de.cismet.cids.custom.objectrenderer.utils.billing.VerwendungszweckPanel;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement;
-import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement.Kostenart;
+import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement.Kostentyp;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -148,7 +148,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
     private javax.swing.JPanel pnlBusyLable;
     private javax.swing.JPanel pnlFilterResults;
     private javax.swing.JPanel pnlFilters;
-    private javax.swing.JPanel pnlKostenart;
+    private javax.swing.JPanel pnlKostentyp;
     private javax.swing.JPanel pnlTable;
     private de.cismet.cids.custom.objectrenderer.utils.billing.TimeFilterPanel pnlTimeFilters;
     private de.cismet.cids.custom.objectrenderer.utils.billing.VerwendungszweckPanel pnlVerwendungszweck;
@@ -254,7 +254,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         txtProjekt = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         cboBenutzer = new javax.swing.JComboBox();
-        pnlKostenart = new javax.swing.JPanel();
+        pnlKostentyp = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         cboKostenfrei = new javax.swing.JCheckBox();
         cboKostenpflichtig = new javax.swing.JCheckBox();
@@ -394,11 +394,11 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
         pnlFilters.add(jPanel3, gridBagConstraints);
 
-        pnlKostenart.setBorder(javax.swing.BorderFactory.createTitledBorder(
+        pnlKostentyp.setBorder(javax.swing.BorderFactory.createTitledBorder(
                 org.openide.util.NbBundle.getMessage(
                     BillingKundeRenderer.class,
-                    "BillingKundeRenderer.pnlKostenart.border.title"))); // NOI18N
-        pnlKostenart.setLayout(new java.awt.BorderLayout());
+                    "BillingKundeRenderer.pnlKostentyp.border.title"))); // NOI18N
+        pnlKostentyp.setLayout(new java.awt.BorderLayout());
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
         jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.PAGE_AXIS));
@@ -433,7 +433,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
             });
         jPanel1.add(cboKostenpflichtig);
 
-        pnlKostenart.add(jPanel1, java.awt.BorderLayout.CENTER);
+        pnlKostentyp.add(jPanel1, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -442,7 +442,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 0, 0);
-        pnlFilters.add(pnlKostenart, gridBagConstraints);
+        pnlFilters.add(pnlKostentyp, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -1139,7 +1139,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
 
             cidsBillingSearchStatement.setVerwendungszweckKeys(
                 pnlVerwendungszweck.createSelectedVerwendungszweckKeysStringArray());
-            cidsBillingSearchStatement.setKostenart(chooseKostenart());
+            cidsBillingSearchStatement.setKostentyp(chooseKostentyp());
             fromDate_tillDate = pnlTimeFilters.chooseDates();
             cidsBillingSearchStatement.setFrom(fromDate_tillDate[0]);
             cidsBillingSearchStatement.setTill(fromDate_tillDate[1]);
@@ -1205,13 +1205,13 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
      *
      * @return  DOCUMENT ME!
      */
-    private Kostenart chooseKostenart() {
+    private Kostentyp chooseKostentyp() {
         if (cboKostenfrei.isSelected() == cboKostenpflichtig.isSelected()) {
-            return Kostenart.IGNORIEREN;
+            return Kostentyp.IGNORIEREN;
         } else if (cboKostenfrei.isSelected()) {
-            return Kostenart.KOSTENFREI;
+            return Kostentyp.KOSTENFREI;
         } else {
-            return Kostenart.KOSTENPFLICHTIG;
+            return Kostentyp.KOSTENPFLICHTIG;
         }
     }
 

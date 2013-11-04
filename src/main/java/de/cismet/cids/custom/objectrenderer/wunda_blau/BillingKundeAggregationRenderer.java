@@ -52,7 +52,7 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objectrenderer.utils.billing.PrintBillingReportForCustomer;
 import de.cismet.cids.custom.reports.wunda_blau.PrintStatisticsReport;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement;
-import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement.Kostenart;
+import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement.Kostentyp;
 
 import de.cismet.cids.dynamics.CidsBean;
 
