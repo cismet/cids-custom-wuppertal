@@ -133,7 +133,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
     private javax.swing.JCheckBox cboKostenpflichtig;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler5;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -143,6 +142,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblFilterResult;
+    private javax.swing.JLabel lblResultHeader;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JPanel panTitle;
     private javax.swing.JPanel pnlBusyLable;
@@ -271,7 +271,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         smiplFilter = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel2 = new javax.swing.JLabel();
         smiplTable = new de.cismet.tools.gui.SemiRoundedPanel();
-        jLabel1 = new javax.swing.JLabel();
+        lblResultHeader = new javax.swing.JLabel();
         pnlTable = new javax.swing.JPanel();
         pnlFilterResults = new javax.swing.JPanel();
         lblFilterResult = new javax.swing.JLabel();
@@ -576,12 +576,14 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         smiplTable.setBackground(new java.awt.Color(51, 51, 51));
         smiplTable.setLayout(new java.awt.FlowLayout());
 
-        jLabel1.setBackground(new java.awt.Color(51, 51, 51));
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        lblResultHeader.setBackground(new java.awt.Color(51, 51, 51));
+        lblResultHeader.setForeground(new java.awt.Color(255, 255, 255));
         org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel1,
-            org.openide.util.NbBundle.getMessage(BillingKundeRenderer.class, "BillingKundeRenderer.jLabel1.text")); // NOI18N
-        smiplTable.add(jLabel1);
+            lblResultHeader,
+            org.openide.util.NbBundle.getMessage(
+                BillingKundeRenderer.class,
+                "BillingKundeRenderer.lblResultHeader.text")); // NOI18N
+        smiplTable.add(lblResultHeader);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -708,7 +710,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         if (!cboKostenfrei.isSelected() && !cboKostenpflichtig.isSelected()) {
             cboKostenpflichtig.setSelected(true);
         }
-        filterBuchungen_placeHolder();
+        filterSettingsChanged();
     }                                                                                 //GEN-LAST:event_cboKostenfreiActionPerformed
 
     /**
@@ -720,7 +722,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         if (!cboKostenfrei.isSelected() && !cboKostenpflichtig.isSelected()) {
             cboKostenfrei.setSelected(true);
         }
-        filterBuchungen_placeHolder();
+        filterSettingsChanged();
     }                                                                                      //GEN-LAST:event_cboKostenpflichtigActionPerformed
 
     /**
@@ -729,7 +731,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
      * @param  evt  DOCUMENT ME!
      */
     private void cboBenutzerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboBenutzerActionPerformed
-        filterBuchungen_placeHolder();
+        filterSettingsChanged();
     }                                                                               //GEN-LAST:event_cboBenutzerActionPerformed
 
     /**
@@ -1089,10 +1091,14 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
     }
 
     /**
-     * a placeholder which can be used if the filterBuchungen has to be executed in a SwingWorker etc...
+     * this method is called after a filter setting has changed.
      */
-    private void filterBuchungen_placeHolder() {
-        // filterBuchungen();
+    private void filterSettingsChanged() {
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblResultHeader,
+            org.openide.util.NbBundle.getMessage(
+                BillingKundeRenderer.class,
+                "BillingKundeRenderer.lblResultHeader.text.filterSettingsChanged")); // NOI18N
     }
 
     /**
@@ -1109,6 +1115,12 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
      * @param  ignoreFilters  DOCUMENT ME!
      */
     private void filterBuchungen(final boolean ignoreFilters) {
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblResultHeader,
+            org.openide.util.NbBundle.getMessage(
+                BillingKundeRenderer.class,
+                "BillingKundeRenderer.lblResultHeader.text")); // NOI18N
+
         final CidsBillingSearchStatement cidsBillingSearchStatement = new CidsBillingSearchStatement(
                 SessionManager.getSession().getUser(),
                 cidsBean.getMetaObject());
@@ -1209,11 +1221,11 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
 
                 @Override
                 public void actionPerformed(final ActionEvent e) {
-                    filterBuchungen_placeHolder();
+                    filterSettingsChanged();
                 }
             };
-        pnlTimeFilters.setFilterAction(filterAction);
-        pnlVerwendungszweck.setFilterAction(filterAction);
+        pnlTimeFilters.setFilterSettingChangedAction(filterAction);
+        pnlVerwendungszweck.setFilterSettingChangedAction(filterAction);
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -1332,7 +1344,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
          */
         @Override
         public void insertUpdate(final DocumentEvent e) {
-            filterBuchungen_placeHolder();
+            filterSettingsChanged();
         }
 
         /**
@@ -1342,7 +1354,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
          */
         @Override
         public void removeUpdate(final DocumentEvent e) {
-            filterBuchungen_placeHolder();
+            filterSettingsChanged();
         }
 
         /**
@@ -1352,7 +1364,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
          */
         @Override
         public void changedUpdate(final DocumentEvent e) {
-            filterBuchungen_placeHolder();
+            filterSettingsChanged();
         }
     }
 

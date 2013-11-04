@@ -19,7 +19,7 @@ import javax.swing.Action;
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public interface FilterActionTrigger {
+public interface FilterSettingChangedTrigger {
 
     //~ Methods ----------------------------------------------------------------
 
@@ -28,12 +28,12 @@ public interface FilterActionTrigger {
      *
      * @return  DOCUMENT ME!
      */
-    Action getFilterAction();
+    Action getFilterSettingChangedAction();
 
     /**
      * DOCUMENT ME!
      *
-     * @param  filterAction  DOCUMENT ME!
+     * @param  filterSettingChangedAction  DOCUMENT ME!
      */
-    void setFilterAction(Action filterAction);
+    void setFilterSettingChangedAction(Action filterSettingChangedAction);
 }

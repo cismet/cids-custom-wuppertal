@@ -99,7 +99,6 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
     private javax.swing.JCheckBox cboBillDownloads;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler5;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel2;
@@ -109,6 +108,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAgrTitle;
     private javax.swing.JLabel lblFilterResult;
+    private javax.swing.JLabel lblResultHeader;
     private javax.swing.JPanel panTitle;
     private javax.swing.JPanel panTitleString;
     private javax.swing.JPanel pnlBusyLable;
@@ -153,7 +153,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         smiplFilter = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel2 = new javax.swing.JLabel();
         smiplTable = new de.cismet.tools.gui.SemiRoundedPanel();
-        jLabel1 = new javax.swing.JLabel();
+        lblResultHeader = new javax.swing.JLabel();
         pnlTable = new javax.swing.JPanel();
         pnlFilterResults = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -225,14 +225,14 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         smiplTable.setBackground(new java.awt.Color(51, 51, 51));
         smiplTable.setLayout(new java.awt.FlowLayout());
 
-        jLabel1.setBackground(new java.awt.Color(51, 51, 51));
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        lblResultHeader.setBackground(new java.awt.Color(51, 51, 51));
+        lblResultHeader.setForeground(new java.awt.Color(255, 255, 255));
         org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel1,
+            lblResultHeader,
             org.openide.util.NbBundle.getMessage(
                 BillingKundeAggregationRenderer.class,
-                "BillingKundeAggregationRenderer.jLabel1.text")); // NOI18N
-        smiplTable.add(jLabel1);
+                "BillingKundeAggregationRenderer.lblResultHeader.text")); // NOI18N
+        smiplTable.add(lblResultHeader);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -552,7 +552,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
      * @param  evt  DOCUMENT ME!
      */
     private void cboAbrechnungsturnusActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboAbrechnungsturnusActionPerformed
-        filterBuchungen_placeHolder();
+        filterSettingsChanged();
     }                                                                                        //GEN-LAST:event_cboAbrechnungsturnusActionPerformed
 
     /**
@@ -616,18 +616,22 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
 
                 @Override
                 public void actionPerformed(final ActionEvent e) {
-                    filterBuchungen_placeHolder();
+                    filterSettingsChanged();
                 }
             };
-        pnlTimeFilters.setFilterAction(filterAction);
-        pnlVerwendungszweck.setFilterAction(filterAction);
+        pnlTimeFilters.setFilterSettingChangedAction(filterAction);
+        pnlVerwendungszweck.setFilterSettingChangedAction(filterAction);
     }
 
     /**
      * DOCUMENT ME!
      */
-    private void filterBuchungen_placeHolder() {
-        // filterBuchungen(false);
+    private void filterSettingsChanged() {
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblResultHeader,
+            org.openide.util.NbBundle.getMessage(
+                BillingKundeAggregationRenderer.class,
+                "BillingKundeAggregationRenderer.lblResultHeader.text.filterSettingsChanged")); // NOI18N
     }
 
     @Override
@@ -657,6 +661,12 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
      * @param  ignoreFilters  DOCUMENT ME!
      */
     private void filterBuchungen(final boolean ignoreFilters) {
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblResultHeader,
+            org.openide.util.NbBundle.getMessage(
+                BillingKundeAggregationRenderer.class,
+                "BillingKundeAggregationRenderer.lblResultHeader.text"));
+
         final ArrayList<MetaObject> kundenMetaObjects = new ArrayList<MetaObject>();
         for (final CidsBean kundeBean : cidsBeans) {
             kundenMetaObjects.add(kundeBean.getMetaObject());

@@ -37,7 +37,7 @@ import javax.swing.JOptionPane;
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterActionTrigger {
+public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterSettingChangedTrigger {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -167,12 +167,12 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterA
     } // </editor-fold>//GEN-END:initComponents
 
     @Override
-    public Action getFilterAction() {
+    public Action getFilterSettingChangedAction() {
         return this.filterAction;
     }
 
     @Override
-    public void setFilterAction(final Action filterAction) {
+    public void setFilterSettingChangedAction(final Action filterAction) {
         this.filterAction = filterAction;
     }
 
