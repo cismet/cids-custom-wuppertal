@@ -25,6 +25,7 @@ import javax.swing.JOptionPane;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
+import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.converter.BooleanConverter;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -58,9 +59,9 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
     private CidsBean cidsBean;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnStornoBuchung;
+    private de.cismet.cids.editors.DefaultBindableJCheckBox cboAbgerechnet;
     private de.cismet.cids.editors.DefaultBindableJCheckBox cboStorno;
     private de.cismet.cids.editors.DefaultBindableReferenceCombo coboStornogrund;
-    private de.cismet.cids.editors.DefaultBindableJCheckBox defaultBindableJCheckBox1;
     private de.cismet.cids.editors.DefaultBindableJTextField defaultBindableJTextField5;
     private de.cismet.cids.editors.DefaultBindableJTextField defaultBindableJTextField7;
     private de.cismet.cids.editors.DefaultBindableJTextField defaultBindableJTextField8;
@@ -118,12 +119,29 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         this.editable = editable;
         initComponents();
         if (!editable) {
-            txtGeschaeftsbuchnummer.setBorder(null);
-            txtProjektbezeichnung.setBorder(null);
+            RendererTools.makeReadOnly(txtGeschaeftsbuchnummer);
+            RendererTools.makeReadOnly(txtProjektbezeichnung);
+            RendererTools.makeReadOnly(coboStornogrund);
         }
-        txtGeschaeftsbuchnummer.setEnabled(editable);
-        txtProjektbezeichnung.setEnabled(editable);
-        coboStornogrund.setEnabled(editable);
+
+        RendererTools.makeReadOnly(btnStornoBuchung);
+        RendererTools.makeReadOnly(cboStorno);
+        RendererTools.makeReadOnly(cboAbgerechnet);
+        RendererTools.makeReadOnly(coboStornogrund);
+        RendererTools.makeReadOnly(defaultBindableJTextField5);
+        RendererTools.makeReadOnly(defaultBindableJTextField7);
+        RendererTools.makeReadOnly(defaultBindableJTextField8);
+        RendererTools.makeReadOnly(jScrollPane1);
+        RendererTools.makeReadOnly(jScrollPane2);
+        RendererTools.makeReadOnly(lblGeschaeftsbuchnummer);
+        RendererTools.makeReadOnly(lblProjektbezeichnung);
+        RendererTools.makeReadOnly(lblStornogrund);
+        RendererTools.makeReadOnly(txtAngelegt_am);
+        RendererTools.makeReadOnly(txtAngelegt_durch);
+        RendererTools.makeReadOnly(txtModus);
+        RendererTools.makeReadOnly(txtVerwendungszweck);
+        RendererTools.makeReadOnly(txtaAenderung);
+        RendererTools.makeReadOnly(txtaBerechnung);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -158,7 +176,7 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         jLabel3 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
-        defaultBindableJCheckBox1 = new de.cismet.cids.editors.DefaultBindableJCheckBox();
+        cboAbgerechnet = new de.cismet.cids.editors.DefaultBindableJCheckBox();
         jLabel4 = new javax.swing.JLabel();
         txtModus = new de.cismet.cids.editors.DefaultBindableJTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -213,6 +231,7 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         jPanel2.add(lblStornogrund, gridBagConstraints);
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -255,7 +274,6 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         org.openide.awt.Mnemonics.setLocalizedText(
             cboStorno,
             org.openide.util.NbBundle.getMessage(BillingBillingEditor.class, "BillingBillingEditor.cboStorno.text")); // NOI18N
-        cboStorno.setEnabled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
@@ -271,6 +289,7 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
         jPanel2.add(cboStorno, gridBagConstraints);
@@ -400,19 +419,18 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 5);
         jPanel4.add(jLabel12, gridBagConstraints);
 
-        defaultBindableJCheckBox1.setBorder(null);
+        cboAbgerechnet.setBorder(null);
         org.openide.awt.Mnemonics.setLocalizedText(
-            defaultBindableJCheckBox1,
+            cboAbgerechnet,
             org.openide.util.NbBundle.getMessage(
                 BillingBillingEditor.class,
-                "BillingBillingEditor.defaultBindableJCheckBox1.text")); // NOI18N
-        defaultBindableJCheckBox1.setEnabled(false);
+                "BillingBillingEditor.cboAbgerechnet.text")); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.abgerechnet}"),
-                defaultBindableJCheckBox1,
+                cboAbgerechnet,
                 org.jdesktop.beansbinding.BeanProperty.create("selected"));
         binding.setSourceNullValue(false);
         binding.setSourceUnreadableValue(false);
@@ -423,7 +441,7 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
-        jPanel4.add(defaultBindableJCheckBox1, gridBagConstraints);
+        jPanel4.add(cboAbgerechnet, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel4,
@@ -436,7 +454,6 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         jPanel4.add(jLabel4, gridBagConstraints);
 
         txtModus.setBorder(null);
-        txtModus.setEnabled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -465,7 +482,6 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         jPanel4.add(jLabel5, gridBagConstraints);
 
         txtVerwendungszweck.setBorder(null);
-        txtVerwendungszweck.setEnabled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -515,7 +531,6 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         jPanel4.add(jLabel8, gridBagConstraints);
 
         defaultBindableJTextField5.setBorder(null);
-        defaultBindableJTextField5.setEnabled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -544,7 +559,6 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         jPanel4.add(jLabel9, gridBagConstraints);
 
         txtAngelegt_am.setBorder(null);
-        txtAngelegt_am.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 7;
@@ -564,7 +578,6 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         jPanel4.add(jLabel10, gridBagConstraints);
 
         defaultBindableJTextField7.setBorder(null);
-        defaultBindableJTextField7.setEnabled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -593,7 +606,6 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         jPanel4.add(jLabel11, gridBagConstraints);
 
         defaultBindableJTextField8.setBorder(null);
-        defaultBindableJTextField8.setEnabled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -615,7 +627,6 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
 
         txtaAenderung.setColumns(20);
         txtaAenderung.setRows(4);
-        txtaAenderung.setEnabled(false);
         jScrollPane1.setViewportView(txtaAenderung);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -630,7 +641,6 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
 
         txtaBerechnung.setColumns(20);
         txtaBerechnung.setRows(6);
-        txtaBerechnung.setEnabled(false);
         jScrollPane2.setViewportView(txtaBerechnung);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -645,7 +655,6 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         txtAngelegt_durch.setText(org.openide.util.NbBundle.getMessage(
                 BillingBillingEditor.class,
                 "BillingBillingEditor.txtAngelegt_durch.text")); // NOI18N
-        txtAngelegt_durch.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
