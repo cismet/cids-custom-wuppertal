@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<parameter name="from" class="java.util.Date"/>
+	<parameter name="till" class="java.util.Date"/>
+	<parameter name="amountTotalDownloads" class="java.lang.Integer"/>
+	<parameter name="amountWithCosts" class="java.lang.Integer"/>
+	<parameter name="amountWithoutCosts" class="java.lang.Integer"/>
+	<parameter name="amountWithCostsVU" class="java.lang.Integer"/>
+	<parameter name="amountWithCostsWiederver" class="java.lang.Integer"/>
+	<parameter name="earningsWithCostsWiederver" class="java.lang.Double"/>
+	<parameter name="earningsWithCostsVU" class="java.lang.Double"/>
+	<parameter name="amountVUamtlicherLageplan" class="java.lang.Integer"/>
+	<parameter name="amountVUhoheitlicheVermessung" class="java.lang.Integer"/>
+	<parameter name="amountVUsonstige" class="java.lang.Integer"/>
+	<parameter name="amountVUamtlicherLageplanGB" class="java.lang.Integer"/>
+	<parameter name="amountVUhoheitlicheVermessungGB" class="java.lang.Integer"/>
+	<parameter name="amountVUsonstigeGB" class="java.lang.Integer"/>
+	<parameter name="amountWiederverkaeufe" class="java.lang.Integer"/>
+	<parameter name="amountWiederverkaeufeGB" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="357" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="102" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$P{till}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="0" y="0" width="63" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$P{from}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="102" y="20" width="230" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountTotalDownloads}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="20" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Downloads gesamt"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="114" y="55" width="230" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountWithCosts}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="55" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["kostenpflichtig"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="75" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["kostenfrei"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="114" y="75" width="230" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountWithoutCosts}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="114" y="95" width="230" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountWithCostsVU}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="114" y="115" width="230" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountWithCostsWiederver}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="114" y="146" width="230" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$P{earningsWithCostsVU}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="114" y="166" width="230" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$P{earningsWithCostsWiederver}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="116" y="196" width="230" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountVUamtlicherLageplan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="236" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["VU s"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="196" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["VU aL"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="359" y="216" width="198" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountVUhoheitlicheVermessungGB}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="116" y="216" width="230" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountVUhoheitlicheVermessung}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="359" y="236" width="198" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountVUsonstigeGB}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="216" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["VU hV"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="359" y="196" width="198" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountVUamtlicherLageplanGB}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="116" y="236" width="230" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountVUsonstige}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="359" y="256" width="198" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountWiederverkaeufeGB}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="116" y="256" width="230" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{amountWiederverkaeufe}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="256" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Wieder"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="116" y="300" width="230" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[new Integer($P{amountVUamtlicherLageplan}.intValue() + $P{amountVUhoheitlicheVermessung}.intValue() + $P{amountVUsonstige}.intValue())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="116" y="320" width="230" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$P{earningsWithCostsWiederver}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
