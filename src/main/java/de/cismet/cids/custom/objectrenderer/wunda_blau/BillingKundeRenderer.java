@@ -188,6 +188,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
      * @param  request  DOCUMENT ME!
      */
     private void doDownload(final String request) {
+        DownloadManagerDialog.showAskingForUserTitle(this);
+
         try {
             final URL url = new URL(request);
             String filename = "alkis_druck";
