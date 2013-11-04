@@ -101,28 +101,38 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
         pnlTimeFilterCards = new javax.swing.JPanel();
         pnlIgnore = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
-        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(1, 0), new java.awt.Dimension(1, 0), new java.awt.Dimension(1, 32767));
+        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(1, 0),
+                new java.awt.Dimension(1, 0),
+                new java.awt.Dimension(1, 32767));
         pnlToday = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(1, 0), new java.awt.Dimension(1, 0), new java.awt.Dimension(1, 32767));
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(1, 0),
+                new java.awt.Dimension(1, 0),
+                new java.awt.Dimension(1, 32767));
         pnlMonth = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         cboMonth = new javax.swing.JComboBox();
         cboYear_Month = new javax.swing.JComboBox();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(1, 0), new java.awt.Dimension(1, 0), new java.awt.Dimension(1, 32767));
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(1, 0),
+                new java.awt.Dimension(1, 0),
+                new java.awt.Dimension(1, 32767));
         pnlQuarter = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         cboQuarter = new javax.swing.JComboBox();
         cboYear_Quarter = new javax.swing.JComboBox();
-        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(1, 0), new java.awt.Dimension(1, 0), new java.awt.Dimension(1, 32767));
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(1, 0),
+                new java.awt.Dimension(1, 0),
+                new java.awt.Dimension(1, 32767));
         pnlDateRange = new javax.swing.JPanel();
         dpTill = new org.jdesktop.swingx.JXDatePicker();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         dpFrom = new org.jdesktop.swingx.JXDatePicker();
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         tbtnToday = new javax.swing.JToggleButton();
         tbtnIgnore = new javax.swing.JToggleButton();
         tbtnMonth = new javax.swing.JToggleButton();
@@ -139,7 +149,9 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
 
         pnlIgnore.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel13, org.openide.util.NbBundle.getMessage(TimeFilterPanel.class, "TimeFilterPanel.jLabel13.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel13,
+            org.openide.util.NbBundle.getMessage(TimeFilterPanel.class, "TimeFilterPanel.jLabel13.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -154,11 +166,13 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
         gridBagConstraints.weightx = 1.0;
         pnlIgnore.add(filler5, gridBagConstraints);
 
-        pnlTimeFilterCards.add(pnlIgnore, "card6");
+        pnlTimeFilterCards.add(pnlIgnore, "pnlIgnore");
 
         pnlToday.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel9, org.openide.util.NbBundle.getMessage(TimeFilterPanel.class, "TimeFilterPanel.jLabel9.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel9,
+            org.openide.util.NbBundle.getMessage(TimeFilterPanel.class, "TimeFilterPanel.jLabel9.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -177,13 +191,17 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
 
         pnlMonth.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(TimeFilterPanel.class, "TimeFilterPanel.jLabel3.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel3,
+            org.openide.util.NbBundle.getMessage(TimeFilterPanel.class, "TimeFilterPanel.jLabel3.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(10, 6, 3, 3);
         pnlMonth.add(jLabel3, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel10, org.openide.util.NbBundle.getMessage(TimeFilterPanel.class, "TimeFilterPanel.jLabel10.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel10,
+            org.openide.util.NbBundle.getMessage(TimeFilterPanel.class, "TimeFilterPanel.jLabel10.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -193,10 +211,12 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
 
         cboMonth.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Januar", "Februar", "März" }));
         cboMonth.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cboMonthActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cboMonthActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.5;
@@ -205,10 +225,12 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
 
         cboYear_Month.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "2013" }));
         cboYear_Month.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cboYear_MonthActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cboYear_MonthActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -228,13 +250,17 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
 
         pnlQuarter.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel11, org.openide.util.NbBundle.getMessage(TimeFilterPanel.class, "TimeFilterPanel.jLabel11.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel11,
+            org.openide.util.NbBundle.getMessage(TimeFilterPanel.class, "TimeFilterPanel.jLabel11.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(10, 6, 4, 3);
         pnlQuarter.add(jLabel11, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel12, org.openide.util.NbBundle.getMessage(TimeFilterPanel.class, "TimeFilterPanel.jLabel12.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel12,
+            org.openide.util.NbBundle.getMessage(TimeFilterPanel.class, "TimeFilterPanel.jLabel12.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -242,12 +268,15 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
         gridBagConstraints.insets = new java.awt.Insets(3, 6, 10, 3);
         pnlQuarter.add(jLabel12, gridBagConstraints);
 
-        cboQuarter.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Januar - März", "April - Juni", "Juli - September", "Oktober - Dezember" }));
+        cboQuarter.setModel(new javax.swing.DefaultComboBoxModel(
+                new String[] { "Januar - März", "April - Juni", "Juli - September", "Oktober - Dezember" }));
         cboQuarter.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cboQuarterActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cboQuarterActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.5;
@@ -256,10 +285,12 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
 
         cboYear_Quarter.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "2013" }));
         cboYear_Quarter.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cboYear_QuarterActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cboYear_QuarterActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -280,10 +311,12 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
         pnlDateRange.setLayout(new java.awt.GridBagLayout());
 
         dpTill.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dpTillActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    dpTillActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -293,12 +326,16 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
         pnlDateRange.add(dpTill, gridBagConstraints);
         dpTill.setFormats(DATE_FORMAT);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(TimeFilterPanel.class, "TimeFilterPanel.jLabel7.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel7,
+            org.openide.util.NbBundle.getMessage(TimeFilterPanel.class, "TimeFilterPanel.jLabel7.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(10, 6, 4, 3);
         pnlDateRange.add(jLabel7, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(TimeFilterPanel.class, "TimeFilterPanel.jLabel8.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel8,
+            org.openide.util.NbBundle.getMessage(TimeFilterPanel.class, "TimeFilterPanel.jLabel8.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -306,10 +343,12 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
         pnlDateRange.add(jLabel8, gridBagConstraints);
 
         dpFrom.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dpFromActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    dpFromActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.5;
@@ -335,13 +374,17 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
         pnlTimeFilters.add(pnlTimeFilterCards, gridBagConstraints);
 
         btngTimeFilters.add(tbtnToday);
-        org.openide.awt.Mnemonics.setLocalizedText(tbtnToday, org.openide.util.NbBundle.getMessage(TimeFilterPanel.class, "TimeFilterPanel.tbtnToday.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            tbtnToday,
+            org.openide.util.NbBundle.getMessage(TimeFilterPanel.class, "TimeFilterPanel.tbtnToday.text")); // NOI18N
         tbtnToday.setMaximumSize(new java.awt.Dimension(500, 25));
         tbtnToday.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tbtnTodayActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    tbtnTodayActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -352,7 +395,16 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
 
         btngTimeFilters.add(tbtnIgnore);
         tbtnIgnore.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(tbtnIgnore, org.openide.util.NbBundle.getMessage(TimeFilterPanel.class, "TimeFilterPanel.tbtnIgnore.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            tbtnIgnore,
+            org.openide.util.NbBundle.getMessage(TimeFilterPanel.class, "TimeFilterPanel.tbtnIgnore.text")); // NOI18N
+        tbtnIgnore.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    tbtnIgnoreActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -362,13 +414,17 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
         pnlTimeFilters.add(tbtnIgnore, gridBagConstraints);
 
         btngTimeFilters.add(tbtnMonth);
-        org.openide.awt.Mnemonics.setLocalizedText(tbtnMonth, org.openide.util.NbBundle.getMessage(TimeFilterPanel.class, "TimeFilterPanel.tbtnMonth.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            tbtnMonth,
+            org.openide.util.NbBundle.getMessage(TimeFilterPanel.class, "TimeFilterPanel.tbtnMonth.text")); // NOI18N
         tbtnMonth.setMaximumSize(new java.awt.Dimension(500, 25));
         tbtnMonth.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tbtnMonthActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    tbtnMonthActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -378,13 +434,17 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
         pnlTimeFilters.add(tbtnMonth, gridBagConstraints);
 
         btngTimeFilters.add(tbtnDateRange);
-        org.openide.awt.Mnemonics.setLocalizedText(tbtnDateRange, org.openide.util.NbBundle.getMessage(TimeFilterPanel.class, "TimeFilterPanel.tbtnDateRange.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            tbtnDateRange,
+            org.openide.util.NbBundle.getMessage(TimeFilterPanel.class, "TimeFilterPanel.tbtnDateRange.text")); // NOI18N
         tbtnDateRange.setMaximumSize(new java.awt.Dimension(500, 25));
         tbtnDateRange.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tbtnDateRangeActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    tbtnDateRangeActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
@@ -394,13 +454,17 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
         pnlTimeFilters.add(tbtnDateRange, gridBagConstraints);
 
         btngTimeFilters.add(tbtnQuarter);
-        org.openide.awt.Mnemonics.setLocalizedText(tbtnQuarter, org.openide.util.NbBundle.getMessage(TimeFilterPanel.class, "TimeFilterPanel.tbtnQuarter.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            tbtnQuarter,
+            org.openide.util.NbBundle.getMessage(TimeFilterPanel.class, "TimeFilterPanel.tbtnQuarter.text")); // NOI18N
         tbtnQuarter.setMaximumSize(new java.awt.Dimension(500, 25));
         tbtnQuarter.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tbtnQuarterActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    tbtnQuarterActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
@@ -414,108 +478,120 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         add(pnlTimeFilters, gridBagConstraints);
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboMonthActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboMonthActionPerformed
+    private void cboMonthActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboMonthActionPerformed
         filterAction.actionPerformed(null);
-    }//GEN-LAST:event_cboMonthActionPerformed
+    }                                                                            //GEN-LAST:event_cboMonthActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboYear_MonthActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboYear_MonthActionPerformed
+    private void cboYear_MonthActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboYear_MonthActionPerformed
         filterAction.actionPerformed(null);
         ;
-    }//GEN-LAST:event_cboYear_MonthActionPerformed
+    }                                                                                 //GEN-LAST:event_cboYear_MonthActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboQuarterActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboQuarterActionPerformed
+    private void cboQuarterActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboQuarterActionPerformed
         filterAction.actionPerformed(null);
-    }//GEN-LAST:event_cboQuarterActionPerformed
+    }                                                                              //GEN-LAST:event_cboQuarterActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboYear_QuarterActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboYear_QuarterActionPerformed
+    private void cboYear_QuarterActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboYear_QuarterActionPerformed
         filterAction.actionPerformed(null);
-    }//GEN-LAST:event_cboYear_QuarterActionPerformed
+    }                                                                                   //GEN-LAST:event_cboYear_QuarterActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void dpTillActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dpTillActionPerformed
+    private void dpTillActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_dpTillActionPerformed
         checkDateRange();
-    }//GEN-LAST:event_dpTillActionPerformed
+    }                                                                          //GEN-LAST:event_dpTillActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void dpFromActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dpFromActionPerformed
+    private void dpFromActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_dpFromActionPerformed
         checkDateRange();
-    }//GEN-LAST:event_dpFromActionPerformed
+    }                                                                          //GEN-LAST:event_dpFromActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnTodayActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnTodayActionPerformed
+    private void tbtnTodayActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnTodayActionPerformed
         changeVisibleTimeFilterPanel();
         filterAction.actionPerformed(null);
-    }//GEN-LAST:event_tbtnTodayActionPerformed
+    }                                                                             //GEN-LAST:event_tbtnTodayActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnMonthActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnMonthActionPerformed
+    private void tbtnMonthActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnMonthActionPerformed
         changeVisibleTimeFilterPanel();
         filterAction.actionPerformed(null);
-    }//GEN-LAST:event_tbtnMonthActionPerformed
+    }                                                                             //GEN-LAST:event_tbtnMonthActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnDateRangeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnDateRangeActionPerformed
+    private void tbtnDateRangeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnDateRangeActionPerformed
         changeVisibleTimeFilterPanel();
-    }//GEN-LAST:event_tbtnDateRangeActionPerformed
+    }                                                                                 //GEN-LAST:event_tbtnDateRangeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnQuarterActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnQuarterActionPerformed
+    private void tbtnQuarterActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnQuarterActionPerformed
         changeVisibleTimeFilterPanel();
         filterAction.actionPerformed(null);
-    }//GEN-LAST:event_tbtnQuarterActionPerformed
+    }                                                                               //GEN-LAST:event_tbtnQuarterActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void tbtnIgnoreActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnIgnoreActionPerformed
+        changeVisibleTimeFilterPanel();
+        filterAction.actionPerformed(null);
+    }                                                                              //GEN-LAST:event_tbtnIgnoreActionPerformed
 
     /**
      * DOCUMENT ME!
      */
     private void changeVisibleTimeFilterPanel() {
         final CardLayout cardLayout = (CardLayout)pnlTimeFilterCards.getLayout();
-        if (tbtnToday.isSelected()) {
+        if (tbtnIgnore.isSelected()) {
+            cardLayout.show(pnlTimeFilterCards, "pnlIgnore");
+        } else if (tbtnToday.isSelected()) {
             cardLayout.show(pnlTimeFilterCards, "pnlToday");
         } else if (tbtnMonth.isSelected()) {
             cardLayout.show(pnlTimeFilterCards, "pnlMonth");
