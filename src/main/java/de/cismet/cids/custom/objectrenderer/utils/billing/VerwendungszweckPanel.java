@@ -115,7 +115,7 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterS
                                 message,
                                 title,
                                 JOptionPane.INFORMATION_MESSAGE);
-                        } else {
+                        } else if (filterAction != null) {
                             filterAction.actionPerformed(null);
                         }
                     }

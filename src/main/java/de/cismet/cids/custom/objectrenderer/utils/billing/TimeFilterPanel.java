@@ -83,6 +83,7 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
     public TimeFilterPanel() {
         initComponents();
         setTimeRelatedModels();
+        selectCurrentDates();
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -486,7 +487,7 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
      * @param  evt  DOCUMENT ME!
      */
     private void cboMonthActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboMonthActionPerformed
-        filterAction.actionPerformed(null);
+        filterSettingChanged();
     }                                                                            //GEN-LAST:event_cboMonthActionPerformed
 
     /**
@@ -495,8 +496,7 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
      * @param  evt  DOCUMENT ME!
      */
     private void cboYear_MonthActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboYear_MonthActionPerformed
-        filterAction.actionPerformed(null);
-        ;
+        filterSettingChanged();
     }                                                                                 //GEN-LAST:event_cboYear_MonthActionPerformed
 
     /**
@@ -505,7 +505,7 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
      * @param  evt  DOCUMENT ME!
      */
     private void cboQuarterActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboQuarterActionPerformed
-        filterAction.actionPerformed(null);
+        filterSettingChanged();
     }                                                                              //GEN-LAST:event_cboQuarterActionPerformed
 
     /**
@@ -514,7 +514,7 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
      * @param  evt  DOCUMENT ME!
      */
     private void cboYear_QuarterActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboYear_QuarterActionPerformed
-        filterAction.actionPerformed(null);
+        filterSettingChanged();
     }                                                                                   //GEN-LAST:event_cboYear_QuarterActionPerformed
 
     /**
@@ -542,7 +542,7 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
      */
     private void tbtnTodayActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnTodayActionPerformed
         changeVisibleTimeFilterPanel();
-        filterAction.actionPerformed(null);
+        filterSettingChanged();
     }                                                                             //GEN-LAST:event_tbtnTodayActionPerformed
 
     /**
@@ -552,7 +552,7 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
      */
     private void tbtnMonthActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnMonthActionPerformed
         changeVisibleTimeFilterPanel();
-        filterAction.actionPerformed(null);
+        filterSettingChanged();
     }                                                                             //GEN-LAST:event_tbtnMonthActionPerformed
 
     /**
@@ -571,7 +571,7 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
      */
     private void tbtnQuarterActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnQuarterActionPerformed
         changeVisibleTimeFilterPanel();
-        filterAction.actionPerformed(null);
+        filterSettingChanged();
     }                                                                               //GEN-LAST:event_tbtnQuarterActionPerformed
 
     /**
@@ -581,7 +581,7 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
      */
     private void tbtnIgnoreActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnIgnoreActionPerformed
         changeVisibleTimeFilterPanel();
-        filterAction.actionPerformed(null);
+        filterSettingChanged();
     }                                                                              //GEN-LAST:event_tbtnIgnoreActionPerformed
 
     /**
@@ -654,6 +654,19 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
     }
 
     /**
+     * DOCUMENT ME!
+     */
+    private void selectCurrentDates() {
+        final Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        final int month = cal.get(Calendar.MONTH);
+        cboMonth.setSelectedIndex(month);
+
+        final int quarter = month / 3;
+        cboQuarter.setSelectedIndex(quarter);
+    }
+
+    /**
      * DateFormatSymbols returns an extra, empty value at the end of the array of months. Remove it.
      *
      * @return  DOCUMENT ME!
@@ -710,5 +723,14 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
             }
         }
         return fromDate_tillDate;
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void filterSettingChanged() {
+        if (filterAction != null) {
+            filterAction.actionPerformed(null);
+        }
     }
 }
