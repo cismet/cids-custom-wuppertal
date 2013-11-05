@@ -789,7 +789,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
      * @param  evt  DOCUMENT ME!
      */
     private void btnShowResultsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnShowResultsActionPerformed
-        filterBuchungen(false);
+        filterBuchungen();
     }                                                                                  //GEN-LAST:event_btnShowResultsActionPerformed
 
     /**
@@ -858,7 +858,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
                 cboBenutzer.addItem(benutzerBean);
             }
 
-            filterBuchungen(true);
+            filterBuchungen();
             this.title = NbBundle.getMessage(BillingKundeRenderer.class, "BillingKundeRenderer.lblTitle.prefix") + " "
                         + kundeBean.toString();
             lblTitle.setText(this.title);
@@ -1106,19 +1106,9 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
     }
 
     /**
-     * DOCUMENT ME!
+     * Runs a query to get the billings, which match the filters, and adds them to the table.
      */
     private void filterBuchungen() {
-        filterBuchungen(false);
-    }
-
-    /**
-     * Runs a query to get the billings, which match the filters, and adds them to the table. If <code>
-     * ignoreFilters</code> is true, then the filters will be ignored and the default values will be used.
-     *
-     * @param  ignoreFilters  DOCUMENT ME!
-     */
-    private void filterBuchungen(final boolean ignoreFilters) {
         org.openide.awt.Mnemonics.setLocalizedText(
             lblResultHeader,
             org.openide.util.NbBundle.getMessage(
@@ -1128,24 +1118,23 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         final CidsBillingSearchStatement cidsBillingSearchStatement = new CidsBillingSearchStatement(
                 SessionManager.getSession().getUser(),
                 cidsBean.getMetaObject());
-        if (!ignoreFilters) {
-            cidsBillingSearchStatement.setGeschaeftsbuchnummer(txtGeschaeftsbuchnummer.getText());
-            cidsBillingSearchStatement.setProjekt(txtProjekt.getText());
+// set filters
+        cidsBillingSearchStatement.setGeschaeftsbuchnummer(txtGeschaeftsbuchnummer.getText());
+        cidsBillingSearchStatement.setProjekt(txtProjekt.getText());
 
-            final Object user = cboBenutzer.getSelectedItem();
-            String userID = "";
-            if (user instanceof CidsBean) {
-                userID = ((CidsBean)user).getProperty("id").toString();
-            }
-            cidsBillingSearchStatement.setUserID(userID);
-
-            cidsBillingSearchStatement.setVerwendungszweckKeys(
-                pnlVerwendungszweck.createSelectedVerwendungszweckKeysStringArray());
-            cidsBillingSearchStatement.setKostentyp(chooseKostentyp());
-            fromDate_tillDate = pnlTimeFilters.chooseDates();
-            cidsBillingSearchStatement.setFrom(fromDate_tillDate[0]);
-            cidsBillingSearchStatement.setTill(fromDate_tillDate[1]);
+        final Object user = cboBenutzer.getSelectedItem();
+        String userID = "";
+        if (user instanceof CidsBean) {
+            userID = ((CidsBean)user).getProperty("id").toString();
         }
+        cidsBillingSearchStatement.setUserID(userID);
+
+        cidsBillingSearchStatement.setVerwendungszweckKeys(
+            pnlVerwendungszweck.createSelectedVerwendungszweckKeysStringArray());
+        cidsBillingSearchStatement.setKostentyp(chooseKostentyp());
+        fromDate_tillDate = pnlTimeFilters.chooseDates();
+        cidsBillingSearchStatement.setFrom(fromDate_tillDate[0]);
+        cidsBillingSearchStatement.setTill(fromDate_tillDate[1]);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Query to get the billings: " + cidsBillingSearchStatement.generateQuery());

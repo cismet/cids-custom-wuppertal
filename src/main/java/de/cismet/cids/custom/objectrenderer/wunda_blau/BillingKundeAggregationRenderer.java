@@ -627,7 +627,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
      * @param  evt  DOCUMENT ME!
      */
     private void btnShowResultsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnShowResultsActionPerformed
-        filterBuchungen(false);
+        filterBuchungen();
     }                                                                                  //GEN-LAST:event_btnShowResultsActionPerformed
 
     /**
@@ -731,7 +731,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         this.cidsBeans = cidsBeans;
         setTitle(null);
         if (!cidsBeans.isEmpty()) {
-            filterBuchungen(true);
+            filterBuchungen();
         }
     }
 
@@ -739,15 +739,6 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
      * DOCUMENT ME!
      */
     private void filterBuchungen() {
-        filterBuchungen(false);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  ignoreFilters  DOCUMENT ME!
-     */
-    private void filterBuchungen(final boolean ignoreFilters) {
         org.openide.awt.Mnemonics.setLocalizedText(
             lblResultHeader,
             org.openide.util.NbBundle.getMessage(
@@ -761,23 +752,23 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         final CidsBillingSearchStatement cidsBillingSearchStatement = new CidsBillingSearchStatement(
                 SessionManager.getSession().getUser(),
                 kundenMetaObjects);
-        if (!ignoreFilters) {
-            cidsBillingSearchStatement.setVerwendungszweckKeys(
-                pnlVerwendungszweck.createSelectedVerwendungszweckKeysStringArray());
-            fromDate_tillDate = pnlTimeFilters.chooseDates();
-            cidsBillingSearchStatement.setFrom(fromDate_tillDate[0]);
-            cidsBillingSearchStatement.setTill(fromDate_tillDate[1]);
 
-            final Object abrechnungsturnus = cboAbrechnungsturnus.getSelectedItem();
-            String abrechnungsturnusID = "";
-            if (abrechnungsturnus instanceof CidsBean) {
-                abrechnungsturnusID = ((CidsBean)abrechnungsturnus).getProperty("id").toString();
-            }
-            cidsBillingSearchStatement.setAbrechnungsturnusID(abrechnungsturnusID);
+        // set filters
+        cidsBillingSearchStatement.setVerwendungszweckKeys(
+            pnlVerwendungszweck.createSelectedVerwendungszweckKeysStringArray());
+        fromDate_tillDate = pnlTimeFilters.chooseDates();
+        cidsBillingSearchStatement.setFrom(fromDate_tillDate[0]);
+        cidsBillingSearchStatement.setTill(fromDate_tillDate[1]);
 
-            if (cboHideFreeDownloads.isSelected()) {
-                cidsBillingSearchStatement.setKostentyp(Kostentyp.KOSTENPFLICHTIG);
-            }
+        final Object abrechnungsturnus = cboAbrechnungsturnus.getSelectedItem();
+        String abrechnungsturnusID = "";
+        if (abrechnungsturnus instanceof CidsBean) {
+            abrechnungsturnusID = ((CidsBean)abrechnungsturnus).getProperty("id").toString();
+        }
+        cidsBillingSearchStatement.setAbrechnungsturnusID(abrechnungsturnusID);
+
+        if (cboHideFreeDownloads.isSelected()) {
+            cidsBillingSearchStatement.setKostentyp(Kostentyp.KOSTENPFLICHTIG);
         }
 
         if (LOG.isDebugEnabled()) {
