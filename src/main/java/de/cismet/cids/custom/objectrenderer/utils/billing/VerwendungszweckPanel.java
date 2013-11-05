@@ -66,7 +66,6 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterS
     private HashMap<JCheckBox, Usage> mappingJCheckboxToUsages = new HashMap<JCheckBox, Usage>();
     private Action filterAction;
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel pnlVerwendungszweck;
     private javax.swing.JPanel pnlVerwendungszweckCheckBoxes;
     // End of variables declaration//GEN-END:variables
 
@@ -135,35 +134,23 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterS
     private void initComponents() {
         final java.awt.GridBagConstraints gridBagConstraints;
 
-        pnlVerwendungszweck = new javax.swing.JPanel();
         pnlVerwendungszweckCheckBoxes = new javax.swing.JPanel();
 
-        setLayout(new java.awt.GridBagLayout());
-
-        pnlVerwendungszweck.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                null,
+        setBorder(javax.swing.BorderFactory.createTitledBorder(
                 org.openide.util.NbBundle.getMessage(
                     VerwendungszweckPanel.class,
-                    "VerwendungszweckPanel.pnlVerwendungszweck.border.title"),
-                javax.swing.border.TitledBorder.LEADING,
-                javax.swing.border.TitledBorder.DEFAULT_POSITION)); // NOI18N
-        pnlVerwendungszweck.setLayout(new java.awt.BorderLayout());
+                    "VerwendungszweckPanel.border.title"))); // NOI18N
+        setLayout(new java.awt.GridBagLayout());
 
         pnlVerwendungszweckCheckBoxes.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
         pnlVerwendungszweckCheckBoxes.setLayout(new javax.swing.BoxLayout(
                 pnlVerwendungszweckCheckBoxes,
                 javax.swing.BoxLayout.PAGE_AXIS));
-        pnlVerwendungszweck.add(pnlVerwendungszweckCheckBoxes, java.awt.BorderLayout.CENTER);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        add(pnlVerwendungszweck, gridBagConstraints);
+        add(pnlVerwendungszweckCheckBoxes, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
 
     @Override
