@@ -671,7 +671,9 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                 true,
                 cboBillDownloads.isSelected()).print();
         }
-        filterBuchungen();
+        if (cboBillDownloads.isSelected()) {
+            filterBuchungen();
+        }
     }                                                                                      //GEN-LAST:event_btnRechnungsanlageActionPerformed
 
     /**

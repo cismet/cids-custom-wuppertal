@@ -804,7 +804,9 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
             fromDate_tillDate,
             true,
             cboBillDownloads.isSelected()).print();
-        filterBuchungen();
+        if (cboBillDownloads.isSelected()) {
+            filterBuchungen();
+        }
     }                                                                                      //GEN-LAST:event_btnRechnungsanlageActionPerformed
 
     /**
