@@ -50,6 +50,7 @@ import java.util.concurrent.ExecutionException;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.SwingWorker;
 import javax.swing.event.DocumentEvent;
@@ -129,6 +130,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
     private javax.swing.JButton btnShowResults;
     private javax.swing.JComboBox cboBenutzer;
     private javax.swing.JCheckBox cboBillDownloads;
+    private javax.swing.JCheckBox cboHideFreeDownloadsBuchungsbeleg;
+    private javax.swing.JCheckBox cboHideFreeDownloadsRechnungsanlage;
     private javax.swing.JCheckBox cboKostenfrei;
     private javax.swing.JCheckBox cboKostenpflichtig;
     private javax.swing.Box.Filler filler1;
@@ -270,6 +273,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
+        cboHideFreeDownloadsRechnungsanlage = new javax.swing.JCheckBox();
+        cboHideFreeDownloadsBuchungsbeleg = new javax.swing.JCheckBox();
         smiplFilter = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel2 = new javax.swing.JLabel();
         smiplTable = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -502,10 +507,11 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(btnBuchungsbeleg, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -523,8 +529,9 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(btnRechnungsanlage, gridBagConstraints);
 
         cboBillDownloads.setSelected(true);
@@ -552,6 +559,32 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         jPanel2.add(filler1, gridBagConstraints);
+
+        cboHideFreeDownloadsRechnungsanlage.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            cboHideFreeDownloadsRechnungsanlage,
+            org.openide.util.NbBundle.getMessage(
+                BillingKundeRenderer.class,
+                "BillingKundeRenderer.cboHideFreeDownloadsRechnungsanlage.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
+        jPanel2.add(cboHideFreeDownloadsRechnungsanlage, gridBagConstraints);
+
+        cboHideFreeDownloadsBuchungsbeleg.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            cboHideFreeDownloadsBuchungsbeleg,
+            org.openide.util.NbBundle.getMessage(
+                BillingKundeRenderer.class,
+                "BillingKundeRenderer.cboHideFreeDownloadsBuchungsbeleg.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
+        jPanel2.add(cboHideFreeDownloadsBuchungsbeleg, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -800,7 +833,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
     private void btnRechnungsanlageActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRechnungsanlageActionPerformed
         new PrintBillingReportForCustomer(
             cidsBean,
-            filteredBuchungen,
+            createBillingsOfCostumersForReports(evt),
             fromDate_tillDate,
             true,
             cboBillDownloads.isSelected()).print();
@@ -817,11 +850,54 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
     private void btnBuchungsbelegActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBuchungsbelegActionPerformed
         new PrintBillingReportForCustomer(
             cidsBean,
-            filteredBuchungen,
+            createBillingsOfCostumersForReports(evt),
             fromDate_tillDate,
             false,
             cboBillDownloads.isSelected()).print();
     }                                                                                    //GEN-LAST:event_btnBuchungsbelegActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   evt  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private Collection<CidsBean> createBillingsOfCostumersForReports(final ActionEvent evt) {
+        final Collection<CidsBean> billings = new ArrayList<CidsBean>();
+        final boolean showBillingWithoutCostInReport = retrieveShowBillingInReport(evt);
+        if (showBillingWithoutCostInReport) {
+            // actually do nothing
+            return filteredBuchungen;
+        } else {
+            // remove billings which cost nothing
+            for (final CidsBean billingBean : filteredBuchungen) {
+                final Double nettoSum = (Double)billingBean.getProperty("netto_summe");
+                if (showBillingWithoutCostInReport || (nettoSum > 0)) {
+                    billings.add(billingBean);
+                }
+            }
+            return billings;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   evt  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private boolean retrieveShowBillingInReport(final ActionEvent evt) {
+        final JButton source = (JButton)evt.getSource();
+        if (source.equals(btnBuchungsbeleg)) {
+            return !cboHideFreeDownloadsBuchungsbeleg.isSelected();
+        } else if (source.equals(btnRechnungsanlage)) {
+            return !cboHideFreeDownloadsRechnungsanlage.isSelected();
+        } else {
+            return false;
+        }
+    }
 
     /**
      * DOCUMENT ME!
