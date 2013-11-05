@@ -142,7 +142,7 @@ public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterS
                     "VerwendungszweckPanel.border.title"))); // NOI18N
         setLayout(new java.awt.GridBagLayout());
 
-        pnlVerwendungszweckCheckBoxes.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
+        pnlVerwendungszweckCheckBoxes.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 6, 3, 3));
         pnlVerwendungszweckCheckBoxes.setLayout(new javax.swing.BoxLayout(
                 pnlVerwendungszweckCheckBoxes,
                 javax.swing.BoxLayout.PAGE_AXIS));

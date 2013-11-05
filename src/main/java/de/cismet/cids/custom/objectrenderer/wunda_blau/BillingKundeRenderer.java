@@ -303,14 +303,16 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         setBorder(javax.swing.BorderFactory.createEmptyBorder(7, 7, 7, 7));
         setLayout(new java.awt.GridBagLayout());
 
-        pnlFilters.setBorder(javax.swing.BorderFactory.createEmptyBorder(6, 6, 6, 6));
+        pnlFilters.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
         pnlFilters.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
         pnlFilters.add(pnlTimeFilters, gridBagConstraints);
 
+        jPanel3.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+                javax.swing.BorderFactory.createEmptyBorder(0, 2, 0, 2),
+                javax.swing.BorderFactory.createTitledBorder("")));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -347,7 +349,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 3, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 3, 12);
         jPanel3.add(txtGeschaeftsbuchnummer, gridBagConstraints);
         txtGeschaeftsbuchnummer.getDocument().addDocumentListener(new FilterBuchungenDocumentListener());
 
@@ -362,7 +364,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(3, 0, 3, 0);
+        gridBagConstraints.insets = new java.awt.Insets(3, 0, 3, 12);
         jPanel3.add(txtProjekt, gridBagConstraints);
         txtProjekt.getDocument().addDocumentListener(new FilterBuchungenDocumentListener());
 
@@ -387,7 +389,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(3, 0, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(3, 0, 0, 12);
         jPanel3.add(cboBenutzer, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -396,7 +398,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 0);
         pnlFilters.add(jPanel3, gridBagConstraints);
 
         pnlKostentyp.setBorder(javax.swing.BorderFactory.createTitledBorder(
@@ -405,7 +406,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
                     "BillingKundeRenderer.pnlKostentyp.border.title"))); // NOI18N
         pnlKostentyp.setLayout(new java.awt.BorderLayout());
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
+        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 6, 3, 3));
         jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.PAGE_AXIS));
 
         cboKostenfrei.setSelected(true);
@@ -446,14 +447,14 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new java.awt.Insets(2, 0, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(6, 0, 0, 0);
         pnlFilters.add(pnlKostentyp, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
+        gridBagConstraints.insets = new java.awt.Insets(0, 3, 0, 3);
         pnlFilters.add(filler5, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -462,7 +463,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 0, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(6, 0, 0, 0);
         pnlFilters.add(pnlVerwendungszweck, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -481,7 +482,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 2);
+        gridBagConstraints.insets = new java.awt.Insets(17, 0, 0, 2);
         pnlFilters.add(btnShowResults, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -492,6 +493,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         gridBagConstraints.weightx = 1.0;
         add(pnlFilters, gridBagConstraints);
 
+        jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 10, 10));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -511,7 +513,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(15, 5, 0, 5);
         jPanel2.add(btnBuchungsbeleg, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -531,7 +533,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         jPanel2.add(btnRechnungsanlage, gridBagConstraints);
 
         cboBillDownloads.setSelected(true);
@@ -551,7 +553,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 7, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
         jPanel2.add(cboBillDownloads, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -570,7 +572,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
         jPanel2.add(cboHideFreeDownloadsRechnungsanlage, gridBagConstraints);
 
         cboHideFreeDownloadsBuchungsbeleg.setSelected(true);
@@ -583,7 +584,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(15, 0, 0, 0);
         jPanel2.add(cboHideFreeDownloadsBuchungsbeleg, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -591,7 +592,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 7);
         add(jPanel2, gridBagConstraints);
 
         smiplFilter.setBackground(new java.awt.Color(51, 51, 51));
@@ -627,7 +627,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         add(smiplTable, gridBagConstraints);
 
-        pnlTable.setBorder(javax.swing.BorderFactory.createEmptyBorder(6, 6, 6, 6));
+        pnlTable.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
         pnlTable.setLayout(new java.awt.CardLayout());
 
         pnlFilterResults.setLayout(new java.awt.GridBagLayout());
