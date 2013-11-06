@@ -460,10 +460,9 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
         jPanel5.add(cboBillDownloads, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -480,7 +479,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(15, 5, 0, 5);
         jPanel5.add(btnBuchungsbeleg, gridBagConstraints);
@@ -499,7 +498,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(15, 5, 0, 5);
         jPanel5.add(btnGeschaeftsstatistik, gridBagConstraints);
@@ -519,6 +518,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         jPanel5.add(btnRechnungsanlage, gridBagConstraints);
@@ -533,7 +533,6 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         jPanel5.add(cboHideFreeDownloadsRechnungsanlage, gridBagConstraints);
 
         cboHideFreeDownloadsBuchungsbeleg.setSelected(true);
@@ -544,13 +543,13 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                 "BillingKundeAggregationRenderer.cboHideFreeDownloadsBuchungsbeleg.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(15, 0, 0, 5);
+        gridBagConstraints.insets = new java.awt.Insets(15, 0, 0, 0);
         jPanel5.add(cboHideFreeDownloadsBuchungsbeleg, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         jPanel5.add(filler1, gridBagConstraints);
