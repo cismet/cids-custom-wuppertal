@@ -127,7 +127,6 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         RendererTools.makeReadOnly(btnStornoBuchung);
         RendererTools.makeReadOnly(cboStorno);
         RendererTools.makeReadOnly(cboAbgerechnet);
-        RendererTools.makeReadOnly(coboStornogrund);
         RendererTools.makeReadOnly(defaultBindableJTextField5);
         RendererTools.makeReadOnly(defaultBindableJTextField7);
         RendererTools.makeReadOnly(defaultBindableJTextField8);
