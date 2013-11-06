@@ -26,6 +26,8 @@ import org.openide.util.NbBundle;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 
+import java.math.BigDecimal;
+
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -54,6 +56,7 @@ import javax.swing.table.TableRowSorter;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
+import de.cismet.cids.custom.objectrenderer.utils.BillingCalculations;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.PrintBillingReportForCustomer;
 import de.cismet.cids.custom.reports.wunda_blau.PrintStatisticsReport;
@@ -85,7 +88,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
     private static final String[] AGR_COMLUMN_NAMES = new String[] {
             "Auswahl für Berichte",
             "Kundenname",
-            "aggregierter Preis",
+            "aggregierter Preis (brutto)",
             "kostenpflichtige Downloads",
         };
     private static DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
@@ -875,7 +878,9 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
     }
 
     /**
-     * DOCUMENT ME!
+     * Evaluates the billings of each customer and returns an HashMap with an entry for each customer. The value of the
+     * HashMap is an array with the following values: {boolean isShownInTheReports, CidsBean customerBean, BigDecimal
+     * brutto sum, int amount of reports which have costs}. The array is used by the table to represent one row.
      *
      * @param   billingBeans  DOCUMENT ME!
      *
@@ -883,14 +888,16 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
      */
     private HashMap<CidsBean, Object[]> aggregateData(final Collection<CidsBean> billingBeans) {
         final HashMap<CidsBean, Object[]> aggregatedData = new HashMap<CidsBean, Object[]>();
+        final HashMap<CidsBean, Collection<CidsBean>> billingsOfCustomers =
+            new HashMap<CidsBean, Collection<CidsBean>>();
+
         for (final CidsBean billingBean : billingBeans) {
+            // fill the Arrays inside the HashMap (except for brutto sum)
             final CidsBean kundeBean = (CidsBean)billingBean.getProperty("angelegt_durch.kunde");
             final double netto_sum = (Double)billingBean.getProperty("netto_summe");
             if (aggregatedData.containsKey(kundeBean)) {
                 final Object[] dataForCustomer = aggregatedData.get(kundeBean);
                 if (netto_sum > 0) {
-                    final double subtotal = (Double)dataForCustomer[2];
-                    dataForCustomer[2] = subtotal + netto_sum;
                     final int amountOfBillingsWithCosts = (Integer)dataForCustomer[3];
                     dataForCustomer[3] = amountOfBillingsWithCosts + 1;
                 }
@@ -900,10 +907,33 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                 if (netto_sum > 0) {
                     amountOfBillingsWithCosts = 1;
                 }
-                final Object[] dataForCustomer = { useInReports, kundeBean, netto_sum, amountOfBillingsWithCosts };
+                final Object[] dataForCustomer = {
+                        useInReports,
+                        kundeBean,
+                        null,
+                        amountOfBillingsWithCosts
+                    };
                 aggregatedData.put(kundeBean, dataForCustomer);
             }
+
+            // match the billings and the customers, this is later on used to calculate the brutto sum
+            if (billingsOfCustomers.containsKey(kundeBean)) {
+                billingsOfCustomers.get(kundeBean).add(billingBean);
+            } else {
+                final ArrayList<CidsBean> list = new ArrayList<CidsBean>();
+                list.add(billingBean);
+                billingsOfCustomers.put(kundeBean, list);
+            }
         }
+
+        // calculate the brutto sum
+        for (final CidsBean kundeBean : billingsOfCustomers.keySet()) {
+            final BigDecimal brutto_sum = BillingCalculations.calculateBruttoSumFromBillings(billingsOfCustomers.get(
+                        kundeBean));
+            final Object[] dataForCustomer = aggregatedData.get(kundeBean);
+            dataForCustomer[2] = brutto_sum;
+        }
+
         return aggregatedData;
     }
 
