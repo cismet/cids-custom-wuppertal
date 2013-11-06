@@ -34,6 +34,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 
@@ -52,6 +53,7 @@ import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -1020,6 +1022,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         }
         tableModel = new BillingTableModel(tableData.toArray(new Object[tableData.size()][]), AGR_COMLUMN_NAMES);
         tblBillings.setModel(tableModel);
+        tblBillings.getColumnModel().getColumn(4).setCellRenderer(new EuroFormatterRenderer());
+        tblBillings.getColumnModel().getColumn(5).setCellRenderer(new PercentFormatterRenderer());
         if (!tableData.isEmpty()) {
             final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tblBillings.getModel());
             tblBillings.setRowSorter(sorter);
@@ -1047,6 +1051,10 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
                     final String request = (String)billingBean.getProperty("request");
                     final DateRequestTuple dateRequestTuple = new DateRequestTuple((Date)property, request);
                     result[i] = dateRequestTuple;
+                } else if (AGR_PROPERTY_NAMES[i].equals("netto_summe")) {
+                    result[i] = property;
+                } else if (AGR_PROPERTY_NAMES[i].equals("mwst_satz")) {
+                    result[i] = property;
                 } else {
                     final String propertyString;
                     propertyString = ObjectRendererUtils.propertyPrettyPrint(property);
@@ -1434,6 +1442,80 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         @Override
         public void changedUpdate(final DocumentEvent e) {
             filterSettingsChanged();
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class PercentFormatterRenderer extends DefaultTableCellRenderer {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private NumberFormat percentFormatter = new DecimalFormat("#0.0");
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new PercentFormatterRenderer object.
+         */
+        public PercentFormatterRenderer() {
+            this.setHorizontalAlignment(SwingConstants.RIGHT);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  value  DOCUMENT ME!
+         */
+        @Override
+        protected void setValue(final Object value) {
+            if ((value == null) || !(value instanceof Number)) {
+                setText(ObjectRendererUtils.propertyPrettyPrint(value));
+            } else {
+                setText(percentFormatter.format(value) + " %");
+            }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class EuroFormatterRenderer extends DefaultTableCellRenderer {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private NumberFormat euroFormatter = NumberFormat.getCurrencyInstance(Locale.GERMANY);
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new EuroFormatterRenderer object.
+         */
+        public EuroFormatterRenderer() {
+            this.setHorizontalAlignment(SwingConstants.RIGHT);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  value  DOCUMENT ME!
+         */
+        @Override
+        protected void setValue(final Object value) {
+            if ((value == null) || !(value instanceof Number)) {
+                setText(ObjectRendererUtils.propertyPrettyPrint(value));
+            } else {
+                setText(euroFormatter.format(value));
+            }
         }
     }
 

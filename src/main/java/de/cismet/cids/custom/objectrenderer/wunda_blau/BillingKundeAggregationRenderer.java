@@ -27,6 +27,7 @@ import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.AbstractAction;
@@ -43,13 +45,16 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.PrintBillingReportForCustomer;
 import de.cismet.cids.custom.reports.wunda_blau.PrintStatisticsReport;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement;
@@ -861,6 +866,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                 tableData.toArray(new Object[tableData.size()][]),
                 AGR_COMLUMN_NAMES);
         tblCustomers.setModel(tableModel);
+        tblCustomers.getColumnModel().getColumn(2).setCellRenderer(new EuroFormatterRenderer());
         if (!tableData.isEmpty()) {
             final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tblCustomers.getModel());
             tblCustomers.setRowSorter(sorter);
@@ -1109,6 +1115,43 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         @Override
         public Class<?> getColumnClass(final int columnIndex) {
             return getValueAt(0, columnIndex).getClass();
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class EuroFormatterRenderer extends DefaultTableCellRenderer {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private NumberFormat euroFormatter = NumberFormat.getCurrencyInstance(Locale.GERMANY);
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new EuroFormatterRenderer object.
+         */
+        public EuroFormatterRenderer() {
+            this.setHorizontalAlignment(SwingConstants.RIGHT);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  value  DOCUMENT ME!
+         */
+        @Override
+        protected void setValue(final Object value) {
+            if ((value == null) || !(value instanceof Number)) {
+                setText(ObjectRendererUtils.propertyPrettyPrint(value));
+            } else {
+                setText(euroFormatter.format(value));
+            }
         }
     }
 }
