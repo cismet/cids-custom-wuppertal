@@ -576,58 +576,58 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblCustomersMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_tblCustomersMouseClicked
-    }                                                                            //GEN-LAST:event_tblCustomersMouseClicked
+    private void tblCustomersMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCustomersMouseClicked
+    }//GEN-LAST:event_tblCustomersMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblCustomersMouseExited(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_tblCustomersMouseExited
-    }                                                                           //GEN-LAST:event_tblCustomersMouseExited
+    private void tblCustomersMouseExited(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCustomersMouseExited
+    }//GEN-LAST:event_tblCustomersMouseExited
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblCustomersMouseMoved(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_tblCustomersMouseMoved
-    }                                                                          //GEN-LAST:event_tblCustomersMouseMoved
+    private void tblCustomersMouseMoved(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCustomersMouseMoved
+    }//GEN-LAST:event_tblCustomersMouseMoved
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboAbrechnungsturnusActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboAbrechnungsturnusActionPerformed
+    private void cboAbrechnungsturnusActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboAbrechnungsturnusActionPerformed
         filterSettingsChanged();
-    }                                                                                        //GEN-LAST:event_cboAbrechnungsturnusActionPerformed
+    }//GEN-LAST:event_cboAbrechnungsturnusActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnShowResultsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnShowResultsActionPerformed
+    private void btnShowResultsActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowResultsActionPerformed
         filterBuchungen();
-    }                                                                                  //GEN-LAST:event_btnShowResultsActionPerformed
+    }//GEN-LAST:event_btnShowResultsActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboBillDownloadsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboBillDownloadsActionPerformed
+    private void cboBillDownloadsActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboBillDownloadsActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_cboBillDownloadsActionPerformed
+    }//GEN-LAST:event_cboBillDownloadsActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBuchungsbelegActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBuchungsbelegActionPerformed
+    private void btnBuchungsbelegActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuchungsbelegActionPerformed
         final HashMap<CidsBean, Collection<CidsBean>> billingsOfCustomers = createBillingsOfCostumersForReports(evt);
         for (final CidsBean kundeBean : billingsOfCustomers.keySet()) {
             new PrintBillingReportForCustomer(
@@ -637,14 +637,14 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                 false,
                 cboBillDownloads.isSelected()).print();
         }
-    }                                                                                    //GEN-LAST:event_btnBuchungsbelegActionPerformed
+    }//GEN-LAST:event_btnBuchungsbelegActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRechnungsanlageActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRechnungsanlageActionPerformed
+    private void btnRechnungsanlageActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRechnungsanlageActionPerformed
         final HashMap<CidsBean, Collection<CidsBean>> billingsOfCustomers = createBillingsOfCostumersForReports(evt);
         for (final CidsBean kundeBean : billingsOfCustomers.keySet()) {
             new PrintBillingReportForCustomer(
@@ -657,26 +657,26 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         if (cboBillDownloads.isSelected()) {
             filterBuchungen();
         }
-    }                                                                                      //GEN-LAST:event_btnRechnungsanlageActionPerformed
+    }//GEN-LAST:event_btnRechnungsanlageActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnGeschaeftsstatistikActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnGeschaeftsstatistikActionPerformed
+    private void btnGeschaeftsstatistikActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGeschaeftsstatistikActionPerformed
         final Collection<CidsBean> billings = createBillingsForStatisticsReport();
         new PrintStatisticsReport(fromDate_tillDate, billings).print();
-    }                                                                                          //GEN-LAST:event_btnGeschaeftsstatistikActionPerformed
+    }//GEN-LAST:event_btnGeschaeftsstatistikActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboHideFreeDownloadsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboHideFreeDownloadsActionPerformed
+    private void cboHideFreeDownloadsActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboHideFreeDownloadsActionPerformed
         filterSettingsChanged();
-    }                                                                                        //GEN-LAST:event_cboHideFreeDownloadsActionPerformed
+    }//GEN-LAST:event_cboHideFreeDownloadsActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1137,13 +1137,19 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         /**
          * DOCUMENT ME!
          *
-         * @param   columnIndex  DOCUMENT ME!
+         * @param   column  DOCUMENT ME!
          *
          * @return  DOCUMENT ME!
          */
         @Override
-        public Class<?> getColumnClass(final int columnIndex) {
-            return getValueAt(0, columnIndex).getClass();
+        public Class getColumnClass(final int column) {
+            for (int row = 0; row < getRowCount(); row++) {
+                final Object o = getValueAt(row, column);
+                if (o != null) {
+                    return o.getClass();
+                }
+            }
+            return Object.class;
         }
     }
 
