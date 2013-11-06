@@ -92,6 +92,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
             "kostenpflichtige Downloads",
         };
     private static DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
+    private static final String BILLING_ACTION_TAG_REPORT = "custom.billing.reports@WUNDA_BLAU";
 
     //~ Instance fields --------------------------------------------------------
 
@@ -146,6 +147,15 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         final AggregatedBillingTableModel tableModel = new AggregatedBillingTableModel(new Object[0][],
                 AGR_COMLUMN_NAMES);
         tblCustomers.setModel(tableModel);
+
+        if (!ObjectRendererUtils.checkActionTag(BILLING_ACTION_TAG_REPORT)) {
+            btnRechnungsanlage.setEnabled(false);
+            cboHideFreeDownloadsRechnungsanlage.setEnabled(false);
+            cboBillDownloads.setSelected(false);
+            cboBillDownloads.setEnabled(false);
+
+            btnGeschaeftsstatistik.setEnabled(false);
+        }
     }
 
     //~ Methods ----------------------------------------------------------------

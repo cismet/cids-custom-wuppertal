@@ -118,6 +118,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
             "angelegt_durch.name"
         };
 
+    private static final String BILLING_ACTION_TAG_REPORT = "custom.billing.reports@WUNDA_BLAU";
+
     //~ Instance fields --------------------------------------------------------
 
     private BillingTableModel tableModel;
@@ -184,6 +186,13 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         tableModel = new BillingTableModel(new Object[0][], AGR_COMLUMN_NAMES);
         tblBillings.setModel(tableModel);
         setFilterActionInExternalPanels();
+
+        if (!ObjectRendererUtils.checkActionTag(BILLING_ACTION_TAG_REPORT)) {
+            btnRechnungsanlage.setEnabled(false);
+            cboHideFreeDownloadsRechnungsanlage.setEnabled(false);
+            cboBillDownloads.setSelected(false);
+            cboBillDownloads.setEnabled(false);
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
