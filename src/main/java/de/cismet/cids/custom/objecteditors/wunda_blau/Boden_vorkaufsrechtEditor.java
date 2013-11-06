@@ -13,6 +13,7 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.DisposableCidsBeanStore;
 import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
+import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 import de.cismet.tools.gui.StaticSwingTools;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -22,12 +23,13 @@ import org.apache.log4j.Logger;
  *
  * @author verkenis
  */
-public class Boden_vorkaufsrechtEditor extends de.cismet.tools.gui.RoundedPanel implements DisposableCidsBeanStore,
+public class Boden_vorkaufsrechtEditor extends de.cismet.tools.gui.RoundedPanel implements CidsBeanRenderer,
         EditorSaveListener, RequestsFullSizeComponent {
 
     private static final Logger LOG = Logger.getLogger(Boden_vorkaufsrechtEditor.class);
     private CidsBean cidsBean;
     private final boolean editable;
+    private String title;
 
     /**
      * Creates new form BodenVorkaufsrechtEditor
@@ -80,8 +82,23 @@ public class Boden_vorkaufsrechtEditor extends de.cismet.tools.gui.RoundedPanel 
         if (cidsBean != null) {
             this.cidsBean = cidsBean;
             this.panEditor.setCidsBean(cidsBean);
+            this.setTitle("Vorkaufsrecht: ");
         }
 
+    }
+
+    @Override
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
+    public final void setTitle(String title) {
+        if (title == null) {
+            this.title = "Vorkaufsrecht: ";
+        } else {
+            this.title = title + String.valueOf(cidsBean);
+        }
     }
 
     @Override
@@ -149,7 +166,7 @@ public class Boden_vorkaufsrechtEditor extends de.cismet.tools.gui.RoundedPanel 
                 "WUNDA_BLAU",
                 "Administratoren",
                 "admin",
-                "krissenich",
+                "",
                 "BODEN_VORKAUFSRECHT",
                 20,
                 1000,

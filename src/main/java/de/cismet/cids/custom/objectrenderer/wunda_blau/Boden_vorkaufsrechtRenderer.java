@@ -6,16 +6,14 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objecteditors.wunda_blau.Boden_vorkaufsrechtEditor;
-import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 /**
  *
  * @author verkenis
  */
-public class Boden_vorkaufsrechtRenderer extends Boden_vorkaufsrechtEditor implements CidsBeanRenderer {
+public class Boden_vorkaufsrechtRenderer extends Boden_vorkaufsrechtEditor {
 
     
-    private String title = "Vorkaufsrecht ";
     
     
     /**
@@ -23,22 +21,10 @@ public class Boden_vorkaufsrechtRenderer extends Boden_vorkaufsrechtEditor imple
      */
     public Boden_vorkaufsrechtRenderer() {
         super(false);
-        this.title = "Vorkaufsrecht ";
     }
 
     //~ Methods ----------------------------------------------------------------
 
-    @Override
-    public String getTitle() {
-        return title;
-    }
-
-    @Override
-    public void setTitle(final String title) {
-        if (title != null) {
-            this.title = title;
-        }
-    }
     
     /**
      * DOCUMENT ME!
@@ -52,7 +38,7 @@ public class Boden_vorkaufsrechtRenderer extends Boden_vorkaufsrechtEditor imple
             "WUNDA_BLAU",
             "Administratoren",
             "admin",
-            "krissenich",
+            "",
             "BODEN_VORKAUFSRECHT",
             20,
             "Boden Vorkaufsrech",

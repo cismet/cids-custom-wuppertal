@@ -48,6 +48,7 @@ import org.apache.log4j.Logger;
  * @author verkennisr
  */
 public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implements DisposableCidsBeanStore {
+
     private CidsBean cidsBean;
     private Collection<MetaObject> allSelectedObjects;
     private final boolean editable;
@@ -57,31 +58,28 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
     public static final String ATAG_FINAL_CHECK = "navigator.baulasten.final_check"; // NOI18N
     private static final Logger LOG = Logger.getLogger(Boden_VorkaufsrechtEditorPanel.class);
 
-
-   
-   
-
-    
     /**
      * Creates new form Boden_VorkaufsrechtEditorPanel
      */
     public Boden_VorkaufsrechtEditorPanel() {
         this(true);
     }
-    
+
     /**
      * Creates new form Boden_VorkaufsrechtEditorPanel
      */
     public Boden_VorkaufsrechtEditorPanel(final boolean editable) {
-        
+
         this.editable = editable;
         this.editableComponents = new ArrayList<JComponent>();
         initComponents();
         initEditableComponents();
-        //initMap();
+        
         map = new MappingComponent();
         if (!editable) {
-        panMap.add(map, BorderLayout.CENTER);
+            panMap.add(map, BorderLayout.CENTER);
+        } else {
+            this.remove(panMap);
         }
         fsDialoge = new FlurstueckSelectionDialoge();
     }
@@ -256,6 +254,7 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         rpFlurstuecke.add(srpHeadFlurstuecke, gridBagConstraints);
 
+        scpFlurstuecke.setBorder(null);
         scpFlurstuecke.setMaximumSize(new java.awt.Dimension(150, 300));
         scpFlurstuecke.setMinimumSize(new java.awt.Dimension(150, 200));
         scpFlurstuecke.setOpaque(false);
@@ -331,7 +330,6 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 5);
         add(rpFlurstuecke, gridBagConstraints);
 
-        panMap.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         panMap.setLayout(new java.awt.BorderLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -341,22 +339,22 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 2, 5);
         add(panMap, gridBagConstraints);
 
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddFlurstueckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddFlurstueckActionPerformed
-        
+
         fsDialoge.setCurrentListToAdd(CidsBeanSupport.getBeanCollectionFromProperty(
                 cidsBean,
                 "ref_flurstuecke"));
         fsDialoge.setTitle("Flurstück hinzufügen");
-        
+
         StaticSwingTools.showDialog(StaticSwingTools.getParentFrame(this),
-            fsDialoge,
-            true);
+                fsDialoge,
+                true);
     }//GEN-LAST:event_btnAddFlurstueckActionPerformed
 
     private void btnRemoveFlurstueckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveFlurstueckActionPerformed
@@ -384,9 +382,8 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
         }
     }//GEN-LAST:event_btnRemoveFlurstueckActionPerformed
 
-    
     private void lstFlurstueckeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstFlurstueckeMouseClicked
-        if (evt.getClickCount() > 1) {
+        if ( !editable && evt.getClickCount() > 1 ) {
             handleJumpToListeSelectionBean(lstFlurstuecke);
         }
     }//GEN-LAST:event_lstFlurstueckeMouseClicked
@@ -395,7 +392,6 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
         ObjectRendererUtils.switchToCismapMap();
         ObjectRendererUtils.addBeanGeomsAsFeaturesToCismapMap(allSelectedObjects, editable);
     }//GEN-LAST:event_lblFlINMapMouseClicked
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField aktenzeichen;
     private javax.swing.JButton btnAddFlurstueck;
@@ -418,35 +414,34 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
-        private void handleJumpToListeSelectionBean(final JList list) {
+    private void handleJumpToListeSelectionBean(final JList list) {
         final Object selectedObj = list.getSelectedValue();
         if (selectedObj instanceof CidsBean) {
-            final Object realFSBean = ((CidsBean)selectedObj).getProperty("ref_flurstuecke");
+            final Object realFSBean = ((CidsBean) selectedObj).getProperty("fs_referenz");
             if (realFSBean instanceof CidsBean) {
-                final MetaObject selMO = ((CidsBean)realFSBean).getMetaObject();
+                final MetaObject selMO = ((CidsBean) realFSBean).getMetaObject();
                 ComponentRegistry.getRegistry().getDescriptionPane().gotoMetaObject(selMO, "");
             }
         }
     }
-        
+
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
     }
 
-    
     public void setAllSelectedMetaObjects(final Collection<MetaObject> selection) {
         this.allSelectedObjects = selection;
     }
-    
+
     /**
      *
      * @param cidsBean
      */
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
-        
-        
+
+
         try {
             bindingGroup.unbind();
             if (cidsBean != null) {
@@ -461,20 +456,19 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
                 Collections.sort(flurstueckeCol, AlphanumComparator.getInstance());
                 flurstueckeCol = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "ref_flurstuecke");
                 Collections.sort(flurstueckeCol, AlphanumComparator.getInstance());
-                
+
                 bindingGroup.bind();
                 lstFlurstuecke.setSelectedIndices(flstIdx);
                 cidsBean.getMetaObject().getDebugString();
                 if (!editable) {
-                initMap();
+                    initMap();
                 }
             }
-        
+
         } catch (final Exception x) {
             LOG.error("cannot initialise Boden_VorkaufsrechtEditorPanel", x); // NOI18N
         }
-}
-    
+    }
 
     @Override
     public void dispose() {
@@ -484,14 +478,14 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
     }
 
     private void initEditableComponents() {
-        
+
         editableComponents.add(aktenzeichen);
         editableComponents.add(defaultBindableDateChooser1);
-        
+
         for (final JComponent editableComponent : editableComponents) {
             editableComponent.setOpaque(editable);
             if (!editable) {
-                panFlurstuecke.setVisible(false);              
+                panFlurstuecke.setVisible(false);
                 aktenzeichen.setEditable(false);
                 defaultBindableDateChooser1.setEnabled(false);
                 defaultBindableDateChooser1.getEditor().setDisabledTextColor(Color.BLACK);
@@ -499,15 +493,15 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
                 defaultBindableDateChooser1.getEditor().setBorder(null);
             }
         }
-          
+
     }
-    
+
     private void initMap() {
-        
-        
+
+
         List<CidsBean> flurstuecke = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "ref_flurstuecke");
         final Object geoObj = flurstuecke.get(0).getProperty("fs_referenz.umschreibendes_rechteck.geo_field");
-        
+
         if (geoObj instanceof Geometry) {
             final Geometry pureGeom = CrsTransformer.transformToGivenCrs((Geometry) geoObj,
                     AlkisConstants.COMMONS.SRS_SERVICE);
@@ -530,7 +524,7 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
                         final CidsFeature newGeomFeature = new CidsFeature(mo);
                         addedFeatures.addAll(FeatureGroups.expandAll(newGeomFeature));
                     }
-                    
+
 
                     mappingModel.addLayer(swms);
                     // set the model
@@ -571,8 +565,7 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
         XBoundingBox result = null;
 
         List<CidsBean> flurstuecke = CidsBeanSupport.getBeanCollectionFromProperty(cidsBean, "ref_flurstuecke");
-        //this.cidsBean=cidsBean;
-
+        
         for (final CidsBean flurstueck : flurstuecke) {
 
 
@@ -606,8 +599,7 @@ public class Boden_VorkaufsrechtEditorPanel extends javax.swing.JPanel implement
                 }
             }
         }
-        
+
         return result;
     }
 }
-    
