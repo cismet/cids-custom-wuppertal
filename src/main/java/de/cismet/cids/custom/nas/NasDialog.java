@@ -937,7 +937,6 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
         pnlFee.removeAll();
         feePreview = new NasFeePreviewPanel(selectedTemplate);
         feePreview.setGeom(geom);
-        feePreview.refresh();
         pnlFee.add(feePreview);
         pnlFee.revalidate();
         pnlFee.repaint();
