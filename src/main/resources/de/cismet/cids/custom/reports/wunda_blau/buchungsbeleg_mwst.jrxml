@@ -89,11 +89,6 @@
 				<textElement/>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{brutto_summe}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="445" y="2" width="100" height="20"/>
-				<textElement/>
-				<textFieldExpression class="java.lang.Double"><![CDATA[sum($F{netto_summe})]]></textFieldExpression>
-			</textField>
 		</band>
 	</summary>
 </jasperReport>

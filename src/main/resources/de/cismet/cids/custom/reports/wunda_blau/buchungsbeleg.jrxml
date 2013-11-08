@@ -157,7 +157,7 @@
 					<subreportParameterExpression><![CDATA[$P{netto_summe_19}]]></subreportParameterExpression>
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource((Collection)$P{billingBeans_mwst19})]]></dataSourceExpression>
-				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "buchungsbeleg_mwst.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA["de/cismet/cids/custom/reports/wunda_blau/buchungsbeleg_mwst.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement positionType="Float" x="0" y="0" width="555" height="44"/>
@@ -171,7 +171,7 @@
 					<subreportParameterExpression><![CDATA[$P{netto_summe_0}]]></subreportParameterExpression>
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource((Collection)$P{billingBeans_mwst0})]]></dataSourceExpression>
-				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "buchungsbeleg_mwst.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA["de/cismet/cids/custom/reports/wunda_blau/buchungsbeleg_mwst.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>
