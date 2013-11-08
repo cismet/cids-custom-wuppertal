@@ -234,7 +234,7 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         jPanel2.add(lblStornogrund, gridBagConstraints);
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.stornogrund}"),
                 coboStornogrund,
