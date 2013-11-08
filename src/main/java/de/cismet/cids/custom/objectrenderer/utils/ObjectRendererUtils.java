@@ -624,14 +624,14 @@ public class ObjectRendererUtils {
 
             switch (permissionToCheck) {
                 case READ: {
-                    return mcPermissions.hasReadPermission(user.getUserGroup());
+                    return mcPermissions.hasReadPermission(user);
                 }
                 case WRITE: {
-                    return mcPermissions.hasWritePermission(user.getUserGroup());
+                    return mcPermissions.hasWritePermission(user);
                 }
                 case READ_WRITE: {
-                    return mcPermissions.hasWritePermission(user.getUserGroup())
-                                && mcPermissions.hasReadPermission(user.getUserGroup());
+                    return mcPermissions.hasWritePermission(user)
+                                && mcPermissions.hasReadPermission(user);
                 }
             }
         }
