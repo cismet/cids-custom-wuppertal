@@ -27,6 +27,7 @@ import de.cismet.cids.custom.utils.nas.NasProductTemplate;
 import de.cismet.cids.custom.wunda_blau.search.actions.NasZaehlObjekteSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsMeasurementPointSearchStatement;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsMeasurementPointSearchStatement.Pointtype;
+import de.cismet.cids.custom.wunda_blau.search.server.NasPointSearch;
 
 /**
  * DOCUMENT ME!
@@ -106,14 +107,14 @@ public abstract class NasFeeCalculator {
         pointtypes.add(Pointtype.BESONDERE_GEBAEUDEPUNKTE);
         pointtypes.add(Pointtype.BESONDERE_BAUWERKSPUNKTE);
         pointtypes.add(Pointtype.BESONDERE_TOPOGRAPHISCHE_PUNKTE);
-        final CidsMeasurementPointSearchStatement search = new CidsMeasurementPointSearchStatement(
+        final NasPointSearch search = new NasPointSearch(
                 null,
                 pointtypes,
                 null,
                 g);
-        final Collection searchResult;
-        searchResult = SessionManager.getProxy().customServerSearch(SessionManager.getSession().getUser(), search);
-        return searchResult.size();
+        final ArrayList<Integer> c = (ArrayList<Integer>)SessionManager.getProxy()
+                    .customServerSearch(SessionManager.getSession().getUser(), search);
+        return c.get(0);
     }
 
     /**

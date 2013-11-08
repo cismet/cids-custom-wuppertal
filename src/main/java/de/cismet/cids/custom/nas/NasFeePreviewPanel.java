@@ -11,6 +11,8 @@
  */
 package de.cismet.cids.custom.nas;
 
+import Sirius.navigator.exception.ConnectionException;
+
 import com.vividsolutions.jts.geom.Geometry;
 
 import org.apache.log4j.Logger;
@@ -242,7 +244,8 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
                         final ArrayList<String> gebaeudeValues = new ArrayList<String>();
                         flurstueckAmount = NasFeeCalculator.getFlurstueckAmount(geom);
                         flurstueckValues.add("" + flurstueckAmount);
-                        final double flurstueckFee = NasFeeCalculator.getFeeForFlurstuecke(flurstueckAmount) * discount;
+                        final double flurstueckFee = NasFeeCalculator.getFeeForFlurstuecke(flurstueckAmount)
+                                    * discount;
                         totalFee += flurstueckFee;
                         // ToDo this is a quick and dirty way to calculate the fee for type KOMPLETT
                         if (template == NasProductTemplate.KOMPLETT) {
