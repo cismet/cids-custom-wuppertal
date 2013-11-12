@@ -13,7 +13,6 @@ package de.cismet.cids.custom.objectrenderer.utils.billing;
 
 import java.awt.event.ActionEvent;
 
-import java.util.EnumMap;
 import java.util.List;
 
 import de.cismet.cids.utils.abstracts.AbstractCidsBeanAction;
@@ -32,15 +31,15 @@ public abstract class AbstractComposeEMailAction extends AbstractCidsBeanAction 
 
     @Override
     public void actionPerformed(final ActionEvent e) {
-        final EnumMap<EMailTemplateChooserDialog.E_MailParts, String> e_mailParts =
-            new EMailTemplateChooserDialog().showDialogAndReturnBody();
+        final Template template = new EMailTemplateChooserDialog().showDialogAndReturnBody();
         final List<String> eMailAddresses = fetchEMailAddresses();
 
-        if (e_mailParts.get(EMailTemplateChooserDialog.E_MailParts.ABORT) == null) {
+        if (template != null) {
             final EMailComposer mail = new EMailComposer();
             mail.setBcc(eMailAddresses);
-            mail.setBody(e_mailParts.get(EMailTemplateChooserDialog.E_MailParts.BODY));
-            mail.setSubject(e_mailParts.get(EMailTemplateChooserDialog.E_MailParts.SUBJECT));
+            mail.setBody(template.getBody());
+            mail.setSubject(template.getSubject());
+            mail.addTo(template.getTo());
 
             mail.compose();
         }

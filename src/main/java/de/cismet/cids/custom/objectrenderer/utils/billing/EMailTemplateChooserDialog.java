@@ -11,8 +11,15 @@
  */
 package de.cismet.cids.custom.objectrenderer.utils.billing;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
+
+import java.util.ArrayList;
+
+import javax.swing.DefaultComboBoxModel;
+
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
-import java.util.EnumMap;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -24,23 +31,29 @@ import de.cismet.tools.gui.StaticSwingTools;
  */
 public class EMailTemplateChooserDialog extends javax.swing.JDialog {
 
-    //~ Enums ------------------------------------------------------------------
+    //~ Static fields/initializers ---------------------------------------------
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    public enum E_MailParts {
+    private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
+            EMailTemplateChooserDialog.class);
+    private static TemplateInfo templateInfo;
+    private static ArrayList<Template> templates = new ArrayList<Template>();
 
-        //~ Enum constants -----------------------------------------------------
+    static {
+        try {
+            templateInfo =
+                new ObjectMapper().readValue(TemplateInfo.class.getResourceAsStream(
+                        "/de/cismet/cids/custom/billing/email_templates.json"),
+                    TemplateInfo.class);
 
-        BODY, SUBJECT, TO, ABORT
+            templates = templateInfo.getTemplates();
+        } catch (IOException ex) {
+            LOG.error("Error when trying to read the email_templates.json", ex);
+        }
     }
 
     //~ Instance fields --------------------------------------------------------
 
-    private EnumMap<E_MailParts, String> e_mailParts = new EnumMap<E_MailParts, String>(E_MailParts.class);
+    private Template templateToReturn;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdoptTemplate;
     private javax.swing.JComboBox cobTemplates;
@@ -59,22 +72,26 @@ public class EMailTemplateChooserDialog extends javax.swing.JDialog {
         super();
         setModal(true);
         initComponents();
-        e_mailParts.put(E_MailParts.ABORT, "do not compose mail");
         RendererTools.makeReadOnly(jScrollPane1);
         RendererTools.makeReadOnly(txtSubject);
-        RendererTools.makeReadOnly(txtaBody);        
+        RendererTools.makeReadOnly(txtaBody);
+
+        final DefaultComboBoxModel<Template> model = new DefaultComboBoxModel<Template>(templates.toArray(
+                    new Template[templates.size()]));
+        cobTemplates.setModel(model);
+        cobTemplates.setSelectedIndex(0);
     }
 
     //~ Methods ----------------------------------------------------------------
 
     /**
-     * DOCUMENT ME!
+     * Shows the dialog and when the dialog is closed then it returns the chosen template.
      *
      * @return  DOCUMENT ME!
      */
-    public EnumMap<E_MailParts, String> showDialogAndReturnBody() {
+    public Template showDialogAndReturnBody() {
         StaticSwingTools.showDialog(this);
-        return e_mailParts;
+        return templateToReturn;
     }
 
     /**
@@ -96,7 +113,9 @@ public class EMailTemplateChooserDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        txtSubject.setText(org.openide.util.NbBundle.getMessage(EMailTemplateChooserDialog.class, "EMailTemplateChooserDialog.txtSubject.text")); // NOI18N
+        txtSubject.setText(org.openide.util.NbBundle.getMessage(
+                EMailTemplateChooserDialog.class,
+                "EMailTemplateChooserDialog.txtSubject.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -122,7 +141,15 @@ public class EMailTemplateChooserDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         getContentPane().add(jScrollPane1, gridBagConstraints);
 
-        cobTemplates.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cobTemplates.setModel(new javax.swing.DefaultComboBoxModel(
+                new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cobTemplates.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cobTemplatesActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -133,12 +160,18 @@ public class EMailTemplateChooserDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
         getContentPane().add(cobTemplates, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(btnAdoptTemplate, org.openide.util.NbBundle.getMessage(EMailTemplateChooserDialog.class, "EMailTemplateChooserDialog.btnAdoptTemplate.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnAdoptTemplate,
+            org.openide.util.NbBundle.getMessage(
+                EMailTemplateChooserDialog.class,
+                "EMailTemplateChooserDialog.btnAdoptTemplate.text")); // NOI18N
         btnAdoptTemplate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAdoptTemplateActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnAdoptTemplateActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
@@ -146,7 +179,11 @@ public class EMailTemplateChooserDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 5);
         getContentPane().add(btnAdoptTemplate, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(EMailTemplateChooserDialog.class, "EMailTemplateChooserDialog.jLabel1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel1,
+            org.openide.util.NbBundle.getMessage(
+                EMailTemplateChooserDialog.class,
+                "EMailTemplateChooserDialog.jLabel1.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -155,21 +192,28 @@ public class EMailTemplateChooserDialog extends javax.swing.JDialog {
         getContentPane().add(jLabel1, gridBagConstraints);
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAdoptTemplateActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdoptTemplateActionPerformed
-        e_mailParts.put(E_MailParts.BODY, txtaBody.getText());
-        e_mailParts.put(E_MailParts.SUBJECT, txtSubject.getText());
-        // set to null so that a mail can be composed
-        e_mailParts.put(E_MailParts.ABORT, null);
-        e_mailParts.put(E_MailParts.TO, null);
+    private void btnAdoptTemplateActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAdoptTemplateActionPerformed
+        templateToReturn = (Template)cobTemplates.getSelectedItem();
         setVisible(false);
-    }//GEN-LAST:event_btnAdoptTemplateActionPerformed
+    }                                                                                    //GEN-LAST:event_btnAdoptTemplateActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cobTemplatesActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cobTemplatesActionPerformed
+        final Template template = (Template)cobTemplates.getSelectedItem();
+        txtSubject.setText(template.getSubject());
+        txtaBody.setText(template.getBody());
+    }                                                                                //GEN-LAST:event_cobTemplatesActionPerformed
 
     /**
      * DOCUMENT ME!
