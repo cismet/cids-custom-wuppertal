@@ -112,7 +112,6 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
     private javax.swing.JCheckBox cboHideFreeDownloadsBuchungsbeleg;
     private javax.swing.JCheckBox cboHideFreeDownloadsRechnungsanlage;
     private javax.swing.Box.Filler filler1;
-    private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
@@ -204,9 +203,6 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
 
         panTitle.setOpaque(false);
         panTitle.setLayout(new java.awt.BorderLayout());
@@ -576,12 +572,6 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         add(jPanel5, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        gridBagConstraints.weighty = 1.0;
-        add(filler3, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
 
     /**
