@@ -1,0 +1,21 @@
+{
+    "templates": [{
+            "name": "Testtemplate 1",
+            "subject": "ein schöner Test",
+            "body": "Eine Mail an Test AG & Söhne?\nVG Mustermann",
+            "to": "mustermann@test.de"
+        },
+        {
+            "name": "Testtemplate 2",
+            "subject": "ein schöner Test 2",
+            "body": "Zwei Mails an Test AG & Söhne?\nVG Mustermann",
+            "to": "mustermann2@test.de"
+        },
+        {
+            "name": "Testtemplate 2",
+            "subject": "ein schöner Test 2",
+            "body": "Zwei Mails an Test AG & Söhne?\nVG Mustermann",
+            "to": "mustermann2@test.de"
+        }
+    ]
+}
