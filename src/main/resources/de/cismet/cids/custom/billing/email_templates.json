@@ -12,9 +12,9 @@
             "to": "mustermann2@test.de"
         },
         {
-            "name": "Testtemplate 2",
-            "subject": "ein schöner Test 2",
-            "body": "Zwei Mails an Test AG & Söhne?\nVG Mustermann",
+            "name": "Testtemplate 3",
+            "subject": "ein schöner Test 3",
+            "body": "Drei Mails an Test AG & Söhne?\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nVG Mustermann",
             "to": "mustermann2@test.de"
         }
     ]

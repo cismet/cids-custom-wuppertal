@@ -11,13 +11,20 @@
  */
 package de.cismet.cids.custom.objectrenderer.utils.billing;
 
+import Sirius.navigator.resource.PropertyManager;
+import Sirius.navigator.ui.LAFManager;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.openide.util.Exceptions;
 
 import java.io.IOException;
 
 import java.util.ArrayList;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.basic.BasicBorders;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
@@ -60,9 +67,12 @@ public class EMailTemplateChooserDialog extends javax.swing.JDialog {
     private javax.swing.JComboBox cobTemplates;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField txtSubject;
+    private javax.swing.JTextField txtTo;
     private javax.swing.JTextArea txtaBody;
     // End of variables declaration//GEN-END:variables
 
@@ -104,58 +114,28 @@ public class EMailTemplateChooserDialog extends javax.swing.JDialog {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel1 = new javax.swing.JPanel();
-        txtSubject = new javax.swing.JTextField();
-        btnAdoptTemplate = new javax.swing.JButton();
         cobTemplates = new javax.swing.JComboBox();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        txtSubject = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtaBody = new javax.swing.JTextArea();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        txtTo = new javax.swing.JTextField();
+        btnAdoptTemplate = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(org.openide.util.NbBundle.getMessage(
                 EMailTemplateChooserDialog.class,
                 "EMailTemplateChooserDialog.title")); // NOI18N
-        setMinimumSize(new java.awt.Dimension(461, 332));
+        setMinimumSize(new java.awt.Dimension(450, 321));
         setModal(true);
-        setPreferredSize(new java.awt.Dimension(461, 332));
-        setResizable(false);
+        setPreferredSize(new java.awt.Dimension(450, 400));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
         jPanel1.setLayout(new java.awt.GridBagLayout());
-
-        txtSubject.setEditable(false);
-        txtSubject.setText(org.openide.util.NbBundle.getMessage(
-                EMailTemplateChooserDialog.class,
-                "EMailTemplateChooserDialog.txtSubject.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(20, 5, 5, 10);
-        jPanel1.add(txtSubject, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            btnAdoptTemplate,
-            org.openide.util.NbBundle.getMessage(
-                EMailTemplateChooserDialog.class,
-                "EMailTemplateChooserDialog.btnAdoptTemplate.text")); // NOI18N
-        btnAdoptTemplate.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnAdoptTemplateActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 10);
-        jPanel1.add(btnAdoptTemplate, gridBagConstraints);
 
         cobTemplates.setModel(new javax.swing.DefaultComboBoxModel(
                 new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -173,8 +153,54 @@ public class EMailTemplateChooserDialog extends javax.swing.JDialog {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 2);
         jPanel1.add(cobTemplates, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel1,
+            org.openide.util.NbBundle.getMessage(
+                EMailTemplateChooserDialog.class,
+                "EMailTemplateChooserDialog.jLabel1.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 5, 5);
+        jPanel1.add(jLabel1, gridBagConstraints);
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+                javax.swing.BorderFactory.createTitledBorder(
+                    org.openide.util.NbBundle.getMessage(
+                        EMailTemplateChooserDialog.class,
+                        "EMailTemplateChooserDialog.jPanel2.border.outsideBorder.title")),
+                javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10))); // NOI18N
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
+        txtSubject.setEditable(false);
+        txtSubject.setText(org.openide.util.NbBundle.getMessage(
+                EMailTemplateChooserDialog.class,
+                "EMailTemplateChooserDialog.txtSubject.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 1);
+        jPanel2.add(txtSubject, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel2,
+            org.openide.util.NbBundle.getMessage(
+                EMailTemplateChooserDialog.class,
+                "EMailTemplateChooserDialog.jLabel2.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 1, 5, 5);
+        jPanel2.add(jLabel2, gridBagConstraints);
 
         txtaBody.setEditable(false);
         txtaBody.setColumns(20);
@@ -194,32 +220,64 @@ public class EMailTemplateChooserDialog extends javax.swing.JDialog {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-        jPanel1.add(jScrollPane1, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
+        jPanel2.add(jScrollPane1, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel2,
+            jLabel3,
             org.openide.util.NbBundle.getMessage(
                 EMailTemplateChooserDialog.class,
-                "EMailTemplateChooserDialog.jLabel2.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(20, 10, 5, 5);
-        jPanel1.add(jLabel2, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel1,
-            org.openide.util.NbBundle.getMessage(
-                EMailTemplateChooserDialog.class,
-                "EMailTemplateChooserDialog.jLabel1.text")); // NOI18N
+                "EMailTemplateChooserDialog.jLabel3.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 5);
-        jPanel1.add(jLabel1, gridBagConstraints);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 1, 5, 5);
+        jPanel2.add(jLabel3, gridBagConstraints);
+
+        txtTo.setEditable(false);
+        txtTo.setText(org.openide.util.NbBundle.getMessage(
+                EMailTemplateChooserDialog.class,
+                "EMailTemplateChooserDialog.txtTo.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 1);
+        jPanel2.add(txtTo, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(20, 0, 0, 0);
+        jPanel1.add(jPanel2, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnAdoptTemplate,
+            org.openide.util.NbBundle.getMessage(
+                EMailTemplateChooserDialog.class,
+                "EMailTemplateChooserDialog.btnAdoptTemplate.text")); // NOI18N
+        btnAdoptTemplate.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnAdoptTemplateActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(15, 5, 0, 2);
+        jPanel1.add(btnAdoptTemplate, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -253,6 +311,7 @@ public class EMailTemplateChooserDialog extends javax.swing.JDialog {
         final Template template = (Template)cobTemplates.getSelectedItem();
         txtSubject.setText(template.getSubject());
         txtaBody.setText(template.getBody());
+        txtTo.setText(template.to + " und Kunden");
     }                                                                                //GEN-LAST:event_cobTemplatesActionPerformed
 
     /**
@@ -293,15 +352,27 @@ public class EMailTemplateChooserDialog extends javax.swing.JDialog {
 
                 @Override
                 public void run() {
-                    final EMailTemplateChooserDialog dialog = new EMailTemplateChooserDialog();
-                    dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    try {
+                        UIManager.installLookAndFeel("Plastic 3D", "com.jgoodies.looks.plastic.Plastic3DLookAndFeel");
+                        UIManager.setLookAndFeel("com.jgoodies.looks.plastic.Plastic3DLookAndFeel");
+                        final EMailTemplateChooserDialog dialog = new EMailTemplateChooserDialog();
+                        dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
-                            @Override
-                            public void windowClosing(final java.awt.event.WindowEvent e) {
-                                System.exit(0);
-                            }
-                        });
-                    dialog.setVisible(true);
+                                @Override
+                                public void windowClosing(final java.awt.event.WindowEvent e) {
+                                    System.exit(0);
+                                }
+                            });
+                        dialog.setVisible(true);
+                    } catch (ClassNotFoundException ex) {
+                        Exceptions.printStackTrace(ex);
+                    } catch (InstantiationException ex) {
+                        Exceptions.printStackTrace(ex);
+                    } catch (IllegalAccessException ex) {
+                        Exceptions.printStackTrace(ex);
+                    } catch (UnsupportedLookAndFeelException ex) {
+                        Exceptions.printStackTrace(ex);
+                    }
                 }
             });
     }
