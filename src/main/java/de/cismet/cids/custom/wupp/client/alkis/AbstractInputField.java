@@ -74,7 +74,7 @@ public abstract class AbstractInputField extends JPanel {
      *
      * @param  config  DOCUMENT ME!
      */
-    public AbstractInputField(final ParcelInputFieldConfig config) {
+    public AbstractInputField(final AbstractInputFieldConfig config) {
         this.config = config;
     }
 

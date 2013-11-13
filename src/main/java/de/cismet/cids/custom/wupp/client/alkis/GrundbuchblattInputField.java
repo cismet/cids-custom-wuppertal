@@ -37,7 +37,7 @@ public class GrundbuchblattInputField extends AbstractInputField {
 
     //~ Instance fields --------------------------------------------------------
 
-    private final ParcelInputFieldConfig config;
+    private final GrundbuchblattInputFieldConfig config;
     private String buchungsblattnummer;
     private String grundbuchblattnummer;
 
@@ -53,7 +53,7 @@ public class GrundbuchblattInputField extends AbstractInputField {
      * Creates new form GrundbuchblattInputField.
      */
     public GrundbuchblattInputField() {
-        this(ParcelInputFieldConfig.FallbackConfig);
+        this(GrundbuchblattInputFieldConfig.FallbackConfig);
     }
 
     /**
@@ -61,7 +61,7 @@ public class GrundbuchblattInputField extends AbstractInputField {
      *
      * @param  config  DOCUMENT ME!
      */
-    public GrundbuchblattInputField(final ParcelInputFieldConfig config) {
+    public GrundbuchblattInputField(final GrundbuchblattInputFieldConfig config) {
         super(config);
         this.config = config;
 
@@ -77,8 +77,8 @@ public class GrundbuchblattInputField extends AbstractInputField {
                         return;
                     }
                     str = str.replaceAll("[^0-9_%]", "");
-                    if ((offs + str.length()) > config.getMaxLenParcelDenominatorField()) {
-                        str = str.substring(0, config.getMaxLenParcelDenominatorField() - offs);
+                    if ((offs + str.length()) > config.getMaxBuchungsblattnummerField()) {
+                        str = str.substring(0, config.getMaxBuchungsblattnummerField() - offs);
                     }
                     super.insertString(offs, str, a);
                     updateResult();
@@ -128,7 +128,7 @@ public class GrundbuchblattInputField extends AbstractInputField {
         add(lblDelimitier1, gridBagConstraints);
 
         txtBuchungsblattnummer.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        dim = new Dimension(metrics.stringWidth("0") * (config.getMaxLenParcelDenominatorField() + 2),
+        dim = new Dimension(metrics.stringWidth("0") * (config.getMaxBuchungsblattnummerField() + 2),
                 txtBuchungsblattnummer.getPreferredSize().height);
         txtBuchungsblattnummer.setMinimumSize(dim);
         txtBuchungsblattnummer.setPreferredSize(dim);
@@ -206,7 +206,7 @@ public class GrundbuchblattInputField extends AbstractInputField {
     private void finishBuchungsblattnummer() {
         final String text = txtBuchungsblattnummer.getText();
         if ((text != null) && !text.isEmpty() && !txtBuchungsblattnummer.getText().contains("%")) {
-            addLeadingZeroes(txtBuchungsblattnummer.getDocument(), config.getMaxLenParcelDenominatorField());
+            addLeadingZeroes(txtBuchungsblattnummer.getDocument(), config.getMaxBuchungsblattnummerField());
         }
         fireAreaBlockFinished(BlockType.BUCHUNGSBLATTNUMMER);
     }
@@ -221,7 +221,7 @@ public class GrundbuchblattInputField extends AbstractInputField {
         }
         if ((txtBuchungsblattnummer.getText() != null) && !txtBuchungsblattnummer.getText().isEmpty()
                     && !txtBuchungsblattnummer.getText().matches("^0+$")) {
-            sb.append(config.getDelimiter2AsString()).append(txtBuchungsblattnummer.getText());
+            sb.append(config.getDelimiter1AsString()).append(txtBuchungsblattnummer.getText());
         }
 
         grundbuchblattnummer = sb.toString();

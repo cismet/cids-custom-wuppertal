@@ -61,7 +61,7 @@
       </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTextField()"/>
-        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="dim = new Dimension(metrics.stringWidth(&quot;0&quot;) * (config.getMaxLenParcelDenominatorField()+2), txtBuchungsblattnummer.getPreferredSize().height);&#xa;txtBuchungsblattnummer.setMinimumSize(dim);&#xa;txtBuchungsblattnummer.setPreferredSize(dim);"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="dim = new Dimension(metrics.stringWidth(&quot;0&quot;) * (config.getMaxBuchungsblattnummerField()+2), txtBuchungsblattnummer.getPreferredSize().height);&#xa;txtBuchungsblattnummer.setMinimumSize(dim);&#xa;txtBuchungsblattnummer.setPreferredSize(dim);"/>
       </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

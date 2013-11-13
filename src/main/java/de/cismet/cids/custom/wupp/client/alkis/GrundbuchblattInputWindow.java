@@ -23,7 +23,7 @@ public class GrundbuchblattInputWindow extends javax.swing.JFrame {
 
     //~ Instance fields --------------------------------------------------------
 
-    private final ParcelInputFieldConfig config;
+    private final GrundbuchblattInputFieldConfig config;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
@@ -56,13 +56,10 @@ public class GrundbuchblattInputWindow extends javax.swing.JFrame {
      * Creates new form ParcelInputWindow.
      */
     public GrundbuchblattInputWindow() {
-        config = new ParcelInputFieldConfig();
+        config = new GrundbuchblattInputFieldConfig();
         config.setDelimiter1('-');
-        config.setDelimiter2('-');
         config.setMaxLenDistrictNumberField(4);
-        config.setMaxLenParcelNumberField(0);
-        config.setMaxLenParcelNumeratorField(0);
-        config.setMaxLenParcelDenominatorField(6);
+        config.setMaxBuchungsblattnummerField(6);
         final HashMap<Integer, String> gemarkung = new HashMap<Integer, String>();
         gemarkung.put(3001, "Barmen");
         gemarkung.put(3135, "Elberfeld");

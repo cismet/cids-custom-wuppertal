@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
 public class GrundbuchblattInputFieldTest {
 
     private GrundbuchblattInputField field;
-    private ParcelInputFieldConfig config;
+    private GrundbuchblattInputFieldConfig config;
 
     public GrundbuchblattInputFieldTest() {
     }
@@ -35,13 +35,10 @@ public class GrundbuchblattInputFieldTest {
 
     @Before
     public void setUp() {
-        config = new ParcelInputFieldConfig();
+        config = new GrundbuchblattInputFieldConfig();
         config.setDelimiter1('-');
-        config.setDelimiter2('/');
         config.setMaxLenDistrictNumberField(4);
-        config.setMaxLenParcelNumberField(3);
-        config.setMaxLenParcelNumeratorField(5);
-        config.setMaxLenParcelDenominatorField(4);
+        config.setMaxBuchungsblattnummerField(6);
         HashMap<Integer, String> gemarkung = new HashMap<Integer, String>();
         gemarkung.put(3001, "Barmen");
         gemarkung.put(3135, "Elberfeld");
