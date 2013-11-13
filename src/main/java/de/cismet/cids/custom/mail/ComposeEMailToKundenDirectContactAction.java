@@ -15,9 +15,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.swing.ImageIcon;
+
 import de.cismet.cids.dynamics.CidsBean;
 
 import static javax.swing.Action.NAME;
+import static javax.swing.Action.SMALL_ICON;
 
 /**
  * DOCUMENT ME!
@@ -34,6 +37,9 @@ class ComposeEMailToKundenDirectContactAction extends AbstractComposeEMailAction
      */
     public ComposeEMailToKundenDirectContactAction() {
         putValue(NAME, "E-Mail an Ansprechpartner");
+        final ImageIcon icon = new javax.swing.ImageIcon(getClass().getResource(
+                    "/de/cismet/cids/custom/icons/mails-stack.png"));
+        putValue(SMALL_ICON, icon);
     }
 
     //~ Methods ----------------------------------------------------------------

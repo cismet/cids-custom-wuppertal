@@ -11,9 +11,6 @@
  */
 package de.cismet.cids.custom.mail;
 
-import Sirius.navigator.resource.PropertyManager;
-import Sirius.navigator.ui.LAFManager;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.openide.util.Exceptions;
@@ -25,9 +22,6 @@ import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.plaf.basic.BasicBorders;
-
-import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -129,6 +123,7 @@ public class EMailTemplateChooserDialog extends javax.swing.JDialog {
         setTitle(org.openide.util.NbBundle.getMessage(
                 EMailTemplateChooserDialog.class,
                 "EMailTemplateChooserDialog.title")); // NOI18N
+        setIconImage(null);
         setMinimumSize(new java.awt.Dimension(450, 321));
         setModal(true);
         getContentPane().setLayout(new java.awt.GridBagLayout());
