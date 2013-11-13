@@ -49,7 +49,7 @@ public class EMailTemplateChooserDialog extends javax.swing.JDialog {
 
             templates = templateInfo.getTemplates();
         } catch (IOException ex) {
-            LOG.error("Error when trying to read the email_templates.json", ex);
+            LOG.error("Error while trying to read the email_templates.json", ex);
         }
     }
 
