@@ -9,7 +9,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.cids.custom.objectrenderer.utils.billing;
+package de.cismet.cids.custom.mail;
 
 import Sirius.navigator.resource.PropertyManager;
 import Sirius.navigator.ui.LAFManager;
@@ -131,7 +131,6 @@ public class EMailTemplateChooserDialog extends javax.swing.JDialog {
                 "EMailTemplateChooserDialog.title")); // NOI18N
         setMinimumSize(new java.awt.Dimension(450, 321));
         setModal(true);
-        setPreferredSize(new java.awt.Dimension(450, 400));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));

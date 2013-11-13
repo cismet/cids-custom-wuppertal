@@ -9,7 +9,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.cids.custom.objectrenderer.utils.billing;
+package de.cismet.cids.custom.mail;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,23 +17,21 @@ import java.util.List;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import static javax.swing.Action.NAME;
-
 /**
  * DOCUMENT ME!
  *
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-class ComposeEMailToKundenDirectContactAction extends AbstractComposeEMailAction {
+class ComposeEMailToAllLoginsOfKundenAction extends AbstractComposeEMailAction {
 
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new ComposeEMailToKundenDirectContactAction object.
+     * Creates a new ComposeEMailToAllLoginsOfKundenAction object.
      */
-    public ComposeEMailToKundenDirectContactAction() {
-        putValue(NAME, "E-Mail an Ansprechpartner");
+    public ComposeEMailToAllLoginsOfKundenAction() {
+        putValue(NAME, "E-Mail an Nutzer");
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -50,9 +48,12 @@ class ComposeEMailToKundenDirectContactAction extends AbstractComposeEMailAction
         final List<String> eMailAddresses = new ArrayList<String>(kundenBeans.size());
 
         for (final CidsBean kunde : kundenBeans) {
-            final String eMailAddress = (String)kunde.getProperty("direktkontakt");
-            if (eMailAddress != null) {
-                eMailAddresses.add(eMailAddress);
+            final Collection<CidsBean> kunden_logins = kunde.getBeanCollectionProperty("benutzer_n");
+            for (final CidsBean kunden_login : kunden_logins) {
+                final String eMailAddress = (String)kunden_login.getProperty("kontakt");
+                if (eMailAddress != null) {
+                    eMailAddresses.add(eMailAddress);
+                }
             }
         }
 

@@ -9,7 +9,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.cids.custom.objectrenderer.utils.billing;
+package de.cismet.cids.custom.mail;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
@@ -121,7 +121,7 @@ public class KundengruppeCExtProvider implements CExtProvider<CidsBeanAction> {
     public boolean canProvide(final Class<?> c) {
         final String cName = c.getCanonicalName();
 
-        return (cName == null) ? false : (ifaceClass.equals(cName));    // || concreteClass1.equals(cName) ||
-                                                                        // concreteClass2.equals(cName));
+        return (cName == null) ? false : (ifaceClass.equals(cName)); // || concreteClass1.equals(cName) ||
+                                                                     // concreteClass2.equals(cName));
     }
 }
