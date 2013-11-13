@@ -35,7 +35,11 @@ public class ParcelInputField extends AbstractInputField {
     public static final String PROP_PARCEL_DENOMINATOR = "parcelDenominator"; // NOI18N
     public static final String PROP_VALID_PARCEL_NUMBER = "validParcelNr";    // NOI18N
 
+    // --- bindable
+
     //~ Instance fields --------------------------------------------------------
+
+    // NOI18N
 
     // --- bindable
     private String currentParcel;

@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 @JsonIgnoreProperties(value = { "delimiter1AsString", "delimiter2AsString" })
-public class ParcelInputFieldConfig implements Serializable {
+public class ParcelInputFieldConfig extends AbstractInputFieldConfig implements Serializable {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -38,16 +38,11 @@ public class ParcelInputFieldConfig implements Serializable {
 
     //~ Instance fields --------------------------------------------------------
 
-    private int maxLenDistrictNumberField;
     private int maxLenParcelNumberField;
     private int maxLenParcelNumeratorField;
     private int maxLenParcelDenominatorField;
 
-    private char delimiter1;
     private char delimiter2;
-
-    private HashMap<String, Integer> conversionMap;
-    private HashMap<Integer, String> districtNamesMap;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -55,6 +50,7 @@ public class ParcelInputFieldConfig implements Serializable {
      * Creates a new ParcelInputFieldConfig object.
      */
     public ParcelInputFieldConfig() {
+        super();
     }
 
     /**
@@ -73,35 +69,14 @@ public class ParcelInputFieldConfig implements Serializable {
             final int lenParcelNumberField,
             final int lenParcelNumeratorField,
             final int lenParcelDenominatorField) {
-        maxLenDistrictNumberField = lenDistrictField;
+        super(lenDistrictField, delimiter1);
         maxLenParcelNumberField = lenParcelNumberField;
         maxLenParcelNumeratorField = lenParcelNumeratorField;
         maxLenParcelDenominatorField = lenParcelDenominatorField;
-        this.delimiter1 = delimiter1;
         this.delimiter2 = delimiter2;
-        this.conversionMap = new HashMap<String, Integer>();
-        this.districtNamesMap = new HashMap<Integer, String>();
     }
 
     //~ Methods ----------------------------------------------------------------
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public int getMaxLenDistrictNumberField() {
-        return maxLenDistrictNumberField;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  maxLenDistrictNumberField  DOCUMENT ME!
-     */
-    public void setMaxLenDistrictNumberField(final int maxLenDistrictNumberField) {
-        this.maxLenDistrictNumberField = maxLenDistrictNumberField;
-    }
 
     /**
      * DOCUMENT ME!
@@ -162,33 +137,6 @@ public class ParcelInputFieldConfig implements Serializable {
      *
      * @return  DOCUMENT ME!
      */
-    public char getDelimiter1() {
-        return delimiter1;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public String getDelimiter1AsString() {
-        return String.valueOf(delimiter1);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  delimiter1  DOCUMENT ME!
-     */
-    public void setDelimiter1(final char delimiter1) {
-        this.delimiter1 = delimiter1;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
     public char getDelimiter2() {
         return delimiter2;
     }
@@ -209,41 +157,5 @@ public class ParcelInputFieldConfig implements Serializable {
      */
     public void setDelimiter2(final char delimiter2) {
         this.delimiter2 = delimiter2;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public HashMap<String, Integer> getConversionMap() {
-        return conversionMap;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  conversionMap  DOCUMENT ME!
-     */
-    public void setConversionMap(final HashMap<String, Integer> conversionMap) {
-        this.conversionMap = conversionMap;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public HashMap<Integer, String> getDistrictNamesMap() {
-        return districtNamesMap;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  districtNames  DOCUMENT ME!
-     */
-    public void setDistrictNamesMap(final HashMap<Integer, String> districtNames) {
-        this.districtNamesMap = districtNames;
     }
 }

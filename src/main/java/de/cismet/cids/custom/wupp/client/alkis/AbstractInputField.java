@@ -62,7 +62,7 @@ public abstract class AbstractInputField extends JPanel {
     private String districtName;
     private boolean validParcelNr = false;
     // ---
-    private final ParcelInputFieldConfig config;
+    private final AbstractInputFieldConfig config;
     private boolean overwritten = false;
 
     private JTextField txtDistrict;
@@ -85,7 +85,7 @@ public abstract class AbstractInputField extends JPanel {
      *
      * @return  DOCUMENT ME!
      */
-    public ParcelInputFieldConfig getConfig() {
+    public AbstractInputFieldConfig getConfig() {
         return config;
     }
     /**
@@ -414,148 +414,6 @@ public abstract class AbstractInputField extends JPanel {
         public void remove(final int offs, final int len) throws BadLocationException {
             textField.setForeground(Color.BLACK);
             super.remove(offs, len);
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    class ParcelPlainDocument extends PlainDocument {
-
-        //~ Instance fields ----------------------------------------------------
-
-        private JTextField nextTextField;
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new ParcelPlainDocument object.
-         *
-         * @param  nextTextField  DOCUMENT ME!
-         */
-        public ParcelPlainDocument(final JTextField nextTextField) {
-            this.nextTextField = nextTextField;
-        }
-
-        //~ Methods ------------------------------------------------------------
-
-        @Override
-        public void insertString(final int offs, String str, final AttributeSet a) throws BadLocationException {
-            if (str == null) {
-                return;
-            }
-            str = str.replaceAll("[^-0-9_%]", "");
-            String newStr = str;
-            if ((str.length() > 0)
-                        && ((str.length() > (config.getMaxLenParcelNumberField() - offs))
-                            || str.substring(
-                                0,
-                                Math.min(config.getMaxLenParcelNumberField() + 1 - offs, str.length())).contains(
-                                config.getDelimiter1AsString()))) {
-                int pos = str.indexOf(config.getDelimiter1());
-                if ((pos < 0) || (pos > (config.getMaxLenParcelNumberField() - offs))) {
-                    pos = config.getMaxLenParcelNumberField() - offs;
-                }
-                if (changeFocus) {
-                    nextTextField.requestFocusInWindow();
-                }
-
-                newStr = str.substring(0, pos);
-
-                if (writeOver) {
-                    String writeOverStr;
-                    if (str.indexOf(config.getDelimiter1AsString()) == pos) {
-                        writeOverStr = str.substring(pos + 1);
-                    } else {
-                        writeOverStr = str.substring(pos);
-                    }
-                    if (!writeOverStr.isEmpty()) {
-                        overwritten = true;
-                        nextTextField.setText(writeOverStr);
-                    }
-                }
-            }
-            super.insertString(offs, newStr, a);
-            updateResult();
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    class LandParcelNumeratorPlainDocument extends PlainDocument {
-
-        //~ Instance fields ----------------------------------------------------
-
-        private JTextField nextTextField;
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new LandParcelNumeratorPlainDocument object.
-         *
-         * @param  nextTextField  DOCUMENT ME!
-         */
-        public LandParcelNumeratorPlainDocument(final JTextField nextTextField) {
-            this.nextTextField = nextTextField;
-        }
-
-        //~ Methods ------------------------------------------------------------
-
-        @Override
-        public void insertString(final int offs, String str, final AttributeSet a) throws BadLocationException {
-            if (str == null) {
-                return;
-            }
-            str = str.replaceAll("[^-0-9_%]", "");
-            String newStr = str;
-            if ((str.length() > 0)
-                        && ((str.length() > (config.getMaxLenParcelNumeratorField() - offs))
-                            || str.substring(
-                                0,
-                                Math.min(config.getMaxLenParcelNumeratorField() + 1 - offs, str.length())).contains(
-                                config.getDelimiter1AsString())
-                            || str.substring(
-                                0,
-                                Math.min(config.getMaxLenParcelNumeratorField() + 1 - offs, str.length())).contains(
-                                config.getDelimiter2AsString()))) {
-                overwritten = true;
-                int pos = str.indexOf(config.getDelimiter1());
-                if ((pos < 0)
-                            || ((pos > str.indexOf(config.getDelimiter2()))
-                                && (str.indexOf(config.getDelimiter2()) >= 0))) {
-                    pos = str.indexOf(config.getDelimiter2());
-                }
-                if ((pos < 0)
-                            || ((pos > (config.getMaxLenParcelNumeratorField() - offs))
-                                && ((config.getMaxLenParcelNumeratorField() - offs) >= 0))) {
-                    pos = config.getMaxLenParcelNumeratorField() - offs;
-                }
-                if (changeFocus) {
-                    nextTextField.requestFocusInWindow();
-                }
-                newStr = str.substring(0, pos);
-
-                if (writeOver) {
-                    String writeOverStr;
-                    if ((str.indexOf(config.getDelimiter1AsString()) == pos)
-                                || (str.indexOf(config.getDelimiter2AsString()) == pos)) {
-                        writeOverStr = str.substring(pos + 1);
-                    } else {
-                        writeOverStr = str.substring(pos);
-                    }
-                    if (!writeOverStr.isEmpty()) {
-                        overwritten = true;
-                        nextTextField.setText(writeOverStr);
-                    }
-                }
-            }
-            super.insertString(offs, newStr, a);
-            updateResult();
         }
     }
 }
