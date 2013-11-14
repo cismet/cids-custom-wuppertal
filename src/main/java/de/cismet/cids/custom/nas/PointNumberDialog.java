@@ -103,6 +103,9 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
     private javax.swing.JLabel lblFreigebenError;
     private javax.swing.JLabel lblProtokoll;
     private javax.swing.JLabel lblPunktNummern;
+    private javax.swing.JLabel lblTabErgaenzen;
+    private javax.swing.JLabel lblTabFreigeben;
+    private javax.swing.JLabel lblTabReservieren;
     private javax.swing.JPanel pnlAntragsnummer;
     private javax.swing.JPanel pnlControls;
     private de.cismet.cids.custom.nas.PointNumberReservationPanel pnlErgaenzen;
@@ -112,6 +115,9 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
     private javax.swing.JPanel pnlLeft;
     private de.cismet.cids.custom.nas.PointNumberReservationPanel pnlReservieren;
     private javax.swing.JPanel pnlRight;
+    private javax.swing.JPanel pnlTabErgaenzen;
+    private javax.swing.JPanel pnlTabFreigeben;
+    private javax.swing.JPanel pnlTabReservieren;
     private javax.swing.JPanel pnlWait;
     private de.cismet.cids.custom.utils.BusyLoggingTextPane protokollPane;
     private javax.swing.JList punktNummernList;
@@ -138,6 +144,11 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
         } catch (IOException e) {
             LOG.error("Could not read pointnumberSettings.properties", e);
         }
+
+        tbpModus.setTabComponentAt(0, pnlTabReservieren);
+        tbpModus.setTabComponentAt(1, lblTabErgaenzen);
+        tbpModus.setTabComponentAt(2, lblTabFreigeben);
+
         tbpModus.addChangeListener(new ChangeListener() {
 
                 @Override
@@ -336,6 +347,12 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        pnlTabReservieren = new javax.swing.JPanel();
+        lblTabReservieren = new javax.swing.JLabel();
+        pnlTabErgaenzen = new javax.swing.JPanel();
+        lblTabErgaenzen = new javax.swing.JLabel();
+        pnlTabFreigeben = new javax.swing.JPanel();
+        lblTabFreigeben = new javax.swing.JLabel();
         pnlLeft = new javax.swing.JPanel();
         lblAntragsnummer = new javax.swing.JLabel();
         tbpModus = new javax.swing.JTabbedPane();
@@ -367,6 +384,36 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
         btnCancel = new javax.swing.JButton();
         btnDone = new javax.swing.JButton();
 
+        pnlTabReservieren.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        pnlTabReservieren.setOpaque(false);
+
+        lblTabReservieren.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/nas/glyphicons_153_unchecked.png")));                    // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblTabReservieren,
+            org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.lblTabReservieren.text")); // NOI18N
+        pnlTabReservieren.add(lblTabReservieren);
+
+        pnlTabErgaenzen.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        pnlTabErgaenzen.setOpaque(false);
+
+        lblTabErgaenzen.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/nas/glyphicons_154_more_windows.png")));               // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblTabErgaenzen,
+            org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.lblTabErgaenzen.text")); // NOI18N
+        pnlTabErgaenzen.add(lblTabErgaenzen);
+
+        pnlTabFreigeben.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        pnlTabFreigeben.setOpaque(false);
+
+        lblTabFreigeben.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/nas/glyphicons_151_new_window.png")));                 // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblTabFreigeben,
+            org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.lblTabFreigeben.text")); // NOI18N
+        pnlTabFreigeben.add(lblTabFreigeben);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
@@ -384,11 +431,15 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
         tbpModus.addTab(org.openide.util.NbBundle.getMessage(
                 PointNumberDialog.class,
                 "PointNumberDialog.pnlReservieren.TabConstraints.tabTitle"),
-            pnlReservieren); // NOI18N
+            null,
+            pnlReservieren,
+            org.openide.util.NbBundle.getMessage(
+                PointNumberDialog.class,
+                "PointNumberDialog.pnlReservieren.TabConstraints.tabToolTip")); // NOI18N
         tbpModus.addTab(org.openide.util.NbBundle.getMessage(
                 PointNumberDialog.class,
                 "PointNumberDialog.pnlErgaenzen.TabConstraints.tabTitle"),
-            pnlErgaenzen);   // NOI18N
+            pnlErgaenzen);                                                      // NOI18N
 
         pnlFreigeben.setLayout(new java.awt.CardLayout());
 
