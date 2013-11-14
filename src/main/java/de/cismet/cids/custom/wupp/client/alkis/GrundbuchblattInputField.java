@@ -83,7 +83,7 @@ public class GrundbuchblattInputField extends AbstractInputField {
                     final String futureText = futureStringBuilder.toString();
 
                     if (futureText.matches("^[0-9_%]{0,6}[a-zA-Z_%]*")) {
-                        final int countLetters = futureText.length() - futureText.replaceAll("[a-zA-Z]", "").length();
+                        final int countLetters = futureText.length() - futureText.replaceAll("[a-zA-Z_%]", "").length();
                         final int newMaxLength = config.getMaxBuchungsblattnummerField() + countLetters;
 
                         if ((offs + str.length()) > newMaxLength) {
