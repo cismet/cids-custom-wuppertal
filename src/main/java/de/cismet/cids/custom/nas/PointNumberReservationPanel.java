@@ -25,12 +25,14 @@ import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.SwingWorker;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.JTextComponent;
 
 import de.cismet.cids.custom.utils.BusyLoggingTextPane;
 import de.cismet.cids.custom.utils.BusyLoggingTextPane.Styles;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
-import de.cismet.cids.custom.utils.nas.NASProductGenerator;
 import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservation;
 import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservationRequest;
 import de.cismet.cids.custom.wunda_blau.search.actions.PointNumberReserverationServerAction;
@@ -54,6 +56,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
 
     private static final Logger LOG = Logger.getLogger(PointNumberReservationPanel.class);
     private static final String SEVER_ACTION = "pointNumberReservation";
+    private static final String WUPP_ZONEN_KENNZIFFER = "32";
 
     //~ Instance fields --------------------------------------------------------
 
@@ -100,12 +103,32 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                 showErrorLbl = true;
             }
         } catch (Exception e) {
+            LOG.error("Error reading pointNUmberSetting.properties", e);
             showErrorLbl = true;
         }
         initComponents();
         if (!showErrorLbl) {
             cbNbz.setModel(new javax.swing.DefaultComboBoxModel(nbz.toArray(new String[nbz.size()])));
         }
+
+        final JTextComponent textComp = (JTextComponent)cbNbz.getEditor().getEditorComponent();
+        textComp.getDocument().addDocumentListener(new DocumentListener() {
+
+                @Override
+                public void insertUpdate(final DocumentEvent e) {
+                    checkButtonState();
+                }
+
+                @Override
+                public void removeUpdate(final DocumentEvent e) {
+                    checkButtonState();
+                }
+
+                @Override
+                public void changedUpdate(final DocumentEvent e) {
+                    checkButtonState();
+                }
+            });
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -156,7 +179,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
             final int x = lowerX + i;
             for (int j = 0; j < diffY; j++) {
                 final int y = lowerY + j;
-                nbz.add("32" + x + y);
+                nbz.add(WUPP_ZONEN_KENNZIFFER + x + y);
             }
         }
         return true;
@@ -283,6 +306,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
             org.openide.util.NbBundle.getMessage(
                 PointNumberReservationPanel.class,
                 "PointNumberReservationPanel.btnErstellen.text")); // NOI18N
+        btnErstellen.setEnabled(false);
         btnErstellen.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -342,7 +366,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
             return;
         }
 
-        final String anrPrefix = (pnrDialog.getAnrPrefix() == null) ? "3290" : pnrDialog.getAnrPrefix();
+        final String anrPrefix = pnrDialog.getAnrPrefix();
 
         protokollPane.addMessage("Prüfe ob Antragsnummer " + anrPrefix + "-" + anr + " schon exisitiert.", Styles.INFO);
 
@@ -351,7 +375,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
 
                 @Override
                 protected PointNumberReservationRequest doInBackground() throws Exception {
-                    final String nummerierungsbezirk = (String)cbNbz.getSelectedItem();
+                    final String nummerierungsbezirk = (String)cbNbz.getEditor().getItem();
                     final Integer anzahl = (Integer)jspAnzahl.getValue();
                     final Integer startwert;
                     final String swText = tfStartWert.getText();
@@ -519,6 +543,21 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
     /**
      * DOCUMENT ME!
      */
+    public void checkButtonState() {
+        if ((pnrDialog.getAnr() == null) || pnrDialog.getAnr().isEmpty()) {
+            btnErstellen.setEnabled(false);
+            return;
+        }
+        if ((cbNbz.getEditor().getItem() == null) || ((String)cbNbz.getEditor().getItem()).isEmpty()) {
+            btnErstellen.setEnabled(false);
+            return;
+        }
+        btnErstellen.setEnabled(true);
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
     public void checkNummerierungsbezirke() {
         if (loadNummerierungsbezirke()) {
             if (showErrorLbl) {
@@ -528,6 +567,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
             }
             cbNbz.setModel(new javax.swing.DefaultComboBoxModel(nbz.toArray(new String[nbz.size()])));
         } else {
+            cbNbz.setModel(new javax.swing.DefaultComboBoxModel(nbz.toArray(new String[nbz.size()])));
             showErrorLbl = true;
             if (lblNbzError == null) {
                 lblNbzError = new javax.swing.JLabel();

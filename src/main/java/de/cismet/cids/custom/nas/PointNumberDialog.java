@@ -18,7 +18,6 @@ import Sirius.server.newuser.User;
 
 import org.apache.log4j.Logger;
 
-import org.openide.util.Exceptions;
 
 import java.awt.CardLayout;
 import java.awt.Component;
@@ -60,7 +59,6 @@ import de.cismet.cids.custom.utils.BusyLoggingTextPane;
 import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservation;
 import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservationRequest;
 import de.cismet.cids.custom.wunda_blau.search.actions.PointNumberReserverationServerAction;
-import de.cismet.cids.custom.wunda_blau.search.server.MauerNummerSearch;
 import de.cismet.cids.custom.wunda_blau.search.server.VermessungsStellenNummerSearch;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
@@ -676,26 +674,26 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnDoneActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDoneActionPerformed
+    private void btnDoneActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDoneActionPerformed
         // TODO add your handling code here:
         this.dispose();
-    } //GEN-LAST:event_btnDoneActionPerformed
+    }//GEN-LAST:event_btnDoneActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
+    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         this.dispose();
-    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
+    }//GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnFreigebenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFreigebenActionPerformed
+    private void btnFreigebenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFreigebenActionPerformed
         try {
             protokollPane.getDocument().remove(0, protokollPane.getDocument().getLength());
         } catch (BadLocationException ex) {
@@ -848,15 +846,15 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
                 }
             };
         releaseWorker.execute();
-    } //GEN-LAST:event_btnFreigebenActionPerformed
+    }//GEN-LAST:event_btnFreigebenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnDownloadActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDownloadActionPerformed
-    }                                                                               //GEN-LAST:event_btnDownloadActionPerformed
+    private void btnDownloadActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
+    }//GEN-LAST:event_btnDownloadActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -934,18 +932,24 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
     public void insertUpdate(final DocumentEvent e) {
         t.stop();
         t.start();
+        pnlErgaenzen.checkButtonState();
+        pnlReservieren.checkButtonState();
     }
 
     @Override
     public void removeUpdate(final DocumentEvent e) {
         t.stop();
         t.start();
+        pnlErgaenzen.checkButtonState();
+        pnlReservieren.checkButtonState();
     }
 
     @Override
     public void changedUpdate(final DocumentEvent e) {
         t.stop();
         t.start();
+        pnlErgaenzen.checkButtonState();
+        pnlReservieren.checkButtonState();
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -989,7 +993,7 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
 
         //~ Instance fields ----------------------------------------------------
 
-        private String pnr;
+        private final String pnr;
         private boolean isSelected = false;
 
         //~ Constructors -------------------------------------------------------
