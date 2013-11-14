@@ -27,12 +27,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
 
@@ -52,6 +55,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 
+import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.utils.BusyLoggingTextPane;
 import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservation;
 import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservationRequest;
@@ -84,6 +88,7 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
                     loadPointNumbers();
                 }
             });
+    private String wuppVnr;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnDone;
@@ -126,6 +131,13 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
     public PointNumberDialog(final java.awt.Frame parent, final boolean modal) {
         super(parent, modal);
         initComponents();
+        final Properties props = new Properties();
+        try {
+            props.load(PointNumberReservationPanel.class.getResourceAsStream("pointNumberSettings.properties"));
+            wuppVnr = props.getProperty("wuppVnr"); // NOI18N
+        } catch (IOException e) {
+            LOG.error("Could not read pointnumberSettings.properties", e);
+        }
         tbpModus.addChangeListener(new ChangeListener() {
 
                 @Override
@@ -164,21 +176,22 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
                         .customServerSearch(SessionManager.getSession().getUser(), search);
             ArrayList<String> tmp;
             if ((res == null) || res.isEmpty()) {
+                tmp = new ArrayList<String>();
+                tmp.add(wuppVnr);
                 search = new VermessungsStellenNummerSearch("%");
                 res = SessionManager.getProxy().customServerSearch(SessionManager.getSession().getUser(), search);
-                tmp = (ArrayList<String>)res;
-                tmp.add("3205");
+                tmp.addAll(res);
                 cbAntragPrefix.setModel(new DefaultComboBoxModel(tmp.toArray()));
             } else {
                 tmp = (ArrayList<String>)res;
                 final String vermessungstellenNr = tmp.get(0);
                 if (vermessungstellenNr != null) {
                     cbAntragPrefix.setModel(new DefaultComboBoxModel(tmp.toArray()));
-                    cbAntragPrefix.setEnabled(false);
+                    RendererTools.makeReadOnly(cbAntragPrefix);
                 }
             }
         } catch (Exception e) {
-            LOG.fatal("Error during determination of vermessungstellennummer");
+            LOG.fatal("Error during determination of vermessungstellennummer", e);
         }
     }
 
@@ -609,26 +622,26 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnDoneActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDoneActionPerformed
+    private void btnDoneActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDoneActionPerformed
         // TODO add your handling code here:
         this.dispose();
-    }//GEN-LAST:event_btnDoneActionPerformed
+    } //GEN-LAST:event_btnDoneActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
         this.dispose();
-    }//GEN-LAST:event_btnCancelActionPerformed
+    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnFreigebenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFreigebenActionPerformed
+    private void btnFreigebenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFreigebenActionPerformed
         try {
             protokollPane.getDocument().remove(0, protokollPane.getDocument().getLength());
         } catch (BadLocationException ex) {
@@ -781,15 +794,15 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
                 }
             };
         releaseWorker.execute();
-    }//GEN-LAST:event_btnFreigebenActionPerformed
+    } //GEN-LAST:event_btnFreigebenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnDownloadActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
-    }//GEN-LAST:event_btnDownloadActionPerformed
+    private void btnDownloadActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDownloadActionPerformed
+    }                                                                               //GEN-LAST:event_btnDownloadActionPerformed
 
     /**
      * DOCUMENT ME!
