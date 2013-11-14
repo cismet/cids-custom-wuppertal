@@ -136,6 +136,9 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
      */
     public PointNumberDialog(final java.awt.Frame parent, final boolean modal) {
         super(parent, modal);
+        this.setTitle(org.openide.util.NbBundle.getMessage(
+                PointNumberDialog.class,
+                "PointNumberDialog.title"));
         initComponents();
         final Properties props = new Properties();
         try {
