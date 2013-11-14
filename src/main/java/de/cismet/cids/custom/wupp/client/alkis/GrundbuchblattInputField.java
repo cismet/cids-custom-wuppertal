@@ -64,7 +64,6 @@ public class GrundbuchblattInputField extends AbstractInputField {
     public GrundbuchblattInputField(final GrundbuchblattInputFieldConfig config) {
         super(config);
         this.config = config;
-        setAbreviationMaxLenght(3);
 
         initComponents();
         setTxtDistrict(txtDistrict);
@@ -216,7 +215,7 @@ public class GrundbuchblattInputField extends AbstractInputField {
      */
     private void finishBuchungsblattnummer() {
         final String text = txtBuchungsblattnummer.getText();
-        if (!txtBuchungsblattnummer.getText().contains("%")) {
+        if ((text != null) && !text.isEmpty() && !txtBuchungsblattnummer.getText().contains("%")) {
             final int countLetters = text.length() - text.replaceAll("[a-zA-Z]", "").length();
             final int newMaxLength = config.getMaxBuchungsblattnummerField() + countLetters;
             addLeadingZeroes(txtBuchungsblattnummer.getDocument(), newMaxLength);

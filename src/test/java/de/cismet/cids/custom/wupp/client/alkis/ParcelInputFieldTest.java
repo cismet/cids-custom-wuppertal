@@ -86,6 +86,8 @@ public class ParcelInputFieldTest {
         umsetzung.put("na", 3487);
         umsetzung.put("n\u00E4", 3487);
         config.setConversionMap(umsetzung);
+        config.setAlternativeAbbreviationLength(new HashMap<Character, Integer>());
+        config.setDefaultAbbreviationLength(2);
         field = new ParcelInputField(config);
     }
 

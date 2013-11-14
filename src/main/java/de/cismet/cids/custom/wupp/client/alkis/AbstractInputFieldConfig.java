@@ -27,8 +27,10 @@ public class AbstractInputFieldConfig implements Serializable {
 
     private int maxLenDistrictNumberField;
     private char delimiter1;
+    private int defaultAbbreviationLength;
     private HashMap<String, Integer> conversionMap;
     private HashMap<Integer, String> districtNamesMap;
+    private HashMap<Character, Integer> alternativeAbbreviationLength;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -49,6 +51,7 @@ public class AbstractInputFieldConfig implements Serializable {
         this.delimiter1 = delimiter1;
         this.conversionMap = new HashMap<String, Integer>();
         this.districtNamesMap = new HashMap<Integer, String>();
+        this.alternativeAbbreviationLength = new HashMap<Character, Integer>();
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -132,5 +135,45 @@ public class AbstractInputFieldConfig implements Serializable {
      */
     public void setDelimiter1(final char delimiter1) {
         this.delimiter1 = delimiter1;
+    }
+
+    /**
+     * the length after which a district abbreviation is automatically resolved.
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getDefaultAbbreviationLength() {
+        return defaultAbbreviationLength;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  defaultAbbreviationLength  DOCUMENT ME!
+     */
+    public void setDefaultAbbreviationLength(final int defaultAbbreviationLength) {
+        this.defaultAbbreviationLength = defaultAbbreviationLength;
+    }
+
+    /**
+     * For some districts, which begins with the same characters, it is not clear how their abbreviation can be
+     * resolved. Therefor their abbreviations need a longer length than that given in defaultAbbreviationMaxLength. An
+     * example for this are the districts Gennebeck (abbr: g, ge) and Gevelsberg (abbr: gev). To resolve Gevelsberg the
+     * abbreviation length needs to be 3. Whereas it is normally set to 2. Thus an exception for the character 'g' is
+     * needed whose AbbreviationLength needs to be set to 3.
+     *
+     * @return  DOCUMENT ME!
+     */
+    public HashMap<Character, Integer> getAlternativeAbbreviationLength() {
+        return alternativeAbbreviationLength;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  alternativeAbbreviationLength  DOCUMENT ME!
+     */
+    public void setAlternativeAbbreviationLength(final HashMap<Character, Integer> alternativeAbbreviationLength) {
+        this.alternativeAbbreviationLength = alternativeAbbreviationLength;
     }
 }

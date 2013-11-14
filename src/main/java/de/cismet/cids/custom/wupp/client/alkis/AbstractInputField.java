@@ -67,8 +67,6 @@ public abstract class AbstractInputField extends JPanel {
     private boolean overwritten = false;
     private JTextField txtDistrict;
 
-    private int abreviationMaxLenght = 3;
-
     //~ Constructors -----------------------------------------------------------
 
     /**
@@ -184,9 +182,9 @@ public abstract class AbstractInputField extends JPanel {
      * @return  DOCUMENT ME!
      */
     Integer getDistrictNrFromAbrv(final String districtAbrv) {
+        final int abbreviationLength = districtAbrv.charAt(0);
         return config.getConversionMap()
-                    .get(districtAbrv.substring(0, Math.min(abreviationMaxLenght, districtAbrv.length()))
-                        .toLowerCase());
+                    .get(districtAbrv.substring(0, Math.min(abbreviationLength, districtAbrv.length())).toLowerCase());
     }
 
     /**
@@ -283,21 +281,18 @@ public abstract class AbstractInputField extends JPanel {
     }
 
     /**
-     * the length after which a district abbreviation is automatically resolved.
+     * DOCUMENT ME!
+     *
+     * @param   abreviationStart  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public int getAbreviationMaxLenght() {
-        return abreviationMaxLenght;
-    }
-
-    /**
-     * the length after which a district abbreviation is automatically resolved.
-     *
-     * @param  abreviationMaxLenght  DOCUMENT ME!
-     */
-    public void setAbreviationMaxLenght(final int abreviationMaxLenght) {
-        this.abreviationMaxLenght = abreviationMaxLenght;
+    public int getAbbreviationLength(Character abreviationStart) {
+        abreviationStart = Character.toLowerCase(abreviationStart);
+        if (config.getAlternativeAbbreviationLength().containsKey(abreviationStart)) {
+            return config.getAlternativeAbbreviationLength().get(abreviationStart);
+        }
+        return config.getDefaultAbbreviationLength();
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -392,13 +387,14 @@ public abstract class AbstractInputField extends JPanel {
                         newStr = newStr.replaceAll(
                                 "[^\\u00F6\\u00D6\\u00FC\\u00DC\\u00E4\\u00C4\\u00dfa-zA-Z]",
                                 "");
+                        final int abbreviationLength = getAbbreviationLength(newStr.charAt(0));
                         newStr = newStr.substring(
                                 0,
-                                Math.min(Math.max(abreviationMaxLenght - offs, 0), newStr.length()));
+                                Math.min(Math.max(abbreviationLength - offs, 0), newStr.length()));
                         final String districtAbreviation = textField.getDocument()
                                     .getText(0, textField.getDocument().getLength()) + newStr;
                         if (validDistrict(districtAbreviation)) {
-                            if (changeFocus && ((offs + newStr.length()) >= abreviationMaxLenght)) {
+                            if (changeFocus && ((offs + newStr.length()) >= abbreviationLength)) {
                                 nextTextField.requestFocusInWindow();
                             }
                         } else {
@@ -415,12 +411,17 @@ public abstract class AbstractInputField extends JPanel {
                     newStr = newStr.replaceAll(
                             "[^\\u00F6\\u00D6\\u00FC\\u00DC\\u00E4\\u00C4\\u00dfa-zA-Z]",
                             "");
-                    newStr = newStr.substring(0, Math.min(Math.max(abreviationMaxLenght - offs, 0), newStr.length()));
+
+                    final Character abbrevStart = textField.getDocument()
+                                .getText(0, textField.getDocument().getLength())
+                                .charAt(0);
+                    final int abbreviationLength = getAbbreviationLength(abbrevStart);
+                    newStr = newStr.substring(0, Math.min(Math.max(abbreviationLength - offs, 0), newStr.length()));
 
                     if (validDistrict(
                                     textField.getDocument().getText(0, textField.getDocument().getLength())
                                     + newStr)) {
-                        if (changeFocus && ((offs + newStr.length()) >= abreviationMaxLenght)) {
+                        if (changeFocus && ((offs + newStr.length()) >= abbreviationLength)) {
                             nextTextField.requestFocusInWindow();
                         }
                     } else {

@@ -79,7 +79,6 @@ public class ParcelInputField extends AbstractInputField {
     public ParcelInputField(final ParcelInputFieldConfig config) {
         super(config);
         this.config = config;
-        setAbreviationMaxLenght(2);
 
         initComponents();
         setTxtDistrict(txtDistrict);
