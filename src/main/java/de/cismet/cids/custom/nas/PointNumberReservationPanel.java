@@ -24,6 +24,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -43,6 +44,8 @@ import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
+
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -359,13 +362,22 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
         } catch (BadLocationException ex) {
             LOG.error("Could not clear Protokoll Pane", ex);
         }
-        protokollPane.setBusy(true);
 
         final String anr = pnrDialog.getAnr();
-        if (!anr.matches("[a-zA-Z0-9_-]*")) {
+        final String nummerierungsbezirk = (String)cbNbz.getEditor().getItem();
+        if (!anr.matches("[a-zA-Z0-9_-]*") || !nummerierungsbezirk.matches("[0-9]*")) {
+            JOptionPane.showMessageDialog(
+                StaticSwingTools.getParentFrame(this),
+                org.openide.util.NbBundle.getMessage(
+                    PointNumberReservationPanel.class,
+                    "PointNumberReservationPanel.ValueCheckJOptionPane.message"),
+                org.openide.util.NbBundle.getMessage(
+                    PointNumberReservationPanel.class,
+                    "PointNumberReservationPanel.ValueCheckJOptionPane.title"),
+                JOptionPane.ERROR_MESSAGE);
             return;
         }
-
+        protokollPane.setBusy(true);
         final String anrPrefix = pnrDialog.getAnrPrefix();
 
         protokollPane.addMessage("Prüfe ob Antragsnummer " + anrPrefix + "-" + anr + " schon exisitiert.", Styles.INFO);
@@ -375,7 +387,6 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
 
                 @Override
                 protected PointNumberReservationRequest doInBackground() throws Exception {
-                    final String nummerierungsbezirk = (String)cbNbz.getEditor().getItem();
                     final Integer anzahl = (Integer)jspAnzahl.getValue();
                     final Integer startwert;
                     final String swText = tfStartWert.getText();
