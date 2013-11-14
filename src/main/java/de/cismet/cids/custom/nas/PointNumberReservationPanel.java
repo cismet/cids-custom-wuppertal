@@ -451,6 +451,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                                                 || (result.getPointNumbers() == null)) {
                                         protokollPane.addMessage("Fehler beim senden des Auftrags", Styles.ERROR);
                                     }
+                                    pnrDialog.setResult(result);
                                     protokollPane.addMessage("Ok.", Styles.SUCCESS);
                                     protokollPane.setBusy(false);
                                     protokollPane.addMessage(

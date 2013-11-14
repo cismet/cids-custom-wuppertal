@@ -18,7 +18,6 @@ import Sirius.server.newuser.User;
 
 import org.apache.log4j.Logger;
 
-
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -64,6 +63,11 @@ import de.cismet.cids.custom.wunda_blau.search.server.VermessungsStellenNummerSe
 import de.cismet.cids.server.actions.ServerActionParameter;
 import de.cismet.cids.server.search.CidsServerSearch;
 
+import de.cismet.cismap.commons.interaction.CismapBroker;
+
+import de.cismet.tools.gui.downloadmanager.DownloadManager;
+import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
+
 /**
  * DOCUMENT ME!
  *
@@ -87,6 +91,7 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
                 }
             });
     private String wuppVnr;
+    private PointNumberReservationRequest result;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnDone;
@@ -203,7 +208,7 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
                 }
             }
         } catch (Exception e) {
-            LOG.fatal("Error during determination of vermessungstellennummer", e);
+            LOG.error("Error during determination of vermessungstellennummer", e);
         }
     }
 
@@ -595,7 +600,7 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
         pnlRight.add(jScrollPane1, gridBagConstraints);
 
         btnDownload.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/nas/inbox_document_text.png")));                   // NOI18N
+                getClass().getResource("/de/cismet/cids/custom/nas/icon-download-alt.png")));                     // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             btnDownload,
             org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.btnDownload.text")); // NOI18N
@@ -605,7 +610,7 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
         btnDownload.setBorderPainted(false);
         btnDownload.setContentAreaFilled(false);
         btnDownload.setFocusPainted(false);
-        btnDownload.setPreferredSize(new java.awt.Dimension(24, 24));
+        btnDownload.setPreferredSize(new java.awt.Dimension(32, 32));
         btnDownload.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -674,26 +679,26 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnDoneActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDoneActionPerformed
+    private void btnDoneActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDoneActionPerformed
         // TODO add your handling code here:
         this.dispose();
-    }//GEN-LAST:event_btnDoneActionPerformed
+    } //GEN-LAST:event_btnDoneActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
         this.dispose();
-    }//GEN-LAST:event_btnCancelActionPerformed
+    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnFreigebenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFreigebenActionPerformed
+    private void btnFreigebenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFreigebenActionPerformed
         try {
             protokollPane.getDocument().remove(0, protokollPane.getDocument().getLength());
         } catch (BadLocationException ex) {
@@ -816,6 +821,7 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
                                         protokollPane.setBusy(false);
                                         return;
                                     }
+                                    setResult(result);
                                     protokollPane.setBusy(false);
                                     protokollPane.addMessage(
                                         "Freigabe für Antragsnummer: "
@@ -846,15 +852,35 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
                 }
             };
         releaseWorker.execute();
-    }//GEN-LAST:event_btnFreigebenActionPerformed
+    } //GEN-LAST:event_btnFreigebenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnDownloadActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
-    }//GEN-LAST:event_btnDownloadActionPerformed
+    private void btnDownloadActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDownloadActionPerformed
+        if (result == null) {
+            return;
+        }
+        PointNumberDownload download;
+        if (DownloadManagerDialog.showAskingForUserTitle(
+                        CismapBroker.getInstance().getMappingComponent())) {
+            final String jobname = (!DownloadManagerDialog.getJobname().equals("")) ? DownloadManagerDialog
+                            .getJobname() : null;
+            download = new PointNumberDownload(
+                    result,
+                    "Punktnummer Download",
+                    jobname,
+                    getAnrPrefix()
+                            + "_"
+                            + getAnr());
+        } else {
+            download = new PointNumberDownload(result, "Punktnummer Download", "", getAnrPrefix() + "_" + getAnr());
+        }
+
+        DownloadManager.instance().add(download);
+    } //GEN-LAST:event_btnDownloadActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -926,6 +952,15 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
      */
     public BusyLoggingTextPane getProtokollPane() {
         return protokollPane;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  result  DOCUMENT ME!
+     */
+    public void setResult(final PointNumberReservationRequest result) {
+        this.result = result;
     }
 
     @Override
