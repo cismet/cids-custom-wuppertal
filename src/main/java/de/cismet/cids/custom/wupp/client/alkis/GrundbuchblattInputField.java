@@ -11,8 +11,6 @@
  */
 package de.cismet.cids.custom.wupp.client.alkis;
 
-import org.apache.commons.lang.StringUtils;
-
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Toolkit;
@@ -141,7 +139,7 @@ public class GrundbuchblattInputField extends AbstractInputField {
         add(lblDelimitier1, gridBagConstraints);
 
         txtBuchungsblattnummer.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        dim = new Dimension(metrics.stringWidth("0") * (config.getMaxBuchungsblattnummerField() + 2),
+        dim = new Dimension(metrics.stringWidth("0") * (config.getMaxBuchungsblattnummerField() + 4),
                 txtBuchungsblattnummer.getPreferredSize().height);
         txtBuchungsblattnummer.setMinimumSize(dim);
         txtBuchungsblattnummer.setPreferredSize(dim);
@@ -218,7 +216,7 @@ public class GrundbuchblattInputField extends AbstractInputField {
      */
     private void finishBuchungsblattnummer() {
         final String text = txtBuchungsblattnummer.getText();
-        if ((text != null) && !text.isEmpty() && !txtBuchungsblattnummer.getText().contains("%")) {
+        if (!txtBuchungsblattnummer.getText().contains("%")) {
             final int countLetters = text.length() - text.replaceAll("[a-zA-Z]", "").length();
             final int newMaxLength = config.getMaxBuchungsblattnummerField() + countLetters;
             addLeadingZeroes(txtBuchungsblattnummer.getDocument(), newMaxLength);
