@@ -66,6 +66,7 @@ public class GrundbuchblattInputField extends AbstractInputField {
     public GrundbuchblattInputField(final GrundbuchblattInputFieldConfig config) {
         super(config);
         this.config = config;
+        setAbreviationMaxLenght(3);
 
         initComponents();
         setTxtDistrict(txtDistrict);

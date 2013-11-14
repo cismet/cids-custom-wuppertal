@@ -35,9 +35,9 @@ public class ParcelInputField extends AbstractInputField {
     public static final String PROP_PARCEL_DENOMINATOR = "parcelDenominator"; // NOI18N
     public static final String PROP_VALID_PARCEL_NUMBER = "validParcelNr";    // NOI18N
 
-    // --- bindable
-
     //~ Instance fields --------------------------------------------------------
+
+    // --- bindable
 
     // NOI18N
 
@@ -79,6 +79,7 @@ public class ParcelInputField extends AbstractInputField {
     public ParcelInputField(final ParcelInputFieldConfig config) {
         super(config);
         this.config = config;
+        setAbreviationMaxLenght(2);
 
         initComponents();
         setTxtDistrict(txtDistrict);

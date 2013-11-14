@@ -36,6 +36,8 @@ public abstract class AbstractInputField extends JPanel {
     public static final String PROP_DISTRICT_NAME = "districtName";     // NOI18N
     public static final String PROP_DISTRICT_NUMBER = "districtNumber"; // NOI18N
 
+    private static final Logger LOG = Logger.getLogger(AbstractInputField.class);
+
     //~ Enums ------------------------------------------------------------------
 
     /**
@@ -54,7 +56,6 @@ public abstract class AbstractInputField extends JPanel {
 
     boolean changeFocus = true;
     boolean writeOver = true;
-
     // --- bindable
     private String districtNumber;
     // ---
@@ -64,8 +65,9 @@ public abstract class AbstractInputField extends JPanel {
     // ---
     private final AbstractInputFieldConfig config;
     private boolean overwritten = false;
-
     private JTextField txtDistrict;
+
+    private int abreviationMaxLenght = 3;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -88,6 +90,7 @@ public abstract class AbstractInputField extends JPanel {
     public AbstractInputFieldConfig getConfig() {
         return config;
     }
+
     /**
      * DOCUMENT ME!
      *
@@ -182,7 +185,8 @@ public abstract class AbstractInputField extends JPanel {
      */
     Integer getDistrictNrFromAbrv(final String districtAbrv) {
         return config.getConversionMap()
-                    .get(districtAbrv.substring(0, Math.min(2, districtAbrv.length())).toLowerCase());
+                    .get(districtAbrv.substring(0, Math.min(abreviationMaxLenght, districtAbrv.length()))
+                        .toLowerCase());
     }
 
     /**
@@ -278,6 +282,24 @@ public abstract class AbstractInputField extends JPanel {
         this.overwritten = overwritten;
     }
 
+    /**
+     * the length after which a district abbreviation is automatically resolved.
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getAbreviationMaxLenght() {
+        return abreviationMaxLenght;
+    }
+
+    /**
+     * the length after which a district abbreviation is automatically resolved.
+     *
+     * @param  abreviationMaxLenght  DOCUMENT ME!
+     */
+    public void setAbreviationMaxLenght(final int abreviationMaxLenght) {
+        this.abreviationMaxLenght = abreviationMaxLenght;
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -366,17 +388,17 @@ public abstract class AbstractInputField extends JPanel {
                     if (Character.isDigit(newStr.charAt(0))) {
                         newStr = newStr.replaceAll("[^0-9]", "");
                     } else if (Character.isLetter(newStr.charAt(0))) {
-                        // removes all characters except alpha charactes and german vowel mutuations
+                        // removes all characters except alphabetic characters and german vowel mutuations
                         newStr = newStr.replaceAll(
                                 "[^\\u00F6\\u00D6\\u00FC\\u00DC\\u00E4\\u00C4\\u00dfa-zA-Z]",
                                 "");
-                        newStr = newStr.substring(0, Math.min(Math.max(2 - offs, 0), newStr.length()));
-                        if (validDistrict(
-                                        textField.getDocument().getText(
-                                            0,
-                                            textField.getDocument().getLength())
-                                        + newStr)) {
-                            if (changeFocus && ((offs + newStr.length()) >= 2)) {
+                        newStr = newStr.substring(
+                                0,
+                                Math.min(Math.max(abreviationMaxLenght - offs, 0), newStr.length()));
+                        final String districtAbreviation = textField.getDocument()
+                                    .getText(0, textField.getDocument().getLength()) + newStr;
+                        if (validDistrict(districtAbreviation)) {
+                            if (changeFocus && ((offs + newStr.length()) >= abreviationMaxLenght)) {
                                 nextTextField.requestFocusInWindow();
                             }
                         } else {
@@ -393,12 +415,12 @@ public abstract class AbstractInputField extends JPanel {
                     newStr = newStr.replaceAll(
                             "[^\\u00F6\\u00D6\\u00FC\\u00DC\\u00E4\\u00C4\\u00dfa-zA-Z]",
                             "");
-                    newStr = newStr.substring(0, Math.min(Math.max(2 - offs, 0), newStr.length()));
+                    newStr = newStr.substring(0, Math.min(Math.max(abreviationMaxLenght - offs, 0), newStr.length()));
 
                     if (validDistrict(
                                     textField.getDocument().getText(0, textField.getDocument().getLength())
                                     + newStr)) {
-                        if (changeFocus && ((offs + newStr.length()) >= 2)) {
+                        if (changeFocus && ((offs + newStr.length()) >= abreviationMaxLenght)) {
                             nextTextField.requestFocusInWindow();
                         }
                     } else {
