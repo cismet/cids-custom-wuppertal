@@ -11,19 +11,20 @@
  */
 package de.cismet.cids.custom.wupp.client.alkis;
 
-import java.util.HashMap;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
 
 /**
  * DOCUMENT ME!
  *
- * @author   mscholl
  * @version  $Revision$, $Date$
  */
 public class GrundbuchblattInputWindow extends javax.swing.JFrame {
 
     //~ Instance fields --------------------------------------------------------
 
-    private final GrundbuchblattInputFieldConfig config;
+    private GrundbuchblattInputFieldConfig config;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
@@ -56,53 +57,15 @@ public class GrundbuchblattInputWindow extends javax.swing.JFrame {
      * Creates new form ParcelInputWindow.
      */
     public GrundbuchblattInputWindow() {
-        config = new GrundbuchblattInputFieldConfig();
-        config.setDelimiter1('-');
-        config.setMaxLenDistrictNumberField(4);
-        config.setMaxBuchungsblattnummerField(6);
-        final HashMap<Integer, String> gemarkung = new HashMap<Integer, String>();
-        gemarkung.put(3001, "Barmen");
-        gemarkung.put(3135, "Elberfeld");
-        gemarkung.put(3267, "Ronsdorf");
-        gemarkung.put(3276, "Schöller");
-        gemarkung.put(3277, "Vohwinkel");
-        gemarkung.put(3278, "Dönberg");
-        gemarkung.put(3279, "Cronenberg");
-        gemarkung.put(3485, "Beyenburg");
-        gemarkung.put(3486, "Langerfeld");
-        gemarkung.put(3487, "Nächstebreck");
-        config.setDistrictNamesMap(gemarkung);
-        final HashMap<String, Integer> umsetzung = new HashMap<String, Integer>();
-        umsetzung.put("b", 3001);
-        umsetzung.put("ba", 3001);
-
-        umsetzung.put("e", 3135);
-        umsetzung.put("el", 3135);
-
-        umsetzung.put("r", 3267);
-        umsetzung.put("ro", 3267);
-
-        umsetzung.put("s", 3276);
-        umsetzung.put("sc", 3276);
-
-        umsetzung.put("v", 3277);
-        umsetzung.put("vo", 3277);
-
-        umsetzung.put("d", 3278);
-        umsetzung.put("do", 3278);
-
-        umsetzung.put("c", 3279);
-        umsetzung.put("cr", 3279);
-
-        umsetzung.put("be", 3485);
-
-        umsetzung.put("l", 3486);
-        umsetzung.put("la", 3486);
-
-        umsetzung.put("n", 3487);
-        umsetzung.put("na", 3487);
-        umsetzung.put("nä", 3487);
-        config.setConversionMap(umsetzung);
+        try {
+            config =
+                new ObjectMapper().readValue(GrundbuchblattInputWindow.class.getResourceAsStream(
+                        "/de/cismet/cids/custom/wunda_blau/res/alkis/GrundbuchblattInputFieldConfig.json"),
+                    GrundbuchblattInputFieldConfig.class);
+            System.out.println(config.getDelimiter1AsString());
+        } catch (IOException ex) {
+            config = GrundbuchblattInputFieldConfig.FallbackConfig;
+        }
         initComponents();
     }
 

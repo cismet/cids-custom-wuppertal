@@ -5,6 +5,8 @@
 
 package de.cismet.cids.custom.wupp.client.alkis;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import java.util.HashMap;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -35,54 +37,16 @@ public class GrundbuchblattInputFieldTest {
 
     @Before
     public void setUp() {
-        config = new GrundbuchblattInputFieldConfig();
-        config.setDelimiter1('-');
-        config.setMaxLenDistrictNumberField(4);
-        config.setMaxBuchungsblattnummerField(6);
-        HashMap<Integer, String> gemarkung = new HashMap<Integer, String>();
-        gemarkung.put(3001, "Barmen");
-        gemarkung.put(3135, "Elberfeld");
-        gemarkung.put(3267, "Ronsdorf");
-        gemarkung.put(3276, "Sch\u00F6ller");
-        gemarkung.put(3277, "Vohwinkel");
-        gemarkung.put(3278, "D\u00F6nberg");
-        gemarkung.put(3279, "Cronenberg");
-        gemarkung.put(3485, "Beyenburg");
-        gemarkung.put(3486, "Langerfeld");
-        gemarkung.put(3487, "N\u00E4chstebreck");
-        config.setDistrictNamesMap(gemarkung);
-        HashMap<String, Integer> umsetzung = new HashMap<String, Integer>();
-        umsetzung.put("b", 3001);
-        umsetzung.put("ba", 3001);
+        try {
+            config =
+                new ObjectMapper().readValue(GrundbuchblattInputFieldTest.class.getResourceAsStream(
+                        "/de/cismet/cids/custom/wunda_blau/res/alkis/GrundbuchblattInputFieldConfig.json"),
+                    GrundbuchblattInputFieldConfig.class);
+            System.out.println(config.getDelimiter1AsString());
+        } catch (IOException ex) {
+            config = GrundbuchblattInputFieldConfig.FallbackConfig;
+        }
 
-        umsetzung.put("e", 3135);
-        umsetzung.put("el", 3135);
-
-        umsetzung.put("r", 3267);
-        umsetzung.put("ro", 3267);
-
-        umsetzung.put("s", 3276);
-        umsetzung.put("sc", 3276);
-
-        umsetzung.put("v", 3277);
-        umsetzung.put("vo", 3277);
-
-        umsetzung.put("d", 3278);
-        umsetzung.put("do", 3278);
-        umsetzung.put("d\u00F6", 3278);
-
-        umsetzung.put("c", 3279);
-        umsetzung.put("cr", 3279);
-
-        umsetzung.put("be", 3485);
-
-        umsetzung.put("l", 3486);
-        umsetzung.put("la", 3486);
-
-        umsetzung.put("n", 3487);
-        umsetzung.put("na", 3487);
-        umsetzung.put("n\u00E4", 3487);
-        config.setConversionMap(umsetzung);
         field = new GrundbuchblattInputField(config);
     }
 
@@ -130,6 +94,24 @@ public class GrundbuchblattInputFieldTest {
         instance.setDistrictNumberInTxtDistrict(districtNumber);
         assertEquals("053001", instance.getDistrictNumber());
     }
+    
+    @Test
+    public void testSetDistrictNumberShort_samePrefix2Chars() {
+        System.out.println("testSetDistrictNumberShort_samePrefix2Chars");
+        String districtNumber = "GE";
+        GrundbuchblattInputField instance = field;
+        instance.setDistrictNumberInTxtDistrict(districtNumber);
+        assertEquals("051329", instance.getDistrictNumber());
+    }
+    
+    @Test
+    public void testSetDistrictNumberShort_samePrefix3Chars() {
+        System.out.println("testSetDistrictNumberShort_samePrefix3Chars");
+        String districtNumber = "gev";
+        GrundbuchblattInputField instance = field;
+        instance.setDistrictNumberInTxtDistrict(districtNumber);
+        assertEquals("051310", instance.getDistrictNumber());
+    }
 
     @Test
     public void testSetDistrictNumberLong() {
@@ -147,6 +129,54 @@ public class GrundbuchblattInputFieldTest {
         GrundbuchblattInputField instance = field;
         instance.setDistrictNumberInTxtDistrict(districtNumber);
         assertEquals(null, instance.getDistrictNumber());
+    }
+    
+     /**
+     * Test of setBuchungsblattnummer method, of class GrundbuchblattInputField.
+     */
+    @Test
+    public void testSetBuchungsblattnummer() {
+        System.out.println("setParcelDenominator");
+        String buchungsblattnummer = "0002";
+        GrundbuchblattInputField instance = field;
+        instance.setBuchungsblattnummerInTxtBuchungsblattnummer(buchungsblattnummer);
+        assertEquals("000002", instance.getBuchungsblattnummer());
+    }
+
+    @Test
+    public void testSetBuchungsblattnummerShort() {
+        System.out.println("setParcelDenominatorShort");
+        String buchungsblattnummer = "2";
+        GrundbuchblattInputField instance = field;
+        instance.setBuchungsblattnummerInTxtBuchungsblattnummer(buchungsblattnummer);
+        assertEquals("000002", instance.getBuchungsblattnummer());
+    }
+
+    @Test
+    public void testSetBuchungsblattnummerLong() {
+        System.out.println("setParcelDenominatorLong");
+        String buchungsblattnummer = "0002000A";
+        GrundbuchblattInputField instance = field;
+        instance.setBuchungsblattnummerInTxtBuchungsblattnummer(buchungsblattnummer);
+        assertEquals("", instance.getBuchungsblattnummer());
+    }
+
+    @Test
+    public void testSetBuchungsblattnummerLettersNoNumbers() {
+        System.out.println("testSetBuchungsblattnummerLettersNoNumbers");
+        String buchungsblattnummer = "abced";
+        GrundbuchblattInputField instance = field;
+        instance.setBuchungsblattnummerInTxtBuchungsblattnummer(buchungsblattnummer);
+        assertEquals("000000abced", instance.getBuchungsblattnummer());
+    }
+    
+    @Test
+    public void testSetBuchungsblattnummerLetters2Numbers() {
+        System.out.println("testSetBuchungsblattnummerLetters2Numbers");
+        String buchungsblattnummer = "12ab";
+        GrundbuchblattInputField instance = field;
+        instance.setBuchungsblattnummerInTxtBuchungsblattnummer(buchungsblattnummer);
+        assertEquals("000012ab", instance.getBuchungsblattnummer());
     }
 
 //    /**

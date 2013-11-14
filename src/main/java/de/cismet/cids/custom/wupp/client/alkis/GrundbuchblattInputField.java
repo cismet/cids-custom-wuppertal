@@ -11,6 +11,8 @@
  */
 package de.cismet.cids.custom.wupp.client.alkis;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Toolkit;
@@ -76,12 +78,22 @@ public class GrundbuchblattInputField extends AbstractInputField {
                     if ((str == null) || str.isEmpty()) {
                         return;
                     }
-                    str = str.replaceAll("[^0-9_%]", "");
-                    if ((offs + str.length()) > config.getMaxBuchungsblattnummerField()) {
-                        str = str.substring(0, config.getMaxBuchungsblattnummerField() - offs);
+
+                    // build the text which would appear in txtBuchungsblattnummer
+                    final StringBuilder futureStringBuilder = new StringBuilder(txtBuchungsblattnummer.getText());
+                    futureStringBuilder.insert(offs, str);
+                    final String futureText = futureStringBuilder.toString();
+
+                    if (futureText.matches("^[0-9_%]{0,6}[a-zA-Z_%]*")) {
+                        final int countLetters = futureText.length() - futureText.replaceAll("[a-zA-Z]", "").length();
+                        final int newMaxLength = config.getMaxBuchungsblattnummerField() + countLetters;
+
+                        if ((offs + str.length()) > newMaxLength) {
+                            str = str.substring(0, newMaxLength - offs);
+                        }
+                        super.insertString(offs, str, a);
+                        updateResult();
                     }
-                    super.insertString(offs, str, a);
-                    updateResult();
                 }
             });
     }
@@ -206,7 +218,9 @@ public class GrundbuchblattInputField extends AbstractInputField {
     private void finishBuchungsblattnummer() {
         final String text = txtBuchungsblattnummer.getText();
         if ((text != null) && !text.isEmpty() && !txtBuchungsblattnummer.getText().contains("%")) {
-            addLeadingZeroes(txtBuchungsblattnummer.getDocument(), config.getMaxBuchungsblattnummerField());
+            final int countLetters = text.length() - text.replaceAll("[a-zA-Z]", "").length();
+            final int newMaxLength = config.getMaxBuchungsblattnummerField() + countLetters;
+            addLeadingZeroes(txtBuchungsblattnummer.getDocument(), newMaxLength);
         }
         fireAreaBlockFinished(BlockType.BUCHUNGSBLATTNUMMER);
     }
@@ -250,6 +264,20 @@ public class GrundbuchblattInputField extends AbstractInputField {
      */
     public String getBuchungsblattnummer() {
         return buchungsblattnummer;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  buchungsblattnummer  DOCUMENT ME!
+     */
+    public void setBuchungsblattnummerInTxtBuchungsblattnummer(final String buchungsblattnummer) {
+        changeFocus = false;
+        writeOver = false;
+        txtBuchungsblattnummer.setText(buchungsblattnummer);
+        finishBuchungsblattnummer();
+        changeFocus = true;
+        writeOver = true;
     }
 
     @Override
