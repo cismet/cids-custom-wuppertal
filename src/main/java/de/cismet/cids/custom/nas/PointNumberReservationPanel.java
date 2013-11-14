@@ -164,7 +164,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
         nbz = new ArrayList<String>();
         final MappingComponent mapC = CismapBroker.getInstance().getMappingComponent();
         Geometry g = ((XBoundingBox)mapC.getCurrentBoundingBoxFromCamera()).getGeometry();
-        if (g.getSRID() != 5) {
+        if (!CrsTransformer.createCrsFromSrid(g.getSRID()).equals(AlkisConstants.COMMONS.SRS_SERVICE)) {
             g = CrsTransformer.transformToGivenCrs(g, AlkisConstants.COMMONS.SRS_SERVICE);
         }
         final XBoundingBox bb = new XBoundingBox(g);
