@@ -92,6 +92,7 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
             });
     private String wuppVnr;
     private PointNumberReservationRequest result;
+    private boolean hasFreigabeAccess = false;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnDone;
@@ -187,6 +188,13 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
         final DefaultCaret caret = (DefaultCaret)protokollPane.getCaret();
         caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
         try {
+            // if user does not have the right to do freigaben, remove the tab
+            hasFreigabeAccess = SessionManager.getConnection()
+                        .getConfigAttr(SessionManager.getSession().getUser(), "custom.nas.punktNummernFreigabe")
+                        != null;
+            if (!hasFreigabeAccess) {
+                tbpModus.remove(2);
+            }
             final User user = SessionManager.getSession().getUser();
             CidsServerSearch search = new VermessungsStellenNummerSearch(user.getName());
             Collection res = SessionManager.getProxy()
