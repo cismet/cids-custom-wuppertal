@@ -525,8 +525,8 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
 
         pnlAntragsnummer.setLayout(new java.awt.GridBagLayout());
 
-        cbAntragPrefix.setMinimumSize(new java.awt.Dimension(65, 27));
-        cbAntragPrefix.setPreferredSize(new java.awt.Dimension(65, 27));
+        cbAntragPrefix.setMinimumSize(new java.awt.Dimension(60, 27));
+        cbAntragPrefix.setPreferredSize(new java.awt.Dimension(60, 27));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlAntragsnummer.add(cbAntragPrefix, gridBagConstraints);
