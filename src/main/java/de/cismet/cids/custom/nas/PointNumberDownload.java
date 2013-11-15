@@ -36,6 +36,7 @@ public class PointNumberDownload extends AbstractDownload {
     //~ Instance fields --------------------------------------------------------
 
     boolean isFreigabeMode = false;
+    boolean downloadProtokoll = false;
     private final StringBuilder contentBuilder = new StringBuilder();
     private PointNumberReservationRequest content;
     private final DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
@@ -57,7 +58,7 @@ public class PointNumberDownload extends AbstractDownload {
         this.content = content;
         this.title = title;
         this.directory = directory;
-        if ((content != null) && (content.getPointNumbers() != null)) {
+        if ((content != null) && content.isSuccessfull() && (content.getPointNumbers() != null)) {
             for (final PointNumberReservation pnr : content.getPointNumbers()) {
                 if ((pnr.getAblaufDatum() == null) || pnr.getAblaufDatum().isEmpty()) {
                     isFreigabeMode = true;
@@ -66,8 +67,12 @@ public class PointNumberDownload extends AbstractDownload {
             }
         }
         status = State.WAITING;
-
-        determineDestinationFile(filename, "txt");
+        if ((content == null) || content.isSuccessfull()) {
+            determineDestinationFile(filename, ".txt");
+        } else {
+            downloadProtokoll = true;
+            determineDestinationFile(filename, ".xml");
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -121,14 +126,19 @@ public class PointNumberDownload extends AbstractDownload {
 
         status = State.RUNNING;
         stateChanged();
-        if (!isPointNumberBeanValid()) {
-            status = State.COMPLETED_WITH_ERROR;
-            stateChanged();
-            return;
+        final byte[] bytes;
+        if (downloadProtokoll) {
+            bytes = content.getProtokoll().getBytes();
+        } else {
+            if (!isPointNumberBeanValid()) {
+                status = State.COMPLETED_WITH_ERROR;
+                stateChanged();
+                return;
+            }
+            createFileHeader();
+            createFileBody();
+            bytes = contentBuilder.toString().getBytes();
         }
-        createFileHeader();
-        createFileBody();
-        final byte[] bytes = contentBuilder.toString().getBytes();
         if ((bytes == null) || (bytes.length <= 0)) {
             log.info("Downloaded content seems to be empty..");
 

@@ -20,8 +20,6 @@ import org.apache.log4j.Logger;
 
 import java.awt.CardLayout;
 import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -30,6 +28,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +42,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 import javax.swing.SwingWorker;
-import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
@@ -52,6 +50,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
+import javax.swing.text.JTextComponent;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.utils.BusyLoggingTextPane;
@@ -65,6 +64,7 @@ import de.cismet.cids.server.search.CidsServerSearch;
 
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
+import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 
@@ -74,7 +74,7 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class PointNumberDialog extends javax.swing.JDialog implements DocumentListener {
+public class PointNumberDialog extends javax.swing.JDialog {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -83,23 +83,23 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
 
     //~ Instance fields --------------------------------------------------------
 
-    private final Timer t = new Timer(800, new ActionListener() {
-
-                @Override
-                public void actionPerformed(final ActionEvent e) {
-                    loadPointNumbers();
-                }
-            });
     private String wuppVnr;
     private PointNumberReservationRequest result;
     private boolean hasFreigabeAccess = false;
+    private AllAntragsnummernLoadWorker allAnrLoadWorker = new AllAntragsnummernLoadWorker();
+    private FreigebenWorker freigebenWorker = new FreigebenWorker();
+    private PointNumberLoadWorker pnrLoadWorker = new PointNumberLoadWorker();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnDeSelectAll;
     private javax.swing.JButton btnDone;
     private javax.swing.JButton btnDownload;
     private javax.swing.JButton btnFreigeben;
+    private javax.swing.JButton btnSelectAll;
     private javax.swing.JComboBox cbAntragPrefix;
+    private javax.swing.JComboBox cbAntragsNummer;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler2;
     private javax.swing.JScrollPane jScrollPane1;
     private org.jdesktop.swingx.JXBusyLabel jxFreigebenWaitLabel;
     private javax.swing.JLabel lblAnrSeperator;
@@ -113,6 +113,7 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
     private javax.swing.JPanel pnlAntragsnummer;
     private javax.swing.JPanel pnlControls;
     private de.cismet.cids.custom.nas.PointNumberReservationPanel pnlErgaenzen;
+    private javax.swing.JPanel pnlFreigabeListControls;
     private javax.swing.JPanel pnlFreigeben;
     private javax.swing.JPanel pnlFreigebenCard;
     private javax.swing.JPanel pnlFreigebenError;
@@ -127,7 +128,6 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
     private javax.swing.JList punktNummernList;
     private javax.swing.JScrollPane scpPunktNummernList;
     private javax.swing.JTabbedPane tbpModus;
-    private javax.swing.JTextField tfAntragsnummer;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -169,6 +169,25 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
                     }
                 }
             });
+        tbpModus.addChangeListener(new ChangeListener() {
+
+                @Override
+                public void stateChanged(final ChangeEvent e) {
+                    final DefaultComboBoxModel model = (DefaultComboBoxModel)cbAntragsNummer.getModel();
+                    if (tbpModus.getSelectedIndex() == 0) {
+                        model.setSelectedItem("");
+                        cbAntragsNummer.setEditable(true);
+                    } else {
+                        final int pos = model.getIndexOf(cbAntragsNummer.getSelectedItem());
+                        if (pos > 0) {
+                            cbAntragsNummer.setSelectedIndex(pos);
+                        } else {
+                            cbAntragsNummer.setSelectedIndex(0);
+                        }
+                        cbAntragsNummer.setEditable(false);
+                    }
+                }
+            });
         punktNummernList.setCellRenderer(new PointNumberListRenderer());
         punktNummernList.addMouseListener(new MouseAdapter() {
 
@@ -182,9 +201,8 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
                 }
             });
 
-        t.setCoalesce(true);
-        t.setRepeats(false);
-        tfAntragsnummer.getDocument().addDocumentListener(this);
+        final JTextComponent textComp = (JTextComponent)cbAntragsNummer.getEditor().getEditorComponent();
+//        textComp.getDocument().addDocumentListener(this);
         final DefaultCaret caret = (DefaultCaret)protokollPane.getCaret();
         caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
         try {
@@ -218,6 +236,9 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
         } catch (Exception e) {
             LOG.error("Error during determination of vermessungstellennummer", e);
         }
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbAntragsNummer);
+        ((DefaultComboBoxModel)cbAntragsNummer.getModel()).addElement("");
+        loadAllAntragsNummern();
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -227,91 +248,20 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
      */
     private void loadPointNumbers() {
         // load the point numbers for the given anr..
-        // pnlFreigeben.
+        if (pnrLoadWorker.getState() == SwingWorker.StateValue.STARTED) {
+            try {
+                pnrLoadWorker.cancel(true);
+            } catch (Exception e) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Exception on cancellation point number load worker", e);
+                }
+            }
+        }
+        pnrLoadWorker = new PointNumberLoadWorker();
         final CardLayout cl = (CardLayout)(pnlFreigeben.getLayout());
         cl.show(pnlFreigeben, "card1");
         jxFreigebenWaitLabel.setBusy(true);
-
-        final SwingWorker<Collection<PointNumberReservation>, Void> worker =
-            new SwingWorker<Collection<PointNumberReservation>, Void>() {
-
-                @Override
-                protected Collection<PointNumberReservation> doInBackground() throws Exception {
-                    final String anr = getAnr();
-                    if ((anr == null) || anr.equals("") || !anr.matches("[a-zA-Z0-9_-]*")) {
-                        showFreigabeError();
-                        return null;
-                    }
-
-                    final String anrPrefix = (getAnrPrefix() == null) ? "3290" : getAnrPrefix();
-                    final ServerActionParameter prefix = new ServerActionParameter(
-                            PointNumberReserverationServerAction.PARAMETER_TYPE.PREFIX.toString(),
-                            anrPrefix);
-                    final ServerActionParameter aNummer = new ServerActionParameter(
-                            PointNumberReserverationServerAction.PARAMETER_TYPE.AUFTRAG_NUMMER.toString(),
-                            anr);
-                    final ServerActionParameter action = new ServerActionParameter(
-                            PointNumberReserverationServerAction.PARAMETER_TYPE.ACTION.toString(),
-                            PointNumberReserverationServerAction.ACTION_TYPE.GET_POINT_NUMBERS);
-                    final Collection<PointNumberReservation> pointNumbers = (Collection<PointNumberReservation>)
-                        SessionManager.getProxy()
-                                .executeTask(
-                                        SEVER_ACTION,
-                                        "WUNDA_BLAU",
-                                        null,
-                                        action,
-                                        prefix,
-                                        aNummer);
-                    return pointNumbers;
-                }
-
-                @Override
-                protected void done() {
-                    try {
-                        final Collection<PointNumberReservation> result = get();
-                        if ((result == null)
-                                    || result.isEmpty()) {
-                            // ToDo show error
-                            showFreigabeError();
-                        }
-                        final CheckListItem[] listModel = new CheckListItem[result.size()];
-                        int i = 0;
-                        for (final PointNumberReservation pnr : result) {
-                            listModel[i] = new CheckListItem(pnr.getPunktnummern());
-                            i++;
-                        }
-                        Arrays.sort(listModel, new CheckBoxItemComparator());
-                        punktNummernList.setModel(new javax.swing.AbstractListModel() {
-
-                                CheckListItem[] pnrs = listModel;
-
-                                @Override
-                                public int getSize() {
-                                    return pnrs.length;
-                                }
-
-                                @Override
-                                public Object getElementAt(final int i) {
-                                    return pnrs[i];
-                                }
-                            });
-                        jxFreigebenWaitLabel.setBusy(false);
-                        cl.show(pnlFreigeben, "card2");
-//                        tfAntragsnummer.getDocument().removeDocumentListener(PointNumberDialog.this);
-                    } catch (InterruptedException ex) {
-                        LOG.error(
-                            "Swing worker that retrieves pointnumbers for antragsnummer was interrupted",
-                            ex);
-                        showFreigabeError();
-                    } catch (ExecutionException ex) {
-                        LOG.error(
-                            "Error in executing worker thread that retrieves pointnumbers for antragsnummer",
-                            ex);
-                        showFreigabeError();
-                    }
-                }
-            };
-        worker.execute();
+        pnrLoadWorker.execute();
     }
 
     /**
@@ -320,7 +270,20 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
      * @return  DOCUMENT ME!
      */
     public String getAnr() {
-        return tfAntragsnummer.getText();
+        final String anr;
+        if (cbAntragsNummer.isEditable()) {
+            final String tmp;
+            tmp = ((JTextComponent)cbAntragsNummer.getEditor().getEditorComponent()).getText();
+            if ((tmp == null) || tmp.isEmpty()) {
+                anr = cbAntragsNummer.getSelectedItem().toString();
+                ;
+            } else {
+                anr = tmp;
+            }
+        } else {
+            anr = cbAntragsNummer.getSelectedItem().toString();
+        }
+        return anr;
     }
 
     /**
@@ -380,12 +343,18 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
         scpPunktNummernList = new javax.swing.JScrollPane();
         punktNummernList = new javax.swing.JList();
         btnFreigeben = new javax.swing.JButton();
+        pnlFreigabeListControls = new javax.swing.JPanel();
+        btnSelectAll = new javax.swing.JButton();
+        btnDeSelectAll = new javax.swing.JButton();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
         pnlFreigebenError = new javax.swing.JPanel();
         lblFreigebenError = new javax.swing.JLabel();
         pnlAntragsnummer = new javax.swing.JPanel();
         cbAntragPrefix = new javax.swing.JComboBox();
-        tfAntragsnummer = new javax.swing.JTextField();
         lblAnrSeperator = new javax.swing.JLabel();
+        cbAntragsNummer = new javax.swing.JComboBox();
         pnlRight = new javax.swing.JPanel();
         lblProtokoll = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -481,6 +450,8 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
         scpPunktNummernList.setViewportView(punktNummernList);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -499,10 +470,54 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         pnlFreigebenCard.add(btnFreigeben, gridBagConstraints);
+
+        pnlFreigabeListControls.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnSelectAll,
+            org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.btnSelectAll.text")); // NOI18N
+        btnSelectAll.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnSelectAllActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        pnlFreigabeListControls.add(btnSelectAll, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnDeSelectAll,
+            org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.btnDeSelectAll.text")); // NOI18N
+        btnDeSelectAll.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnDeSelectAllActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        pnlFreigabeListControls.add(btnDeSelectAll, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        pnlFreigabeListControls.add(filler2, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
+        pnlFreigebenCard.add(pnlFreigabeListControls, gridBagConstraints);
 
         pnlFreigeben.add(pnlFreigebenCard, "card2");
 
@@ -538,22 +553,16 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
 
         cbAntragPrefix.setMinimumSize(new java.awt.Dimension(60, 27));
         cbAntragPrefix.setPreferredSize(new java.awt.Dimension(60, 27));
+        cbAntragPrefix.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cbAntragPrefixActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlAntragsnummer.add(cbAntragPrefix, gridBagConstraints);
-
-        tfAntragsnummer.setText(org.openide.util.NbBundle.getMessage(
-                PointNumberDialog.class,
-                "PointNumberDialog.tfAntragsnummer.text")); // NOI18N
-        tfAntragsnummer.setMinimumSize(new java.awt.Dimension(10, 29));
-        tfAntragsnummer.setPreferredSize(new java.awt.Dimension(10, 29));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlAntragsnummer.add(tfAntragsnummer, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblAnrSeperator,
@@ -564,6 +573,21 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
         pnlAntragsnummer.add(lblAnrSeperator, gridBagConstraints);
+
+        cbAntragsNummer.setEditable(true);
+        cbAntragsNummer.setMinimumSize(new java.awt.Dimension(209, 29));
+        cbAntragsNummer.setPreferredSize(new java.awt.Dimension(209, 29));
+        cbAntragsNummer.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cbAntragsNummerActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        pnlAntragsnummer.add(cbAntragsNummer, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -688,9 +712,8 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
      * @param  evt  DOCUMENT ME!
      */
     private void btnDoneActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDoneActionPerformed
-        // TODO add your handling code here:
         this.dispose();
-    } //GEN-LAST:event_btnDoneActionPerformed
+    }                                                                           //GEN-LAST:event_btnDoneActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -707,6 +730,8 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
      * @param  evt  DOCUMENT ME!
      */
     private void btnFreigebenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFreigebenActionPerformed
+        freigebenWorker = new FreigebenWorker();
+
         try {
             protokollPane.getDocument().remove(0, protokollPane.getDocument().getLength());
         } catch (BadLocationException ex) {
@@ -715,151 +740,7 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
         protokollPane.setBusy(true);
         protokollPane.addMessage("Sende Freigabeauftrag.", BusyLoggingTextPane.Styles.INFO);
 
-        final SwingWorker<PointNumberReservationRequest, Void> releaseWorker =
-            new SwingWorker<PointNumberReservationRequest, Void>() {
-
-                @Override
-                protected PointNumberReservationRequest doInBackground() throws Exception {
-                    if ((punktNummernList.getModel() == null) || (punktNummernList.getModel().getSize() == 0)) {
-                        return null;
-                    }
-
-                    final List<String> selectedValues = new ArrayList<String>();
-                    for (int i = 0; i < punktNummernList.getModel().getSize(); i++) {
-                        final CheckListItem item = (CheckListItem)punktNummernList.getModel().getElementAt(i);
-                        if (item.isSelected) {
-                            selectedValues.add(item.toString());
-                        }
-                    }
-                    final HashMap<Integer, ArrayList<Long>> pnrIntervals = new HashMap<Integer, ArrayList<Long>>();
-                    ArrayList<Long> pnrs = new ArrayList<Long>();
-                    int index = 0;
-                    // find coherent intervals
-                    for (final String pnr : selectedValues) {
-                        final int currIndex = selectedValues.indexOf(pnr);
-                        if (currIndex != (selectedValues.size() - 1)) {
-                            final long currPnr = Long.parseLong(pnr);
-                            final long nextPnr = Long.parseLong(selectedValues.get(currIndex + 1));
-                            pnrs.add(currPnr);
-                            if ((currPnr + 1) != nextPnr) {
-                                pnrIntervals.put(index, pnrs);
-                                index++;
-                                pnrs = new ArrayList<Long>();
-                            }
-                        } else {
-                            pnrs.add(Long.parseLong(pnr));
-                            pnrIntervals.put(index, pnrs);
-                        }
-                    }
-
-                    final String anr = getAnr();
-                    if (!anr.matches("[a-zA-Z0-9_-]*")) {
-                        return null;
-                    }
-
-                    final String anrPrefix = (getAnrPrefix() == null) ? "3290" : getAnrPrefix();
-                    final ServerActionParameter prefix = new ServerActionParameter(
-                            PointNumberReserverationServerAction.PARAMETER_TYPE.PREFIX.toString(),
-                            anrPrefix);
-                    final ServerActionParameter aNummer = new ServerActionParameter(
-                            PointNumberReserverationServerAction.PARAMETER_TYPE.AUFTRAG_NUMMER.toString(),
-                            anr);
-                    final ServerActionParameter action = new ServerActionParameter(
-                            PointNumberReserverationServerAction.PARAMETER_TYPE.ACTION.toString(),
-                            PointNumberReserverationServerAction.ACTION_TYPE.DO_STORNO);
-
-                    // do release for each interval...
-                    final ArrayList<PointNumberReservation> releasedPoints = new ArrayList<PointNumberReservation>();
-                    final PointNumberReservationRequest res = new PointNumberReservationRequest();
-                    for (final ArrayList<Long> interval : pnrIntervals.values()) {
-                        final Long s = interval.get(0) % 1000000;
-                        final Long e = interval.get(interval.size() - 1) % 1000000;
-                        final Integer start = s.intValue();
-                        final Integer end = e.intValue();
-
-                        final String nummerierungsbezirk = "" + (interval.get(0) / 1000000);
-                        final ServerActionParameter on1 = new ServerActionParameter(
-                                PointNumberReserverationServerAction.PARAMETER_TYPE.ON1.toString(),
-                                start);
-                        final ServerActionParameter on2 = new ServerActionParameter(
-                                PointNumberReserverationServerAction.PARAMETER_TYPE.ON2.toString(),
-                                end);
-                        final ServerActionParameter nbz = new ServerActionParameter(
-                                PointNumberReserverationServerAction.PARAMETER_TYPE.NBZ.toString(),
-                                nummerierungsbezirk);
-                        final PointNumberReservationRequest result = (PointNumberReservationRequest)SessionManager
-                                    .getProxy()
-                                    .executeTask(
-                                            SEVER_ACTION,
-                                            "WUNDA_BLAU",
-                                            null,
-                                            action,
-                                            prefix,
-                                            aNummer,
-                                            nbz,
-                                            on1,
-                                            on2);
-                        if ((result != null) && (result.getPointNumbers() != null)
-                                    && !result.getPointNumbers().isEmpty()) {
-                            if (res.getAntragsnummer() == null) {
-                                res.setAntragsnummer(result.getAntragsnummer());
-                            }
-                            releasedPoints.addAll(result.getPointNumbers());
-                        }
-                    }
-                    res.setPointNumbers(releasedPoints);
-                    return res;
-                }
-
-                @Override
-                protected void done() {
-                    final java.util.Timer t = new java.util.Timer();
-                    t.schedule(new TimerTask() {
-
-                            @Override
-                            public void run() {
-                                try {
-                                    final PointNumberReservationRequest result = get();
-                                    if ((result == null) || (result.getPointNumbers() == null)
-                                                || result.getPointNumbers().isEmpty()
-                                                || (result.getAntragsnummer() == null)) {
-                                        protokollPane.addMessage(
-                                            "Fehler beim senden des Auftrags",
-                                            BusyLoggingTextPane.Styles.ERROR);
-                                        protokollPane.setBusy(false);
-                                        return;
-                                    }
-                                    setResult(result);
-                                    protokollPane.setBusy(false);
-                                    protokollPane.addMessage(
-                                        "Freigabe für Antragsnummer: "
-                                                + result.getAntragsnummer()
-                                                + " erfolgreich. Folgende Punktnummern wurden freigegeben:",
-                                        BusyLoggingTextPane.Styles.SUCCESS);
-                                    protokollPane.addMessage("", BusyLoggingTextPane.Styles.INFO);
-                                    for (final PointNumberReservation pnr : result.getPointNumbers()) {
-                                        protokollPane.addMessage(
-                                            ""
-                                                    + pnr.getPunktnummern(),
-                                            BusyLoggingTextPane.Styles.INFO);
-                                    }
-                                    loadPointNumbers();
-                                } catch (InterruptedException ex) {
-                                    LOG.error(
-                                        "Swing worker that releases points was interrupted",
-                                        ex);
-                                    showError();
-                                } catch (ExecutionException ex) {
-                                    LOG.error(
-                                        "Error in execution of Swing Worker that releases points",
-                                        ex);
-                                    showError();
-                                }
-                            }
-                        }, 50);
-                }
-            };
-        releaseWorker.execute();
+        freigebenWorker.execute();
     } //GEN-LAST:event_btnFreigebenActionPerformed
 
     /**
@@ -889,6 +770,54 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
 
         DownloadManager.instance().add(download);
     } //GEN-LAST:event_btnDownloadActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cbAntragPrefixActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbAntragPrefixActionPerformed
+        loadAllAntragsNummern();
+    }                                                                                  //GEN-LAST:event_cbAntragPrefixActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnDeSelectAllActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDeSelectAllActionPerformed
+        for (int i = 0; i < punktNummernList.getModel().getSize(); i++) {
+            final CheckListItem item = (CheckListItem)punktNummernList.getModel().getElementAt(i);
+            item.setSelected(false);
+        }
+        punktNummernList.repaint();
+    }                                                                                  //GEN-LAST:event_btnDeSelectAllActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnSelectAllActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnSelectAllActionPerformed
+        for (int i = 0; i < punktNummernList.getModel().getSize(); i++) {
+            final CheckListItem item = (CheckListItem)punktNummernList.getModel().getElementAt(i);
+            item.setSelected(true);
+        }
+        punktNummernList.repaint();
+    }                                                                                //GEN-LAST:event_btnSelectAllActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cbAntragsNummerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbAntragsNummerActionPerformed
+        // since the combobox in the freigeben tab is  not editable no document events are fired when changing the
+        // selected item
+        if (!cbAntragsNummer.isEditable() && (tbpModus.getSelectedIndex() == 2)) {
+            loadPointNumbers();
+        }
+    } //GEN-LAST:event_cbAntragsNummerActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -971,31 +900,346 @@ public class PointNumberDialog extends javax.swing.JDialog implements DocumentLi
         this.result = result;
     }
 
-    @Override
-    public void insertUpdate(final DocumentEvent e) {
-        t.stop();
-        t.start();
-        pnlErgaenzen.checkButtonState();
-        pnlReservieren.checkButtonState();
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  newAnr  DOCUMENT ME!
+     */
+    public void addAnr(final String newAnr) {
+        final DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>)cbAntragsNummer.getModel();
+        final List<String> tmp = new ArrayList<String>();
+        for (int i = 0; i < model.getSize(); i++) {
+            tmp.add(model.getElementAt(i));
+        }
+        final int pos = Collections.binarySearch(tmp, newAnr);
+        model.insertElementAt(newAnr, Math.abs(pos));
     }
 
-    @Override
-    public void removeUpdate(final DocumentEvent e) {
-        t.stop();
-        t.start();
-        pnlErgaenzen.checkButtonState();
-        pnlReservieren.checkButtonState();
-    }
+    /**
+     * DOCUMENT ME!
+     */
+    public void loadAllAntragsNummern() {
+        if (allAnrLoadWorker.getState() == SwingWorker.StateValue.STARTED) {
+            try {
+                final boolean cancelled = allAnrLoadWorker.cancel(true);
+            } catch (Exception e) {
+            }
+        }
+        allAnrLoadWorker = new AllAntragsnummernLoadWorker();
+        final DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>)cbAntragsNummer.getModel();
+        final String insertedText = (String)((JTextComponent)cbAntragsNummer.getEditor().getEditorComponent())
+                    .getText();
+        model.removeAllElements();
+        model.addElement("lade Antragsnummern...");
+        if (tbpModus.getSelectedIndex() != 0) {
+            cbAntragsNummer.setEditable(false);
+        } else {
+            ((JTextComponent)cbAntragsNummer.getEditor().getEditorComponent()).setText(insertedText);
+        }
 
-    @Override
-    public void changedUpdate(final DocumentEvent e) {
-        t.stop();
-        t.start();
-        pnlErgaenzen.checkButtonState();
-        pnlReservieren.checkButtonState();
+        cbAntragsNummer.repaint();
+        this.repaint();
+        allAnrLoadWorker.execute();
     }
 
     //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private final class PointNumberLoadWorker extends SwingWorker<Collection<PointNumberReservation>, Void> {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        protected Collection<PointNumberReservation> doInBackground() throws Exception {
+            final String anr = getAnr();
+            if ((anr == null) || anr.equals("") || !anr.matches("[a-zA-Z0-9_-]*")) {
+                showFreigabeError();
+                return null;
+            }
+
+            final String anrPrefix = (getAnrPrefix() == null) ? "3290" : getAnrPrefix();
+            final ServerActionParameter prefix = new ServerActionParameter(
+                    PointNumberReserverationServerAction.PARAMETER_TYPE.PREFIX.toString(),
+                    anrPrefix);
+            final ServerActionParameter aNummer = new ServerActionParameter(
+                    PointNumberReserverationServerAction.PARAMETER_TYPE.AUFTRAG_NUMMER.toString(),
+                    anr);
+            final ServerActionParameter action = new ServerActionParameter(
+                    PointNumberReserverationServerAction.PARAMETER_TYPE.ACTION.toString(),
+                    PointNumberReserverationServerAction.ACTION_TYPE.GET_POINT_NUMBERS);
+            final Collection<PointNumberReservation> pointNumbers = (Collection<PointNumberReservation>)SessionManager
+                        .getProxy().executeTask(
+                        SEVER_ACTION,
+                        "WUNDA_BLAU",
+                        null,
+                        action,
+                        prefix,
+                        aNummer);
+            return pointNumbers;
+        }
+
+        @Override
+        protected void done() {
+            try {
+                final Collection<PointNumberReservation> result = get();
+                if ((result == null)
+                            || result.isEmpty()) {
+                    // ToDo show error
+                    showFreigabeError();
+                }
+                final CheckListItem[] listModel = new CheckListItem[result.size()];
+                int i = 0;
+                for (final PointNumberReservation pnr : result) {
+                    listModel[i] = new CheckListItem(pnr.getPunktnummern());
+                    i++;
+                }
+                Arrays.sort(listModel, new CheckBoxItemComparator());
+                punktNummernList.setModel(new javax.swing.AbstractListModel() {
+
+                        CheckListItem[] pnrs = listModel;
+
+                        @Override
+                        public int getSize() {
+                            return pnrs.length;
+                        }
+
+                        @Override
+                        public Object getElementAt(final int i) {
+                            return pnrs[i];
+                        }
+                    });
+                jxFreigebenWaitLabel.setBusy(false);
+                final CardLayout cl = (CardLayout)(pnlFreigeben.getLayout());
+                cl.show(pnlFreigeben, "card2");
+//                        tfAntragsnummer.getDocument().removeDocumentListener(PointNumberDialog.this);
+            } catch (InterruptedException ex) {
+                LOG.error(
+                    "Swing worker that retrieves pointnumbers for antragsnummer was interrupted",
+                    ex);
+                showFreigabeError();
+            } catch (ExecutionException ex) {
+                LOG.error(
+                    "Error in executing worker thread that retrieves pointnumbers for antragsnummer",
+                    ex);
+                showFreigabeError();
+            }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private final class FreigebenWorker extends SwingWorker<PointNumberReservationRequest, Void> {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        protected PointNumberReservationRequest doInBackground() throws Exception {
+            if ((punktNummernList.getModel() == null) || (punktNummernList.getModel().getSize() == 0)) {
+                return null;
+            }
+
+            final List<String> selectedValues = new ArrayList<String>();
+            for (int i = 0; i < punktNummernList.getModel().getSize(); i++) {
+                final CheckListItem item = (CheckListItem)punktNummernList.getModel().getElementAt(i);
+                if (item.isSelected) {
+                    selectedValues.add(item.toString());
+                }
+            }
+            final HashMap<Integer, ArrayList<Long>> pnrIntervals = new HashMap<Integer, ArrayList<Long>>();
+            ArrayList<Long> pnrs = new ArrayList<Long>();
+            int index = 0;
+            // find coherent intervals
+            for (final String pnr : selectedValues) {
+                final int currIndex = selectedValues.indexOf(pnr);
+                if (currIndex != (selectedValues.size() - 1)) {
+                    final long currPnr = Long.parseLong(pnr);
+                    final long nextPnr = Long.parseLong(selectedValues.get(currIndex + 1));
+                    pnrs.add(currPnr);
+                    if ((currPnr + 1) != nextPnr) {
+                        pnrIntervals.put(index, pnrs);
+                        index++;
+                        pnrs = new ArrayList<Long>();
+                    }
+                } else {
+                    pnrs.add(Long.parseLong(pnr));
+                    pnrIntervals.put(index, pnrs);
+                }
+            }
+
+            final String anr = getAnr();
+            if (!anr.matches("[a-zA-Z0-9_-]*")) {
+                return null;
+            }
+
+            final String anrPrefix = (getAnrPrefix() == null) ? "3290" : getAnrPrefix();
+            final ServerActionParameter prefix = new ServerActionParameter(
+                    PointNumberReserverationServerAction.PARAMETER_TYPE.PREFIX.toString(),
+                    anrPrefix);
+            final ServerActionParameter aNummer = new ServerActionParameter(
+                    PointNumberReserverationServerAction.PARAMETER_TYPE.AUFTRAG_NUMMER.toString(),
+                    anr);
+            final ServerActionParameter action = new ServerActionParameter(
+                    PointNumberReserverationServerAction.PARAMETER_TYPE.ACTION.toString(),
+                    PointNumberReserverationServerAction.ACTION_TYPE.DO_STORNO);
+
+            // do release for each interval...
+            final ArrayList<PointNumberReservation> releasedPoints = new ArrayList<PointNumberReservation>();
+            final PointNumberReservationRequest res = new PointNumberReservationRequest();
+            for (final ArrayList<Long> interval : pnrIntervals.values()) {
+                final Long s = interval.get(0) % 1000000;
+                final Long e = interval.get(interval.size() - 1) % 1000000;
+                final Integer start = s.intValue();
+                final Integer end = e.intValue();
+
+                final String nummerierungsbezirk = "" + (interval.get(0) / 1000000);
+                final ServerActionParameter on1 = new ServerActionParameter(
+                        PointNumberReserverationServerAction.PARAMETER_TYPE.ON1.toString(),
+                        start);
+                final ServerActionParameter on2 = new ServerActionParameter(
+                        PointNumberReserverationServerAction.PARAMETER_TYPE.ON2.toString(),
+                        end);
+                final ServerActionParameter nbz = new ServerActionParameter(
+                        PointNumberReserverationServerAction.PARAMETER_TYPE.NBZ.toString(),
+                        nummerierungsbezirk);
+                final PointNumberReservationRequest result = (PointNumberReservationRequest)SessionManager
+                            .getProxy()
+                            .executeTask(
+                                    SEVER_ACTION,
+                                    "WUNDA_BLAU",
+                                    null,
+                                    action,
+                                    prefix,
+                                    aNummer,
+                                    nbz,
+                                    on1,
+                                    on2);
+                if ((result != null) && (result.getPointNumbers() != null)
+                            && !result.getPointNumbers().isEmpty()) {
+                    if (res.getAntragsnummer() == null) {
+                        res.setAntragsnummer(result.getAntragsnummer());
+                    }
+                    releasedPoints.addAll(result.getPointNumbers());
+                }
+            }
+            res.setPointNumbers(releasedPoints);
+            return res;
+        }
+
+        @Override
+        protected void done() {
+            final java.util.Timer t = new java.util.Timer();
+            t.schedule(new TimerTask() {
+
+                    @Override
+                    public void run() {
+                        try {
+                            final PointNumberReservationRequest result = get();
+                            setResult(result);
+                            if ((result == null) || !result.isSuccessfull()) {
+                                protokollPane.addMessage(
+                                    "Fehler beim Senden des Auftrags",
+                                    BusyLoggingTextPane.Styles.ERROR);
+                                protokollPane.addMessage(
+                                    "Die Protokolldatei mit Fehlerinformationen steht zum Download bereit.",
+                                    BusyLoggingTextPane.Styles.ERROR);
+                                protokollPane.setBusy(false);
+                                return;
+                            }
+                            protokollPane.setBusy(false);
+                            protokollPane.addMessage(
+                                "Freigabe für Antragsnummer: "
+                                        + result.getAntragsnummer()
+                                        + " erfolgreich. Folgende Punktnummern wurden freigegeben:",
+                                BusyLoggingTextPane.Styles.SUCCESS);
+                            protokollPane.addMessage("", BusyLoggingTextPane.Styles.INFO);
+                            for (final PointNumberReservation pnr : result.getPointNumbers()) {
+                                protokollPane.addMessage(
+                                    ""
+                                            + pnr.getPunktnummern(),
+                                    BusyLoggingTextPane.Styles.INFO);
+                            }
+                            loadPointNumbers();
+                        } catch (InterruptedException ex) {
+                            LOG.error(
+                                "Swing worker that releases points was interrupted",
+                                ex);
+                            showError();
+                        } catch (ExecutionException ex) {
+                            LOG.error(
+                                "Error in execution of Swing Worker that releases points",
+                                ex);
+                            showError();
+                        }
+                    }
+                }, 50);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private final class AllAntragsnummernLoadWorker extends SwingWorker<Collection<String>, Void> {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        protected Collection<String> doInBackground() throws Exception {
+            final ServerActionParameter action = new ServerActionParameter(
+                    PointNumberReserverationServerAction.PARAMETER_TYPE.ACTION.toString(),
+                    PointNumberReserverationServerAction.ACTION_TYPE.GET_ALL_RESERVATIONS);
+            final ServerActionParameter prefix = new ServerActionParameter(
+                    PointNumberReserverationServerAction.PARAMETER_TYPE.PREFIX.toString(),
+                    getAnrPrefix());
+
+            final List<String> result = (List<String>)SessionManager.getProxy()
+                        .executeTask(
+                                SEVER_ACTION,
+                                "WUNDA_BLAU",
+                                null,
+                                action,
+                                prefix);
+            Collections.sort(result);
+            return result;
+        }
+
+        @Override
+        protected void done() {
+            try {
+                final Collection<String> result = get();
+                final DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>)cbAntragsNummer.getModel();
+                final String insertedText = (String)((JTextComponent)cbAntragsNummer.getEditor().getEditorComponent())
+                            .getText();
+                model.removeAllElements();
+                if ((result == null) || result.isEmpty()) {
+                    model.addElement("keine Aufträge gefunden");
+                    return;
+                }
+
+                for (final String s : result) {
+                    model.addElement(s.substring(5));
+                }
+                if (tbpModus.getSelectedIndex() == 0) {
+                    ((JTextComponent)cbAntragsNummer.getEditor().getEditorComponent()).setText(insertedText);
+                    cbAntragsNummer.setEditable(true);
+                }
+                cbAntragsNummer.repaint();
+                PointNumberDialog.this.repaint();
+            } catch (InterruptedException ex) {
+                LOG.error("Worker Thread that loads all existing Antragsnummern was interrupted", ex);
+            } catch (ExecutionException ex) {
+                LOG.error("Error during executing Worker Thread that loads all existing Antragsnummern", ex);
+            }
+        }
+    }
 
     /**
      * DOCUMENT ME!

@@ -42,6 +42,7 @@ import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
+import de.cismet.cismap.commons.gui.MapListener;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
@@ -309,7 +310,6 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
             org.openide.util.NbBundle.getMessage(
                 PointNumberReservationPanel.class,
                 "PointNumberReservationPanel.btnErstellen.text")); // NOI18N
-        btnErstellen.setEnabled(false);
         btnErstellen.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -356,6 +356,20 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
      */
     private void btnErstellenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnErstellenActionPerformed
         // check anr
+        final String anr = pnrDialog.getAnr();
+        if ((anr == null) || anr.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                StaticSwingTools.getParentFrame(this),
+                org.openide.util.NbBundle.getMessage(
+                    PointNumberReservationPanel.class,
+                    "PointNumberReservationPanel.AnrExistsJOptionPane.message"),
+                org.openide.util.NbBundle.getMessage(
+                    PointNumberReservationPanel.class,
+                    "PointNumberReservationPanel.AnrExistsJOptionPane.title"),
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         protokollPane = pnrDialog.getProtokollPane();
         try {
             protokollPane.getDocument().remove(0, protokollPane.getDocument().getLength());
@@ -363,7 +377,6 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
             LOG.error("Could not clear Protokoll Pane", ex);
         }
 
-        final String anr = pnrDialog.getAnr();
         final String nummerierungsbezirk = (String)cbNbz.getEditor().getItem();
         if (!anr.matches("[a-zA-Z0-9_-]*") || !nummerierungsbezirk.matches("[0-9]*")) {
             JOptionPane.showMessageDialog(
@@ -447,9 +460,14 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                             public void run() {
                                 try {
                                     final PointNumberReservationRequest result = get();
-                                    if ((result == null) || (result.getAntragsnummer() == null)
-                                                || (result.getPointNumbers() == null)) {
-                                        protokollPane.addMessage("Fehler beim senden des Auftrags", Styles.ERROR);
+                                    pnrDialog.setResult(result);
+                                    if ((result == null) || !result.isSuccessfull()) {
+                                        protokollPane.addMessage("Fehler beim Senden des Auftrags.", Styles.ERROR);
+                                        protokollPane.addMessage(
+                                            "Die Protokolldatei mit Fehlerinformationen steht zum Download bereit.",
+                                            Styles.ERROR);
+                                        protokollPane.setBusy(false);
+                                        return;
                                     }
                                     pnrDialog.setResult(result);
                                     protokollPane.addMessage("Ok.", Styles.SUCCESS);
@@ -457,11 +475,14 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                                     protokollPane.addMessage(
                                         "Reservierung für Antragsnummer: "
                                                 + result.getAntragsnummer()
-                                                + ". Folgende Punktnummern reserviert:",
+                                                + ". Folgende Punktnummern wurden reserviert:",
                                         Styles.SUCCESS);
                                     protokollPane.addMessage("", Styles.INFO);
                                     for (final PointNumberReservation pnr : result.getPointNumbers()) {
                                         protokollPane.addMessage("" + pnr.getPunktnummern(), Styles.INFO);
+                                    }
+                                    if (!pnrDialog.isErgaenzenMode()) {
+                                        pnrDialog.addAnr(result.getAntragsnummer().substring(5));
                                     }
                                 } catch (InterruptedException ex) {
                                     LOG.error("Swing worker that executes the reservation was interrupted", ex);
