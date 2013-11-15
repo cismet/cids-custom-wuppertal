@@ -8,19 +8,24 @@
 package de.cismet.cids.custom.wunda_blau.search;
 
 import Sirius.navigator.actiontag.ActionTagProtected;
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.search.CidsSearchExecutor;
 import Sirius.navigator.search.dynamic.SearchControlListener;
 import Sirius.navigator.search.dynamic.SearchControlPanel;
 
 import Sirius.server.middleware.types.MetaClass;
+import Sirius.server.middleware.types.MetaObject;
 
 import com.vividsolutions.jts.geom.Geometry;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import org.openide.util.NbBundle;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -34,20 +39,28 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
+import javax.swing.AbstractAction;
 import javax.swing.Box;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JList;
+import javax.swing.ListModel;
 
 import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungFlurstueckSelectionDialog;
+import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungRissEditor;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.wunda_blau.search.server.CidsVermessungRissArtSearchStatement;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsVermessungRissSearchStatement;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.navigator.utils.CidsBeanDropListener;
+import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
@@ -62,6 +75,8 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 
 import de.cismet.tools.gui.StaticSwingTools;
+
+import static javax.swing.Action.NAME;
 
 /**
  * DOCUMENT ME!
@@ -79,6 +94,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
 
     private static final Logger LOG = Logger.getLogger(VermessungRissWindowSearch.class);
     private static final String ACTION_TAG = "custom.vermessungsriss.windowsearch@WUNDA_BLAU";
+    private static Collection<CidsBean> veraenderungsarts = new LinkedList<CidsBean>();
 
     //~ Instance fields --------------------------------------------------------
 
@@ -123,6 +139,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     private javax.swing.JPanel pnlFilterRissWildcards;
     private javax.swing.JPanel pnlFilterSchluessel;
     private javax.swing.JPanel pnlFilterSchluesselControls;
+    private javax.swing.JPopupMenu popChangeVeraenderungsart;
     private javax.swing.JScrollPane scpFlurstuecke;
     private javax.swing.JTextField txtBlatt;
     private javax.swing.JTextField txtFlur;
@@ -168,6 +185,8 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
 //                icoPluginPolyline = new ImageIcon(getClass().getResource("/images/pluginSearchPolyline.png"));
 
                 initComponents();
+
+                new CidsBeanDropTarget((DropAwareJList)lstFlurstuecke);
 
                 pnlSearchCancel = new SearchControlPanel(this);
                 final Dimension max = pnlSearchCancel.getMaximumSize();
@@ -221,6 +240,33 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                     };
 
                 flurstueckDialog.pack();
+
+                // Initialize the popup menu to change the veraenderungsart. Since the set of available veraenderungsart
+                // is very unlikely to change, we once load it and save it in a static Collection.
+                if ((veraenderungsarts == null) || veraenderungsarts.isEmpty()) {
+                    final Collection result;
+                    try {
+                        result = SessionManager.getProxy()
+                                    .customServerSearch(SessionManager.getSession().getUser(),
+                                            new CidsVermessungRissArtSearchStatement(
+                                                SessionManager.getSession().getUser()));
+                    } catch (final ConnectionException ex) {
+                        LOG.warn(
+                            "Could not fetch veranederungsart entries. Editing flurstuecksvermessung will not work.",
+                            ex);
+                        // TODO: USer feedback?
+                        return;
+                    }
+
+                    for (final Object veraenderungsart : result) {
+                        veraenderungsarts.add(((MetaObject)veraenderungsart).getBean());
+                    }
+                }
+
+                for (final CidsBean veraenderungsart : veraenderungsarts) {
+                    popChangeVeraenderungsart.add(new VermessungRissWindowSearch.ChangeVeraenderungsartAction(
+                            veraenderungsart));
+                }
             }
         } catch (Throwable e) {
             LOG.warn("Error in Constructor of VermessungsRissWindowSearch. Search will not work properly.", e);
@@ -241,6 +287,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        popChangeVeraenderungsart = new javax.swing.JPopupMenu();
         pnlFilterRiss = new javax.swing.JPanel();
         lblSchluessel = new javax.swing.JLabel();
         lblGemarkung = new javax.swing.JLabel();
@@ -269,7 +316,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         btnFilterSchluessel505To508 = new javax.swing.JButton();
         pnlFilterFlurstuecke = new javax.swing.JPanel();
         scpFlurstuecke = new javax.swing.JScrollPane();
-        lstFlurstuecke = new javax.swing.JList();
+        lstFlurstuecke = new DropAwareJList();
         btnAddFlurstueck = new javax.swing.JButton();
         btnRemoveFlurstueck = new javax.swing.JButton();
         chkSearchInCismap = new javax.swing.JCheckBox();
@@ -586,6 +633,21 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         scpFlurstuecke.setMinimumSize(new java.awt.Dimension(266, 138));
         scpFlurstuecke.setOpaque(false);
 
+        lstFlurstuecke.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lstFlurstueckeMouseClicked(evt);
+                }
+                @Override
+                public void mousePressed(final java.awt.event.MouseEvent evt) {
+                    lstFlurstueckeMousePressed(evt);
+                }
+                @Override
+                public void mouseReleased(final java.awt.event.MouseEvent evt) {
+                    lstFlurstueckeMouseReleased(evt);
+                }
+            });
         lstFlurstuecke.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
 
                 @Override
@@ -764,6 +826,55 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         chkFilterSchluessel508.setSelected(true);
         chkFilterSchluessel600.setSelected(false);
     }                                                                                               //GEN-LAST:event_btnFilterSchluessel505To508ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lstFlurstueckeMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstFlurstueckeMouseClicked
+    }                                                                              //GEN-LAST:event_lstFlurstueckeMouseClicked
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lstFlurstueckeMousePressed(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstFlurstueckeMousePressed
+        if (popChangeVeraenderungsart.isPopupTrigger(evt)) {
+            final int indexUnderMouse = lstFlurstuecke.locationToIndex(evt.getPoint());
+
+            int[] selection = lstFlurstuecke.getSelectedIndices();
+
+            boolean selectValueUnderMouse = true;
+            if ((selection != null) && (selection.length > 0)) {
+                for (final int index : selection) {
+                    if (index == indexUnderMouse) {
+                        selectValueUnderMouse = false;
+                    }
+                }
+            }
+
+            if (selectValueUnderMouse) {
+                lstFlurstuecke.setSelectedIndex(lstFlurstuecke.locationToIndex(evt.getPoint()));
+                selection = lstFlurstuecke.getSelectedIndices();
+            }
+
+            if ((selection != null) && (selection.length > 0)) {
+                popChangeVeraenderungsart.show(evt.getComponent(), evt.getX(), evt.getY());
+            }
+        }
+    } //GEN-LAST:event_lstFlurstueckeMousePressed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lstFlurstueckeMouseReleased(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstFlurstueckeMouseReleased
+        // Hock for popup menu. The return value of JPopupMenu.isPopupTrigger() depends on the OS.
+        lstFlurstueckeMousePressed(evt);
+    } //GEN-LAST:event_lstFlurstueckeMouseReleased
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
@@ -958,5 +1069,274 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     @Override
     public boolean suppressEmptyResultMessage() {
         return false;
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private final class ChangeVeraenderungsartAction extends AbstractAction {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private final CidsBean veraenderungsart;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new ChangeVeraenderungsartAction object.
+         *
+         * @param  veraenderungsart  DOCUMENT ME!
+         */
+        public ChangeVeraenderungsartAction(final CidsBean veraenderungsart) {
+            this.veraenderungsart = veraenderungsart;
+
+            putValue(
+                NAME,
+                this.veraenderungsart.getProperty("code")
+                        + " - "
+                        + this.veraenderungsart.getProperty("name"));
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void actionPerformed(final ActionEvent e) {
+            for (final Object flurstuecksvermessung : lstFlurstuecke.getSelectedValues()) {
+                try {
+                    ((CidsBean)flurstuecksvermessung).setProperty("veraenderungsart", veraenderungsart);
+                    lstFlurstuecke.clearSelection();
+                    lstFlurstuecke.revalidate();
+                    lstFlurstuecke.repaint();
+                } catch (final Exception ex) {
+                    LOG.info("Couldn't set veraenderungsart to '" + veraenderungsart + "' for flurstuecksvermessung '"
+                                + flurstuecksvermessung + "'.",
+                        ex);
+                    // TODO: User feedback?
+                }
+            }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class DropAwareJList extends JList implements CidsBeanDropListener {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new DropAwareJList object.
+         */
+        public DropAwareJList() {
+        }
+
+        /**
+         * Creates a new DropAwareJList object.
+         *
+         * @param  dataModel  DOCUMENT ME!
+         */
+        public DropAwareJList(final ListModel dataModel) {
+            super(dataModel);
+        }
+
+        /**
+         * Creates a new DropAwareJList object.
+         *
+         * @param  listData  DOCUMENT ME!
+         */
+        public DropAwareJList(final Object[] listData) {
+            super(listData);
+        }
+
+        /**
+         * Creates a new DropAwareJList object.
+         *
+         * @param  listData  DOCUMENT ME!
+         */
+        public DropAwareJList(final Vector listData) {
+            super(listData);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void beansDropped(final ArrayList<CidsBean> beans) {
+//        MetaObject veraenderungsartMO = null;
+            final CidsBean veraenderungsart = null;
+            // veraenderungsart aus Dialog abfragen
+
+//        final MetaObject[] arten = VermessungFlurstueckFinder.getVeraenderungsarten();
+//        veraenderungsartMO = (MetaObject)JOptionPane.showInputDialog(
+//                StaticSwingTools.getParentFrame(this),
+//                "Bitte Veränderungsart auswählen?",
+//                "Veränderungsart",
+//                JOptionPane.QUESTION_MESSAGE,
+//                null,
+//                arten,
+//                arten[0]);
+//        veraenderungsart = veraenderungsartMO.getBean();
+            try {
+                // final List<CidsBean> landparcels = cidsBean.getBeanCollectionProperty("flurstuecksvermessung");
+                for (final CidsBean dropped : beans) {
+                    final CidsBean newEntry = CidsBean.createNewCidsBeanFromTableName(
+                            "WUNDA_BLAU",
+                            "vermessung_flurstuecksvermessung");
+                    newEntry.setProperty("veraenderungsart", veraenderungsart);
+//                newEntry.setProperty("tmp_lp_orig", dropped);
+                    convertOriginalFlurstueckToFlurstueckKicker(newEntry, dropped);
+                    flurstuecksvermessungFilterModel.addElement(newEntry);
+                }
+            } catch (Exception ex) {
+                LOG.error("Problem when adding the DroppedBeans", ex);
+            }
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   vermessung_flurstuecksvermessung  DOCUMENT ME!
+         * @param   flurstuck                         DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public boolean convertOriginalFlurstueckToFlurstueckKicker(final CidsBean vermessung_flurstuecksvermessung,
+                final CidsBean flurstuck) {
+            try {
+                // Check if new Vermessung_Flurstuecksvermessung Objects are in the flurstuecksvermessung Collection
+                // that are created via a dropped "ALKIS_landparcel"- or "flurstueck"-Objects
+
+                // 1. Store the objects in a collection
+                // final List<CidsBean> vermessungen = cidsBean.getBeanCollectionProperty("flurstuecksvermessung");
+
+                // 2. Iterate
+// for (final CidsBean entry : vermessungen) {
+                // final Object tmp = vermessung_flurstuecksvermessung.getProperty("tmp_lp_orig");
+                if (flurstuck instanceof CidsBean) {
+                    // 3. For each dropped object find the corresponding kicker
+
+                    String gemarkung = null;
+                    String flur = null;
+                    String zaehler = null;
+                    String nenner = null;
+
+                    final CidsBean tmpbean = (CidsBean)flurstuck;
+                    CidsBean kicker = null;
+
+                    // 3a. Alternative for flurstueck
+                    if (tmpbean.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase("flurstueck")) {
+                        gemarkung = String.valueOf(tmpbean.getProperty("gemarkungs_nr.gemarkungsnummer"));
+                        flur = String.valueOf(tmpbean.getProperty("flur"));
+                        zaehler = String.valueOf(tmpbean.getProperty("fstnr_z"));
+                        nenner = String.valueOf(tmpbean.getProperty("fstnr_n"));
+                        if (nenner == null) {
+                            zaehler = "0";
+                        }
+                    } // 3b. Alternative for ALKIS_landparcel
+                    else if (tmpbean.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase(
+                                    "ALKIS_landparcel")) {
+                        gemarkung = ((String)tmpbean.getProperty("alkis_id")).substring(2, 6);
+                        flur = (String)tmpbean.getProperty("flur");
+                        zaehler = new Integer((String)tmpbean.getProperty("fstck_zaehler")).toString();
+                        nenner = (String)tmpbean.getProperty("fstck_nenner");
+                        if (nenner == null) {
+                            nenner = "0";
+                        }
+                    }
+
+                    // get the kicker
+                    final MetaClass kickerClass = ClassCacheMultiple.getMetaClass(
+                            "WUNDA_BLAU",
+                            "vermessung_flurstueck_kicker");
+                    final StringBuffer kickerQuery = new StringBuffer("select ").append(kickerClass.getId())
+                                .append(", ")
+                                .append(kickerClass.getPrimaryKey())
+                                .append(" from ")
+                                .append(kickerClass.getTableName())
+                                .append(" where gemarkung=")
+                                .append(gemarkung)
+                                .append(" and flur='")
+                                .append(flur)
+                                .append("'")
+                                .append(" and zaehler='")
+                                .append(zaehler)
+                                .append("'")
+                                .append(" and nenner='")
+                                .append(nenner)
+                                .append("'");
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("SQL: kickerQuery:" + kickerQuery.toString());
+                    }
+                    final MetaObject[] kickers = SessionManager.getProxy()
+                                .getMetaObjectByQuery(kickerQuery.toString(), 0);
+                    if (kickers.length > 0) {
+                        kicker = kickers[0].getBean();
+                    }
+                    // if there is no kicker
+                    // create a new kicker
+                    if (kicker == null) {
+                        kicker = CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "vermessung_flurstueck_kicker");
+
+                        // retrieve the vermessung_gemarkung by id
+                        final MetaClass vermessungGemarkungClass = ClassCacheMultiple.getMetaClass(
+                                "WUNDA_BLAU",
+                                "vermessung_gemarkung");
+                        final MetaObject gemarkungObject = SessionManager.getProxy()
+                                    .getMetaObject(new Integer(gemarkung),
+                                        vermessungGemarkungClass.getId(),
+                                        "WUNDA_BLAU");
+                        final CidsBean vGemarkungBean = gemarkungObject.getBean();
+
+                        kicker.setProperty("gemarkung", vGemarkungBean);
+                        kicker.setProperty("flur", StringUtils.leftPad(flur, 3, "0"));
+                        kicker.setProperty("zaehler", zaehler);
+                        kicker.setProperty("nenner", nenner);
+
+                        // Check for a real flurstueck that matches
+                        final MetaClass flurstueckClass = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "flurstueck");
+                        final StringBuffer fQuery = new StringBuffer("select ").append(flurstueckClass.getId())
+                                    .append(", ")
+                                    .append(flurstueckClass.getPrimaryKey())
+                                    .append(" from ")
+                                    .append(flurstueckClass.getTableName())
+                                    .append(" where gemarkungs_nr=")
+                                    .append(gemarkung)
+                                    .append(" and flur='")
+                                    .append(flur)
+                                    .append("'")
+                                    .append(" and fstnr_z='")
+                                    .append(zaehler)
+                                    .append("'")
+                                    .append(" and fstnr_n='")
+                                    .append(nenner)
+                                    .append("'");
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("SQL: flurstueckQuery:" + fQuery.toString());
+                        }
+                        final MetaObject[] matchedLandparcels = SessionManager.getProxy()
+                                    .getMetaObjectByQuery(fQuery.toString(), 0);
+                        if (matchedLandparcels.length > 0) {
+                            kicker.setProperty("flurstueck", matchedLandparcels[0].getBean());
+                        }
+                    }
+                    // set it to the "flurstueck" property
+                    vermessung_flurstuecksvermessung.setProperty("flurstueck", kicker);
+
+                    // delete the "tmp_lp_orig" property
+// vermessung_flurstuecksvermessung.setProperty("tmp_lp_orig", null);
+                }
+//            }
+            } catch (Exception e) {
+                LOG.error("Problem when working on dropped landparcels", e);
+                final boolean save = false;
+                return save;
+            }
+            return true;
+        }
     }
 }
