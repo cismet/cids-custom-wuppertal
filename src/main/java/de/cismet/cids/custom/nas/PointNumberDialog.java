@@ -46,8 +46,6 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.JTextComponent;
@@ -89,6 +87,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
     private AllAntragsnummernLoadWorker allAnrLoadWorker = new AllAntragsnummernLoadWorker();
     private FreigebenWorker freigebenWorker = new FreigebenWorker();
     private PointNumberLoadWorker pnrLoadWorker = new PointNumberLoadWorker();
+    private boolean useAutoCompleteDecorator = false;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnDeSelectAll;
@@ -148,6 +147,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
         try {
             props.load(PointNumberReservationPanel.class.getResourceAsStream("pointNumberSettings.properties"));
             wuppVnr = props.getProperty("wuppVnr"); // NOI18N
+            useAutoCompleteDecorator = Boolean.getBoolean(props.getProperty("autoCompletion"));
         } catch (IOException e) {
             LOG.error("Could not read pointnumberSettings.properties", e);
         }
@@ -236,7 +236,9 @@ public class PointNumberDialog extends javax.swing.JDialog {
         } catch (Exception e) {
             LOG.error("Error during determination of vermessungstellennummer", e);
         }
-        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbAntragsNummer);
+        if (useAutoCompleteDecorator) {
+            StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbAntragsNummer);
+        }
         ((DefaultComboBoxModel)cbAntragsNummer.getModel()).addElement("");
         loadAllAntragsNummern();
     }
@@ -276,7 +278,6 @@ public class PointNumberDialog extends javax.swing.JDialog {
             tmp = ((JTextComponent)cbAntragsNummer.getEditor().getEditorComponent()).getText();
             if ((tmp == null) || tmp.isEmpty()) {
                 anr = cbAntragsNummer.getSelectedItem().toString();
-                ;
             } else {
                 anr = tmp;
             }
@@ -451,7 +452,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -477,9 +478,15 @@ public class PointNumberDialog extends javax.swing.JDialog {
 
         pnlFreigabeListControls.setLayout(new java.awt.GridBagLayout());
 
+        btnSelectAll.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/nas/icon-selectionadd.png")));                      // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             btnSelectAll,
             org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.btnSelectAll.text")); // NOI18N
+        btnSelectAll.setToolTipText(org.openide.util.NbBundle.getMessage(
+                PointNumberDialog.class,
+                "PointNumberDialog.btnSelectAll.toolTipText"));                                                    // NOI18N
+        btnSelectAll.setOpaque(false);
         btnSelectAll.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -488,13 +495,18 @@ public class PointNumberDialog extends javax.swing.JDialog {
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         pnlFreigabeListControls.add(btnSelectAll, gridBagConstraints);
 
+        btnDeSelectAll.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/nas/icon-selectionremove.png")));                     // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             btnDeSelectAll,
             org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.btnDeSelectAll.text")); // NOI18N
+        btnDeSelectAll.setToolTipText(org.openide.util.NbBundle.getMessage(
+                PointNumberDialog.class,
+                "PointNumberDialog.btnDeSelectAll.toolTipText"));                                                    // NOI18N
         btnDeSelectAll.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -503,7 +515,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         pnlFreigabeListControls.add(btnDeSelectAll, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -514,9 +526,11 @@ public class PointNumberDialog extends javax.swing.JDialog {
         pnlFreigabeListControls.add(filler2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 5, 0);
         pnlFreigebenCard.add(pnlFreigabeListControls, gridBagConstraints);
 
         pnlFreigeben.add(pnlFreigebenCard, "card2");
@@ -990,6 +1004,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
                             || result.isEmpty()) {
                     // ToDo show error
                     showFreigabeError();
+                    return;
                 }
                 final CheckListItem[] listModel = new CheckListItem[result.size()];
                 int i = 0;

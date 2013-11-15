@@ -18,6 +18,8 @@ import com.vividsolutions.jts.geom.Geometry;
 
 import org.apache.log4j.Logger;
 
+import java.awt.EventQueue;
+
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Timer;
@@ -42,9 +44,10 @@ import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
-import de.cismet.cismap.commons.gui.MapListener;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
+import de.cismet.cismap.commons.interaction.StatusListener;
+import de.cismet.cismap.commons.interaction.events.StatusEvent;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -78,8 +81,11 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
     private javax.swing.JSpinner jspAnzahl;
     private javax.swing.JLabel lblAnzahl;
     private javax.swing.JLabel lblNbz;
+    private javax.swing.JLabel lblNbzAnzahl;
     private javax.swing.JLabel lblNbzError;
+    private javax.swing.JLabel lblNbzINfo;
     private javax.swing.JLabel lblStartwert;
+    private javax.swing.JPanel pnlNbzInfo;
     private javax.swing.JTextField tfStartWert;
     // End of variables declaration//GEN-END:variables
 
@@ -113,7 +119,28 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
         initComponents();
         if (!showErrorLbl) {
             cbNbz.setModel(new javax.swing.DefaultComboBoxModel(nbz.toArray(new String[nbz.size()])));
+            lblNbzAnzahl.setText("" + nbz.size());
         }
+        CismapBroker.getInstance().addStatusListener(new StatusListener() {
+
+                @Override
+                public void statusValueChanged(final StatusEvent e) {
+                    final Runnable modifyControls = new Runnable() {
+
+                            @Override
+                            public void run() {
+                                if (e.getName().equals(StatusEvent.RETRIEVAL_STARTED)) {
+                                    btnPosMap.setVisible(true);
+                                }
+                            }
+                        };
+                    if (EventQueue.isDispatchThread()) {
+                        modifyControls.run();
+                    } else {
+                        EventQueue.invokeLater(modifyControls);
+                    }
+                }
+            });
 
         final JTextComponent textComp = (JTextComponent)cbNbz.getEditor().getEditorComponent();
         textComp.getDocument().addDocumentListener(new DocumentListener() {
@@ -212,6 +239,9 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
         if (showErrorLbl) {
             lblNbzError = new javax.swing.JLabel();
         }
+        pnlNbzInfo = new javax.swing.JPanel();
+        lblNbzAnzahl = new javax.swing.JLabel();
+        lblNbzINfo = new javax.swing.JLabel();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -250,7 +280,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         add(btnPosMap, gridBagConstraints);
@@ -262,7 +292,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                 "PointNumberReservationPanel.lblAnzahl.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         add(lblAnzahl, gridBagConstraints);
@@ -276,7 +306,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
         jspAnzahl.setPreferredSize(new java.awt.Dimension(100, 28));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         add(jspAnzahl, gridBagConstraints);
@@ -288,7 +318,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                 "PointNumberReservationPanel.lblStartwert.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         add(lblStartwert, gridBagConstraints);
@@ -300,7 +330,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
         tfStartWert.setPreferredSize(new java.awt.Dimension(100, 27));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         add(tfStartWert, gridBagConstraints);
@@ -319,13 +349,13 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         add(btnErstellen, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 1.0;
@@ -347,7 +377,32 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
             gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 10);
             add(lblNbzError, gridBagConstraints);
         }
-    }                                                                 // </editor-fold>//GEN-END:initComponents
+
+        pnlNbzInfo.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblNbzAnzahl,
+            org.openide.util.NbBundle.getMessage(
+                PointNumberReservationPanel.class,
+                "PointNumberReservationPanel.lblNbzAnzahl.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        pnlNbzInfo.add(lblNbzAnzahl, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblNbzINfo,
+            org.openide.util.NbBundle.getMessage(
+                PointNumberReservationPanel.class,
+                "PointNumberReservationPanel.lblNbzINfo.text")); // NOI18N
+        pnlNbzInfo.add(lblNbzINfo, new java.awt.GridBagConstraints());
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        add(pnlNbzInfo, gridBagConstraints);
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
@@ -598,9 +653,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                 lblNbzError = null;
                 showErrorLbl = false;
             }
-            cbNbz.setModel(new javax.swing.DefaultComboBoxModel(nbz.toArray(new String[nbz.size()])));
         } else {
-            cbNbz.setModel(new javax.swing.DefaultComboBoxModel(nbz.toArray(new String[nbz.size()])));
             showErrorLbl = true;
             if (lblNbzError == null) {
                 lblNbzError = new javax.swing.JLabel();
@@ -620,6 +673,8 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                 pnrDialog.repaint();
             }
         }
+        cbNbz.setModel(new javax.swing.DefaultComboBoxModel(nbz.toArray(new String[nbz.size()])));
+        lblNbzAnzahl.setText("" + nbz.size());
     }
 
     /**
@@ -629,5 +684,6 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
      */
     private void btnPosMapActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnPosMapActionPerformed
         checkNummerierungsbezirke();
+        btnPosMap.setVisible(false);
     }                                                                             //GEN-LAST:event_btnPosMapActionPerformed
 }
