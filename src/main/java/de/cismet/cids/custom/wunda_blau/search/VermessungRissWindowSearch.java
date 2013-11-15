@@ -54,6 +54,7 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungRissEditor;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.VermessungFlurstueckFinder;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsVermessungRissArtSearchStatement;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsVermessungRissSearchStatement;
 
@@ -94,6 +95,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
 
     private static final Logger LOG = Logger.getLogger(VermessungRissWindowSearch.class);
     private static final String ACTION_TAG = "custom.vermessungsriss.windowsearch@WUNDA_BLAU";
+    private static final String VERAENDERUNGSART_ALL_CODE = " ";
     private static Collection<CidsBean> veraenderungsarts = new LinkedList<CidsBean>();
 
     //~ Instance fields --------------------------------------------------------
@@ -262,6 +264,20 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                         veraenderungsarts.add(((MetaObject)veraenderungsart).getBean());
                     }
                 }
+
+                // create the additional Veraenderungsart 'All', which has an empty code and is the neutral element
+                // for the search.
+                final CidsBean veraenderungsartAll = CidsBean.createNewCidsBeanFromTableName(
+                        "WUNDA_BLAU",
+                        VermessungFlurstueckFinder.VERMESSUNG_VERAENDERUNGSART_TABLE_NAME);
+                veraenderungsartAll.setProperty(
+                    VermessungFlurstueckFinder.VERMESSUNG_VERAENDERUNGSART_CODE,
+                    VERAENDERUNGSART_ALL_CODE);
+                final String text = org.openide.util.NbBundle.getMessage(
+                        VermessungRissWindowSearch.class,
+                        "VermessungRissWindowSearch.veraenderungsart_all.name");
+                veraenderungsartAll.setProperty(VermessungFlurstueckFinder.VERMESSUNG_VERAENDERUNGSART_NAME, text);
+                popChangeVeraenderungsart.add(new ChangeVeraenderungsartAction(veraenderungsartAll));
 
                 for (final CidsBean veraenderungsart : veraenderungsarts) {
                     popChangeVeraenderungsart.add(new VermessungRissWindowSearch.ChangeVeraenderungsartAction(
@@ -1093,12 +1109,19 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
          */
         public ChangeVeraenderungsartAction(final CidsBean veraenderungsart) {
             this.veraenderungsart = veraenderungsart;
+            final String veranderungsArtCode = (String)this.veraenderungsart.getProperty("code");
 
-            putValue(
-                NAME,
-                this.veraenderungsart.getProperty("code")
-                        + " - "
-                        + this.veraenderungsart.getProperty("name"));
+            if (veranderungsArtCode.equals(VERAENDERUNGSART_ALL_CODE)) {
+                putValue(
+                    NAME,
+                    this.veraenderungsart.getProperty("name"));
+            } else {
+                putValue(
+                    NAME,
+                    veranderungsArtCode
+                            + " - "
+                            + this.veraenderungsart.getProperty("name"));
+            }
         }
 
         //~ Methods ------------------------------------------------------------
@@ -1107,7 +1130,14 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         public void actionPerformed(final ActionEvent e) {
             for (final Object flurstuecksvermessung : lstFlurstuecke.getSelectedValues()) {
                 try {
-                    ((CidsBean)flurstuecksvermessung).setProperty("veraenderungsart", veraenderungsart);
+                    final String veraenderungsArtCode = (String)veraenderungsart.getProperty(
+                            VermessungFlurstueckFinder.VERMESSUNG_VERAENDERUNGSART_CODE);
+                    // was the Veränderungsart 'All' choosen
+                    if (veraenderungsArtCode.equals(VERAENDERUNGSART_ALL_CODE)) {
+                        ((CidsBean)flurstuecksvermessung).setProperty("veraenderungsart", null);
+                    } else {
+                        ((CidsBean)flurstuecksvermessung).setProperty("veraenderungsart", veraenderungsart);
+                    }
                     lstFlurstuecke.clearSelection();
                     lstFlurstuecke.revalidate();
                     lstFlurstuecke.repaint();
