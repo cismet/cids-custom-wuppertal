@@ -11,17 +11,12 @@
  */
 package de.cismet.cids.custom.wupp.client.alkis;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Toolkit;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
 /**
@@ -30,49 +25,32 @@ import javax.swing.text.PlainDocument;
  * @author   mroncoroni
  * @version  $Revision$, $Date$
  */
-public class ParcelInputField extends javax.swing.JPanel {
+public class ParcelInputField extends AbstractInputField {
 
     //~ Static fields/initializers ---------------------------------------------
 
     public static final String PROP_CURRENT_PARCEL = "currentParcel";         // NOI18N
-    public static final String PROP_DISTRICT_NUMBER = "districtNumber";       // NOI18N
     public static final String PROP_PARCEL_NUMBER = "parcelNumber";           // NOI18N
     public static final String PROP_PARCEL_NUMERATOR = "parcelNumerator";     // NOI18N
     public static final String PROP_PARCEL_DENOMINATOR = "parcelDenominator"; // NOI18N
-    public static final String PROP_DISTRICT_NAME = "districtName";           // NOI18N
     public static final String PROP_VALID_PARCEL_NUMBER = "validParcelNr";    // NOI18N
-
-    //~ Enums ------------------------------------------------------------------
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    public enum BlockType {
-
-        //~ Enum constants -----------------------------------------------------
-
-        DISTRICT, PARCEL, PARCEL_NUMERATOR, PARCEL_DENOMINATOR
-    }
 
     //~ Instance fields --------------------------------------------------------
 
     // --- bindable
+
+    // NOI18N
+
+    // --- bindable
     private String currentParcel;
-    private String districtNumber;
     private String parcelNumber;
     private String parcelNumerator;
     private String parcelDenominator;
     // ---
     // --- read-only bindable
-    private String districtName;
     private boolean validParcelNr = false;
     // ---
     private final ParcelInputFieldConfig config;
-    private boolean overwritten = false;
-    private boolean changeFocus = true;
-    private boolean writeOver = true;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lblDelimitier1;
@@ -94,126 +72,18 @@ public class ParcelInputField extends javax.swing.JPanel {
     }
 
     /**
-     * Creates new form Flurstueckseingabe.
+     * Creates new form ParcelInputField.
      *
      * @param  config  DOCUMENT ME!
      */
     public ParcelInputField(final ParcelInputFieldConfig config) {
+        super(config);
         this.config = config;
 
         initComponents();
+        setTxtDistrict(txtDistrict);
 
-        txtDistrict.setDocument(new PlainDocument() {
-
-                @Override
-                public void insertString(final int offs, String str, final AttributeSet a) throws BadLocationException {
-                    txtDistrict.setForeground(Color.BLACK);
-
-                    if (str == null) {
-                        return;
-                    }
-                    // removes all characters except "-_%", digits, alpha charactes and german vowel mutuations
-                    str = str.replaceAll("[^-\\u00F6\\u00D6\\u00FC\\u00DC\\u00E4\\u00C4\\u00dfa-zA-Z0-9_%]", "");
-                    String newStr = str;
-                    int maxLen = config.getMaxLenDistrictNumberField();
-                    if ((txtDistrict.getDocument().getText(0, txtDistrict.getDocument().getLength()) + str).matches(
-                                    "^05.*")) {
-                        maxLen += 2;
-                    }
-                    if ((str.length() > 0)
-                                && ((str.length() > (maxLen - offs))
-                                    || str.substring(0, Math.min(maxLen + 1 - offs, str.length())).contains(
-                                        config.getDelimiter1AsString()))) {
-                        int pos = maxLen - offs;
-                        int posDel = str.indexOf(config.getDelimiter1());
-                        if ((posDel >= 0) && (posDel < pos)) {
-                            pos = posDel;
-                        }
-
-                        while (((str.indexOf('_') >= 0) && (str.indexOf('_') < pos))
-                                    || ((str.indexOf('%') >= 0) && (str.indexOf('%') < pos))) {
-                            str = str.replaceFirst("[_%]", "");
-                            posDel = str.indexOf(config.getDelimiter1());
-                            if ((posDel >= 0) && (posDel < pos)) {
-                                pos = posDel;
-                            }
-                        }
-                        if (changeFocus) {
-                            txtParcel.requestFocusInWindow();
-                        }
-
-                        newStr = str.substring(0, pos);
-
-                        if (writeOver) {
-                            String writeOverStr;
-                            if (str.indexOf(config.getDelimiter1()) == pos) {
-                                writeOverStr = str.substring(pos + 1);
-                            } else {
-                                writeOverStr = str.substring(pos);
-                            }
-                            if (!writeOverStr.isEmpty()) {
-                                overwritten = true;
-                                txtParcel.setText(writeOverStr);
-                            }
-                        }
-                    } else {
-                        newStr = newStr.replaceFirst("[_%]", "");
-                    }
-                    if (!newStr.isEmpty()) {
-                        if (txtDistrict.getDocument().getLength() == 0) {
-                            if (Character.isDigit(newStr.charAt(0))) {
-                                newStr = newStr.replaceAll("[^0-9]", "");
-                            } else if (Character.isLetter(newStr.charAt(0))) {
-                                // removes all characters except alpha charactes and german vowel mutuations
-                                newStr = newStr.replaceAll(
-                                        "[^\\u00F6\\u00D6\\u00FC\\u00DC\\u00E4\\u00C4\\u00dfa-zA-Z]",
-                                        "");
-                                newStr = newStr.substring(0, Math.min(Math.max(2 - offs, 0), newStr.length()));
-                                if (validDistrict(
-                                                txtDistrict.getDocument().getText(
-                                                    0,
-                                                    txtDistrict.getDocument().getLength())
-                                                + newStr)) {
-                                    if (changeFocus && ((offs + newStr.length()) >= 2)) {
-                                        txtParcel.requestFocusInWindow();
-                                    }
-                                } else {
-                                    txtDistrict.setForeground(Color.red);
-                                }
-                            }
-                        } else if (txtDistrict.getDocument().getText(0, txtDistrict.getDocument().getLength()).matches(
-                                        "^[0-9]*")) {
-                            newStr = newStr.replaceAll("[^0-9]", ""); // checks if the entered text only contains
-                                                                      // alpha charactes and german vowel mutuations
-                        } else if (txtDistrict.getDocument().getText(0, txtDistrict.getDocument().getLength()).matches(
-                                        "^[\\u00F6\\u00D6\\u00FC\\u00DC\\u00E4\\u00C4\\u00dfa-zA-Z]*")) {
-                            // removes all characters except alpha charactes and german vowel mutuations
-                            newStr = newStr.replaceAll(
-                                    "[^\\u00F6\\u00D6\\u00FC\\u00DC\\u00E4\\u00C4\\u00dfa-zA-Z]",
-                                    "");
-                            newStr = newStr.substring(0, Math.min(Math.max(2 - offs, 0), newStr.length()));
-
-                            if (validDistrict(
-                                            txtDistrict.getDocument().getText(0, txtDistrict.getDocument().getLength())
-                                            + newStr)) {
-                                if (changeFocus && ((offs + newStr.length()) >= 2)) {
-                                    txtParcel.requestFocusInWindow();
-                                }
-                            } else {
-                                txtDistrict.setForeground(Color.red);
-                            }
-                        }
-                    }
-                    super.insertString(offs, newStr, a);
-                    updateParcel();
-                }
-
-                @Override
-                public void remove(final int offs, final int len) throws BadLocationException {
-                    txtDistrict.setForeground(Color.BLACK);
-                    super.remove(offs, len);
-                }
-            });
+        txtDistrict.setDocument(new DistrictPlainDocument(txtDistrict, txtParcel));
 
         txtParcel.setDocument(new PlainDocument() {
 
@@ -248,7 +118,7 @@ public class ParcelInputField extends javax.swing.JPanel {
                                 writeOverStr = str.substring(pos);
                             }
                             if (!writeOverStr.isEmpty()) {
-                                overwritten = true;
+                                setOverwritten(true);
                                 txtLandParcelNumerator.setText(writeOverStr);
                             }
                         }
@@ -277,7 +147,7 @@ public class ParcelInputField extends javax.swing.JPanel {
                                         0,
                                         Math.min(config.getMaxLenParcelNumeratorField() + 1 - offs, str.length()))
                                     .contains(config.getDelimiter2AsString()))) {
-                        overwritten = true;
+                        setOverwritten(true);
                         int pos = str.indexOf(config.getDelimiter1());
                         if ((pos < 0)
                                     || ((pos > str.indexOf(config.getDelimiter2()))
@@ -303,7 +173,7 @@ public class ParcelInputField extends javax.swing.JPanel {
                                 writeOverStr = str.substring(pos);
                             }
                             if (!writeOverStr.isEmpty()) {
-                                overwritten = true;
+                                setOverwritten(true);
                                 txtLandParcelDenominator.setText(writeOverStr);
                             }
                         }
@@ -332,13 +202,9 @@ public class ParcelInputField extends javax.swing.JPanel {
 
     //~ Methods ----------------------------------------------------------------
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public boolean getValidParcelNr() {
-        return validParcelNr;
+    @Override
+    void updateResult() {
+        updateParcel();
     }
 
     /**
@@ -397,38 +263,6 @@ public class ParcelInputField extends javax.swing.JPanel {
             }
         }
         validParcelNr = true;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public String getDistrictName() {
-        return districtName;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public String getDistrictNumber() {
-        return districtNumber;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  districtNumber  DOCUMENT ME!
-     */
-    public void setDistrictNumber(final String districtNumber) {
-        changeFocus = false;
-        writeOver = false;
-        txtDistrict.setText(districtNumber);
-        changeFocus = true;
-        writeOver = true;
-        finishDistrict();
     }
 
     /**
@@ -526,36 +360,6 @@ public class ParcelInputField extends javax.swing.JPanel {
 
     /**
      * DOCUMENT ME!
-     *
-     * @param  document  DOCUMENT ME!
-     * @param  maxLen    DOCUMENT ME!
-     * @param  offs      DOCUMENT ME!
-     */
-    private void addLeadingZeroes(final Document document, final int maxLen, final int offs) {
-        if (document.getLength() < maxLen) {
-            for (int i = document.getLength(); i < maxLen; i++) {
-                try {
-                    document.insertString(offs, "0", null);
-                } catch (final BadLocationException ex) {
-                    Logger.getLogger(ParcelInputField.class.getName())
-                            .log(Level.INFO, "Leading zero could not be inserted", ex);
-                }
-            }
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  document  DOCUMENT ME!
-     * @param  maxLen    DOCUMENT ME!
-     */
-    private void addLeadingZeroes(final Document document, final int maxLen) {
-        addLeadingZeroes(document, maxLen, 0);
-    }
-
-    /**
-     * DOCUMENT ME!
      */
     private void updateParcel() {
         final String oldParcel = currentParcel;
@@ -589,13 +393,14 @@ public class ParcelInputField extends javax.swing.JPanel {
      *
      * @param  blockNr  DOCUMENT ME!
      */
-    private void fireAreaBlockFinished(final BlockType blockNr) {
+    @Override
+    void fireAreaBlockFinished(final BlockType blockNr) {
         String oldValue;
         switch (blockNr) {
             case DISTRICT: {
-                oldValue = districtNumber;
-                districtNumber = txtDistrict.getText();
-                super.firePropertyChange(PROP_DISTRICT_NUMBER, oldValue, districtNumber);
+                oldValue = getDistrictNumber();
+                setDistrictNumber(txtDistrict.getText());
+                super.firePropertyChange(PROP_DISTRICT_NUMBER, oldValue, getDistrictNumber());
                 break;
             }
             case PARCEL: {
@@ -616,68 +421,6 @@ public class ParcelInputField extends javax.swing.JPanel {
                 super.firePropertyChange(PROP_PARCEL_DENOMINATOR, oldValue, parcelDenominator);
                 break;
             }
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   districtAbrv  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private Integer getDistrictNrFromAbrv(final String districtAbrv) {
-        return config.getConversionMap()
-                    .get(districtAbrv.substring(0, Math.min(2, districtAbrv.length())).toLowerCase());
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   districtAbrv  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private boolean validDistrict(final String districtAbrv) {
-        return getDistrictNrFromAbrv(districtAbrv) != null;
-    }
-
-    /**
-     * DOCUMENT ME!
-     */
-    private void finishDistrict() {
-        String text = txtDistrict.getText();
-        if (text.matches("^[öÖüÜäÄßa-zA-Z]+$")) {
-            if (validDistrict(text)) {
-                txtDistrict.setText(getDistrictNrFromAbrv(text).toString());
-                text = txtDistrict.getText();
-            } else {
-                txtDistrict.setForeground(Color.red);
-            }
-        }
-        if (text.matches("^[0-9]+$") || text.isEmpty()) {
-            if (!text.matches("^05.*")) // Leading 05 in districtNr
-            {
-                txtDistrict.setText("05" + text);
-            }
-            addLeadingZeroes(txtDistrict.getDocument(), config.getMaxLenDistrictNumberField() + 2, 2);
-        }
-        int intArea;
-        final String oldAreaName = districtName;
-        try {
-            if (txtDistrict.getText().length() > config.getMaxLenDistrictNumberField()) {
-                intArea = Integer.parseInt(txtDistrict.getText().substring(2));
-            } else {
-                intArea = Integer.parseInt(txtDistrict.getText().substring(0));
-            }
-            districtName = config.getDistrictNamesMap().get(intArea);
-        } catch (final NumberFormatException e) {
-            districtName = null;
-            // dont care, simply unknownn district, maybe insert log
-        }
-        firePropertyChange(PROP_DISTRICT_NAME, oldAreaName, districtName);
-        if (districtName != null) {
-            fireAreaBlockFinished(BlockType.DISTRICT);
         }
     }
 
@@ -867,8 +610,8 @@ public class ParcelInputField extends javax.swing.JPanel {
      */
     private void txtLandParcelDenominatorFocusGained(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtLandParcelDenominatorFocusGained
         final int textLenght = txtLandParcelDenominator.getText().length();
-        if (overwritten) {
-            overwritten = false;
+        if (isOverwritten()) {
+            setOverwritten(false);
             txtLandParcelDenominator.getHighlighter().removeAllHighlights();
             txtLandParcelDenominator.setCaretPosition(textLenght);
         } else {
@@ -884,8 +627,8 @@ public class ParcelInputField extends javax.swing.JPanel {
      */
     private void txtLandParcelNumeratorFocusGained(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtLandParcelNumeratorFocusGained
         final int textLength = txtLandParcelNumerator.getText().length();
-        if (overwritten) {
-            overwritten = false;
+        if (isOverwritten()) {
+            setOverwritten(false);
             txtLandParcelNumerator.getHighlighter().removeAllHighlights();
             txtLandParcelNumerator.setCaretPosition(textLength);
         } else {
@@ -901,8 +644,8 @@ public class ParcelInputField extends javax.swing.JPanel {
      */
     private void txtParcelFocusGained(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtParcelFocusGained
         final int textLength = txtParcel.getText().length();
-        if (overwritten) {
-            overwritten = false;
+        if (isOverwritten()) {
+            setOverwritten(false);
             txtParcel.getHighlighter().removeAllHighlights();
             txtParcel.setCaretPosition(textLength);
         } else {
@@ -918,8 +661,8 @@ public class ParcelInputField extends javax.swing.JPanel {
      */
     private void txtDistrictFocusGained(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtDistrictFocusGained
         final int textLength = txtDistrict.getText().length();
-        if (overwritten) {
-            overwritten = false;
+        if (isOverwritten()) {
+            setOverwritten(false);
             txtDistrict.getHighlighter().removeAllHighlights();
             txtDistrict.setCaretPosition(textLength);
         } else {
