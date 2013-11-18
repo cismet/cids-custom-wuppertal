@@ -62,7 +62,6 @@ public class GrundbuchblattInputWindow extends javax.swing.JFrame {
                 new ObjectMapper().readValue(GrundbuchblattInputWindow.class.getResourceAsStream(
                         "/de/cismet/cids/custom/wunda_blau/res/alkis/GrundbuchblattInputFieldConfig.json"),
                     GrundbuchblattInputFieldConfig.class);
-            System.out.println(config.getDelimiter1AsString());
         } catch (IOException ex) {
             config = GrundbuchblattInputFieldConfig.FallbackConfig;
         }

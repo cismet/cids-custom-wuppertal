@@ -11,6 +11,7 @@
  */
 package de.cismet.cids.custom.wupp.client.alkis;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Toolkit;
@@ -76,21 +77,42 @@ public class GrundbuchblattInputField extends AbstractInputField {
                     if ((str == null) || str.isEmpty()) {
                         return;
                     }
+                    txtBuchungsblattnummer.setForeground(Color.BLACK);
 
-                    // build the text which would appear in txtBuchungsblattnummer
+                    // cut the characters before the delimiter
+                    final int posDel = str.indexOf(config.getDelimiter1());
+                    if (posDel >= 0) {
+                        str = str.substring(posDel + 1);
+                    }
+
+                    // build the text which will appear in txtBuchungsblattnummer
                     final StringBuilder futureStringBuilder = new StringBuilder(txtBuchungsblattnummer.getText());
                     futureStringBuilder.insert(offs, str);
                     final String futureText = futureStringBuilder.toString();
 
-                    if (futureText.matches("^[0-9_%]{0,6}[a-zA-Z_%]*")) {
-                        final int countLetters = futureText.length() - futureText.replaceAll("[a-zA-Z_%]", "").length();
-                        final int newMaxLength = config.getMaxBuchungsblattnummerField() + countLetters;
+                    checkFutureString(futureText);
 
-                        if ((offs + str.length()) > newMaxLength) {
-                            str = str.substring(0, newMaxLength - offs);
-                        }
-                        super.insertString(offs, str, a);
-                        updateResult();
+                    super.insertString(offs, str, a);
+                    updateResult();
+                }
+
+                @Override
+                public void remove(final int offs, final int len) throws BadLocationException {
+                    txtBuchungsblattnummer.setForeground(Color.BLACK);
+
+                    // build the text which will appear in txtBuchungsblattnummer
+                    String futureText = txtBuchungsblattnummer.getText();
+                    futureText = futureText.substring(offs, offs + len);
+                    checkFutureString(futureText);
+
+                    super.remove(offs, len);
+                    updateResult();
+                }
+
+                private void checkFutureString(final String futureString) {
+                    // if the number is not a regular one, just change the color of the textfield
+                    if (!futureString.matches("^[0-9_%]{0,6}[a-zA-Z_%]*")) {
+                        txtBuchungsblattnummer.setForeground(Color.RED);
                     }
                 }
             });
@@ -253,6 +275,19 @@ public class GrundbuchblattInputField extends AbstractInputField {
      */
     public String getGrundbuchblattnummer() {
         return grundbuchblattnummer;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  grundbuchblattnummer  DOCUMENT ME!
+     */
+    public void setGrundbuchblattNummerForTest(final String grundbuchblattnummer) {
+        changeFocus = false;
+        txtDistrict.setText(grundbuchblattnummer);
+        finishDistrict();
+        finishBuchungsblattnummer();
+        changeFocus = true;
     }
 
     /**
