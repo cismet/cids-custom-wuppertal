@@ -88,7 +88,7 @@ public class PointNumberDownload extends AbstractDownload {
                 contentBuilder.append(pnr.getAblaufDatum());
                 contentBuilder.append(" )");
             }
-            contentBuilder.append("\n");
+            contentBuilder.append(System.getProperty("line.separator"));
         }
     }
 
@@ -108,14 +108,14 @@ public class PointNumberDownload extends AbstractDownload {
 
         header += " Punktnummern: " + content.getPointNumbers().size();
         contentBuilder.append(header);
-        contentBuilder.append("\n");
+        contentBuilder.append(System.getProperty("line.separator"));
         if (isFreigabeMode) {
             contentBuilder.append("freigegebene Punktnummern");
         } else {
             contentBuilder.append("reservierte Punktnummern (gültig bis)");
         }
-        contentBuilder.append("\n");
-        contentBuilder.append("\n");
+        contentBuilder.append(System.getProperty("line.separator"));
+        contentBuilder.append(System.getProperty("line.separator"));
     }
 
     @Override
