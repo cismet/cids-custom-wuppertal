@@ -1109,6 +1109,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
             // do release for each interval...
             final ArrayList<PointNumberReservation> releasedPoints = new ArrayList<PointNumberReservation>();
             final PointNumberReservationRequest res = new PointNumberReservationRequest();
+            res.setSuccessful(true);
             for (final ArrayList<Long> interval : pnrIntervals.values()) {
                 final Long s = interval.get(0) % 1000000;
                 final Long e = interval.get(interval.size() - 1) % 1000000;
@@ -1137,6 +1138,10 @@ public class PointNumberDialog extends javax.swing.JDialog {
                                     nbz,
                                     on1,
                                     on2);
+                if ((result != null) && !result.isSuccessfull()) {
+                    res.setSuccessful(false);
+                    res.setProtokoll(result.getProtokoll());
+                }
                 if ((result != null) && (result.getPointNumbers() != null)
                             && !result.getPointNumbers().isEmpty()) {
                     if (res.getAntragsnummer() == null) {
