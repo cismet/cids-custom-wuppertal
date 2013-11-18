@@ -486,7 +486,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
         btnSelectAll.setToolTipText(org.openide.util.NbBundle.getMessage(
                 PointNumberDialog.class,
                 "PointNumberDialog.btnSelectAll.toolTipText"));                                                    // NOI18N
-        btnSelectAll.setOpaque(false);
+        btnSelectAll.setPreferredSize(new java.awt.Dimension(30, 28));
         btnSelectAll.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -507,6 +507,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
         btnDeSelectAll.setToolTipText(org.openide.util.NbBundle.getMessage(
                 PointNumberDialog.class,
                 "PointNumberDialog.btnDeSelectAll.toolTipText"));                                                    // NOI18N
+        btnDeSelectAll.setPreferredSize(new java.awt.Dimension(30, 28));
         btnDeSelectAll.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -517,6 +518,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         pnlFreigabeListControls.add(btnDeSelectAll, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
