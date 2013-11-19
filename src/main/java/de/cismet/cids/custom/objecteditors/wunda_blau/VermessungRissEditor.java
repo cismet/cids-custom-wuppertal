@@ -70,6 +70,7 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 
+import de.cismet.cids.custom.objecteditors.utils.VermessungRissUtils;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
@@ -1861,120 +1862,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
             // 2. Iterate
             for (final CidsBean entry : vermessungen) {
-                final Object tmp = entry.getProperty("tmp_lp_orig");
-                if (tmp instanceof CidsBean) {
-                    // 3. For each dropped object find the corresponding kicker
-
-                    String gemarkung = null;
-                    String flur = null;
-                    String zaehler = null;
-                    String nenner = null;
-
-                    final CidsBean tmpbean = (CidsBean)tmp;
-                    CidsBean kicker = null;
-
-                    // 3a. Alternative for flurstueck
-                    if (tmpbean.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase("flurstueck")) {
-                        gemarkung = String.valueOf(tmpbean.getProperty("gemarkungs_nr.gemarkungsnummer"));
-                        flur = String.valueOf(tmpbean.getProperty("flur"));
-                        zaehler = String.valueOf(tmpbean.getProperty("fstnr_z"));
-                        nenner = String.valueOf(tmpbean.getProperty("fstnr_n"));
-                        if (nenner == null) {
-                            zaehler = "0";
-                        }
-                    } // 3b. Alternative for ALKIS_landparcel
-                    else if (tmpbean.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase(
-                                    "ALKIS_landparcel")) {
-                        gemarkung = ((String)tmpbean.getProperty("alkis_id")).substring(2, 6);
-                        flur = (String)tmpbean.getProperty("flur");
-                        zaehler = new Integer((String)tmpbean.getProperty("fstck_zaehler")).toString();
-                        nenner = (String)tmpbean.getProperty("fstck_nenner");
-                        if (nenner == null) {
-                            nenner = "0";
-                        }
-                    }
-
-                    // get the kicker
-                    final MetaClass kickerClass = ClassCacheMultiple.getMetaClass(
-                            "WUNDA_BLAU",
-                            "vermessung_flurstueck_kicker");
-                    final StringBuffer kickerQuery = new StringBuffer("select ").append(kickerClass.getId())
-                                .append(", ")
-                                .append(kickerClass.getPrimaryKey())
-                                .append(" from ")
-                                .append(kickerClass.getTableName())
-                                .append(" where gemarkung=")
-                                .append(gemarkung)
-                                .append(" and flur='")
-                                .append(flur)
-                                .append("'")
-                                .append(" and zaehler='")
-                                .append(zaehler)
-                                .append("'")
-                                .append(" and nenner='")
-                                .append(nenner)
-                                .append("'");
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("SQL: kickerQuery:" + kickerQuery.toString());
-                    }
-                    final MetaObject[] kickers = SessionManager.getProxy()
-                                .getMetaObjectByQuery(kickerQuery.toString(), 0);
-                    if (kickers.length > 0) {
-                        kicker = kickers[0].getBean();
-                    }
-                    // if there is no kicker
-                    // create a new kicker
-                    if (kicker == null) {
-                        kicker = CidsBean.createNewCidsBeanFromTableName("WUNDA_BLAU", "vermessung_flurstueck_kicker");
-
-                        // retrieve the vermessung_gemarkung by id
-                        final MetaClass vermessungGemarkungClass = ClassCacheMultiple.getMetaClass(
-                                "WUNDA_BLAU",
-                                "vermessung_gemarkung");
-                        final MetaObject gemarkungObject = SessionManager.getProxy()
-                                    .getMetaObject(new Integer(gemarkung),
-                                        vermessungGemarkungClass.getId(),
-                                        "WUNDA_BLAU");
-                        final CidsBean vGemarkungBean = gemarkungObject.getBean();
-
-                        kicker.setProperty("gemarkung", vGemarkungBean);
-                        kicker.setProperty("flur", StringUtils.leftPad(flur, 3, "0"));
-                        kicker.setProperty("zaehler", zaehler);
-                        kicker.setProperty("nenner", nenner);
-
-                        // Check for a real flurstueck that matches
-                        final MetaClass flurstueckClass = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "flurstueck");
-                        final StringBuffer fQuery = new StringBuffer("select ").append(flurstueckClass.getId())
-                                    .append(", ")
-                                    .append(flurstueckClass.getPrimaryKey())
-                                    .append(" from ")
-                                    .append(flurstueckClass.getTableName())
-                                    .append(" where gemarkungs_nr=")
-                                    .append(gemarkung)
-                                    .append(" and flur='")
-                                    .append(flur)
-                                    .append("'")
-                                    .append(" and fstnr_z='")
-                                    .append(zaehler)
-                                    .append("'")
-                                    .append(" and fstnr_n='")
-                                    .append(nenner)
-                                    .append("'");
-                        if (LOG.isDebugEnabled()) {
-                            LOG.debug("SQL: flurstueckQuery:" + fQuery.toString());
-                        }
-                        final MetaObject[] matchedLandparcels = SessionManager.getProxy()
-                                    .getMetaObjectByQuery(fQuery.toString(), 0);
-                        if (matchedLandparcels.length > 0) {
-                            kicker.setProperty("flurstueck", matchedLandparcels[0].getBean());
-                        }
-                    }
-                    // set it to the "flurstueck" property
-                    entry.setProperty("flurstueck", kicker);
-
-                    // delete the "tmp_lp_orig" property
-                    entry.setProperty("tmp_lp_orig", null);
-                }
+                VermessungRissUtils.setFluerstueckKickerInVermessung(entry);
             }
         } catch (Exception e) {
             LOG.error("Problem when working on dropped landparcels", e);
