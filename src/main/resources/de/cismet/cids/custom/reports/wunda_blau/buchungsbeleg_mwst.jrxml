@@ -9,21 +9,88 @@
 	<field name="verwendungskey" class="java.lang.String"/>
 	<field name="produktbezeichnung" class="java.lang.String"/>
 	<field name="geschaeftsbuchnummer" class="java.lang.String"/>
+	<variable name="sum_netto_summe" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{netto_summe}]]></variableExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="22" splitType="Stretch">
-			<textField>
-				<reportElement x="101" y="2" width="100" height="20"/>
-				<textElement/>
-				<textFieldExpression class="java.lang.Double"><![CDATA[$P{mwst}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="1" y="2" width="100" height="20"/>
-				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA["mwst:"]]></textFieldExpression>
-			</textField>
+		<band height="66" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="24" width="555" height="42" backcolor="#CCCCCC"/>
+				<graphicElement>
+					<pen lineWidth="1.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Transparent" x="3" y="24" width="44" height="20" backcolor="#FFFFFF"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Gebühr]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="60" y="24" width="66" height="42" backcolor="#FFFFFF"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Geschäfts-
+buchnummer
+(GB-NR.)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="130" y="24" width="123" height="20" backcolor="#FFFFFF"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Projektbezeichnung]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="277" y="24" width="33" height="20" backcolor="#FFFFFF"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Zeit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="363" y="24" width="46" height="42" backcolor="#FFFFFF"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Verwen-
+dungs-
+zweck]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="412" y="24" width="116" height="20" backcolor="#FFFFFF"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Produktbezeichnung]]></text>
+			</staticText>
+			<line>
+				<reportElement x="409" y="24" width="1" height="42"/>
+			</line>
+			<line>
+				<reportElement x="360" y="24" width="1" height="42"/>
+			</line>
+			<line>
+				<reportElement x="274" y="24" width="1" height="42"/>
+			</line>
+			<line>
+				<reportElement x="127" y="24" width="1" height="42"/>
+			</line>
+			<line>
+				<reportElement x="57" y="24" width="1" height="42"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="0" width="252" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Aufstellung kostenpflichtiger Downloads:]]></text>
+			</staticText>
 		</band>
 	</title>
 	<pageHeader>
@@ -33,37 +100,55 @@
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="22" splitType="Stretch">
+		<band height="18" splitType="Stretch">
 			<textField>
-				<reportElement x="465" y="0" width="91" height="20"/>
+				<reportElement x="411" y="2" width="134" height="16"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{produktbezeichnung}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="418" y="0" width="47" height="20"/>
+				<reportElement x="362" y="2" width="46" height="16"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{verwendungskey}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="1" y="0" width="100" height="20"/>
-				<textElement/>
-				<textFieldExpression class="java.lang.Double"><![CDATA[$F{netto_summe}]]></textFieldExpression>
+				<reportElement x="1" y="2" width="55" height="16"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{netto_summe} + "€"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="101" y="0" width="100" height="20"/>
+				<reportElement x="58" y="2" width="67" height="16"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{geschaeftsbuchnummer}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="201" y="0" width="117" height="20"/>
-				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{projektbezeichnung}]]></textFieldExpression>
-			</textField>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="318" y="0" width="100" height="20"/>
+				<reportElement x="276" y="2" width="83" height="16"/>
 				<textElement/>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{ts}]]></textFieldExpression>
 			</textField>
+			<line>
+				<reportElement x="127" y="0" width="1" height="18"/>
+			</line>
+			<line>
+				<reportElement x="360" y="0" width="1" height="18"/>
+			</line>
+			<line>
+				<reportElement x="409" y="0" width="1" height="18"/>
+			</line>
+			<line>
+				<reportElement x="57" y="0" width="1" height="18"/>
+			</line>
+			<line>
+				<reportElement x="274" y="0" width="1" height="18"/>
+			</line>
+			<textField>
+				<reportElement x="129" y="2" width="144" height="16"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{projektbezeichnung}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement mode="Transparent" x="0" y="0" width="555" height="18"/>
+			</rectangle>
 		</band>
 	</detail>
 	<columnFooter>
@@ -73,22 +158,33 @@
 		<band splitType="Stretch"/>
 	</pageFooter>
 	<summary>
-		<band height="22" splitType="Stretch">
+		<band height="25" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="139" height="20"/>
-				<textElement/>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{total_netto_summe}]]></textFieldExpression>
+				<reportElement x="0" y="2" width="56" height="18"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{total_netto_summe} + "€"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="156" y="0" width="139" height="20"/>
+				<reportElement x="63" y="2" width="384" height="18"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.Double"><![CDATA[$P{mwst}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["(abzurechnende Summe kostenpflichtiger Downloads inkl. " + $P{mwst} + "% Mwst.)"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="318" y="0" width="100" height="20"/>
+				<reportElement x="467" y="2" width="36" height="18"/>
 				<textElement/>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{brutto_summe}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="503" y="2" width="42" height="18"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$V{sum_netto_summe}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="20" width="58" height="1"/>
+				<graphicElement>
+					<pen lineWidth="1.5" lineStyle="Double"/>
+				</graphicElement>
+			</line>
 		</band>
 	</summary>
 </jasperReport>
