@@ -549,6 +549,14 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                                     pnrDialog.setResult(result);
                                     if ((result == null) || !result.isSuccessfull()) {
                                         protokollPane.addMessage("Fehler beim Senden des Auftrags.", Styles.ERROR);
+                                        protokollPane.addMessage("", Styles.INFO);
+                                        for (final String s : result.getErrorMessages()) {
+                                            protokollPane.addMessage(
+                                                s,
+                                                BusyLoggingTextPane.Styles.ERROR);
+                                            protokollPane.addMessage("", Styles.INFO);
+                                        }
+                                        protokollPane.addMessage("", Styles.INFO);
                                         protokollPane.addMessage(
                                             "Die Protokolldatei mit Fehlerinformationen steht zum Download bereit.",
                                             Styles.ERROR);
