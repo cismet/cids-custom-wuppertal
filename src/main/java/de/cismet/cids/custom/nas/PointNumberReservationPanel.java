@@ -440,7 +440,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnErstellenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnErstellenActionPerformed
+    private void btnErstellenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnErstellenActionPerformed
         // check anr
         final String anr = pnrDialog.getAnr();
         if ((anr == null) || anr.isEmpty()) {
@@ -479,7 +479,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
         protokollPane.setBusy(true);
         final String anrPrefix = pnrDialog.getAnrPrefix();
 
-        protokollPane.addMessage("Prüfe ob Antragsnummer " + anrPrefix + "-" + anr + " schon existiert.", Styles.INFO);
+        protokollPane.addMessage("Prüfe ob Antragsnummer " + anrPrefix + "_" + anr + " schon existiert.", Styles.INFO);
 
         final SwingWorker<PointNumberReservationRequest, Void> reservationWorker =
             new SwingWorker<PointNumberReservationRequest, Void>() {
@@ -665,7 +665,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
             };
 
         isAntragExistingWorker.execute();
-    }//GEN-LAST:event_btnErstellenActionPerformed
+    } //GEN-LAST:event_btnErstellenActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -716,11 +716,11 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRefreshNbzActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshNbzActionPerformed
+    private void btnRefreshNbzActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRefreshNbzActionPerformed
         checkNummerierungsbezirke();
         btnRefreshNbz.setVisible(false);
         this.invalidate();
         this.validate();
         this.repaint();
-    }//GEN-LAST:event_btnRefreshNbzActionPerformed
+    }                                                                                 //GEN-LAST:event_btnRefreshNbzActionPerformed
 }
