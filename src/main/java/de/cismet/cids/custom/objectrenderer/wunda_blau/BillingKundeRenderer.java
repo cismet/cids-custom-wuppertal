@@ -548,7 +548,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         jPanel2.add(btnRechnungsanlage, gridBagConstraints);
 
-        cboBillDownloads.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(
             cboBillDownloads,
             org.openide.util.NbBundle.getMessage(

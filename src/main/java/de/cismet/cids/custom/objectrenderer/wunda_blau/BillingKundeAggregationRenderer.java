@@ -458,7 +458,6 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         jPanel5.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 10, 10));
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
-        cboBillDownloads.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(
             cboBillDownloads,
             org.openide.util.NbBundle.getMessage(
