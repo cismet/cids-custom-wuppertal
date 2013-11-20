@@ -535,7 +535,6 @@ public class BillingPopup extends javax.swing.JDialog {
             cb.setProperty("projektbezeichnung", txtProjektbez.getText());
             cb.setProperty("request", request);
             cb.setProperty("verwendungskey", currentUsage.getKey());
-            LOG.info(cb.getMOString());
             cb.persist();
 
             // Nebenläufigkeit my arse
@@ -555,6 +554,13 @@ public class BillingPopup extends javax.swing.JDialog {
      */
     public CidsBean getExternalUser() {
         final MetaClass MB_MC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "billing_kunden_logins");
+        if (MB_MC == null) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(
+                    "The metaclass for billing_kunden_logins is null. The current user has probably not the needed rights.");
+            }
+            return null;
+        }
         String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " ";
         query += "FROM " + MB_MC.getTableName();
         query += " WHERE name = '" + SessionManager.getSession().getUser().getName() + "'";
