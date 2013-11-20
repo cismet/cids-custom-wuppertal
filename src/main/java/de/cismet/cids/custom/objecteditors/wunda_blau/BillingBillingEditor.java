@@ -85,8 +85,6 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblGeschaeftsbuchnummer;
     private javax.swing.JLabel lblProjektbezeichnung;
     private javax.swing.JLabel lblStornogrund;
@@ -135,8 +133,6 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         RendererTools.makeReadOnly(defaultBindableJTextField5);
         RendererTools.makeReadOnly(defaultBindableJTextField7);
         RendererTools.makeReadOnly(defaultBindableJTextField8);
-        RendererTools.makeReadOnly(jScrollPane1);
-        RendererTools.makeReadOnly(jScrollPane2);
         RendererTools.makeReadOnly(lblGeschaeftsbuchnummer);
         RendererTools.makeReadOnly(lblProjektbezeichnung);
         RendererTools.makeReadOnly(lblStornogrund);
@@ -181,9 +177,7 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         defaultBindableJTextField7 = new de.cismet.cids.editors.DefaultBindableJTextField();
         jLabel11 = new javax.swing.JLabel();
         defaultBindableJTextField8 = new de.cismet.cids.editors.DefaultBindableJTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
         txtaAenderung = new javax.swing.JTextArea();
-        jScrollPane2 = new javax.swing.JScrollPane();
         txtaBerechnung = new javax.swing.JTextArea();
         txtAngelegt_durch = new de.cismet.cids.editors.DefaultBindableJTextField();
         jLabel13 = new javax.swing.JLabel();
@@ -445,33 +439,27 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 5);
         jPanel4.add(defaultBindableJTextField8, gridBagConstraints);
 
-        jScrollPane1.setBorder(null);
-
         txtaAenderung.setColumns(20);
         txtaAenderung.setRows(4);
-        jScrollPane1.setViewportView(txtaAenderung);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel4.add(jScrollPane1, gridBagConstraints);
-
-        jScrollPane2.setBorder(null);
+        jPanel4.add(txtaAenderung, gridBagConstraints);
 
         txtaBerechnung.setColumns(20);
-        txtaBerechnung.setRows(10);
-        jScrollPane2.setViewportView(txtaBerechnung);
-
+        txtaBerechnung.setRows(5);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel4.add(jScrollPane2, gridBagConstraints);
+        jPanel4.add(txtaBerechnung, gridBagConstraints);
 
         txtAngelegt_durch.setBorder(null);
         txtAngelegt_durch.setText(org.openide.util.NbBundle.getMessage(
@@ -873,7 +861,7 @@ public class BillingBillingEditor extends javax.swing.JPanel implements CidsBean
             text = "Änderung von " + geaendert_von + " am " + DATE_FORMAT.format(geaendert_am) + "\n";
             text += "Attribut: " + aenderung_attribut + "\n";
             text += "Alter Wert: " + aenderung_alter_wert + "\n";
-            text += "Neuer Wert: " + aenderung_neuer_wert + "\n";
+            text += "Neuer Wert: " + aenderung_neuer_wert;
         }
         txtaAenderung.setText(text);
 
