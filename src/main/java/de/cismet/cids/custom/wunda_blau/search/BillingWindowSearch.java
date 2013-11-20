@@ -68,6 +68,7 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
     private javax.swing.JCheckBox cboKostenpflichtig;
     private javax.swing.JCheckBox cboStorniert;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
@@ -79,6 +80,7 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblAbgerechnetInformation;
     private javax.swing.JPanel panCommand;
     private javax.swing.JPanel pnlAbgerechnetStorniert;
     private javax.swing.JPanel pnlKostentyp;
@@ -130,8 +132,12 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
         jPanel2 = new javax.swing.JPanel();
         pnlAbgerechnetStorniert = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
+        lblAbgerechnetInformation = new javax.swing.JLabel();
         cboAbgerechnet = new javax.swing.JCheckBox();
         cboStorniert = new javax.swing.JCheckBox();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 30),
+                new java.awt.Dimension(0, 30),
+                new java.awt.Dimension(32767, 30));
         pnlKostentyp = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         cboKostenfrei = new javax.swing.JCheckBox();
@@ -166,8 +172,21 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
                     "BillingWindowSearch.pnlAbgerechnetStorniert.border.title"))); // NOI18N
         pnlAbgerechnetStorniert.setLayout(new java.awt.BorderLayout());
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
-        jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.PAGE_AXIS));
+        jPanel4.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblAbgerechnetInformation,
+            org.openide.util.NbBundle.getMessage(
+                BillingWindowSearch.class,
+                "BillingWindowSearch.lblAbgerechnetInformation.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
+        jPanel4.add(lblAbgerechnetInformation, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             cboAbgerechnet,
@@ -179,7 +198,14 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
                     cboAbgerechnetActionPerformed(evt);
                 }
             });
-        jPanel4.add(cboAbgerechnet);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(5, 3, 5, 5);
+        jPanel4.add(cboAbgerechnet, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             cboStorniert,
@@ -191,7 +217,18 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
                     cboStorniertActionPerformed(evt);
                 }
             });
-        jPanel4.add(cboStorniert);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(0, 3, 5, 5);
+        jPanel4.add(cboStorniert, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        jPanel4.add(filler2, gridBagConstraints);
 
         pnlAbgerechnetStorniert.add(jPanel4, java.awt.BorderLayout.CENTER);
 
@@ -494,8 +531,11 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
      * @param  evt  DOCUMENT ME!
      */
     private void cboAbgerechnetActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboAbgerechnetActionPerformed
-        // TODO add your handling code here:
-    } //GEN-LAST:event_cboAbgerechnetActionPerformed
+        if (cboAbgerechnet.isSelected()) {
+            cboStorniert.setSelected(false);
+        }
+        showOrHideInformationLabel();
+    }                                                                                  //GEN-LAST:event_cboAbgerechnetActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -503,8 +543,22 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
      * @param  evt  DOCUMENT ME!
      */
     private void cboStorniertActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboStorniertActionPerformed
-        // TODO add your handling code here:
-    } //GEN-LAST:event_cboStorniertActionPerformed
+        if (cboStorniert.isSelected()) {
+            cboAbgerechnet.setSelected(false);
+        }
+        showOrHideInformationLabel();
+    }                                                                                //GEN-LAST:event_cboStorniertActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void showOrHideInformationLabel() {
+        if (!cboAbgerechnet.isSelected() && !cboStorniert.isSelected()) {
+            lblAbgerechnetInformation.setVisible(true);
+        } else {
+            lblAbgerechnetInformation.setVisible(false);
+        }
+    }
 
     @Override
     public JComponent getSearchWindowComponent() {
