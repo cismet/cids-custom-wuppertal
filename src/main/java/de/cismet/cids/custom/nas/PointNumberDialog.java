@@ -1,12 +1,10 @@
-/**
- * *************************************************
- *
- * cismet GmbH, Saarbruecken, Germany
- * 
-* ... and it just works.
- * 
-***************************************************
- */
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -75,16 +73,18 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 /**
  * DOCUMENT ME!
  *
- * @author daniel
- * @version $Revision$, $Date$
+ * @author   daniel
+ * @version  $Revision$, $Date$
  */
 public class PointNumberDialog extends javax.swing.JDialog {
 
     //~ Static fields/initializers ---------------------------------------------
+
     private static final Logger LOG = Logger.getLogger(PointNumberDialog.class);
     private static final String SEVER_ACTION = "pointNumberReservation";
 
     //~ Instance fields --------------------------------------------------------
+
     private PointNumberReservationRequest result;
     private boolean hasFreigabeAccess = false;
     private AllAntragsnummernLoadWorker allAnrLoadWorker = new AllAntragsnummernLoadWorker();
@@ -135,11 +135,12 @@ public class PointNumberDialog extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
+
     /**
      * Creates new form PointNumberDialog.
      *
-     * @param parent DOCUMENT ME!
-     * @param modal DOCUMENT ME!
+     * @param  parent  DOCUMENT ME!
+     * @param  modal   DOCUMENT ME!
      */
     public PointNumberDialog(final java.awt.Frame parent, final boolean modal) {
         super(parent, modal);
@@ -150,7 +151,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
         final Properties props = new Properties();
         try {
             props.load(PointNumberReservationPanel.class.getResourceAsStream("pointNumberSettings.properties"));
-            useAutoCompleteDecorator = Boolean.getBoolean(props.getProperty("autoCompletion"));
+            useAutoCompleteDecorator = Boolean.parseBoolean(props.getProperty("autoCompletion"));
             final String[] splittedPrioPrefixes = props.getProperty("priorityPrefixes").split(",");
             for (int i = 0; i < splittedPrioPrefixes.length; i++) {
                 final String tmp = splittedPrioPrefixes[i];
@@ -166,51 +167,52 @@ public class PointNumberDialog extends javax.swing.JDialog {
 
         tbpModus.addChangeListener(new ChangeListener() {
 
-            @Override
-            public void stateChanged(final ChangeEvent e) {
-                if (tbpModus.getSelectedIndex() == 2) {
-                    loadPointNumbers();
-                } else {
-                    final PointNumberReservationPanel pnl = (PointNumberReservationPanel) tbpModus.getSelectedComponent();
-                    pnl.checkNummerierungsbezirke();
+                @Override
+                public void stateChanged(final ChangeEvent e) {
+                    if (tbpModus.getSelectedIndex() == 2) {
+                        loadPointNumbers();
+                    } else {
+                        final PointNumberReservationPanel pnl = (PointNumberReservationPanel)
+                            tbpModus.getSelectedComponent();
+                        pnl.checkNummerierungsbezirke();
+                    }
                 }
-            }
-        });
+            });
         tbpModus.addChangeListener(new ChangeListener() {
 
-            @Override
-            public void stateChanged(final ChangeEvent e) {
-                final DefaultComboBoxModel model = (DefaultComboBoxModel) cbAntragsNummer.getModel();
-                if (tbpModus.getSelectedIndex() == 0) {
-                    model.setSelectedItem("");
-                    cbAntragsNummer.setEditable(true);
-                } else {
-                    final int pos = model.getIndexOf(cbAntragsNummer.getSelectedItem());
-                    if (pos > 0) {
-                        cbAntragsNummer.setSelectedIndex(pos);
+                @Override
+                public void stateChanged(final ChangeEvent e) {
+                    final DefaultComboBoxModel model = (DefaultComboBoxModel)cbAntragsNummer.getModel();
+                    if (tbpModus.getSelectedIndex() == 0) {
+                        model.setSelectedItem("");
+                        cbAntragsNummer.setEditable(true);
                     } else {
-                        cbAntragsNummer.setSelectedIndex(0);
+                        final int pos = model.getIndexOf(cbAntragsNummer.getSelectedItem());
+                        if (pos > 0) {
+                            cbAntragsNummer.setSelectedIndex(pos);
+                        } else {
+                            cbAntragsNummer.setSelectedIndex(0);
+                        }
+                        cbAntragsNummer.setEditable(false);
                     }
-                    cbAntragsNummer.setEditable(false);
                 }
-            }
-        });
+            });
         punktNummernList.setCellRenderer(new PointNumberListRenderer());
         punktNummernList.addMouseListener(new MouseAdapter() {
 
-            @Override
-            public void mouseClicked(final MouseEvent event) {
-                final JList list = (JList) event.getSource();
-                final int index = list.locationToIndex(event.getPoint());
-                final CheckListItem item = (CheckListItem) list.getModel().getElementAt(index);
-                item.setSelected(!item.isSelected());
-                list.repaint(list.getCellBounds(index, index));
-            }
-        });
+                @Override
+                public void mouseClicked(final MouseEvent event) {
+                    final JList list = (JList)event.getSource();
+                    final int index = list.locationToIndex(event.getPoint());
+                    final CheckListItem item = (CheckListItem)list.getModel().getElementAt(index);
+                    item.setSelected(!item.isSelected());
+                    list.repaint(list.getCellBounds(index, index));
+                }
+            });
 
-        final JTextComponent textComp = (JTextComponent) cbAntragsNummer.getEditor().getEditorComponent();
+        final JTextComponent textComp = (JTextComponent)cbAntragsNummer.getEditor().getEditorComponent();
 //        textComp.getDocument().addDocumentListener(this);
-        final DefaultCaret caret = (DefaultCaret) protokollPane.getCaret();
+        final DefaultCaret caret = (DefaultCaret)protokollPane.getCaret();
         caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
         try {
             configureFreigebenTab();
@@ -222,20 +224,21 @@ public class PointNumberDialog extends javax.swing.JDialog {
         if (useAutoCompleteDecorator) {
             StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbAntragsNummer);
         }
-        ((DefaultComboBoxModel) cbAntragsNummer.getModel()).addElement("");
+        ((DefaultComboBoxModel)cbAntragsNummer.getModel()).addElement("");
     }
 
     //~ Methods ----------------------------------------------------------------
+
     /**
      * DOCUMENT ME!
      *
-     * @throws ConnectionException DOCUMENT ME!
+     * @throws  ConnectionException  DOCUMENT ME!
      */
     private void configureFreigebenTab() throws ConnectionException {
         // if user does not have the right to do freigaben, remove the tab
         hasFreigabeAccess = SessionManager.getConnection()
-                .getConfigAttr(SessionManager.getSession().getUser(), "custom.nas.punktNummernFreigabe")
-                != null;
+                    .getConfigAttr(SessionManager.getSession().getUser(), "custom.nas.punktNummernFreigabe")
+                    != null;
         if (!hasFreigabeAccess) {
             tbpModus.remove(2);
         }
@@ -244,58 +247,58 @@ public class PointNumberDialog extends javax.swing.JDialog {
     /**
      * DOCUMENT ME!
      *
-     * @throws ConnectionException DOCUMENT ME!
+     * @throws  ConnectionException  DOCUMENT ME!
      */
     private void configurePrefixBox() throws ConnectionException {
         final User user = SessionManager.getSession().getUser();
         final VermessungsnummerLoadWorker vnrLoadWorker = new VermessungsnummerLoadWorker(user.getName()) {
 
-            @Override
-            protected void done() {
-                try {
-                    final Collection res = get();
+                @Override
+                protected void done() {
+                    try {
+                        final Collection res = get();
 
-                    if ((res == null) || res.isEmpty()) {
-                        final VermessungsnummerLoadWorker allVnrLoadWorker = new VermessungsnummerLoadWorker("%") {
+                        if ((res == null) || res.isEmpty()) {
+                            final VermessungsnummerLoadWorker allVnrLoadWorker = new VermessungsnummerLoadWorker("%") {
 
-                            @Override
-                            protected void done() {
-                                try {
-                                    final ArrayList<String> tmp;
-                                    tmp = new ArrayList<String>();
-                                    tmp.addAll(priorityPrefixes);
-                                    final Collection resultAllVnr = get();
-                                    final HashSet<String> loadedPrefixes = new HashSet<String>();
-                                    loadedPrefixes.addAll(resultAllVnr);
-                                    loadedPrefixes.removeAll(priorityPrefixes);
-                                    tmp.addAll(loadedPrefixes);
-                                    cbAntragPrefix.setModel(new DefaultComboBoxModel(tmp.toArray()));
-                                    loadAllAntragsNummern();
-                                } catch (InterruptedException ex) {
-                                    Exceptions.printStackTrace(ex);
-                                } catch (ExecutionException ex) {
-                                    Exceptions.printStackTrace(ex);
-                                }
+                                    @Override
+                                    protected void done() {
+                                        try {
+                                            final ArrayList<String> tmp;
+                                            tmp = new ArrayList<String>();
+                                            tmp.addAll(priorityPrefixes);
+                                            final Collection resultAllVnr = get();
+                                            final HashSet<String> loadedPrefixes = new HashSet<String>();
+                                            loadedPrefixes.addAll(resultAllVnr);
+                                            loadedPrefixes.removeAll(priorityPrefixes);
+                                            tmp.addAll(loadedPrefixes);
+                                            cbAntragPrefix.setModel(new DefaultComboBoxModel(tmp.toArray()));
+                                            loadAllAntragsNummern();
+                                        } catch (InterruptedException ex) {
+                                            Exceptions.printStackTrace(ex);
+                                        } catch (ExecutionException ex) {
+                                            Exceptions.printStackTrace(ex);
+                                        }
+                                    }
+                                };
+                            allVnrLoadWorker.execute();
+                        } else {
+                            final ArrayList<String> tmp;
+                            tmp = (ArrayList<String>)res;
+                            final String vermessungstellenNr = tmp.get(0);
+                            if (vermessungstellenNr != null) {
+                                cbAntragPrefix.setModel(new DefaultComboBoxModel(tmp.toArray()));
+                                RendererTools.makeReadOnly(cbAntragPrefix);
                             }
-                        };
-                        allVnrLoadWorker.execute();
-                    } else {
-                        final ArrayList<String> tmp;
-                        tmp = (ArrayList<String>) res;
-                        final String vermessungstellenNr = tmp.get(0);
-                        if (vermessungstellenNr != null) {
-                            cbAntragPrefix.setModel(new DefaultComboBoxModel(tmp.toArray()));
-                            RendererTools.makeReadOnly(cbAntragPrefix);
+                            loadAllAntragsNummern();
                         }
-                        loadAllAntragsNummern();
+                    } catch (InterruptedException ex) {
+                        Exceptions.printStackTrace(ex);
+                    } catch (ExecutionException ex) {
+                        Exceptions.printStackTrace(ex);
                     }
-                } catch (InterruptedException ex) {
-                    Exceptions.printStackTrace(ex);
-                } catch (ExecutionException ex) {
-                    Exceptions.printStackTrace(ex);
                 }
-            }
-        };
+            };
 
         vnrLoadWorker.execute();
     }
@@ -315,7 +318,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
             }
         }
         pnrLoadWorker = new PointNumberLoadWorker();
-        final CardLayout cl = (CardLayout) (pnlFreigeben.getLayout());
+        final CardLayout cl = (CardLayout)(pnlFreigeben.getLayout());
         cl.show(pnlFreigeben, "card1");
         jxFreigebenWaitLabel.setBusy(true);
         pnrLoadWorker.execute();
@@ -324,13 +327,13 @@ public class PointNumberDialog extends javax.swing.JDialog {
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     public String getAnr() {
         final String anr;
         if (cbAntragsNummer.isEditable()) {
             final String tmp;
-            tmp = ((JTextComponent) cbAntragsNummer.getEditor().getEditorComponent()).getText();
+            tmp = ((JTextComponent)cbAntragsNummer.getEditor().getEditorComponent()).getText();
             if ((tmp == null) || tmp.isEmpty()) {
                 anr = cbAntragsNummer.getSelectedItem().toString();
             } else {
@@ -345,16 +348,16 @@ public class PointNumberDialog extends javax.swing.JDialog {
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     public String getAnrPrefix() {
-        return (String) cbAntragPrefix.getSelectedItem();
+        return (String)cbAntragPrefix.getSelectedItem();
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     public boolean isErgaenzenMode() {
         return tbpModus.getSelectedIndex() == 1;
@@ -366,7 +369,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
     private void showFreigabeError() {
 //        tfAntragsnummer.getDocument().addDocumentListener(this);
         jxFreigebenWaitLabel.setBusy(false);
-        final CardLayout cl = (CardLayout) (pnlFreigeben.getLayout());
+        final CardLayout cl = (CardLayout)(pnlFreigeben.getLayout());
         cl.show(pnlFreigeben, "card3");
         jxFreigebenWaitLabel.setBusy(true);
     }
@@ -798,7 +801,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
     private void btnDoneActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDoneActionPerformed
         this.dispose();
@@ -807,7 +810,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
     private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         this.dispose();
@@ -816,7 +819,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
     private void btnFreigebenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFreigebenActionPerformed
         freigebenWorker = new FreigebenWorker();
@@ -835,7 +838,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
     private void btnDownloadActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
         if (result == null) {
@@ -843,16 +846,16 @@ public class PointNumberDialog extends javax.swing.JDialog {
         }
         PointNumberDownload download;
         if (DownloadManagerDialog.showAskingForUserTitle(
-                CismapBroker.getInstance().getMappingComponent())) {
+                        CismapBroker.getInstance().getMappingComponent())) {
             final String jobname = (!DownloadManagerDialog.getJobname().equals("")) ? DownloadManagerDialog
-                    .getJobname() : null;
+                            .getJobname() : null;
             download = new PointNumberDownload(
                     result,
                     "Punktnummer Download",
                     jobname,
                     getAnrPrefix()
-                    + "_"
-                    + getAnr());
+                            + "_"
+                            + getAnr());
         } else {
             download = new PointNumberDownload(result, "Punktnummer Download", "", getAnrPrefix() + "_" + getAnr());
         }
@@ -863,7 +866,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
     private void cbAntragPrefixActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAntragPrefixActionPerformed
         loadAllAntragsNummern();
@@ -872,11 +875,11 @@ public class PointNumberDialog extends javax.swing.JDialog {
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
     private void btnDeSelectAllActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeSelectAllActionPerformed
         for (int i = 0; i < punktNummernList.getModel().getSize(); i++) {
-            final CheckListItem item = (CheckListItem) punktNummernList.getModel().getElementAt(i);
+            final CheckListItem item = (CheckListItem)punktNummernList.getModel().getElementAt(i);
             item.setSelected(false);
         }
         punktNummernList.repaint();
@@ -885,11 +888,11 @@ public class PointNumberDialog extends javax.swing.JDialog {
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
     private void btnSelectAllActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAllActionPerformed
         for (int i = 0; i < punktNummernList.getModel().getSize(); i++) {
-            final CheckListItem item = (CheckListItem) punktNummernList.getModel().getElementAt(i);
+            final CheckListItem item = (CheckListItem)punktNummernList.getModel().getElementAt(i);
             item.setSelected(true);
         }
         punktNummernList.repaint();
@@ -898,7 +901,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
     private void cbAntragsNummerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAntragsNummerActionPerformed
         // since the combobox in the freigeben tab is  not editable no document events are fired when changing the
@@ -914,8 +917,8 @@ public class PointNumberDialog extends javax.swing.JDialog {
     private void showError() {
         if (protokollPane != null) {
             protokollPane.addMessage(
-                    "Während der Bearbeitung des Auftrags trat ein Fehler auf!",
-                    BusyLoggingTextPane.Styles.ERROR);
+                "Während der Bearbeitung des Auftrags trat ein Fehler auf!",
+                BusyLoggingTextPane.Styles.ERROR);
             protokollPane.setBusy(false);
         }
     }
@@ -923,7 +926,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
     /**
      * DOCUMENT ME!
      *
-     * @param args the command line arguments
+     * @param  args  the command line arguments
      */
     public static void main(final String[] args) {
         /* Set the Nimbus look and feel */
@@ -956,25 +959,25 @@ public class PointNumberDialog extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
 
-            @Override
-            public void run() {
-                final PointNumberDialog dialog = new PointNumberDialog(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void run() {
+                    final PointNumberDialog dialog = new PointNumberDialog(new javax.swing.JFrame(), true);
+                    dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
-                    @Override
-                    public void windowClosing(final java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
+                            @Override
+                            public void windowClosing(final java.awt.event.WindowEvent e) {
+                                System.exit(0);
+                            }
+                        });
+                    dialog.setVisible(true);
+                }
+            });
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     public BusyLoggingTextPane getProtokollPane() {
         return protokollPane;
@@ -983,7 +986,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
     /**
      * DOCUMENT ME!
      *
-     * @param result DOCUMENT ME!
+     * @param  result  DOCUMENT ME!
      */
     public void setResult(final PointNumberReservationRequest result) {
         this.result = result;
@@ -992,10 +995,10 @@ public class PointNumberDialog extends javax.swing.JDialog {
     /**
      * DOCUMENT ME!
      *
-     * @param newAnr DOCUMENT ME!
+     * @param  newAnr  DOCUMENT ME!
      */
     public void addAnr(final String newAnr) {
-        final DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) cbAntragsNummer.getModel();
+        final DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>)cbAntragsNummer.getModel();
         final List<String> tmp = new ArrayList<String>();
         for (int i = 0; i < model.getSize(); i++) {
             tmp.add(model.getElementAt(i));
@@ -1015,15 +1018,15 @@ public class PointNumberDialog extends javax.swing.JDialog {
             }
         }
         allAnrLoadWorker = new AllAntragsnummernLoadWorker();
-        final DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) cbAntragsNummer.getModel();
-        final String insertedText = (String) ((JTextComponent) cbAntragsNummer.getEditor().getEditorComponent())
-                .getText();
+        final DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>)cbAntragsNummer.getModel();
+        final String insertedText = (String)((JTextComponent)cbAntragsNummer.getEditor().getEditorComponent())
+                    .getText();
         model.removeAllElements();
         model.addElement("lade Antragsnummern...");
         if (tbpModus.getSelectedIndex() != 0) {
             cbAntragsNummer.setEditable(false);
         } else {
-            ((JTextComponent) cbAntragsNummer.getEditor().getEditorComponent()).setText(insertedText);
+            ((JTextComponent)cbAntragsNummer.getEditor().getEditorComponent()).setText(insertedText);
         }
 
         cbAntragsNummer.repaint();
@@ -1032,14 +1035,16 @@ public class PointNumberDialog extends javax.swing.JDialog {
     }
 
     //~ Inner Classes ----------------------------------------------------------
+
     /**
      * DOCUMENT ME!
      *
-     * @version $Revision$, $Date$
+     * @version  $Revision$, $Date$
      */
     private final class PointNumberLoadWorker extends SwingWorker<Collection<PointNumberReservation>, Void> {
 
         //~ Methods ------------------------------------------------------------
+
         @Override
         protected Collection<PointNumberReservation> doInBackground() throws Exception {
             final String anr = getAnr();
@@ -1058,14 +1063,14 @@ public class PointNumberDialog extends javax.swing.JDialog {
             final ServerActionParameter action = new ServerActionParameter(
                     PointNumberReserverationServerAction.PARAMETER_TYPE.ACTION.toString(),
                     PointNumberReserverationServerAction.ACTION_TYPE.GET_POINT_NUMBERS);
-            final Collection<PointNumberReservation> pointNumbers = (Collection<PointNumberReservation>) SessionManager
-                    .getProxy().executeTask(
-                            SEVER_ACTION,
-                            "WUNDA_BLAU",
-                            null,
-                            action,
-                            prefix,
-                            aNummer);
+            final Collection<PointNumberReservation> pointNumbers = (Collection<PointNumberReservation>)SessionManager
+                        .getProxy().executeTask(
+                        SEVER_ACTION,
+                        "WUNDA_BLAU",
+                        null,
+                        action,
+                        prefix,
+                        aNummer);
             return pointNumbers;
         }
 
@@ -1074,7 +1079,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
             try {
                 final Collection<PointNumberReservation> result = get();
                 if ((result == null)
-                        || result.isEmpty()) {
+                            || result.isEmpty()) {
                     // ToDo show error
                     showFreigabeError();
                     return;
@@ -1088,31 +1093,31 @@ public class PointNumberDialog extends javax.swing.JDialog {
                 Arrays.sort(listModel, new CheckBoxItemComparator());
                 punktNummernList.setModel(new javax.swing.AbstractListModel() {
 
-                    CheckListItem[] pnrs = listModel;
+                        CheckListItem[] pnrs = listModel;
 
-                    @Override
-                    public int getSize() {
-                        return pnrs.length;
-                    }
+                        @Override
+                        public int getSize() {
+                            return pnrs.length;
+                        }
 
-                    @Override
-                    public Object getElementAt(final int i) {
-                        return pnrs[i];
-                    }
-                });
+                        @Override
+                        public Object getElementAt(final int i) {
+                            return pnrs[i];
+                        }
+                    });
                 jxFreigebenWaitLabel.setBusy(false);
-                final CardLayout cl = (CardLayout) (pnlFreigeben.getLayout());
+                final CardLayout cl = (CardLayout)(pnlFreigeben.getLayout());
                 cl.show(pnlFreigeben, "card2");
 //                        tfAntragsnummer.getDocument().removeDocumentListener(PointNumberDialog.this);
             } catch (InterruptedException ex) {
                 LOG.error(
-                        "Swing worker that retrieves pointnumbers for antragsnummer was interrupted",
-                        ex);
+                    "Swing worker that retrieves pointnumbers for antragsnummer was interrupted",
+                    ex);
                 showFreigabeError();
             } catch (ExecutionException ex) {
                 LOG.error(
-                        "Error in executing worker thread that retrieves pointnumbers for antragsnummer",
-                        ex);
+                    "Error in executing worker thread that retrieves pointnumbers for antragsnummer",
+                    ex);
                 showFreigabeError();
             }
         }
@@ -1121,29 +1126,32 @@ public class PointNumberDialog extends javax.swing.JDialog {
     /**
      * DOCUMENT ME!
      *
-     * @version $Revision$, $Date$
+     * @version  $Revision$, $Date$
      */
     private class VermessungsnummerLoadWorker extends SwingWorker<Collection, Void> {
 
         //~ Instance fields ----------------------------------------------------
+
         private String user;
 
         //~ Constructors -------------------------------------------------------
+
         /**
          * Creates a new VermessungsnummerLoadWorker object.
          *
-         * @param user DOCUMENT ME!
+         * @param  user  DOCUMENT ME!
          */
         public VermessungsnummerLoadWorker(final String user) {
             this.user = user;
         }
 
         //~ Methods ------------------------------------------------------------
+
         @Override
         protected Collection doInBackground() throws Exception {
             final CidsServerSearch search = new VermessungsStellenNummerSearch(user);
             final Collection res = SessionManager.getProxy()
-                    .customServerSearch(SessionManager.getSession().getUser(), search);
+                        .customServerSearch(SessionManager.getSession().getUser(), search);
             if ((res == null) || res.isEmpty()) {
             }
             return res;
@@ -1153,11 +1161,12 @@ public class PointNumberDialog extends javax.swing.JDialog {
     /**
      * DOCUMENT ME!
      *
-     * @version $Revision$, $Date$
+     * @version  $Revision$, $Date$
      */
     private final class FreigebenWorker extends SwingWorker<PointNumberReservationRequest, Void> {
 
         //~ Methods ------------------------------------------------------------
+
         @Override
         protected PointNumberReservationRequest doInBackground() throws Exception {
             if ((punktNummernList.getModel() == null) || (punktNummernList.getModel().getSize() == 0)) {
@@ -1166,7 +1175,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
 
             final List<String> selectedValues = new ArrayList<String>();
             for (int i = 0; i < punktNummernList.getModel().getSize(); i++) {
-                final CheckListItem item = (CheckListItem) punktNummernList.getModel().getElementAt(i);
+                final CheckListItem item = (CheckListItem)punktNummernList.getModel().getElementAt(i);
                 if (item.isSelected) {
                     selectedValues.add(item.toString());
                 }
@@ -1228,24 +1237,24 @@ public class PointNumberDialog extends javax.swing.JDialog {
                 final ServerActionParameter nbz = new ServerActionParameter(
                         PointNumberReserverationServerAction.PARAMETER_TYPE.NBZ.toString(),
                         nummerierungsbezirk);
-                final PointNumberReservationRequest result = (PointNumberReservationRequest) SessionManager
-                        .getProxy()
-                        .executeTask(
-                                SEVER_ACTION,
-                                "WUNDA_BLAU",
-                                null,
-                                action,
-                                prefix,
-                                aNummer,
-                                nbz,
-                                on1,
-                                on2);
+                final PointNumberReservationRequest result = (PointNumberReservationRequest)SessionManager
+                            .getProxy()
+                            .executeTask(
+                                    SEVER_ACTION,
+                                    "WUNDA_BLAU",
+                                    null,
+                                    action,
+                                    prefix,
+                                    aNummer,
+                                    nbz,
+                                    on1,
+                                    on2);
                 if ((result != null) && !result.isSuccessfull()) {
                     res.setSuccessful(false);
                     res.setProtokoll(result.getProtokoll());
                 }
                 if ((result != null) && (result.getPointNumbers() != null)
-                        && !result.getPointNumbers().isEmpty()) {
+                            && !result.getPointNumbers().isEmpty()) {
                     if (res.getAntragsnummer() == null) {
                         res.setAntragsnummer(result.getAntragsnummer());
                     }
@@ -1261,78 +1270,79 @@ public class PointNumberDialog extends javax.swing.JDialog {
             final java.util.Timer t = new java.util.Timer();
             t.schedule(new TimerTask() {
 
-                @Override
-                public void run() {
-                    try {
-                        final PointNumberReservationRequest result = get();
-                        setResult(result);
-                        if ((result == null) || !result.isSuccessfull()) {
-                            protokollPane.addMessage(
+                    @Override
+                    public void run() {
+                        try {
+                            final PointNumberReservationRequest result = get();
+                            setResult(result);
+                            if ((result == null) || !result.isSuccessfull()) {
+                                protokollPane.addMessage(
                                     "Fehler beim Senden des Auftrags",
                                     BusyLoggingTextPane.Styles.ERROR);
-                            protokollPane.addMessage("", BusyLoggingTextPane.Styles.INFO);
-                            for (final String s : result.getErrorMessages()) {
-                                protokollPane.addMessage(
+                                protokollPane.addMessage("", BusyLoggingTextPane.Styles.INFO);
+                                for (final String s : result.getErrorMessages()) {
+                                    protokollPane.addMessage(
                                         s,
                                         BusyLoggingTextPane.Styles.ERROR);
+                                    protokollPane.addMessage("", BusyLoggingTextPane.Styles.INFO);
+                                }
                                 protokollPane.addMessage("", BusyLoggingTextPane.Styles.INFO);
-                            }
-                            protokollPane.addMessage("", BusyLoggingTextPane.Styles.INFO);
-                            protokollPane.addMessage(
+                                protokollPane.addMessage(
                                     "Die Protokolldatei mit Fehlerinformationen steht zum Download bereit.",
                                     BusyLoggingTextPane.Styles.ERROR);
-                            protokollPane.setBusy(false);
-                            return;
-                        }
-                        protokollPane.setBusy(false);
-                        protokollPane.addMessage(
-                                "Freigabe für Antragsnummer: "
-                                + result.getAntragsnummer()
-                                + " erfolgreich. Folgende Punktnummern wurden freigegeben:",
-                                BusyLoggingTextPane.Styles.SUCCESS);
-                        protokollPane.addMessage("", BusyLoggingTextPane.Styles.INFO);
-                        for (final PointNumberReservation pnr : result.getPointNumbers()) {
-                            protokollPane.addMessage(
-                                    ""
-                                    + pnr.getPunktnummern(),
-                                    BusyLoggingTextPane.Styles.INFO);
-                        }
-                        int selectedValues = 0;
-                        for (int i = 0; i < punktNummernList.getModel().getSize(); i++) {
-                            final CheckListItem item = (CheckListItem) punktNummernList.getModel().getElementAt(i);
-                            if (item.isSelected) {
-                                selectedValues++;
+                                protokollPane.setBusy(false);
+                                return;
                             }
-                        }
-                        if (selectedValues == punktNummernList.getModel().getSize()) {
-                            cbAntragsNummer.removeItemAt(cbAntragsNummer.getSelectedIndex());
-                            cbAntragsNummer.setSelectedIndex(0);
-                        }
-                        loadPointNumbers();
-                    } catch (InterruptedException ex) {
-                        LOG.error(
+                            protokollPane.setBusy(false);
+                            protokollPane.addMessage(
+                                "Freigabe für Antragsnummer: "
+                                        + result.getAntragsnummer()
+                                        + " erfolgreich. Folgende Punktnummern wurden freigegeben:",
+                                BusyLoggingTextPane.Styles.SUCCESS);
+                            protokollPane.addMessage("", BusyLoggingTextPane.Styles.INFO);
+                            for (final PointNumberReservation pnr : result.getPointNumbers()) {
+                                protokollPane.addMessage(
+                                    ""
+                                            + pnr.getPunktnummern(),
+                                    BusyLoggingTextPane.Styles.INFO);
+                            }
+                            int selectedValues = 0;
+                            for (int i = 0; i < punktNummernList.getModel().getSize(); i++) {
+                                final CheckListItem item = (CheckListItem)punktNummernList.getModel().getElementAt(i);
+                                if (item.isSelected) {
+                                    selectedValues++;
+                                }
+                            }
+                            if (selectedValues == punktNummernList.getModel().getSize()) {
+                                cbAntragsNummer.removeItemAt(cbAntragsNummer.getSelectedIndex());
+                                cbAntragsNummer.setSelectedIndex(0);
+                            }
+                            loadPointNumbers();
+                        } catch (InterruptedException ex) {
+                            LOG.error(
                                 "Swing worker that releases points was interrupted",
                                 ex);
-                        showError();
-                    } catch (ExecutionException ex) {
-                        LOG.error(
+                            showError();
+                        } catch (ExecutionException ex) {
+                            LOG.error(
                                 "Error in execution of Swing Worker that releases points",
                                 ex);
-                        showError();
+                            showError();
+                        }
                     }
-                }
-            }, 50);
+                }, 50);
         }
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @version $Revision$, $Date$
+     * @version  $Revision$, $Date$
      */
     private final class AllAntragsnummernLoadWorker extends SwingWorker<Collection<String>, Void> {
 
         //~ Methods ------------------------------------------------------------
+
         @Override
         protected Collection<String> doInBackground() throws Exception {
             final ServerActionParameter action = new ServerActionParameter(
@@ -1342,21 +1352,21 @@ public class PointNumberDialog extends javax.swing.JDialog {
                     PointNumberReserverationServerAction.PARAMETER_TYPE.PREFIX.toString(),
                     getAnrPrefix());
 
-            final List<String> result = (List<String>) SessionManager.getProxy()
-                    .executeTask(
-                            SEVER_ACTION,
-                            "WUNDA_BLAU",
-                            null,
-                            action,
-                            prefix);
+            final List<String> result = (List<String>)SessionManager.getProxy()
+                        .executeTask(
+                                SEVER_ACTION,
+                                "WUNDA_BLAU",
+                                null,
+                                action,
+                                prefix);
             return result;
         }
 
         @Override
         protected void done() {
             try {
-                final List<String> result = (List<String>) get();
-                final DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) cbAntragsNummer.getModel();
+                final List<String> result = (List<String>)get();
+                final DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>)cbAntragsNummer.getModel();
                 if ((result == null) || result.isEmpty()) {
                     model.addElement("keine Aufträge gefunden");
                     return;
@@ -1368,15 +1378,15 @@ public class PointNumberDialog extends javax.swing.JDialog {
                 }
                 Collections.sort(tmp);
 
-                final String insertedText = (String) ((JTextComponent) cbAntragsNummer.getEditor().getEditorComponent())
-                        .getText();
+                final String insertedText = (String)((JTextComponent)cbAntragsNummer.getEditor().getEditorComponent())
+                            .getText();
                 model.removeAllElements();
 
                 for (int i = 0; i < tmp.size(); i++) {
                     model.addElement(tmp.get(i));
                 }
                 if (tbpModus.getSelectedIndex() == 0) {
-                    ((JTextComponent) cbAntragsNummer.getEditor().getEditorComponent()).setText(insertedText);
+                    ((JTextComponent)cbAntragsNummer.getEditor().getEditorComponent()).setText(insertedText);
                     cbAntragsNummer.setEditable(true);
                 }
                 cbAntragsNummer.repaint();
@@ -1392,11 +1402,12 @@ public class PointNumberDialog extends javax.swing.JDialog {
     /**
      * DOCUMENT ME!
      *
-     * @version $Revision$, $Date$
+     * @version  $Revision$, $Date$
      */
     private final class PointNumberListRenderer extends JPanel implements ListCellRenderer<Object> {
 
         //~ Methods ------------------------------------------------------------
+
         @Override
         public Component getListCellRendererComponent(final JList<? extends Object> list,
                 final Object value,
@@ -1406,7 +1417,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
             final String text = value.toString();
             final JCheckBox checkbox = new JCheckBox(text);
             checkbox.setEnabled(true);
-            checkbox.setSelected(((CheckListItem) value).isSelected());
+            checkbox.setSelected(((CheckListItem)value).isSelected());
             checkbox.setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());
             checkbox.setForeground(isSelected ? list.getSelectionForeground() : list.getForeground());
             checkbox.setFont(getFont());
@@ -1421,29 +1432,32 @@ public class PointNumberDialog extends javax.swing.JDialog {
     /**
      * DOCUMENT ME!
      *
-     * @version $Revision$, $Date$
+     * @version  $Revision$, $Date$
      */
     private final class CheckListItem {
 
         //~ Instance fields ----------------------------------------------------
+
         private final String pnr;
         private boolean isSelected = false;
 
         //~ Constructors -------------------------------------------------------
+
         /**
          * Creates a new CheckListItem object.
          *
-         * @param label DOCUMENT ME!
+         * @param  label  DOCUMENT ME!
          */
         public CheckListItem(final String label) {
             this.pnr = label;
         }
 
         //~ Methods ------------------------------------------------------------
+
         /**
          * DOCUMENT ME!
          *
-         * @return DOCUMENT ME!
+         * @return  DOCUMENT ME!
          */
         public boolean isSelected() {
             return isSelected;
@@ -1452,7 +1466,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
         /**
          * DOCUMENT ME!
          *
-         * @param isSelected DOCUMENT ME!
+         * @param  isSelected  DOCUMENT ME!
          */
         public void setSelected(final boolean isSelected) {
             this.isSelected = isSelected;
@@ -1467,11 +1481,12 @@ public class PointNumberDialog extends javax.swing.JDialog {
     /**
      * DOCUMENT ME!
      *
-     * @version $Revision$, $Date$
+     * @version  $Revision$, $Date$
      */
     private final class CheckBoxItemComparator implements Comparator<CheckListItem> {
 
         //~ Methods ------------------------------------------------------------
+
         @Override
         public int compare(final CheckListItem o1, final CheckListItem o2) {
             return o1.pnr.compareTo(o2.pnr);
