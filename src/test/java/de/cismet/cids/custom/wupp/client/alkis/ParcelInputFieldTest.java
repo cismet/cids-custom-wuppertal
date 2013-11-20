@@ -86,6 +86,8 @@ public class ParcelInputFieldTest {
         umsetzung.put("na", 3487);
         umsetzung.put("n\u00E4", 3487);
         config.setConversionMap(umsetzung);
+        config.setAlternativeAbbreviationLength(new HashMap<Character, Integer>());
+        config.setDefaultAbbreviationLength(2);
         field = new ParcelInputField(config);
     }
 
@@ -103,7 +105,7 @@ public class ParcelInputFieldTest {
         System.out.println("setDistrictNumber");
         String districtNumber = "3001";
         ParcelInputField instance = field;
-        instance.setDistrictNumber(districtNumber);
+        instance.setDistrictNumberInTxtDistrict(districtNumber);
         assertEquals("053001", instance.getDistrictNumber());
     }
     
@@ -112,7 +114,7 @@ public class ParcelInputFieldTest {
         System.out.println("setDistrictNumberSpecialCharacter");
         String districtNumber = "n\u00E4";
         ParcelInputField instance = field;
-        instance.setDistrictNumber(districtNumber);
+        instance.setDistrictNumberInTxtDistrict(districtNumber);
         assertEquals("053487", instance.getDistrictNumber());
     }
 
@@ -121,7 +123,7 @@ public class ParcelInputFieldTest {
         System.out.println("setDistrictNumberShort");
         String districtNumber = "30";
         ParcelInputField instance = field;
-        instance.setDistrictNumber(districtNumber);
+        instance.setDistrictNumberInTxtDistrict(districtNumber);
         assertEquals(null, instance.getDistrictNumber());
     }
 
@@ -130,7 +132,7 @@ public class ParcelInputFieldTest {
         System.out.println("setDistrictNumberShort2");
         String districtNumber = "ba";
         ParcelInputField instance = field;
-        instance.setDistrictNumber(districtNumber);
+        instance.setDistrictNumberInTxtDistrict(districtNumber);
         assertEquals("053001", instance.getDistrictNumber());
     }
 
@@ -139,7 +141,7 @@ public class ParcelInputFieldTest {
         System.out.println("setDistrictNumberLong");
         String districtNumber = "30017435";
         ParcelInputField instance = field;
-        instance.setDistrictNumber(districtNumber);
+        instance.setDistrictNumberInTxtDistrict(districtNumber);
         assertEquals("053001", instance.getDistrictNumber());
     }
 
@@ -148,7 +150,7 @@ public class ParcelInputFieldTest {
         System.out.println("setDistrictNumberWrong");
         String districtNumber = "sadfh";
         ParcelInputField instance = field;
-        instance.setDistrictNumber(districtNumber);
+        instance.setDistrictNumberInTxtDistrict(districtNumber);
         assertEquals(null, instance.getDistrictNumber());
     }
 

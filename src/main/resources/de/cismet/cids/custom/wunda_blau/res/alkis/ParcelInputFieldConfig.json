@@ -41,5 +41,8 @@
     "3485" : "Beyenburg"
   },
   "delimiter1AsString" : "-",
-  "delimiter2AsString" : "/"
+  "delimiter2AsString" : "/",
+  "defaultAbbreviationLength" : 2,
+  "alternativeAbbreviationLength": {
+  }
 }
