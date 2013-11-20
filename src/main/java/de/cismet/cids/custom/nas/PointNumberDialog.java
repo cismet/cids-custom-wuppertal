@@ -1202,6 +1202,17 @@ public class PointNumberDialog extends javax.swing.JDialog {
                                             + pnr.getPunktnummern(),
                                     BusyLoggingTextPane.Styles.INFO);
                             }
+                            int selectedValues = 0;
+                            for (int i = 0; i < punktNummernList.getModel().getSize(); i++) {
+                                final CheckListItem item = (CheckListItem)punktNummernList.getModel().getElementAt(i);
+                                if (item.isSelected) {
+                                    selectedValues++;
+                                }
+                            }
+                            if (selectedValues == punktNummernList.getModel().getSize()) {
+                                cbAntragsNummer.removeItemAt(cbAntragsNummer.getSelectedIndex());
+                                cbAntragsNummer.setSelectedIndex(0);
+                            }
                             loadPointNumbers();
                         } catch (InterruptedException ex) {
                             LOG.error(
