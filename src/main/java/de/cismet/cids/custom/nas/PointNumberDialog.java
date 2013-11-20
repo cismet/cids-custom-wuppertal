@@ -13,10 +13,13 @@
 package de.cismet.cids.custom.nas;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 
 import Sirius.server.newuser.User;
 
 import org.apache.log4j.Logger;
+
+import org.openide.util.Exceptions;
 
 import java.awt.CardLayout;
 import java.awt.Component;
@@ -31,6 +34,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.TimerTask;
@@ -81,13 +85,13 @@ public class PointNumberDialog extends javax.swing.JDialog {
 
     //~ Instance fields --------------------------------------------------------
 
-    private String wuppVnr;
     private PointNumberReservationRequest result;
     private boolean hasFreigabeAccess = false;
     private AllAntragsnummernLoadWorker allAnrLoadWorker = new AllAntragsnummernLoadWorker();
     private FreigebenWorker freigebenWorker = new FreigebenWorker();
     private PointNumberLoadWorker pnrLoadWorker = new PointNumberLoadWorker();
     private boolean useAutoCompleteDecorator = false;
+    private List<String> priorityPrefixes = new ArrayList<String>();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnDeSelectAll;
@@ -146,8 +150,12 @@ public class PointNumberDialog extends javax.swing.JDialog {
         final Properties props = new Properties();
         try {
             props.load(PointNumberReservationPanel.class.getResourceAsStream("pointNumberSettings.properties"));
-            wuppVnr = props.getProperty("wuppVnr"); // NOI18N
             useAutoCompleteDecorator = Boolean.getBoolean(props.getProperty("autoCompletion"));
+            final String[] splittedPrioPrefixes = props.getProperty("priorityPrefixes").split(",");
+            for (int i = 0; i < splittedPrioPrefixes.length; i++) {
+                final String tmp = splittedPrioPrefixes[i];
+                priorityPrefixes.add(tmp);
+            }
         } catch (IOException e) {
             LOG.error("Could not read pointnumberSettings.properties", e);
         }
@@ -206,36 +214,12 @@ public class PointNumberDialog extends javax.swing.JDialog {
         final DefaultCaret caret = (DefaultCaret)protokollPane.getCaret();
         caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
         try {
-            // if user does not have the right to do freigaben, remove the tab
-            hasFreigabeAccess = SessionManager.getConnection()
-                        .getConfigAttr(SessionManager.getSession().getUser(), "custom.nas.punktNummernFreigabe")
-                        != null;
-            if (!hasFreigabeAccess) {
-                tbpModus.remove(2);
-            }
-            final User user = SessionManager.getSession().getUser();
-            CidsServerSearch search = new VermessungsStellenNummerSearch(user.getName());
-            Collection res = SessionManager.getProxy()
-                        .customServerSearch(SessionManager.getSession().getUser(), search);
-            ArrayList<String> tmp;
-            if ((res == null) || res.isEmpty()) {
-                tmp = new ArrayList<String>();
-                tmp.add(wuppVnr);
-                search = new VermessungsStellenNummerSearch("%");
-                res = SessionManager.getProxy().customServerSearch(SessionManager.getSession().getUser(), search);
-                tmp.addAll(res);
-                cbAntragPrefix.setModel(new DefaultComboBoxModel(tmp.toArray()));
-            } else {
-                tmp = (ArrayList<String>)res;
-                final String vermessungstellenNr = tmp.get(0);
-                if (vermessungstellenNr != null) {
-                    cbAntragPrefix.setModel(new DefaultComboBoxModel(tmp.toArray()));
-                    RendererTools.makeReadOnly(cbAntragPrefix);
-                }
-            }
+            configureFreigebenTab();
+            configurePrefixBox();
         } catch (Exception e) {
             LOG.error("Error during determination of vermessungstellennummer", e);
         }
+
         if (useAutoCompleteDecorator) {
             StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbAntragsNummer);
         }
@@ -244,6 +228,78 @@ public class PointNumberDialog extends javax.swing.JDialog {
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @throws  ConnectionException  DOCUMENT ME!
+     */
+    private void configureFreigebenTab() throws ConnectionException {
+        // if user does not have the right to do freigaben, remove the tab
+        hasFreigabeAccess = SessionManager.getConnection()
+                    .getConfigAttr(SessionManager.getSession().getUser(), "custom.nas.punktNummernFreigabe")
+                    != null;
+        if (!hasFreigabeAccess) {
+            tbpModus.remove(2);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @throws  ConnectionException  DOCUMENT ME!
+     */
+    private void configurePrefixBox() throws ConnectionException {
+        final User user = SessionManager.getSession().getUser();
+        final VermessungsnummerLoadWorker vnrLoadWorker = new VermessungsnummerLoadWorker(user.getName()) {
+
+                @Override
+                protected void done() {
+                    try {
+                        final Collection res = get();
+
+                        if ((res == null) || res.isEmpty()) {
+                            final VermessungsnummerLoadWorker allVnrLoadWorker = new VermessungsnummerLoadWorker("%") {
+
+                                    @Override
+                                    protected void done() {
+                                        try {
+                                            final ArrayList<String> tmp;
+                                            tmp = new ArrayList<String>();
+                                            tmp.addAll(priorityPrefixes);
+                                            final Collection resultAllVnr = get();
+                                            final HashSet<String> loadedPrefixes = new HashSet<String>();
+                                            loadedPrefixes.addAll(resultAllVnr);
+                                            loadedPrefixes.removeAll(priorityPrefixes);
+                                            tmp.addAll(loadedPrefixes);
+                                            cbAntragPrefix.setModel(new DefaultComboBoxModel(tmp.toArray()));
+                                        } catch (InterruptedException ex) {
+                                            Exceptions.printStackTrace(ex);
+                                        } catch (ExecutionException ex) {
+                                            Exceptions.printStackTrace(ex);
+                                        }
+                                    }
+                                };
+                            allVnrLoadWorker.execute();
+                        } else {
+                            final ArrayList<String> tmp;
+                            tmp = (ArrayList<String>)res;
+                            final String vermessungstellenNr = tmp.get(0);
+                            if (vermessungstellenNr != null) {
+                                cbAntragPrefix.setModel(new DefaultComboBoxModel(tmp.toArray()));
+                                RendererTools.makeReadOnly(cbAntragPrefix);
+                            }
+                        }
+                    } catch (InterruptedException ex) {
+                        Exceptions.printStackTrace(ex);
+                    } catch (ExecutionException ex) {
+                        Exceptions.printStackTrace(ex);
+                    }
+                }
+            };
+
+        vnrLoadWorker.execute();
+    }
 
     /**
      * DOCUMENT ME!
@@ -1051,6 +1107,41 @@ public class PointNumberDialog extends javax.swing.JDialog {
                     ex);
                 showFreigabeError();
             }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class VermessungsnummerLoadWorker extends SwingWorker<Collection, Void> {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private String user;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new VermessungsnummerLoadWorker object.
+         *
+         * @param  user  DOCUMENT ME!
+         */
+        public VermessungsnummerLoadWorker(final String user) {
+            this.user = user;
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        protected Collection doInBackground() throws Exception {
+            final CidsServerSearch search = new VermessungsStellenNummerSearch(user);
+            final Collection res = SessionManager.getProxy()
+                        .customServerSearch(SessionManager.getSession().getUser(), search);
+            if ((res == null) || res.isEmpty()) {
+            }
+            return res;
         }
     }
 
