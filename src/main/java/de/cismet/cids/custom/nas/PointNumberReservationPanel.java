@@ -440,7 +440,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnErstellenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnErstellenActionPerformed
+    private void btnErstellenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnErstellenActionPerformed
         // check anr
         final String anr = pnrDialog.getAnr();
         if ((anr == null) || anr.isEmpty()) {
@@ -665,16 +665,12 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
             };
 
         isAntragExistingWorker.execute();
-    } //GEN-LAST:event_btnErstellenActionPerformed
+    }//GEN-LAST:event_btnErstellenActionPerformed
 
     /**
      * DOCUMENT ME!
      */
     public void checkButtonState() {
-        if ((pnrDialog.getAnr() == null) || pnrDialog.getAnr().isEmpty()) {
-            btnErstellen.setEnabled(false);
-            return;
-        }
         if ((cbNbz.getEditor().getItem() == null) || ((String)cbNbz.getEditor().getItem()).isEmpty()) {
             btnErstellen.setEnabled(false);
             return;
@@ -720,11 +716,11 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRefreshNbzActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRefreshNbzActionPerformed
+    private void btnRefreshNbzActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshNbzActionPerformed
         checkNummerierungsbezirke();
         btnRefreshNbz.setVisible(false);
         this.invalidate();
         this.validate();
         this.repaint();
-    }                                                                                 //GEN-LAST:event_btnRefreshNbzActionPerformed
+    }//GEN-LAST:event_btnRefreshNbzActionPerformed
 }
