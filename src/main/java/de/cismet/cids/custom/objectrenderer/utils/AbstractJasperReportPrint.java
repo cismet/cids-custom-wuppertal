@@ -162,6 +162,37 @@ public abstract class AbstractJasperReportPrint {
         this.beansCollection = beansCollection;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public JasperPrint getJasperPrint() throws Exception {
+        final JasperReport jasperReport = (JasperReport)JRLoader.loadObject(getClass().getResourceAsStream(
+                    reportURL));
+        JasperPrint jasperPrint = null;
+        if (isBeansCollection()) {
+            final Map params = generateReportParam(beans);
+            final JRBeanCollectionDataSource beanArray = new JRBeanCollectionDataSource(beans);
+//                final JRBeanArrayDataSource beanArray = new JRBeanArrayDataSource(beans.toArray());
+            jasperPrint = JasperFillManager.fillReport(jasperReport, params, beanArray);
+        } else {
+            for (final CidsBean current : beans) {
+                final Map params = generateReportParam(current);
+                final JRBeanArrayDataSource beanArray = new JRBeanArrayDataSource(new CidsBean[] { current });
+                if (jasperPrint == null) {
+                    jasperPrint = JasperFillManager.fillReport(jasperReport, params, beanArray);
+                } else {
+                    jasperPrint.addPage((JRPrintPage)JasperFillManager.fillReport(jasperReport, params, beanArray)
+                                .getPages().get(0));
+                }
+            }
+        }
+        return jasperPrint;
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -185,30 +216,11 @@ public abstract class AbstractJasperReportPrint {
 
         @Override
         protected JasperPrint doInBackground() throws Exception {
-            final JasperReport jasperReport = (JasperReport)JRLoader.loadObject(getClass().getResourceAsStream(
-                        reportURL));
-            JasperPrint jasperPrint = null;
-            if (isBeansCollection()) {
-                final Map params = generateReportParam(beans);
-                final JRBeanCollectionDataSource beanArray = new JRBeanCollectionDataSource(beans);
-//                final JRBeanArrayDataSource beanArray = new JRBeanArrayDataSource(beans.toArray());
-                jasperPrint = JasperFillManager.fillReport(jasperReport, params, beanArray);
+            if (isCancelled()) {
+                return null;
             } else {
-                for (final CidsBean current : beans) {
-                    if (isCancelled()) {
-                        return null;
-                    }
-                    final Map params = generateReportParam(current);
-                    final JRBeanArrayDataSource beanArray = new JRBeanArrayDataSource(new CidsBean[] { current });
-                    if (jasperPrint == null) {
-                        jasperPrint = JasperFillManager.fillReport(jasperReport, params, beanArray);
-                    } else {
-                        jasperPrint.addPage((JRPrintPage)JasperFillManager.fillReport(jasperReport, params, beanArray)
-                                    .getPages().get(0));
-                    }
-                }
+                return getJasperPrint();
             }
-            return jasperPrint;
         }
 
         @Override

@@ -11,15 +11,32 @@
  */
 package de.cismet.cids.custom.reports.wunda_blau;
 
+import Sirius.navigator.ui.ComponentRegistry;
+
+import net.sf.jasperreports.engine.JasperPrint;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objectrenderer.utils.AbstractJasperReportPrint;
 
 import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.utils.jasperreports.ReportSwingWorkerDialog;
+
+import de.cismet.cismap.commons.gui.printing.JasperDownload;
+import de.cismet.cismap.commons.interaction.CismapBroker;
+
+import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.downloadmanager.DownloadManager;
+import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 
 /**
  * DOCUMENT ME!
@@ -34,6 +51,8 @@ public class BillingStatisticsReport extends AbstractJasperReportPrint {
     private static final String REPORT_URL = "/de/cismet/cids/custom/reports/wunda_blau/geschaeftsstatisktik.jasper";
 
     //~ Instance fields --------------------------------------------------------
+
+    SwingWorker<JasperPrint, Void> downloadWorker;
 
     private Date from;
     private Date till;
@@ -161,5 +180,74 @@ public class BillingStatisticsReport extends AbstractJasperReportPrint {
         params.put("amountWiederverkaeufeGB", amountWiederverkaeufeGB);
 
         return params;
+    }
+    @Override
+    public void print() {
+        final SwingWorker<JasperPrint, Void> old = downloadWorker;
+        if ((old != null) && !old.isDone()) {
+            old.cancel(true);
+        }
+        downloadWorker = new DownloadWorker();
+        downloadWorker.execute();
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class DownloadWorker extends SwingWorker<JasperPrint, Void> {
+
+        //~ Instance fields ----------------------------------------------------
+
+        ReportSwingWorkerDialog dialog = new ReportSwingWorkerDialog(StaticSwingTools.getParentFrame(
+                    CismapBroker.getInstance().getMappingComponent()),
+                true);
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        protected JasperPrint doInBackground() throws Exception {
+            SwingUtilities.invokeLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        StaticSwingTools.showDialog(dialog);
+                    }
+                });
+
+            if (isCancelled()) {
+                return null;
+            } else {
+                return getJasperPrint();
+            }
+        }
+
+        @Override
+        protected void done() {
+            try {
+                final JasperPrint jasperPrint = get();
+
+                if (DownloadManagerDialog.showAskingForUserTitle(ComponentRegistry.getRegistry().getMainWindow())) {
+                    final String jobname = DownloadManagerDialog.getJobname();
+                    final String filename = "buchungen_geschaeftsstatistik";
+                    final String title = "Buchungen: Geschäftsstatistik";
+
+                    DownloadManager.instance().add(new JasperDownload(
+                            jasperPrint,
+                            jobname,
+                            title,
+                            filename));
+                }
+            } catch (InterruptedException ex) {
+                log.warn(ex, ex);
+            } catch (ExecutionException ex) {
+                log.error(ex, ex);
+            } finally {
+                dialog.setVisible(false);
+            }
+        }
     }
 }
