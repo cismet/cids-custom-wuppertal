@@ -479,7 +479,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
         protokollPane.setBusy(true);
         final String anrPrefix = pnrDialog.getAnrPrefix();
 
-        protokollPane.addMessage("Prüfe ob Antragsnummer " + anrPrefix + "-" + anr + " schon exisitiert.", Styles.INFO);
+        protokollPane.addMessage("Prüfe ob Antragsnummer " + anrPrefix + "-" + anr + " schon existiert.", Styles.INFO);
 
         final SwingWorker<PointNumberReservationRequest, Void> reservationWorker =
             new SwingWorker<PointNumberReservationRequest, Void>() {
