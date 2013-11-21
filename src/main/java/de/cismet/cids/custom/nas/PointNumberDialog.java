@@ -20,11 +20,14 @@ import Sirius.server.newuser.User;
 import org.apache.log4j.Logger;
 
 import org.openide.util.Exceptions;
+import org.openide.util.NbBundle;
 
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Component;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import java.io.IOException;
 
@@ -50,11 +53,14 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.JTextComponent;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.objectrenderer.wunda_blau.MauerAggregationRenderer;
 import de.cismet.cids.custom.utils.BusyLoggingTextPane;
 import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservation;
 import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservationRequest;
@@ -82,6 +88,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
 
     private static final Logger LOG = Logger.getLogger(PointNumberDialog.class);
     private static final String SEVER_ACTION = "pointNumberReservation";
+    private static final int COLUMNS = 2;
 
     //~ Instance fields --------------------------------------------------------
 
@@ -92,6 +99,8 @@ public class PointNumberDialog extends javax.swing.JDialog {
     private PointNumberLoadWorker pnrLoadWorker = new PointNumberLoadWorker();
     private boolean useAutoCompleteDecorator = false;
     private List<String> priorityPrefixes = new ArrayList<String>();
+    private List<CheckListItem> punktnummern = new ArrayList<CheckListItem>();
+    private PunktNummerTableModel model = new PunktNummerTableModel();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnDeSelectAll;
@@ -104,6 +113,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private org.jdesktop.swingx.JXBusyLabel jxFreigebenWaitLabel;
     private javax.swing.JLabel lblAnrSeperator;
     private javax.swing.JLabel lblAntragsnummer;
@@ -129,8 +139,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
     private javax.swing.JPanel pnlTabReservieren;
     private javax.swing.JPanel pnlWait;
     private de.cismet.cids.custom.utils.BusyLoggingTextPane protokollPane;
-    private javax.swing.JList punktNummernList;
-    private javax.swing.JScrollPane scpPunktNummernList;
+    private javax.swing.JTable tblPunktnummern;
     private javax.swing.JTabbedPane tbpModus;
     // End of variables declaration//GEN-END:variables
 
@@ -197,21 +206,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
                     }
                 }
             });
-        punktNummernList.setCellRenderer(new PointNumberListRenderer());
-        punktNummernList.addMouseListener(new MouseAdapter() {
 
-                @Override
-                public void mouseClicked(final MouseEvent event) {
-                    final JList list = (JList)event.getSource();
-                    final int index = list.locationToIndex(event.getPoint());
-                    final CheckListItem item = (CheckListItem)list.getModel().getElementAt(index);
-                    item.setSelected(!item.isSelected());
-                    list.repaint(list.getCellBounds(index, index));
-                }
-            });
-
-        final JTextComponent textComp = (JTextComponent)cbAntragsNummer.getEditor().getEditorComponent();
-//        textComp.getDocument().addDocumentListener(this);
         final DefaultCaret caret = (DefaultCaret)protokollPane.getCaret();
         caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
         try {
@@ -225,6 +220,15 @@ public class PointNumberDialog extends javax.swing.JDialog {
             StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbAntragsNummer);
         }
         ((DefaultComboBoxModel)cbAntragsNummer.getModel()).addElement("");
+        if ((tblPunktnummern != null) && (tblPunktnummern.getColumnModel() != null)) {
+            final TableColumn column = tblPunktnummern.getColumnModel().getColumn(0);
+            if (column != null) {
+                column.setPreferredWidth(20);
+                column.setMaxWidth(20);
+            }
+        }
+        tblPunktnummern.setTableHeader(null);
+        tblPunktnummern.setShowGrid(false);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -399,8 +403,6 @@ public class PointNumberDialog extends javax.swing.JDialog {
         jxFreigebenWaitLabel = new org.jdesktop.swingx.JXBusyLabel();
         pnlFreigebenCard = new javax.swing.JPanel();
         lblPunktNummern = new javax.swing.JLabel();
-        scpPunktNummernList = new javax.swing.JScrollPane();
-        punktNummernList = new javax.swing.JList();
         btnFreigeben = new javax.swing.JButton();
         pnlFreigabeListControls = new javax.swing.JPanel();
         btnSelectAll = new javax.swing.JButton();
@@ -408,6 +410,8 @@ public class PointNumberDialog extends javax.swing.JDialog {
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblPunktnummern = new javax.swing.JTable();
         pnlFreigebenError = new javax.swing.JPanel();
         lblFreigebenError = new javax.swing.JLabel();
         cbAntragPrefix = new javax.swing.JComboBox();
@@ -510,17 +514,6 @@ public class PointNumberDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         pnlFreigebenCard.add(lblPunktNummern, gridBagConstraints);
 
-        scpPunktNummernList.setViewportView(punktNummernList);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        pnlFreigebenCard.add(scpPunktNummernList, gridBagConstraints);
-
         org.openide.awt.Mnemonics.setLocalizedText(
             btnFreigeben,
             org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.btnFreigeben.text")); // NOI18N
@@ -596,6 +589,20 @@ public class PointNumberDialog extends javax.swing.JDialog {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 5, 0);
         pnlFreigebenCard.add(pnlFreigabeListControls, gridBagConstraints);
+
+        tblPunktnummern.setModel(model);
+        tblPunktnummern.setFillsViewportHeight(true);
+        tblPunktnummern.setShowHorizontalLines(false);
+        tblPunktnummern.setShowVerticalLines(false);
+        tblPunktnummern.setTableHeader(null);
+        jScrollPane2.setViewportView(tblPunktnummern);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        pnlFreigebenCard.add(jScrollPane2, gridBagConstraints);
 
         pnlFreigeben.add(pnlFreigebenCard, "card2");
 
@@ -878,11 +885,11 @@ public class PointNumberDialog extends javax.swing.JDialog {
      * @param  evt  DOCUMENT ME!
      */
     private void btnDeSelectAllActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDeSelectAllActionPerformed
-        for (int i = 0; i < punktNummernList.getModel().getSize(); i++) {
-            final CheckListItem item = (CheckListItem)punktNummernList.getModel().getElementAt(i);
+        for (int i = 0; i < punktnummern.size(); i++) {
+            final CheckListItem item = (CheckListItem)punktnummern.get(i);
             item.setSelected(false);
         }
-        punktNummernList.repaint();
+        tblPunktnummern.repaint();
     }                                                                                  //GEN-LAST:event_btnDeSelectAllActionPerformed
 
     /**
@@ -891,11 +898,11 @@ public class PointNumberDialog extends javax.swing.JDialog {
      * @param  evt  DOCUMENT ME!
      */
     private void btnSelectAllActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnSelectAllActionPerformed
-        for (int i = 0; i < punktNummernList.getModel().getSize(); i++) {
-            final CheckListItem item = (CheckListItem)punktNummernList.getModel().getElementAt(i);
+        for (int i = 0; i < punktnummern.size(); i++) {
+            final CheckListItem item = (CheckListItem)punktnummern.get(i);
             item.setSelected(true);
         }
-        punktNummernList.repaint();
+        tblPunktnummern.repaint();
     }                                                                                //GEN-LAST:event_btnSelectAllActionPerformed
 
     /**
@@ -1084,27 +1091,17 @@ public class PointNumberDialog extends javax.swing.JDialog {
                     showFreigabeError();
                     return;
                 }
-                final CheckListItem[] listModel = new CheckListItem[result.size()];
+
+                final List<CheckListItem> listModel = new ArrayList<CheckListItem>();
                 int i = 0;
                 for (final PointNumberReservation pnr : result) {
-                    listModel[i] = new CheckListItem(pnr.getPunktnummern());
+                    listModel.add(new CheckListItem(pnr.getPunktnummern()));
                     i++;
                 }
-                Arrays.sort(listModel, new CheckBoxItemComparator());
-                punktNummernList.setModel(new javax.swing.AbstractListModel() {
-
-                        CheckListItem[] pnrs = listModel;
-
-                        @Override
-                        public int getSize() {
-                            return pnrs.length;
-                        }
-
-                        @Override
-                        public Object getElementAt(final int i) {
-                            return pnrs[i];
-                        }
-                    });
+                Collections.sort(listModel, new CheckBoxItemComparator());
+                punktnummern.clear();
+                punktnummern.addAll(listModel);
+                tblPunktnummern.repaint();
                 jxFreigebenWaitLabel.setBusy(false);
                 final CardLayout cl = (CardLayout)(pnlFreigeben.getLayout());
                 cl.show(pnlFreigeben, "card2");
@@ -1169,13 +1166,13 @@ public class PointNumberDialog extends javax.swing.JDialog {
 
         @Override
         protected PointNumberReservationRequest doInBackground() throws Exception {
-            if ((punktNummernList.getModel() == null) || (punktNummernList.getModel().getSize() == 0)) {
+            if ((model.getSelectedValues() == 0)) {
                 return null;
             }
 
             final List<String> selectedValues = new ArrayList<String>();
-            for (int i = 0; i < punktNummernList.getModel().getSize(); i++) {
-                final CheckListItem item = (CheckListItem)punktNummernList.getModel().getElementAt(i);
+            for (int i = 0; i < punktnummern.size(); i++) {
+                final CheckListItem item = (CheckListItem)punktnummern.get(i);
                 if (item.isSelected) {
                     selectedValues.add(item.toString());
                 }
@@ -1307,13 +1304,13 @@ public class PointNumberDialog extends javax.swing.JDialog {
                                     BusyLoggingTextPane.Styles.INFO);
                             }
                             int selectedValues = 0;
-                            for (int i = 0; i < punktNummernList.getModel().getSize(); i++) {
-                                final CheckListItem item = (CheckListItem)punktNummernList.getModel().getElementAt(i);
+                            for (int i = 0; i < punktnummern.size(); i++) {
+                                final CheckListItem item = (CheckListItem)punktnummern.get(i);
                                 if (item.isSelected) {
                                     selectedValues++;
                                 }
                             }
-                            if (selectedValues == punktNummernList.getModel().getSize()) {
+                            if (selectedValues == punktnummern.size()) {
                                 cbAntragsNummer.removeItemAt(cbAntragsNummer.getSelectedIndex());
                                 cbAntragsNummer.setSelectedIndex(0);
                             }
@@ -1404,28 +1401,81 @@ public class PointNumberDialog extends javax.swing.JDialog {
      *
      * @version  $Revision$, $Date$
      */
-    private final class PointNumberListRenderer extends JPanel implements ListCellRenderer<Object> {
+    private final class PunktNummerTableModel extends AbstractTableModel {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private int selectedCidsBeans = 0;
 
         //~ Methods ------------------------------------------------------------
 
         @Override
-        public Component getListCellRendererComponent(final JList<? extends Object> list,
-                final Object value,
-                final int index,
-                final boolean isSelected,
-                final boolean cellHasFocus) {
-            final String text = value.toString();
-            final JCheckBox checkbox = new JCheckBox(text);
-            checkbox.setEnabled(true);
-            checkbox.setSelected(((CheckListItem)value).isSelected());
-            checkbox.setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());
-            checkbox.setForeground(isSelected ? list.getSelectionForeground() : list.getForeground());
-            checkbox.setFont(getFont());
-            checkbox.setFocusPainted(false);
-            checkbox.setBorderPainted(true);
-            checkbox.setBorder(isSelected ? UIManager.getBorder(
-                    "List.focusCellHighlightBorder") : new EmptyBorder(1, 1, 1, 1));
-            return checkbox;
+        public int getRowCount() {
+            if (punktnummern == null) {
+                return 0;
+            }
+            return punktnummern.size();
+        }
+
+        @Override
+        public int getColumnCount() {
+            if (punktnummern == null) {
+                return 0;
+            }
+            return COLUMNS;
+        }
+
+        @Override
+        public Object getValueAt(final int rowIndex, final int columnIndex) {
+            if (punktnummern == null) {
+                return null;
+            }
+            final CheckListItem bean = punktnummern.get(rowIndex);
+            if (columnIndex == 0) {
+                return bean.isSelected();
+            } else {
+                return bean.toString();
+            }
+        }
+
+        @Override
+        public void setValueAt(final Object value, final int row, final int column) {
+            if (column != 0) {
+                return;
+            }
+
+            final CheckListItem item = punktnummern.get(row);
+            item.setSelected(!item.isSelected());
+            if (item.isSelected()) {
+                selectedCidsBeans++;
+            } else {
+                selectedCidsBeans--;
+            }
+
+            fireTableRowsUpdated(row, row);
+        }
+
+        @Override
+        public Class<?> getColumnClass(final int columnIndex) {
+            if (columnIndex == 0) {
+                return Boolean.class;
+            } else {
+                return String.class;
+            }
+        }
+
+        @Override
+        public boolean isCellEditable(final int row, final int column) {
+            return column == 0;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public int getSelectedValues() {
+            return selectedCidsBeans;
         }
     }
 
