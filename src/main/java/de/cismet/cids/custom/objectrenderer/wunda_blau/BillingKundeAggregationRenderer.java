@@ -819,39 +819,43 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
      * @return  DOCUMENT ME!
      */
     private String generateFilterResultText(final Collection<CidsBean> billingBeans) {
+        final StringBuilder text = new StringBuilder();
         if (billingBeans.isEmpty()) {
-            return NbBundle.getMessage(
+            text.append(NbBundle.getMessage(
                     BillingKundeRenderer.class,
-                    "BillingKundeRenderer.generateFilterResultText().noBillings");
+                    "BillingKundeRenderer.generateFilterResultText().noBillings"));
         } else {
             fromDate_tillDate = pnlTimeFilters.chooseDates();
             final Date from = fromDate_tillDate[0];
             final Date till = fromDate_tillDate[1];
 
-            final StringBuilder text = new StringBuilder(NbBundle.getMessage(
-                        BillingKundeRenderer.class,
-                        "BillingKundeAggregationRenderer.generateFilterResultText().billings1"));
+            text.append(NbBundle.getMessage(
+                    BillingKundeAggregationRenderer.class,
+                    "BillingKundeAggregationRenderer.generateFilterResultText().billings1"));
             if (from == null) {
                 text.append(".");
             } else if ((till == null) || from.equals(till)) {
                 text.append(NbBundle.getMessage(
-                        BillingKundeRenderer.class,
+                        BillingKundeAggregationRenderer.class,
                         "BillingKundeAggregationRenderer.generateFilterResultText().billings2.oneDate"));
                 text.append(DATE_FORMAT.format(from));
                 text.append(".");
             } else {
                 text.append(NbBundle.getMessage(
-                        BillingKundeRenderer.class,
+                        BillingKundeAggregationRenderer.class,
                         "BillingKundeAggregationRenderer.generateFilterResultText().billings2.twoDates1"));
                 text.append(DATE_FORMAT.format(from));
                 text.append(NbBundle.getMessage(
-                        BillingKundeRenderer.class,
+                        BillingKundeAggregationRenderer.class,
                         "BillingKundeAggregationRenderer.generateFilterResultText().billings2.twoDates2"));
                 text.append(DATE_FORMAT.format(till));
                 text.append(".");
             }
-            return text.toString();
         }
+        text.append(NbBundle.getMessage(
+                BillingKundeAggregationRenderer.class,
+                "BillingKundeAggregationRenderer.generateFilterResultText().suffix"));
+        return text.toString();
     }
 
     /**

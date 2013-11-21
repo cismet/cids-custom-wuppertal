@@ -1081,11 +1081,12 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
      * @return  DOCUMENT ME!
      */
     private String generateFilterResultText(final Collection<CidsBean> billingBeans) {
+        final StringBuilder text = new StringBuilder();
         if (billingBeans.isEmpty()) {
             totalSum = new BigDecimal("0");
-            return NbBundle.getMessage(
+            text.append(NbBundle.getMessage(
                     BillingKundeRenderer.class,
-                    "BillingKundeRenderer.generateFilterResultText().noBillings");
+                    "BillingKundeRenderer.generateFilterResultText().noBillings"));
         } else {
             final int amountBillings = billingBeans.size();
             fromDate_tillDate = pnlTimeFilters.chooseDates();
@@ -1094,9 +1095,9 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
             totalSum = BillingCalculations.calculateBruttoSumFromBillings(billingBeans);
             final NumberFormat euroFormatter = NumberFormat.getCurrencyInstance(Locale.GERMANY);
 
-            final StringBuilder text = new StringBuilder(NbBundle.getMessage(
-                        BillingKundeRenderer.class,
-                        "BillingKundeRenderer.generateFilterResultText().billings1"));
+            text.append(NbBundle.getMessage(
+                    BillingKundeRenderer.class,
+                    "BillingKundeRenderer.generateFilterResultText().billings1"));
             text.append(euroFormatter.format(totalSum));
             text.append(NbBundle.getMessage(
                     BillingKundeRenderer.class,
@@ -1130,8 +1131,11 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
                 text.append(DATE_FORMAT.format(till));
                 text.append(".");
             }
-            return text.toString();
         }
+        text.append(NbBundle.getMessage(
+                BillingKundeRenderer.class,
+                "BillingKundeRenderer.generateFilterResultText().suffix"));
+        return text.toString();
     }
 
     /**
