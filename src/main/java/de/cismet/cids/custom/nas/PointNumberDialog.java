@@ -803,25 +803,25 @@ public class PointNumberDialog extends javax.swing.JDialog {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnDoneActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDoneActionPerformed
+    private void btnDoneActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDoneActionPerformed
         this.dispose();
-    }//GEN-LAST:event_btnDoneActionPerformed
+    }                                                                           //GEN-LAST:event_btnDoneActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
         this.dispose();
-    }//GEN-LAST:event_btnCancelActionPerformed
+    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnFreigebenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFreigebenActionPerformed
+    private void btnFreigebenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFreigebenActionPerformed
         freigebenWorker = new FreigebenWorker();
 
         try {
@@ -833,14 +833,14 @@ public class PointNumberDialog extends javax.swing.JDialog {
         protokollPane.addMessage("Sende Freigabeauftrag.", BusyLoggingTextPane.Styles.INFO);
 
         freigebenWorker.execute();
-    }//GEN-LAST:event_btnFreigebenActionPerformed
+    } //GEN-LAST:event_btnFreigebenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnDownloadActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
+    private void btnDownloadActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDownloadActionPerformed
         if (result == null) {
             return;
         }
@@ -861,55 +861,55 @@ public class PointNumberDialog extends javax.swing.JDialog {
         }
 
         DownloadManager.instance().add(download);
-    }//GEN-LAST:event_btnDownloadActionPerformed
+    } //GEN-LAST:event_btnDownloadActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbAntragPrefixActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAntragPrefixActionPerformed
+    private void cbAntragPrefixActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbAntragPrefixActionPerformed
         loadAllAntragsNummern();
-    }//GEN-LAST:event_cbAntragPrefixActionPerformed
+    }                                                                                  //GEN-LAST:event_cbAntragPrefixActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnDeSelectAllActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeSelectAllActionPerformed
+    private void btnDeSelectAllActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDeSelectAllActionPerformed
         for (int i = 0; i < punktNummernList.getModel().getSize(); i++) {
             final CheckListItem item = (CheckListItem)punktNummernList.getModel().getElementAt(i);
             item.setSelected(false);
         }
         punktNummernList.repaint();
-    }//GEN-LAST:event_btnDeSelectAllActionPerformed
+    }                                                                                  //GEN-LAST:event_btnDeSelectAllActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnSelectAllActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAllActionPerformed
+    private void btnSelectAllActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnSelectAllActionPerformed
         for (int i = 0; i < punktNummernList.getModel().getSize(); i++) {
             final CheckListItem item = (CheckListItem)punktNummernList.getModel().getElementAt(i);
             item.setSelected(true);
         }
         punktNummernList.repaint();
-    }//GEN-LAST:event_btnSelectAllActionPerformed
+    }                                                                                //GEN-LAST:event_btnSelectAllActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbAntragsNummerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAntragsNummerActionPerformed
+    private void cbAntragsNummerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbAntragsNummerActionPerformed
         // since the combobox in the freigeben tab is  not editable no document events are fired when changing the
         // selected item
         if (!cbAntragsNummer.isEditable() && (tbpModus.getSelectedIndex() == 2)) {
             loadPointNumbers();
         }
-    }//GEN-LAST:event_cbAntragsNummerActionPerformed
+    } //GEN-LAST:event_cbAntragsNummerActionPerformed
 
     /**
      * DOCUMENT ME!
