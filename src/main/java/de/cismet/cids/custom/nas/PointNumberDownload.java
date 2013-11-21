@@ -14,6 +14,8 @@ package de.cismet.cids.custom.nas;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -126,9 +128,9 @@ public class PointNumberDownload extends AbstractDownload {
 
         status = State.RUNNING;
         stateChanged();
-        final byte[] bytes;
+        final String bytes;
         if (downloadProtokoll) {
-            bytes = content.getProtokoll().getBytes();
+            bytes = content.getProtokoll();
         } else {
             if (!isPointNumberBeanValid()) {
                 status = State.COMPLETED_WITH_ERROR;
@@ -137,9 +139,9 @@ public class PointNumberDownload extends AbstractDownload {
             }
             createFileHeader();
             createFileBody();
-            bytes = contentBuilder.toString().getBytes();
+            bytes = contentBuilder.toString();
         }
-        if ((bytes == null) || (bytes.length <= 0)) {
+        if ((bytes == null) || (bytes.isEmpty())) {
             log.info("Downloaded content seems to be empty..");
 
             if (status == State.RUNNING) {
@@ -153,7 +155,8 @@ public class PointNumberDownload extends AbstractDownload {
         FileOutputStream out = null;
         try {
             out = new FileOutputStream(fileToSaveTo);
-            out.write(bytes);
+            final Writer w = new OutputStreamWriter(out, "UTF8");
+            w.write(bytes);
         } catch (final IOException ex) {
             log.warn("Couldn't write downloaded content to file '" + fileToSaveTo + "'.", ex);
             error(ex);
