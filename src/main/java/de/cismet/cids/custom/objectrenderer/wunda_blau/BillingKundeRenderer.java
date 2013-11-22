@@ -39,9 +39,9 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -790,7 +790,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         if (column == 6) {
             final DateRequestTuple bt = (DateRequestTuple)tblBillings.getModel().getValueAt(row, column);
             final String request = bt.getRequest();
-            if ((request != null) && !request.equals("")) {
+            if ((request != null) && !request.equals("") && bt.isToday()) {
                 doDownload(request);
             }
         }
@@ -807,7 +807,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         if (column == 6) {
             final DateRequestTuple bt = (DateRequestTuple)tblBillings.getModel().getValueAt(row, column);
             final String request = bt.getRequest();
-            if ((request != null) && !request.equals("")) {
+            if ((request != null) && !request.equals("") && bt.isToday()) {
                 setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             } else {
                 setCursor(Cursor.getDefaultCursor());
@@ -1316,6 +1316,24 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         public int compareTo(final DateRequestTuple o) {
             return date.compareTo(o.getDate());
         }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public boolean isToday() {
+            if (date == null) {
+                return false;
+            }
+            final Calendar c1 = Calendar.getInstance(); // today
+
+            final Calendar c2 = Calendar.getInstance();
+            c2.setTime(date);
+
+            return (c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR))
+                        && (c1.get(Calendar.DAY_OF_YEAR) == c2.get(Calendar.DAY_OF_YEAR));
+        }
     }
 
     /**
@@ -1535,7 +1553,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
                 final String text = ObjectRendererUtils.propertyPrettyPrint(formattedDate);
 
                 final String request = dateRequestTuple.getRequest();
-                if ((request != null) && request.startsWith("http://")) {
+                if ((request != null) && request.startsWith("http://") && dateRequestTuple.isToday()) {
                     // url is just a placeholder
                     setText("<html><a href=\"http://www.cismet.de\">" + text + "</a></html>");
                 } else {
