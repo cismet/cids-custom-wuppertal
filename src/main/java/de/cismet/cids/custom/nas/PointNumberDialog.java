@@ -20,39 +20,44 @@ import Sirius.server.newuser.User;
 import org.apache.log4j.Logger;
 
 import org.openide.util.Exceptions;
-import org.openide.util.NbBundle;
 
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FontMetrics;
 
 import java.io.IOException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
-import javax.swing.UIManager;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
+import javax.swing.plaf.basic.BasicComboBoxEditor;
+import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.text.BadLocationException;
@@ -60,15 +65,17 @@ import javax.swing.text.DefaultCaret;
 import javax.swing.text.JTextComponent;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
-import de.cismet.cids.custom.objectrenderer.wunda_blau.MauerAggregationRenderer;
 import de.cismet.cids.custom.utils.BusyLoggingTextPane;
 import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservation;
 import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservationRequest;
+import de.cismet.cids.custom.utils.pointnumberreservation.VermessungsStellenSearchResult;
 import de.cismet.cids.custom.wunda_blau.search.actions.PointNumberReserverationServerAction;
 import de.cismet.cids.custom.wunda_blau.search.server.VermessungsStellenNummerSearch;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 import de.cismet.cids.server.search.CidsServerSearch;
+
+import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
@@ -89,9 +96,18 @@ public class PointNumberDialog extends javax.swing.JDialog {
     private static final Logger LOG = Logger.getLogger(PointNumberDialog.class);
     private static final String SEVER_ACTION = "pointNumberReservation";
     private static final int COLUMNS = 2;
+    private static final Comparator<VermessungsStellenSearchResult> vnrComperator =
+        new Comparator<VermessungsStellenSearchResult>() {
+
+            @Override
+            public int compare(final VermessungsStellenSearchResult o1, final VermessungsStellenSearchResult o2) {
+                return o1.getZulassungsNummer().compareTo(o2.getZulassungsNummer());
+            }
+        };
 
     //~ Instance fields --------------------------------------------------------
 
+    Timer t = new Timer();
     private PointNumberReservationRequest result;
     private boolean hasFreigabeAccess = false;
     private AllAntragsnummernLoadWorker allAnrLoadWorker = new AllAntragsnummernLoadWorker();
@@ -101,6 +117,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
     private List<String> priorityPrefixes = new ArrayList<String>();
     private List<CheckListItem> punktnummern = new ArrayList<CheckListItem>();
     private PunktNummerTableModel model = new PunktNummerTableModel();
+    private boolean skipLoadAntragsnummern = true;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnDeSelectAll;
@@ -209,6 +226,31 @@ public class PointNumberDialog extends javax.swing.JDialog {
 
         final DefaultCaret caret = (DefaultCaret)protokollPane.getCaret();
         caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
+        cbAntragPrefix.setRenderer(new AnrPrefixItemRenderer());
+        final JTextComponent tc = (JTextComponent)cbAntragPrefix.getEditor().getEditorComponent();
+        tc.getDocument().addDocumentListener(new DocumentListener() {
+
+                @Override
+                public void insertUpdate(final DocumentEvent e) {
+//                    if (!skipLoadAntragsnummern) {
+                    startLoadAllAnrWorker();
+//                    }
+                }
+
+                @Override
+                public void removeUpdate(final DocumentEvent e) {
+//                    if (!skipLoadAntragsnummern) {
+                    startLoadAllAnrWorker();
+//                    }
+                }
+
+                @Override
+                public void changedUpdate(final DocumentEvent e) {
+//                    if (!skipLoadAntragsnummern) {
+                    startLoadAllAnrWorker();
+//                    }
+                }
+            });
         try {
             configureFreigebenTab();
             configurePrefixBox();
@@ -233,6 +275,20 @@ public class PointNumberDialog extends javax.swing.JDialog {
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     */
+    private void startLoadAllAnrWorker() {
+        t.cancel();
+        t = new Timer();
+        t.schedule(new TimerTask() {
+
+                @Override
+                public void run() {
+                    loadAllAntragsNummern();
+                }
+            }, 800);
+    }
     /**
      * DOCUMENT ME!
      *
@@ -268,15 +324,33 @@ public class PointNumberDialog extends javax.swing.JDialog {
                                     @Override
                                     protected void done() {
                                         try {
-                                            final ArrayList<String> tmp;
-                                            tmp = new ArrayList<String>();
-                                            tmp.addAll(priorityPrefixes);
-                                            final Collection resultAllVnr = get();
-                                            final HashSet<String> loadedPrefixes = new HashSet<String>();
-                                            loadedPrefixes.addAll(resultAllVnr);
-                                            loadedPrefixes.removeAll(priorityPrefixes);
-                                            tmp.addAll(loadedPrefixes);
-                                            cbAntragPrefix.setModel(new DefaultComboBoxModel(tmp.toArray()));
+                                            final ArrayList<VermessungsStellenSearchResult> tmp =
+                                                new ArrayList<VermessungsStellenSearchResult>();
+                                            final List<VermessungsStellenSearchResult> resultAllVnr =
+                                                (List<VermessungsStellenSearchResult>)get();
+                                            Collections.sort(resultAllVnr, vnrComperator);
+                                            for (final String s : priorityPrefixes) {
+                                                final int index = Collections.binarySearch(
+                                                        resultAllVnr,
+                                                        new VermessungsStellenSearchResult(s, s),
+                                                        vnrComperator);
+                                                if (index < 0) {
+                                                    if (s.equals("3290")) {
+                                                        tmp.add(new VermessungsStellenSearchResult(
+                                                                s,
+                                                                "Stadt Wuppertal"));
+                                                    } else {
+                                                        tmp.add(new VermessungsStellenSearchResult(s, ""));
+                                                    }
+                                                } else {
+                                                    tmp.add(resultAllVnr.get(index));
+                                                    resultAllVnr.remove(index);
+                                                }
+                                            }
+                                            tmp.addAll(resultAllVnr);
+
+                                            cbAntragPrefix.setModel(
+                                                new DefaultComboBoxModel(tmp.toArray()));
                                             loadAllAntragsNummern();
                                         } catch (InterruptedException ex) {
                                             Exceptions.printStackTrace(ex);
@@ -287,12 +361,13 @@ public class PointNumberDialog extends javax.swing.JDialog {
                                 };
                             allVnrLoadWorker.execute();
                         } else {
-                            final ArrayList<String> tmp;
-                            tmp = (ArrayList<String>)res;
-                            final String vermessungstellenNr = tmp.get(0);
-                            if (vermessungstellenNr != null) {
+                            final ArrayList<VermessungsStellenSearchResult> tmp;
+                            tmp = (ArrayList<VermessungsStellenSearchResult>)res;
+                            final VermessungsStellenSearchResult firstRes = tmp.get(0);
+                            if ((firstRes != null) && (firstRes.getZulassungsNummer() != null)) {
                                 cbAntragPrefix.setModel(new DefaultComboBoxModel(tmp.toArray()));
                                 RendererTools.makeReadOnly(cbAntragPrefix);
+                                cbAntragPrefix.setEditable(false);
                             }
                             loadAllAntragsNummern();
                         }
@@ -355,7 +430,19 @@ public class PointNumberDialog extends javax.swing.JDialog {
      * @return  DOCUMENT ME!
      */
     public String getAnrPrefix() {
-        return (String)cbAntragPrefix.getSelectedItem();
+        final String anrPrefix;
+        if (cbAntragPrefix.isEditable()) {
+            final String tmp;
+            tmp = ((JTextComponent)cbAntragPrefix.getEditor().getEditorComponent()).getText();
+            if ((tmp == null) || tmp.isEmpty()) {
+                anrPrefix = cbAntragPrefix.getSelectedItem().toString();
+            } else {
+                anrPrefix = tmp;
+            }
+        } else {
+            anrPrefix = cbAntragPrefix.getSelectedItem().toString();
+        }
+        return anrPrefix;
     }
 
     /**
@@ -414,7 +501,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
         tblPunktnummern = new javax.swing.JTable();
         pnlFreigebenError = new javax.swing.JPanel();
         lblFreigebenError = new javax.swing.JLabel();
-        cbAntragPrefix = new javax.swing.JComboBox();
+        cbAntragPrefix = new WideComboBox();
         lblAnrSeperator = new javax.swing.JLabel();
         pnlAntragsnummer = new javax.swing.JPanel();
         cbAntragsNummer = new javax.swing.JComboBox();
@@ -634,6 +721,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         pnlLeft.add(tbpModus, gridBagConstraints);
 
+        cbAntragPrefix.setEditable(true);
         cbAntragPrefix.setMinimumSize(new java.awt.Dimension(60, 27));
         cbAntragPrefix.setPreferredSize(new java.awt.Dimension(60, 27));
         cbAntragPrefix.addActionListener(new java.awt.event.ActionListener() {
@@ -876,8 +964,10 @@ public class PointNumberDialog extends javax.swing.JDialog {
      * @param  evt  DOCUMENT ME!
      */
     private void cbAntragPrefixActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbAntragPrefixActionPerformed
-        loadAllAntragsNummern();
-    }                                                                                  //GEN-LAST:event_cbAntragPrefixActionPerformed
+//        skipLoadAntragsnummern = true;
+//        loadAllAntragsNummern();
+//        skipLoadAntragsnummern = false;
+    } //GEN-LAST:event_cbAntragPrefixActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1042,6 +1132,52 @@ public class PointNumberDialog extends javax.swing.JDialog {
     }
 
     //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private final class AnrPrefixItemRenderer extends JLabel implements ListCellRenderer {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new AnrPrefixItemRenderer object.
+         */
+        public AnrPrefixItemRenderer() {
+            setOpaque(true);
+            setHorizontalAlignment(LEFT);
+            setVerticalAlignment(CENTER);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Component getListCellRendererComponent(final JList list,
+                final Object value,
+                final int index,
+                final boolean isSelected,
+                final boolean cellHasFocus) {
+            if ((value != null) && (list != null)) {
+                final VermessungsStellenSearchResult item = (VermessungsStellenSearchResult)value;
+                if (isSelected) {
+                    setBackground(list.getSelectionBackground());
+                    setForeground(list.getSelectionForeground());
+                } else {
+                    setBackground(list.getBackground());
+                    setForeground(list.getForeground());
+                }
+
+                if (index != -1) {
+                    setText(item.getZulassungsNummer() + " " + item.getName());
+                } else {
+                    setText(item.getZulassungsNummer());
+                }
+            }
+            return this;
+        }
+    }
 
     /**
      * DOCUMENT ME!
@@ -1365,6 +1501,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
                 final List<String> result = (List<String>)get();
                 final DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>)cbAntragsNummer.getModel();
                 if ((result == null) || result.isEmpty()) {
+                    model.removeAllElements();
                     model.addElement("keine Aufträge gefunden");
                     return;
                 }
@@ -1387,6 +1524,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
                     cbAntragsNummer.setEditable(true);
                 }
                 cbAntragsNummer.repaint();
+//                skipLoadAntragsnummern = false;
                 PointNumberDialog.this.repaint();
             } catch (InterruptedException ex) {
                 LOG.error("Worker Thread that loads all existing Antragsnummern was interrupted", ex);
@@ -1540,6 +1678,87 @@ public class PointNumberDialog extends javax.swing.JDialog {
         @Override
         public int compare(final CheckListItem o1, final CheckListItem o2) {
             return o1.pnr.compareTo(o2.pnr);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private final class WideComboBox extends JComboBox {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private boolean layingOut = false;
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void doLayout() {
+            try {
+                layingOut = true;
+                super.doLayout();
+            } finally {
+                layingOut = false;
+            }
+        }
+
+        @Override
+        public Dimension getSize() {
+            final Dimension dim = super.getSize();
+            if (!layingOut) {
+                dim.width = Math.max(dim.width, popupWider());
+            }
+            return dim;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        protected int popupWider() {
+            final BasicComboPopup popup = (BasicComboPopup)this.getAccessibleContext().getAccessibleChild(0);
+            final JList list = popup.getList();
+            final Container c = SwingUtilities.getAncestorOfClass(JScrollPane.class, list);
+
+            final JScrollPane scrollPane = (JScrollPane)c;
+
+            // Determine the maximimum width to use:
+            // a) determine the popup preferred width
+            // b) limit width to the maximum if specified
+            // c) ensure width is not less than the scroll pane width
+            int popupWidth = list.getPreferredSize().width
+                        + 5 // make sure horizontal scrollbar doesn't appear
+                        + getScrollBarWidth(scrollPane);
+
+//            if (maximumWidth != -1) {
+//                popupWidth = Math.min(popupWidth, maximumWidth);
+//            }
+            final Dimension scrollPaneSize = scrollPane.getPreferredSize();
+            popupWidth = Math.max(popupWidth, scrollPaneSize.width);
+
+            // Adjust the width
+            return popupWidth;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   scrollPane  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        protected int getScrollBarWidth(final JScrollPane scrollPane) {
+            int scrollBarWidth = 0;
+
+            if (this.getItemCount() > this.getMaximumRowCount()) {
+                final JScrollBar vertical = scrollPane.getVerticalScrollBar();
+                scrollBarWidth = vertical.getPreferredSize().width;
+            }
+
+            return scrollBarWidth;
         }
     }
 }
