@@ -1,17 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Produktbeschreibung Stadt Wuppertal
+     Stand: 02.04.2013
+     Version: 1.1.1
+     Verfasser: Jens Oberbossel
+     - NivP-Übersicht auch im Massstab 1:2500
+     - Alte Rahmenkartenübersicht
+    - Schreibfehler korrigiert (Punktummerierungsübersicht)
+   -->
+
 <Produktbeschreibung xsi:schemaLocation="http://products.aaaweb.aedsicad.de Produktbeschreibung.xsd " xmlns="http://products.aaaweb.aedsicad.de" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" content="alkis">
   <Layernamen>
-    <Layername ID="10,14,18,22,26,30,34,38,154,158,162,166,170,174,178,182,294,298" Name="Karte (farbig)"/>
-    <Layername ID="6,14,18,22,26,30,34,38,150,158,162,166,170,174,178,182,294,298" Name="Karte (sw)"/>
-    <Layername ID="6,10,18,22,26,30,34,38,150,154,162,166,170,174,178,182,294,298" Name="LK mit Bodenschätzung (farbig)"/>
-    <Layername ID="6,10,14,22,26,30,34,38,150,154,158,166,170,174,178,182,294,298" Name="LK mit Bodenschätzung (sw)"/>
-    <Layername ID="6,10,14,18,22,26,30,34,150,154,158,162,166,170,174,178,294,298" Name="graphischer Fortführungsnachweis"/>
-    <Layername ID="6,10,14,18,22,26,30,34,38,150,154,158,162,166,170,174,178,182,298" Name="Amtliche Basiskarte (farbig)"/>
-    <Layername ID="6,10,14,18,22,26,30,34,38,150,154,158,162,166,170,174,178,182,294" Name="Amtliche Basiskarte (sw)"/>
-    <Layername ID="6,10,14,18,26,30,34,38,150,154,158,162,170,174,178,182,294,298" Name="Stadtgrundkarte (farbig)"/>
-    <Layername ID="6,10,14,18,22,30,34,38,150,154,158,162,166,174,178,182,294,298" Name="Stadtgrundkarte (sw)"/>
-    <Layername ID="6,10,14,18,22,26,34,38,150,154,158,162,166,170,178,182,294,298" Name="Stadtgrundkarte mit kom. Erg. (farbig)"/>
-    <Layername ID="6,10,14,18,22,26,30,38,150,154,158,162,166,170,174,182,294,298" Name="Stadtgrundkarte mit kom. Erg. (sw)"/>
+    <Layername ID="0,106,110,114,118,122,126,130,134,250,254,258,262,266,270,274,278,390,394,490" Name="Karte (farbig)"/>
+    <Layername ID="0,102,110,114,118,122,126,130,134,246,254,258,262,266,270,274,278,390,394,490" Name="Karte (sw)"/>
+    <Layername ID="0,102,106,114,118,122,126,130,134,246,250,258,262,266,270,274,278,390,394,490" Name="LK mit Bodenschätzung (farbig)"/>
+    <Layername ID="0,102,106,110,118,122,126,130,134,246,250,254,262,266,270,274,278,390,394,490" Name="LK mit Bodenschätzung (sw)"/>
+    <Layername ID="0,102,106,110,114,118,122,126,130,246,250,254,258,262,266,270,274,390,394,490" Name="graphischer Fortführungsnachweis"/>
+    <Layername ID="0,102,106,110,114,118,122,126,130,134,246,250,254,258,262,266,270,274,278,394,490" Name="Amtliche Basiskarte (farbig)"/>
+    <Layername ID="0,102,106,110,114,118,122,126,130,134,246,250,254,258,262,266,270,274,278,390,490" Name="Amtliche Basiskarte (sw)"/>
+    <Layername ID="0,102,106,110,114,122,126,130,134,246,250,254,258,266,270,274,278,390,394,490" Name="Stadtgrundkarte (farbig)"/>
+    <Layername ID="0,102,106,110,114,118,126,130,134,246,250,254,258,262,270,274,278,390,394,490" Name="Stadtgrundkarte (sw)"/>
+    <Layername ID="0,102,106,110,114,118,122,130,134,246,250,254,258,262,266,274,278,390,394,490" Name="Stadtgrundkarte mit kom. Erg. (farbig)"/>
+    <Layername ID="0,102,106,110,114,118,122,126,134,246,250,254,258,262,266,270,278,390,394,490" Name="Stadtgrundkarte mit kom. Erg. (sw)"/>
+
+	<Layername ID="0,100,244,388,491,492,511,512" Name="Orthofoto"/>
+	<Layername ID="0,100,244,388,491,492,512,513" Name="DGK"/>
+	<Layername ID="1,6,14,20,28,36,37,38,100,244,388,492,511,512,513" Name="NivP-Übersicht"/>
+	<Layername ID="1,5,14,20,36,37,38,100,244,388,492,511,512,513" Name="AP-Übersicht"/>
+	<Layername ID="1,5,20,36,38,100,244,388,491,511,512,513" Name="Punktnumerierungsübersicht"/>
+	<Layername ID="5,6,14,20,28,36,37,38,100,244,388,491,492,512,513" Name="DGK mit Höhenlinien"/>
+	<Layername ID="5,6,14,20,28,36,37,38,102,106,110,114,118,122,126,134,246,250,254,258,262,266,270,278,390,394,490" Name="Stadtgrundkarte mit Höhenlinien"/>
+	<Layername ID="0,100,244,388,491,511,512" Name="Orthofoto mit Katasterdarstellung"/>
+
   </Layernamen>
   <Karte>
     <Kartenklasse ID="LK.GDBNRW.A" Name="Gdb-NRW-Amtlich">
@@ -107,6 +127,7 @@
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
       </GUIKartenProdukt>
+	  <!-- ########################################-->
        <GUIKartenProdukt Antragsart="NW03" ID="LK.GDBNRW.A.SW" Name="Liegenschaftskarte, grau" Logo="logo-aaa-wappen-wup-sw" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Karte (sw)" ProduktnameAuswertung="Liegenschaftskarte, grau" ProduktnameGUI="LiKa, grau" Zusatzlegende="false">
         <KartenProdukt ID="LK.GDBNRW.A.SW.1" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Flurkarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="500"/>
@@ -199,6 +220,7 @@
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
       </GUIKartenProdukt>
+	  <!-- ########################################-->
       <GUIKartenProdukt Antragsart="NW04" ID="LK.GDBNRW.A.BF" Name="Schätzungskarte, farbig" Logo="logo-aaa-wappen-wup-f" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="LK mit Bodenschätzung (farbig)" ProduktnameAuswertung="Schätzungskarte, farbig" ProduktnameGUI="Schätzungskarte, farbig" Zusatzlegende="false">
         <KartenProdukt ID="LK.GDBNRW.A.BF.1" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="500"/>
@@ -291,6 +313,7 @@
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
       </GUIKartenProdukt>
+	  <!-- ########################################-->
        <GUIKartenProdukt Antragsart="NW04" ID="LK.GDBNRW.A.BSW" Name="Schätzungskarte, grau" Logo="logo-aaa-wappen-wup-sw" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="LK mit Bodenschätzung (sw)" ProduktnameAuswertung="Schätzungskarte, grau" ProduktnameGUI="Schätzungskarte, grau" Zusatzlegende="false">
         <KartenProdukt ID="LK.GDBNRW.A.BSW.1" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="500"/>
@@ -310,13 +333,13 @@
         <KartenProdukt ID="LK.GDBNRW.A.BSW.6" Kartenname="Karte" Layout="LKA2Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BSW.7" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
+        <KartenProdukt ID="LK.GDBNRW.A.BSW.7" Kartenname="Karte" Layout="LKA1H" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
         <KartenProdukt ID="LK.GDBNRW.A.BSW.8" Kartenname="Karte" Layout="LKA1Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
-        <KartenProdukt ID="LK.GDBNRW.A.BSW.9" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
+        <KartenProdukt ID="LK.GDBNRW.A.BSW.9" Kartenname="Karte" Layout="LKA0H" Praesentationshinweis1="Schätzungskarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
         <KartenProdukt ID="LK.GDBNRW.A.BSW.10" Kartenname="Karte" Layout="LKA0Q" Praesentationshinweis1="Schätzungskarte NRW 1:500">
@@ -383,6 +406,7 @@
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
       </GUIKartenProdukt>
+	  <!-- ########################################-->
       <GUIKartenProdukt Antragsart="NW05" ID="LK.GDBNRW.A.ABKF" Name="Amtliche Basiskarte, farbig" Logo="logo-aaa-wappen-wup-f" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Amtliche Basiskarte (farbig)" ProduktnameAuswertung="Amtliche Basiskarte (farbig)" ProduktnameGUI="ABK, farbig" Zusatzlegende="false">
         <KartenProdukt ID="LK.GDBNRW.A.ABKF.1" Kartenname="Karte" Layout="ABKA4H" Praesentationshinweis1="Amtliche Basiskarte NRW 1:2500">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="2500"/>
@@ -475,6 +499,7 @@
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="10000"/>
         </KartenProdukt>
      </GUIKartenProdukt>
+	 <!-- ########################################-->
        <GUIKartenProdukt Antragsart="NW05" ID="LK.GDBNRW.A.ABKSW" Name="Amtliche Basiskarte, sw" Logo="logo-aaa-wappen-wup-sw" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Amtliche Basiskarte (sw)" ProduktnameAuswertung="Amtliche Basiskarte, grau" ProduktnameGUI="ABK, grau" Zusatzlegende="false">
         <KartenProdukt ID="LK.GDBNRW.A.ABKSW.1" Kartenname="Karte" Layout="ABKA4H" Praesentationshinweis1="Amtliche Basiskarte NRW 1:2500">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="2500"/>
@@ -567,119 +592,789 @@
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="10000"/>
         </KartenProdukt>
      </GUIKartenProdukt>
-    </Kartenklasse>
-	
-	
-    <Kartenklasse ID="LK.GDBNRW.I" Name="Gdb-NRW-Intern">
-    <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="Rahmenkarte, farbig" Logo="logo-aaa-wappen-wup-f" 
-                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" 
+	 <!-- ########################################-->
+     </Kartenklasse>
+     <Kartenklasse ID="LK.GDBNRW.I" Name="Gdb-NRW-Intern">
+     <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="Rahmenkarte, farbig" Logo="logo-aaa-wappen-wup-f"
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)"
                         ProduktnameAuswertung="Rahmenkarte, farbig" ProduktnameGUI="Rahmenkarte, farbig" Zusatzlegende="false">
         <KartenProdukt ID="LK.NRW.K.F.50" Kartenname="Karte" Layout="RAKA" Praesentationshinweis1="Stadtgrundkarte 1:500">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
 	  </GUIKartenProdukt>
-	  <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.SW" Name="Rahmenkarte, grau" Logo="logo-aaa-wappen-wup-sw" 
-                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (sw)" 
+	  <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.SW" Name="Rahmenkarte, grau" Logo="logo-aaa-wappen-wup-sw"
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (sw)"
                         ProduktnameAuswertung="Rahmenkarte, schwarzweiß" ProduktnameGUI="Rahmenkarte, sw" Zusatzlegende="false">
         <KartenProdukt ID="LK.NRW.K.SW.50" Kartenname="Karte" Layout="RAKA" Praesentationshinweis1="Stadtgrundkarte 1:500">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
 	  </GUIKartenProdukt>
-      <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF" 
-                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" 
+      <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF"
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)"
                         ProduktnameAuswertung="100m x 100m" ProduktnameGUI="100m x 100m" Zusatzlegende="false">
         <KartenProdukt ID="LK.NRW.K.F.60" Kartenname="Karte" Layout="EXPORT100" Praesentationshinweis1="Stadtgrundkarte 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
 	 </GUIKartenProdukt>
-	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF" 
-                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" 
+	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF"
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)"
                         ProduktnameAuswertung="200m x 200m" ProduktnameGUI="200m x 200m" Zusatzlegende="false">
         <KartenProdukt ID="LK.NRW.K.F.61" Kartenname="Karte" Layout="EXPORT200" Praesentationshinweis1="Stadtgrundkarte 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
 	 </GUIKartenProdukt>
-	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF" 
-                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" 
+	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF"
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)"
                         ProduktnameAuswertung="300m x 300m" ProduktnameGUI="300m x 300m" Zusatzlegende="false">
         <KartenProdukt ID="LK.NRW.K.F.62" Kartenname="Karte" Layout="EXPORT300" Praesentationshinweis1="Stadtgrundkarte 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
 	 </GUIKartenProdukt>
-	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF" 
-                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" 
+	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF"
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)"
                         ProduktnameAuswertung="400m x 400m" ProduktnameGUI="400m x 400m" Zusatzlegende="false">
         <KartenProdukt ID="LK.NRW.K.F.63" Kartenname="Karte" Layout="EXPORT400" Praesentationshinweis1="Stadtgrundkarte 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
 	 </GUIKartenProdukt>
-	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF" 
-                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" 
+	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF"
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)"
                         ProduktnameAuswertung="500m x 500m" ProduktnameGUI="500m x 500m" Zusatzlegende="false">
         <KartenProdukt ID="LK.NRW.K.F.64" Kartenname="Karte" Layout="EXPORT500" Praesentationshinweis1="Stadtgrundkarte 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
 	 </GUIKartenProdukt>
-	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF" 
-                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" 
+	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF"
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)"
                         ProduktnameAuswertung="600m x 600m" ProduktnameGUI="600m x 600m" Zusatzlegende="false">
         <KartenProdukt ID="LK.NRW.K.F.65" Kartenname="Karte" Layout="EXPORT600" Praesentationshinweis1="Stadtgrundkarte 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
 	 </GUIKartenProdukt>
-	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF" 
-                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" 
+	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF"
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)"
                         ProduktnameAuswertung="600m x 600m" ProduktnameGUI="600m x 600m" Zusatzlegende="false">
         <KartenProdukt ID="LK.NRW.K.F.66" Kartenname="Karte" Layout="EXPORT600" Praesentationshinweis1="Stadtgrundkarte 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
 	 </GUIKartenProdukt>
-	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF" 
-                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" 
+	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF"
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)"
                         ProduktnameAuswertung="700m x 700m" ProduktnameGUI="700m x 700m" Zusatzlegende="false">
         <KartenProdukt ID="LK.NRW.K.F.67" Kartenname="Karte" Layout="EXPORT700" Praesentationshinweis1="Stadtgrundkarte 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
 	 </GUIKartenProdukt>
-	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF" 
-                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" 
+	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF"
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)"
                         ProduktnameAuswertung="800m x 800m" ProduktnameGUI="800m x 800m" Zusatzlegende="false">
         <KartenProdukt ID="LK.NRW.K.F.68" Kartenname="Karte" Layout="EXPORT800" Praesentationshinweis1="Stadtgrundkarte 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
 	 </GUIKartenProdukt>
-	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF" 
-                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" 
+	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF"
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)"
                         ProduktnameAuswertung="900m x 900m" ProduktnameGUI="900m x 900m" Zusatzlegende="false">
         <KartenProdukt ID="LK.NRW.K.F.69" Kartenname="Karte" Layout="EXPORT900" Praesentationshinweis1="Stadtgrundkarte 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
 	 </GUIKartenProdukt>
-	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF" 
-                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" 
+	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF"
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)"
                         ProduktnameAuswertung="1000m x 1000m" ProduktnameGUI="1000m x 1000m" Zusatzlegende="false">
         <KartenProdukt ID="LK.NRW.K.F.70" Kartenname="Karte" Layout="EXPORT1000" Praesentationshinweis1="Stadtgrundkarte 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
 	 </GUIKartenProdukt>
-	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF" 
-                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" 
+	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF"
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)"
                         ProduktnameAuswertung="1500m x 1500m" ProduktnameGUI="1500m x 1500m" Zusatzlegende="false">
         <KartenProdukt ID="LK.NRW.K.F.71" Kartenname="Karte" Layout="EXPORT1500" Praesentationshinweis1="Stadtgrundkarte 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
 	 </GUIKartenProdukt>
-	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF" 
-                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" 
+	 <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="PDF"
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)"
                         ProduktnameAuswertung="2000m x 2000m" ProduktnameGUI="2000m x 2000m" Zusatzlegende="false">
         <KartenProdukt ID="LK.NRW.K.F.72" Kartenname="Karte" Layout="EXPORT2000" Praesentationshinweis1="Stadtgrundkarte 1:1000">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
         </KartenProdukt>
 	 </GUIKartenProdukt>
 	 </Kartenklasse>
-	
-	
-    <Kartenklasse ID="LK.NRW.K" Name="NRW-Kommunal">
+	 <!-- ########################################-->
+     <Kartenklasse ID="LK.GEO.F" Name="WUP-Kommunal">
+     <GUIKartenProdukt Antragsart="KS03" ID="LK.GEO.F.D" Name="PDF"
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="DGK"
+                        ProduktnameAuswertung="DGK" ProduktnameGUI="DGK" Zusatzlegende="false">
+        <KartenProdukt ID="WUP.KOM.DGK.1" Kartenname="Karte" Layout="GEOA4H" Praesentationshinweis1="Digitale Grundkarte" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGK.2" Kartenname="Karte" Layout="GEOA4Q" Praesentationshinweis1="Digitale Grundkarte" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGK.3" Kartenname="Karte" Layout="GEOA3H" Praesentationshinweis1="Digitale Grundkarte" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGK.4" Kartenname="Karte" Layout="GEOA3Q" Praesentationshinweis1="Digitale Grundkarte" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGK.5" Kartenname="Karte" Layout="GEOA2H" Praesentationshinweis1="Digitale Grundkarte" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGK.6" Kartenname="Karte" Layout="GEOA2Q" Praesentationshinweis1="Digitale Grundkarte" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGK.7" Kartenname="Karte" Layout="GEOA1H" Praesentationshinweis1="Digitale Grundkarte" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGK.8" Kartenname="Karte" Layout="GEOA1Q" Praesentationshinweis1="Digitale Grundkarte" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGK.9" Kartenname="Karte" Layout="GEOA0H" Praesentationshinweis1="Digitale Grundkarte" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGK.10" Kartenname="Karte" Layout="GEOA0Q" Praesentationshinweis1="Digitale Grundkarte" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGK.11" Kartenname="Karte" Layout="GEOA4H" Praesentationshinweis1="Digitale Grundkarte" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGK.12" Kartenname="Karte" Layout="GEOA4Q" Praesentationshinweis1="Digitale Grundkarte" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGK.13" Kartenname="Karte" Layout="GEOA3H" Praesentationshinweis1="Digitale Grundkarte" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGK.14" Kartenname="Karte" Layout="GEOA3Q" Praesentationshinweis1="Digitale Grundkarte" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGK.15" Kartenname="Karte" Layout="GEOA2H" Praesentationshinweis1="Digitale Grundkarte" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGK.16" Kartenname="Karte" Layout="GEOA2Q" Praesentationshinweis1="Digitale Grundkarte" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGK.17" Kartenname="Karte" Layout="GEOA1H" Praesentationshinweis1="Digitale Grundkarte" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGK.18" Kartenname="Karte" Layout="GEOA1Q" Praesentationshinweis1="Digitale Grundkarte" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGK.19" Kartenname="Karte" Layout="GEOA0H" Praesentationshinweis1="Digitale Grundkarte" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGK.20" Kartenname="Karte" Layout="GEOA0Q" Praesentationshinweis1="Digitale Grundkarte" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+     </GUIKartenProdukt>
+	 <!-- ########################################-->
+	 <GUIKartenProdukt Antragsart="KS03" ID="LK.GEO.F.D" Name="PDF"
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Orthofoto"
+                        ProduktnameAuswertung="Orthofoto" ProduktnameGUI="Orthofoto" Zusatzlegende="false">
+        <KartenProdukt ID="WUP.KOM.ORTHO.1" Kartenname="Karte" Layout="GEOA4H" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.2" Kartenname="Karte" Layout="GEOA4Q" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.3" Kartenname="Karte" Layout="GEOA3H" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.4" Kartenname="Karte" Layout="GEOA3Q" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.5" Kartenname="Karte" Layout="GEOA2H" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.6" Kartenname="Karte" Layout="GEOA2Q" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.7" Kartenname="Karte" Layout="GEOA1H" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.8" Kartenname="Karte" Layout="GEOA1Q" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.9" Kartenname="Karte" Layout="GEOA0H" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.10" Kartenname="Karte" Layout="GEOA0Q" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.11" Kartenname="Karte" Layout="GEOA4H" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.12" Kartenname="Karte" Layout="GEOA4Q" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.13" Kartenname="Karte" Layout="GEOA3H" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.14" Kartenname="Karte" Layout="GEOA3Q" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.15" Kartenname="Karte" Layout="GEOA2H" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.16" Kartenname="Karte" Layout="GEOA2Q" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.17" Kartenname="Karte" Layout="GEOA1H" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.18" Kartenname="Karte" Layout="GEOA1Q" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.19" Kartenname="Karte" Layout="GEOA0H" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.20" Kartenname="Karte" Layout="GEOA0Q" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.21" Kartenname="Karte" Layout="GEOA4H" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.22" Kartenname="Karte" Layout="GEOA4Q" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.23" Kartenname="Karte" Layout="GEOA3H" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.24" Kartenname="Karte" Layout="GEOA3Q" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.25" Kartenname="Karte" Layout="GEOA2H" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.26" Kartenname="Karte" Layout="GEOA2Q" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.27" Kartenname="Karte" Layout="GEOA1H" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.28" Kartenname="Karte" Layout="GEOA1Q" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.29" Kartenname="Karte" Layout="GEOA0H" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.30" Kartenname="Karte" Layout="GEOA0Q" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.31" Kartenname="Karte" Layout="GEOA4H" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.32" Kartenname="Karte" Layout="GEOA4Q" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.33" Kartenname="Karte" Layout="GEOA3H" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.34" Kartenname="Karte" Layout="GEOA3Q" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.35" Kartenname="Karte" Layout="GEOA2H" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.36" Kartenname="Karte" Layout="GEOA2Q" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.37" Kartenname="Karte" Layout="GEOA1H" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.38" Kartenname="Karte" Layout="GEOA1Q" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.39" Kartenname="Karte" Layout="GEOA0H" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHO.40" Kartenname="Karte" Layout="GEOA0Q" Praesentationshinweis1="Orthofoto" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		</GUIKartenProdukt>
+	 <!-- ########################################-->
+	 <GUIKartenProdukt Antragsart="KS03" ID="LK.GEO.F.D" Name="PDF"
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="NivP-Übersicht"
+                        ProduktnameAuswertung="NivP-Übersicht" ProduktnameGUI="NivP-Übersicht" Zusatzlegende="false">
+        <KartenProdukt ID="WUP.KOM.NIVP.1" Kartenname="Karte" Layout="GEOA4H" Praesentationshinweis1="NivP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.NIVP.2" Kartenname="Karte" Layout="GEOA4Q" Praesentationshinweis1="NivP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.NIVP.3" Kartenname="Karte" Layout="GEOA3H" Praesentationshinweis1="NivP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.NIVP.4" Kartenname="Karte" Layout="GEOA3Q" Praesentationshinweis1="NivP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.NIVP.5" Kartenname="Karte" Layout="GEOA2H" Praesentationshinweis1="NivP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.NIVP.6" Kartenname="Karte" Layout="GEOA2Q" Praesentationshinweis1="NivP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.NIVP.7" Kartenname="Karte" Layout="GEOA1H" Praesentationshinweis1="NivP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.NIVP.8" Kartenname="Karte" Layout="GEOA1Q" Praesentationshinweis1="NivP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.NIVP.9" Kartenname="Karte" Layout="GEOA0H" Praesentationshinweis1="NivP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.NIVP.10" Kartenname="Karte" Layout="GEOA0Q" Praesentationshinweis1="NivP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.NIVP.11" Kartenname="Karte" Layout="GEOA4H" Praesentationshinweis1="NivP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.NIVP.12" Kartenname="Karte" Layout="GEOA4Q" Praesentationshinweis1="NivP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.NIVP.13" Kartenname="Karte" Layout="GEOA3H" Praesentationshinweis1="NivP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.NIVP.14" Kartenname="Karte" Layout="GEOA3Q" Praesentationshinweis1="NivP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.NIVP.15" Kartenname="Karte" Layout="GEOA2H" Praesentationshinweis1="NivP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.NIVP.16" Kartenname="Karte" Layout="GEOA2Q" Praesentationshinweis1="NivP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.NIVP.17" Kartenname="Karte" Layout="GEOA1H" Praesentationshinweis1="NivP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.NIVP.18" Kartenname="Karte" Layout="GEOA1Q" Praesentationshinweis1="NivP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.NIVP.19" Kartenname="Karte" Layout="GEOA0H" Praesentationshinweis1="NivP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.NIVP.20" Kartenname="Karte" Layout="GEOA0Q" Praesentationshinweis1="NivP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		</GUIKartenProdukt>
+	 <!-- ########################################-->
+	 <GUIKartenProdukt Antragsart="KS03" ID="LK.GEO.F.D" Name="PDF"
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="AP-Übersicht"
+                        ProduktnameAuswertung="AP-Übersicht" ProduktnameGUI="AP-Übersicht" Zusatzlegende="false">
+		<KartenProdukt ID="WUP.KOM.AP.1" Kartenname="Karte" Layout="GEOA4H" Praesentationshinweis1="AP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.AP.2" Kartenname="Karte" Layout="GEOA4Q" Praesentationshinweis1="AP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.AP.3" Kartenname="Karte" Layout="GEOA3H" Praesentationshinweis1="AP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.AP.4" Kartenname="Karte" Layout="GEOA3Q" Praesentationshinweis1="AP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.AP.5" Kartenname="Karte" Layout="GEOA2H" Praesentationshinweis1="AP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.AP.6" Kartenname="Karte" Layout="GEOA2Q" Praesentationshinweis1="AP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.AP.7" Kartenname="Karte" Layout="GEOA1H" Praesentationshinweis1="AP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.AP.8" Kartenname="Karte" Layout="GEOA1Q" Praesentationshinweis1="AP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.AP.9" Kartenname="Karte" Layout="GEOA0H" Praesentationshinweis1="AP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.AP.10" Kartenname="Karte" Layout="GEOA0Q" Praesentationshinweis1="AP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+	    <KartenProdukt ID="WUP.KOM.AP.11" Kartenname="Karte" Layout="GEOA4H" Praesentationshinweis1="AP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.AP.12" Kartenname="Karte" Layout="GEOA4Q" Praesentationshinweis1="AP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.AP.13" Kartenname="Karte" Layout="GEOA3H" Praesentationshinweis1="AP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.AP.14" Kartenname="Karte" Layout="GEOA3Q" Praesentationshinweis1="AP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.AP.15" Kartenname="Karte" Layout="GEOA2H" Praesentationshinweis1="AP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.AP.16" Kartenname="Karte" Layout="GEOA2Q" Praesentationshinweis1="AP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.AP.17" Kartenname="Karte" Layout="GEOA1H" Praesentationshinweis1="AP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.AP.18" Kartenname="Karte" Layout="GEOA1Q" Praesentationshinweis1="AP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.AP.19" Kartenname="Karte" Layout="GEOA0H" Praesentationshinweis1="AP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.AP.20" Kartenname="Karte" Layout="GEOA0Q" Praesentationshinweis1="AP-Übersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="5000"/>
+		</KartenProdukt>
+	    </GUIKartenProdukt>
+		<!-- ########################################-->
+		<GUIKartenProdukt Antragsart="KS03" ID="LK.GEO.F.D" Name="PDF"
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Punktnumerierungsübersicht"
+                        ProduktnameAuswertung="Punktnumerierungsübersicht" ProduktnameGUI="Punktnumerierungsübersicht" Zusatzlegende="false">
+		<KartenProdukt ID="WUP.KOM.PKTNR.1" Kartenname="Karte" Layout="GEOA4H" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="100"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.2" Kartenname="Karte" Layout="GEOA4Q" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="100"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.3" Kartenname="Karte" Layout="GEOA3H" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="100"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.4" Kartenname="Karte" Layout="GEOA3Q" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="100"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.5" Kartenname="Karte" Layout="GEOA2H" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="100"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.6" Kartenname="Karte" Layout="GEOA2Q" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="100"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.7" Kartenname="Karte" Layout="GEOA1H" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="100"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.8" Kartenname="Karte" Layout="GEOA1Q" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="100"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.9" Kartenname="Karte" Layout="GEOA0H" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="100"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.10" Kartenname="Karte" Layout="GEOA0Q" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="100"/>
+        </KartenProdukt>
+	    <KartenProdukt ID="WUP.KOM.PKTNR.11" Kartenname="Karte" Layout="GEOA4H" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.12" Kartenname="Karte" Layout="GEOA4Q" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.13" Kartenname="Karte" Layout="GEOA3H" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.14" Kartenname="Karte" Layout="GEOA3Q" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.15" Kartenname="Karte" Layout="GEOA2H" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.16" Kartenname="Karte" Layout="GEOA2Q" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.17" Kartenname="Karte" Layout="GEOA1H" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.18" Kartenname="Karte" Layout="GEOA1Q" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.19" Kartenname="Karte" Layout="GEOA0H" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.20" Kartenname="Karte" Layout="GEOA0Q" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.21" Kartenname="Karte" Layout="GEOA4H" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.22" Kartenname="Karte" Layout="GEOA4Q" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.23" Kartenname="Karte" Layout="GEOA3H" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.24" Kartenname="Karte" Layout="GEOA3Q" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.25" Kartenname="Karte" Layout="GEOA2H" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.26" Kartenname="Karte" Layout="GEOA2Q" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.27" Kartenname="Karte" Layout="GEOA1H" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.28" Kartenname="Karte" Layout="GEOA1Q" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.29" Kartenname="Karte" Layout="GEOA0H" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.30" Kartenname="Karte" Layout="GEOA0Q" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+	    <KartenProdukt ID="WUP.KOM.PKTNR.31" Kartenname="Karte" Layout="GEOA4H" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.32" Kartenname="Karte" Layout="GEOA4Q" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.33" Kartenname="Karte" Layout="GEOA3H" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.34" Kartenname="Karte" Layout="GEOA3Q" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.35" Kartenname="Karte" Layout="GEOA2H" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.36" Kartenname="Karte" Layout="GEOA2Q" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.37" Kartenname="Karte" Layout="GEOA1H" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.38" Kartenname="Karte" Layout="GEOA1Q" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.39" Kartenname="Karte" Layout="GEOA0H" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.PKTNR.40" Kartenname="Karte" Layout="GEOA0Q" Praesentationshinweis1="Punktnumerierungsübersicht" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		</GUIKartenProdukt>
+		<!-- ########################################-->
+		<GUIKartenProdukt Antragsart="KS03" ID="LK.GEO.F.D" Name="PDF"
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="DGK mit Höhenlinien"
+                        ProduktnameAuswertung="DGK mit Höhenlinien" ProduktnameGUI="DGK mit Höhenlinien" Zusatzlegende="false">
+        <KartenProdukt ID="WUP.KOM.DGKH.1" Kartenname="Karte" Layout="GEOA4H" Praesentationshinweis1="DGK mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGKH.2" Kartenname="Karte" Layout="GEOA4Q" Praesentationshinweis1="DGK mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGKH.3" Kartenname="Karte" Layout="GEOA3H" Praesentationshinweis1="DGK mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGKH.4" Kartenname="Karte" Layout="GEOA3Q" Praesentationshinweis1="DGK mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGKH.5" Kartenname="Karte" Layout="GEOA2H" Praesentationshinweis1="DGK mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGKH.6" Kartenname="Karte" Layout="GEOA2Q" Praesentationshinweis1="DGK mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGKH.7" Kartenname="Karte" Layout="GEOA1H" Praesentationshinweis1="DGK mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGKH.8" Kartenname="Karte" Layout="GEOA1Q" Praesentationshinweis1="DGK mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGKH.9" Kartenname="Karte" Layout="GEOA0H" Praesentationshinweis1="DGK mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGKH.10" Kartenname="Karte" Layout="GEOA0Q" Praesentationshinweis1="DGK mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGKH.11" Kartenname="Karte" Layout="GEOA4H" Praesentationshinweis1="DGK mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGKH.12" Kartenname="Karte" Layout="GEOA4Q" Praesentationshinweis1="DGK mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGKH.13" Kartenname="Karte" Layout="GEOA3H" Praesentationshinweis1="DGK mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGKH.14" Kartenname="Karte" Layout="GEOA3Q" Praesentationshinweis1="DGK mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGKH.15" Kartenname="Karte" Layout="GEOA2H" Praesentationshinweis1="DGK mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGKH.16" Kartenname="Karte" Layout="GEOA2Q" Praesentationshinweis1="DGK mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGKH.17" Kartenname="Karte" Layout="GEOA1H" Praesentationshinweis1="DGK mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGKH.18" Kartenname="Karte" Layout="GEOA1Q" Praesentationshinweis1="DGK mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGKH.19" Kartenname="Karte" Layout="GEOA0H" Praesentationshinweis1="DGK mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.DGKH.20" Kartenname="Karte" Layout="GEOA0Q" Praesentationshinweis1="DGK mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="5000"/>
+        </KartenProdukt>
+     </GUIKartenProdukt>
+	 <!-- ########################################-->
+		<GUIKartenProdukt Antragsart="KS03" ID="LK.GEO.F.D" Name="PDF"
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte mit Höhenlinien"
+                        ProduktnameAuswertung="Stadtgrundkarte mit Höhenlinien" ProduktnameGUI="Stadtgrundkarte mit Höhenlinien" Zusatzlegende="false">
+        <KartenProdukt ID="WUP.KOM.STGKH.1" Kartenname="Karte" Layout="GEOA4H" Praesentationshinweis1="Stadtgrundkarte mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.STGKH.2" Kartenname="Karte" Layout="GEOA4Q" Praesentationshinweis1="Stadtgrundkarte mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.STGKH.3" Kartenname="Karte" Layout="GEOA3H" Praesentationshinweis1="Stadtgrundkarte mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.STGKH.4" Kartenname="Karte" Layout="GEOA3Q" Praesentationshinweis1="Stadtgrundkarte mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.STGKH.5" Kartenname="Karte" Layout="GEOA2H" Praesentationshinweis1="Stadtgrundkarte mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.STGKH.6" Kartenname="Karte" Layout="GEOA2Q" Praesentationshinweis1="Stadtgrundkarte mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.STGKH.7" Kartenname="Karte" Layout="GEOA1H" Praesentationshinweis1="Stadtgrundkarte mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.STGKH.8" Kartenname="Karte" Layout="GEOA1Q" Praesentationshinweis1="Stadtgrundkarte mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.STGKH.9" Kartenname="Karte" Layout="GEOA0H" Praesentationshinweis1="Stadtgrundkarte mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.STGKH.10" Kartenname="Karte" Layout="GEOA0Q" Praesentationshinweis1="Stadtgrundkarte mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.STGKH.11" Kartenname="Karte" Layout="GEOA4H" Praesentationshinweis1="Stadtgrundkarte mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.STGKH.12" Kartenname="Karte" Layout="GEOA4Q" Praesentationshinweis1="Stadtgrundkarte mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.STGKH.13" Kartenname="Karte" Layout="GEOA3H" Praesentationshinweis1="Stadtgrundkarte mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.STGKH.14" Kartenname="Karte" Layout="GEOA3Q" Praesentationshinweis1="Stadtgrundkarte mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.STGKH.15" Kartenname="Karte" Layout="GEOA2H" Praesentationshinweis1="Stadtgrundkarte mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.STGKH.16" Kartenname="Karte" Layout="GEOA2Q" Praesentationshinweis1="Stadtgrundkarte mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.STGKH.17" Kartenname="Karte" Layout="GEOA1H" Praesentationshinweis1="Stadtgrundkarte mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.STGKH.18" Kartenname="Karte" Layout="GEOA1Q" Praesentationshinweis1="Stadtgrundkarte mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.STGKH.19" Kartenname="Karte" Layout="GEOA0H" Praesentationshinweis1="Stadtgrundkarte mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.STGKH.20" Kartenname="Karte" Layout="GEOA0Q" Praesentationshinweis1="Stadtgrundkarte mit Höhenlinien" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+     </GUIKartenProdukt>
+	 <!-- ########################################-->
+	   		<GUIKartenProdukt Antragsart="KS03" ID="LK.GEO.F.D" Name="PDF"
+                        SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Orthofoto mit Katasterdarstellung"
+                        ProduktnameAuswertung="Orthofoto mit Katasterdarstellung" ProduktnameGUI="Orthofoto mit Katasterdarstellung" Zusatzlegende="false">
+        <KartenProdukt ID="WUP.KOM.ORTHOKAT.1" Kartenname="Karte" Layout="GEOA4H" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.2" Kartenname="Karte" Layout="GEOA4Q" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.3" Kartenname="Karte" Layout="GEOA3H" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.4" Kartenname="Karte" Layout="GEOA3Q" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.5" Kartenname="Karte" Layout="GEOA2H" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.6" Kartenname="Karte" Layout="GEOA2Q" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.7" Kartenname="Karte" Layout="GEOA1H" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.8" Kartenname="Karte" Layout="GEOA1Q" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.9" Kartenname="Karte" Layout="GEOA0H" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.10" Kartenname="Karte" Layout="GEOA0Q" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="250"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.11" Kartenname="Karte" Layout="GEOA4H" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.12" Kartenname="Karte" Layout="GEOA4Q" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.13" Kartenname="Karte" Layout="GEOA3H" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.14" Kartenname="Karte" Layout="GEOA3Q" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.15" Kartenname="Karte" Layout="GEOA2H" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.16" Kartenname="Karte" Layout="GEOA2Q" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.17" Kartenname="Karte" Layout="GEOA1H" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.18" Kartenname="Karte" Layout="GEOA1Q" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.19" Kartenname="Karte" Layout="GEOA0H" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.20" Kartenname="Karte" Layout="GEOA0Q" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="500"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.21" Kartenname="Karte" Layout="GEOA4H" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.22" Kartenname="Karte" Layout="GEOA4Q" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.23" Kartenname="Karte" Layout="GEOA3H" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.24" Kartenname="Karte" Layout="GEOA3Q" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.25" Kartenname="Karte" Layout="GEOA2H" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.26" Kartenname="Karte" Layout="GEOA2Q" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.27" Kartenname="Karte" Layout="GEOA1H" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.28" Kartenname="Karte" Layout="GEOA1Q" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.29" Kartenname="Karte" Layout="GEOA0H" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+		<KartenProdukt ID="WUP.KOM.ORTHOKAT.30" Kartenname="Karte" Layout="GEOA0Q" Praesentationshinweis1="Orthofoto mit Katasterdarstellung" Praesentationshinweis2="Geobasisdaten">
+           <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="1000"/>
+        </KartenProdukt>
+     </GUIKartenProdukt>
+	 </Kartenklasse>
+	 <!-- ########################################-->
+	 <Kartenklasse ID="LK.NRW.K" Name="NRW-Kommunal">
       <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.F" Name="farbige Ausgabe" Logo="logo-aaa-wappen-wup-f" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (farbig)" ProduktnameAuswertung="Stadtgrundkarte, farbig" ProduktnameGUI="farbig" Zusatzlegende="false">
         <KartenProdukt ID="LK.NRW.K.F.1" Kartenname="KarteNameSGK" Layout="SGKA4H" Praesentationshinweis1="Stadtgrundkarte 1:500">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="500"/>
@@ -772,6 +1467,7 @@
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
       </GUIKartenProdukt>
+	  <!-- ########################################-->
        <GUIKartenProdukt Antragsart="KS03" ID="LK.NRW.K.SW" Name="Graustufenausgabe" Logo="logo-aaa-wappen-wup-sw" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte (sw)" ProduktnameAuswertung="Stadtgrundkarte, grau" ProduktnameGUI="grau" Zusatzlegende="false">
         <KartenProdukt ID="LK.NRW.K.SW.1" Kartenname="KarteNameSGK" Layout="SGKA4H" Praesentationshinweis1="Stadtgrundkarte 1:500">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="500"/>
@@ -864,6 +1560,7 @@
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
       </GUIKartenProdukt>
+	  <!-- ########################################-->
       <GUIKartenProdukt Antragsart="KS04" ID="LK.NRW.K.BF" Name="mit kommunalen Erg., farbig" Logo="logo-aaa-wappen-wup-f" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte mit kom. Erg. (farbig)" ProduktnameAuswertung="Stadtgrundkarte m. kom. Erg., farbig" ProduktnameGUI="mit kommunalen Erg., farbig" Zusatzlegende="false">
         <KartenProdukt ID="LK.NRW.K.BF.1" Kartenname="KarteNameSGK" Layout="SGKA4H" Praesentationshinweis1="Stadtgrundkarte 1:500" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="500"/>
@@ -956,6 +1653,7 @@
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
       </GUIKartenProdukt>
+	  <!-- ########################################-->
        <GUIKartenProdukt Antragsart="KS04" ID="LK.NRW.K.BSW" Name="mit kommunalen Erg., grau" Logo="logo-aaa-wappen-wup-sw" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte mit kom. Erg. (sw)" ProduktnameAuswertung="Stadtgrundkarte m. kom. Erg., schwarz-weiß" ProduktnameGUI="mit kommunalen Erg., grau" Zusatzlegende="false">
         <KartenProdukt ID="LK.NRW.K.BSW.1" Kartenname="KarteNameSGK" Layout="SGKA4H" Praesentationshinweis1="Stadtgrundkarte 1:500" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="500"/>
@@ -1050,6 +1748,7 @@
       </GUIKartenProdukt>
     </Kartenklasse>
   </Karte>
+  <!-- ########################################-->
   <Einzelnachweis>
     <Einzelnachweisklasse ID="LB.GDBNRW.A"  Name="Gdb-NRW-Amtlich">
       <GUIEinzelnachweisprodukt Antragsart="NW07" ID="LB.GDBNRW.A.FNW" Name="Flurstücksnachweis" SelektionsKriterium="Flurstückskennzeichen" ProduktnameAuswertung="Flurstücksnachweis(G) NRW" ProduktnameGUI="Flurstücksnachweis">
@@ -1094,6 +1793,7 @@
           </Einzelnachweisprodukt>
        </GUIEinzelnachweisprodukt>
     </Einzelnachweisklasse>
+	<!-- ########################################-->
     <Einzelnachweisklasse ID="LB.GDBNRW.I"  Name="Gdb-NRW-Intern">
       <GUIEinzelnachweisprodukt Antragsart="NW07" ID="LB.GDBNRW.I.FNW" Name="Flurstücksnachweis" SelektionsKriterium="Flurstückskennzeichen" ProduktnameAuswertung="Flurstücksnachweis(G) NRW" ProduktnameGUI="Flurstücksnachweis" Logo="http://localhost:81/AaaDhkWebService/logo-aaa-f.png">
          <Einzelnachweisprodukt ID="LB.GDBNRW.I.FNW.1" Layout="NW07.xsl">
@@ -1136,7 +1836,8 @@
              <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="HTML"/>
           </Einzelnachweisprodukt>
        </GUIEinzelnachweisprodukt>
-    </Einzelnachweisklasse>
+     </Einzelnachweisklasse>
+	 <!-- ########################################-->
      <Einzelnachweisklasse ID="LB.GDBADV.A" Name="Gdb-AdV-Amtlich" XsltBasisverzeichnis="D:\Programme\Apache Software Foundation\Tomcat 6.0\webapps\ASWeb\WEB-INF\ASA_AAAWeb\xsl\ALKIS\GID_6_0_0\Default">
          <GUIEinzelnachweisprodukt Antragsart="0511" ID="LB.GDBADV.A.FNW" Name="Flurstücksnachweis" ProduktnameAuswertung="Flurstücksnachweis (G)" SelektionsKriterium="Flurstückskennzeichen" ProduktnameGUI="Flurstücksnachweis">
             <Einzelnachweisprodukt ID="LB.GDBADV.A.FNW.1" Layout="0510.xsl">
@@ -1187,6 +1888,7 @@
             </Einzelnachweisprodukt>
          </GUIEinzelnachweisprodukt>
       </Einzelnachweisklasse>
+	 <!-- ########################################-->
      <Einzelnachweisklasse ID="LB.NRW.K"  Name="NRW-Kommunal">
       <GUIEinzelnachweisprodukt Antragsart="KS08" ID="LB.NRW.K.FENW" Name="Flurstücks- und Eigentumsnachweis" SelektionsKriterium="Flurstückskennzeichen" ProduktnameAuswertung="Flurstücks- und Eigentumsnachweis NRW Kommunal" ProduktnameGUI="Flurstücks- u. Eig.-nachweis">
          <Einzelnachweisprodukt ID="LB.NRW.K.FENW.1" Layout="KS08.xsl">
@@ -1205,9 +1907,29 @@
         </Einzelnachweisprodukt>
       </GUIEinzelnachweisprodukt>
     </Einzelnachweisklasse>
+	<!-- ########################################-->
+	<Einzelnachweisklasse ID="LB.NRW.K.I"  Name="NRW-Kommunal-Intern">
+      <GUIEinzelnachweisprodukt Antragsart="KS08" ID="LB.NRW.K.FENW" Name="Flurstücks- und Eigentumsnachweis" SelektionsKriterium="Flurstückskennzeichen" ProduktnameAuswertung="Flurstücks- und Eigentumsnachweis NRW Kommunal" ProduktnameGUI="Flurstücks- u. Eig.-nachweis" Logo="http://localhost:81/AaaDhkWebService/logo-aaa-f.png">
+         <Einzelnachweisprodukt ID="LB.NRW.K.I.FENW.1" Layout="KS08.xsl">
+          <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="PDF"/>
+        </Einzelnachweisprodukt>
+        <Einzelnachweisprodukt ID="LB.NRW.K.I.FENW.2" Layout="KS08.xsl">
+          <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="HTML"/>
+        </Einzelnachweisprodukt>
+      </GUIEinzelnachweisprodukt>
+      <GUIEinzelnachweisprodukt Antragsart="KS10" ID="LB.NRW.K.BNW" Name="Bestandsnachweis" SelektionsKriterium="Bestandskennzeichen" ProduktnameAuswertung="Bestandsnachweis NRW Kommunal" ProduktnameGUI="Bestandsnachweis" Logo="http://localhost:81/AaaDhkWebService/logo-aaa-f.png">
+         <Einzelnachweisprodukt ID="LB.NRW.K.I.BNW.1" Layout="KS10.xsl">
+          <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="PDF"/>
+        </Einzelnachweisprodukt>
+        <Einzelnachweisprodukt ID="LB.NRW.K.I.BNW.2" Layout="KS10.xsl">
+          <PreisfaktorenEinzelnachweis DINFormat="DINA4 Hochformat" Dateiformat="HTML"/>
+        </Einzelnachweisprodukt>
+      </GUIEinzelnachweisprodukt>
+    </Einzelnachweisklasse>
+	<!-- ########################################-->
  </Einzelnachweis>
   <Listennachweis>
-      <Listennachweisklasse ID="LN.GDBNRW.A" Name="Gdb-NRW-Amtlich"> 
+      <Listennachweisklasse ID="LN.GDBNRW.A" Name="Gdb-NRW-Amtlich">
           <GUIListennachweisprodukt ID="LN.GDBNRW.A.PL" Name="Punktliste" Antragsart="1019" SelektionsKriterium="UUIDListe" ProduktnameGUI="Punktliste" ProduktnameAuswertung="Punktliste">
             <Listennachweisprodukt ID="LN.GDBNRW.A.PL.1" Layout="1019.xsl">
                <PreisfaktorenListennachweis DINFormat="DINA4 Querformat" Dateiformat="PDF" Paketgroesse="25"/>
@@ -1220,7 +1942,7 @@
             </Listennachweisprodukt>
          </GUIListennachweisprodukt>
       </Listennachweisklasse>
-      <Listennachweisklasse ID="LN.GDBNRW.I" Name="Gdb-NRW-Intern"> 
+      <Listennachweisklasse ID="LN.GDBNRW.I" Name="Gdb-NRW-Intern">
           <GUIListennachweisprodukt ID="LN.GDBNRW.I.PL" Name="Punktliste" Antragsart="1019" SelektionsKriterium="UUIDListe" ProduktnameGUI="Punktliste" ProduktnameAuswertung="Punktliste">
             <Listennachweisprodukt ID="LN.GDBNRW.I.PL.1" Layout="1019.xsl">
                <PreisfaktorenListennachweis DINFormat="DINA4 Querformat" Dateiformat="PDF" Paketgroesse="25"/>
