@@ -636,7 +636,7 @@ public class BillingPopup extends javax.swing.JDialog {
     private void calculateBruttoPrice() {
         final double mwst = nettoPrice * (currentProduct.getMwst() / 100);
         bruttoPrice = nettoPrice + mwst;
-        bruttoPrice = Math.round(nettoPrice * 100) / 100;
+        bruttoPrice = Math.round(nettoPrice * 100) / 100.;
 
         final DecimalFormat df = new DecimalFormat("0.#");
         lblMwstTitle.setText("zzgl. MwSt. (" + df.format(currentProduct.getMwst()) + "%):");
