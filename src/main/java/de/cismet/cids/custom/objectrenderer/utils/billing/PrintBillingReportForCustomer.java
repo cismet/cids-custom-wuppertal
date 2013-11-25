@@ -46,6 +46,7 @@ public class PrintBillingReportForCustomer {
     private HashMap<Double, HashMap<String, Object>> billingInformation;
     private CidsBean kundeBean;
     private BigDecimal totalSum;
+    private BigDecimal mwstValue;
     private Date[] fromDate_tillDate;
     private Collection<CidsBean> billingsBeans;
     private boolean isRechnungsanlage;
@@ -149,6 +150,7 @@ public class PrintBillingReportForCustomer {
                     bruttoSum_19,
                     fromDate_tillDate[0],
                     fromDate_tillDate[1],
+                    mwstValue,
                     totalSum,
                     isRechnungsanlage,
                     amountTotalDownloads,
@@ -230,6 +232,7 @@ public class PrintBillingReportForCustomer {
 
         // calculate the brutto sum from each netto_sum
         totalSum = new BigDecimal("0");
+        mwstValue = new BigDecimal("0");
         for (final BigDecimal mwst_satz : mwstSatz_nettoSum.keySet()) {
             final BigDecimal nettoSum = mwstSatz_nettoSum.get(mwst_satz);
             // billing information might not contain any billings for a type of MwSt. if
@@ -239,7 +242,8 @@ public class PrintBillingReportForCustomer {
 
                 // calculate: bruttoSum = nettoSum + (nettoSum * (mwst_satz / 100))
                 final BigDecimal percent = mwst_satz.divide(new BigDecimal("100"));
-                final BigDecimal mwstValue = nettoSum.multiply(percent);
+                mwstValue = nettoSum.multiply(percent);
+                mwstValue = mwstValue.setScale(2, BigDecimal.ROUND_HALF_UP);
                 BigDecimal bruttoSum = nettoSum.add(mwstValue);
                 bruttoSum = bruttoSum.setScale(2, BigDecimal.ROUND_HALF_UP);
                 totalSum = totalSum.add(bruttoSum);

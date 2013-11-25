@@ -68,6 +68,7 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
     private BigDecimal brutto_summe_19;
     private Date from;
     private Date till;
+    private BigDecimal mwstValue;
     private BigDecimal totalSum;
     private boolean isRechnungsanlage;
     private int amountTotalDownloads;
@@ -100,6 +101,7 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
      * @param  brutto_summe_19      DOCUMENT ME!
      * @param  from                 DOCUMENT ME!
      * @param  till                 DOCUMENT ME!
+     * @param  mwstValue            DOCUMENT ME!
      * @param  totalSum             DOCUMENT ME!
      */
     public BillingBuchungsbelegReport(
@@ -112,6 +114,7 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
             final BigDecimal brutto_summe_19,
             final Date from,
             final Date till,
+            final BigDecimal mwstValue,
             final BigDecimal totalSum) {
         this(
             kundeBean,
@@ -123,6 +126,7 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
             brutto_summe_19,
             from,
             till,
+            mwstValue,
             totalSum,
             false,
             0,
@@ -153,6 +157,7 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
      * @param  brutto_summe_19                         DOCUMENT ME!
      * @param  from                                    DOCUMENT ME!
      * @param  till                                    DOCUMENT ME!
+     * @param  mwstValue                               DOCUMENT ME!
      * @param  totalSum                                DOCUMENT ME!
      * @param  isRechnungsanlage                       DOCUMENT ME!
      * @param  amountTotalDownloads                    DOCUMENT ME!
@@ -181,6 +186,7 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
             final BigDecimal brutto_summe_19,
             final Date from,
             final Date till,
+            final BigDecimal mwstValue,
             final BigDecimal totalSum,
             final boolean isRechnungsanlage,
             final int amountTotalDownloads,
@@ -223,6 +229,7 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
         this.from = from;
         this.till = till;
 
+        this.mwstValue = mwstValue;
         this.totalSum = totalSum;
 
         this.isRechnungsanlage = isRechnungsanlage;
@@ -267,6 +274,7 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
             params.put("till", till);
         }
 
+        params.put("mwstValue", mwstValue);
         params.put("end_summe", totalSum);
 
         params.put("isRechnungsanlage", isRechnungsanlage);

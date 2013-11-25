@@ -71,7 +71,8 @@ public class BillingCalculations {
         for (final BigDecimal mwst_satz : mwstSatz_nettoSum.keySet()) {
             final BigDecimal nettoSum = mwstSatz_nettoSum.get(mwst_satz);
             final BigDecimal percent = mwst_satz.divide(new BigDecimal("100"));
-            final BigDecimal mwstValue = nettoSum.multiply(percent);
+            BigDecimal mwstValue = nettoSum.multiply(percent);
+            mwstValue = mwstValue.setScale(2, BigDecimal.ROUND_HALF_UP);
             BigDecimal bruttoSum = nettoSum.add(mwstValue);
             bruttoSum = bruttoSum.setScale(2, BigDecimal.ROUND_HALF_UP);
             totalSum = totalSum.add(bruttoSum);

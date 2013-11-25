@@ -25,6 +25,7 @@
 	<parameter name="amountVUamtlicherLageplanGB" class="java.lang.Integer"/>
 	<parameter name="amountVUhoheitlicheVermessungGB" class="java.lang.Integer"/>
 	<parameter name="amountVUsonstigeGB" class="java.lang.Integer"/>
+	<parameter name="mwstValue" class="java.math.BigDecimal"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -51,7 +52,7 @@
 				<textFieldExpression class="java.util.Date"><![CDATA[$P{till}]]></textFieldExpression>
 			</textField>
 			<frame>
-				<reportElement x="0" y="139" width="555" height="198">
+				<reportElement x="0" y="135" width="555" height="198">
 					<printWhenExpression><![CDATA[$P{isRechnungsanlage}]]></printWhenExpression>
 				</reportElement>
 				<textField>
@@ -135,21 +136,21 @@
 					<textFieldExpression class="java.lang.String"><![CDATA["GB"]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement mode="Opaque" x="0" y="1" width="555" height="20" backcolor="#CCCCCC"/>
+					<reportElement x="0" y="1" width="555" height="20" backcolor="#CCCCCC"/>
 					<textElement>
 						<font isBold="true"/>
 					</textElement>
 					<text><![CDATA[Anzahl Downloads]]></text>
 				</staticText>
 				<staticText>
-					<reportElement mode="Opaque" x="0" y="92" width="228" height="27" backcolor="#CCCCCC"/>
+					<reportElement x="0" y="92" width="228" height="27" backcolor="#CCCCCC"/>
 					<textElement>
 						<font isBold="true"/>
 					</textElement>
 					<text><![CDATA[Verwendungszwecke]]></text>
 				</staticText>
 				<staticText>
-					<reportElement mode="Opaque" x="228" y="92" width="87" height="27" backcolor="#CCCCCC"/>
+					<reportElement x="228" y="92" width="87" height="27" backcolor="#CCCCCC"/>
 					<textElement textAlignment="Center">
 						<font isBold="true"/>
 					</textElement>
@@ -157,7 +158,7 @@
 Downloads]]></text>
 				</staticText>
 				<staticText>
-					<reportElement mode="Opaque" x="315" y="92" width="87" height="27" backcolor="#CCCCCC"/>
+					<reportElement x="315" y="92" width="87" height="27" backcolor="#CCCCCC"/>
 					<textElement textAlignment="Center">
 						<font isBold="true"/>
 					</textElement>
@@ -188,23 +189,28 @@ GB-Nr.]]></text>
 				<line>
 					<reportElement x="0" y="179" width="402" height="1"/>
 				</line>
+				<textField>
+					<reportElement x="443" y="155" width="100" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{mwstValue}]]></textFieldExpression>
+				</textField>
 			</frame>
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="67" width="131" height="20" backcolor="#CCCCCC"/>
+				<reportElement x="0" y="67" width="131" height="20" backcolor="#CCCCCC"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Kunde:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="87" width="131" height="20" backcolor="#CCCCCC"/>
+				<reportElement x="0" y="87" width="131" height="20" backcolor="#CCCCCC"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Vertragsnummer:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="107" width="131" height="20" backcolor="#CCCCCC"/>
+				<reportElement x="0" y="107" width="131" height="20" backcolor="#CCCCCC"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
