@@ -30,7 +30,7 @@ public class PrintStatisticsReport {
 
     //~ Instance fields --------------------------------------------------------
 
-    private HashMap<String, Integer> productInformation;
+    private HashMap<String, Integer> productInformation = new HashMap<String, Integer>();
     private Date[] fromDate_tillDate;
     private Collection<CidsBean> billingsBeans;
     private int amountTotalDownloads = 0;

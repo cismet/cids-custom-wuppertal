@@ -126,6 +126,8 @@ public class BillingStatisticsReport extends AbstractJasperReportPrint {
         super(REPORT_URL, beans);
         setBeansCollection(true);
 
+        this.from = from;
+        this.till = till;
         this.amountTotalDownloads = amountTotalDownloads;
         this.amountWithCosts = amountWithCosts;
         this.amountWithoutCosts = amountWithoutCosts;

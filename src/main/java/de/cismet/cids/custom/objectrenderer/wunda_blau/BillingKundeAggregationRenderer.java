@@ -706,7 +706,19 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
      */
     private void btnGeschaeftsstatistikActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnGeschaeftsstatistikActionPerformed
         final Collection<CidsBean> billings = createBillingsForStatisticsReport();
-        new PrintStatisticsReport(fromDate_tillDate, billings).print();
+        if (billings.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                this,
+                NbBundle.getMessage(
+                    BillingKundeAggregationRenderer.class,
+                    "BillingKundeAggregationRenderer.btnGeschaeftsstatistikActionPerformed().dialog.message"),
+                NbBundle.getMessage(
+                    BillingKundeAggregationRenderer.class,
+                    "BillingKundeAggregationRenderer.btnGeschaeftsstatistikActionPerformed().dialog.title"),
+                JOptionPane.ERROR_MESSAGE);
+        } else {
+            new PrintStatisticsReport(fromDate_tillDate, billings).print();
+        }
     }                                                                                          //GEN-LAST:event_btnGeschaeftsstatistikActionPerformed
 
     /**
