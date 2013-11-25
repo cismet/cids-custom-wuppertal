@@ -13,12 +13,18 @@ package de.cismet.cids.custom.objectrenderer.utils.billing;
 
 import org.apache.log4j.Logger;
 
+import org.openide.util.NbBundle;
+
 import java.math.BigDecimal;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import de.cismet.cids.custom.reports.wunda_blau.BillingBuchungsbelegReport;
 
@@ -50,32 +56,46 @@ public class PrintBillingReportForCustomer {
     private int amountVUamtlicherLageplan = 0;
     private int amountVUhoheitlicheVermessung = 0;
     private int amountVUsonstige = 0;
-    private int amountVUamtlicherLageplanGB = 0;
-    private int amountVUhoheitlicheVermessungGB = 0;
-    private int amountVUsonstigeGB = 0;
+    private int amountEigenerGebrauch = 0;
+    private int amountWiederverkauf = 0;
+    private int amountEigenerGebrauchGebührenbefreit = 0;
+    private HashSet amountVUamtlicherLageplanGB = new HashSet();
+    private HashSet amountVUhoheitlicheVermessungGB = new HashSet();
+    private HashSet amountVUsonstigeGB = new HashSet();
+    private HashSet amountEigenerGebrauchGB = new HashSet();
+    private HashSet amountWiederverkaufGB = new HashSet();
+    private HashSet amountEigenerGebrauchGebührenbefreitGB = new HashSet();
+    private JPanel panel;
+    private boolean showBillingWithoutCostInReport;
 
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates a new StartReportForCustomer object.
      *
-     * @param  kundeBean             DOCUMENT ME!
-     * @param  billingsBeans         DOCUMENT ME!
-     * @param  fromDate_tillDate     DOCUMENT ME!
-     * @param  isRechnungsanlage     DOCUMENT ME!
-     * @param  markBillingsAsBilled  DOCUMENT ME!
+     * @param  kundeBean                       DOCUMENT ME!
+     * @param  billingsBeans                   DOCUMENT ME!
+     * @param  fromDate_tillDate               DOCUMENT ME!
+     * @param  isRechnungsanlage               DOCUMENT ME!
+     * @param  markBillingsAsBilled            DOCUMENT ME!
+     * @param  panel                           DOCUMENT ME!
+     * @param  showBillingWithoutCostInReport  DOCUMENT ME!
      */
     public PrintBillingReportForCustomer(final CidsBean kundeBean,
             final Collection<CidsBean> billingsBeans,
             final Date[] fromDate_tillDate,
             final boolean isRechnungsanlage,
-            final boolean markBillingsAsBilled) {
+            final boolean markBillingsAsBilled,
+            final JPanel panel,
+            final boolean showBillingWithoutCostInReport) {
         this.kundeBean = kundeBean;
         this.fromDate_tillDate = fromDate_tillDate;
-        totalSum = generateStatisticsForTheReport(billingsBeans);
         this.isRechnungsanlage = isRechnungsanlage;
         this.markBillingsAsBilled = markBillingsAsBilled;
         this.billingsBeans = billingsBeans;
+        this.panel = panel;
+        this.showBillingWithoutCostInReport = showBillingWithoutCostInReport;
+        totalSum = generateStatisticsForTheReport(billingsBeans);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -106,7 +126,19 @@ public class PrintBillingReportForCustomer {
             bruttoSum_19 = (BigDecimal)mwst_information_19.get("brutto_summe");
             noData = false;
         }
-        if (!noData) {
+
+        if (noData && !isRechnungsanlage) {
+            // the report is an empty Buchungsbeleg
+            JOptionPane.showMessageDialog(
+                panel,
+                NbBundle.getMessage(
+                    PrintBillingReportForCustomer.class,
+                    "PrintBillingReportForCustomer.print().dialog.message"),
+                NbBundle.getMessage(
+                    PrintBillingReportForCustomer.class,
+                    "PrintBillingReportForCustomer.print().dialog.title"),
+                JOptionPane.ERROR_MESSAGE);
+        } else {
             final BillingBuchungsbelegReport report = new BillingBuchungsbelegReport(
                     kundeBean,
                     filteredBuchungen_mwst0,
@@ -125,9 +157,15 @@ public class PrintBillingReportForCustomer {
                     amountVUamtlicherLageplan,
                     amountVUhoheitlicheVermessung,
                     amountVUsonstige,
-                    amountVUamtlicherLageplanGB,
-                    amountVUhoheitlicheVermessungGB,
-                    amountVUsonstigeGB);
+                    amountEigenerGebrauch,
+                    amountWiederverkauf,
+                    amountEigenerGebrauchGebührenbefreit,
+                    amountVUamtlicherLageplanGB.size(),
+                    amountVUhoheitlicheVermessungGB.size(),
+                    amountVUsonstigeGB.size(),
+                    amountEigenerGebrauchGB.size(),
+                    amountWiederverkaufGB.size(),
+                    amountEigenerGebrauchGebührenbefreitGB.size());
             report.print();
 
             if (isRechnungsanlage && markBillingsAsBilled) {
@@ -174,15 +212,17 @@ public class PrintBillingReportForCustomer {
                 mwstSatz_nettoSum.put(mwst_satz, netto_summe);
             }
 
-            // add the billing to the right MwSt-category
-            if (!billingInformation.containsKey(mwst_satz.doubleValue())) {
-                final HashMap<String, Object> information = new HashMap<String, Object>();
-                final Collection<CidsBean> billings = new ArrayList<CidsBean>();
-                billings.add(billing);
-                information.put("billings", billings);
-                billingInformation.put(mwst_satz.doubleValue(), information);
-            } else {
-                ((Collection)billingInformation.get(mwst_satz.doubleValue()).get("billings")).add(billing);
+            if (showBillingWithoutCostInReport || (netto_summe.compareTo(new BigDecimal("0")) > 0)) {
+                // add the billing to the right MwSt-category
+                if (!billingInformation.containsKey(mwst_satz.doubleValue())) {
+                    final HashMap<String, Object> information = new HashMap<String, Object>();
+                    final Collection<CidsBean> billings = new ArrayList<CidsBean>();
+                    billings.add(billing);
+                    information.put("billings", billings);
+                    billingInformation.put(mwst_satz.doubleValue(), information);
+                } else {
+                    ((Collection)billingInformation.get(mwst_satz.doubleValue()).get("billings")).add(billing);
+                }
             }
 
             setCountersDependingOnVerwendungszweck(billing);
@@ -192,15 +232,19 @@ public class PrintBillingReportForCustomer {
         totalSum = new BigDecimal("0");
         for (final BigDecimal mwst_satz : mwstSatz_nettoSum.keySet()) {
             final BigDecimal nettoSum = mwstSatz_nettoSum.get(mwst_satz);
-            billingInformation.get(mwst_satz.doubleValue()).put("netto_summe", nettoSum);
+            // billing information might not contain any billings for a type of MwSt. if
+            // showBillingWithoutCostInReport is false
+            if (billingInformation.containsKey(mwst_satz.doubleValue())) {
+                billingInformation.get(mwst_satz.doubleValue()).put("netto_summe", nettoSum);
 
-            // calculate: bruttoSum = nettoSum + (nettoSum * (mwst_satz / 100))
-            final BigDecimal percent = mwst_satz.divide(new BigDecimal("100"));
-            final BigDecimal mwstValue = nettoSum.multiply(percent);
-            BigDecimal bruttoSum = nettoSum.add(mwstValue);
-            bruttoSum = bruttoSum.setScale(2, BigDecimal.ROUND_HALF_UP);
-            totalSum = totalSum.add(bruttoSum);
-            billingInformation.get(mwst_satz.doubleValue()).put("brutto_summe", bruttoSum);
+                // calculate: bruttoSum = nettoSum + (nettoSum * (mwst_satz / 100))
+                final BigDecimal percent = mwst_satz.divide(new BigDecimal("100"));
+                final BigDecimal mwstValue = nettoSum.multiply(percent);
+                BigDecimal bruttoSum = nettoSum.add(mwstValue);
+                bruttoSum = bruttoSum.setScale(2, BigDecimal.ROUND_HALF_UP);
+                totalSum = totalSum.add(bruttoSum);
+                billingInformation.get(mwst_satz.doubleValue()).put("brutto_summe", bruttoSum);
+            }
         }
         return totalSum;
     }
@@ -212,10 +256,7 @@ public class PrintBillingReportForCustomer {
      */
     private void setCountersDependingOnVerwendungszweck(final CidsBean billing) {
         final String verwendungsKey = (String)billing.getProperty("verwendungskey");
-        if (verwendungsKey.startsWith("WV")) {
-            // the total amount of downloads is without the Wiederverkauf
-            return;
-        }
+
         amountTotalDownloads++;
         final Double nettoSum = (Double)billing.getProperty("netto_summe");
         if (nettoSum > 0) {
@@ -233,17 +274,32 @@ public class PrintBillingReportForCustomer {
         if (verwendungsKey.equals("VU aL")) {
             amountVUamtlicherLageplan++;
             if (geschaeftsbuchnummerIsValid) {
-                amountVUamtlicherLageplanGB++;
+                amountVUamtlicherLageplanGB.add(geschaeftsbuchnummer);
             }
         } else if (verwendungsKey.equals("VU hV")) {
             amountVUhoheitlicheVermessung++;
             if (geschaeftsbuchnummerIsValid) {
-                amountVUhoheitlicheVermessungGB++;
+                amountVUhoheitlicheVermessungGB.add(geschaeftsbuchnummer);
             }
         } else if (verwendungsKey.equals("VU s")) {
             amountVUsonstige++;
             if (geschaeftsbuchnummerIsValid) {
-                amountVUsonstigeGB++;
+                amountVUsonstigeGB.add(geschaeftsbuchnummer);
+            }
+        } else if (verwendungsKey.equals("eigG")) {
+            amountEigenerGebrauch++;
+            if (geschaeftsbuchnummerIsValid) {
+                amountEigenerGebrauchGB.add(geschaeftsbuchnummer);
+            }
+        } else if (verwendungsKey.equals("WV ein")) {
+            amountWiederverkauf++;
+            if (geschaeftsbuchnummerIsValid) {
+                amountWiederverkaufGB.add(geschaeftsbuchnummer);
+            }
+        } else if (verwendungsKey.equals("eigG frei")) {
+            amountEigenerGebrauchGebührenbefreit++;
+            if (geschaeftsbuchnummerIsValid) {
+                amountEigenerGebrauchGebührenbefreitGB.add(geschaeftsbuchnummer);
             }
         }
     }

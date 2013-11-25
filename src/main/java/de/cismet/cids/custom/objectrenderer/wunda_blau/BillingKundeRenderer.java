@@ -513,6 +513,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
             org.openide.util.NbBundle.getMessage(
                 BillingKundeRenderer.class,
                 "BillingKundeRenderer.btnBuchungsbeleg.text")); // NOI18N
+        btnBuchungsbeleg.setEnabled(false);
         btnBuchungsbeleg.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -533,6 +534,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
             org.openide.util.NbBundle.getMessage(
                 BillingKundeRenderer.class,
                 "BillingKundeRenderer.btnRechnungsanlage.text")); // NOI18N
+        btnRechnungsanlage.setEnabled(false);
         btnRechnungsanlage.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -832,6 +834,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
      * @param  evt  DOCUMENT ME!
      */
     private void btnShowResultsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnShowResultsActionPerformed
+        btnBuchungsbeleg.setEnabled(true);
+        btnRechnungsanlage.setEnabled(true);
         filterBuchungen();
     }                                                                                  //GEN-LAST:event_btnShowResultsActionPerformed
 
@@ -843,10 +847,12 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
     private void btnRechnungsanlageActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRechnungsanlageActionPerformed
         new PrintBillingReportForCustomer(
             cidsBean,
-            createBillingsOfCostumersForReports(evt),
+            filteredBuchungen,
             fromDate_tillDate,
             true,
-            cboBillDownloads.isSelected()).print();
+            cboBillDownloads.isSelected(),
+            this,
+            retrieveShowBillingInReport(evt)).print();
         if (cboBillDownloads.isSelected()) {
             filterBuchungen();
         }
@@ -860,36 +866,13 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
     private void btnBuchungsbelegActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBuchungsbelegActionPerformed
         new PrintBillingReportForCustomer(
             cidsBean,
-            createBillingsOfCostumersForReports(evt),
+            filteredBuchungen,
             fromDate_tillDate,
             false,
-            cboBillDownloads.isSelected()).print();
+            cboBillDownloads.isSelected(),
+            this,
+            retrieveShowBillingInReport(evt)).print();
     }                                                                                    //GEN-LAST:event_btnBuchungsbelegActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   evt  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private Collection<CidsBean> createBillingsOfCostumersForReports(final ActionEvent evt) {
-        final Collection<CidsBean> billings = new ArrayList<CidsBean>();
-        final boolean showBillingWithoutCostInReport = retrieveShowBillingInReport(evt);
-        if (showBillingWithoutCostInReport) {
-            // actually do nothing
-            return filteredBuchungen;
-        } else {
-            // remove billings which cost nothing
-            for (final CidsBean billingBean : filteredBuchungen) {
-                final Double nettoSum = (Double)billingBean.getProperty("netto_summe");
-                if (showBillingWithoutCostInReport || (nettoSum > 0)) {
-                    billings.add(billingBean);
-                }
-            }
-            return billings;
-        }
-    }
 
     /**
      * DOCUMENT ME!

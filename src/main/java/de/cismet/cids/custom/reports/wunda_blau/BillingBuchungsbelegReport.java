@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -75,9 +76,15 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
     private int amountVUamtlicherLageplan;
     private int amountVUhoheitlicheVermessung;
     private int amountVUsonstige;
+    private int amountEigenerGebrauch = 0;
+    private int amountWiederverkauf = 0;
+    private int amountEigenerGebrauchGebührenbefreit = 0;
     private int amountVUamtlicherLageplanGB = 0;
     private int amountVUhoheitlicheVermessungGB = 0;
     private int amountVUsonstigeGB = 0;
+    private int amountEigenerGebrauchGB = 0;
+    private int amountWiederverkaufGB = 0;
+    private int amountEigenerGebrauchGebührenbefreitGB = 0;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -126,31 +133,43 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
             0,
             0,
             0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             0);
     }
     /**
      * Creates a new BillingBuchungsbelegReport object.
      *
-     * @param  kundeBean                        DOCUMENT ME!
-     * @param  billingBeans_mwst0               DOCUMENT ME!
-     * @param  netto_summe_0                    DOCUMENT ME!
-     * @param  brutto_summe_0                   DOCUMENT ME!
-     * @param  billingBeans_mwst19              DOCUMENT ME!
-     * @param  netto_summe_19                   DOCUMENT ME!
-     * @param  brutto_summe_19                  DOCUMENT ME!
-     * @param  from                             DOCUMENT ME!
-     * @param  till                             DOCUMENT ME!
-     * @param  totalSum                         DOCUMENT ME!
-     * @param  isRechnungsanlage                DOCUMENT ME!
-     * @param  amountTotalDownloads             DOCUMENT ME!
-     * @param  amountWithCosts                  DOCUMENT ME!
-     * @param  amountWithoutCosts               DOCUMENT ME!
-     * @param  amountVUamtlicherLageplan        DOCUMENT ME!
-     * @param  amountVUhoheitlicheVermessung    DOCUMENT ME!
-     * @param  amountVUsonstige                 DOCUMENT ME!
-     * @param  amountVUamtlicherLageplanGB      DOCUMENT ME!
-     * @param  amountVUhoheitlicheVermessungGB  DOCUMENT ME!
-     * @param  amountVUsonstigeGB               DOCUMENT ME!
+     * @param  kundeBean                               DOCUMENT ME!
+     * @param  billingBeans_mwst0                      DOCUMENT ME!
+     * @param  netto_summe_0                           DOCUMENT ME!
+     * @param  brutto_summe_0                          DOCUMENT ME!
+     * @param  billingBeans_mwst19                     DOCUMENT ME!
+     * @param  netto_summe_19                          DOCUMENT ME!
+     * @param  brutto_summe_19                         DOCUMENT ME!
+     * @param  from                                    DOCUMENT ME!
+     * @param  till                                    DOCUMENT ME!
+     * @param  totalSum                                DOCUMENT ME!
+     * @param  isRechnungsanlage                       DOCUMENT ME!
+     * @param  amountTotalDownloads                    DOCUMENT ME!
+     * @param  amountWithCosts                         DOCUMENT ME!
+     * @param  amountWithoutCosts                      DOCUMENT ME!
+     * @param  amountVUamtlicherLageplan               DOCUMENT ME!
+     * @param  amountVUhoheitlicheVermessung           DOCUMENT ME!
+     * @param  amountVUsonstige                        DOCUMENT ME!
+     * @param  amountEigenerGebrauch                   DOCUMENT ME!
+     * @param  amountWiederverkauf                     DOCUMENT ME!
+     * @param  amountEigenerGebrauchGebührenbefreit    DOCUMENT ME!
+     * @param  amountVUamtlicherLageplanGB             DOCUMENT ME!
+     * @param  amountVUhoheitlicheVermessungGB         DOCUMENT ME!
+     * @param  amountVUsonstigeGB                      DOCUMENT ME!
+     * @param  amountEigenerGebrauchGB                 DOCUMENT ME!
+     * @param  amountWiederverkaufGB                   DOCUMENT ME!
+     * @param  amountEigenerGebrauchGebührenbefreitGB  DOCUMENT ME!
      */
     public BillingBuchungsbelegReport(
             final CidsBean kundeBean,
@@ -170,9 +189,15 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
             final int amountVUamtlicherLageplan,
             final int amountVUhoheitlicheVermessung,
             final int amountVUsonstige,
+            final int amountEigenerGebrauch,
+            final int amountWiederverkauf,
+            final int amountEigenerGebrauchGebührenbefreit,
             final int amountVUamtlicherLageplanGB,
             final int amountVUhoheitlicheVermessungGB,
-            final int amountVUsonstigeGB) {
+            final int amountVUsonstigeGB,
+            final int amountEigenerGebrauchGB,
+            final int amountWiederverkaufGB,
+            final int amountEigenerGebrauchGebührenbefreitGB) {
         super(REPORT_URL, kundeBean);
 
         this.kundeBean = kundeBean;
@@ -208,9 +233,15 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
         this.amountVUamtlicherLageplan = amountVUamtlicherLageplan;
         this.amountVUhoheitlicheVermessung = amountVUhoheitlicheVermessung;
         this.amountVUsonstige = amountVUsonstige;
+        this.amountEigenerGebrauch = amountEigenerGebrauch;
+        this.amountWiederverkauf = amountWiederverkauf;
+        this.amountEigenerGebrauchGebührenbefreit = amountEigenerGebrauchGebührenbefreit;
         this.amountVUamtlicherLageplanGB = amountVUamtlicherLageplanGB;
         this.amountVUhoheitlicheVermessungGB = amountVUhoheitlicheVermessungGB;
         this.amountVUsonstigeGB = amountVUsonstigeGB;
+        this.amountEigenerGebrauchGB = amountEigenerGebrauchGB;
+        this.amountWiederverkaufGB = amountWiederverkaufGB;
+        this.amountEigenerGebrauchGebührenbefreitGB = amountEigenerGebrauchGebührenbefreitGB;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -246,10 +277,16 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
         params.put("amountVUamtlicherLageplan", amountVUamtlicherLageplan);
         params.put("amountVUhoheitlicheVermessung", amountVUhoheitlicheVermessung);
         params.put("amountVUsonstige", amountVUsonstige);
+        params.put("amountEigenerGebrauch", amountEigenerGebrauch);
+        params.put("amountWiederverkauf", amountWiederverkauf);
+        params.put("amountEigenerGebrauchGebührenbefreit", amountEigenerGebrauchGebührenbefreit);
 
         params.put("amountVUamtlicherLageplanGB", amountVUamtlicherLageplanGB);
         params.put("amountVUhoheitlicheVermessungGB", amountVUhoheitlicheVermessungGB);
         params.put("amountVUsonstigeGB", amountVUsonstigeGB);
+        params.put("amountEigenerGebrauchGB", amountEigenerGebrauchGB);
+        params.put("amountWiederverkaufGB", amountWiederverkaufGB);
+        params.put("amountEigenerGebrauchGebührenbefreitGB", amountEigenerGebrauchGebührenbefreitGB);
 
         return params;
     }

@@ -39,6 +39,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.AbstractAction;
@@ -47,6 +48,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -481,6 +483,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
             org.openide.util.NbBundle.getMessage(
                 BillingKundeAggregationRenderer.class,
                 "BillingKundeAggregationRenderer.btnBuchungsbeleg.text")); // NOI18N
+        btnBuchungsbeleg.setEnabled(false);
         btnBuchungsbeleg.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -500,6 +503,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
             org.openide.util.NbBundle.getMessage(
                 BillingKundeAggregationRenderer.class,
                 "BillingKundeAggregationRenderer.btnGeschaeftsstatistik.text")); // NOI18N
+        btnGeschaeftsstatistik.setEnabled(false);
         btnGeschaeftsstatistik.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -519,6 +523,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
             org.openide.util.NbBundle.getMessage(
                 BillingKundeAggregationRenderer.class,
                 "BillingKundeAggregationRenderer.btnRechnungsanlage.text")); // NOI18N
+        btnRechnungsanlage.setEnabled(false);
         btnRechnungsanlage.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -612,6 +617,9 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
      * @param  evt  DOCUMENT ME!
      */
     private void btnShowResultsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnShowResultsActionPerformed
+        btnBuchungsbeleg.setEnabled(true);
+        btnRechnungsanlage.setEnabled(true);
+        btnGeschaeftsstatistik.setEnabled(true);
         filterBuchungen();
     }                                                                                  //GEN-LAST:event_btnShowResultsActionPerformed
 
@@ -631,13 +639,28 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
      */
     private void btnBuchungsbelegActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBuchungsbelegActionPerformed
         final HashMap<CidsBean, Collection<CidsBean>> billingsOfCustomers = createBillingsOfCostumersForReports(evt);
-        for (final CidsBean kundeBean : billingsOfCustomers.keySet()) {
-            new PrintBillingReportForCustomer(
-                kundeBean,
-                billingsOfCustomers.get(kundeBean),
-                fromDate_tillDate,
-                false,
-                cboBillDownloads.isSelected()).print();
+        final Set<CidsBean> customers = billingsOfCustomers.keySet();
+        if (customers.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                this,
+                NbBundle.getMessage(
+                    BillingKundeAggregationRenderer.class,
+                    "BillingKundeAggregationRenderer.btnBuchungsbelegActionPerformed().dialog.message"),
+                NbBundle.getMessage(
+                    BillingKundeAggregationRenderer.class,
+                    "BillingKundeAggregationRenderer.btnBuchungsbelegActionPerformed().dialog.title"),
+                JOptionPane.ERROR_MESSAGE);
+        } else {
+            for (final CidsBean kundeBean : customers) {
+                new PrintBillingReportForCustomer(
+                    kundeBean,
+                    billingsOfCustomers.get(kundeBean),
+                    fromDate_tillDate,
+                    false,
+                    cboBillDownloads.isSelected(),
+                    this,
+                    retrieveShowBillingWithoutCostInReport(evt)).print();
+            }
         }
     }                                                                                    //GEN-LAST:event_btnBuchungsbelegActionPerformed
 
@@ -648,16 +671,31 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
      */
     private void btnRechnungsanlageActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRechnungsanlageActionPerformed
         final HashMap<CidsBean, Collection<CidsBean>> billingsOfCustomers = createBillingsOfCostumersForReports(evt);
-        for (final CidsBean kundeBean : billingsOfCustomers.keySet()) {
-            new PrintBillingReportForCustomer(
-                kundeBean,
-                billingsOfCustomers.get(kundeBean),
-                fromDate_tillDate,
-                true,
-                cboBillDownloads.isSelected()).print();
-        }
-        if (cboBillDownloads.isSelected()) {
-            filterBuchungen();
+        final Set<CidsBean> customers = billingsOfCustomers.keySet();
+        if (customers.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                this,
+                NbBundle.getMessage(
+                    BillingKundeAggregationRenderer.class,
+                    "BillingKundeAggregationRenderer.btnBuchungsbelegActionPerformed().dialog.message"),
+                NbBundle.getMessage(
+                    BillingKundeAggregationRenderer.class,
+                    "BillingKundeAggregationRenderer.btnBuchungsbelegActionPerformed().dialog.title"),
+                JOptionPane.ERROR_MESSAGE);
+        } else {
+            for (final CidsBean kundeBean : customers) {
+                new PrintBillingReportForCustomer(
+                    kundeBean,
+                    billingsOfCustomers.get(kundeBean),
+                    fromDate_tillDate,
+                    true,
+                    cboBillDownloads.isSelected(),
+                    this,
+                    retrieveShowBillingWithoutCostInReport(evt)).print();
+            }
+            if (cboBillDownloads.isSelected()) {
+                filterBuchungen();
+            }
         }
     }                                                                                      //GEN-LAST:event_btnRechnungsanlageActionPerformed
 
@@ -751,6 +789,8 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
 
         if (cboHideFreeDownloads.isSelected()) {
             cidsBillingSearchStatement.setKostentyp(Kostentyp.KOSTENPFLICHTIG);
+        } else {
+            cidsBillingSearchStatement.setKostentyp(Kostentyp.IGNORIEREN);
         }
 
         if (LOG.isDebugEnabled()) {
@@ -950,19 +990,15 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
     private HashMap<CidsBean, Collection<CidsBean>> createBillingsOfCostumersForReports(final ActionEvent evt) {
         final HashMap<CidsBean, Collection<CidsBean>> billingsOfCustomers =
             new HashMap<CidsBean, Collection<CidsBean>>();
-        final boolean showBillingWithoutCostInReport = retrieveShowBillingInReport(evt);
         for (final CidsBean billingBean : filteredBillingBeans) {
-            final Double nettoSum = (Double)billingBean.getProperty("netto_summe");
-            if (showBillingWithoutCostInReport || (nettoSum > 0)) {
-                final CidsBean kundeBean = (CidsBean)billingBean.getProperty("angelegt_durch.kunde");
-                if (isCustomerSelectedToBeIncludedIntoReport(kundeBean)) {
-                    if (billingsOfCustomers.containsKey(kundeBean)) {
-                        billingsOfCustomers.get(kundeBean).add(billingBean);
-                    } else {
-                        final ArrayList<CidsBean> billings = new ArrayList<CidsBean>();
-                        billings.add(billingBean);
-                        billingsOfCustomers.put(kundeBean, billings);
-                    }
+            final CidsBean kundeBean = (CidsBean)billingBean.getProperty("angelegt_durch.kunde");
+            if (isCustomerSelectedToBeIncludedIntoReport(kundeBean)) {
+                if (billingsOfCustomers.containsKey(kundeBean)) {
+                    billingsOfCustomers.get(kundeBean).add(billingBean);
+                } else {
+                    final ArrayList<CidsBean> billings = new ArrayList<CidsBean>();
+                    billings.add(billingBean);
+                    billingsOfCustomers.put(kundeBean, billings);
                 }
             }
         }
@@ -976,7 +1012,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
      *
      * @return  DOCUMENT ME!
      */
-    private boolean retrieveShowBillingInReport(final ActionEvent evt) {
+    private boolean retrieveShowBillingWithoutCostInReport(final ActionEvent evt) {
         final JButton source = (JButton)evt.getSource();
         if (source.equals(btnBuchungsbeleg)) {
             return !cboHideFreeDownloadsBuchungsbeleg.isSelected();
