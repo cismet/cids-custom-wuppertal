@@ -49,14 +49,17 @@ public class BillingKundengruppeEditor extends javax.swing.JPanel implements Cid
     private javax.swing.JButton btnRemKunde;
     private javax.swing.JColorChooser jColorChooser1;
     private javax.swing.JDialog jDialog1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblKunden;
     private javax.swing.JLabel lblName;
     private javax.swing.JList lstKunden;
     private javax.swing.JPanel panWkGroupFgs;
     private javax.swing.JScrollPane scpWkFgs;
     private javax.swing.JTextField txtName;
+    private javax.swing.JTextArea txtaDescription;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -128,6 +131,9 @@ public class BillingKundengruppeEditor extends javax.swing.JPanel implements Cid
         panWkGroupFgs = new javax.swing.JPanel();
         btnRemKunde = new javax.swing.JButton();
         lblKunden = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtaDescription = new javax.swing.JTextArea();
+        jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
 
         jDialog1.getContentPane().setLayout(new java.awt.GridBagLayout());
@@ -157,7 +163,7 @@ public class BillingKundengruppeEditor extends javax.swing.JPanel implements Cid
         txtName.setMinimumSize(new java.awt.Dimension(400, 20));
         txtName.setPreferredSize(new java.awt.Dimension(400, 20));
 
-        final org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.name}"),
@@ -232,6 +238,38 @@ public class BillingKundengruppeEditor extends javax.swing.JPanel implements Cid
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel2.add(lblKunden, gridBagConstraints);
 
+        txtaDescription.setColumns(20);
+        txtaDescription.setRows(5);
+        txtaDescription.setMinimumSize(new java.awt.Dimension(220, 75));
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.beschreibung}"),
+                txtaDescription,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jScrollPane1.setViewportView(txtaDescription);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jScrollPane1, gridBagConstraints);
+
+        jLabel1.setText(org.openide.util.NbBundle.getMessage(
+                BillingKundengruppeEditor.class,
+                "BillingKundengruppeEditor.jLabel1.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(jLabel1, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(jPanel2, gridBagConstraints);
@@ -243,12 +281,12 @@ public class BillingKundengruppeEditor extends javax.swing.JPanel implements Cid
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                826,
+                577,
                 Short.MAX_VALUE));
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                188,
+                292,
                 Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
