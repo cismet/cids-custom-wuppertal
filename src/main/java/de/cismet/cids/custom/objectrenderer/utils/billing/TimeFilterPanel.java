@@ -84,6 +84,11 @@ public class TimeFilterPanel extends javax.swing.JPanel implements FilterSetting
         initComponents();
         setTimeRelatedModels();
         selectCurrentDates();
+
+        // set Zoomable has to be set to activate the SpinningCalendarHeaderHandler. for more information see
+        // JXDatePickerHeaderTakeoff or http://stackoverflow.com/questions/16111943/java-swing-jxdatepicker
+        dpFrom.getMonthView().setZoomable(true);
+        dpTill.getMonthView().setZoomable(true);
     }
 
     //~ Methods ----------------------------------------------------------------
