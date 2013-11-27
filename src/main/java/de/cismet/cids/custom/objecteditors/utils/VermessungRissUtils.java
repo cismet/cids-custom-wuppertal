@@ -80,7 +80,7 @@ public class VermessungRissUtils {
                 gemarkung = ((String)tmpbean.getProperty("alkis_id")).substring(2, 6);
                 flur = (String)tmpbean.getProperty("flur");
                 zaehler = new Integer((String)tmpbean.getProperty("fstck_zaehler")).toString();
-                nenner = (String)tmpbean.getProperty("fstck_nenner");
+                nenner = new Integer((String)tmpbean.getProperty("fstck_nenner")).toString();
                 if (nenner == null) {
                     nenner = "0";
                 }
