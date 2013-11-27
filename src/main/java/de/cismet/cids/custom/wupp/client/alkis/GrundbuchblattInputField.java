@@ -78,7 +78,7 @@ public class GrundbuchblattInputField extends AbstractInputField {
                         return;
                     }
                     txtBuchungsblattnummer.setForeground(Color.BLACK);
-                    
+
                     str = str.replaceAll("[^-a-zA-Z0-9_%]", "");
 
                     // cut the characters before the delimiter
@@ -185,7 +185,7 @@ public class GrundbuchblattInputField extends AbstractInputField {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtDistrictFocusGained(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDistrictFocusGained
+    private void txtDistrictFocusGained(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtDistrictFocusGained
         final int textLength = txtDistrict.getText().length();
         if (isOverwritten()) {
             setOverwritten(false);
@@ -195,24 +195,24 @@ public class GrundbuchblattInputField extends AbstractInputField {
             txtDistrict.setCaretPosition(0);
             txtDistrict.moveCaretPosition(textLength);
         }
-    }//GEN-LAST:event_txtDistrictFocusGained
+    }                                                                          //GEN-LAST:event_txtDistrictFocusGained
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtDistrictFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDistrictFocusLost
+    private void txtDistrictFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtDistrictFocusLost
         finishDistrict();
         txtDistrict.setCaretPosition(0);
-    }//GEN-LAST:event_txtDistrictFocusLost
+    }                                                                        //GEN-LAST:event_txtDistrictFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtBuchungsblattnummerFocusGained(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBuchungsblattnummerFocusGained
+    private void txtBuchungsblattnummerFocusGained(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtBuchungsblattnummerFocusGained
         final int textLenght = txtBuchungsblattnummer.getText().length();
         if (isOverwritten()) {
             setOverwritten(false);
@@ -222,17 +222,17 @@ public class GrundbuchblattInputField extends AbstractInputField {
             txtBuchungsblattnummer.setCaretPosition(0);
             txtBuchungsblattnummer.moveCaretPosition(textLenght);
         }
-    }//GEN-LAST:event_txtBuchungsblattnummerFocusGained
+    }                                                                                     //GEN-LAST:event_txtBuchungsblattnummerFocusGained
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtBuchungsblattnummerFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBuchungsblattnummerFocusLost
+    private void txtBuchungsblattnummerFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtBuchungsblattnummerFocusLost
         finishBuchungsblattnummer();
         txtBuchungsblattnummer.setCaretPosition(0);
-    }//GEN-LAST:event_txtBuchungsblattnummerFocusLost
+    }                                                                                   //GEN-LAST:event_txtBuchungsblattnummerFocusLost
 
     /**
      * DOCUMENT ME!
