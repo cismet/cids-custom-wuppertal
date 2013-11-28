@@ -39,6 +39,8 @@ import de.aedsicad.aaaweb.service.util.Owner;
 import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
 import edu.umd.cs.piccolo.event.PInputEvent;
 
+import org.apache.commons.lang.ArrayUtils;
+
 import org.jdesktop.swingbinding.JListBinding;
 import org.jdesktop.swingx.graphics.ReflectionRenderer;
 
@@ -174,6 +176,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private ImageIcon GRUND_NRW_HTML;
     //
     private final List<LightweightLandParcel> landParcelList;
+    private final List<LightweightLandParcel3A> landParcel3AList;
     private final MappingComponent map;
     //
     private RetrieveWorker retrieveWorker;
@@ -183,6 +186,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private CidsBean cidsBean;
     private String title;
     private final JListBinding landparcelListBinding;
+    private final JListBinding landparcel3AListBinding;
     private final CardLayout cardLayout;
     private final Map<Object, ImageIcon> productPreviewImages;
     private boolean continueInBackground = false;
@@ -231,6 +235,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private javax.swing.JLabel lblPreviewHead;
     private javax.swing.JLabel lblProductPreview;
     private javax.swing.JLabel lblTitle;
+    private javax.swing.JList lstBuchungsstellen;
     private javax.swing.JList lstLandparcels;
     private javax.swing.JPanel panButtons;
     private javax.swing.JPanel panContent;
@@ -246,6 +251,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private javax.swing.JPanel panProdukteHTML;
     private javax.swing.JPanel panProduktePDF;
     private javax.swing.JPanel panTitle;
+    private javax.swing.JScrollPane scpBuchungsstellen;
     private javax.swing.JScrollPane scpLandparcels;
     private javax.swing.JScrollPane scpOwner;
     private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel3;
@@ -266,6 +272,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 //        landParcelFeatureMap = TypeSafeCollections.newHashMap();
         map.setOpaque(false);
         landParcelList = TypeSafeCollections.newArrayList();
+        landParcel3AList = TypeSafeCollections.newArrayList();
         productPreviewImages = TypeSafeCollections.newHashMap();
 
         if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions()) {
@@ -303,6 +310,18 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                 lstLandparcels);
         landparcelListBinding.setSourceNullValue(null);
         landparcelListBinding.setSourceUnreadableValue(null);
+
+        lstBuchungsstellen.setCellRenderer(new FancyListCellRenderer());
+        final org.jdesktop.beansbinding.ELProperty eLProperty3A = org.jdesktop.beansbinding.ELProperty.create(
+                "${landParcel3AList}");
+        landparcel3AListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                this,
+                eLProperty3A,
+                lstBuchungsstellen);
+        landparcel3AListBinding.setSourceNullValue(null);
+        landparcel3AListBinding.setSourceUnreadableValue(null);
+
         if (!AlkisUtils.validateUserHasAlkisProductAccess()) {
             // disable Product page if user does not have the right to see it.
             btnForward.setEnabled(false);
@@ -511,6 +530,8 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         jPanel4 = new javax.swing.JPanel();
         scpLandparcels = new javax.swing.JScrollPane();
         lstLandparcels = new javax.swing.JList();
+        scpBuchungsstellen = new javax.swing.JScrollPane();
+        lstBuchungsstellen = new javax.swing.JList();
         srpHeadGrundstuecke = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeadFlurstuecke = new javax.swing.JLabel();
         panKarte = new javax.swing.JPanel();
@@ -820,7 +841,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         panGrundstuecke.setLayout(new java.awt.BorderLayout());
 
         jPanel4.setOpaque(false);
-        jPanel4.setLayout(new java.awt.BorderLayout());
+        jPanel4.setLayout(new java.awt.GridBagLayout());
 
         scpLandparcels.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
         scpLandparcels.setOpaque(false);
@@ -849,7 +870,40 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
             });
         scpLandparcels.setViewportView(lstLandparcels);
 
-        jPanel4.add(scpLandparcels, java.awt.BorderLayout.CENTER);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel4.add(scpLandparcels, gridBagConstraints);
+
+        scpBuchungsstellen.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        scpBuchungsstellen.setOpaque(false);
+
+        lstBuchungsstellen.setOpaque(false);
+        lstBuchungsstellen.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lstBuchungsstellenMouseClicked(evt);
+                }
+            });
+        lstBuchungsstellen.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+
+                @Override
+                public void valueChanged(final javax.swing.event.ListSelectionEvent evt) {
+                    lstBuchungsstellenValueChanged(evt);
+                }
+            });
+        lstBuchungsstellen.addFocusListener(new java.awt.event.FocusAdapter() {
+
+                @Override
+                public void focusLost(final java.awt.event.FocusEvent evt) {
+                    lstBuchungsstellenFocusLost(evt);
+                }
+            });
+        scpBuchungsstellen.setViewportView(lstBuchungsstellen);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel4.add(scpBuchungsstellen, gridBagConstraints);
 
         panGrundstuecke.add(jPanel4, java.awt.BorderLayout.CENTER);
 
@@ -1479,6 +1533,33 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     /**
      * DOCUMENT ME!
      *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lstBuchungsstellenMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstBuchungsstellenMouseClicked
+        // TODO add your handling code here:
+    } //GEN-LAST:event_lstBuchungsstellenMouseClicked
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lstBuchungsstellenValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstBuchungsstellenValueChanged
+        // TODO add your handling code here:
+    } //GEN-LAST:event_lstBuchungsstellenValueChanged
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lstBuchungsstellenFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_lstBuchungsstellenFocusLost
+        // TODO add your handling code here:
+    } //GEN-LAST:event_lstBuchungsstellenFocusLost
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param   buchungsblattCode  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
@@ -1604,12 +1685,24 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     /**
      * DOCUMENT ME!
      *
+     * @return  DOCUMENT ME!
+     */
+    public Object getLandParcel3AList() {
+        return landParcel3AList;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param  cb  DOCUMENT ME!
      */
     @Override
     public void setCidsBean(final CidsBean cb) {
         if (landparcelListBinding.isBound()) {
             landparcelListBinding.unbind();
+        }
+        if (landparcel3AListBinding.isBound()) {
+            landparcel3AListBinding.unbind();
         }
         if (cb != null) {
             cidsBean = cb;
@@ -1928,6 +2021,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     @Override
     public void dispose() {
         landparcelListBinding.unbind();
+        landparcel3AListBinding.unbind();
         if (!continueInBackground) {
             AlkisSOAPWorkerService.cancel(retrieveWorker);
             setWaiting(false);
@@ -2040,10 +2134,32 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                         hlGrundstuecksnachweisNrwPdf.setEnabled(true);
                         hlGrundstuecksnachweisNrwHtml.setEnabled(true);
 
-//                        Buchungsstelle[] bsts=buchungsblatt.getBuchungsstellen();
-//                        for (Buchungsstelle bst:bsts){
-//                            LandParcel[] lpa=bst.getLandParcel();
-//                        }
+                        final Buchungsstelle[] buchungsstellen = buchungsblatt.getBuchungsstellen();
+                        for (final Buchungsstelle buchungsstelle : buchungsstellen) {
+                            final String buchungsart = buchungsstelle.getBuchungsart();
+                            final String lfn = buchungsstelle.getSequentialNumber();
+                            final String fraction = buchungsstelle.getFraction();
+                            final String aufteilungsnummer = buchungsstelle.getNumber();
+
+                            for (final LandParcel landparcel : getLandparcelFromBuchungsstelle(buchungsstelle)) {
+                                final String landparcelCode = landparcel.getLandParcelCode().trim();
+                                final LightweightLandParcel3A landparcel3A = new LightweightLandParcel3A(
+                                        landparcelCode,
+                                        buchungsart,
+                                        lfn,
+                                        fraction,
+                                        aufteilungsnummer);
+                                landParcel3AList.add(landparcel3A);
+                            }
+                        }
+                        Collections.sort(landParcel3AList, new Comparator<LightweightLandParcel3A>() {
+
+                                @Override
+                                public int compare(final LightweightLandParcel3A t, final LightweightLandParcel3A t1) {
+                                    return t.toString().compareTo(t1.toString());
+                                }
+                            });
+                        landparcel3AListBinding.bind();
                     }
                 }
             } catch (InterruptedException ex) {
@@ -2058,6 +2174,160 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
             } finally {
                 setWaiting(false);
             }
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   buchungsstelle  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        private LandParcel[] getLandparcelFromBuchungsstelle(final Buchungsstelle buchungsstelle) {
+            if (buchungsstelle.getBuchungsstellen() == null) {
+                return buchungsstelle.getLandParcel();
+            } else {
+                final LandParcel[] result = buchungsstelle.getLandParcel();
+                for (final Buchungsstelle b : buchungsstelle.getBuchungsstellen()) {
+                    concatArrays(result, getLandparcelFromBuchungsstelle(b));
+                }
+                return result;
+            }
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   a  DOCUMENT ME!
+         * @param   b  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        private LandParcel[] concatArrays(LandParcel[] a, LandParcel[] b) {
+            if (a == null) {
+                a = new LandParcel[0];
+            }
+            if (b == null) {
+                b = new LandParcel[0];
+            }
+            return (LandParcel[])ArrayUtils.addAll(a, b);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public static final class LightweightLandParcel3A {
+
+        //~ Static fields/initializers -----------------------------------------
+
+        private static int nextColor = 0;
+
+        //~ Instance fields ----------------------------------------------------
+
+        private final String landparcelCode;
+        private final Color color;
+        private final String buchungsart;
+        private final String lfn;
+        private final String fraction;
+        private final String aufteilungsnummer;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new LightweightLandParcel3A object.
+         *
+         * @param  landparcelCode     DOCUMENT ME!
+         * @param  buchungsart        DOCUMENT ME!
+         * @param  lfn                DOCUMENT ME!
+         * @param  fraction           DOCUMENT ME!
+         * @param  aufteilungsnummer  DOCUMENT ME!
+         */
+        public LightweightLandParcel3A(final String landparcelCode,
+                final String buchungsart,
+                final String lfn,
+                final String fraction,
+                final String aufteilungsnummer) {
+            this.landparcelCode = landparcelCode;
+            this.buchungsart = buchungsart;
+            this.lfn = lfn;
+            this.fraction = fraction;
+            this.aufteilungsnummer = aufteilungsnummer;
+            nextColor = (nextColor + 1) % COLORS.length;
+            this.color = COLORS[nextColor];
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public String toString() {
+            return String.valueOf(lfn) + "  " + String.valueOf(landparcelCode) + " (" + String.valueOf(buchungsart)
+                        + ", " + String.valueOf(fraction) + ", " + String.valueOf(aufteilungsnummer) + ")";
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public static int getNextColor() {
+            return nextColor;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public String getLandparcelCode() {
+            return landparcelCode;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public Color getColor() {
+            return color;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public String getBuchungsart() {
+            return buchungsart;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public String getLfn() {
+            return lfn;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public String getFraction() {
+            return fraction;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public String getAufteilungsnummer() {
+            return aufteilungsnummer;
         }
     }
 
@@ -2242,6 +2512,9 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
             selected = isSelected;
             if (value instanceof LightweightLandParcel) {
                 final LightweightLandParcel lwlp = (LightweightLandParcel)value;
+                setBackground(lwlp.getColor());
+            } else if (value instanceof LightweightLandParcel3A) {
+                final LightweightLandParcel3A lwlp = (LightweightLandParcel3A)value;
                 setBackground(lwlp.getColor());
             }
 
