@@ -298,6 +298,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         }
         scpOwner.getViewport().setOpaque(false);
         scpLandparcels.getViewport().setOpaque(false);
+        scpBuchungsstellen.getViewport().setOpaque(false);
         panKarte.add(map, BorderLayout.CENTER);
         initEditorPanes();
         lstLandparcels.setCellRenderer(new FancyListCellRenderer());
@@ -872,6 +873,8 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         jPanel4.add(scpLandparcels, gridBagConstraints);
 
         scpBuchungsstellen.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -903,6 +906,8 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         jPanel4.add(scpBuchungsstellen, gridBagConstraints);
 
         panGrundstuecke.add(jPanel4, java.awt.BorderLayout.CENTER);
@@ -2187,9 +2192,9 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
             if (buchungsstelle.getBuchungsstellen() == null) {
                 return buchungsstelle.getLandParcel();
             } else {
-                final LandParcel[] result = buchungsstelle.getLandParcel();
+                LandParcel[] result = buchungsstelle.getLandParcel();
                 for (final Buchungsstelle b : buchungsstelle.getBuchungsstellen()) {
-                    concatArrays(result, getLandparcelFromBuchungsstelle(b));
+                    result = concatArrays(result, getLandparcelFromBuchungsstelle(b));
                 }
                 return result;
             }
