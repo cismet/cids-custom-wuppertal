@@ -161,6 +161,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         "custom.alkis.product.bestandsnachweis_kom_intern@WUNDA_BLAU";
     private static final String PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW =
         "custom.alkis.product.grundstuecksnachweis_nrw@WUNDA_BLAU";
+    private static int nextColor = 0;
 
     //~ Instance fields --------------------------------------------------------
 
@@ -2035,15 +2036,17 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     }
 
     /**
-     * final class GeomQueryWorker extends SwingWorker<List<MetaObject>, Void> { @Override protected List<MetaObject>
-     * doInBackground() throws Exception { //set dummy to avoid multiple worker calls realLandParcelMetaObjectsCache =
-     * Collections.EMPTY_LIST; return queryForRealLandParcels(); } @Override protected void done() { try { if
-     * (!isCancelled()) { realLandParcelMetaObjectsCache = get(); switchToMapAndShowGeometries(); } } catch
-     * (InterruptedException ex) { log.warn(ex, ex); realLandParcelMetaObjectsCache = null; } catch (Exception ex) {
-     * ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Abrufen der Geometrien", ex,
-     * Alkis_buchungsblattRenderer.this); log.error(ex, ex); realLandParcelMetaObjectsCache = null; } } }.
+     * final class GeomQueryWorker extends SwingWorker<List<MetaObject>, Void> {.
      *
-     * @return  DOCUMENT ME!
+     * @return    DOCUMENT ME!
+     *
+     * @Override  protected List<MetaObject> doInBackground() throws Exception { //set dummy to avoid multiple worker
+     *            calls realLandParcelMetaObjectsCache = Collections.EMPTY_LIST; return queryForRealLandParcels(); }
+     * @Override  protected void done() { try { if (!isCancelled()) { realLandParcelMetaObjectsCache = get();
+     *            switchToMapAndShowGeometries(); } } catch (InterruptedException ex) { log.warn(ex, ex);
+     *            realLandParcelMetaObjectsCache = null; } catch (Exception ex) {
+     *            ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Abrufen der Geometrien", ex,
+     *            Alkis_buchungsblattRenderer.this); log.error(ex, ex); realLandParcelMetaObjectsCache = null; } } }.
      */
     @Override
     public Border getTitleBorder() {
@@ -2068,6 +2071,15 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     @Override
     public Border getCenterrBorder() {
         return new EmptyBorder(5, 5, 5, 5);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static int getNextColor() {
+        return nextColor;
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -2224,11 +2236,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      *
      * @version  $Revision$, $Date$
      */
-    public static final class LightweightLandParcel3A {
-
-        //~ Static fields/initializers -----------------------------------------
-
-        private static int nextColor = 0;
+    public final class LightweightLandParcel3A {
 
         //~ Instance fields ----------------------------------------------------
 
@@ -2268,17 +2276,32 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 
         @Override
         public String toString() {
-            return String.valueOf(lfn) + "  " + String.valueOf(landparcelCode) + " (" + String.valueOf(buchungsart)
-                        + ", " + String.valueOf(fraction) + ", " + String.valueOf(aufteilungsnummer) + ")";
-        }
+            final String basicString = String.valueOf(lfn) + "  " + String.valueOf(landparcelCode);
+            if ((buchungsart == null)
+                        || (buchungsart.equals(lblBuchungsart.getText()) && (fraction == null)
+                            && (aufteilungsnummer == null))) {
+                return basicString;
+            }
 
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public static int getNextColor() {
-            return nextColor;
+            final StringBuilder sb = new StringBuilder();
+            sb.append(basicString);
+            sb.append(" (");
+            if ((buchungsart != null) && !buchungsart.equals(lblBuchungsart.getText())) {
+                sb.append(buchungsart);
+                sb.append(", ");
+            }
+            if (fraction != null) {
+                sb.append(fraction);
+                sb.append(", ");
+            }
+            if (aufteilungsnummer != null) {
+                sb.append(AlkisUtils.prettyPrintAufteilungsnummer(aufteilungsnummer));
+                sb.append(", ");
+            }
+            sb.replace(sb.length() - 2, sb.length(), "");
+            sb.append(")");
+
+            return sb.toString();
         }
 
         /**

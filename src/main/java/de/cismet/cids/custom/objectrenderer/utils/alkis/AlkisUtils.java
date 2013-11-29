@@ -523,31 +523,49 @@ public class AlkisUtils {
         if ((buchungsstellen != null) && (buchungsstellen.length > 0)) {
             final ArrayList<Buchungsstelle> alleStellen = new ArrayList<Buchungsstelle>();
             alleStellen.addAll(Arrays.asList(buchungsstellen));
-            Collections.sort(alleStellen, new Comparator<Buchungsstelle>() {
-
-                    @Override
-                    public int compare(final Buchungsstelle t, final Buchungsstelle t1) {
-                        return t.getBuchungsartCode().compareTo(t1.getBuchungsartCode());
-                    }
-                });
-
-            final Buchungsstelle ersteBuchungsstelle = alleStellen.get(alleStellen.size() - 1);
-            if (ersteBuchungsstelle != null) {
-                final StringBuilder result = new StringBuilder();
-                final String prettyFration = prettyPrintFration(ersteBuchungsstelle.getFraction());
-                result.append(prettyFration);
-                if ((prettyFration != null) && (prettyFration.length() > 0)) {
-                    result.append(" ");
-                }
-                result.append(ersteBuchungsstelle.getBuchungsart());
-                final String number = ersteBuchungsstelle.getNumber();
-                if (!((number == null) || (number.trim().length() > 0))) {
-                    result.append(", Aufteilungsplan Nr. ").append(number);
-                }
-                return result.toString();
+            if (isListOfSameBuchungsart(alleStellen)) {
+                return alleStellen.get(0).getBuchungsart();
+            } else {
+                return "diverse";
             }
         }
         return "";
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   buchungsstellen  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static boolean isListOfSameBuchungsart(final List<Buchungsstelle> buchungsstellen) {
+        final Set<Buchungsstelle> set = new HashSet<Buchungsstelle>(buchungsstellen.size());
+        for (final Buchungsstelle o : buchungsstellen) {
+            if (set.isEmpty()) {
+                set.add(o);
+            } else {
+                if (set.add(o)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   aufteilungsnummer  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String prettyPrintAufteilungsnummer(final String aufteilungsnummer) {
+        if (aufteilungsnummer != null) {
+            return "ATP Nr. " + aufteilungsnummer;
+        } else {
+            return "";
+        }
     }
 
     /**
