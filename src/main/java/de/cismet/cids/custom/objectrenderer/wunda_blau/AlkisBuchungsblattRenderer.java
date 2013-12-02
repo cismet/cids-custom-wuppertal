@@ -79,6 +79,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
@@ -198,6 +199,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 //    private List<MetaObject> realLandParcelMetaObjectsCache = null;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXBusyLabel blWait;
+    private org.jdesktop.swingx.JXBusyLabel blWaitingLandparcel;
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnForward;
     private javax.swing.JEditorPane epOwner;
@@ -209,9 +211,9 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private org.jdesktop.swingx.JXHyperlink hlBestandsnachweisNrwPdf;
     private org.jdesktop.swingx.JXHyperlink hlGrundstuecksnachweisNrwHtml;
     private org.jdesktop.swingx.JXHyperlink hlGrundstuecksnachweisNrwPdf;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
-    private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -258,6 +260,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private javax.swing.JPanel panTitle;
     private javax.swing.JPanel pnlBusy;
     private javax.swing.JPanel pnlError;
+    private javax.swing.JPanel pnlLandparcels;
     private javax.swing.JScrollPane scpBuchungsstellen;
     private javax.swing.JScrollPane scpLandparcels;
     private javax.swing.JScrollPane scpOwner;
@@ -538,11 +541,13 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         jPanel4 = new javax.swing.JPanel();
         scpLandparcels = new javax.swing.JScrollPane();
         lstLandparcels = new javax.swing.JList();
-        jPanel11 = new javax.swing.JPanel();
+        pnlLandparcels = new javax.swing.JPanel();
         scpBuchungsstellen = new javax.swing.JScrollPane();
         lstBuchungsstellen = new javax.swing.JList();
         pnlError = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
         pnlBusy = new javax.swing.JPanel();
+        blWaitingLandparcel = new org.jdesktop.swingx.JXBusyLabel();
         srpHeadGrundstuecke = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeadFlurstuecke = new javax.swing.JLabel();
         panKarte = new javax.swing.JPanel();
@@ -887,7 +892,8 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         gridBagConstraints.weighty = 1.0;
         jPanel4.add(scpLandparcels, gridBagConstraints);
 
-        jPanel11.setLayout(new java.awt.CardLayout());
+        pnlLandparcels.setOpaque(false);
+        pnlLandparcels.setLayout(new java.awt.CardLayout());
 
         scpBuchungsstellen.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
         scpBuchungsstellen.setOpaque(false);
@@ -916,9 +922,22 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
             });
         scpBuchungsstellen.setViewportView(lstBuchungsstellen);
 
-        jPanel11.add(scpBuchungsstellen, "landparcels");
-        jPanel11.add(pnlError, "error");
-        jPanel11.add(pnlBusy, "busy");
+        pnlLandparcels.add(scpBuchungsstellen, "landparcels");
+
+        pnlError.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        pnlError.setOpaque(false);
+        pnlError.setLayout(new java.awt.BorderLayout());
+
+        jLabel1.setText("Fehler beim Laden!");
+        pnlError.add(jLabel1, java.awt.BorderLayout.PAGE_START);
+
+        pnlLandparcels.add(pnlError, "error");
+
+        pnlBusy.setOpaque(false);
+        pnlBusy.setLayout(new java.awt.GridBagLayout());
+        pnlBusy.add(blWaitingLandparcel, new java.awt.GridBagConstraints());
+
+        pnlLandparcels.add(pnlBusy, "busy");
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -926,7 +945,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        jPanel4.add(jPanel11, gridBagConstraints);
+        jPanel4.add(pnlLandparcels, gridBagConstraints);
 
         panGrundstuecke.add(jPanel4, java.awt.BorderLayout.CENTER);
 
@@ -2062,6 +2081,10 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private void setWaiting(final boolean waiting) {
         blWait.setVisible(waiting);
         blWait.setBusy(waiting);
+        blWaitingLandparcel.setBusy(waiting);
+        if (waiting) {
+            ((CardLayout)pnlLandparcels.getLayout()).show(pnlLandparcels, "busy");
+        }
     }
 
     /**
@@ -2156,6 +2179,20 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
          */
         public RetrieveWorker(final CidsBean bean) {
             this.bean = bean;
+
+            if (SwingUtilities.isEventDispatchThread()) {
+                setWaiting(true);
+                epOwner.setText("Wird geladen...");
+            } else {
+                SwingUtilities.invokeLater(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            setWaiting(true);
+                            epOwner.setText("Wird geladen...");
+                        }
+                    });
+            }
         }
 
         //~ Methods ------------------------------------------------------------
@@ -2169,8 +2206,6 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
          */
         @Override
         protected Buchungsblatt doInBackground() throws Exception {
-            setWaiting(true);
-            epOwner.setText("Wird geladen...");
             if (infoService != null) {
                 return infoService.getBuchungsblatt(soapProvider.getIdentityCard(),
                         soapProvider.getService(),
@@ -2229,7 +2264,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                                 }
                             });
                         landparcel3AListBinding.bind();
-
+                        ((CardLayout)pnlLandparcels.getLayout()).show(pnlLandparcels, "landparcels");
                         initMap();
                     }
                 }
@@ -2241,6 +2276,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                     ex,
                     AlkisBuchungsblattRenderer.this);
                 epOwner.setText("Fehler beim Laden!");
+                ((CardLayout)pnlLandparcels.getLayout()).show(pnlLandparcels, "error");
                 log.error(ex, ex);
             } finally {
                 setWaiting(false);
