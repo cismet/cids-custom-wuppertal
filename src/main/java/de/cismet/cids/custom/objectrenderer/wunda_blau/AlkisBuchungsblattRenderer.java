@@ -148,7 +148,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
             new Color(255, 91, 0)
         };
     public static final List<Color> LANDPARCEL_COLORS = Collections.unmodifiableList(Arrays.asList(COLORS));
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             AlkisBuchungsblattRenderer.class);
     private static final String ICON_RES_PACKAGE = "/de/cismet/cids/custom/wunda_blau/res/";
     private static final String ALKIS_RES_PACKAGE = ICON_RES_PACKAGE + "alkis/";
@@ -282,7 +282,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                 soapProvider = new SOAPAccessProvider();
                 infoService = soapProvider.getAlkisInfoService();
             } catch (Exception ex) {
-                log.fatal(ex, ex);
+                LOG.fatal(ex, ex);
             }
         }
         initIcons();
@@ -295,7 +295,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
             cardLayout.show(this, CARD_1);
         } else {
             cardLayout = new CardLayout();
-            log.error("Alkis_buchungsblattRenderer exspects CardLayout as major layout manager, but has " + getLayout()
+            LOG.error("Alkis_buchungsblattRenderer exspects CardLayout as major layout manager, but has " + getLayout()
                         + "!");
         }
         scpOwner.getViewport().setOpaque(false);
@@ -373,7 +373,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
             i6 = reflectionRenderer.appendReflection(ImageIO.read(
                         getClass().getResource(ALKIS_RES_PACKAGE + "bestandsachweishtml.png")));
         } catch (Exception ex) {
-            log.error(ex, ex);
+            LOG.error(ex, ex);
         }
         BESTAND_NRW_PDF = new ImageIcon(i1);
         BESTAND_NRW_HTML = new ImageIcon(i2);
@@ -1246,7 +1246,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                         + product,
                 ex,
                 AlkisBuchungsblattRenderer.this);
-            log.error(ex);
+            LOG.error(ex);
         }
     }
 
@@ -1279,7 +1279,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                         PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW);
                 }
             } catch (Exception e) {
-                log.error("Error when trying to produce a alkis product", e);
+                LOG.error("Error when trying to produce a alkis product", e);
                 // Hier noch ein Fehlerdialog
             }
         } else {
@@ -1345,7 +1345,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                         PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM);
                 }
             } catch (Exception e) {
-                log.error("Error when trying to produce a alkis product", e);
+                LOG.error("Error when trying to produce a alkis product", e);
                 // Hier noch ein Fehlerdialog
             }
         } else {
@@ -1366,7 +1366,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                     PRODUCT_ACTION_TAG_GRUNDSTUECKSNACHWEIS_NRW);
             }
         } catch (Exception e) {
-            log.error("Error when trying to produce a alkis product", e);
+            LOG.error("Error when trying to produce a alkis product", e);
             // Hier noch ein Fehlerdialog
         }
     }                                                                                                //GEN-LAST:event_hlGrundstuecksnachweisNrwPdfActionPerformed
@@ -1449,7 +1449,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                             .gotoMetaObject(mc, lwParcel.getFullObjectID(), "");
                 }
             } catch (Exception ex) {
-                log.error(ex, ex);
+                LOG.error(ex, ex);
             }
         }
     }                                                                                  //GEN-LAST:event_lstBuchungsstellenMouseClicked
@@ -1503,7 +1503,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                     map.gotoBoundingBox(boxToGoto, true, true, 500);
                 }
             } catch (Error t) {
-                log.fatal(t, t);
+                LOG.fatal(t, t);
             }
         }
     } //GEN-LAST:event_lstBuchungsstellenValueChanged
@@ -1756,14 +1756,14 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 //                                }
                                 }
                             } catch (Exception ex) {
-                                log.error(ex, ex);
+                                LOG.error(ex, ex);
                             }
                         }
                     });
                 map.setInteractionMode("MUTE");
                 map.setAnimationDuration(duration);
             } catch (Throwable t) {
-                log.fatal(t, t);
+                LOG.fatal(t, t);
             }
         } else {
             panKarte.setVisible(false);
@@ -2112,7 +2112,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                     }
                 }
             } catch (InterruptedException ex) {
-                log.warn(ex, ex);
+                LOG.warn(ex, ex);
             } catch (Exception ex) {
                 ObjectRendererUtils.showExceptionWindowToUser(
                     "Fehler beim Retrieve",
@@ -2120,7 +2120,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                     AlkisBuchungsblattRenderer.this);
                 epOwner.setText("Fehler beim Laden!");
                 ((CardLayout)pnlLandparcels.getLayout()).show(pnlLandparcels, "error");
-                log.error(ex, ex);
+                LOG.error(ex, ex);
             } finally {
                 setWaiting(false);
             }
