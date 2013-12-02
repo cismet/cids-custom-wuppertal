@@ -935,7 +935,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         srpHeadGrundstuecke.setLayout(new java.awt.GridBagLayout());
 
         lblHeadFlurstuecke.setForeground(new java.awt.Color(255, 255, 255));
-        lblHeadFlurstuecke.setText("Grundstücke und Flurstücke");
+        lblHeadFlurstuecke.setText("Buchungsstellen und Flurstücke");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         srpHeadGrundstuecke.add(lblHeadFlurstuecke, gridBagConstraints);
