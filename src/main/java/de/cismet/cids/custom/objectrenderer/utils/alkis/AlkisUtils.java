@@ -575,21 +575,9 @@ public class AlkisUtils {
      *
      * @return  DOCUMENT ME!
      */
-    public static String prettyPrintFration(final String fraction) {
+    public static String prettyPrintFraction(final String fraction) {
         if (fraction != null) {
-//            final String[] elements = fraction.split("/");
-//            if ((elements != null) && (elements.length == 2)) {
-//                String zaehler = elements[0];
-//                String nenner = elements[1];
-//                if (zaehler.lastIndexOf(".") != -1) {
-//                    zaehler = zaehler.substring(0, zaehler.lastIndexOf("."));
-//                }
-//                if (nenner.lastIndexOf(".") != -1) {
-//                    nenner = nenner.substring(0, nenner.lastIndexOf("."));
-//                }
-//                return zaehler + "/" + nenner;
-//            }
-            return fraction;
+            return "Anteil " + fraction;
         }
         return "";
     }

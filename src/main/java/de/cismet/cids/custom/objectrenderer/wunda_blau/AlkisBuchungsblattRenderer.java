@@ -2347,7 +2347,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                 sb.append(", ");
             }
             if (fraction != null) {
-                sb.append(fraction);
+                sb.append(AlkisUtils.prettyPrintFraction(fraction));
                 sb.append(", ");
             }
             if (aufteilungsnummer != null) {
