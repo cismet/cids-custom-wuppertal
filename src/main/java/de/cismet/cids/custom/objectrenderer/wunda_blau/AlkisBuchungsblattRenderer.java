@@ -44,6 +44,8 @@ import org.apache.commons.lang.ArrayUtils;
 import org.jdesktop.swingbinding.JListBinding;
 import org.jdesktop.swingx.graphics.ReflectionRenderer;
 
+import org.openide.util.Exceptions;
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -61,6 +63,7 @@ import java.awt.image.BufferedImage;
 
 import java.net.URL;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -208,6 +211,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private org.jdesktop.swingx.JXHyperlink hlGrundstuecksnachweisNrwPdf;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -252,6 +256,8 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private javax.swing.JPanel panProdukteHTML;
     private javax.swing.JPanel panProduktePDF;
     private javax.swing.JPanel panTitle;
+    private javax.swing.JPanel pnlBusy;
+    private javax.swing.JPanel pnlError;
     private javax.swing.JScrollPane scpBuchungsstellen;
     private javax.swing.JScrollPane scpLandparcels;
     private javax.swing.JScrollPane scpOwner;
@@ -532,8 +538,11 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         jPanel4 = new javax.swing.JPanel();
         scpLandparcels = new javax.swing.JScrollPane();
         lstLandparcels = new javax.swing.JList();
+        jPanel11 = new javax.swing.JPanel();
         scpBuchungsstellen = new javax.swing.JScrollPane();
         lstBuchungsstellen = new javax.swing.JList();
+        pnlError = new javax.swing.JPanel();
+        pnlBusy = new javax.swing.JPanel();
         srpHeadGrundstuecke = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeadFlurstuecke = new javax.swing.JLabel();
         panKarte = new javax.swing.JPanel();
@@ -878,6 +887,8 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         gridBagConstraints.weighty = 1.0;
         jPanel4.add(scpLandparcels, gridBagConstraints);
 
+        jPanel11.setLayout(new java.awt.CardLayout());
+
         scpBuchungsstellen.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
         scpBuchungsstellen.setOpaque(false);
 
@@ -905,11 +916,17 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
             });
         scpBuchungsstellen.setViewportView(lstBuchungsstellen);
 
+        jPanel11.add(scpBuchungsstellen, "landparcels");
+        jPanel11.add(pnlError, "error");
+        jPanel11.add(pnlBusy, "busy");
+
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        jPanel4.add(scpBuchungsstellen, gridBagConstraints);
+        jPanel4.add(jPanel11, gridBagConstraints);
 
         panGrundstuecke.add(jPanel4, java.awt.BorderLayout.CENTER);
 
@@ -1311,23 +1328,6 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      * @param  evt  DOCUMENT ME!
      */
     private void lstLandparcelsMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstLandparcelsMouseClicked
-        if (evt.getClickCount() > 1) {
-            try {
-                final Object selection = lstLandparcels.getSelectedValue();
-                if (selection instanceof LightweightLandParcel) {
-                    final LightweightLandParcel lwParcel = (LightweightLandParcel)selection;
-                    final MetaClass mc = ClassCacheMultiple.getMetaClass(
-                            CidsBeanSupport.DOMAIN_NAME,
-                            "ALKIS_LANDPARCEL");
-                    continueInBackground = true;
-                    ComponentRegistry.getRegistry()
-                            .getDescriptionPane()
-                            .gotoMetaObject(mc, lwParcel.getFullObjectID(), "");
-                }
-            } catch (Exception ex) {
-                log.error(ex, ex);
-            }
-        }
     }                                                                              //GEN-LAST:event_lstLandparcelsMouseClicked
 
     /**
@@ -1336,53 +1336,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      * @param  evt  DOCUMENT ME!
      */
     private void lstLandparcelsValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstLandparcelsValueChanged
-        if (!evt.getValueIsAdjusting()) {
-            try {
-                // release cache
-// realLandParcelMetaObjectsCache = null;
-                final Object[] selObjs = lstLandparcels.getSelectedValues();
-                final List<Geometry> allSelectedGeoms = TypeSafeCollections.newArrayList();
-                for (final Object obj : selObjs) {
-                    if (obj instanceof LightweightLandParcel) {
-                        final LightweightLandParcel lwlp = (LightweightLandParcel)obj;
-                        if (lwlp.getGeometry() != null) {
-                            allSelectedGeoms.add(lwlp.getGeometry());
-                        }
-//                    final DefaultStyledFeature dsFeature = landParcelFeatureMap.get(lwlp);
-//                    if (dsFeature != null) {
-//                        if (lwlp.getColor().equals(dsFeature.getFillingPaint())) {
-//
-//                        }
-//                    }
-                    }
-                }
-
-                if (allSelectedGeoms.size() > 0) {
-                    final GeometryCollection geoCollection = new GeometryCollection(allSelectedGeoms.toArray(
-                                new Geometry[allSelectedGeoms.size()]),
-                            new GeometryFactory());
-                    final Geometry extendGeom = geoCollection.getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER);
-
-                    extendGeom.setSRID(allSelectedGeoms.get(0).getSRID());
-                    final Geometry transformedGeom = CrsTransformer.transformToDefaultCrs(extendGeom);
-                    transformedGeom.setSRID(CismapBroker.getInstance().getDefaultCrsAlias());
-
-                    final XBoundingBox boxToGoto = new XBoundingBox(transformedGeom);
-                    boxToGoto.setX1(boxToGoto.getX1()
-                                - (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
-                    boxToGoto.setX2(boxToGoto.getX2()
-                                + (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
-                    boxToGoto.setY1(boxToGoto.getY1()
-                                - (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
-                    boxToGoto.setY2(boxToGoto.getY2()
-                                + (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
-                    map.gotoBoundingBox(boxToGoto, true, true, 500);
-                }
-            } catch (Error t) {
-                log.fatal(t, t);
-            }
-        }
-    } //GEN-LAST:event_lstLandparcelsValueChanged
+    }                                                                                         //GEN-LAST:event_lstLandparcelsValueChanged
 
     /**
      * DOCUMENT ME!
@@ -1532,8 +1486,6 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      * @param  evt  DOCUMENT ME!
      */
     private void lstLandparcelsFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_lstLandparcelsFocusLost
-        map.gotoInitialBoundingBox();
-        lstLandparcels.clearSelection();
     }                                                                           //GEN-LAST:event_lstLandparcelsFocusLost
 
     /**
@@ -1542,8 +1494,24 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      * @param  evt  DOCUMENT ME!
      */
     private void lstBuchungsstellenMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstBuchungsstellenMouseClicked
-        // TODO add your handling code here:
-    } //GEN-LAST:event_lstBuchungsstellenMouseClicked
+        if (evt.getClickCount() > 1) {
+            try {
+                final Object selection = lstBuchungsstellen.getSelectedValue();
+                if (selection instanceof LightweightLandParcel3A) {
+                    final LightweightLandParcel3A lwParcel = (LightweightLandParcel3A)selection;
+                    final MetaClass mc = ClassCacheMultiple.getMetaClass(
+                            CidsBeanSupport.DOMAIN_NAME,
+                            "ALKIS_LANDPARCEL");
+                    continueInBackground = true;
+                    ComponentRegistry.getRegistry()
+                            .getDescriptionPane()
+                            .gotoMetaObject(mc, lwParcel.getFullObjectID(), "");
+                }
+            } catch (Exception ex) {
+                log.error(ex, ex);
+            }
+        }
+    }                                                                                  //GEN-LAST:event_lstBuchungsstellenMouseClicked
 
     /**
      * DOCUMENT ME!
@@ -1551,7 +1519,52 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      * @param  evt  DOCUMENT ME!
      */
     private void lstBuchungsstellenValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstBuchungsstellenValueChanged
-        // TODO add your handling code here:
+        if (!evt.getValueIsAdjusting()) {
+            try {
+                // release cache
+// realLandParcelMetaObjectsCache = null;
+                final Object[] selObjs = lstBuchungsstellen.getSelectedValues();
+                final List<Geometry> allSelectedGeoms = new ArrayList<Geometry>();
+                for (final Object obj : selObjs) {
+                    if (obj instanceof LightweightLandParcel3A) {
+                        final LightweightLandParcel3A lwlp = (LightweightLandParcel3A)obj;
+                        if (lwlp.getGeometry() != null) {
+                            allSelectedGeoms.add(lwlp.getGeometry());
+                        }
+//                    final DefaultStyledFeature dsFeature = landParcelFeatureMap.get(lwlp);
+//                    if (dsFeature != null) {
+//                        if (lwlp.getColor().equals(dsFeature.getFillingPaint())) {
+//
+//                        }
+//                    }
+                    }
+                }
+
+                if (allSelectedGeoms.size() > 0) {
+                    final GeometryCollection geoCollection = new GeometryCollection(allSelectedGeoms.toArray(
+                                new Geometry[allSelectedGeoms.size()]),
+                            new GeometryFactory());
+                    final Geometry extendGeom = geoCollection.getEnvelope().buffer(AlkisConstants.COMMONS.GEO_BUFFER);
+
+                    extendGeom.setSRID(allSelectedGeoms.get(0).getSRID());
+                    final Geometry transformedGeom = CrsTransformer.transformToDefaultCrs(extendGeom);
+                    transformedGeom.setSRID(CismapBroker.getInstance().getDefaultCrsAlias());
+
+                    final XBoundingBox boxToGoto = new XBoundingBox(transformedGeom);
+                    boxToGoto.setX1(boxToGoto.getX1()
+                                - (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
+                    boxToGoto.setX2(boxToGoto.getX2()
+                                + (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getWidth()));
+                    boxToGoto.setY1(boxToGoto.getY1()
+                                - (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
+                    boxToGoto.setY2(boxToGoto.getY2()
+                                + (AlkisConstants.COMMONS.GEO_BUFFER_MULTIPLIER * boxToGoto.getHeight()));
+                    map.gotoBoundingBox(boxToGoto, true, true, 500);
+                }
+            } catch (Error t) {
+                log.fatal(t, t);
+            }
+        }
     } //GEN-LAST:event_lstBuchungsstellenValueChanged
 
     /**
@@ -1560,8 +1573,9 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      * @param  evt  DOCUMENT ME!
      */
     private void lstBuchungsstellenFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_lstBuchungsstellenFocusLost
-        // TODO add your handling code here:
-    } //GEN-LAST:event_lstBuchungsstellenFocusLost
+        map.gotoInitialBoundingBox();
+        lstBuchungsstellen.clearSelection();
+    }                                                                               //GEN-LAST:event_lstBuchungsstellenFocusLost
 
     /**
      * DOCUMENT ME!
@@ -1756,7 +1770,6 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                         }
 //                    CismetThreadPool.execute(retrieveWorker);
                         landparcelListBinding.bind();
-                        initMap();
                     }
                 };
             if (EventQueue.isDispatchThread()) {
@@ -1774,10 +1787,12 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      *
      * @return  DOCUMENT ME!
      */
-    private XBoundingBox boundingBoxFromLandparcelList(final List<LightweightLandParcel> lpList) {
-        final List<Geometry> allGeomList = TypeSafeCollections.newArrayList();
-        for (final LightweightLandParcel parcel : lpList) {
-            allGeomList.add(parcel.geometry);
+    private XBoundingBox boundingBoxFromLandparcelList(final List<LightweightLandParcel3A> lpList) {
+        final List<Geometry> allGeomList = new ArrayList<Geometry>();
+        for (final LightweightLandParcel3A parcel : lpList) {
+            if (parcel.geometry != null) {
+                allGeomList.add(parcel.geometry);
+            }
         }
         final GeometryCollection geoCollection = new GeometryCollection(allGeomList.toArray(
                     new Geometry[allGeomList.size()]),
@@ -1797,12 +1812,13 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      * DOCUMENT ME!
      */
     private void initMap() {
-        if (landParcelList.size() > 0) {
+        if (landParcel3AList.size() > 0) {
             try {
                 final ActiveLayerModel mappingModel = new ActiveLayerModel();
                 mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
                 // TODO: do we need an swsw for every class?
-                final XBoundingBox box = boundingBoxFromLandparcelList(landParcelList);
+                retrieveAlkisLandparcelForLightweightLandparcels3A();
+                final XBoundingBox box = boundingBoxFromLandparcelList(landParcel3AList);
                 mappingModel.addHome(new XBoundingBox(
                         box.getX1(),
                         box.getY1(),
@@ -1814,7 +1830,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                 swms.setName("Buchungsblatt");
                 mappingModel.addLayer(swms);
                 map.setMappingModel(mappingModel);
-                for (final LightweightLandParcel lwLandparcel : landParcelList) {
+                for (final LightweightLandParcel3A lwLandparcel : landParcel3AList) {
                     final StyledFeature dsf = new DefaultStyledFeature();
                     dsf.setGeometry(lwLandparcel.getGeometry());
                     final Color lpColor = lwLandparcel.getColor();
@@ -1898,6 +1914,42 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
             return Arrays.asList(moArr);
         }
         return Collections.EMPTY_LIST;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @throws  ConnectionException  DOCUMENT ME!
+     */
+    private void retrieveAlkisLandparcelForLightweightLandparcels3A() throws ConnectionException {
+        if ((landParcel3AList != null) && (landParcel3AList.size() > 0)) {
+            final StringBuilder inBuilder = new StringBuilder("(");
+            for (final LightweightLandParcel3A landParcel3A : landParcel3AList) {
+                if (inBuilder.length() > 1) {
+                    inBuilder.append(",");
+                }
+                inBuilder.append("'");
+                inBuilder.append(landParcel3A.getLandparcelCode());
+                inBuilder.append("'");
+            }
+            inBuilder.append(")");
+            final User user = SessionManager.getSession().getUser();
+            final MetaClass mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "alkis_landparcel");
+            final String query = "select " + mc.getID() + "," + mc.getPrimaryKey() + " from " + mc.getTableName()
+                        + " where alkis_id in " + inBuilder.toString();
+            final MetaObject[] moArr = SessionManager.getProxy().getMetaObjectByQuery(user, query);
+
+            for (final LightweightLandParcel3A landParcel3A : landParcel3AList) {
+                for (final MetaObject mo : moArr) {
+                    final CidsBean bean = mo.getBean();
+                    if (landParcel3A.getLandparcelCode().equals(bean.getProperty("alkis_id"))) {
+                        landParcel3A.setFullObjectID((Integer)bean.getProperty("id"));
+                        landParcel3A.setGeometry((Geometry)bean.getProperty("geometrie.geo_field"));
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -2177,6 +2229,8 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                                 }
                             });
                         landparcel3AListBinding.bind();
+
+                        initMap();
                     }
                 }
             } catch (InterruptedException ex) {
@@ -2246,6 +2300,8 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         private final String lfn;
         private final String fraction;
         private final String aufteilungsnummer;
+        private Geometry geometry;
+        private int fullObjectID;
 
         //~ Constructors -------------------------------------------------------
 
@@ -2302,6 +2358,42 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
             sb.append(")");
 
             return sb.toString();
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public Geometry getGeometry() {
+            return geometry;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  geometry  DOCUMENT ME!
+         */
+        public void setGeometry(final Geometry geometry) {
+            this.geometry = geometry;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public int getFullObjectID() {
+            return fullObjectID;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  fullObjectID  DOCUMENT ME!
+         */
+        public void setFullObjectID(final int fullObjectID) {
+            this.fullObjectID = fullObjectID;
         }
 
         /**
