@@ -117,8 +117,6 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 import de.cismet.tools.BrowserLauncher;
 import de.cismet.tools.StaticDebuggingTools;
 
-import de.cismet.tools.collections.TypeSafeCollections;
-
 import de.cismet.tools.gui.BorderProvider;
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.RoundedPanel;
@@ -275,10 +273,9 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      */
     public AlkisBuchungsblattRenderer() {
         map = new MappingComponent();
-//        landParcelFeatureMap = TypeSafeCollections.newHashMap();
         map.setOpaque(false);
-        landParcel3AList = TypeSafeCollections.newArrayList();
-        productPreviewImages = TypeSafeCollections.newHashMap();
+        landParcel3AList = new ArrayList<LightweightLandParcel3A>();
+        productPreviewImages = new HashMap<Object, ImageIcon>();
 
         if (!AlkisUtils.validateUserShouldUseAlkisSOAPServerActions()) {
             try {
