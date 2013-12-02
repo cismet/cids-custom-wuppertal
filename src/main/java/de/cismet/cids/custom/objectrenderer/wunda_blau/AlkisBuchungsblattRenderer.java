@@ -167,10 +167,6 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
 
     //~ Instance fields --------------------------------------------------------
 
-// private ImageIcon FORWARD_PRESSED;
-// private ImageIcon FORWARD_SELECTED;
-// private ImageIcon BACKWARD_PRESSED;
-// private ImageIcon BACKWARD_SELECTED;
     private ImageIcon BESTAND_NRW_PDF;
     private ImageIcon BESTAND_NRW_HTML;
     private ImageIcon BESTAND_KOM_PDF;
@@ -192,7 +188,6 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private final Map<Object, ImageIcon> productPreviewImages;
     private boolean continueInBackground = false;
     private final boolean demoMode = StaticDebuggingTools.checkHomeForFile("demoMode");
-//    private List<MetaObject> realLandParcelMetaObjectsCache = null;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXBusyLabel blWait;
     private org.jdesktop.swingx.JXBusyLabel blWaitingLandparcel;
@@ -347,11 +342,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      */
     private void initIcons() {
         final ReflectionRenderer reflectionRenderer = new ReflectionRenderer(0.5f, 0.15f, false);
-//        BACKWARD_SELECTED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-left-sel.png"));
-//        BACKWARD_PRESSED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-left-pressed.png"));
-//
-//        FORWARD_SELECTED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-right-sel.png"));
-//        FORWARD_PRESSED = new ImageIcon(getClass().getResource(ICON_RES_PACKAGE + "arrow-right-pressed.png"));
+
         BufferedImage i1 = null;
         BufferedImage i2 = null;
         BufferedImage i3 = null;
@@ -405,8 +396,6 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
             btnBack,
             ObjectRendererUtils.BACKWARD_SELECTED,
             ObjectRendererUtils.BACKWARD_PRESSED);
-//        ObjectRendererUtils.decorateJLabelAndButtonSynced(lblForw, btnForward, FORWARD_SELECTED, FORWARD_PRESSED);
-//        ObjectRendererUtils.decorateJLabelAndButtonSynced(lblBack, btnBack, BACKWARD_SELECTED, BACKWARD_PRESSED);
     }
 
     /**
@@ -1462,8 +1451,6 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private void lstBuchungsstellenValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstBuchungsstellenValueChanged
         if (!evt.getValueIsAdjusting()) {
             try {
-                // release cache
-// realLandParcelMetaObjectsCache = null;
                 final Object[] selObjs = lstBuchungsstellen.getSelectedValues();
                 final List<Geometry> allSelectedGeoms = new ArrayList<Geometry>();
                 for (final Object obj : selObjs) {
@@ -1472,12 +1459,6 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                         if (lwlp.getGeometry() != null) {
                             allSelectedGeoms.add(lwlp.getGeometry());
                         }
-//                    final DefaultStyledFeature dsFeature = landParcelFeatureMap.get(lwlp);
-//                    if (dsFeature != null) {
-//                        if (lwlp.getColor().equals(dsFeature.getFillingPaint())) {
-//
-//                        }
-//                    }
                     }
                 }
 
@@ -1749,11 +1730,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                         public void mouseClicked(final PInputEvent evt) {
                             try {
                                 if (evt.getClickCount() > 1) {
-//                                if (realLandParcelMetaObjectsCache == null) {
-//                                    CismetThreadPool.execute(new GeomQueryWorker());
-//                                } else {
                                     switchToMapAndShowGeometries();
-//                                }
                                 }
                             } catch (Exception ex) {
                                 LOG.error(ex, ex);
@@ -1776,7 +1753,6 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private void switchToMapAndShowGeometries() {
         ObjectRendererUtils.switchToCismapMap();
         ObjectRendererUtils.addBeanGeomAsFeatureToCismapMap(cidsBean, false);
-//        ObjectRendererUtils.addBeanGeomsAsFeaturesToCismapMap(realLandParcelMetaObjectsCache, false);
     }
 
     /**
@@ -1953,19 +1929,6 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         map.dispose();
     }
 
-    /**
-     * final class GeomQueryWorker extends SwingWorker<List<MetaObject>, Void> {.
-     *
-     * @return    DOCUMENT ME!
-     *
-     * @Override  protected List<MetaObject> doInBackground() throws Exception { //set dummy to avoid multiple worker
-     *            calls realLandParcelMetaObjectsCache = Collections.EMPTY_LIST; return queryForRealLandParcels(); }
-     * @Override  protected void done() { try { if (!isCancelled()) { realLandParcelMetaObjectsCache = get();
-     *            switchToMapAndShowGeometries(); } } catch (InterruptedException ex) { log.warn(ex, ex);
-     *            realLandParcelMetaObjectsCache = null; } catch (Exception ex) {
-     *            ObjectRendererUtils.showExceptionWindowToUser("Fehler beim Abrufen der Geometrien", ex,
-     *            Alkis_buchungsblattRenderer.this); log.error(ex, ex); realLandParcelMetaObjectsCache = null; } } }.
-     */
     @Override
     public Border getTitleBorder() {
         return new EmptyBorder(10, 10, 10, 10);
@@ -2070,7 +2033,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                     if (buchungsblatt != null) {
                         displayBuchungsblattInfos(buchungsblatt);
                         final Owner[] owners = buchungsblatt.getOwners();
-//                    final StringBuilder ownerBuilder = new StringBuilder("<html>");
+
                         final StringBuilder ownerBuilder = new StringBuilder("<html><table>");
                         for (final Owner owner : owners) {
                             ownerBuilder.append(AlkisUtils.ownerToString(owner, ""));
@@ -2428,7 +2391,6 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         @Override
         protected void paintComponent(final Graphics g) {
             final Graphics2D g2d = (Graphics2D)g;
-//            final Color col = g2d.getColor();
             final Paint backup = g2d.getPaint();
             if (selected) {
                 g2d.setColor(javax.swing.UIManager.getDefaults().getColor("List.selectionBackground"));
