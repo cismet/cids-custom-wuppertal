@@ -35,10 +35,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.aedsicad.aaaweb.service.util.Address;
 import de.aedsicad.aaaweb.service.util.Buchungsblatt;
 import de.aedsicad.aaaweb.service.util.Buchungsstelle;
+import de.aedsicad.aaaweb.service.util.LandParcel;
 import de.aedsicad.aaaweb.service.util.Owner;
 import de.aedsicad.aaaweb.service.util.Point;
 
 import javafx.beans.binding.StringBinding;
+
+import org.apache.commons.lang.ArrayUtils;
 
 import org.openide.util.Exceptions;
 
@@ -245,6 +248,43 @@ public class AlkisUtils {
             }
         }
         return "";
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   buchungsstelle  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static LandParcel[] getLandparcelFromBuchungsstelle(final Buchungsstelle buchungsstelle) {
+        if (buchungsstelle.getBuchungsstellen() == null) {
+            return buchungsstelle.getLandParcel();
+        } else {
+            LandParcel[] result = buchungsstelle.getLandParcel();
+            for (final Buchungsstelle b : buchungsstelle.getBuchungsstellen()) {
+                result = concatArrays(result, getLandparcelFromBuchungsstelle(b));
+            }
+            return result;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   a  DOCUMENT ME!
+     * @param   b  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static LandParcel[] concatArrays(LandParcel[] a, LandParcel[] b) {
+        if (a == null) {
+            a = new LandParcel[0];
+        }
+        if (b == null) {
+            b = new LandParcel[0];
+        }
+        return (LandParcel[])ArrayUtils.addAll(a, b);
     }
 
     /**

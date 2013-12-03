@@ -2035,43 +2035,6 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         /**
          * DOCUMENT ME!
          *
-         * @param   buchungsstelle  DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        private LandParcel[] getLandparcelFromBuchungsstelle(final Buchungsstelle buchungsstelle) {
-            if (buchungsstelle.getBuchungsstellen() == null) {
-                return buchungsstelle.getLandParcel();
-            } else {
-                LandParcel[] result = buchungsstelle.getLandParcel();
-                for (final Buchungsstelle b : buchungsstelle.getBuchungsstellen()) {
-                    result = concatArrays(result, getLandparcelFromBuchungsstelle(b));
-                }
-                return result;
-            }
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @param   a  DOCUMENT ME!
-         * @param   b  DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        private LandParcel[] concatArrays(LandParcel[] a, LandParcel[] b) {
-            if (a == null) {
-                a = new LandParcel[0];
-            }
-            if (b == null) {
-                b = new LandParcel[0];
-            }
-            return (LandParcel[])ArrayUtils.addAll(a, b);
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
          * @param   buchungsblatt  DOCUMENT ME!
          *
          * @throws  ConnectionException  DOCUMENT ME!
@@ -2084,7 +2047,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                 final String fraction = buchungsstelle.getFraction();
                 final String aufteilungsnummer = buchungsstelle.getNumber();
 
-                for (final LandParcel landparcel : getLandparcelFromBuchungsstelle(buchungsstelle)) {
+                for (final LandParcel landparcel : AlkisUtils.getLandparcelFromBuchungsstelle(buchungsstelle)) {
                     final String landparcelCode = landparcel.getLandParcelCode().trim();
                     final LightweightLandParcel3A landparcel3A = new LightweightLandParcel3A(
                             landparcelCode,
