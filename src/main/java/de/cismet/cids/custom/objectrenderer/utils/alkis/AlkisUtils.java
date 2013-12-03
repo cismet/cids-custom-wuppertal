@@ -159,11 +159,14 @@ public class AlkisUtils {
             final Buchungsblatt buchungsblatt,
             final CidsBean buchungsblattBean) {
         final String alkisId = (String)originatingFlurstueck.getProperty("alkis_id");
+
         String pos = "";
-        final List<CidsBean> alleFSaufBB = buchungsblattBean.getBeanCollectionProperty("landparcels");
-        for (final CidsBean lp : alleFSaufBB) {
-            if (lp.getProperty("landparcelcode").equals(alkisId)) {
-                pos = String.valueOf(lp.getProperty("lfn"));
+        final Buchungsstelle[] buchungsstellen = buchungsblatt.getBuchungsstellen();
+        for (final Buchungsstelle b : buchungsstellen) {
+            for (final LandParcel lp : getLandparcelFromBuchungsstelle(b)) {
+                if (lp.getLandParcelCode().equals(alkisId)) {
+                    pos = b.getSequentialNumber();
+                }
             }
         }
 
