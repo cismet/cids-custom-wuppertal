@@ -123,7 +123,7 @@ public class BillingStatisticsReport extends AbstractJasperReportPrint {
             final double earningsWithCostsWiederver,
             final int amountWiederverkaeufe,
             final int amountWiederverkaeufeGB) {
-        super(REPORT_URL, beans);
+        super(REPORT_URL, (CidsBean)beans.toArray()[0]);
         setBeansCollection(true);
 
         this.from = from;

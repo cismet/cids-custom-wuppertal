@@ -138,6 +138,13 @@ public class Product {
         return prices;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   obj  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public boolean equals(final Object obj) {
         if (obj == null) {
@@ -163,6 +170,11 @@ public class Product {
         return true;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public int hashCode() {
         int hash = 3;

@@ -214,6 +214,13 @@ public abstract class AbstractJasperReportPrint {
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception  DOCUMENT ME!
+         */
         @Override
         protected JasperPrint doInBackground() throws Exception {
             if (isCancelled()) {
@@ -223,6 +230,9 @@ public abstract class AbstractJasperReportPrint {
             }
         }
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         protected void done() {
             try {
