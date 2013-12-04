@@ -791,9 +791,8 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         final int column = tblBillings.convertColumnIndexToModel(tblBillings.getSelectedColumn());
         if (column == 6) {
             final DateRequestTuple bt = (DateRequestTuple)tblBillings.getModel().getValueAt(row, column);
-            final String request = bt.getRequest();
-            if ((request != null) && !request.equals("") && bt.isToday()) {
-                doDownload(request);
+            if (bt.isRequestValid()) {
+                doDownload(bt.getRequest());
             }
         }
     }                                                                           //GEN-LAST:event_tblBillingsMouseClicked
@@ -808,8 +807,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         final int column = tblBillings.convertColumnIndexToModel(tblBillings.columnAtPoint(evt.getPoint()));
         if (column == 6) {
             final DateRequestTuple bt = (DateRequestTuple)tblBillings.getModel().getValueAt(row, column);
-            final String request = bt.getRequest();
-            if ((request != null) && !request.equals("") && bt.isToday()) {
+            if (bt.isRequestValid()) {
                 setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             } else {
                 setCursor(Cursor.getDefaultCursor());
@@ -1301,11 +1299,21 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         }
 
         /**
+         * If the request is valid, then the document can be downloaded again. The request is valid if, it is not null,
+         * starts with 'http://' and the billing was billed at the present day (today).
+         *
+         * @return  DOCUMENT ME!
+         */
+        public boolean isRequestValid() {
+            return (request != null) && request.startsWith("http://") && this.isToday();
+        }
+
+        /**
          * DOCUMENT ME!
          *
          * @return  DOCUMENT ME!
          */
-        public boolean isToday() {
+        private boolean isToday() {
             if (date == null) {
                 return false;
             }
@@ -1535,8 +1543,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
                 final String formattedDate = DATE_FORMAT.format(dateRequestTuple.getDate());
                 final String text = ObjectRendererUtils.propertyPrettyPrint(formattedDate);
 
-                final String request = dateRequestTuple.getRequest();
-                if ((request != null) && request.startsWith("http://") && dateRequestTuple.isToday()) {
+                if (dateRequestTuple.isRequestValid()) {
                     // url is just a placeholder
                     setText("<html><a href=\"http://www.cismet.de\">" + text + "</a></html>");
                 } else {
