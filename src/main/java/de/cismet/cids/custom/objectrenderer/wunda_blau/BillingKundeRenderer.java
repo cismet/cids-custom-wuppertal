@@ -65,6 +65,7 @@ import javax.swing.table.TableRowSorter;
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.BillingCalculations;
+import de.cismet.cids.custom.objectrenderer.utils.BillingRestrictedReportJButton;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.PrintBillingReportForCustomer;
 import de.cismet.cids.custom.objectrenderer.utils.billing.Usage;
@@ -117,8 +118,6 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
             "ts",
             "angelegt_durch.name"
         };
-
-    private static final String BILLING_ACTION_TAG_REPORT = "custom.billing.reports@WUNDA_BLAU";
 
     //~ Instance fields --------------------------------------------------------
 
@@ -187,7 +186,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         tblBillings.setModel(tableModel);
         setFilterActionInExternalPanels();
 
-        if (!ObjectRendererUtils.checkActionTag(BILLING_ACTION_TAG_REPORT)) {
+        if (!ObjectRendererUtils.checkActionTag(BillingRestrictedReportJButton.BILLING_ACTION_TAG_REPORT)) {
             btnRechnungsanlage.setEnabled(false);
             cboHideFreeDownloadsRechnungsanlage.setEnabled(false);
             cboBillDownloads.setSelected(false);
@@ -280,7 +279,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         btnShowResults = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         btnBuchungsbeleg = new javax.swing.JButton();
-        btnRechnungsanlage = new javax.swing.JButton();
+        btnRechnungsanlage = new BillingRestrictedReportJButton();
         cboBillDownloads = new javax.swing.JCheckBox();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),

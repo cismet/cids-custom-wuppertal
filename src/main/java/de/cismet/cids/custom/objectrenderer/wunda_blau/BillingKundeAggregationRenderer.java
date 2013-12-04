@@ -59,6 +59,7 @@ import javax.swing.table.TableRowSorter;
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objectrenderer.utils.BillingCalculations;
+import de.cismet.cids.custom.objectrenderer.utils.BillingRestrictedReportJButton;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.PrintBillingReportForCustomer;
 import de.cismet.cids.custom.reports.wunda_blau.PrintStatisticsReport;
@@ -94,7 +95,6 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
             "kostenpflichtige Downloads",
         };
     private static DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
-    private static final String BILLING_ACTION_TAG_REPORT = "custom.billing.reports@WUNDA_BLAU";
 
     //~ Instance fields --------------------------------------------------------
 
@@ -149,7 +149,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                 AGR_COMLUMN_NAMES);
         tblCustomers.setModel(tableModel);
 
-        if (!ObjectRendererUtils.checkActionTag(BILLING_ACTION_TAG_REPORT)) {
+        if (!ObjectRendererUtils.checkActionTag(BillingRestrictedReportJButton.BILLING_ACTION_TAG_REPORT)) {
             btnRechnungsanlage.setEnabled(false);
             cboHideFreeDownloadsRechnungsanlage.setEnabled(false);
             cboBillDownloads.setSelected(false);
@@ -198,8 +198,8 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         jPanel5 = new javax.swing.JPanel();
         cboBillDownloads = new javax.swing.JCheckBox();
         btnBuchungsbeleg = new javax.swing.JButton();
-        btnGeschaeftsstatistik = new javax.swing.JButton();
-        btnRechnungsanlage = new javax.swing.JButton();
+        btnGeschaeftsstatistik = new BillingRestrictedReportJButton();
+        btnRechnungsanlage = new BillingRestrictedReportJButton();
         cboHideFreeDownloadsRechnungsanlage = new javax.swing.JCheckBox();
         cboHideFreeDownloadsBuchungsbeleg = new javax.swing.JCheckBox();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
