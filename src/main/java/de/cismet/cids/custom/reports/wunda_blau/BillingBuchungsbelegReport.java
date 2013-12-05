@@ -376,6 +376,9 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
                         title = "Buchungen: Buchungsbeleg";
                     }
 
+                    // worst case: "_null" will be appended to the filename, but at least nothing will break
+                    filename += "_" + String.valueOf(kundeBean.getProperty("name_intern"));
+
                     final JasperDownload download = new JasperDownload(
                             jasperPrint,
                             jobname,
