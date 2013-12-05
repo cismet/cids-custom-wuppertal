@@ -842,18 +842,28 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
      * @param  evt  DOCUMENT ME!
      */
     private void btnRechnungsanlageActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRechnungsanlageActionPerformed
-        new PrintBillingReportForCustomer(
-            cidsBean,
-            filteredBuchungen,
-            fromDate_tillDate,
-            true,
-            cboBillDownloads.isSelected(),
-            this,
-            retrieveShowBillingInReport(evt)).print();
-        if (cboBillDownloads.isSelected()) {
-            filterBuchungen();
-        }
-    }                                                                                      //GEN-LAST:event_btnRechnungsanlageActionPerformed
+        final PrintBillingReportForCustomer printBillingReportForCustomer = new PrintBillingReportForCustomer(
+                cidsBean,
+                filteredBuchungen,
+                fromDate_tillDate,
+                true,
+                cboBillDownloads.isSelected(),
+                this,
+                retrieveShowBillingInReport(evt));
+
+        // refresh the table after the report was successfully created and the billings were marked
+        printBillingReportForCustomer.setDownloadFinishedObserver(printBillingReportForCustomer.new DownloadFinishedObserver() {
+
+                @Override
+                public void additionalFunctionalityIfDownloadCompleted() {
+                    if (cboBillDownloads.isSelected()) {
+                        filterBuchungen();
+                    }
+                }
+            });
+
+        printBillingReportForCustomer.print();
+    } //GEN-LAST:event_btnRechnungsanlageActionPerformed
 
     /**
      * DOCUMENT ME!

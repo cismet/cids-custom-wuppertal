@@ -684,20 +684,30 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                 JOptionPane.ERROR_MESSAGE);
         } else {
             for (final CidsBean kundeBean : customers) {
-                new PrintBillingReportForCustomer(
-                    kundeBean,
-                    billingsOfCustomers.get(kundeBean),
-                    fromDate_tillDate,
-                    true,
-                    cboBillDownloads.isSelected(),
-                    this,
-                    retrieveShowBillingWithoutCostInReport(evt)).print();
-            }
-            if (cboBillDownloads.isSelected()) {
-                filterBuchungen();
+                final PrintBillingReportForCustomer printBillingReportForCustomer = new PrintBillingReportForCustomer(
+                        kundeBean,
+                        billingsOfCustomers.get(kundeBean),
+                        fromDate_tillDate,
+                        true,
+                        cboBillDownloads.isSelected(),
+                        this,
+                        retrieveShowBillingWithoutCostInReport(evt));
+
+                // refresh the table after the report was successfully created and the billings were marked
+                printBillingReportForCustomer.setDownloadFinishedObserver(printBillingReportForCustomer.new DownloadFinishedObserver() {
+
+                        @Override
+                        public void additionalFunctionalityIfDownloadCompleted() {
+                            if (cboBillDownloads.isSelected()) {
+                                filterBuchungen();
+                            }
+                        }
+                    });
+
+                printBillingReportForCustomer.print();
             }
         }
-    }                                                                                      //GEN-LAST:event_btnRechnungsanlageActionPerformed
+    } //GEN-LAST:event_btnRechnungsanlageActionPerformed
 
     /**
      * DOCUMENT ME!

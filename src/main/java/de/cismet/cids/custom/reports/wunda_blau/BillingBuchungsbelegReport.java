@@ -23,6 +23,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.SwingUtilities;
@@ -86,6 +88,7 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
     private int amountEigenerGebrauchGB = 0;
     private int amountWiederverkaufGB = 0;
     private int amountEigenerGebrauchGebührenbefreitGB = 0;
+    private Observer downloadObserver;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -313,6 +316,15 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
         return generateReportParam(kundeBean);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  downloadObserver  DOCUMENT ME!
+     */
+    public void setDownloadObserver(final Observer downloadObserver) {
+        this.downloadObserver = downloadObserver;
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -364,11 +376,13 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
                         title = "Buchungen: Buchungsbeleg";
                     }
 
-                    DownloadManager.instance().add(new JasperDownload(
+                    final JasperDownload download = new JasperDownload(
                             jasperPrint,
                             jobname,
                             title,
-                            filename));
+                            filename);
+                    download.addObserver(downloadObserver);
+                    DownloadManager.instance().add(download);
                 }
             } catch (InterruptedException ex) {
                 log.warn(ex, ex);

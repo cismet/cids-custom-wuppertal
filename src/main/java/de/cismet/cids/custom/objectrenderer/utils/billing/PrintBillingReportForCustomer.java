@@ -22,6 +22,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -29,6 +31,10 @@ import javax.swing.JPanel;
 import de.cismet.cids.custom.reports.wunda_blau.BillingBuchungsbelegReport;
 
 import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cismap.commons.gui.printing.JasperDownload;
+
+import de.cismet.tools.gui.downloadmanager.Download;
 
 /**
  * DOCUMENT ME!
@@ -68,6 +74,7 @@ public class PrintBillingReportForCustomer {
     private HashSet amountEigenerGebrauchGebührenbefreitGB = new HashSet();
     private JPanel panel;
     private boolean showBillingWithoutCostInReport;
+    private DownloadFinishedObserver downloadFinishedObserver = new DownloadFinishedObserver();
 
     //~ Constructors -----------------------------------------------------------
 
@@ -168,11 +175,8 @@ public class PrintBillingReportForCustomer {
                     amountEigenerGebrauchGB.size(),
                     amountWiederverkaufGB.size(),
                     amountEigenerGebrauchGebührenbefreitGB.size());
+            report.setDownloadObserver(downloadFinishedObserver);
             report.print();
-
-            if (isRechnungsanlage && markBillingsAsBilled) {
-                markBillings();
-            }
         }
     }
 
@@ -312,13 +316,55 @@ public class PrintBillingReportForCustomer {
      * DOCUMENT ME!
      */
     private void markBillings() {
-        for (final CidsBean billing : billingsBeans) {
-            try {
-                billing.setProperty("abgerechnet", Boolean.TRUE);
-                billing.persist();
-            } catch (Exception ex) {
-                LOG.error("Error while setting value or persisting of billing.", ex);
+        if (isRechnungsanlage && markBillingsAsBilled) {
+            for (final CidsBean billing : billingsBeans) {
+                try {
+                    billing.setProperty("abgerechnet", Boolean.TRUE);
+                    billing.persist();
+                } catch (Exception ex) {
+                    LOG.error("Error while setting value or persisting of billing.", ex);
+                }
             }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  downloadFinishedObserver  DOCUMENT ME!
+     */
+    public void setDownloadFinishedObserver(final DownloadFinishedObserver downloadFinishedObserver) {
+        this.downloadFinishedObserver = downloadFinishedObserver;
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * After the report has been created successfully then the billings are marked, if necessary, and some additional
+     * functionality is done, if required.
+     *
+     * @version  $Revision$, $Date$
+     */
+    public class DownloadFinishedObserver implements Observer {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void update(final Observable o, final Object arg) {
+            if (o instanceof JasperDownload) {
+                final JasperDownload download = (JasperDownload)o;
+                if (download.getStatus().equals(Download.State.COMPLETED)) {
+                    markBillings();
+                    additionalFunctionalityIfDownloadCompleted();
+                }
+            }
+        }
+
+        /**
+         * This method can be overwritten so that some additional functionality can be executed after the successful
+         * creation of the report. For example reload the billings in the table.
+         */
+        public void additionalFunctionalityIfDownloadCompleted() {
         }
     }
 }
