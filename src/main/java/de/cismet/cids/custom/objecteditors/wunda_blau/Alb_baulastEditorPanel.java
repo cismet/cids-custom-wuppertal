@@ -33,6 +33,7 @@ import org.jfree.util.Log;
 import org.openide.util.Exceptions;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -51,12 +52,14 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
@@ -200,6 +203,8 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         dlgAddBaulastArt.pack();
         dlgAddBaulastArt.setLocationRelativeTo(this);
         StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbBaulastArt);
+        lstFlurstueckeBeguenstigt.setCellRenderer(new HyperlinkStyleExistingLandparcelCellRenderer());
+        lstFlurstueckeBelastet.setCellRenderer(new HyperlinkStyleExistingLandparcelCellRenderer());
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -1479,6 +1484,36 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
             g2d.fillRect(0, STRIPE_THICKNESS, STRIPE_THICKNESS, getHeight() - (2 * STRIPE_THICKNESS));
             g2d.setColor(backupCol);
             super.paint(g);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class HyperlinkStyleExistingLandparcelCellRenderer implements ListCellRenderer<Object> {
+
+        //~ Instance fields ----------------------------------------------------
+
+        DefaultListCellRenderer dlcr = new DefaultListCellRenderer();
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Component getListCellRendererComponent(final JList list,
+                final Object value,
+                final int index,
+                final boolean isSelected,
+                final boolean cellHasFocus) {
+            final Component c = dlcr.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            if (value instanceof CidsBean) {
+                final Object realFSBean = ((CidsBean)value).getProperty("fs_referenz");
+                if (realFSBean != null) {
+                    c.setForeground(Color.blue);
+                }
+            }
+            return c;
         }
     }
 }
