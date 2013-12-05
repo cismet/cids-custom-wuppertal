@@ -194,7 +194,16 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         this.editableComponents = new ArrayList<JComponent>();
         initComponents();
         initEditableComponents();
-        fsDialoge = new FlurstueckSelectionDialoge();
+        fsDialoge = new FlurstueckSelectionDialoge() {
+
+                @Override
+                public void okHook() {
+                    bindingGroup.getBinding("begFstckBinding").unbind();
+                    bindingGroup.getBinding("begFstckBinding").bind();
+                    bindingGroup.getBinding("belFstckBinding").unbind();
+                    bindingGroup.getBinding("belFstckBinding").bind();
+                }
+            };
         fsDialoge.pack();
         fsDialoge.setLocationRelativeTo(this);
         dlgAddBaulastArt.pack();
@@ -419,7 +428,16 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         semiRoundedPanel1.setLayout(new java.awt.GridBagLayout());
 
         lblHeadBegFlurstuecke.setForeground(new java.awt.Color(255, 255, 255));
-        lblHeadBegFlurstuecke.setText("Begünstigte Flurstücke");
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                lstFlurstueckeBeguenstigt,
+                org.jdesktop.beansbinding.ELProperty.create("Begünstigte Flurstücke (${model.size})"),
+                lblHeadBegFlurstuecke,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "begFstckBinding");
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         semiRoundedPanel1.add(lblHeadBegFlurstuecke, gridBagConstraints);
@@ -508,7 +526,16 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         semiRoundedPanel2.setLayout(new java.awt.GridBagLayout());
 
         lblHeadBelFlurstuecke.setForeground(new java.awt.Color(255, 255, 255));
-        lblHeadBelFlurstuecke.setText("Belastete Flurstücke");
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                lstFlurstueckeBelastet,
+                org.jdesktop.beansbinding.ELProperty.create("Belastete Flurstücke (${model.size})"),
+                lblHeadBelFlurstuecke,
+                org.jdesktop.beansbinding.BeanProperty.create("text"),
+                "belFstckBinding");
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         semiRoundedPanel2.add(lblHeadBelFlurstuecke, gridBagConstraints);
@@ -609,14 +636,12 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         txtLaufendeNr.setMinimumSize(new java.awt.Dimension(125, 20));
         txtLaufendeNr.setPreferredSize(new java.awt.Dimension(125, 20));
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.laufende_nummer}"),
                 txtLaufendeNr,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("nicht verfügbar");
-        binding.setSourceUnreadableValue("");
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
