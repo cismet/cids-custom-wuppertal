@@ -11,10 +11,25 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
+
+import Sirius.server.middleware.types.MetaClass;
+import Sirius.server.middleware.types.MetaObject;
+
 import org.apache.log4j.Logger;
 
+import org.jdesktop.beansbinding.Binding;
+import org.jdesktop.beansbinding.Property;
+
+import org.jfree.util.Log;
+
+import org.openide.util.Exceptions;
+
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -33,6 +48,7 @@ import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
+import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -49,13 +65,19 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(BillingKundeEditor.class);
+    public static final String DOMAIN = "WUNDA_BLAU";
+    public static final String KUNDENGRUPPE_TABLE = "BILLING_KUNDENGRUPPE";
 
     //~ Instance fields --------------------------------------------------------
+
+    private List kundengruppen = new ArrayList();
+    private Set<CidsBean> touchedKundengruppen = new HashSet<CidsBean>();
 
     private CidsBean cidsBean;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRemKundenLogin;
+    private javax.swing.JButton btnRemKundengruppe;
     private javax.swing.JButton btnRemProduct;
     private javax.swing.JComboBox cboAbrechnungsturnus;
     private javax.swing.JComboBox cboBranche;
@@ -66,6 +88,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -76,9 +99,11 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JList lstKundenLogins;
+    private javax.swing.JList lstKundengruppe;
     private javax.swing.JList lstProdukte;
+    private javax.swing.JScrollPane scpKundenLogins;
+    private javax.swing.JScrollPane scpKundengruppe;
     private javax.swing.JScrollPane scpProdukte;
-    private javax.swing.JScrollPane scpProdukte1;
     private javax.swing.JTextField txtDirektkontakt;
     private javax.swing.JTextField txtInternalName;
     private javax.swing.JTextField txtName;
@@ -98,6 +123,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
         try {
             new CidsBeanDropTarget(lstKundenLogins);
             new CidsBeanDropTarget(lstProdukte);
+            new CidsBeanDropTarget(lstKundengruppe);
         } catch (final Exception ex) {
             LOG.warn("Error while creating CidsBeanDropTarget", ex); // NOI18N
         }
@@ -142,11 +168,15 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
         jLabel11 = new javax.swing.JLabel();
-        scpProdukte1 = new javax.swing.JScrollPane();
+        scpKundenLogins = new javax.swing.JScrollPane();
         lstKundenLogins = new DroppedBeansList();
         btnRemKundenLogin = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
         txtInternalName = new DefaultBindableJTextField();
+        jLabel13 = new javax.swing.JLabel();
+        scpKundengruppe = new javax.swing.JScrollPane();
+        lstKundengruppe = new DroppedBeansList();
+        btnRemKundengruppe = new javax.swing.JButton();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -159,7 +189,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
             org.openide.util.NbBundle.getMessage(BillingKundeEditor.class, "BillingKundeEditor.jLabel1.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel1, gridBagConstraints);
@@ -434,7 +464,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
         jPanel1.add(jLabel10, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 1.0;
@@ -445,13 +475,13 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
             org.openide.util.NbBundle.getMessage(BillingKundeEditor.class, "BillingKundeEditor.jLabel11.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel11, gridBagConstraints);
 
-        scpProdukte1.setMinimumSize(new java.awt.Dimension(400, 200));
-        scpProdukte1.setPreferredSize(new java.awt.Dimension(400, 200));
+        scpKundenLogins.setMinimumSize(new java.awt.Dimension(400, 200));
+        scpKundenLogins.setPreferredSize(new java.awt.Dimension(400, 200));
 
         lstKundenLogins.setModel(new DefaultListModel());
 
@@ -463,7 +493,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
                 lstKundenLogins);
         bindingGroup.addBinding(jListBinding);
 
-        scpProdukte1.setViewportView(lstKundenLogins);
+        scpKundenLogins.setViewportView(lstKundenLogins);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -471,7 +501,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(scpProdukte1, gridBagConstraints);
+        jPanel1.add(scpKundenLogins, gridBagConstraints);
 
         btnRemKundenLogin.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
@@ -508,12 +538,61 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtInternalName, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel13,
+            org.openide.util.NbBundle.getMessage(BillingKundeEditor.class, "BillingKundeEditor.jLabel13.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel13, gridBagConstraints);
+
+        scpKundengruppe.setMinimumSize(new java.awt.Dimension(400, 200));
+        scpKundengruppe.setPreferredSize(new java.awt.Dimension(400, 200));
+
+        lstKundengruppe.setModel(new DefaultListModel());
+
+        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${kundengruppen}");
+        jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                eLProperty,
+                lstKundengruppe,
+                "kundengruppenBinding");
+        bindingGroup.addBinding(jListBinding);
+
+        scpKundengruppe.setViewportView(lstKundengruppe);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(scpKundengruppe, gridBagConstraints);
+
+        btnRemKundengruppe.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        btnRemKundengruppe.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnRemKundengruppeActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(btnRemKundengruppe, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -568,6 +647,36 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
         }
     } //GEN-LAST:event_btnRemKundenLoginActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnRemKundengruppeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemKundengruppeActionPerformed
+        final List selection = lstKundengruppe.getSelectedValuesList();
+
+        if (selection != null) {
+            final int answer = JOptionPane.showConfirmDialog(
+                    StaticSwingTools.getParentFrame(this),
+                    "Sollen die Einträge wirklich gelöscht werden?",
+                    "Einträge entfernen",
+                    JOptionPane.YES_NO_OPTION);
+            if (answer == JOptionPane.YES_OPTION) {
+                for (final Object gruppeBean : selection) {
+                    if (gruppeBean instanceof CidsBean) {
+                        ((CidsBean)gruppeBean).getBeanCollectionProperty("kunden_arr").remove(cidsBean);
+                        kundengruppen.remove(gruppeBean);
+                        final Binding kundengruppenBinding = bindingGroup.getBinding("kundengruppenBinding");
+                        kundengruppenBinding.unbind();
+                        kundengruppenBinding.bind();
+                        touchedKundengruppen.add((CidsBean)gruppeBean);
+                        cidsBean.setArtificialChangeFlag(true);
+                    }
+                }
+            }
+        }
+    } //GEN-LAST:event_btnRemKundengruppeActionPerformed
+
     @Override
     public CidsBean getCidsBean() {
         return cidsBean;
@@ -581,6 +690,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
                 bindingGroup,
                 cidsBean);
             this.cidsBean = cidsBean;
+            refreshKundengruppe();
             bindingGroup.bind();
         }
     }
@@ -611,6 +721,13 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
 
     @Override
     public boolean prepareForSave() {
+        for (final CidsBean gruppenBean : touchedKundengruppen) {
+            try {
+                gruppenBean.persist();
+            } catch (Exception ex) {
+                Log.error(ex.getMessage(), ex);
+            }
+        }
         return true;
     }
 
@@ -631,6 +748,55 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
             15,
             1280,
             1024);
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void refreshKundengruppe() {
+        final MetaClass mc = ClassCacheMultiple.getMetaClass(DOMAIN, KUNDENGRUPPE_TABLE);
+        kundengruppen.clear();
+        final String query = "SELECT "
+                    + mc.getID()
+                    + ", billing_kundengruppe."
+                    + mc.getPrimaryKey()
+                    + " FROM "
+                    + mc.getTableName()
+                    + " JOIN "
+                    + " billing_kunde_kundengruppe_array "
+                    + " ON "
+                    + " billing_kundengruppe_reference = billing_kundengruppe.id"
+                    + " WHERE "
+                    + " kunde = " + cidsBean.getProperty("id").toString()
+                    + " order by billing_kundengruppe.name";
+        try {
+            final MetaObject[] metaObjects = SessionManager.getProxy()
+                        .getMetaObjectByQuery(SessionManager.getSession().getUser(), query);
+            for (final MetaObject mo : metaObjects) {
+                final CidsBean cb = mo.getBean();
+                kundengruppen.add(cb);
+            }
+        } catch (ConnectionException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public List getKundengruppen() {
+        return kundengruppen;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  kundengruppen  DOCUMENT ME!
+     */
+    public void setKundengruppen(final List kundengruppen) {
+        this.kundengruppen = kundengruppen;
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -656,6 +822,17 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
                 if (bean.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase("billing_kunden_logins")
                             && !loginsOfTheCustomer.contains(bean)) {
                     loginsOfTheCustomer.add(bean);
+                }
+                if (bean.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase("billing_kundengruppe")
+                            && !kundengruppen.contains(bean)) {
+                    final List<CidsBean> kunden = bean.getBeanCollectionProperty("kunden_arr");
+                    kunden.add(cidsBean);
+                    kundengruppen.add(bean);
+                    touchedKundengruppen.add(bean);
+                    final Binding kundengruppenBinding = bindingGroup.getBinding("kundengruppenBinding");
+                    kundengruppenBinding.unbind();
+                    kundengruppenBinding.bind();
+                    cidsBean.setArtificialChangeFlag(true);
                 }
             }
         }
