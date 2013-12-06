@@ -52,7 +52,6 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
 
     //~ Instance fields --------------------------------------------------------
 
-    private final boolean editable;
     private CidsBean cidsBean;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -66,6 +65,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -80,6 +80,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
     private javax.swing.JScrollPane scpProdukte;
     private javax.swing.JScrollPane scpProdukte1;
     private javax.swing.JTextField txtDirektkontakt;
+    private javax.swing.JTextField txtInternalName;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtVermessungsstellennummer;
     private javax.swing.JTextField txtVertragskennzeichen;
@@ -90,27 +91,15 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form BillingKundeEditor.
+     * Creates a new BillingKundeEditor object.
      */
     public BillingKundeEditor() {
-        this(true);
-    }
-
-    /**
-     * Creates a new BillingKundeEditor object.
-     *
-     * @param  editable  DOCUMENT ME!
-     */
-    public BillingKundeEditor(final boolean editable) {
-        this.editable = editable;
         initComponents();
-        if (editable) {
-            try {
-                new CidsBeanDropTarget(lstKundenLogins);
-                new CidsBeanDropTarget(lstProdukte);
-            } catch (final Exception ex) {
-                LOG.warn("Error while creating CidsBeanDropTarget", ex); // NOI18N
-            }
+        try {
+            new CidsBeanDropTarget(lstKundenLogins);
+            new CidsBeanDropTarget(lstProdukte);
+        } catch (final Exception ex) {
+            LOG.warn("Error while creating CidsBeanDropTarget", ex); // NOI18N
         }
     }
 
@@ -156,6 +145,8 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
         scpProdukte1 = new javax.swing.JScrollPane();
         lstKundenLogins = new DroppedBeansList();
         btnRemKundenLogin = new javax.swing.JButton();
+        jLabel12 = new javax.swing.JLabel();
+        txtInternalName = new DefaultBindableJTextField();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -168,7 +159,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
             org.openide.util.NbBundle.getMessage(BillingKundeEditor.class, "BillingKundeEditor.jLabel1.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel1, gridBagConstraints);
@@ -443,7 +434,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
         jPanel1.add(jLabel10, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 1.0;
@@ -496,6 +487,33 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
         gridBagConstraints.gridy = 10;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(btnRemKundenLogin, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel12,
+            org.openide.util.NbBundle.getMessage(BillingKundeEditor.class, "BillingKundeEditor.jLabel12.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel12, gridBagConstraints);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.name_intern}"),
+                txtInternalName,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(txtInternalName, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
