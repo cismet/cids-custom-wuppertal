@@ -8,19 +8,24 @@
 package de.cismet.cids.custom.wunda_blau.search;
 
 import Sirius.navigator.actiontag.ActionTagProtected;
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.search.CidsSearchExecutor;
 import Sirius.navigator.search.dynamic.SearchControlListener;
 import Sirius.navigator.search.dynamic.SearchControlPanel;
 
 import Sirius.server.middleware.types.MetaClass;
+import Sirius.server.middleware.types.MetaObject;
 
 import com.vividsolutions.jts.geom.Geometry;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import org.openide.util.NbBundle;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -34,20 +39,30 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
+import javax.swing.AbstractAction;
 import javax.swing.Box;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JList;
+import javax.swing.ListModel;
 
+import de.cismet.cids.custom.objecteditors.utils.VermessungRissUtils;
 import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungFlurstueckSelectionDialog;
+import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungRissEditor;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.VermessungFlurstueckFinder;
+import de.cismet.cids.custom.wunda_blau.search.server.CidsVermessungRissArtSearchStatement;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsVermessungRissSearchStatement;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.navigator.utils.CidsBeanDropListener;
+import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
@@ -62,6 +77,8 @@ import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.navigatorplugin.GeoSearchButton;
 
 import de.cismet.tools.gui.StaticSwingTools;
+
+import static javax.swing.Action.NAME;
 
 /**
  * DOCUMENT ME!
@@ -79,6 +96,8 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
 
     private static final Logger LOG = Logger.getLogger(VermessungRissWindowSearch.class);
     private static final String ACTION_TAG = "custom.vermessungsriss.windowsearch@WUNDA_BLAU";
+    private static final String VERAENDERUNGSART_ALL_CODE = " ";
+    private static Collection<CidsBean> veraenderungsarts = new LinkedList<CidsBean>();
 
     //~ Instance fields --------------------------------------------------------
 
@@ -123,6 +142,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     private javax.swing.JPanel pnlFilterRissWildcards;
     private javax.swing.JPanel pnlFilterSchluessel;
     private javax.swing.JPanel pnlFilterSchluesselControls;
+    private javax.swing.JPopupMenu popChangeVeraenderungsart;
     private javax.swing.JScrollPane scpFlurstuecke;
     private javax.swing.JTextField txtBlatt;
     private javax.swing.JTextField txtFlur;
@@ -168,6 +188,8 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
 //                icoPluginPolyline = new ImageIcon(getClass().getResource("/images/pluginSearchPolyline.png"));
 
                 initComponents();
+
+                new CidsBeanDropTarget((DropAwareJList)lstFlurstuecke);
 
                 pnlSearchCancel = new SearchControlPanel(this);
                 final Dimension max = pnlSearchCancel.getMaximumSize();
@@ -221,6 +243,47 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
                     };
 
                 flurstueckDialog.pack();
+
+                // Initialize the popup menu to change the veraenderungsart. Since the set of available veraenderungsart
+                // is very unlikely to change, we once load it and save it in a static Collection.
+                if ((veraenderungsarts == null) || veraenderungsarts.isEmpty()) {
+                    final Collection result;
+                    try {
+                        result = SessionManager.getProxy()
+                                    .customServerSearch(SessionManager.getSession().getUser(),
+                                            new CidsVermessungRissArtSearchStatement(
+                                                SessionManager.getSession().getUser()));
+                    } catch (final ConnectionException ex) {
+                        LOG.warn(
+                            "Could not fetch veranederungsart entries. Editing flurstuecksvermessung will not work.",
+                            ex);
+                        // TODO: USer feedback?
+                        return;
+                    }
+
+                    for (final Object veraenderungsart : result) {
+                        veraenderungsarts.add(((MetaObject)veraenderungsart).getBean());
+                    }
+                }
+
+                // create the additional Veraenderungsart 'All', which has an empty code and is the neutral element
+                // for the search.
+                final CidsBean veraenderungsartAll = CidsBean.createNewCidsBeanFromTableName(
+                        "WUNDA_BLAU",
+                        VermessungFlurstueckFinder.VERMESSUNG_VERAENDERUNGSART_TABLE_NAME);
+                veraenderungsartAll.setProperty(
+                    VermessungFlurstueckFinder.VERMESSUNG_VERAENDERUNGSART_CODE,
+                    VERAENDERUNGSART_ALL_CODE);
+                final String text = org.openide.util.NbBundle.getMessage(
+                        VermessungRissWindowSearch.class,
+                        "VermessungRissWindowSearch.veraenderungsart_all.name");
+                veraenderungsartAll.setProperty(VermessungFlurstueckFinder.VERMESSUNG_VERAENDERUNGSART_NAME, text);
+                popChangeVeraenderungsart.add(new ChangeVeraenderungsartAction(veraenderungsartAll));
+
+                for (final CidsBean veraenderungsart : veraenderungsarts) {
+                    popChangeVeraenderungsart.add(new VermessungRissWindowSearch.ChangeVeraenderungsartAction(
+                            veraenderungsart));
+                }
             }
         } catch (Throwable e) {
             LOG.warn("Error in Constructor of VermessungsRissWindowSearch. Search will not work properly.", e);
@@ -241,6 +304,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        popChangeVeraenderungsart = new javax.swing.JPopupMenu();
         pnlFilterRiss = new javax.swing.JPanel();
         lblSchluessel = new javax.swing.JLabel();
         lblGemarkung = new javax.swing.JLabel();
@@ -269,7 +333,7 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         btnFilterSchluessel505To508 = new javax.swing.JButton();
         pnlFilterFlurstuecke = new javax.swing.JPanel();
         scpFlurstuecke = new javax.swing.JScrollPane();
-        lstFlurstuecke = new javax.swing.JList();
+        lstFlurstuecke = new DropAwareJList();
         btnAddFlurstueck = new javax.swing.JButton();
         btnRemoveFlurstueck = new javax.swing.JButton();
         chkSearchInCismap = new javax.swing.JCheckBox();
@@ -586,6 +650,21 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         scpFlurstuecke.setMinimumSize(new java.awt.Dimension(266, 138));
         scpFlurstuecke.setOpaque(false);
 
+        lstFlurstuecke.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lstFlurstueckeMouseClicked(evt);
+                }
+                @Override
+                public void mousePressed(final java.awt.event.MouseEvent evt) {
+                    lstFlurstueckeMousePressed(evt);
+                }
+                @Override
+                public void mouseReleased(final java.awt.event.MouseEvent evt) {
+                    lstFlurstueckeMouseReleased(evt);
+                }
+            });
         lstFlurstuecke.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
 
                 @Override
@@ -764,6 +843,55 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
         chkFilterSchluessel508.setSelected(true);
         chkFilterSchluessel600.setSelected(false);
     }                                                                                               //GEN-LAST:event_btnFilterSchluessel505To508ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lstFlurstueckeMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstFlurstueckeMouseClicked
+    }                                                                              //GEN-LAST:event_lstFlurstueckeMouseClicked
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lstFlurstueckeMousePressed(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstFlurstueckeMousePressed
+        if (popChangeVeraenderungsart.isPopupTrigger(evt)) {
+            final int indexUnderMouse = lstFlurstuecke.locationToIndex(evt.getPoint());
+
+            int[] selection = lstFlurstuecke.getSelectedIndices();
+
+            boolean selectValueUnderMouse = true;
+            if ((selection != null) && (selection.length > 0)) {
+                for (final int index : selection) {
+                    if (index == indexUnderMouse) {
+                        selectValueUnderMouse = false;
+                    }
+                }
+            }
+
+            if (selectValueUnderMouse) {
+                lstFlurstuecke.setSelectedIndex(lstFlurstuecke.locationToIndex(evt.getPoint()));
+                selection = lstFlurstuecke.getSelectedIndices();
+            }
+
+            if ((selection != null) && (selection.length > 0)) {
+                popChangeVeraenderungsart.show(evt.getComponent(), evt.getX(), evt.getY());
+            }
+        }
+    } //GEN-LAST:event_lstFlurstueckeMousePressed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lstFlurstueckeMouseReleased(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lstFlurstueckeMouseReleased
+        // Hock for popup menu. The return value of JPopupMenu.isPopupTrigger() depends on the OS.
+        lstFlurstueckeMousePressed(evt);
+    } //GEN-LAST:event_lstFlurstueckeMouseReleased
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
@@ -958,5 +1086,132 @@ public class VermessungRissWindowSearch extends javax.swing.JPanel implements Ci
     @Override
     public boolean suppressEmptyResultMessage() {
         return false;
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private final class ChangeVeraenderungsartAction extends AbstractAction {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private final CidsBean veraenderungsart;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new ChangeVeraenderungsartAction object.
+         *
+         * @param  veraenderungsart  DOCUMENT ME!
+         */
+        public ChangeVeraenderungsartAction(final CidsBean veraenderungsart) {
+            this.veraenderungsart = veraenderungsart;
+            final String veranderungsArtCode = (String)this.veraenderungsart.getProperty("code");
+
+            if (veranderungsArtCode.equals(VERAENDERUNGSART_ALL_CODE)) {
+                putValue(
+                    NAME,
+                    this.veraenderungsart.getProperty("name"));
+            } else {
+                putValue(
+                    NAME,
+                    veranderungsArtCode
+                            + " - "
+                            + this.veraenderungsart.getProperty("name"));
+            }
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void actionPerformed(final ActionEvent e) {
+            for (final Object flurstuecksvermessung : lstFlurstuecke.getSelectedValues()) {
+                try {
+                    final String veraenderungsArtCode = (String)veraenderungsart.getProperty(
+                            VermessungFlurstueckFinder.VERMESSUNG_VERAENDERUNGSART_CODE);
+                    // was the Veränderungsart 'All' choosen
+                    if (veraenderungsArtCode.equals(VERAENDERUNGSART_ALL_CODE)) {
+                        ((CidsBean)flurstuecksvermessung).setProperty("veraenderungsart", null);
+                    } else {
+                        ((CidsBean)flurstuecksvermessung).setProperty("veraenderungsart", veraenderungsart);
+                    }
+                    lstFlurstuecke.clearSelection();
+                    lstFlurstuecke.revalidate();
+                    lstFlurstuecke.repaint();
+                } catch (final Exception ex) {
+                    LOG.info("Couldn't set veraenderungsart to '" + veraenderungsart + "' for flurstuecksvermessung '"
+                                + flurstuecksvermessung + "'.",
+                        ex);
+                    // TODO: User feedback?
+                }
+            }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class DropAwareJList extends JList implements CidsBeanDropListener {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new DropAwareJList object.
+         */
+        public DropAwareJList() {
+        }
+
+        /**
+         * Creates a new DropAwareJList object.
+         *
+         * @param  dataModel  DOCUMENT ME!
+         */
+        public DropAwareJList(final ListModel dataModel) {
+            super(dataModel);
+        }
+
+        /**
+         * Creates a new DropAwareJList object.
+         *
+         * @param  listData  DOCUMENT ME!
+         */
+        public DropAwareJList(final Object[] listData) {
+            super(listData);
+        }
+
+        /**
+         * Creates a new DropAwareJList object.
+         *
+         * @param  listData  DOCUMENT ME!
+         */
+        public DropAwareJList(final Vector listData) {
+            super(listData);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void beansDropped(final ArrayList<CidsBean> beans) {
+            try {
+                // final List<CidsBean> landparcels = cidsBean.getBeanCollectionProperty("flurstuecksvermessung");
+                for (final CidsBean dropped : beans) {
+                    final CidsBean newEntry = CidsBean.createNewCidsBeanFromTableName(
+                            "WUNDA_BLAU",
+                            "vermessung_flurstuecksvermessung");
+                    newEntry.setProperty("veraenderungsart", null);
+                    newEntry.setProperty("tmp_lp_orig", dropped);
+                    VermessungRissUtils.setFluerstueckKickerInVermessung(newEntry);
+                    flurstuecksvermessungFilterModel.addElement(newEntry);
+                }
+            } catch (Exception ex) {
+                LOG.error("Problem when adding the DroppedBeans", ex);
+            }
+        }
     }
 }
