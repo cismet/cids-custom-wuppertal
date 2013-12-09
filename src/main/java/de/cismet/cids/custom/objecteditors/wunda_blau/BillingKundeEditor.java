@@ -13,6 +13,8 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
+import Sirius.navigator.types.treenode.RootTreeNode;
+import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
@@ -34,6 +36,8 @@ import java.util.Set;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
@@ -70,7 +74,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
 
     //~ Instance fields --------------------------------------------------------
 
-    private List kundengruppen = new ArrayList();
+    private List<CidsBean> kundengruppen = new ArrayList();
     private Set<CidsBean> touchedKundengruppen = new HashSet<CidsBean>();
 
     private CidsBean cidsBean;
@@ -665,7 +669,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
                 for (final Object gruppeBean : selection) {
                     if (gruppeBean instanceof CidsBean) {
                         ((CidsBean)gruppeBean).getBeanCollectionProperty("kunden_arr").remove(cidsBean);
-                        kundengruppen.remove(gruppeBean);
+                        kundengruppen.remove((CidsBean)gruppeBean);
                         final Binding kundengruppenBinding = bindingGroup.getBinding("kundengruppenBinding");
                         kundengruppenBinding.unbind();
                         kundengruppenBinding.bind();
@@ -717,17 +721,42 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
 
     @Override
     public void editorClosed(final EditorClosedEvent event) {
+        if (event.getStatus() == EditorSaveStatus.SAVE_SUCCESS) {
+            for (final CidsBean gruppenBean : touchedKundengruppen) {
+                // check if the bean should be added to the Kundengruppe
+                // Kundengruppe is shown in the list and was touched
+                if (kundengruppen.contains(gruppenBean)) {
+                    final List<CidsBean> kunden = gruppenBean.getBeanCollectionProperty("kunden_arr");
+                    kunden.add(event.getSavedBean());
+                }
+
+                try {
+                    gruppenBean.persist();
+                } catch (Exception ex) {
+                    Log.error(ex.getMessage(), ex);
+                }
+            }
+
+            // reload the tree
+            try {
+                final TreePath selectionPath = ComponentRegistry.getRegistry().getCatalogueTree().getSelectionPath();
+                if ((selectionPath != null) && (selectionPath.getPath().length > 0)) {
+                    final RootTreeNode rootTreeNode = new RootTreeNode(SessionManager.getProxy().getRoots());
+                    ((DefaultTreeModel)ComponentRegistry.getRegistry().getCatalogueTree().getModel()).setRoot(
+                        rootTreeNode);
+                    ((DefaultTreeModel)ComponentRegistry.getRegistry().getCatalogueTree().getModel()).reload();
+                    ComponentRegistry.getRegistry().getCatalogueTree().exploreSubtree(selectionPath);
+                }
+            } catch (ConnectionException ex) {
+                LOG.error("Error while refreshing the tree", ex); // NOI18N
+            } catch (RuntimeException ex) {
+                LOG.error("Error while refreshing the tree", ex); // NOI18N
+            }
+        }
     }
 
     @Override
     public boolean prepareForSave() {
-        for (final CidsBean gruppenBean : touchedKundengruppen) {
-            try {
-                gruppenBean.persist();
-            } catch (Exception ex) {
-                Log.error(ex.getMessage(), ex);
-            }
-        }
         return true;
     }
 
@@ -825,8 +854,6 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
                 }
                 if (bean.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase("billing_kundengruppe")
                             && !kundengruppen.contains(bean)) {
-                    final List<CidsBean> kunden = bean.getBeanCollectionProperty("kunden_arr");
-                    kunden.add(cidsBean);
                     kundengruppen.add(bean);
                     touchedKundengruppen.add(bean);
                     final Binding kundengruppenBinding = bindingGroup.getBinding("kundengruppenBinding");
