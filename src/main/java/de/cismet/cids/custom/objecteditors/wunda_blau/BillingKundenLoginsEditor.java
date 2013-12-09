@@ -234,7 +234,7 @@ public class BillingKundenLoginsEditor extends javax.swing.JPanel implements Cid
     public String getTitle() {
         String title = "Kunden Logins";
         final String desc = String.valueOf(cidsBean);
-        if (desc != null) {
+        if (!desc.equalsIgnoreCase("null")) {
             title += ": " + desc;
         }
 

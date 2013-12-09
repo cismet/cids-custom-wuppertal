@@ -708,7 +708,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
     public String getTitle() {
         String title = "Kunde";
         final String desc = String.valueOf(cidsBean);
-        if (desc != null) {
+        if (!desc.equalsIgnoreCase("null")) {
             title += ": " + desc;
         }
 
