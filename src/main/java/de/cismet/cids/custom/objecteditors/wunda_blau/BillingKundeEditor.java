@@ -22,11 +22,11 @@ import Sirius.server.middleware.types.MetaObject;
 import org.apache.log4j.Logger;
 
 import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.Property;
 
 import org.jfree.util.Log;
 
 import org.openide.util.Exceptions;
+import org.openide.util.NbBundle;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -193,7 +193,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
             org.openide.util.NbBundle.getMessage(BillingKundeEditor.class, "BillingKundeEditor.jLabel1.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel1, gridBagConstraints);
@@ -220,7 +220,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
             org.openide.util.NbBundle.getMessage(BillingKundeEditor.class, "BillingKundeEditor.jLabel2.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel2, gridBagConstraints);
@@ -235,7 +235,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtVertragskennzeichen, gridBagConstraints);
@@ -245,7 +245,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
             org.openide.util.NbBundle.getMessage(BillingKundeEditor.class, "BillingKundeEditor.jLabel3.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel3, gridBagConstraints);
@@ -255,7 +255,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
             org.openide.util.NbBundle.getMessage(BillingKundeEditor.class, "BillingKundeEditor.jLabel4.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel4, gridBagConstraints);
@@ -270,7 +270,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtWeiterverkaufsvertragskennzeichen, gridBagConstraints);
@@ -280,7 +280,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
             org.openide.util.NbBundle.getMessage(BillingKundeEditor.class, "BillingKundeEditor.jLabel5.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel5, gridBagConstraints);
@@ -290,7 +290,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
             org.openide.util.NbBundle.getMessage(BillingKundeEditor.class, "BillingKundeEditor.jLabel6.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel6, gridBagConstraints);
@@ -305,7 +305,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtDirektkontakt, gridBagConstraints);
@@ -315,7 +315,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
             org.openide.util.NbBundle.getMessage(BillingKundeEditor.class, "BillingKundeEditor.jLabel7.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel7, gridBagConstraints);
@@ -330,7 +330,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtVermessungsstellennummer, gridBagConstraints);
@@ -346,7 +346,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(dcVertragsende, gridBagConstraints);
@@ -362,7 +362,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(dcWeiterverkaufsvertragsende, gridBagConstraints);
@@ -372,7 +372,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
             org.openide.util.NbBundle.getMessage(BillingKundeEditor.class, "BillingKundeEditor.jLabel8.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel8, gridBagConstraints);
@@ -387,7 +387,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cboBranche, gridBagConstraints);
@@ -397,7 +397,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
             org.openide.util.NbBundle.getMessage(BillingKundeEditor.class, "BillingKundeEditor.jLabel9.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel9, gridBagConstraints);
@@ -413,7 +413,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(btnRemProduct, gridBagConstraints);
 
@@ -427,7 +427,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cboAbrechnungsturnus, gridBagConstraints);
@@ -451,7 +451,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -462,13 +462,13 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
             org.openide.util.NbBundle.getMessage(BillingKundeEditor.class, "BillingKundeEditor.jLabel10.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel10, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 1.0;
@@ -479,7 +479,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
             org.openide.util.NbBundle.getMessage(BillingKundeEditor.class, "BillingKundeEditor.jLabel11.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel11, gridBagConstraints);
@@ -501,7 +501,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -518,7 +518,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(btnRemKundenLogin, gridBagConstraints);
 
@@ -542,7 +542,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
@@ -554,7 +554,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
             org.openide.util.NbBundle.getMessage(BillingKundeEditor.class, "BillingKundeEditor.jLabel13.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel13, gridBagConstraints);
@@ -577,7 +577,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -594,7 +594,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(btnRemKundengruppe, gridBagConstraints);
 
@@ -757,7 +757,22 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
 
     @Override
     public boolean prepareForSave() {
-        return true;
+        if (txtInternalName.getText().isEmpty()) {
+            final String message = NbBundle.getMessage(
+                    BillingKundeEditor.class,
+                    "BillingKundeEditor.prepareForSave().dialog.message");
+            final String title = NbBundle.getMessage(
+                    BillingKundeEditor.class,
+                    "BillingKundeEditor.prepareForSave().dialog.title");
+            JOptionPane.showMessageDialog(
+                this,
+                message,
+                title,
+                JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**
