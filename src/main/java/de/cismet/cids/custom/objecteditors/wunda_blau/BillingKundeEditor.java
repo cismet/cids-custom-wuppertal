@@ -76,6 +76,8 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
 
     private List<CidsBean> kundengruppen = new ArrayList();
     private Set<CidsBean> touchedKundengruppen = new HashSet<CidsBean>();
+    private List<CidsBean> kundenLogins = new ArrayList();
+    private Set<CidsBean> touchedKundenLogins = new HashSet<CidsBean>();
 
     private CidsBean cidsBean;
 
@@ -489,12 +491,13 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
 
         lstKundenLogins.setModel(new DefaultListModel());
 
-        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${cidsBean.benutzer_n}");
+        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${kundenLogins}");
         jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 eLProperty,
-                lstKundenLogins);
+                lstKundenLogins,
+                "kundenLoginsBinding");
         bindingGroup.addBinding(jListBinding);
 
         scpKundenLogins.setViewportView(lstKundenLogins);
@@ -644,8 +647,20 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
                     "Einträge entfernen",
                     JOptionPane.YES_NO_OPTION);
             if (answer == JOptionPane.YES_OPTION) {
-                for (final Object cidsbean : selection) {
-                    cidsBean.getBeanCollectionProperty("benutzer_n").remove((CidsBean)cidsbean);
+                for (final Object loginBean : selection) {
+                    if (loginBean instanceof CidsBean) {
+                        try {
+                            ((CidsBean)loginBean).setProperty("kunde", null);
+                        } catch (Exception ex) {
+                            LOG.error(ex.getMessage(), ex);
+                        }
+                        kundenLogins.remove((CidsBean)loginBean);
+                        touchedKundenLogins.add((CidsBean)loginBean);
+                        final Binding kundenLoginsBinding = bindingGroup.getBinding("kundenLoginsBinding");
+                        kundenLoginsBinding.unbind();
+                        kundenLoginsBinding.bind();
+                        cidsBean.setArtificialChangeFlag(true);
+                    }
                 }
             }
         }
@@ -694,7 +709,8 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
                 bindingGroup,
                 cidsBean);
             this.cidsBean = cidsBean;
-            refreshKundengruppe();
+            initKundengruppe();
+            initKundenLogins();
             bindingGroup.bind();
         }
     }
@@ -723,15 +739,37 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
     public void editorClosed(final EditorClosedEvent event) {
         if (event.getStatus() == EditorSaveStatus.SAVE_SUCCESS) {
             for (final CidsBean gruppenBean : touchedKundengruppen) {
-                // check if the bean should be added to the Kundengruppe
-                // Kundengruppe is shown in the list and was touched
+                // check if the customer bean should be added to the Kundengruppe
+                // this should happen if: Kundengruppe is shown in the list and was touched
                 if (kundengruppen.contains(gruppenBean)) {
                     final List<CidsBean> kunden = gruppenBean.getBeanCollectionProperty("kunden_arr");
                     kunden.add(event.getSavedBean());
                 }
 
+                // persist the bean, this should also happen if the bean was only touched. This means, that the
+                // customer bean was removed.
                 try {
                     gruppenBean.persist();
+                } catch (Exception ex) {
+                    Log.error(ex.getMessage(), ex);
+                }
+            }
+
+            for (final CidsBean loginBean : touchedKundenLogins) {
+                // check if the customer bean should be added to the KundenLogin
+                // this should happen if: KundenLogin is shown in the list and was touched
+                if (kundenLogins.contains(loginBean)) {
+                    try {
+                        loginBean.setProperty("kunde", event.getSavedBean());
+                    } catch (Exception ex) {
+                        Exceptions.printStackTrace(ex);
+                    }
+                }
+
+                // persist the bean, this should also happen if the bean was only touched. This means, that the
+                // customer bean was removed.
+                try {
+                    loginBean.persist();
                 } catch (Exception ex) {
                     Log.error(ex.getMessage(), ex);
                 }
@@ -797,7 +835,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
     /**
      * DOCUMENT ME!
      */
-    private void refreshKundengruppe() {
+    private void initKundengruppe() {
         final MetaClass mc = ClassCacheMultiple.getMetaClass(DOMAIN, KUNDENGRUPPE_TABLE);
         kundengruppen.clear();
         final String query = "SELECT "
@@ -827,6 +865,33 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
 
     /**
      * DOCUMENT ME!
+     */
+    private void initKundenLogins() {
+        final MetaClass mc = ClassCacheMultiple.getMetaClass(DOMAIN, "billing_kunden_logins");
+        kundenLogins.clear();
+        final String query = "SELECT "
+                    + mc.getID()
+                    + ", billing_kunden_logins."
+                    + mc.getPrimaryKey()
+                    + " FROM "
+                    + mc.getTableName()
+                    + " WHERE "
+                    + " kunde = " + cidsBean.getProperty("id").toString()
+                    + " order by billing_kunden_logins.name";
+        try {
+            final MetaObject[] metaObjects = SessionManager.getProxy()
+                        .getMetaObjectByQuery(SessionManager.getSession().getUser(), query);
+            for (final MetaObject mo : metaObjects) {
+                final CidsBean cb = mo.getBean();
+                kundenLogins.add(cb);
+            }
+        } catch (ConnectionException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
@@ -843,6 +908,24 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
         this.kundengruppen = kundengruppen;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public List<CidsBean> getKundenLogins() {
+        return kundenLogins;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  kundenLogins  DOCUMENT ME!
+     */
+    public void setKundenLogins(final List<CidsBean> kundenLogins) {
+        this.kundenLogins = kundenLogins;
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -857,15 +940,19 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
         @Override
         public void beansDropped(final ArrayList<CidsBean> beans) {
             final List<CidsBean> productsOfTheCustomer = cidsBean.getBeanCollectionProperty("produkte_arr");
-            final List<CidsBean> loginsOfTheCustomer = cidsBean.getBeanCollectionProperty("benutzer_n");
             for (final CidsBean bean : beans) {
                 if (bean.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase("billing_produkt")
                             && !productsOfTheCustomer.contains(bean)) {
                     productsOfTheCustomer.add(bean);
                 }
                 if (bean.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase("billing_kunden_logins")
-                            && !loginsOfTheCustomer.contains(bean)) {
-                    loginsOfTheCustomer.add(bean);
+                            && !kundenLogins.contains(bean)) {
+                    kundenLogins.add(bean);
+                    touchedKundenLogins.add(bean);
+                    final Binding kundenLoginsBinding = bindingGroup.getBinding("kundenLoginsBinding");
+                    kundenLoginsBinding.unbind();
+                    kundenLoginsBinding.bind();
+                    cidsBean.setArtificialChangeFlag(true);
                 }
                 if (bean.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase("billing_kundengruppe")
                             && !kundengruppen.contains(bean)) {

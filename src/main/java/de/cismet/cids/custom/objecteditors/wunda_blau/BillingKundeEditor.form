@@ -402,7 +402,9 @@
                 </Property>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="elements" source="Form" sourcePath="${cidsBean.benutzer_n}" target="lstKundenLogins" targetPath="elements" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="elements" source="Form" sourcePath="${kundenLogins}" target="lstKundenLogins" targetPath="elements" updateStrategy="0" immediately="false">
+                  <Property name="name" type="java.lang.String" value="kundenLoginsBinding"/>
+                </BindingProperty>
               </BindingProperties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DroppedBeansList();"/>
