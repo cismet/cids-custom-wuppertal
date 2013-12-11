@@ -616,7 +616,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
      * @param  evt  DOCUMENT ME!
      */
     private void btnRemProductActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemProductActionPerformed
-        final List selection = lstProdukte.getSelectedValuesList();
+        final Object[] selection = lstProdukte.getSelectedValues();
 
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -638,7 +638,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
      * @param  evt  DOCUMENT ME!
      */
     private void btnRemKundenLoginActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemKundenLoginActionPerformed
-        final List selection = lstKundenLogins.getSelectedValuesList();
+        final Object[] selection = lstKundenLogins.getSelectedValues();
 
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -672,7 +672,7 @@ public class BillingKundeEditor extends javax.swing.JPanel implements CidsBeanRe
      * @param  evt  DOCUMENT ME!
      */
     private void btnRemKundengruppeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemKundengruppeActionPerformed
-        final List selection = lstKundengruppe.getSelectedValuesList();
+        final Object[] selection = lstKundengruppe.getSelectedValues();
 
         if (selection != null) {
             final int answer = JOptionPane.showConfirmDialog(
