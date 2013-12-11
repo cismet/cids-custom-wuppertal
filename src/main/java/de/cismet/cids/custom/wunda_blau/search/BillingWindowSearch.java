@@ -11,6 +11,7 @@
  */
 package de.cismet.cids.custom.wunda_blau.search;
 
+import Sirius.navigator.actiontag.ActionTagProtected;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.search.dynamic.SearchControlListener;
@@ -32,6 +33,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement;
 import de.cismet.cids.custom.wunda_blau.search.server.MetaObjectNodesBillingSearchStatement;
 
@@ -50,11 +52,14 @@ import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
  * @version  $Revision$, $Date$
  */
 @org.openide.util.lookup.ServiceProvider(service = CidsWindowSearch.class)
-public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindowSearch, SearchControlListener {
+public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindowSearch,
+    SearchControlListener,
+    ActionTagProtected {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(BillingWindowSearch.class);
+    private static final String ACTION_TAG = "custom.billing.search@WUNDA_BLAU";
 
     //~ Instance fields --------------------------------------------------------
 
@@ -686,5 +691,10 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
     @Override
     public String getName() {
         return NbBundle.getMessage(BillingWindowSearch.class, "BillingWindowSearch.name");
+    }
+
+    @Override
+    public boolean checkActionTag() {
+        return ObjectRendererUtils.checkActionTag(ACTION_TAG);
     }
 }
