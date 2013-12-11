@@ -204,7 +204,7 @@ public class PrintBillingReportForCustomer {
             }
 
             final Double mwst_satz_bean = (Double)billing.getProperty("mwst_satz");
-            if (mwst_satz_bean != null) {
+            if ((mwst_satz_bean != null) && !mwst_satz_bean.equals(new Double(0))) {
                 mwst_satz = new BigDecimal(mwst_satz_bean.toString());
             } else {
                 mwst_satz = new BigDecimal("0");
