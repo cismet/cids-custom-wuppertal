@@ -11,7 +11,15 @@
  */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.server.middleware.types.MetaClass;
+
 import org.apache.log4j.Logger;
+
+import java.util.concurrent.ExecutionException;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 
@@ -24,6 +32,10 @@ import de.cismet.cids.editors.EditorClosedEvent;
 import de.cismet.cids.editors.EditorSaveListener;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+
+import de.cismet.tools.CismetThreadPool;
+
+import static de.cismet.cids.editors.DefaultBindableReferenceCombo.getModelByMetaClass;
 
 /**
  * DOCUMENT ME!
@@ -42,7 +54,7 @@ public class BillingKundenLoginsEditor extends javax.swing.JPanel implements Cid
     private CidsBean cidsBean;
     private boolean editable;
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox cboBranche;
+    private javax.swing.JComboBox cboCustomer;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
@@ -73,7 +85,7 @@ public class BillingKundenLoginsEditor extends javax.swing.JPanel implements Cid
         if (!editable) {
             RendererTools.makeReadOnly(txtKontakt);
             RendererTools.makeReadOnly(txtName);
-            RendererTools.makeReadOnly(cboBranche);
+            RendererTools.makeReadOnly(cboCustomer);
         }
     }
 
@@ -94,7 +106,7 @@ public class BillingKundenLoginsEditor extends javax.swing.JPanel implements Cid
         txtName = new DefaultBindableJTextField();
         txtKontakt = new DefaultBindableJTextField();
         lblKunde = new javax.swing.JLabel();
-        cboBranche = new DefaultBindableReferenceCombo();
+        cboCustomer = new AlwaysReloadBindableReferenceCombo();
         jLabel2 = new javax.swing.JLabel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
@@ -166,7 +178,7 @@ public class BillingKundenLoginsEditor extends javax.swing.JPanel implements Cid
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kunde}"),
-                cboBranche,
+                cboCustomer,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
@@ -175,7 +187,7 @@ public class BillingKundenLoginsEditor extends javax.swing.JPanel implements Cid
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(cboBranche, gridBagConstraints);
+        jPanel1.add(cboCustomer, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel2,
@@ -252,5 +264,57 @@ public class BillingKundenLoginsEditor extends javax.swing.JPanel implements Cid
     @Override
     public boolean prepareForSave() {
         return true;
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class AlwaysReloadBindableReferenceCombo extends DefaultBindableReferenceCombo {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        protected void init(final MetaClass mc, final boolean forceReload) {
+            if (!isFakeModel() && (mc != null)) {
+                DefaultComboBoxModel tmpModel = null;
+                if (!SwingUtilities.isEventDispatchThread()) {
+                    tmpModel = getModelByMetaClass(mc, isNullable(), isOnlyUsed(), getComparator(), true);
+                }
+                final DefaultComboBoxModel model = tmpModel;
+
+                CismetThreadPool.execute(new SwingWorker<DefaultComboBoxModel, Void>() {
+
+                        @Override
+                        protected DefaultComboBoxModel doInBackground() throws Exception {
+                            if (model != null) {
+                                return model;
+                            } else {
+                                return getModelByMetaClass(
+                                        mc,
+                                        isNullable(),
+                                        isOnlyUsed(),
+                                        getComparator(),
+                                        forceReload);
+                            }
+                        }
+
+                        @Override
+                        protected void done() {
+                            try {
+                                final DefaultComboBoxModel tmp = get();
+                                tmp.setSelectedItem(cidsBean);
+                                setModel(tmp);
+                            } catch (InterruptedException interruptedException) {
+                            } catch (ExecutionException executionException) {
+                                LOG.error("Error while initializing the model of a referenceCombo", executionException); // NOI18N
+                            }
+                        }
+                    });
+            }
+        }
     }
 }
