@@ -55,39 +55,48 @@ public class NasStartupHook implements StartupHook {
 
                 @Override
                 public void run() {
-                    final ServerActionParameter paramMethod = new ServerActionParameter(
-                            NasDataQueryAction.PARAMETER_TYPE.METHOD.toString(),
-                            NasDataQueryAction.METHOD_TYPE.GET_ALL);
-                    HashMap<String, NasProductInfo> openOrderIds = null;
+                    boolean hasNasAccess = false;
                     try {
-                        openOrderIds = (HashMap<String, NasProductInfo>)SessionManager.getProxy()
-                                    .executeTask(
-                                            SEVER_ACTION,
-                                            "WUNDA_BLAU",
-                                            null,
-                                            paramMethod);
-                    } catch (Exception ex) {
-                        log.error("error while getting the list of undelivered nas orders from server", ex);
+                        hasNasAccess = SessionManager.getConnection()
+                                    .getConfigAttr(SessionManager.getSession().getUser(), "csa://nasDataQuery") != null;
+                    } catch (ConnectionException ex) {
+                        log.error("Could not validate action tag for NAS!", ex);
                     }
+                    if (hasNasAccess) {
+                        final ServerActionParameter paramMethod = new ServerActionParameter(
+                                NasDataQueryAction.PARAMETER_TYPE.METHOD.toString(),
+                                NasDataQueryAction.METHOD_TYPE.GET_ALL);
+                        HashMap<String, NasProductInfo> openOrderIds = null;
+                        try {
+                            openOrderIds = (HashMap<String, NasProductInfo>)SessionManager
+                                        .getProxy().executeTask(
+                                        SEVER_ACTION,
+                                        "WUNDA_BLAU",
+                                        null,
+                                        paramMethod);
+                        } catch (Exception ex) {
+                            log.error("error while getting the list of undelivered nas orders from server", ex);
+                        }
 
-                    if ((openOrderIds == null) || openOrderIds.isEmpty()) {
-                        log.info("no pending nas orders found for the logged in user");
-                        return;
-                    }
-                    final StringBuilder logMessageBuilder = new StringBuilder();
-                    for (final String s : openOrderIds.keySet()) {
-                        logMessageBuilder.append(s);
-                        logMessageBuilder.append(",");
-                    }
-                    log.fatal("pending nas orders found: " + logMessageBuilder.toString());
-                    // generate a new NasDownload object for pending orders
-                    for (final String orderId : openOrderIds.keySet()) {
-                        final NasProductInfo pInfo = (NasProductInfo)openOrderIds.get(orderId);
-                        final NASDownload download = new NASDownload(
-                                orderId,
-                                pInfo.isIsSplittet(),
-                                pInfo.getRequestName());
-                        DownloadManager.instance().add(download);
+                        if ((openOrderIds == null) || openOrderIds.isEmpty()) {
+                            log.info("no pending nas orders found for the logged in user");
+                            return;
+                        }
+                        final StringBuilder logMessageBuilder = new StringBuilder();
+                        for (final String s : openOrderIds.keySet()) {
+                            logMessageBuilder.append(s);
+                            logMessageBuilder.append(",");
+                        }
+                        log.fatal("pending nas orders found: " + logMessageBuilder.toString());
+                        // generate a new NasDownload object for pending orders
+                        for (final String orderId : openOrderIds.keySet()) {
+                            final NasProductInfo pInfo = (NasProductInfo)openOrderIds.get(orderId);
+                            final NASDownload download = new NASDownload(
+                                    orderId,
+                                    pInfo.isIsSplittet(),
+                                    pInfo.getRequestName());
+                            DownloadManager.instance().add(download);
+                        }
                     }
                 }
             });

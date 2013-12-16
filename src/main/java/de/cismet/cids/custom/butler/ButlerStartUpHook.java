@@ -64,45 +64,54 @@ public class ButlerStartUpHook implements StartupHook {
      * DOCUMENT ME!
      */
     private void restartPendingButler1Requests() {
-        final ServerActionParameter paramMethod = new ServerActionParameter(
-                ButlerQueryAction.PARAMETER_TYPE.METHOD.toString(),
-                ButlerQueryAction.METHOD_TYPE.GET_ALL);
-        HashMap<String, ButlerRequestInfo> openRequestIds = null;
+        boolean hasButlerAccess = false;
         try {
-            openRequestIds = (HashMap<String, ButlerRequestInfo>)SessionManager.getProxy()
-                        .executeTask(
-                                SERVER_ACTION,
-                                "WUNDA_BLAU",
-                                null,
-                                paramMethod);
+            hasButlerAccess = SessionManager.getConnection()
+                        .getConfigAttr(SessionManager.getSession().getUser(), "csa://butler1Query") != null;
         } catch (ConnectionException ex) {
-            log.error("error while getting the list of undelivered butler 1 requests from server", ex);
-            return;
+            log.error("Could not validate action tag for Butler!", ex);
         }
-        if ((openRequestIds == null) || openRequestIds.isEmpty()) {
-            log.info("no pending butler orders found for the logged in user");
-            return;
-        }
+        if (hasButlerAccess) {
+            final ServerActionParameter paramMethod = new ServerActionParameter(
+                    ButlerQueryAction.PARAMETER_TYPE.METHOD.toString(),
+                    ButlerQueryAction.METHOD_TYPE.GET_ALL);
+            HashMap<String, ButlerRequestInfo> openRequestIds = null;
+            try {
+                openRequestIds = (HashMap<String, ButlerRequestInfo>)SessionManager.getProxy()
+                            .executeTask(
+                                    SERVER_ACTION,
+                                    "WUNDA_BLAU",
+                                    null,
+                                    paramMethod);
+            } catch (ConnectionException ex) {
+                log.error("error while getting the list of undelivered butler 1 requests from server", ex);
+                return;
+            }
+            if ((openRequestIds == null) || openRequestIds.isEmpty()) {
+                log.info("no pending butler orders found for the logged in user");
+                return;
+            }
 
-        final StringBuilder logMessageBuilder = new StringBuilder();
-        for (final String s : openRequestIds.keySet()) {
-            logMessageBuilder.append(s);
-            logMessageBuilder.append(",");
+            final StringBuilder logMessageBuilder = new StringBuilder();
+            for (final String s : openRequestIds.keySet()) {
+                logMessageBuilder.append(s);
+                logMessageBuilder.append(",");
+            }
+            log.fatal("pending nas orders found: " + logMessageBuilder.toString());
+            // generate a new NasDownload object for pending orders
+            final ArrayList<ButlerDownload> downloads = new ArrayList<ButlerDownload>();
+            for (final String requestId : openRequestIds.keySet()) {
+                final ButlerRequestInfo info = (ButlerRequestInfo)openRequestIds.get(requestId);
+                final ButlerDownload download = new ButlerDownload(requestId, info.getUserOrderId(), info.getProduct());
+                downloads.add(download);
+            }
+            DownloadManager.instance()
+                    .add(new MultipleDownload(
+                            downloads,
+                            org.openide.util.NbBundle.getMessage(
+                                ButlerStartUpHook.class,
+                                "ButlerStartUpHook.downloadTitle")));
         }
-        log.fatal("pending nas orders found: " + logMessageBuilder.toString());
-        // generate a new NasDownload object for pending orders
-        final ArrayList<ButlerDownload> downloads = new ArrayList<ButlerDownload>();
-        for (final String requestId : openRequestIds.keySet()) {
-            final ButlerRequestInfo info = (ButlerRequestInfo)openRequestIds.get(requestId);
-            final ButlerDownload download = new ButlerDownload(requestId, info.getUserOrderId(), info.getProduct());
-            downloads.add(download);
-        }
-        DownloadManager.instance()
-                .add(new MultipleDownload(
-                        downloads,
-                        org.openide.util.NbBundle.getMessage(
-                            ButlerStartUpHook.class,
-                            "ButlerStartUpHook.downloadTitle")));
     }
 
     /**
