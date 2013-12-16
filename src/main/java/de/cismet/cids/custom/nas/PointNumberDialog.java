@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.DefaultComboBoxModel;
@@ -65,7 +66,6 @@ import javax.swing.text.DefaultCaret;
 import javax.swing.text.JTextComponent;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
-import de.cismet.cids.custom.utils.BusyLoggingTextPane;
 import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservation;
 import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservationRequest;
 import de.cismet.cids.custom.utils.pointnumberreservation.VermessungsStellenSearchResult;
@@ -78,6 +78,8 @@ import de.cismet.cids.server.search.CidsServerSearch;
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
 import de.cismet.cismap.commons.interaction.CismapBroker;
+
+import de.cismet.commons.gui.progress.BusyLoggingTextPane;
 
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
@@ -129,8 +131,11 @@ public class PointNumberDialog extends javax.swing.JDialog {
     private javax.swing.JComboBox cbAntragsNummer;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTable jTable1;
     private org.jdesktop.swingx.JXBusyLabel jxFreigebenWaitLabel;
     private javax.swing.JLabel lblAnrSeperator;
     private javax.swing.JLabel lblAntragsnummer;
@@ -155,7 +160,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
     private javax.swing.JPanel pnlTabFreigeben;
     private javax.swing.JPanel pnlTabReservieren;
     private javax.swing.JPanel pnlWait;
-    private de.cismet.cids.custom.utils.BusyLoggingTextPane protokollPane;
+    private de.cismet.commons.gui.progress.BusyLoggingTextPane protokollPane;
     private javax.swing.JTable tblPunktnummern;
     private javax.swing.JTabbedPane tbpModus;
     // End of variables declaration//GEN-END:variables
@@ -289,6 +294,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
                 }
             }, 800);
     }
+
     /**
      * DOCUMENT ME!
      *
@@ -480,6 +486,9 @@ public class PointNumberDialog extends javax.swing.JDialog {
         lblTabErgaenzen = new javax.swing.JLabel();
         pnlTabFreigeben = new javax.swing.JPanel();
         lblTabFreigeben = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         pnlLeft = new javax.swing.JPanel();
         lblAntragsnummer = new javax.swing.JLabel();
         tbpModus = new javax.swing.JTabbedPane();
@@ -547,6 +556,18 @@ public class PointNumberDialog extends javax.swing.JDialog {
             lblTabFreigeben,
             org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.lblTabFreigeben.text")); // NOI18N
         pnlTabFreigeben.add(lblTabFreigeben);
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                new Object[][] {
+                    { null, null, null, null },
+                    { null, null, null, null },
+                    { null, null, null, null },
+                    { null, null, null, null }
+                },
+                new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
+        jScrollPane3.setViewportView(jTable1);
+
+        jPanel1.add(jScrollPane3);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridBagLayout());
@@ -1153,6 +1174,17 @@ public class PointNumberDialog extends javax.swing.JDialog {
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   list          DOCUMENT ME!
+         * @param   value         DOCUMENT ME!
+         * @param   index         DOCUMENT ME!
+         * @param   isSelected    DOCUMENT ME!
+         * @param   cellHasFocus  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public Component getListCellRendererComponent(final JList list,
                 final Object value,
@@ -1188,6 +1220,13 @@ public class PointNumberDialog extends javax.swing.JDialog {
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception  DOCUMENT ME!
+         */
         @Override
         protected Collection<PointNumberReservation> doInBackground() throws Exception {
             final String anr = getAnr();
@@ -1217,6 +1256,9 @@ public class PointNumberDialog extends javax.swing.JDialog {
             return pointNumbers;
         }
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         protected void done() {
             try {
@@ -1238,6 +1280,9 @@ public class PointNumberDialog extends javax.swing.JDialog {
                 punktnummern.clear();
                 punktnummern.addAll(listModel);
                 tblPunktnummern.repaint();
+                jScrollPane2.invalidate();
+                jScrollPane2.validate();
+                jScrollPane2.repaint();
                 jxFreigebenWaitLabel.setBusy(false);
                 final CardLayout cl = (CardLayout)(pnlFreigeben.getLayout());
                 cl.show(pnlFreigeben, "card2");
@@ -1280,6 +1325,13 @@ public class PointNumberDialog extends javax.swing.JDialog {
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception  DOCUMENT ME!
+         */
         @Override
         protected Collection doInBackground() throws Exception {
             final CidsServerSearch search = new VermessungsStellenNummerSearch(user);
@@ -1300,6 +1352,13 @@ public class PointNumberDialog extends javax.swing.JDialog {
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception  DOCUMENT ME!
+         */
         @Override
         protected PointNumberReservationRequest doInBackground() throws Exception {
             if ((model.getSelectedValues() == 0)) {
@@ -1398,6 +1457,9 @@ public class PointNumberDialog extends javax.swing.JDialog {
             return res;
         }
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         protected void done() {
             final java.util.Timer t = new java.util.Timer();
@@ -1413,16 +1475,18 @@ public class PointNumberDialog extends javax.swing.JDialog {
                                     "Fehler beim Senden des Auftrags",
                                     BusyLoggingTextPane.Styles.ERROR);
                                 protokollPane.addMessage("", BusyLoggingTextPane.Styles.INFO);
-                                for (final String s : result.getErrorMessages()) {
-                                    protokollPane.addMessage(
-                                        s,
-                                        BusyLoggingTextPane.Styles.ERROR);
+                                if ((result != null) && (result.getErrorMessages() != null)) {
+                                    for (final String s : result.getErrorMessages()) {
+                                        protokollPane.addMessage(
+                                            s,
+                                            BusyLoggingTextPane.Styles.ERROR);
+                                        protokollPane.addMessage("", BusyLoggingTextPane.Styles.INFO);
+                                    }
                                     protokollPane.addMessage("", BusyLoggingTextPane.Styles.INFO);
+                                    protokollPane.addMessage(
+                                        "Die Protokolldatei mit Fehlerinformationen steht zum Download bereit.",
+                                        BusyLoggingTextPane.Styles.ERROR);
                                 }
-                                protokollPane.addMessage("", BusyLoggingTextPane.Styles.INFO);
-                                protokollPane.addMessage(
-                                    "Die Protokolldatei mit Fehlerinformationen steht zum Download bereit.",
-                                    BusyLoggingTextPane.Styles.ERROR);
                                 protokollPane.setBusy(false);
                                 return;
                             }
@@ -1463,7 +1527,8 @@ public class PointNumberDialog extends javax.swing.JDialog {
                             showError();
                         }
                     }
-                }, 50);
+                },
+                50);
         }
     }
 
@@ -1476,6 +1541,13 @@ public class PointNumberDialog extends javax.swing.JDialog {
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception  DOCUMENT ME!
+         */
         @Override
         protected Collection<String> doInBackground() throws Exception {
             final ServerActionParameter action = new ServerActionParameter(
@@ -1495,6 +1567,9 @@ public class PointNumberDialog extends javax.swing.JDialog {
             return result;
         }
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         protected void done() {
             try {
@@ -1530,6 +1605,8 @@ public class PointNumberDialog extends javax.swing.JDialog {
                 LOG.error("Worker Thread that loads all existing Antragsnummern was interrupted", ex);
             } catch (ExecutionException ex) {
                 LOG.error("Error during executing Worker Thread that loads all existing Antragsnummern", ex);
+            } catch (CancellationException ex) {
+                LOG.error("Worker Thread that loads all existing Antragsnummern was interrupted", ex);
             }
         }
     }
@@ -1547,6 +1624,11 @@ public class PointNumberDialog extends javax.swing.JDialog {
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public int getRowCount() {
             if (punktnummern == null) {
@@ -1555,6 +1637,11 @@ public class PointNumberDialog extends javax.swing.JDialog {
             return punktnummern.size();
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public int getColumnCount() {
             if (punktnummern == null) {
@@ -1563,6 +1650,14 @@ public class PointNumberDialog extends javax.swing.JDialog {
             return COLUMNS;
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   rowIndex     DOCUMENT ME!
+         * @param   columnIndex  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public Object getValueAt(final int rowIndex, final int columnIndex) {
             if (punktnummern == null) {
@@ -1576,6 +1671,13 @@ public class PointNumberDialog extends javax.swing.JDialog {
             }
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  value   DOCUMENT ME!
+         * @param  row     DOCUMENT ME!
+         * @param  column  DOCUMENT ME!
+         */
         @Override
         public void setValueAt(final Object value, final int row, final int column) {
             if (column != 0) {
@@ -1593,6 +1695,13 @@ public class PointNumberDialog extends javax.swing.JDialog {
             fireTableRowsUpdated(row, row);
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   columnIndex  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public Class<?> getColumnClass(final int columnIndex) {
             if (columnIndex == 0) {
@@ -1602,6 +1711,14 @@ public class PointNumberDialog extends javax.swing.JDialog {
             }
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   row     DOCUMENT ME!
+         * @param   column  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public boolean isCellEditable(final int row, final int column) {
             return column == 0;
@@ -1660,6 +1777,11 @@ public class PointNumberDialog extends javax.swing.JDialog {
             this.isSelected = isSelected;
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public String toString() {
             return pnr;
@@ -1675,6 +1797,14 @@ public class PointNumberDialog extends javax.swing.JDialog {
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   o1  DOCUMENT ME!
+         * @param   o2  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public int compare(final CheckListItem o1, final CheckListItem o2) {
             return o1.pnr.compareTo(o2.pnr);
@@ -1694,6 +1824,9 @@ public class PointNumberDialog extends javax.swing.JDialog {
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         public void doLayout() {
             try {
@@ -1704,6 +1837,11 @@ public class PointNumberDialog extends javax.swing.JDialog {
             }
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
         @Override
         public Dimension getSize() {
             final Dimension dim = super.getSize();

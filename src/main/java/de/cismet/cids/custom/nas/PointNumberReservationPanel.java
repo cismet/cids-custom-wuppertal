@@ -33,8 +33,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 
-import de.cismet.cids.custom.utils.BusyLoggingTextPane;
-import de.cismet.cids.custom.utils.BusyLoggingTextPane.Styles;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservation;
 import de.cismet.cids.custom.utils.pointnumberreservation.PointNumberReservationRequest;
@@ -48,6 +46,9 @@ import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.interaction.StatusListener;
 import de.cismet.cismap.commons.interaction.events.StatusEvent;
+
+import de.cismet.commons.gui.progress.BusyLoggingTextPane;
+import de.cismet.commons.gui.progress.BusyLoggingTextPane.Styles;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -550,16 +551,18 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                                     if ((result == null) || !result.isSuccessfull()) {
                                         protokollPane.addMessage("Fehler beim Senden des Auftrags.", Styles.ERROR);
                                         protokollPane.addMessage("", Styles.INFO);
-                                        for (final String s : result.getErrorMessages()) {
-                                            protokollPane.addMessage(
-                                                s,
-                                                BusyLoggingTextPane.Styles.ERROR);
+                                        if ((result != null) && (result.getErrorMessages() != null)) {
+                                            for (final String s : result.getErrorMessages()) {
+                                                protokollPane.addMessage(
+                                                    s,
+                                                    BusyLoggingTextPane.Styles.ERROR);
+                                                protokollPane.addMessage("", Styles.INFO);
+                                            }
                                             protokollPane.addMessage("", Styles.INFO);
+                                            protokollPane.addMessage(
+                                                "Die Protokolldatei mit Fehlerinformationen steht zum Download bereit.",
+                                                Styles.ERROR);
                                         }
-                                        protokollPane.addMessage("", Styles.INFO);
-                                        protokollPane.addMessage(
-                                            "Die Protokolldatei mit Fehlerinformationen steht zum Download bereit.",
-                                            Styles.ERROR);
                                         protokollPane.setBusy(false);
                                         return;
                                     }
@@ -586,7 +589,8 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                                     showError();
                                 }
                             }
-                        }, 50);
+                        },
+                        50);
                 }
             };
 
@@ -704,6 +708,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                 gridBagConstraints.gridy = 0;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
                 gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 10);
+
                 add(lblNbzError, gridBagConstraints);
             }
         }
