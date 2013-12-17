@@ -1,10 +1,12 @@
-/***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+/**
+ * *************************************************
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ * 
+* ... and it just works.
+ * 
+***************************************************
+ */
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -22,16 +24,27 @@ import de.cismet.tools.configuration.TakeoffHook;
 /**
  * DOCUMENT ME!
  *
- * @author   thorsten
- * @version  $Revision$, $Date$
+ * @author thorsten
+ * @version $Revision$, $Date$
  */
 @ServiceProvider(service = TakeoffHook.class)
 public class WuNDaTakeoffHook implements TakeoffHook {
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(WuNDaTakeoffHook.class);
 
     //~ Methods ----------------------------------------------------------------
-
     @Override
     public void applicationTakeoff() {
-        WebAccessManager.getInstance().setTunnel(new CallServerTunnel("WUNDA_BLAU"));
+        final String intranetUse = System.getProperty("jnlp.intranetUse", "false");
+        if (!intranetUse.equals("false") && !intranetUse.equals("true")) {
+            LOG.warn("SystemProperty intranetUse should be set to either true or false. You set it to: " + intranetUse
+                    + " (Will handle that like false.)");
+        }
+        if (!intranetUse.equals("true")) {
+            try {
+                WebAccessManager.getInstance().setTunnel(new CallServerTunnel("WUNDA_BLAU"));
+            } catch (Throwable e) {
+                LOG.error("problem initializing WebaccessManager", e);
+            }
+        }
     }
 }
