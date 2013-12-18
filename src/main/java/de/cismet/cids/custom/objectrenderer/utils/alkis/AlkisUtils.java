@@ -35,10 +35,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.aedsicad.aaaweb.service.util.Address;
 import de.aedsicad.aaaweb.service.util.Buchungsblatt;
 import de.aedsicad.aaaweb.service.util.Buchungsstelle;
+import de.aedsicad.aaaweb.service.util.LandParcel;
 import de.aedsicad.aaaweb.service.util.Owner;
 import de.aedsicad.aaaweb.service.util.Point;
 
 import javafx.beans.binding.StringBinding;
+
+import org.apache.commons.lang.ArrayUtils;
 
 import org.openide.util.Exceptions;
 
@@ -156,11 +159,14 @@ public class AlkisUtils {
             final Buchungsblatt buchungsblatt,
             final CidsBean buchungsblattBean) {
         final String alkisId = (String)originatingFlurstueck.getProperty("alkis_id");
+
         String pos = "";
-        final List<CidsBean> alleFSaufBB = buchungsblattBean.getBeanCollectionProperty("landparcels");
-        for (final CidsBean lp : alleFSaufBB) {
-            if (lp.getProperty("landparcelcode").equals(alkisId)) {
-                pos = String.valueOf(lp.getProperty("lfn"));
+        final Buchungsstelle[] buchungsstellen = buchungsblatt.getBuchungsstellen();
+        for (final Buchungsstelle b : buchungsstellen) {
+            for (final LandParcel lp : getLandparcelFromBuchungsstelle(b)) {
+                if (lp.getLandParcelCode().equals(alkisId)) {
+                    pos = b.getSequentialNumber();
+                }
             }
         }
 
@@ -245,6 +251,43 @@ public class AlkisUtils {
             }
         }
         return "";
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   buchungsstelle  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static LandParcel[] getLandparcelFromBuchungsstelle(final Buchungsstelle buchungsstelle) {
+        if (buchungsstelle.getBuchungsstellen() == null) {
+            return buchungsstelle.getLandParcel();
+        } else {
+            LandParcel[] result = buchungsstelle.getLandParcel();
+            for (final Buchungsstelle b : buchungsstelle.getBuchungsstellen()) {
+                result = concatArrays(result, getLandparcelFromBuchungsstelle(b));
+            }
+            return result;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   a  DOCUMENT ME!
+     * @param   b  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static LandParcel[] concatArrays(LandParcel[] a, LandParcel[] b) {
+        if (a == null) {
+            a = new LandParcel[0];
+        }
+        if (b == null) {
+            b = new LandParcel[0];
+        }
+        return (LandParcel[])ArrayUtils.addAll(a, b);
     }
 
     /**
@@ -523,31 +566,49 @@ public class AlkisUtils {
         if ((buchungsstellen != null) && (buchungsstellen.length > 0)) {
             final ArrayList<Buchungsstelle> alleStellen = new ArrayList<Buchungsstelle>();
             alleStellen.addAll(Arrays.asList(buchungsstellen));
-            Collections.sort(alleStellen, new Comparator<Buchungsstelle>() {
-
-                    @Override
-                    public int compare(final Buchungsstelle t, final Buchungsstelle t1) {
-                        return t.getBuchungsartCode().compareTo(t1.getBuchungsartCode());
-                    }
-                });
-
-            final Buchungsstelle ersteBuchungsstelle = alleStellen.get(alleStellen.size() - 1);
-            if (ersteBuchungsstelle != null) {
-                final StringBuilder result = new StringBuilder();
-                final String prettyFration = prettyPrintFration(ersteBuchungsstelle.getFraction());
-                result.append(prettyFration);
-                if ((prettyFration != null) && (prettyFration.length() > 0)) {
-                    result.append(" ");
-                }
-                result.append(ersteBuchungsstelle.getBuchungsart());
-                final String number = ersteBuchungsstelle.getNumber();
-                if (!((number == null) || (number.trim().length() > 0))) {
-                    result.append(", Aufteilungsplan Nr. ").append(number);
-                }
-                return result.toString();
+            if (isListOfSameBuchungsart(alleStellen)) {
+                return alleStellen.get(0).getBuchungsart();
+            } else {
+                return "diverse";
             }
         }
         return "";
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   buchungsstellen  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static boolean isListOfSameBuchungsart(final List<Buchungsstelle> buchungsstellen) {
+        final Set<Buchungsstelle> set = new HashSet<Buchungsstelle>(buchungsstellen.size());
+        for (final Buchungsstelle o : buchungsstellen) {
+            if (set.isEmpty()) {
+                set.add(o);
+            } else {
+                if (set.add(o)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   aufteilungsnummer  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String prettyPrintAufteilungsnummer(final String aufteilungsnummer) {
+        if (aufteilungsnummer != null) {
+            return "ATP Nr. " + aufteilungsnummer;
+        } else {
+            return "";
+        }
     }
 
     /**
@@ -557,21 +618,9 @@ public class AlkisUtils {
      *
      * @return  DOCUMENT ME!
      */
-    public static String prettyPrintFration(final String fraction) {
+    public static String prettyPrintFraction(final String fraction) {
         if (fraction != null) {
-//            final String[] elements = fraction.split("/");
-//            if ((elements != null) && (elements.length == 2)) {
-//                String zaehler = elements[0];
-//                String nenner = elements[1];
-//                if (zaehler.lastIndexOf(".") != -1) {
-//                    zaehler = zaehler.substring(0, zaehler.lastIndexOf("."));
-//                }
-//                if (nenner.lastIndexOf(".") != -1) {
-//                    nenner = nenner.substring(0, nenner.lastIndexOf("."));
-//                }
-//                return zaehler + "/" + nenner;
-//            }
-            return fraction;
+            return "Anteil " + fraction;
         }
         return "";
     }
