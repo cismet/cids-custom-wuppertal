@@ -123,6 +123,10 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
     private Object oldPruefdatum;
     private Object oldPruefkommentar;
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private de.cismet.cids.editors.DefaultBindableDateChooser bdcBefristungsdatum;
+    private de.cismet.cids.editors.DefaultBindableDateChooser bdcEintragungsdatum;
+    private de.cismet.cids.editors.DefaultBindableDateChooser bdcGeschlossenAm;
+    private de.cismet.cids.editors.DefaultBindableDateChooser bdcLoeschungsdatum;
     private javax.swing.JButton btnAddArt;
     private javax.swing.JButton btnAddBeguenstigt;
     private javax.swing.JButton btnAddBelastet;
@@ -133,10 +137,6 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
     private javax.swing.JButton btnRemoveBelastet;
     private javax.swing.JComboBox cbBaulastArt;
     private javax.swing.JCheckBox chkGeprueft;
-    private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooser1;
-    private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooser2;
-    private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooser3;
-    private de.cismet.cids.editors.DefaultBindableDateChooser defaultBindableDateChooser4;
     private javax.swing.JDialog dlgAddBaulastArt;
     private javax.swing.JLabel lblDescBaulastart;
     private javax.swing.JLabel lblDescBefristungsdatum;
@@ -218,10 +218,10 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
      */
     private void initEditableComponents() {
         editableComponents.add(txtLaufendeNr);
-        editableComponents.add(defaultBindableDateChooser1);
-        editableComponents.add(defaultBindableDateChooser2);
-        editableComponents.add(defaultBindableDateChooser3);
-        editableComponents.add(defaultBindableDateChooser4);
+        editableComponents.add(bdcEintragungsdatum);
+        editableComponents.add(bdcBefristungsdatum);
+        editableComponents.add(bdcGeschlossenAm);
+        editableComponents.add(bdcLoeschungsdatum);
 
         for (final JComponent editableComponent : editableComponents) {
             editableComponent.setOpaque(editable);
@@ -297,10 +297,10 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         lblDescGeschlossenAm = new javax.swing.JLabel();
         lblDescLoeschungsdatum = new javax.swing.JLabel();
         txtLaufendeNr = new javax.swing.JTextField();
-        defaultBindableDateChooser4 = new de.cismet.cids.editors.DefaultBindableDateChooser();
-        defaultBindableDateChooser1 = new de.cismet.cids.editors.DefaultBindableDateChooser();
-        defaultBindableDateChooser2 = new de.cismet.cids.editors.DefaultBindableDateChooser();
-        defaultBindableDateChooser3 = new de.cismet.cids.editors.DefaultBindableDateChooser();
+        bdcLoeschungsdatum = new de.cismet.cids.editors.DefaultBindableDateChooser();
+        bdcEintragungsdatum = new de.cismet.cids.editors.DefaultBindableDateChooser();
+        bdcBefristungsdatum = new de.cismet.cids.editors.DefaultBindableDateChooser();
+        bdcGeschlossenAm = new de.cismet.cids.editors.DefaultBindableDateChooser();
         rpHeadInfo = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeadInfo = new javax.swing.JLabel();
         lblLastInMap = new javax.swing.JLabel();
@@ -609,6 +609,15 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         rpInfo.add(lblDescEintragungsdatum, gridBagConstraints);
 
         lblDescBefristungsdatum.setText("Befristungsdatum:");
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.befristungsdatum}!=null"),
+                lblDescBefristungsdatum,
+                org.jdesktop.beansbinding.BeanProperty.create("opaque"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -657,10 +666,8 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.loeschungsdatum}"),
-                defaultBindableDateChooser4,
+                bdcLoeschungsdatum,
                 org.jdesktop.beansbinding.BeanProperty.create("date"));
-        binding.setSourceNullValue(null);
-        binding.setSourceUnreadableValue(null);
         binding.setConverter(sqlDateToUtilDateConverter);
         bindingGroup.addBinding(binding);
 
@@ -672,13 +679,13 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        rpInfo.add(defaultBindableDateChooser4, gridBagConstraints);
+        rpInfo.add(bdcLoeschungsdatum, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.eintragungsdatum}"),
-                defaultBindableDateChooser1,
+                bdcEintragungsdatum,
                 org.jdesktop.beansbinding.BeanProperty.create("date"));
         binding.setSourceNullValue(null);
         binding.setSourceUnreadableValue(null);
@@ -692,19 +699,24 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        rpInfo.add(defaultBindableDateChooser1, gridBagConstraints);
+        rpInfo.add(bdcEintragungsdatum, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.befristungsdatum}"),
-                defaultBindableDateChooser2,
+                bdcBefristungsdatum,
                 org.jdesktop.beansbinding.BeanProperty.create("date"));
-        binding.setSourceNullValue(null);
-        binding.setSourceUnreadableValue(null);
         binding.setConverter(sqlDateToUtilDateConverter);
         bindingGroup.addBinding(binding);
 
+        bdcBefristungsdatum.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    bdcBefristungsdatumActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -712,16 +724,14 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        rpInfo.add(defaultBindableDateChooser2, gridBagConstraints);
+        rpInfo.add(bdcBefristungsdatum, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geschlossen_am}"),
-                defaultBindableDateChooser3,
+                bdcGeschlossenAm,
                 org.jdesktop.beansbinding.BeanProperty.create("date"));
-        binding.setSourceNullValue(null);
-        binding.setSourceUnreadableValue(null);
         binding.setConverter(sqlDateToUtilDateConverter);
         bindingGroup.addBinding(binding);
 
@@ -732,7 +742,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        rpInfo.add(defaultBindableDateChooser3, gridBagConstraints);
+        rpInfo.add(bdcGeschlossenAm, gridBagConstraints);
 
         rpHeadInfo.setBackground(java.awt.Color.darkGray);
         rpHeadInfo.setLayout(new java.awt.GridBagLayout());
@@ -1133,6 +1143,15 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
     /**
      * DOCUMENT ME!
      *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void bdcBefristungsdatumActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_bdcBefristungsdatumActionPerformed
+        // TODO add your handling code here:
+    } //GEN-LAST:event_bdcBefristungsdatumActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param  list  DOCUMENT ME!
      */
     private void handleJumpToListeSelectionBean(final JList list) {
@@ -1221,6 +1240,28 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                 }
 
                 bindingGroup.bind();
+                if (bdcLoeschungsdatum.getDate() != null) {
+                    bdcLoeschungsdatum.getEditor().setBackground(Color.yellow);
+                    bdcLoeschungsdatum.setOpaque(true);
+                    bdcLoeschungsdatum.getEditor().setOpaque(true);
+                    bdcLoeschungsdatum.repaint();
+                } else {
+                    bdcLoeschungsdatum.getEditor().setBackground(Color.white);
+                    bdcLoeschungsdatum.setOpaque(this.editable);
+                    bdcLoeschungsdatum.getEditor().setOpaque(this.editable);
+                    bdcLoeschungsdatum.repaint();
+                }
+                if (bdcGeschlossenAm.getDate() != null) {
+                    bdcGeschlossenAm.getEditor().setBackground(Color.yellow);
+                    bdcGeschlossenAm.setOpaque(true);
+                    bdcGeschlossenAm.getEditor().setOpaque(true);
+                    bdcGeschlossenAm.repaint();
+                } else {
+                    bdcGeschlossenAm.getEditor().setBackground(Color.white);
+                    bdcGeschlossenAm.setOpaque(this.editable);
+                    bdcGeschlossenAm.getEditor().setOpaque(this.editable);
+                    bdcGeschlossenAm.repaint();
+                }
                 lstFlurstueckeBelastet.setSelectedIndices(belIdx);
                 lstFlurstueckeBeguenstigt.setSelectedIndices(begIdx);
                 lstBaulastArt.setSelectedIndices(artenIdx);
@@ -1505,5 +1546,49 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
             g2d.setColor(backupCol);
             super.paint(g);
         }
+    }
+}
+
+/**
+ * DOCUMENT ME!
+ *
+ * @version  $Revision$, $Date$
+ */
+class ObjectNullStatusToColorConverter extends Converter<Object, Color> {
+
+    //~ Instance fields --------------------------------------------------------
+
+    Color colorNull;
+    Color colorNotNull;
+    Object value = null;
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new ObjectNullStatusToColorConverter object.
+     *
+     * @param  colorNull     DOCUMENT ME!
+     * @param  colorNotNull  DOCUMENT ME!
+     */
+    public ObjectNullStatusToColorConverter(final Color colorNull, final Color colorNotNull) {
+        this.colorNull = colorNull;
+        this.colorNotNull = colorNotNull;
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public Color convertForward(final Object s) {
+        value = s;
+        if (s == null) {
+            return colorNull;
+        } else {
+            return colorNotNull;
+        }
+    }
+
+    @Override
+    public Object convertReverse(final Color t) {
+        return value;
     }
 }
