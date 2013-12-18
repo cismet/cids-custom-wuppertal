@@ -615,14 +615,6 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
 
         lblDescBefristungsdatum.setText("Befristungsdatum:");
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.befristungsdatum}!=null"),
-                lblDescBefristungsdatum,
-                org.jdesktop.beansbinding.BeanProperty.create("opaque"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
