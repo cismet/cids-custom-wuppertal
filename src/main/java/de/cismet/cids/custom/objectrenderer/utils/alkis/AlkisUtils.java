@@ -576,19 +576,21 @@ public class AlkisUtils {
     }
 
     /**
-     * DOCUMENT ME!
+     * Check if in list of Buchungsstellen, all Buchungsstellen have the same Buchungsart. Return true if all have the
+     * same Buchungsart, false otherwise. The check is realized with adding the buchungsart to a set. As soon the set
+     * contains a second buchungsart, false can be returned.
      *
      * @param   buchungsstellen  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
     public static boolean isListOfSameBuchungsart(final List<Buchungsstelle> buchungsstellen) {
-        final Set<Buchungsstelle> set = new HashSet<Buchungsstelle>(buchungsstellen.size());
+        final Set<String> set = new HashSet<String>();
         for (final Buchungsstelle o : buchungsstellen) {
             if (set.isEmpty()) {
-                set.add(o);
+                set.add(o.getBuchungsart());
             } else {
-                if (set.add(o)) {
+                if (set.add(o.getBuchungsart())) {
                     return false;
                 }
             }
