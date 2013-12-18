@@ -33,6 +33,7 @@ import org.jfree.util.Log;
 import org.openide.util.Exceptions;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -51,12 +52,14 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
@@ -209,6 +212,8 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         dlgAddBaulastArt.pack();
         dlgAddBaulastArt.setLocationRelativeTo(this);
         StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbBaulastArt);
+        lstFlurstueckeBeguenstigt.setCellRenderer(new HyperlinkStyleExistingLandparcelCellRenderer());
+        lstFlurstueckeBelastet.setCellRenderer(new HyperlinkStyleExistingLandparcelCellRenderer());
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -609,14 +614,6 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         rpInfo.add(lblDescEintragungsdatum, gridBagConstraints);
 
         lblDescBefristungsdatum.setText("Befristungsdatum:");
-
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.befristungsdatum}!=null"),
-                lblDescBefristungsdatum,
-                org.jdesktop.beansbinding.BeanProperty.create("opaque"));
-        bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1547,48 +1544,34 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
             super.paint(g);
         }
     }
-}
-
-/**
- * DOCUMENT ME!
- *
- * @version  $Revision$, $Date$
- */
-class ObjectNullStatusToColorConverter extends Converter<Object, Color> {
-
-    //~ Instance fields --------------------------------------------------------
-
-    Color colorNull;
-    Color colorNotNull;
-    Object value = null;
-
-    //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new ObjectNullStatusToColorConverter object.
+     * DOCUMENT ME!
      *
-     * @param  colorNull     DOCUMENT ME!
-     * @param  colorNotNull  DOCUMENT ME!
+     * @version  $Revision$, $Date$
      */
-    public ObjectNullStatusToColorConverter(final Color colorNull, final Color colorNotNull) {
-        this.colorNull = colorNull;
-        this.colorNotNull = colorNotNull;
-    }
+    class HyperlinkStyleExistingLandparcelCellRenderer implements ListCellRenderer<Object> {
 
-    //~ Methods ----------------------------------------------------------------
+        //~ Instance fields ----------------------------------------------------
 
-    @Override
-    public Color convertForward(final Object s) {
-        value = s;
-        if (s == null) {
-            return colorNull;
-        } else {
-            return colorNotNull;
+        DefaultListCellRenderer dlcr = new DefaultListCellRenderer();
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Component getListCellRendererComponent(final JList list,
+                final Object value,
+                final int index,
+                final boolean isSelected,
+                final boolean cellHasFocus) {
+            final Component c = dlcr.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            if (value instanceof CidsBean) {
+                final Object realFSBean = ((CidsBean)value).getProperty("fs_referenz");
+                if (realFSBean != null) {
+                    c.setForeground(Color.blue);
+                }
+            }
+            return c;
         }
-    }
-
-    @Override
-    public Object convertReverse(final Color t) {
-        return value;
     }
 }
