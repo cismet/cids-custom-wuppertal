@@ -1216,22 +1216,26 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
 
                 bindingGroup.bind();
                 if (bdcLoeschungsdatum.getDate() != null) {
-                    lblDescLoeschungsdatum.setBackground(Color.yellow);
-                    // lblDescLoeschungsdatum.setForeground(Color.red);
-                    lblDescLoeschungsdatum.setOpaque(true);
-                    lblDescLoeschungsdatum.repaint();
+                    bdcLoeschungsdatum.getEditor().setBackground(Color.yellow);
+                    bdcLoeschungsdatum.setOpaque(true);
+                    bdcLoeschungsdatum.getEditor().setOpaque(true);
+                    bdcLoeschungsdatum.repaint();
                 } else {
-                    lblDescLoeschungsdatum.setOpaque(false);
-                    lblDescLoeschungsdatum.repaint();
+                    bdcLoeschungsdatum.getEditor().setBackground(Color.white);
+                    bdcLoeschungsdatum.setOpaque(this.editable);
+                    bdcLoeschungsdatum.getEditor().setOpaque(this.editable);
+                    bdcLoeschungsdatum.repaint();
                 }
                 if (bdcGeschlossenAm.getDate() != null) {
-                    lblDescGeschlossenAm.setBackground(Color.yellow);
-                    // lblDescGeschlossenAm.setForeground(Color.red);
-                    lblDescGeschlossenAm.setOpaque(true);
-                    lblDescGeschlossenAm.repaint();
+                    bdcGeschlossenAm.getEditor().setBackground(Color.yellow);
+                    bdcGeschlossenAm.setOpaque(true);
+                    bdcGeschlossenAm.getEditor().setOpaque(true);
+                    bdcGeschlossenAm.repaint();
                 } else {
-                    lblDescGeschlossenAm.setOpaque(false);
-                    lblDescGeschlossenAm.repaint();
+                    bdcGeschlossenAm.getEditor().setBackground(Color.white);
+                    bdcGeschlossenAm.setOpaque(this.editable);
+                    bdcGeschlossenAm.getEditor().setOpaque(this.editable);
+                    bdcGeschlossenAm.repaint();
                 }
                 lstFlurstueckeBelastet.setSelectedIndices(belIdx);
                 lstFlurstueckeBeguenstigt.setSelectedIndices(begIdx);
