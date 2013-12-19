@@ -2089,7 +2089,8 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                 final MetaClass mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "alkis_landparcel");
                 final String query = "select " + mc.getID() + "," + mc.getPrimaryKey() + " from " + mc.getTableName()
                             + " where alkis_id in " + inBuilder.toString();
-                final MetaObject[] moArr = SessionManager.getProxy().getMetaObjectByQuery(user, query);
+                final MetaObject[] moArr = SessionManager.getProxy()
+                            .getMetaObjectByQuery(user, query, CidsBeanSupport.DOMAIN_NAME);
 
                 for (final LightweightLandParcel3A landParcel3A : landParcel3AList) {
                     for (final MetaObject mo : moArr) {
