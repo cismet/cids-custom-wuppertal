@@ -43,7 +43,7 @@ public class Alb_baulastIconFactory implements CidsTreeObjectIconFactory {
 
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_baulastIconFactory.class);
     private static ImageIcon fallback = new ImageIcon(Alb_baulastIconFactory.class.getResource(
-                "/res/16/BaulastGrau.png"));
+                "/res/16/Baulast.png"));
 
     //~ Instance fields --------------------------------------------------------
 
