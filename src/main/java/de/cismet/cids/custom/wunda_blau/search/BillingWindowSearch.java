@@ -102,24 +102,28 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
      * Creates new form BillingWindowSearch.
      */
     public BillingWindowSearch() {
-        initComponents();
-        setAbrechnungsturnusIntoComboBox();
-        setUsersIntoComboBox();
+        try {
+            initComponents();
+            setAbrechnungsturnusIntoComboBox();
+            setUsersIntoComboBox();
 
-        pnlSearchCancel = new SearchControlPanel(this);
-        final Dimension max = pnlSearchCancel.getMaximumSize();
-        final Dimension min = pnlSearchCancel.getMinimumSize();
-        final Dimension pre = pnlSearchCancel.getPreferredSize();
-        pnlSearchCancel.setMaximumSize(new java.awt.Dimension(
-                new Double(max.getWidth()).intValue(),
-                new Double(max.getHeight() + 5).intValue()));
-        pnlSearchCancel.setMinimumSize(new java.awt.Dimension(
-                new Double(min.getWidth()).intValue(),
-                new Double(min.getHeight() + 5).intValue()));
-        pnlSearchCancel.setPreferredSize(new java.awt.Dimension(
-                new Double(pre.getWidth() + 6).intValue(),
-                new Double(pre.getHeight() + 5).intValue()));
-        panCommand.add(pnlSearchCancel);
+            pnlSearchCancel = new SearchControlPanel(this);
+            final Dimension max = pnlSearchCancel.getMaximumSize();
+            final Dimension min = pnlSearchCancel.getMinimumSize();
+            final Dimension pre = pnlSearchCancel.getPreferredSize();
+            pnlSearchCancel.setMaximumSize(new java.awt.Dimension(
+                    new Double(max.getWidth()).intValue(),
+                    new Double(max.getHeight() + 5).intValue()));
+            pnlSearchCancel.setMinimumSize(new java.awt.Dimension(
+                    new Double(min.getWidth()).intValue(),
+                    new Double(min.getHeight() + 5).intValue()));
+            pnlSearchCancel.setPreferredSize(new java.awt.Dimension(
+                    new Double(pre.getWidth() + 6).intValue(),
+                    new Double(pre.getHeight() + 5).intValue()));
+            panCommand.add(pnlSearchCancel);
+        } catch (Throwable e) {
+            LOG.warn("Error in Constructor of BillingWindowSearch. Search will not work properly.", e);
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -648,7 +652,7 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
                 cboAbrechnungsturnus.addItem(abrechnungsturnus.getBean());
             }
         } catch (ConnectionException ex) {
-            Exceptions.printStackTrace(ex);
+            LOG.error(ex, ex);
         }
         ((DefaultComboBoxModel)cboAbrechnungsturnus.getModel()).insertElementAt(" ", 0);
         cboAbrechnungsturnus.setSelectedIndex(0);
@@ -667,7 +671,7 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
                 cboBenutzer.addItem(abrechnungsturnus.getBean());
             }
         } catch (ConnectionException ex) {
-            Exceptions.printStackTrace(ex);
+            LOG.error(ex, ex);
         }
         ((DefaultComboBoxModel)cboBenutzer.getModel()).insertElementAt(" ", 0);
         cboBenutzer.setSelectedIndex(0);
