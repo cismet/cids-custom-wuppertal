@@ -655,11 +655,12 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                     final StringBuilder jobnameBuilder = new StringBuilder();
                     if (DownloadManagerDialog.showAskingForUserTitle(
                                     CismapBroker.getInstance().getMappingComponent())) {
-                        final String jobname = (!DownloadManagerDialog.getJobname().equals(""))
-                            ? DownloadManagerDialog.getJobname() : null;
-                        jobnameBuilder.append(jobname);
-                    } else {
-                        jobnameBuilder.append("");
+                        final String jobname = DownloadManagerDialog.getJobname();
+                        if (jobname == null) {
+                            jobnameBuilder.append("");
+                        } else {
+                            jobnameBuilder.append(jobname);
+                        }
                     }
 
                     final ArrayList<ButlerDownload> downloads = new ArrayList<ButlerDownload>();
