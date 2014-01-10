@@ -14,14 +14,17 @@ package de.cismet.cids.custom.butler;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 
-import org.openide.util.Cancellable;
 import org.openide.util.Exceptions;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.InputStream;
 
-import java.util.Map;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import java.util.ArrayList;
+import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -38,7 +41,11 @@ import de.cismet.cids.custom.wunda_blau.search.actions.ButlerQueryAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 
-import de.cismet.tools.gui.downloadmanager.AbstractDownload;
+import de.cismet.security.WebAccessManager;
+
+import de.cismet.security.exceptions.BadHttpStatusCodeException;
+
+import de.cismet.tools.gui.downloadmanager.HttpDownload;
 
 /**
  * DOCUMENT ME!
@@ -46,13 +53,31 @@ import de.cismet.tools.gui.downloadmanager.AbstractDownload;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class ButlerDownload extends AbstractDownload implements Cancellable {
+public class ButlerDownload extends HttpDownload {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final String SERVER_ACTION = "butler1Query";
     private static final String TITLE = "Butler Download";
     private static final long WAIT_PERIOD = 5000;
+    private static String BUTLER_SERVER_BASE_PATH;
+    private static String TIF_RESULT_DIR;
+    private static String PDF_RESULT_DIR;
+    private static String SHAPE_RESULT_DIR;
+    private static String DXF_RESULT_DIR;
+
+    static {
+        final Properties prop = new Properties();
+        try {
+            prop.load(ButlerDownload.class.getResourceAsStream("butlerDownload.properties"));
+            BUTLER_SERVER_BASE_PATH = prop.getProperty("butlerBasePath");
+            TIF_RESULT_DIR = prop.getProperty("tifResultDir");
+            PDF_RESULT_DIR = prop.getProperty("pdfResultDir");
+            SHAPE_RESULT_DIR = prop.getProperty("shapeResultDir");
+            DXF_RESULT_DIR = prop.getProperty("dxfResultDir");
+        } catch (Exception ex) {
+        }
+    }
 
     //~ Instance fields --------------------------------------------------------
 
@@ -189,7 +214,7 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
         /*
          * Phase 2 : poll the result
          */
-        Map<String, byte[]> result = null;
+        ArrayList<URL> result = null;
         final ExecutorService executor = Executors.newSingleThreadExecutor();
         if (!downloadFuture.isCancelled()) {
             pollingFuture = executor.submit(new ButlerPollingRunnable(requestId));
@@ -198,7 +223,7 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
         }
         try {
             if (!downloadFuture.isCancelled()) {
-                result = (Map<String, byte[]>)pollingFuture.get(1, TimeUnit.HOURS);
+                result = (ArrayList<URL>)pollingFuture.get(1, TimeUnit.HOURS);
             } else {
                 doCancellationHandling(true, true);
             }
@@ -212,7 +237,7 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
             log.warn("the maximum timeout for butler download is exceeded", ex);
         }
 
-        if ((result == null) || (result.size() == 0)) {
+        if ((result == null) || (result.isEmpty())) {
             log.error("error during butler download");
             this.status = State.COMPLETED_WITH_ERROR;
             stateChanged();
@@ -220,22 +245,35 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
         /*
          * Phase 3: save the files
          */
+        if (!downloadFuture.isCancelled()) {
+            if (useZipFile || (result.size() > 1)) {
+                // the server returned more than 1 file, this is the case for tif and shp format..
+                // we need to zip all these files and save them as zip
+                saveZipFileOfUnzippedFileCollection(result, fileToSaveTo);
+            } else {
+                saveFile(result);
+            }
+        } else {
+            doCancellationHandling(false, true);
+        }
+        removeRequestFromServer();
+        status = State.COMPLETED;
+        stateChanged();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  result  DOCUMENT ME!
+     */
+    private void saveFile(final ArrayList<URL> result) {
         FileOutputStream out = null;
         try {
-            if (!downloadFuture.isCancelled()) {
-                if (useZipFile || (result.size() > 1)) {
-                    // the server returned more than 1 file, this is the case for tif and shp format..
-                    // we need to zip all these files and save them as zip
-                    saveZipFileOfUnzippedFileCollection(result, fileToSaveTo);
-                } else {
-                    out = new FileOutputStream(fileToSaveTo);
-                    final byte[] data = (byte[])result.values().toArray()[0];
-                    out.write(data);
-                }
-            } else {
-                doCancellationHandling(false, true);
-            }
-        } catch (final IOException ex) {
+            out = new FileOutputStream(fileToSaveTo);
+            final URL fileUrl = result.get(0);
+            final InputStream is = getUrlInputStreamWithWebAcessManager(fileUrl);
+            downloadStream(is, out);
+        } catch (Exception ex) {
             log.warn("Couldn't write downloaded content to file '" + fileToSaveTo + "'.", ex);
             error(ex);
             return;
@@ -247,10 +285,6 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
                 }
             }
         }
-
-//        setTitleFCorPhase(NASDownload.Phase.DONE);
-        status = State.COMPLETED;
-        stateChanged();
     }
 
     /**
@@ -260,28 +294,27 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
      * @param  zipFile        DOCUMENT ME!
      */
     private void saveZipFileOfUnzippedFileCollection(
-            final Map<String, byte[]> unzippedFiles,
+            final ArrayList<URL> unzippedFiles,
             final File zipFile) {
-//        determineDestinationFile(orderId, ".zip");
-        final File f = new File(zipFile.getParentFile().getAbsolutePath() + "/test.zip");
         FileOutputStream fos = null;
         ZipOutputStream zos = null;
         try {
-            f.createNewFile();
             fos = new FileOutputStream(zipFile);
             zos = new ZipOutputStream(fos);
-            for (final String fn : unzippedFiles.keySet()) {
-                final byte[] unzippedFile = unzippedFiles.get(fn);
+            for (final URL url : unzippedFiles) {
                 final StringBuilder extensionBuilder = new StringBuilder();
-                final int extennstionIndex = fn.lastIndexOf(".");
-                extensionBuilder.append(fn.substring(extennstionIndex));
+                final int extennstionIndex = url.getFile().lastIndexOf(".");
+                extensionBuilder.append(url.getFile().substring(extennstionIndex));
                 final String fileEntryName = orderId + extensionBuilder.toString();
                 zos.putNextEntry(new ZipEntry(fileEntryName));
-                zos.write(unzippedFile);
+                final InputStream is = getUrlInputStreamWithWebAcessManager(url);
+                downloadStream(is, zos);
                 zos.closeEntry();
             }
-        } catch (IOException ex) {
-            log.warn("error during creation of butler result zip file", ex);
+        } catch (Exception ex) {
+            log.warn("Couldn't write downloaded content to file '" + fileToSaveTo + "'.", ex);
+            error(ex);
+            return;
         } finally {
             try {
                 if (zos != null) {
@@ -290,8 +323,7 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
                 if (fos != null) {
                     fos.close();
                 }
-            } catch (IOException ex) {
-                log.error("error during creation of butler result zip file", ex);
+            } catch (Exception e) {
             }
         }
     }
@@ -305,7 +337,7 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
     private void doCancellationHandling(final boolean cancelServerRequest, final boolean cancelPollingThread) {
         log.warn("Butler Download was interuppted");
         if (cancelServerRequest) {
-            cancelRequest();
+            removeRequestFromServer();
         }
         if (cancelPollingThread && (pollingFuture != null)) {
             pollingFuture.cancel(true);
@@ -410,7 +442,7 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
     /**
      * DOCUMENT ME!
      */
-    private void cancelRequest() {
+    private void removeRequestFromServer() {
         final ServerActionParameter paramOrderId = new ServerActionParameter(ButlerQueryAction.PARAMETER_TYPE.REQUEST_ID
                         .toString(),
                 requestId);
@@ -436,7 +468,7 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
      *
      * @version  $Revision$, $Date$
      */
-    private final class ButlerPollingRunnable implements Callable<Map<String, byte[]>> {
+    private final class ButlerPollingRunnable implements Callable<ArrayList<URL>> {
 
         //~ Instance fields ----------------------------------------------------
 
@@ -455,59 +487,90 @@ public class ButlerDownload extends AbstractDownload implements Cancellable {
 
         //~ Methods ------------------------------------------------------------
 
-        @Override
-        public Map<String, byte[]> call() throws Exception {
-            final ServerActionParameter paramMethod = new ServerActionParameter(ButlerQueryAction.PARAMETER_TYPE.METHOD
-                            .toString(),
-                    ButlerQueryAction.METHOD_TYPE.GET);
-            final ServerActionParameter paramRequestId = new ServerActionParameter(
-                    ButlerQueryAction.PARAMETER_TYPE.REQUEST_ID.toString(),
-                    requestId);
-            final ServerActionParameter paramProduct = new ServerActionParameter(
-                    ButlerQueryAction.PARAMETER_TYPE.BUTLER_PRODUCT.toString(),
-                    product);
-            Map<String, byte[]> files = null;
-            try {
-                files = (Map<String, byte[]>)SessionManager.getProxy()
-                            .executeTask(
-                                    SERVER_ACTION,
-                                    "WUNDA_BLAU",
-                                    null,
-                                    paramMethod,
-                                    paramRequestId,
-                                    paramProduct);
-
-                while (files == null) {
-                    if (Thread.interrupted()) {
-                        if (log.isDebugEnabled()) {
-                            log.debug("Butler polling future was cancelled");
-                        }
-                        return null;
-                    }
-                    if (log.isDebugEnabled()) {
-                        log.debug("Result for " + requestId + " is not finished, try later again");
-                    }
-                    try {
-                        Thread.sleep(WAIT_PERIOD);
-                    } catch (InterruptedException ex) {
-                        log.info("result fetching thread was interrupted", ex);
-                        Thread.currentThread().interrupt();
-                        return null;
-                    }
-                    files = (Map<String, byte[]>)SessionManager.getProxy()
-                                .executeTask(
-                                        SERVER_ACTION,
-                                        "WUNDA_BLAU",
-                                        null,
-                                        paramMethod,
-                                        paramRequestId,
-                                        paramProduct);
-                }
-                return files;
-            } catch (ConnectionException ex) {
-                Exceptions.printStackTrace(ex);
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        private ArrayList<URL> getDownloadURLs() {
+            final ArrayList<URL> result = new ArrayList<URL>();
+            final StringBuilder baseUrl = new StringBuilder();
+            final ArrayList<String> fileExtensions = new ArrayList<String>();
+            final String format = product.getFormat().getKey();
+            baseUrl.append(BUTLER_SERVER_BASE_PATH);
+            if (format.equals("dxf")) {
+                baseUrl.append(DXF_RESULT_DIR);
+                fileExtensions.add(".dxf");
+            } else if (format.equals("shp")) {
+                baseUrl.append(SHAPE_RESULT_DIR);
+                fileExtensions.add(".shp");
+                fileExtensions.add(".prj");
+                fileExtensions.add(".dbf");
+                fileExtensions.add(".shx");
+            } else if (format.equals("tif")) {
+                baseUrl.append(TIF_RESULT_DIR);
+                fileExtensions.add(".tif");
+            } else if (format.equals("geotif")) {
+                baseUrl.append(TIF_RESULT_DIR);
+                fileExtensions.add(".tif");
+                fileExtensions.add(".tfw");
+            } else {
+                // this must be true here: format.equals("pdf")
+                baseUrl.append(PDF_RESULT_DIR);
+                fileExtensions.add(".pdf");
             }
-            return null;
+            baseUrl.append("/");
+            baseUrl.append(requestId);
+            for (final String fileExtension : fileExtensions) {
+                try {
+                    result.add(new URL(baseUrl.toString() + fileExtension));
+                } catch (MalformedURLException ex) {
+                    // should not happen
+                    log.error("Missformed Download URL");
+                }
+            }
+            return result;
+        }
+
+        @Override
+        public ArrayList<URL> call() throws Exception {
+            final ArrayList<URL> urls = getDownloadURLs();
+            if (urls.isEmpty()) {
+                log.error("Could not determine Download URLS");
+                return null;
+            }
+            final URL url = urls.get(0);
+            boolean fileExists = false;
+            while (!fileExists) {
+                try {
+                    fileExists = (WebAccessManager.getInstance().doRequest(url) != null);
+                } catch (BadHttpStatusCodeException e) {
+                    if (e.getStatuscode() == 404) {
+                        if (log.isDebugEnabled()) {
+                            log.debug("Resultfile for order " + requestId + " not exists. Trying again");
+                        }
+                    } else {
+                        return null;
+                    }
+                }
+                if (Thread.interrupted()) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("Butler polling future was cancelled");
+                    }
+                    return null;
+                }
+                if (log.isDebugEnabled()) {
+                    log.debug("Result for " + requestId + " is not finished, try later again");
+                }
+                try {
+                    Thread.sleep(WAIT_PERIOD);
+                } catch (InterruptedException ex) {
+                    log.info("result fetching thread was interrupted", ex);
+                    Thread.currentThread().interrupt();
+                    return null;
+                }
+            }
+            return urls;
         }
     }
 }
