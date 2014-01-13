@@ -945,6 +945,13 @@ public class PointNumberDialog extends javax.swing.JDialog {
         } catch (BadLocationException ex) {
             LOG.error("Could not clear Protokoll Pane", ex);
         }
+        if ((model.getSelectedValues() == 0)) {
+            protokollPane.addMessage(
+                "Es wurden keine Punktnummern zur Freigabe selektiert.",
+                BusyLoggingTextPane.Styles.ERROR);
+            return;
+        }
+        btnFreigeben.setEnabled(false);
         protokollPane.setBusy(true);
         protokollPane.addMessage("Sende Freigabeauftrag.", BusyLoggingTextPane.Styles.INFO);
 
@@ -998,7 +1005,8 @@ public class PointNumberDialog extends javax.swing.JDialog {
     private void btnDeSelectAllActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDeSelectAllActionPerformed
         for (int i = 0; i < punktnummern.size(); i++) {
             final CheckListItem item = (CheckListItem)punktnummern.get(i);
-            item.setSelected(false);
+            item.setSelected(true);
+            model.setValueAt(item, i, 0);
         }
         tblPunktnummern.repaint();
     }                                                                                  //GEN-LAST:event_btnDeSelectAllActionPerformed
@@ -1011,10 +1019,12 @@ public class PointNumberDialog extends javax.swing.JDialog {
     private void btnSelectAllActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnSelectAllActionPerformed
         for (int i = 0; i < punktnummern.size(); i++) {
             final CheckListItem item = (CheckListItem)punktnummern.get(i);
-            item.setSelected(true);
+            // inverts the selection for the item
+            item.setSelected(false);
+            model.setValueAt(item, i, 0);
         }
         tblPunktnummern.repaint();
-    }                                                                                //GEN-LAST:event_btnSelectAllActionPerformed
+    } //GEN-LAST:event_btnSelectAllActionPerformed
 
     /**
      * DOCUMENT ME!
