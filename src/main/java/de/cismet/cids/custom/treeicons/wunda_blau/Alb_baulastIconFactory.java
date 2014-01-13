@@ -20,6 +20,7 @@ import Sirius.navigator.ui.tree.CidsTreeObjectIconFactory;
 import Sirius.server.middleware.types.MetaObject;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -44,6 +45,20 @@ public class Alb_baulastIconFactory implements CidsTreeObjectIconFactory {
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_baulastIconFactory.class);
     private static ImageIcon fallback = new ImageIcon(Alb_baulastIconFactory.class.getResource(
                 "/res/16/Baulast.png"));
+
+    //~ Enums ------------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public enum Overlay {
+
+        //~ Enum constants -----------------------------------------------------
+
+        CROSS, LOCKED, WARN, NONE
+    }
 
     //~ Instance fields --------------------------------------------------------
 
@@ -121,34 +136,32 @@ public class Alb_baulastIconFactory implements CidsTreeObjectIconFactory {
                 final CidsBean baulastBean = baulastMO.getBean();
                 result = node.getLeafIcon();
 
-                if (!checkIfBaulastBeansIsComplete(baulastBean)) {
-                    final Icon overlay = Static2DTools.createOverlayIcon(
-                            WARNING_ICON,
-                            result.getIconWidth(),
-                            result.getIconHeight());
-                    result = Static2DTools.mergeIcons(result, overlay);
-//                result = overlay;
-//                result = Static2DTools.mergeIcons(result, Static2DTools.createOverlayIcon(WARNING_ICON, result.getIconWidth(), result.getIconHeight()));
-//                result = Static2DTools.mergeIcons(new Icon[]{result, WARNING_ICON});
-                } else {
-                    if (baulastBean.getProperty("loeschungsdatum") != null) {
+                final Overlay ovl = getOverlayForBaulast(baulastBean);
+                // CROSS OVERLAY
+
+                switch (ovl) {
+                    case CROSS: {
                         final Icon overlay = Static2DTools.createOverlayIcon(
                                 DELETED_ICON,
                                 result.getIconWidth(),
                                 result.getIconHeight());
                         result = Static2DTools.mergeIcons(result, overlay);
-//                    result = overlay;
-//                result = Static2DTools.mergeIcons(result, Static2DTools.createOverlayIcon(DELETED_ICON, result.getIconWidth(), result.getIconHeight()));
-//                result = Static2DTools.mergeIcons(new Icon[]{result, DELETED_ICON});
-                    } else if (baulastBean.getProperty("geschlossen_am") != null) {
+                        break;
+                    }
+                    case LOCKED: {
                         final Icon overlay = Static2DTools.createOverlayIcon(
                                 CLOSED_ICON,
                                 result.getIconWidth(),
                                 result.getIconHeight());
                         result = Static2DTools.mergeIcons(result, overlay);
-//                    result = overlay;
-//                result = Static2DTools.mergeIcons(result, Static2DTools.createOverlayIcon(CLOSED_ICON, result.getIconWidth(), result.getIconHeight()));
-//                result = Static2DTools.mergeIcons(new Icon[]{result, CLOSED_ICON});
+                        break;
+                    }
+                    case WARN: {
+                        final Icon overlay = Static2DTools.createOverlayIcon(
+                                WARNING_ICON,
+                                result.getIconWidth(),
+                                result.getIconHeight());
+                        result = Static2DTools.mergeIcons(result, overlay);
                     }
                 }
                 return result;
@@ -214,14 +227,60 @@ public class Alb_baulastIconFactory implements CidsTreeObjectIconFactory {
     }
 
     /**
-     * Checks whether or not all important attributes of a baulast are filled.
+     * DOCUMENT ME!
      *
      * @param   baulastBean  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    private boolean checkIfBaulastBeansIsComplete(final CidsBean baulastBean) {
-        return (baulastBean.getProperty("laufende_nummer") != null) && (baulastBean.getProperty("lageplan") != null)
-                    && (baulastBean.getProperty("textblatt") != null);
+    private static boolean hasBaulastHistoricLandparcels(final CidsBean baulastBean) {
+        final List<CidsBean> belastete = baulastBean.getBeanCollectionProperty("flurstuecke_belastet");
+        final List<CidsBean> beguenstigte = baulastBean.getBeanCollectionProperty("flurstuecke_beguenstigt");
+        for (final CidsBean fs : belastete) {
+            if (fs.getProperty("historisch") != null) {
+                return true;
+            }
+        }
+        for (final CidsBean fs : beguenstigte) {
+            if (fs.getProperty("historisch") != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   baulastBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static boolean isBaulastGeprueft(final CidsBean baulastBean) {
+        final Boolean geprueft = (Boolean)baulastBean.getProperty("geprueft");
+        if (geprueft == null) {
+            return false;
+        } else {
+            return geprueft.booleanValue();
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   baulastBean  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static Overlay getOverlayForBaulast(final CidsBean baulastBean) {
+        if (isBaulastGeprueft(baulastBean) && (baulastBean.getProperty("loeschungsdatum") != null)) {
+            return Overlay.CROSS;
+        } else if (isBaulastGeprueft(baulastBean) && (baulastBean.getProperty("geschlossen_am") != null)) {
+            return Overlay.LOCKED;
+        } else if (!isBaulastGeprueft(baulastBean) || hasBaulastHistoricLandparcels(baulastBean)) {
+            return Overlay.WARN;
+        } else {
+            return Overlay.NONE;
+        }
     }
 }
