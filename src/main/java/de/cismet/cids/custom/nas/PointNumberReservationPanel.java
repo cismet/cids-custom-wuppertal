@@ -182,6 +182,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                         protokollPane.addMessage(
                             "Während der Bearbeitung des Auftrags trat ein Fehler auf!",
                             Styles.ERROR);
+                        btnErstellen.setEnabled(true);
                         protokollPane.setBusy(false);
                     }
                 }
@@ -477,6 +478,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                 JOptionPane.ERROR_MESSAGE);
             return;
         }
+        btnErstellen.setEnabled(false);
         protokollPane.setBusy(true);
         final String anrPrefix = pnrDialog.getAnrPrefix();
 
@@ -563,6 +565,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                                                 "Die Protokolldatei mit Fehlerinformationen steht zum Download bereit.",
                                                 Styles.ERROR);
                                         }
+                                        btnErstellen.setEnabled(true);
                                         protokollPane.setBusy(false);
                                         return;
                                     }
@@ -581,6 +584,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                                     if (!pnrDialog.isErgaenzenMode()) {
                                         pnrDialog.addAnr(result.getAntragsnummer().substring(5));
                                     }
+                                    btnErstellen.setEnabled(true);
                                 } catch (InterruptedException ex) {
                                     LOG.error("Swing worker that executes the reservation was interrupted", ex);
                                     showError();
@@ -640,11 +644,11 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                                             protokollPane.addMessage(
                                                 "Auftragsnummer existiert noch nicht!",
                                                 Styles.ERROR);
-                                            protokollPane.setBusy(false);
                                         } else {
                                             protokollPane.addMessage("Auftragsnummer existiert bereits", Styles.ERROR);
-                                            protokollPane.setBusy(false);
                                         }
+                                        btnErstellen.setEnabled(true);
+                                        protokollPane.setBusy(false);
                                     }
                                 } catch (InterruptedException ex) {
                                     LOG.error(

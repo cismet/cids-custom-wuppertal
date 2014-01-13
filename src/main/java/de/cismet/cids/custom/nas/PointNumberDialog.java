@@ -419,7 +419,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
         if (cbAntragsNummer.isEditable()) {
             final String tmp;
             tmp = ((JTextComponent)cbAntragsNummer.getEditor().getEditorComponent()).getText();
-            if ((tmp == null) || tmp.isEmpty()) {
+            if (((tmp == null) || tmp.isEmpty()) && (cbAntragsNummer.getSelectedItem() != null)) {
                 anr = cbAntragsNummer.getSelectedItem().toString();
             } else {
                 anr = tmp;
@@ -1033,6 +1033,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
      * DOCUMENT ME!
      */
     private void showError() {
+        btnFreigeben.setEnabled(true);
         if (protokollPane != null) {
             protokollPane.addMessage(
                 "Während der Bearbeitung des Auftrags trat ein Fehler auf!",
@@ -1487,9 +1488,11 @@ public class PointNumberDialog extends javax.swing.JDialog {
                                         "Die Protokolldatei mit Fehlerinformationen steht zum Download bereit.",
                                         BusyLoggingTextPane.Styles.ERROR);
                                 }
+                                btnFreigeben.setEnabled(true);
                                 protokollPane.setBusy(false);
                                 return;
                             }
+                            btnFreigeben.setEnabled(true);
                             protokollPane.setBusy(false);
                             protokollPane.addMessage(
                                 "Freigabe für Antragsnummer: "
