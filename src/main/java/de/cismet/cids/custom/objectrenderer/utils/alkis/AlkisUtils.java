@@ -261,7 +261,11 @@ public class AlkisUtils {
      * @return  DOCUMENT ME!
      */
     public static LandParcel[] getLandparcelFromBuchungsstelle(final Buchungsstelle buchungsstelle) {
-        if (buchungsstelle.getBuchungsstellen() == null) {
+        if ((buchungsstelle.getBuchungsstellen() == null) && (buchungsstelle.getLandParcel() == null)) {
+            log.warn("getLandparcelFromBuchungsstelle returns null. Problem on landparcel with number:"
+                        + buchungsstelle.getSequentialNumber());
+            return new LandParcel[0];
+        } else if (buchungsstelle.getBuchungsstellen() == null) {
             return buchungsstelle.getLandParcel();
         } else {
             LandParcel[] result = buchungsstelle.getLandParcel();
