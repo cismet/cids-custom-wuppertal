@@ -86,10 +86,17 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
+import javax.swing.text.DocumentFilter.FilterBypass;
+import javax.swing.text.JTextComponent;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objecteditors.utils.DoubleNumberConverter;
+import de.cismet.cids.custom.objecteditors.utils.IntegerNumberConverter;
 import de.cismet.cids.custom.objecteditors.utils.NumberConverter;
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.utils.WebDavHelper;
@@ -1153,6 +1160,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.laenge}"),
                 tfLaenge,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setConverter(new IntegerNumberConverter());
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2045,6 +2053,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.san_kosten_gelaender}"),
                 tfSanKostenGelaender,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setConverter(new IntegerNumberConverter());
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2233,6 +2242,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.san_kosten_kopf}"),
                 tfSanKostenKopf,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setConverter(new IntegerNumberConverter());
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2421,6 +2431,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.san_kosten_ansicht}"),
                 tfSanKostenAnsicht,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setConverter(new IntegerNumberConverter());
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2609,6 +2620,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.san_kosten_gruendung}"),
                 tfSanKostenGruendung,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setConverter(new IntegerNumberConverter());
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2797,6 +2809,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.san_kosten_gelaende}"),
                 tfSanKostenGruendung1,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setConverter(new IntegerNumberConverter());
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2985,6 +2998,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.san_kosten_verformung}"),
                 tfSanKostenGruendung2,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setConverter(new IntegerNumberConverter());
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
