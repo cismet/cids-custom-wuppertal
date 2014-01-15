@@ -43,8 +43,8 @@ public class Alb_baulastIconFactory implements CidsTreeObjectIconFactory {
     //~ Static fields/initializers ---------------------------------------------
 
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_baulastIconFactory.class);
-    private static ImageIcon fallback = new ImageIcon(Alb_baulastIconFactory.class.getResource(
-                "/res/16/Baulast.png"));
+    private static ImageIcon FALLBACK = new ImageIcon(Alb_baulastIconFactory.class.getResource(
+                "/res/16/BaulastGrau.png"));
 
     //~ Enums ------------------------------------------------------------------
 
@@ -64,10 +64,11 @@ public class Alb_baulastIconFactory implements CidsTreeObjectIconFactory {
 
     volatile javax.swing.SwingWorker<Void, Void> objectRetrievingWorker = null;
     final HashSet<ObjectTreeNode> listOfRetrievingObjectWorkers = new HashSet<ObjectTreeNode>();
-    private ExecutorService objectRetrievalExecutor = Executors.newFixedThreadPool(15);
+    private final ExecutorService objectRetrievalExecutor = Executors.newFixedThreadPool(15);
     private final ImageIcon DELETED_ICON;
     private final ImageIcon CLOSED_ICON;
     private final ImageIcon WARNING_ICON;
+
     private final Object objectRetrievingLock = new Object();
 
     //~ Constructors -----------------------------------------------------------
@@ -220,7 +221,7 @@ public class Alb_baulastIconFactory implements CidsTreeObjectIconFactory {
                     // evtl log meldungen
                 }
             }
-            return fallback;
+            return FALLBACK;
         }
 
         return null;

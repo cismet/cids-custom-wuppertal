@@ -44,17 +44,17 @@ public class Alb_baulastblattIconFactory implements CidsTreeObjectIconFactory {
 
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(
             Alb_baulastblattIconFactory.class);
-    private static ImageIcon fallback = new ImageIcon(Alb_baulastIconFactory.class.getResource(
-                "/res/16/Baulast.png"));
+    private static ImageIcon FALLBACK = new ImageIcon(Alb_baulastblattIconFactory.class.getResource(
+                "/res/16/BaulastGrau.png"));
 
     //~ Instance fields --------------------------------------------------------
 
     volatile javax.swing.SwingWorker<Void, Void> objectRetrievingWorker = null;
     final HashSet<ObjectTreeNode> listOfRetrievingObjectWorkers = new HashSet<ObjectTreeNode>();
-    private ExecutorService objectRetrievalExecutor = Executors.newFixedThreadPool(15);
+    private final ExecutorService objectRetrievalExecutor = Executors.newFixedThreadPool(15);
     private final ImageIcon DELETED_ICON;
-    private final ImageIcon CLOSED_ICON;
     private final ImageIcon WARNING_ICON;
+
     private final Object objectRetrievingLock = new Object();
 
     //~ Constructors -----------------------------------------------------------
@@ -65,8 +65,6 @@ public class Alb_baulastblattIconFactory implements CidsTreeObjectIconFactory {
     public Alb_baulastblattIconFactory() {
         DELETED_ICON = new ImageIcon(getClass().getResource(
                     "/de/cismet/cids/custom/objecteditors/wunda_blau/edit-delete.png"));
-        CLOSED_ICON = new ImageIcon(getClass().getResource(
-                    "/de/cismet/cids/custom/objecteditors/wunda_blau/encrypted.png"));
         WARNING_ICON = new ImageIcon(getClass().getResource(
                     "/de/cismet/cids/custom/objecteditors/wunda_blau/dialog-warning.png"));
     }
@@ -107,6 +105,7 @@ public class Alb_baulastblattIconFactory implements CidsTreeObjectIconFactory {
     public Icon getClassNodeIcon(final ClassTreeNode dmtn) {
         return null;
     }
+
     /**
      * DOCUMENT ME!
      *
@@ -198,7 +197,7 @@ public class Alb_baulastblattIconFactory implements CidsTreeObjectIconFactory {
                     // evtl log meldungen
                 }
             }
-            return fallback;
+            return FALLBACK;
         }
 
         return null;
