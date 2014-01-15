@@ -22,6 +22,7 @@ public class Product {
     String id;
     String name;
     String description;
+    Double mwst;
     final HashMap<String, Double> prices = new HashMap<String, Double>();
     final HashMap<String, Double> discounts = new HashMap<String, Double>();
 
@@ -93,6 +94,24 @@ public class Product {
     /**
      * DOCUMENT ME!
      *
+     * @return  DOCUMENT ME!
+     */
+    public Double getMwst() {
+        return mwst;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  mwst  DOCUMENT ME!
+     */
+    public void setMwst(final Double mwst) {
+        this.mwst = mwst;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param  pricegroup  DOCUMENT ME!
      * @param  price       DOCUMENT ME!
      */
@@ -119,6 +138,13 @@ public class Product {
         return prices;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   obj  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public boolean equals(final Object obj) {
         if (obj == null) {
@@ -144,6 +170,11 @@ public class Product {
         return true;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public int hashCode() {
         int hash = 3;

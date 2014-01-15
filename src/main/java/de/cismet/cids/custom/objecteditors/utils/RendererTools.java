@@ -11,6 +11,7 @@
  */
 package de.cismet.cids.custom.objecteditors.utils;
 
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
@@ -50,6 +51,8 @@ public class RendererTools {
         } else if (comp instanceof DefaultBindableDateChooser) {
             final DefaultBindableDateChooser dc = (DefaultBindableDateChooser)comp;
             dc.setEnabled(false);
+        } else if (comp instanceof JCheckBox) {
+            ((JCheckBox)comp).setEnabled(false);
         }
     }
 }

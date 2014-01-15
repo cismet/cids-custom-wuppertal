@@ -1,0 +1,190 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package de.cismet.cids.custom.objectrenderer.utils.billing;
+
+import Sirius.navigator.ui.ComponentRegistry;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.apache.log4j.Logger;
+
+import org.openide.util.NbBundle;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import java.io.IOException;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import javax.swing.Action;
+import javax.swing.JCheckBox;
+import javax.swing.JOptionPane;
+
+/**
+ * DOCUMENT ME!
+ *
+ * @author   Gilles Baatz
+ * @version  $Revision$, $Date$
+ */
+public class VerwendungszweckPanel extends javax.swing.JPanel implements FilterSettingChangedTrigger {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final Logger LOG = Logger.getLogger(VerwendungszweckPanel.class);
+    private static BillingInfo billingInfo;
+    private static final ObjectMapper mapper = new ObjectMapper();
+    private static final HashMap<String, Usage> usages = new HashMap<String, Usage>();
+
+    static {
+        try {
+            billingInfo = mapper.readValue(BillingInfo.class.getResourceAsStream(
+                        "/de/cismet/cids/custom/billing/billing.json"),
+                    BillingInfo.class);
+
+            final ArrayList<Usage> lu = billingInfo.getUsages();
+            for (final Usage u : lu) {
+                usages.put(u.getKey(), u);
+            }
+        } catch (IOException ioException) {
+            LOG.error("Error when trying to read the billingInfo.json", ioException);
+        }
+    }
+
+    //~ Instance fields --------------------------------------------------------
+
+    private HashMap<JCheckBox, Usage> mappingJCheckboxToUsages = new HashMap<JCheckBox, Usage>();
+    private Action filterAction;
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel pnlVerwendungszweckCheckBoxes;
+    // End of variables declaration//GEN-END:variables
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates new form VerwendungszweckPanel.
+     */
+    public VerwendungszweckPanel() {
+        initComponents();
+        initVerwendungszweckCheckBoxes();
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void initVerwendungszweckCheckBoxes() {
+        for (final Usage usage : usages.values()) {
+            final JCheckBox checkBox = new JCheckBox();
+            checkBox.setSelected(true);
+            checkBox.setText(usage.getName());
+            checkBox.setToolTipText(usage.getKey());
+            checkBox.addActionListener(new ActionListener() {
+
+                    @Override
+                    public void actionPerformed(final ActionEvent e) {
+                        boolean noneSelected = true;
+                        for (final JCheckBox cb : mappingJCheckboxToUsages.keySet()) {
+                            if (cb.isSelected()) {
+                                noneSelected = false;
+                                break;
+                            }
+                        }
+                        if (noneSelected) {
+                            ((JCheckBox)e.getSource()).setSelected(true);
+                            final String title = NbBundle.getMessage(
+                                    VerwendungszweckPanel.class,
+                                    "VerwendungszweckPanel.initVerwendungszweckCheckBoxes().actionPerformed().dialog.title");
+                            final String message = NbBundle.getMessage(
+                                    VerwendungszweckPanel.class,
+                                    "VerwendungszweckPanel.initVerwendungszweckCheckBoxes().actionPerformed().dialog.message");
+                            JOptionPane.showMessageDialog(
+                                VerwendungszweckPanel.this.getTopLevelAncestor(),
+                                message,
+                                title,
+                                JOptionPane.INFORMATION_MESSAGE);
+                        } else if (filterAction != null) {
+                            filterAction.actionPerformed(null);
+                        }
+                    }
+                });
+
+            mappingJCheckboxToUsages.put(checkBox, usage);
+            pnlVerwendungszweckCheckBoxes.add(checkBox);
+        }
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+        final java.awt.GridBagConstraints gridBagConstraints;
+
+        pnlVerwendungszweckCheckBoxes = new javax.swing.JPanel();
+
+        setBorder(javax.swing.BorderFactory.createTitledBorder(
+                org.openide.util.NbBundle.getMessage(
+                    VerwendungszweckPanel.class,
+                    "VerwendungszweckPanel.border.title"))); // NOI18N
+        setLayout(new java.awt.GridBagLayout());
+
+        pnlVerwendungszweckCheckBoxes.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 6, 3, 3));
+        pnlVerwendungszweckCheckBoxes.setLayout(new javax.swing.BoxLayout(
+                pnlVerwendungszweckCheckBoxes,
+                javax.swing.BoxLayout.PAGE_AXIS));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        add(pnlVerwendungszweckCheckBoxes, gridBagConstraints);
+    } // </editor-fold>//GEN-END:initComponents
+
+    @Override
+    public Action getFilterSettingChangedAction() {
+        return this.filterAction;
+    }
+
+    @Override
+    public void setFilterSettingChangedAction(final Action filterAction) {
+        this.filterAction = filterAction;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public ArrayList<String> createSelectedVerwendungszweckKeysStringArray() {
+        final ArrayList<String> ret = new ArrayList<String>();
+        for (final JCheckBox jCheckBox : mappingJCheckboxToUsages.keySet()) {
+            if (jCheckBox.isSelected()) {
+                final Usage usage = mappingJCheckboxToUsages.get(jCheckBox);
+                ret.add(usage.getKey());
+            }
+        }
+        return ret;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static HashMap<String, Usage> getUsages() {
+        return usages;
+    }
+}

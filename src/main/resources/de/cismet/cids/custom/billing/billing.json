@@ -121,6 +121,10 @@
         "name":"Wiederverkauf (einmalig)",
         "key":"WV ein",
         "description":"-"
+    },{
+        "name":"eigener Gebrauch (gebührenbefreit)",
+        "key":"eigG frei",
+        "description":"-"
     }],
     "products":[{
         "name":"Flurstücksnachweis",
@@ -130,12 +134,14 @@
             "eigG":0.75,
             "VU aL":0.0,
             "VU s":0.75,
-            "VU hV":0.0,            
-            "WV ein":1.0
+            "VU hV":0.0,
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "ea":10.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Flurstücks- und Eigentumsnachweis (NRW)",
         "id":"fsuenw",
@@ -145,11 +151,13 @@
             "VU aL":0.0,
             "VU s":0.75,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "ea":10.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Flurstücks- und Eigentumsnachweis (kommunal)",
         "id":"fsuekom",
@@ -159,11 +167,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "ea":11.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Bestandsnachweis (NRW)",
         "id":"benw",
@@ -173,11 +183,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "ea":20.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Bestandsnachweis (kommunal)",
         "id":"bekom",
@@ -187,11 +199,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "ea":22.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Grundstücksnachweis (NRW)",
         "id":"grnw",
@@ -201,11 +215,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "ea":10.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Flurkarte (NRW) DIN A4",
         "id":"fknw4",
@@ -215,11 +231,13 @@
             "VU aL":0.0,
             "VU s":0.75,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a3":20.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Flurkarte (NRW) DIN A3",
         "id":"fknw3",
@@ -229,11 +247,13 @@
             "VU aL":0.0,
             "VU s":0.75,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a3":20.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Flurkarte (NRW) DIN A2",
         "id":"fknw2",
@@ -243,11 +263,13 @@
             "VU aL":0.0,
             "VU s":0.75,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a2-a0":40.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Flurkarte (NRW) DIN A1",
         "id":"fknw1",
@@ -257,11 +279,13 @@
             "VU aL":0.0,
             "VU s":0.75,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a2-a0":40.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Flurkarte (NRW) DIN A0",
         "id":"fknw0",
@@ -271,11 +295,13 @@
             "VU aL":0.0,
             "VU s":0.75,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a2-a0":40.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Stadtgrundkarte (kommunal) DIN A4",
         "id":"skmekom4",
@@ -285,11 +311,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a3":22.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Stadtgrundkarte (kommunal) DIN A3",
         "id":"skmekom3",
@@ -299,11 +327,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a3":22.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Stadtgrundkarte (kommunal) DIN A2",
         "id":"skmekom2",
@@ -313,11 +343,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a2-a0":44.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Stadtgrundkarte (kommunal) DIN A1",
         "id":"skmekom1",
@@ -327,11 +359,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a2-a0":44.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Stadtgrundkarte (kommunal) DIN A0",
         "id":"skmekom0",
@@ -341,11 +375,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a2-a0":44.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Schätzungskarte (NRW) DIN A4",
         "id":"schknw4",
@@ -355,11 +391,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a3":20.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Schätzungskarte (NRW) DIN A3",
         "id":"schknw3",
@@ -369,11 +407,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a3":20.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Schätzungskarte (NRW) DIN A2",
         "id":"schknw2",
@@ -383,11 +423,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a2-a0":40.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Schätzungskarte (NRW) DIN A1",
         "id":"schknw1",
@@ -397,11 +439,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a2-a0":40.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Schätzungskarte (NRW) DIN A0",
         "id":"schknw0",
@@ -411,11 +455,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a2-a0":40.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Amtliche Basiskarte (NRW) DIN A4",
         "id":"abknw4",
@@ -425,11 +471,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a3":15.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Amtliche Basiskarte (NRW) DIN A3",
         "id":"abknw3",
@@ -439,11 +487,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a3":15.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Amtliche Basiskarte (NRW) DIN A2",
         "id":"abknw2",
@@ -453,11 +503,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a2-a0":30.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Amtliche Basiskarte (NRW) DIN A1",
         "id":"abknw1",
@@ -467,11 +519,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a2-a0":30.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Amtliche Basiskarte (NRW) DIN A0",
         "id":"abknw0",
@@ -481,11 +535,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a2-a0":30.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Stadtgrundkarte DIN A4",
         "id":"skkom4",
@@ -495,11 +551,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a3":22.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Stadtgrundkarte DIN A3",
         "id":"skkom3",
@@ -509,11 +567,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a3":22.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Stadtgrundkarte DIN A2",
         "id":"skkom2",
@@ -523,11 +583,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a2-a0":44.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Stadtgrundkarte DIN A1",
         "id":"skkom1",
@@ -537,11 +599,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a2-a0":44.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Stadtgrundkarte DIN A0",
         "id":"skkom0",
@@ -551,11 +615,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a2-a0":44.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Punktliste (TEXT)",
         "id":"pktlsttxt",
@@ -565,7 +631,8 @@
             "VU aL":0.0,
             "VU s":0.5,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eapkt_1000":0.2,
@@ -573,7 +640,8 @@
             "eapkt_10001-100000":0.05,
             "eapkt_100001-1000000":0.025,
             "eapkt_1000001":0.0125
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Punktnachweis (PDF)",
         "id":"pktlstpdf",
@@ -583,11 +651,13 @@
             "VU aL":0.0,
             "VU s":0.75,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eafifty":20.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Digitale Grundkarte (DGK) DIN A4",
         "id":"dgkkom4",
@@ -597,11 +667,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a3":15.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Digitale Grundkarte (DGK) DIN A3",
         "id":"dgkkom3",
@@ -611,11 +683,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a3":15.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Digitale Grundkarte (DGK) DIN A2",
         "id":"dgkkom2",
@@ -625,11 +699,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a2-a0":30.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Digitale Grundkarte (DGK) DIN A1",
         "id":"dgkkom1",
@@ -639,11 +715,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a2-a0":30.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Digitale Grundkarte (DGK) DIN A0",
         "id":"dgkkom0",
@@ -653,11 +731,13 @@
             "VU aL":0.75,
             "VU s":0.75,
             "VU hV":0.75,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a2-a0":30.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Orthofoto DIN A4",
         "id":"ofkom4",
@@ -667,11 +747,13 @@
             "VU aL":1.0,
             "VU s":1.0,
             "VU hV":1.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a3":15.0
-        }
+            "eakarte_a3":12.60
+        },
+        "mwst":19.0
     },{
         "name":"Orthofoto DIN A3",
         "id":"ofkom3",
@@ -681,11 +763,13 @@
             "VU aL":1.0,
             "VU s":1.0,
             "VU hV":1.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a3":15.0
-        }
+            "eakarte_a3":12.60
+        },
+        "mwst":19.0
     },{
         "name":"Orthofoto DIN A2",
         "id":"ofkom2",
@@ -695,11 +779,13 @@
             "VU aL":1.0,
             "VU s":1.0,
             "VU hV":1.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a2-a0":30.0
-        }
+            "eakarte_a2-a0":25.21
+        },
+        "mwst":19.0
     },{
         "name":"Orthofoto DIN A1",
         "id":"ofkom1",
@@ -709,11 +795,13 @@
             "VU aL":1.0,
             "VU s":1.0,
             "VU hV":1.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a2-a0":30.0
-        }
+            "eakarte_a2-a0":25.21
+        },
+        "mwst":19.0
     },{
         "name":"Orthofoto DIN A0",
         "id":"ofkom0",
@@ -723,11 +811,13 @@
             "VU aL":1.0,
             "VU s":1.0,
             "VU hV":1.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a2-a0":30.0
-        }
+            "eakarte_a2-a0":25.21
+        },
+        "mwst":19.0
     },{
         "name":"NivP-Übersicht DIN A4",
         "id":"nivpükom4",
@@ -737,11 +827,13 @@
             "VU aL":0.0,
             "VU s":0.0,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a3":10.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"NivP-Übersicht DIN A3",
         "id":"nivpükom3",
@@ -751,11 +843,13 @@
             "VU aL":0.0,
             "VU s":0.0,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a3":10.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"NivP-Übersicht DIN A2",
         "id":"nivpükom2",
@@ -765,11 +859,13 @@
             "VU aL":0.0,
             "VU s":0.0,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a2-a0":20.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"NivP-Übersicht DIN A1",
         "id":"nivpükom1",
@@ -779,11 +875,13 @@
             "VU aL":0.0,
             "VU s":0.0,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a2-a0":20.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"NivP-Übersicht DIN A0",
         "id":"nivpükom0",
@@ -793,11 +891,13 @@
             "VU aL":0.0,
             "VU s":0.0,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a2-a0":20.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"AP-Übersicht DIN A4",
         "id":"apükom4",
@@ -807,11 +907,13 @@
             "VU aL":0.0,
             "VU s":0.75,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a3":10.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"AP-Übersicht DIN A3",
         "id":"apükom3",
@@ -821,11 +923,13 @@
             "VU aL":0.0,
             "VU s":0.75,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a3":10.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"AP-Übersicht DIN A2",
         "id":"apükom2",
@@ -835,11 +939,13 @@
             "VU aL":0.0,
             "VU s":0.75,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a2-a0":20.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"AP-Übersicht DIN A1",
         "id":"apükom1",
@@ -849,11 +955,13 @@
             "VU aL":0.0,
             "VU s":0.75,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a2-a0":20.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"AP-Übersicht DIN A0",
         "id":"apükom0",
@@ -863,11 +971,13 @@
             "VU aL":0.0,
             "VU s":0.75,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a2-a0":20.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Punktnummerierungsübersicht (PNÜ) DIN A4",
         "id":"pnükom4",
@@ -877,11 +987,13 @@
             "VU aL":0.0,
             "VU s":0.75,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a3":10.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Punktnummerierungsübersicht (PNÜ) DIN A3",
         "id":"pnükom3",
@@ -891,11 +1003,13 @@
             "VU aL":0.0,
             "VU s":0.75,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a3":10.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Punktnummerierungsübersicht (PNÜ) DIN A2",
         "id":"pnükom2",
@@ -905,11 +1019,13 @@
             "VU aL":0.0,
             "VU s":0.75,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a2-a0":20.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Punktnummerierungsübersicht (PNÜ) DIN A1",
         "id":"pnükom1",
@@ -919,11 +1035,13 @@
             "VU aL":0.0,
             "VU s":0.75,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a2-a0":20.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Punktnummerierungsübersicht (PNÜ) DIN A0",
         "id":"pnükom0",
@@ -933,11 +1051,13 @@
             "VU aL":0.0,
             "VU s":0.75,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eakarte_a2-a0":20.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Digitale Grundkarte mit Höhenlinien DIN A4",
         "id":"dgkhkom4",
@@ -947,11 +1067,13 @@
             "VU aL":1.0,
             "VU s":1.0,
             "VU hV":1.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a3":15.0
-        }
+            "eakarte_a3":12.60
+        },
+        "mwst":19.0
     },{
         "name":"Digitale Grundkarte mit Höhenlinien DIN A3",
         "id":"dgkhkom3",
@@ -961,11 +1083,13 @@
             "VU aL":1.0,
             "VU s":1.0,
             "VU hV":1.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a3":15.0
-        }
+            "eakarte_a3":12.60
+        },
+        "mwst":19.0
     },{
         "name":"Digitale Grundkarte mit Höhenlinien DIN A2",
         "id":"dgkhkom2",
@@ -975,11 +1099,13 @@
             "VU aL":1.0,
             "VU s":1.0,
             "VU hV":1.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a2-a0":30.0
-        }
+            "eakarte_a2-a0":25.21
+        },
+        "mwst":19.0
     },{
         "name":"Digitale Grundkarte mit Höhenlinien DIN A1",
         "id":"dgkhkom1",
@@ -989,11 +1115,13 @@
             "VU aL":1.0,
             "VU s":1.0,
             "VU hV":1.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a2-a0":30.0
-        }
+            "eakarte_a2-a0":25.21
+        },
+        "mwst":19.0
     },{
         "name":"Digitale Grundkarte mit Höhenlinien DIN A0",
         "id":"dgkhkom0",
@@ -1003,11 +1131,13 @@
             "VU aL":1.0,
             "VU s":1.0,
             "VU hV":1.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a2-a0":30.0
-        }
+            "eakarte_a2-a0":25.21
+        },
+        "mwst":19.0
     },{
         "name":"Stadtgrundkarte mit Höhenlinien DIN A4",
         "id":"skhkom4",
@@ -1017,11 +1147,13 @@
             "VU aL":1.0,
             "VU s":1.0,
             "VU hV":1.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a3":15.0
-        }
+            "eakarte_a3":12.60
+        },
+        "mwst":19.0
     },{
         "name":"Stadtgrundkarte mit Höhenlinien DIN A3",
         "id":"skhkom3",
@@ -1031,11 +1163,13 @@
             "VU aL":1.0,
             "VU s":1.0,
             "VU hV":1.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a3":15.0
-        }
+            "eakarte_a3":12.60
+        },
+        "mwst":19.0
     },{
         "name":"Stadtgrundkarte mit Höhenlinien DIN A2",
         "id":"skhkom2",
@@ -1045,11 +1179,13 @@
             "VU aL":1.0,
             "VU s":1.0,
             "VU hV":1.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a2-a0":30.0
-        }
+            "eakarte_a2-a0":25.21
+        },
+        "mwst":19.0
     },{
         "name":"Stadtgrundkarte mit Höhenlinien DIN A1",
         "id":"skhkom1",
@@ -1059,11 +1195,13 @@
             "VU aL":1.0,
             "VU s":1.0,
             "VU hV":1.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a2-a0":30.0
-        }
+            "eakarte_a2-a0":25.21
+        },
+        "mwst":19.0
     },{
         "name":"Stadtgrundkarte mit Höhenlinien DIN A0",
         "id":"skhkom0",
@@ -1073,11 +1211,13 @@
             "VU aL":1.0,
             "VU s":1.0,
             "VU hV":1.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a2-a0":30.0
-        }
+            "eakarte_a2-a0":25.21
+        },
+        "mwst":19.0
     },{
         "name":"Orthofoto mit Katasterdarstellung DIN A4",
         "id":"ofkkom4",
@@ -1087,11 +1227,13 @@
             "VU aL":1.0,
             "VU s":1.0,
             "VU hV":1.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a3":15.0
-        }
+            "eakarte_a3":12.60
+        },
+        "mwst":19.0
     },{
         "name":"Orthofoto mit Katasterdarstellung DIN A3",
         "id":"ofkkom3",
@@ -1101,11 +1243,13 @@
             "VU aL":1.0,
             "VU s":1.0,
             "VU hV":1.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a3":15.0
-        }
+            "eakarte_a3":12.60
+        },
+        "mwst":19.0
     },{
         "name":"Orthofoto mit Katasterdarstellung DIN A2",
         "id":"ofkkom2",
@@ -1115,11 +1259,13 @@
             "VU aL":1.0,
             "VU s":1.0,
             "VU hV":1.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a2-a0":30.0
-        }
+            "eakarte_a2-a0":25.21
+        },
+        "mwst":19.0
     },{
         "name":"Orthofoto mit Katasterdarstellung DIN A1",
         "id":"ofkkom1",
@@ -1129,11 +1275,13 @@
             "VU aL":1.0,
             "VU s":1.0,
             "VU hV":1.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a2-a0":30.0
-        }
+            "eakarte_a2-a0":25.21
+        },
+        "mwst":19.0
     },{
         "name":"Orthofoto mit Katasterdarstellung DIN A0",
         "id":"ofkkom0",
@@ -1143,11 +1291,13 @@
             "VU aL":1.0,
             "VU s":1.0,
             "VU hV":1.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
-            "eakarte_a2-a0":30.0
-        }
+            "eakarte_a2-a0":25.21
+        },
+        "mwst":19.0
     },{
         "name":"AP-Karte",
         "id":"appdf",
@@ -1157,11 +1307,13 @@
             "VU aL":0.0,
             "VU s":0.75,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "ea":10.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Nivellement-Punkt",
         "id":"nivppdf",
@@ -1171,11 +1323,13 @@
             "VU aL":0.0,
             "VU s":0.0,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "ea":10.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Vermessungsriss",
         "id":"vrpdf",
@@ -1185,13 +1339,15 @@
             "VU aL":0.0,
             "VU s":0.75,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "ea":10.0,
             "eadoc_a3":10.0,
             "eadoc_a2-a0":20.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"Dokument Liegenschaftskatasterakte",
         "id":"doklapdf",
@@ -1201,13 +1357,15 @@
             "VU aL":0.0,
             "VU s":0.75,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "ea":10.0,
             "eadoc_a3":10.0,
             "eadoc_a2-a0":20.0
-        }
+        },
+        "mwst":0.0
     },{
         "name":"NAS-Daten (mit Eigentümern)",
         "id":"naskom",
@@ -1217,7 +1375,8 @@
             "VU aL":0.5,
             "VU s":0.5,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eaflst_1000":1.98,
@@ -1235,7 +1394,8 @@
             "eaeig_10001-100000":0.225,
             "eaeig_100001-1000000":0.1125,
             "eaeig_1000001":0.05625
-        }
+        },
+        "mwst":0.0
     },{
         "name":"NAS-Daten (ohne Eigentümer)",
         "id":"nasoeig",
@@ -1245,7 +1405,8 @@
             "VU aL":0.5,
             "VU s":0.5,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eaflst_1000":1.98,
@@ -1258,9 +1419,10 @@
             "eageb_10001-100000":0.45,
             "eageb_100001-1000000":0.225,
             "eageb_1000001":0.1125
-        }
+        },
+        "mwst":0.0
     },{
-        "name":"NAS-Daten (nur Punkte)",
+       "name":"NAS-Daten (nur Punkte)",
         "id":"naspkt",
         "description":"[x] NAS Datensatz nur Punkte",
         "discounts":{
@@ -1268,7 +1430,8 @@
             "VU aL":0.0,
             "VU s":0.5,
             "VU hV":0.0,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eapkt_1000":0.2,
@@ -1276,7 +1439,8 @@
             "eapkt_10001-100000":0.05,
             "eapkt_100001-1000000":0.025,
             "eapkt_1000001":0.0125
-        }
+        },
+        "mwst":0.0
     },{
         "name":"DXF-Daten (Stadtgrundkarte kommunal)",
         "id":"skmekomdxf",
@@ -1286,7 +1450,8 @@
             "VU aL":0.5,
             "VU s":0.5,
             "VU hV":0.5,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eaflst_1000":0.99,
@@ -1299,9 +1464,10 @@
             "eageb_10001-100000":0.225,
             "eageb_100001-1000000":0.1125,
             "eageb_1000001":0.05625
-        }
+        },
+        "mwst":0.0
     },{
-        "name":"Raster-Daten (Stadtgrundkarte kommunal)",
+        "name":"GEOTIFF-Daten (Stadtgrundkarte kommunal)",
         "id":"skmekomtiff",
         "description":"# GUI in WuNDa fehlt noch, kann noch nicht implementiert werden",
         "discounts":{
@@ -1309,7 +1475,8 @@
             "VU aL":0.5,
             "VU s":0.5,
             "VU hV":0.5,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eaflst_1000":0.495,
@@ -1322,7 +1489,8 @@
             "eageb_10001-100000":0.1125,
             "eageb_100001-1000000":0.05625,
             "eageb_1000001":0.028125
-        }
+        },
+        "mwst":0.0
     },{
         "name":"GEOTIFF-Daten (DGK, ABK)",
         "id":"abktiff",
@@ -1332,10 +1500,12 @@
             "VU aL":0.5,
             "VU s":0.5,
             "VU hV":0.5,
-            "WV ein":1.0
+            "WV ein":1.0,
+            "eigG frei":0.0
         },
         "prices":{
             "eaqkm":7.5
-        }
+        },
+        "mwst":0.0
     }]
 }
