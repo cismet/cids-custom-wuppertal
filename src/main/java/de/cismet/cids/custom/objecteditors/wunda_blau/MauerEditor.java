@@ -504,6 +504,23 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                     }
                 });
         timer.setRepeats(false);
+        setLimitDocumentFilter(tfMauerNummer, 50);
+        setLimitDocumentFilter(tfLagebezeichnung, 500);
+        setLimitDocumentFilter(taBeschreibungAnsicht, 500);
+        setLimitDocumentFilter(taBeschreibungGelaender, 500);
+        setLimitDocumentFilter(taBeschreibungGruendung, 500);
+        setLimitDocumentFilter(taBeschreibungGruendung1, 500);
+        setLimitDocumentFilter(taBeschreibungGruendung2, 500);
+        setLimitDocumentFilter(taBeschreibungKopf, 500);
+        setLimitDocumentFilter(taBesonderheiten, 500);
+        setLimitDocumentFilter(taLagebeschreibung, 500);
+        setLimitDocumentFilter(taNeigung, 500);
+        setLimitDocumentFilter(taSanMassnahmeAnsicht, 500);
+        setLimitDocumentFilter(taSanMassnahmeGelaender, 500);
+        setLimitDocumentFilter(taSanMassnahmeGruendung, 500);
+        setLimitDocumentFilter(taSanMassnahmeGruendung1, 500);
+        setLimitDocumentFilter(taSanMassnahmeGruendung2, 500);
+        setLimitDocumentFilter(taSanMassnahmeKopf, 500);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -3303,86 +3320,86 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnImagesActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnImagesActionPerformed
+    private void btnImagesActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImagesActionPerformed
 
         cardLayout.show(this, "card2");
         btnImages.setEnabled(false);
         btnInfo.setEnabled(true);
         lblImages.setEnabled(false);
         lblInfo.setEnabled(true);
-    } //GEN-LAST:event_btnImagesActionPerformed
+    }//GEN-LAST:event_btnImagesActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnInfoActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnInfoActionPerformed
+    private void btnInfoActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInfoActionPerformed
         cardLayout.show(this, "card1");
         btnImages.setEnabled(true);
         btnInfo.setEnabled(false);
         lblImages.setEnabled(true);
         lblInfo.setEnabled(false);
-    }                                                                           //GEN-LAST:event_btnInfoActionPerformed
+    }//GEN-LAST:event_btnInfoActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnPrevImgActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnPrevImgActionPerformed
+    private void btnPrevImgActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevImgActionPerformed
         lstFotos.setSelectedIndex(lstFotos.getSelectedIndex() - 1);
-    }                                                                              //GEN-LAST:event_btnPrevImgActionPerformed
+    }//GEN-LAST:event_btnPrevImgActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnNextImgActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnNextImgActionPerformed
+    private void btnNextImgActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImgActionPerformed
         lstFotos.setSelectedIndex(lstFotos.getSelectedIndex() + 1);
-    }                                                                              //GEN-LAST:event_btnNextImgActionPerformed
+    }//GEN-LAST:event_btnNextImgActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstFotosValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstFotosValueChanged
+    private void lstFotosValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstFotosValueChanged
         if (!evt.getValueIsAdjusting() && listListenerEnabled) {
             loadFoto();
         }
-    }                                                                                   //GEN-LAST:event_lstFotosValueChanged
+    }//GEN-LAST:event_lstFotosValueChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tfStaerke_untenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tfStaerke_untenActionPerformed
+    private void tfStaerke_untenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfStaerke_untenActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_tfStaerke_untenActionPerformed
+    }//GEN-LAST:event_tfStaerke_untenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddImgActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddImgActionPerformed
+    private void btnAddImgActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddImgActionPerformed
         if (JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(this)) {
             final File[] selFiles = fileChooser.getSelectedFiles();
             if ((selFiles != null) && (selFiles.length > 0)) {
                 CismetThreadPool.execute(new ImageUploadWorker(Arrays.asList(selFiles)));
             }
         }
-    }                                                                             //GEN-LAST:event_btnAddImgActionPerformed
+    }//GEN-LAST:event_btnAddImgActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveImgActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveImgActionPerformed
+    private void btnRemoveImgActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveImgActionPerformed
         final Object[] selection = lstFotos.getSelectedValues();
         if ((selection != null) && (selection.length > 0)) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -3428,18 +3445,18 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
                 }
             }
         }
-    } //GEN-LAST:event_btnRemoveImgActionPerformed
+    }//GEN-LAST:event_btnRemoveImgActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
+    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         final Collection<CidsBean> c = new LinkedList<CidsBean>();
         c.add(cidsBean);
         MauernReportGenerator.generateKatasterBlatt(c, MauerEditor.this);
-    }                                                                             //GEN-LAST:event_btnReportActionPerformed
+    }//GEN-LAST:event_btnReportActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -3610,6 +3627,19 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         } catch (ConnectionException ex) {
             Exceptions.printStackTrace(ex);
             return false;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  ta       DOCUMENT ME!
+     * @param  maxSize  DOCUMENT ME!
+     */
+    private void setLimitDocumentFilter(final JTextComponent ta, final int maxSize) {
+        if (ta.getDocument() instanceof AbstractDocument) {
+            final AbstractDocument sd = (AbstractDocument)ta.getDocument();
+            sd.setDocumentFilter(new DocumentSizeFilter(maxSize));
         }
     }
 
@@ -4022,6 +4052,60 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
     }
 
     //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private final class DocumentSizeFilter extends DocumentFilter {
+
+        //~ Instance fields ----------------------------------------------------
+
+        int maxCharacters;
+        boolean DEBUG = false;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new DocumentSizeFilter object.
+         *
+         * @param  maxChars  DOCUMENT ME!
+         */
+        public DocumentSizeFilter(final int maxChars) {
+            maxCharacters = maxChars;
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void insertString(final FilterBypass fb, final int offs, final String str, final AttributeSet a)
+                throws BadLocationException {
+            // This rejects the entire insertion if it would make
+            // the contents too long. Another option would be
+            // to truncate the inserted string so the contents
+            // would be exactly maxCharacters in length.
+            if ((fb.getDocument().getLength() + str.length()) <= maxCharacters) {
+                super.insertString(fb, offs, str, a);
+            }
+        }
+
+        @Override
+        public void replace(final FilterBypass fb,
+                final int offs,
+                final int length,
+                final String str,
+                final AttributeSet a) throws BadLocationException {
+            // This rejects the entire replacement if it would make
+            // the contents too long. Another option would be
+            // to truncate the replacement string so the contents
+            // would be exactly maxCharacters in length.
+            if ((fb.getDocument().getLength() + str.length()
+                            - length) <= maxCharacters) {
+                super.replace(fb, offs, length, str, a);
+            }
+        }
+    }
 
     /**
      * DOCUMENT ME!
