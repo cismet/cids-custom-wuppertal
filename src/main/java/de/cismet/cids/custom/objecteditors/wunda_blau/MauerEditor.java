@@ -2606,7 +2606,7 @@ public class MauerEditor extends javax.swing.JPanel implements RequestsFullSizeC
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.san_kosten_Gruendung}"),
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.san_kosten_gruendung}"),
                 tfSanKostenGruendung,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
