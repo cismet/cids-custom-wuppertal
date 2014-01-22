@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- Produktbeschreibung Stadt Wuppertal
-     Stand: 02.04.2013
-     Version: 1.1.1
+     Stand: 14.01.2014
+     Version: 1.1.2
      Verfasser: Jens Oberbossel
      - NivP-Übersicht auch im Massstab 1:2500
      - Alte Rahmenkartenübersicht
     - Schreibfehler korrigiert (Punktummerierungsübersicht)
+    - AP-Übersicht mit Hausnummern (Layer 038 eingeführt)
+    - Freier Maßstab
    -->
 
 <Produktbeschreibung xsi:schemaLocation="http://products.aaaweb.aedsicad.de Produktbeschreibung.xsd " xmlns="http://products.aaaweb.aedsicad.de" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" content="alkis">
@@ -25,11 +27,11 @@
 
 	<Layername ID="0,100,244,388,491,492,511,512" Name="Orthofoto"/>
 	<Layername ID="0,100,244,388,491,492,512,513" Name="DGK"/>
-	<Layername ID="1,6,14,20,28,36,37,38,100,244,388,492,511,512,513" Name="NivP-Übersicht"/>
-	<Layername ID="1,5,14,20,36,37,38,100,244,388,492,511,512,513" Name="AP-Übersicht"/>
-	<Layername ID="1,5,20,36,38,100,244,388,491,511,512,513" Name="Punktnumerierungsübersicht"/>
-	<Layername ID="5,6,14,20,28,36,37,38,100,244,388,491,492,512,513" Name="DGK mit Höhenlinien"/>
-	<Layername ID="5,6,14,20,28,36,37,38,102,106,110,114,118,122,126,134,246,250,254,258,262,266,270,278,390,394,490" Name="Stadtgrundkarte mit Höhenlinien"/>
+	<Layername ID="1,6,14,20,36,37,38,39,100,244,388,492,511,512,513" Name="NivP-Übersicht"/>
+	<Layername ID="1,5,14,20,36,37,39,100,244,388,492,511,512,513" Name="AP-Übersicht"/>
+	<Layername ID="1,5,20,36,38,39,100,244,388,491,511,512,513" Name="Punktnumerierungsübersicht"/>
+	<Layername ID="5,6,14,20,28,36,37,38,39,100,244,388,491,492,512,513" Name="DGK mit Höhenlinien"/>
+	<Layername ID="5,6,14,20,28,36,37,38,39,102,106,110,114,118,122,126,134,246,250,254,258,262,266,270,278,390,394,490" Name="Stadtgrundkarte mit Höhenlinien"/>
 	<Layername ID="0,100,244,388,491,511,512" Name="Orthofoto mit Katasterdarstellung"/>
 
   </Layernamen>
@@ -1652,6 +1654,164 @@
         <KartenProdukt ID="LK.NRW.K.BF.30" Kartenname="KarteNameSGK" Layout="SGKA0Q" Praesentationshinweis1="Stadtgrundkarte 1:2000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
+        <!-- Beginn Original Produktbeschreibung
+	<KartenProdukt ID="LK.NRW.K.BF.31" Kartenname="KarteNameSGK" Layout="SGKA4H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="Massstabsbereich" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.32" Kartenname="KarteNameSGK" Layout="SGKA4Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="Massstabsbereich" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.33" Kartenname="KarteNameSGK" Layout="SGKA3H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="Massstabsbereich" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.34" Kartenname="KarteNameSGK" Layout="SGKA3Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="Massstabsbereich" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.35" Kartenname="KarteNameSGK" Layout="SGKA2H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="Massstabsbereich" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.36" Kartenname="KarteNameSGK" Layout="SGKA2Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="Massstabsbereich" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.37" Kartenname="KarteNameSGK" Layout="SGKA1H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="Massstabsbereich" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.38" Kartenname="KarteNameSGK" Layout="SGKA1Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="Massstabsbereich" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.39" Kartenname="KarteNameSGK" Layout="SGKA0H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="Massstabsbereich" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.40" Kartenname="KarteNameSGK" Layout="SGKA0Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+		    <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="Massstabsbereich" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        Ende Original Produktbeschreibung -->
+
+        <KartenProdukt ID="LK.NRW.K.BF.31" Kartenname="KarteNameSGK" Layout="SGKA4H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="625" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.31" Kartenname="KarteNameSGK" Layout="SGKA4H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1250" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.31" Kartenname="KarteNameSGK" Layout="SGKA4H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.31" Kartenname="KarteNameSGK" Layout="SGKA4H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="2500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.32" Kartenname="KarteNameSGK" Layout="SGKA4Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="625" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.32" Kartenname="KarteNameSGK" Layout="SGKA4Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="1250" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.32" Kartenname="KarteNameSGK" Layout="SGKA4Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="1500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.32" Kartenname="KarteNameSGK" Layout="SGKA4Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="2500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.33" Kartenname="KarteNameSGK" Layout="SGKA3H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="625" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.33" Kartenname="KarteNameSGK" Layout="SGKA3H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="1250" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.33" Kartenname="KarteNameSGK" Layout="SGKA3H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="1500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.33" Kartenname="KarteNameSGK" Layout="SGKA3H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="2500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.34" Kartenname="KarteNameSGK" Layout="SGKA3Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="625" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.34" Kartenname="KarteNameSGK" Layout="SGKA3Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="1250" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.34" Kartenname="KarteNameSGK" Layout="SGKA3Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="1500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.34" Kartenname="KarteNameSGK" Layout="SGKA3Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="2500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.35" Kartenname="KarteNameSGK" Layout="SGKA2H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="625" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.35" Kartenname="KarteNameSGK" Layout="SGKA2H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="1250" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.35" Kartenname="KarteNameSGK" Layout="SGKA2H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="1500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.35" Kartenname="KarteNameSGK" Layout="SGKA2H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="2500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.36" Kartenname="KarteNameSGK" Layout="SGKA2Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="625" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.36" Kartenname="KarteNameSGK" Layout="SGKA2Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="1250" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.36" Kartenname="KarteNameSGK" Layout="SGKA2Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="1500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.36" Kartenname="KarteNameSGK" Layout="SGKA2Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="2500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.37" Kartenname="KarteNameSGK" Layout="SGKA1H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="625" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.37" Kartenname="KarteNameSGK" Layout="SGKA1H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="1250" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.37" Kartenname="KarteNameSGK" Layout="SGKA1H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="1500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.37" Kartenname="KarteNameSGK" Layout="SGKA1H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="2500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.38" Kartenname="KarteNameSGK" Layout="SGKA1Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="625" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.38" Kartenname="KarteNameSGK" Layout="SGKA1Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="1250" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.38" Kartenname="KarteNameSGK" Layout="SGKA1Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="1500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.38" Kartenname="KarteNameSGK" Layout="SGKA1Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="2500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.39" Kartenname="KarteNameSGK" Layout="SGKA0H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="625" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.39" Kartenname="KarteNameSGK" Layout="SGKA0H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="1250" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.39" Kartenname="KarteNameSGK" Layout="SGKA0H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="1500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.39" Kartenname="KarteNameSGK" Layout="SGKA0H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="2500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.40" Kartenname="KarteNameSGK" Layout="SGKA0Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="625" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.40" Kartenname="KarteNameSGK" Layout="SGKA0Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="1250" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.40" Kartenname="KarteNameSGK" Layout="SGKA0Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="1500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BF.40" Kartenname="KarteNameSGK" Layout="SGKA0Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+
+        
+
+
+        
       </GUIKartenProdukt>
 	  <!-- ########################################-->
        <GUIKartenProdukt Antragsart="KS04" ID="LK.NRW.K.BSW" Name="mit kommunalen Erg., grau" Logo="logo-aaa-wappen-wup-sw" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte mit kom. Erg. (sw)" ProduktnameAuswertung="Stadtgrundkarte m. kom. Erg., schwarz-weiß" ProduktnameGUI="mit kommunalen Erg., grau" Zusatzlegende="false">
@@ -1745,6 +1905,161 @@
         <KartenProdukt ID="LK.NRW.K.BSW.30" Kartenname="KarteNameSGK" Layout="SGKA0Q" Praesentationshinweis1="Stadtgrundkarte 1:2000" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2000"/>
         </KartenProdukt>
+
+        <!-- Beginn Original Produktbeschreibung
+	<KartenProdukt ID="LK.NRW.K.BSW.31" Kartenname="KarteNameSGK" Layout="SGKA4H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="Massstabsbereich" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.32" Kartenname="KarteNameSGK" Layout="SGKA4Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="Massstabsbereich" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.33" Kartenname="KarteNameSGK" Layout="SGKA3H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="Massstabsbereich" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.34" Kartenname="KarteNameSGK" Layout="SGKA3Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="Massstabsbereich" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.35" Kartenname="KarteNameSGK" Layout="SGKA2H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="Massstabsbereich" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.36" Kartenname="KarteNameSGK" Layout="SGKA2Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="Massstabsbereich" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.37" Kartenname="KarteNameSGK" Layout="SGKA1H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="Massstabsbereich" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.38" Kartenname="KarteNameSGK" Layout="SGKA1Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="Massstabsbereich" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.39" Kartenname="KarteNameSGK" Layout="SGKA0H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="Massstabsbereich" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.40" Kartenname="KarteNameSGK" Layout="SGKA0Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+		   <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="Massstabsbereich" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        Ende Original Produktbeschreibung-->
+
+        <KartenProdukt ID="LK.NRW.K.BSW.31" Kartenname="KarteNameSGK" Layout="SGKA4Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="625" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.31" Kartenname="KarteNameSGK" Layout="SGKA4H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1250" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.31" Kartenname="KarteNameSGK" Layout="SGKA4H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="1500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.31" Kartenname="KarteNameSGK" Layout="SGKA4H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="2500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.32" Kartenname="KarteNameSGK" Layout="SGKA4Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="625" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.32" Kartenname="KarteNameSGK" Layout="SGKA4Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="1250" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.32" Kartenname="KarteNameSGK" Layout="SGKA4Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="1500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.32" Kartenname="KarteNameSGK" Layout="SGKA4Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA4 Querformat" Dateiformat="PDF" Massstab="2500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.33" Kartenname="KarteNameSGK" Layout="SGKA3H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="625" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.33" Kartenname="KarteNameSGK" Layout="SGKA3H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="1250" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.33" Kartenname="KarteNameSGK" Layout="SGKA3H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="1500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.33" Kartenname="KarteNameSGK" Layout="SGKA3H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Hochformat" Dateiformat="PDF" Massstab="2500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.34" Kartenname="KarteNameSGK" Layout="SGKA3Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="625" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.34" Kartenname="KarteNameSGK" Layout="SGKA3Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="1250" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.34" Kartenname="KarteNameSGK" Layout="SGKA3Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="1500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.34" Kartenname="KarteNameSGK" Layout="SGKA3Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA3 Querformat" Dateiformat="PDF" Massstab="2500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.35" Kartenname="KarteNameSGK" Layout="SGKA2H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="625" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.35" Kartenname="KarteNameSGK" Layout="SGKA2H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="1250" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.35" Kartenname="KarteNameSGK" Layout="SGKA2H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="1500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.35" Kartenname="KarteNameSGK" Layout="SGKA2H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Hochformat" Dateiformat="PDF" Massstab="2500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.36" Kartenname="KarteNameSGK" Layout="SGKA2Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="625" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.36" Kartenname="KarteNameSGK" Layout="SGKA2Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="1250" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.36" Kartenname="KarteNameSGK" Layout="SGKA2Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="1500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.36" Kartenname="KarteNameSGK" Layout="SGKA2Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA2 Querformat" Dateiformat="PDF" Massstab="2500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.37" Kartenname="KarteNameSGK" Layout="SGKA1H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="625" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.37" Kartenname="KarteNameSGK" Layout="SGKA1H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="1250" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.37" Kartenname="KarteNameSGK" Layout="SGKA1H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="1500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.37" Kartenname="KarteNameSGK" Layout="SGKA1H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Hochformat" Dateiformat="PDF" Massstab="2500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.38" Kartenname="KarteNameSGK" Layout="SGKA1Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="625" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.38" Kartenname="KarteNameSGK" Layout="SGKA1Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="1250" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.38" Kartenname="KarteNameSGK" Layout="SGKA1Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="1500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.38" Kartenname="KarteNameSGK" Layout="SGKA1Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA1 Querformat" Dateiformat="PDF" Massstab="2500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.39" Kartenname="KarteNameSGK" Layout="SGKA0H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="625" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.39" Kartenname="KarteNameSGK" Layout="SGKA0H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="1250" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.39" Kartenname="KarteNameSGK" Layout="SGKA0H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="1500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.39" Kartenname="KarteNameSGK" Layout="SGKA0H" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+           <PreisfaktorenKarte DINFormat="DINA0 Hochformat" Dateiformat="PDF" Massstab="2500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.40" Kartenname="KarteNameSGK" Layout="SGKA0Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="625" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.40" Kartenname="KarteNameSGK" Layout="SGKA0Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="1250" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.40" Kartenname="KarteNameSGK" Layout="SGKA0Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="1500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        <KartenProdukt ID="LK.NRW.K.BSW.40" Kartenname="KarteNameSGK" Layout="SGKA0Q" Praesentationshinweis1="Stadtgrundkarte" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
+            <PreisfaktorenKarte DINFormat="DINA0 Querformat" Dateiformat="PDF" Massstab="2500" MassstabMin="625" MassstabMax="2500"/>
+        </KartenProdukt>
+        
       </GUIKartenProdukt>
     </Kartenklasse>
   </Karte>
