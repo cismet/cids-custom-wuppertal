@@ -124,24 +124,7 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
         final int width = Integer.parseInt(NbBundle.getMessage(
                     MauernReportBeanWithMapAndImages.class,
                     "MauernReportBeanWithMapAndImages.mapWidth"));
-        final XBoundingBox boundingBox;
-        if (CismapBroker.getInstance().getMappingComponent() != null) {
-            boundingBox = new XBoundingBox(g);
-            boundingBox.setX1(boundingBox.getX1());
-            boundingBox.setY1(boundingBox.getY1());
-            boundingBox.setX2(boundingBox.getX2());
-            boundingBox.setY2(boundingBox.getY2());
-        } else {
-            // only for test purposes
-            boundingBox = new XBoundingBox(
-                    33298653.1,
-                    5994912.610934,
-                    33308958.598,
-                    5999709.97916,
-                    "EPSG:35833",
-                    true);
-        }
-//        mapProvider.setBoundingBox(xbb);
+        final XBoundingBox boundingBox = new XBoundingBox(g);
         mapProvider.setBoundingBox(boundingBox);
         final Future<Image> f = mapProvider.getImage(72, MAP_DPI, width, height);
         try {
