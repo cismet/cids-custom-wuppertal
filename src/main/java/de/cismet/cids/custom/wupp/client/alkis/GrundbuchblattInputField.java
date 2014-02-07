@@ -294,6 +294,16 @@ public class GrundbuchblattInputField extends AbstractInputField {
 
     /**
      * DOCUMENT ME!
+     */
+    public void finish() {
+        changeFocus = false;
+        finishDistrict();
+        finishBuchungsblattnummer();
+        changeFocus = true;
+    }
+
+    /**
+     * DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
