@@ -1215,7 +1215,8 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                     final boolean finalCheckEnable = SessionManager.getProxy().hasConfigAttr(user, ATAG_FINAL_CHECK)
                                 && (!user.getName().equals(cidsBean.getProperty("bearbeitet_von"))
                                     || ((cidsBean.getProperty("geprueft") != null)
-                                        && (Boolean)cidsBean.getProperty("geprueft")));
+                                        && (Boolean)cidsBean.getProperty("geprueft")))
+                                && !cidsBean.getMetaObject().isChanged();
 
                     chkGeprueft.setEnabled(finalCheckEnable);
                     cidsBean.addPropertyChangeListener(listener);
