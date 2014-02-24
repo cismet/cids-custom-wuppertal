@@ -61,7 +61,7 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objectrenderer.utils.BillingCalculations;
 import de.cismet.cids.custom.objectrenderer.utils.BillingRestrictedReportJButton;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.objectrenderer.utils.billing.PrintBillingReportForCustomer;
+import de.cismet.cids.custom.reports.wunda_blau.PrintBillingReportForCustomer;
 import de.cismet.cids.custom.reports.wunda_blau.PrintStatisticsReport;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement.Kostentyp;
@@ -583,61 +583,61 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblCustomersMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_tblCustomersMouseClicked
-    }                                                                            //GEN-LAST:event_tblCustomersMouseClicked
+    private void tblCustomersMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCustomersMouseClicked
+    }//GEN-LAST:event_tblCustomersMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblCustomersMouseExited(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_tblCustomersMouseExited
-    }                                                                           //GEN-LAST:event_tblCustomersMouseExited
+    private void tblCustomersMouseExited(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCustomersMouseExited
+    }//GEN-LAST:event_tblCustomersMouseExited
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblCustomersMouseMoved(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_tblCustomersMouseMoved
-    }                                                                          //GEN-LAST:event_tblCustomersMouseMoved
+    private void tblCustomersMouseMoved(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCustomersMouseMoved
+    }//GEN-LAST:event_tblCustomersMouseMoved
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboAbrechnungsturnusActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboAbrechnungsturnusActionPerformed
+    private void cboAbrechnungsturnusActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboAbrechnungsturnusActionPerformed
         filterSettingsChanged();
-    }                                                                                        //GEN-LAST:event_cboAbrechnungsturnusActionPerformed
+    }//GEN-LAST:event_cboAbrechnungsturnusActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnShowResultsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnShowResultsActionPerformed
+    private void btnShowResultsActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowResultsActionPerformed
         btnBuchungsbeleg.setEnabled(true);
         btnRechnungsanlage.setEnabled(true);
         btnGeschaeftsstatistik.setEnabled(true);
         filterBuchungen();
-    }                                                                                  //GEN-LAST:event_btnShowResultsActionPerformed
+    }//GEN-LAST:event_btnShowResultsActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboBillDownloadsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboBillDownloadsActionPerformed
+    private void cboBillDownloadsActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboBillDownloadsActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_cboBillDownloadsActionPerformed
+    }//GEN-LAST:event_cboBillDownloadsActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBuchungsbelegActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBuchungsbelegActionPerformed
+    private void btnBuchungsbelegActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuchungsbelegActionPerformed
         final HashMap<CidsBean, Collection<CidsBean>> billingsOfCustomers = createBillingsOfCostumersForReports(evt);
         final Set<CidsBean> customers = billingsOfCustomers.keySet();
         if (customers.isEmpty()) {
@@ -662,14 +662,14 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                     retrieveShowBillingWithoutCostInReport(evt)).print();
             }
         }
-    }                                                                                    //GEN-LAST:event_btnBuchungsbelegActionPerformed
+    }//GEN-LAST:event_btnBuchungsbelegActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRechnungsanlageActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRechnungsanlageActionPerformed
+    private void btnRechnungsanlageActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRechnungsanlageActionPerformed
         final HashMap<CidsBean, Collection<CidsBean>> billingsOfCustomers = createBillingsOfCostumersForReports(evt);
         final Set<CidsBean> customers = billingsOfCustomers.keySet();
         if (customers.isEmpty()) {
@@ -707,14 +707,14 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                 printBillingReportForCustomer.print();
             }
         }
-    } //GEN-LAST:event_btnRechnungsanlageActionPerformed
+    }//GEN-LAST:event_btnRechnungsanlageActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnGeschaeftsstatistikActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnGeschaeftsstatistikActionPerformed
+    private void btnGeschaeftsstatistikActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGeschaeftsstatistikActionPerformed
         final Collection<CidsBean> billings = createBillingsForStatisticsReport();
         if (billings.isEmpty()) {
             JOptionPane.showMessageDialog(
@@ -729,16 +729,16 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         } else {
             new PrintStatisticsReport(fromDate_tillDate, billings).print();
         }
-    }                                                                                          //GEN-LAST:event_btnGeschaeftsstatistikActionPerformed
+    }//GEN-LAST:event_btnGeschaeftsstatistikActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboHideFreeDownloadsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboHideFreeDownloadsActionPerformed
+    private void cboHideFreeDownloadsActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboHideFreeDownloadsActionPerformed
         filterSettingsChanged();
-    }                                                                                        //GEN-LAST:event_cboHideFreeDownloadsActionPerformed
+    }//GEN-LAST:event_cboHideFreeDownloadsActionPerformed
 
     /**
      * DOCUMENT ME!
