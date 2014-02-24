@@ -13,6 +13,7 @@ import Sirius.server.middleware.types.MetaObject;
 
 import com.vividsolutions.jts.geom.Geometry;
 
+import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -71,7 +72,8 @@ import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 import de.cismet.cismap.commons.Crs;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.measuring.MeasuringComponent;
-import de.cismet.cismap.commons.gui.printing.JasperDownload;
+import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
+import de.cismet.cismap.commons.gui.printing.JasperReportDownload.JasperReportDataSourceGenerator;
 
 import de.cismet.security.WebAccessManager;
 
@@ -888,34 +890,34 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togPanActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togPanActionPerformed
+    private void togPanActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togPanActionPerformed
         measuringComponent.actionPan();
-    }                                                                          //GEN-LAST:event_togPanActionPerformed
+    }//GEN-LAST:event_togPanActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togZoomActionPerformed
+    private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togZoomActionPerformed
         measuringComponent.actionZoom();
-    }                                                                           //GEN-LAST:event_togZoomActionPerformed
+    }//GEN-LAST:event_togZoomActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnHomeActionPerformed
+    private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
         measuringComponent.actionOverview();
-    }                                                                           //GEN-LAST:event_btnHomeActionPerformed
+    }//GEN-LAST:event_btnHomeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
+    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
         try {
             if (BillingPopup.doBilling(
                             "nivppdf",
@@ -928,7 +930,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
             LOG.error("Error when trying to produce a alkis product", e);
             // Hier noch ein Fehlerdialog
         }
-    }                                                                           //GEN-LAST:event_btnOpenActionPerformed
+    }//GEN-LAST:event_btnOpenActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -971,47 +973,47 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtDGKBlattnummerFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtDGKBlattnummerFocusLost
+    private void txtDGKBlattnummerFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDGKBlattnummerFocusLost
         if ((oldDgkBlattnummer != null) && !oldDgkBlattnummer.equals(txtDGKBlattnummer.getText())) {
             refreshImage();
         }
-    }                                                                              //GEN-LAST:event_txtDGKBlattnummerFocusLost
+    }//GEN-LAST:event_txtDGKBlattnummerFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtLaufendeNummerFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtLaufendeNummerFocusLost
+    private void txtLaufendeNummerFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLaufendeNummerFocusLost
         if ((oldLaufendeNummer != null) && !oldLaufendeNummer.equals(txtLaufendeNummer.getText())) {
             refreshImage();
         }
-    }                                                                              //GEN-LAST:event_txtLaufendeNummerFocusLost
+    }//GEN-LAST:event_txtLaufendeNummerFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtDGKBlattnummerFocusGained(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtDGKBlattnummerFocusGained
+    private void txtDGKBlattnummerFocusGained(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDGKBlattnummerFocusGained
         oldDgkBlattnummer = txtDGKBlattnummer.getText();
-    }                                                                                //GEN-LAST:event_txtDGKBlattnummerFocusGained
+    }//GEN-LAST:event_txtDGKBlattnummerFocusGained
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtLaufendeNummerFocusGained(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtLaufendeNummerFocusGained
+    private void txtLaufendeNummerFocusGained(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLaufendeNummerFocusGained
         oldLaufendeNummer = txtLaufendeNummer.getText();
-    }                                                                                //GEN-LAST:event_txtLaufendeNummerFocusGained
+    }//GEN-LAST:event_txtLaufendeNummerFocusGained
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
+    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         try {
             if (BillingPopup.doBilling(
                             "nivppdf",
@@ -1024,16 +1026,16 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
             LOG.error("Error when trying to produce a alkis product", e);
             // Hier noch ein Fehlerdialog
         }
-    }                                                                             //GEN-LAST:event_btnReportActionPerformed
+    }//GEN-LAST:event_btnReportActionPerformed
 
     /**
      * DOCUMENT ME!
      */
     private void downloadReport() {
-        final Runnable runnable = new Runnable() {
+        final JasperReportDataSourceGenerator dataSourceGenerator = new JasperReportDataSourceGenerator() {
 
                 @Override
-                public void run() {
+                public JRDataSource generateDataSource() {
                     final Collection<CidsBean> nivellementPunkte = new LinkedList<CidsBean>();
                     nivellementPunkte.add(cidsBean);
                     final Collection<NivellementPunktAggregationRenderer.NivellementPunktReportBean> reportBeans =
@@ -1041,44 +1043,21 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
                     reportBeans.add(new NivellementPunktAggregationRenderer.NivellementPunktReportBean(
                             nivellementPunkte));
                     final JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(reportBeans);
-
-                    final HashMap parameters = new HashMap();
-
-                    final JasperReport jasperReport;
-                    final JasperPrint jasperPrint;
-                    try {
-                        jasperReport = (JasperReport)JRLoader.loadObject(getClass().getResourceAsStream(
-                                    "/de/cismet/cids/custom/wunda_blau/res/nivp.jasper"));
-                        jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
-                    } catch (JRException ex) {
-                        LOG.error("Could not generate report for nivellement points.", ex);
-
-                        final ErrorInfo ei = new ErrorInfo(NbBundle.getMessage(
-                                    NivellementPunktEditor.class,
-                                    "NivellementPunktEditor.btnReportActionPerformed(ActionEvent).ErrorInfo.title"),   // NOI18N
-                                NbBundle.getMessage(
-                                    NivellementPunktEditor.class,
-                                    "NivellementPunktEditor.btnReportActionPerformed(ActionEvent).ErrorInfo.message"), // NOI18N
-                                null,
-                                null,
-                                ex,
-                                Level.ALL,
-                                null);
-                        JXErrorPane.showDialog(NivellementPunktEditor.this, ei);
-
-                        return;
-                    }
-
-                    if (DownloadManagerDialog.showAskingForUserTitle(NivellementPunktEditor.this)) {
-                        final String jobname = DownloadManagerDialog.getJobname();
-
-                        DownloadManager.instance()
-                                .add(new JasperDownload(jasperPrint, jobname, "Nivellement-Punkt", "nivp"));
-                    }
+                    return dataSource;
                 }
             };
 
-        CismetThreadPool.execute(runnable);
+        if (DownloadManagerDialog.showAskingForUserTitle(NivellementPunktEditor.this)) {
+            final String jobname = DownloadManagerDialog.getJobname();
+
+            DownloadManager.instance()
+                    .add(new JasperReportDownload(
+                            "/de/cismet/cids/custom/wunda_blau/res/nivp.jasper", // NOI18N
+                            dataSourceGenerator,
+                            jobname,
+                            "Nivellement-Punkt",
+                            "nivp"));
+        }
     }
 
     /**
