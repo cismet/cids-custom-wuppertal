@@ -15,6 +15,7 @@ import Sirius.navigator.ui.ComponentRegistry;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import java.util.Collection;
 import java.util.Date;
@@ -45,6 +46,7 @@ public class BillingStatisticsReport {
     //~ Instance fields --------------------------------------------------------
 
     SwingWorker<JasperPrint, Void> downloadWorker;
+    Collection<CidsBean> billingBeans;
 
     private Date from;
     private Date till;
@@ -69,7 +71,7 @@ public class BillingStatisticsReport {
     /**
      * Creates a new BillingStatisticsReport object.
      *
-     * @param  beans                            DOCUMENT ME!
+     * @param  billingBeans                     DOCUMENT ME!
      * @param  from                             DOCUMENT ME!
      * @param  till                             DOCUMENT ME!
      * @param  amountTotalDownloads             DOCUMENT ME!
@@ -88,7 +90,7 @@ public class BillingStatisticsReport {
      * @param  amountWiederverkaeufe            DOCUMENT ME!
      * @param  amountWiederverkaeufeGB          DOCUMENT ME!
      */
-    public BillingStatisticsReport(final Collection<CidsBean> beans,
+    public BillingStatisticsReport(final Collection<CidsBean> billingBeans,
             final Date from,
             final Date till,
             final int amountTotalDownloads,
@@ -106,6 +108,7 @@ public class BillingStatisticsReport {
             final double earningsWithCostsWiederver,
             final int amountWiederverkaeufe,
             final int amountWiederverkaeufeGB) {
+        this.billingBeans = billingBeans;
         this.from = from;
         this.till = till;
         this.amountTotalDownloads = amountTotalDownloads;
@@ -136,7 +139,9 @@ public class BillingStatisticsReport {
 
                 @Override
                 public JRDataSource generateDataSource() {
-                    return null;
+                    // this is only a dummy value, because returning null results in a blank report
+                    final JRBeanCollectionDataSource beanArray = new JRBeanCollectionDataSource(billingBeans);
+                    return beanArray;
                 }
             };
 
