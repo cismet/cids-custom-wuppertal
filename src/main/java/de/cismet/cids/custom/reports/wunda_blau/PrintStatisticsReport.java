@@ -18,7 +18,7 @@ import java.util.HashMap;
 import de.cismet.cids.dynamics.CidsBean;
 
 /**
- * PrintStatisticsReport gets Billing-CidsBean and evaluates them to generate a BillingStatisticsReport.   
+ * PrintStatisticsReport gets Billing-CidsBean and evaluates them to generate a BillingStatisticsReport.
  *
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$

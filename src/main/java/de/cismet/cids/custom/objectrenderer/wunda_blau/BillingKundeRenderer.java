@@ -67,9 +67,9 @@ import de.cismet.cids.client.tools.DevelopmentTools;
 import de.cismet.cids.custom.objectrenderer.utils.BillingCalculations;
 import de.cismet.cids.custom.objectrenderer.utils.BillingRestrictedReportJButton;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.reports.wunda_blau.PrintBillingReportForCustomer;
 import de.cismet.cids.custom.objectrenderer.utils.billing.Usage;
 import de.cismet.cids.custom.objectrenderer.utils.billing.VerwendungszweckPanel;
+import de.cismet.cids.custom.reports.wunda_blau.PrintBillingReportForCustomer;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement;
 import de.cismet.cids.custom.wunda_blau.search.server.CidsBillingSearchStatement.Kostentyp;
 
@@ -743,49 +743,49 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtGeschaeftsbuchnummerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGeschaeftsbuchnummerActionPerformed
+    private void txtGeschaeftsbuchnummerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtGeschaeftsbuchnummerActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtGeschaeftsbuchnummerActionPerformed
+    } //GEN-LAST:event_txtGeschaeftsbuchnummerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboKostenfreiActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboKostenfreiActionPerformed
+    private void cboKostenfreiActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboKostenfreiActionPerformed
         if (!cboKostenfrei.isSelected() && !cboKostenpflichtig.isSelected()) {
             cboKostenpflichtig.setSelected(true);
         }
         filterSettingsChanged();
-    }//GEN-LAST:event_cboKostenfreiActionPerformed
+    }                                                                                 //GEN-LAST:event_cboKostenfreiActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboKostenpflichtigActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboKostenpflichtigActionPerformed
+    private void cboKostenpflichtigActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboKostenpflichtigActionPerformed
         if (!cboKostenfrei.isSelected() && !cboKostenpflichtig.isSelected()) {
             cboKostenfrei.setSelected(true);
         }
         filterSettingsChanged();
-    }//GEN-LAST:event_cboKostenpflichtigActionPerformed
+    }                                                                                      //GEN-LAST:event_cboKostenpflichtigActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboBenutzerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboBenutzerActionPerformed
+    private void cboBenutzerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboBenutzerActionPerformed
         filterSettingsChanged();
-    }//GEN-LAST:event_cboBenutzerActionPerformed
+    }                                                                               //GEN-LAST:event_cboBenutzerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblBillingsMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBillingsMouseClicked
+    private void tblBillingsMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_tblBillingsMouseClicked
         final int row = tblBillings.convertRowIndexToModel(tblBillings.getSelectedRow());
         final int column = tblBillings.convertColumnIndexToModel(tblBillings.getSelectedColumn());
         if (column == 6) {
@@ -794,14 +794,14 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
                 doDownload(bt.getRequest());
             }
         }
-    }//GEN-LAST:event_tblBillingsMouseClicked
+    }                                                                           //GEN-LAST:event_tblBillingsMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblBillingsMouseMoved(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBillingsMouseMoved
+    private void tblBillingsMouseMoved(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_tblBillingsMouseMoved
         final int row = tblBillings.convertRowIndexToModel(tblBillings.rowAtPoint(evt.getPoint()));
         final int column = tblBillings.convertColumnIndexToModel(tblBillings.columnAtPoint(evt.getPoint()));
         if (column == 6) {
@@ -814,34 +814,34 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
         } else {
             setCursor(Cursor.getDefaultCursor());
         }
-    }//GEN-LAST:event_tblBillingsMouseMoved
+    }                                                                         //GEN-LAST:event_tblBillingsMouseMoved
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblBillingsMouseExited(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBillingsMouseExited
+    private void tblBillingsMouseExited(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_tblBillingsMouseExited
         setCursor(Cursor.getDefaultCursor());
-    }//GEN-LAST:event_tblBillingsMouseExited
+    }                                                                          //GEN-LAST:event_tblBillingsMouseExited
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnShowResultsActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowResultsActionPerformed
+    private void btnShowResultsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnShowResultsActionPerformed
         btnBuchungsbeleg.setEnabled(true);
         btnRechnungsanlage.setEnabled(true);
         filterBuchungen();
-    }//GEN-LAST:event_btnShowResultsActionPerformed
+    }                                                                                  //GEN-LAST:event_btnShowResultsActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRechnungsanlageActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRechnungsanlageActionPerformed
+    private void btnRechnungsanlageActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRechnungsanlageActionPerformed
         final PrintBillingReportForCustomer printBillingReportForCustomer = new PrintBillingReportForCustomer(
                 cidsBean,
                 filteredBuchungen,
@@ -863,14 +863,14 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
             });
 
         printBillingReportForCustomer.print();
-    }//GEN-LAST:event_btnRechnungsanlageActionPerformed
+    } //GEN-LAST:event_btnRechnungsanlageActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBuchungsbelegActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuchungsbelegActionPerformed
+    private void btnBuchungsbelegActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBuchungsbelegActionPerformed
         new PrintBillingReportForCustomer(
             cidsBean,
             filteredBuchungen,
@@ -879,7 +879,7 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
             cboBillDownloads.isSelected(),
             this,
             retrieveShowBillingInReport(evt)).print();
-    }//GEN-LAST:event_btnBuchungsbelegActionPerformed
+    }                                                                                    //GEN-LAST:event_btnBuchungsbelegActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -904,9 +904,9 @@ public class BillingKundeRenderer extends javax.swing.JPanel implements Requests
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboBillDownloadsActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboBillDownloadsActionPerformed
+    private void cboBillDownloadsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboBillDownloadsActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cboBillDownloadsActionPerformed
+    } //GEN-LAST:event_cboBillDownloadsActionPerformed
 
     /**
      * DOCUMENT ME!
