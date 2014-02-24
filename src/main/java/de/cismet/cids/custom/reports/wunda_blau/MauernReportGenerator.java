@@ -108,27 +108,15 @@ public class MauernReportGenerator {
      * @param  parent     DOCUMENT ME!
      */
     public static void generateMainInfo(final Collection<CidsBean> cidsBeans, final Component parent) {
-        final SwingWorker<Boolean, Object> worker = new SwingWorker<Boolean, Object>() {
-
-                ReportSwingWorkerDialog dialog = new ReportSwingWorkerDialog(StaticSwingTools.getParentFrame(
-                            CismapBroker.getInstance().getMappingComponent()),
-                        true);
+        final JasperReportDataSourceGenerator dataSourceGenerator = new JasperReportDataSourceGenerator() {
 
                 @Override
-                protected Boolean doInBackground() throws Exception {
-                    SwingUtilities.invokeLater(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                StaticSwingTools.showDialog(dialog);
-                            }
-                        });
-
+                public JRDataSource generateDataSource() {
                     final Collection<MauernReportBean> reportBeans = new LinkedList<MauernReportBean>();
                     for (final CidsBean b : cidsBeans) {
                         reportBeans.add(new MauernReportBeanWithMapAndImages(b));
                     }
-                    boolean ready = false;
+                    boolean ready;
                     do {
                         ready = true;
                         for (final MauernReportBean m : reportBeans) {
@@ -140,63 +128,20 @@ public class MauernReportGenerator {
                     } while (!ready);
 
                     final JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(reportBeans);
-
-                    final HashMap parameters = new HashMap();
-
-                    final JasperReport jasperReport;
-                    final JasperPrint jasperPrint;
-                    try {
-                        jasperReport = (JasperReport)JRLoader.loadObject(getClass().getResourceAsStream(
-                                    "/de/cismet/cids/custom/reports/wunda_blau/mauer-hauptinfo.jasper"));
-                        jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
-                    } catch (JRException ex) {
-                        LOG.error("Could not generate main info report for mauern.", ex);
-
-                        return false;
-                    }
-
-                    if (DownloadManagerDialog.showAskingForUserTitle(parent)) {
-                        final String jobname = DownloadManagerDialog.getJobname();
-
-                        DownloadManager.instance()
-                                .add(new JasperDownload(
-                                        jasperPrint,
-                                        jobname,
-                                        "Mauer Katasterblatt",
-                                        "mauern_hauptinfo"));
-                    }
-                    return true;
-                }
-
-                @Override
-                protected void done() {
-                    boolean error = false;
-                    try {
-                        error = !get();
-                    } catch (InterruptedException ex) {
-                        // unterbrochen, nichts tun
-                    } catch (ExecutionException ex) {
-                        error = true;
-                        LOG.error("error while generating report", ex);
-                    }
-                    dialog.setVisible(false);
-                    if (error) {
-                        final ErrorInfo ei = new ErrorInfo(NbBundle.getMessage(
-                                    MauernReportGenerator.class,
-                                    "MauernReportGenerator.jxlKatasterblattActionPerformed(ActionEvent).ErrorInfo.title"),   // NOI18N
-                                NbBundle.getMessage(
-                                    MauernReportGenerator.class,
-                                    "MauernReportGenerator.jxlKatasterblattActionPerformed(ActionEvent).ErrorInfo.message"), // NOI18N
-                                null,
-                                null,
-                                null,
-                                Level.ALL,
-                                null);
-                        JXErrorPane.showDialog(parent, ei);
-                    }
+                    return dataSource;
                 }
             };
 
-        worker.execute();
+        if (DownloadManagerDialog.showAskingForUserTitle(parent)) {
+            final String jobname = DownloadManagerDialog.getJobname();
+
+            DownloadManager.instance()
+                    .add(new JasperReportDownload(
+                            "/de/cismet/cids/custom/reports/wunda_blau/mauer-hauptinfo.jasper",
+                            dataSourceGenerator,
+                            jobname,
+                            "Mauer Katasterblatt",
+                            "mauern_hauptinfo"));
+        }
     }
 }
