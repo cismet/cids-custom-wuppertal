@@ -259,7 +259,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
         jLabel1 = new javax.swing.JLabel();
-        cbGeoms = new ButlerGeometryComboBox(ButlerGeometryComboBox.GEOM_FILTER_TYPE.RECTANGLE);
+        cbGeoms = new ButlerGeometryComboBox(ButlerGeometryComboBox.GEOM_FILTER_TYPE.BOTH);
         jLabel2 = new javax.swing.JLabel();
         pnlControls = new javax.swing.JPanel();
         btnCreate = new javax.swing.JButton();

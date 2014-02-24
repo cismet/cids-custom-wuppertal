@@ -54,7 +54,7 @@ public class ButlerGeometryComboBox extends JComboBox {
 
         //~ Enum constants -----------------------------------------------------
 
-        POINT, RECTANGLE
+        POINT, RECTANGLE, BOTH
     }
 
     //~ Constructors -----------------------------------------------------------
@@ -95,11 +95,17 @@ public class ButlerGeometryComboBox extends JComboBox {
      * @return  DOCUMENT ME!
      */
     private boolean validatesFilter(final Geometry g, final GEOM_FILTER_TYPE filter) {
+        final boolean isPoint = g instanceof Point;
+        final boolean isRect = g.isRectangle();
+
         if (filter == GEOM_FILTER_TYPE.POINT) {
-            return g instanceof Point;
+            return isPoint;
         }
         if (filter == GEOM_FILTER_TYPE.RECTANGLE) {
             return g.isRectangle();
+        }
+        if (filter == GEOM_FILTER_TYPE.BOTH) {
+            return isPoint || isRect;
         }
         return false;
     }
@@ -140,31 +146,30 @@ public class ButlerGeometryComboBox extends JComboBox {
                 final boolean cellHasFocus) {
             super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             String text = "";
-            if (filter == GEOM_FILTER_TYPE.POINT) {
-                if (value instanceof Geometry) {
+
+            if (value instanceof Geometry) {
+                final Geometry g = (Geometry)value;
+                if (g instanceof Point) {
                     final Point p = (Point)value;
                     final double x = p.getX();
                     final double y = p.getY();
                     final java.text.DecimalFormat myFormatter = new java.text.DecimalFormat("#.###");
                     text = "Punkt " + myFormatter.format(x) + "/" + myFormatter.format(y);
-                } else {
-                    text = value.toString();
-                }
-            } else if (filter == GEOM_FILTER_TYPE.RECTANGLE) {
-                if (value instanceof Geometry) {
-                    final Envelope g = ((Geometry)value).getEnvelopeInternal();
+                } else if (g.isRectangle()) {
+                    final Envelope env = ((Geometry)value).getEnvelopeInternal();
                     final DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols();
                     formatSymbols.setDecimalSeparator('.');
                     final java.text.DecimalFormat myFormatter = new java.text.DecimalFormat("#.###", formatSymbols);
-                    text = "Polygon (" + "(" + myFormatter.format(g.getMinX()) + "," + myFormatter.format(g.getMinY())
+                    text = "Polygon (" + "(" + myFormatter.format(env.getMinX()) + ","
+                                + myFormatter.format(env.getMinY())
                                 + ")"
-                                + "(" + myFormatter.format(g.getMaxX()) + "," + myFormatter.format(g.getMaxY()) + ")"
+                                + "(" + myFormatter.format(env.getMaxX()) + "," + myFormatter.format(env.getMaxY())
+                                + ")"
                                 + ")";
                 } else {
                     text = value.toString();
                 }
             }
-
             setText(text);
             return this;
         }
