@@ -1904,7 +1904,12 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     }
 
     /**
-     * DOCUMENT ME!
+     * Creates URLs based on the arguments. The arguments are given to <code>MessageFormat.format()</code>, where <code>
+     * host</code> is the pattern, this call create a base URL. Different suffixes (.tif, .TIFF,...) are appended to
+     * that base URL to create one URL for each suffix. Furthermore for each of this URLs an alternative with the <code>
+     * SUFFIX_REDUCED_SIZE</code> is created.<br>
+     * The return value is a Map where the key is a URL with a suffix and the value is the corresponding URL with the
+     * additional <code>SUFFIX_REDUCED_SIZE</code>.
      *
      * @param   host        DOCUMENT ME!
      * @param   gemarkung   DOCUMENT ME!
