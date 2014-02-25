@@ -169,6 +169,8 @@ public class ButlerGeometryComboBox extends JComboBox {
                 } else {
                     text = value.toString();
                 }
+            } else {
+                text = value.toString();
             }
             setText(text);
             return this;
