@@ -47,6 +47,7 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -125,6 +126,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
     private Object oldGeprueft_Von;
     private Object oldPruefdatum;
     private Object oldPruefkommentar;
+    private final HashMap<CidsBean, String> propStringMap = new HashMap<CidsBean, String>();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.cismet.cids.editors.DefaultBindableDateChooser bdcBefristungsdatum;
     private de.cismet.cids.editors.DefaultBindableDateChooser bdcEintragungsdatum;
@@ -1211,12 +1213,18 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                 writePruefkommentar = true;
 
                 if (editable) {
+                    String propstring = propStringMap.get(cidsBean);
+                    if (propstring == null) {
+                        propstring = cidsBean.getMetaObject().getPropertyString();
+                        propStringMap.put(cidsBean, propstring);
+                    }
+
                     final User user = SessionManager.getSession().getUser();
                     final boolean finalCheckEnable = SessionManager.getProxy().hasConfigAttr(user, ATAG_FINAL_CHECK)
                                 && (!user.getName().equals(cidsBean.getProperty("bearbeitet_von"))
                                     || ((cidsBean.getProperty("geprueft") != null)
                                         && (Boolean)cidsBean.getProperty("geprueft")))
-                                && !cidsBean.getMetaObject().isChanged();
+                                && propstring.equals(cidsBean.getMetaObject().getPropertyString());
 
                     chkGeprueft.setEnabled(finalCheckEnable);
                     cidsBean.addPropertyChangeListener(listener);
@@ -1379,11 +1387,13 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
                     }
                 }
             } else {
+                final String propstring = propStringMap.get(cidsBean);
+                final boolean flag = propstring.equals(cidsBean.getMetaObject().getPropertyString());
                 if (chkGeprueft.isSelected()) {
-                    chkGeprueft.setEnabled(false);
+                    chkGeprueft.setEnabled(flag);
                     chkGeprueft.setSelected(false);
                 } else {
-                    chkGeprueft.setEnabled(false);
+                    chkGeprueft.setEnabled(flag);
                 }
             }
         }
