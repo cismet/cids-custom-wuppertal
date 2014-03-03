@@ -1,10 +1,12 @@
-/***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+/**
+ * *************************************************
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ * 
+* ... and it just works.
+ * 
+***************************************************
+ */
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -42,17 +44,19 @@ import de.cismet.tools.PasswordEncrypter;
 
 import static de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel.BLATTNUMMER_PROPERTY;
 import static de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel.LFDNUMMER_PROPERTY;
+import java.awt.CardLayout;
+import java.awt.Dimension;
+import org.jdesktop.swingx.JXBusyLabel;
 
 /**
  * DOCUMENT ME!
  *
- * @author   daniel
- * @version  $Revision$, $Date$
+ * @author daniel
+ * @version $Revision$, $Date$
  */
 public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements DocumentListener {
 
     //~ Static fields/initializers ---------------------------------------------
-
     private static final Logger LOG = Logger.getLogger(Alb_baulastUmleitungPanel.class);
     private static final String PLATZHALTER_DOC_NAME = "000000-00";
     private static final String LAGEPLAN_ENDUNG = "p";
@@ -75,49 +79,51 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
     }
 
     //~ Enums ------------------------------------------------------------------
-
     /**
      * DOCUMENT ME!
      *
-     * @version  $Revision$, $Date$
+     * @version $Revision$, $Date$
      */
     public enum MODE {
 
         //~ Enum constants -----------------------------------------------------
-
         TEXTBLATT, LAGEPLAN
     }
 
     //~ Instance fields --------------------------------------------------------
-
     private MODE mode;
     private Alb_picturePanel picturePan;
     private final Timer t = new Timer(1000, new ActionListener() {
 
-                @Override
-                public void actionPerformed(final ActionEvent e) {
-                    t.stop();
-                    if ((getLinkDocument() == null) || getLinkDocument().isEmpty()) {
-                        deleteFile();
-                    } else {
-                        checkIfLinkDocumentExists();
-                    }
-                }
-            });
+        @Override
+        public void actionPerformed(final ActionEvent e) {
+            t.stop();
+            CardLayout cl = (CardLayout) pnlControls.getLayout();
+            cl.show(pnlControls, "card2");
+            jXBusyLabel1.setBusy(true);
+            checkIfLinkDocumentExists();
+        }
+    });
     private long lastChange = 0;
     private WebDavHelper webDavHelper;
     private boolean firstDocumentChange = true;
+    private URL lastCheckedURL;
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCreateDocument;
     private javax.swing.JButton btnPlatzhalter;
-    private javax.swing.Box.Filler filler1;
-    private javax.swing.Box.Filler filler3;
+    private javax.swing.JLabel jLabel1;
+    private org.jdesktop.swingx.JXBusyLabel jXBusyLabel1;
     private javax.swing.JLabel lblDateiname;
     private javax.swing.JLabel lblMode;
+    private javax.swing.JPanel pnlBusyLabel;
+    private javax.swing.JPanel pnlControls;
+    private javax.swing.JPanel pnlEmpty;
+    private javax.swing.JPanel pnlError;
+    private javax.swing.JPanel pnlOkButton;
     private javax.swing.JTextField tfName;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
-
     /**
      * Creates new form Alb_baulastUmleitungPanel.
      */
@@ -128,36 +134,37 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
     /**
      * Creates a new Alb_baulastUmleitungPanel object.
      *
-     * @param  m             DOCUMENT ME!
-     * @param  picturePanel  DOCUMENT ME!
+     * @param m DOCUMENT ME!
+     * @param picturePanel DOCUMENT ME!
      */
     public Alb_baulastUmleitungPanel(final MODE m, final Alb_picturePanel picturePanel) {
         this.mode = m;
         this.picturePan = picturePanel;
         initComponents();
+        jXBusyLabel1.setSize(16, 16);
         setModeLabeltext();
         tfName.getDocument().addDocumentListener(this);
         webDavHelper = new WebDavHelper(Proxy.fromPreferences(), WEB_DAV_USER, WEB_DAV_PASSWORD, true);
     }
 
     //~ Methods ----------------------------------------------------------------
-
     /**
      * DOCUMENT ME!
      *
-     * @param  text  DOCUMENT ME!
+     * @param text DOCUMENT ME!
      */
-    void setLinkDocumentText(final String text) {
+    public void setLinkDocumentText(final String text) {
         tfName.getDocument().removeDocumentListener(this);
         tfName.setText(text);
         tfName.getDocument().addDocumentListener(this);
     }
+
     /**
      * DOCUMENT ME!
      *
-     * @param  m  DOCUMENT ME!
+     * @param m DOCUMENT ME!
      */
-    void setMode(final MODE m) {
+    public void setMode(final MODE m) {
         this.mode = m;
         setModeLabeltext();
     }
@@ -170,41 +177,60 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
         lblMode.setText(text);
     }
 
+    private void showError() {
+        picturePan.dangerAlert();
+        CardLayout cl = (CardLayout) pnlControls.getLayout();
+        cl.show(pnlControls, "card4");
+    }
+
     /**
      * DOCUMENT ME!
      */
     private void checkIfLinkDocumentExists() {
-        final SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
+        final SwingWorker<URL, Void> worker = new SwingWorker<URL, Void>() {
 
-                @Override
-                protected void done() {
-                    try {
-                        final boolean fileExists = get();
-                        if (fileExists) {
-                            createLinkFile();
-                        }
-                    } catch (InterruptedException ex) {
-                        LOG.error("Worker Thread interrupter", ex);
-                    } catch (ExecutionException ex) {
-                        LOG.error("Execution error", ex);
-                    }
-                }
-
-                @Override
-                protected Boolean doInBackground() throws Exception {
-                    final String input = getLinkDocument();
-                    final String blattnummer = input.contains("-") ? input.substring(0, input.indexOf("-"))
-                                                                   : input.substring(0, 7);
-                    final String lfdNummer = input.substring(input.length() - 2, input.length());
-                    final List<URL> res;
-                    if (mode == MODE.LAGEPLAN) {
-                        res = BaulastenPictureFinder.findPlanPicture(blattnummer, lfdNummer);
+            @Override
+            protected void done() {
+                try {
+                    final URL file = get();
+                    jXBusyLabel1.setBusy(false);
+                    if (file != null) {
+                        picturePan.successAlert();
+                        picturePan.reloadPictureFromUrl(file);
+                        lastCheckedURL = file;
+                        CardLayout cl = (CardLayout) pnlControls.getLayout();
+                        cl.show(pnlControls, "card3");
                     } else {
-                        res = BaulastenPictureFinder.findPlanPicture(blattnummer, lfdNummer);
+                        showError();
                     }
-                    return (res != null) && !res.isEmpty();
+
+                } catch (InterruptedException ex) {
+                    LOG.error("Worker Thread interrupter", ex);
+                    showError();
+                } catch (ExecutionException ex) {
+                    LOG.error("Execution error", ex);
+                    showError();
                 }
-            };
+            }
+
+            @Override
+            protected URL doInBackground() throws Exception {
+                final String input = getLinkDocument();
+                final String blattnummer = input.contains("-") ? input.substring(0, input.indexOf("-"))
+                        : input.substring(0, 7);
+                final String lfdNummer = input.substring(input.length() - 2, input.length());
+                final List<URL> res;
+                if (mode == MODE.LAGEPLAN) {
+                    res = BaulastenPictureFinder.findPlanPicture(blattnummer, lfdNummer);
+                } else {
+                    res = BaulastenPictureFinder.findPlanPicture(blattnummer, lfdNummer);
+                }
+                if (res == null || res.isEmpty()) {
+                    return null;
+                }
+                return res.get(0);
+            }
+        };
         worker.execute();
     }
 
@@ -214,22 +240,29 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
     private void deleteFile() {
         final SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 
-                @Override
-                protected Void doInBackground() throws Exception {
-                    final String filename = createFilename();
-                    final File f = File.createTempFile(filename, ".txt");
-                    webDavHelper.deleteFileFromWebDAV(
+            @Override
+            protected Void doInBackground() throws Exception {
+                final String filename = createFilename();
+                final File f = File.createTempFile(filename, ".txt");
+                webDavHelper.deleteFileFromWebDAV(
                         filename
-                                + ".txt",
+                        + ".txt",
                         createDirName());
-                    return null;
-                }
+                return null;
+            }
 
-                @Override
-                protected void done() {
-                    picturePan.successAlert();
+            @Override
+            protected void done() {
+                try {
+                    get();
+                    picturePan.setUmleitungChangedFlag(true);
+                } catch (InterruptedException ex) {
+                    LOG.error("Deleting link file worker was interrupted", ex);
+                } catch (ExecutionException ex) {
+                    LOG.error("Error in deleting link file worker", ex);
                 }
-            };
+            }
+        };
         worker.execute();
     }
 
@@ -239,65 +272,72 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
     private void createLinkFile() {
         final SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 
-                @Override
-                protected Void doInBackground() throws Exception {
-                    final String filename = createFilename();
-                    final File f = File.createTempFile(filename, ".txt");
-                    final FileWriter fw = new FileWriter(f);
-                    final BufferedWriter bfw = new BufferedWriter(fw);
-                    final String linkDocument = getLinkDocument()
-                                + ((Alb_baulastUmleitungPanel.this.mode == MODE.LAGEPLAN) ? LAGEPLAN_ENDUNG
-                                                                                          : TEXTBLATT_ENDUNG);
-                    bfw.write(linkDocument, 0, linkDocument.length());
-                    bfw.flush();
-                    bfw.close();
-                    webDavHelper.uploadFileToWebDAV(
+            @Override
+            protected Void doInBackground() throws Exception {
+                final String filename = createFilename();
+                final File f = File.createTempFile(filename, ".txt");
+                final FileWriter fw = new FileWriter(f);
+                final BufferedWriter bfw = new BufferedWriter(fw);
+                final String linkDocument = getLinkDocument()
+                        + ((Alb_baulastUmleitungPanel.this.mode == MODE.LAGEPLAN) ? LAGEPLAN_ENDUNG
+                        : TEXTBLATT_ENDUNG);
+                bfw.write(linkDocument, 0, linkDocument.length());
+                bfw.flush();
+                bfw.close();
+                webDavHelper.uploadFileToWebDAV(
                         filename
-                                + ".txt",
+                        + ".txt",
                         f,
                         createDirName(),
                         picturePan);
-                    return null;
-                }
+                return null;
+            }
 
-                @Override
-                protected void done() {
-                    picturePan.successAlert();
+            @Override
+            protected void done() {
+                try {
+                    get();
+                    picturePan.handleUmleitungCreated(lastCheckedURL);
+                } catch (InterruptedException ex) {
+                    LOG.error("Create Link File Worker was interrupted.", ex);
+                } catch (ExecutionException ex) {
+                    LOG.error("Error in Create Link File worker", ex);
                 }
-            };
+            }
+        };
         worker.execute();
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @return  DOCUMENT ME!
+     * @return DOCUMENT ME!
      */
     private String createDirName() {
-        final String blattnummer = (String)picturePan.getCidsBean().getProperty(BLATTNUMMER_PROPERTY);
+        final String blattnummer = (String) picturePan.getCidsBean().getProperty(BLATTNUMMER_PROPERTY);
         return BAULASTEN_DIRECTORY
-                    + BaulastenPictureFinder.getFolderWihoutPath(
+                + BaulastenPictureFinder.getFolderWihoutPath(
                         BaulastenPictureFinder.getBlattnummer(blattnummer))
-                    + "/";
+                + "/";
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @return  DOCUMENT ME!
+     * @return DOCUMENT ME!
      */
     private String createFilename() {
-        final String blattnummer = (String)picturePan.getCidsBean().getProperty(BLATTNUMMER_PROPERTY);
-        final String lfdNummer = (String)picturePan.getCidsBean().getProperty(LFDNUMMER_PROPERTY);
+        final String blattnummer = (String) picturePan.getCidsBean().getProperty(BLATTNUMMER_PROPERTY);
+        final String lfdNummer = (String) picturePan.getCidsBean().getProperty(LFDNUMMER_PROPERTY);
         final String filenameSuffix = (this.mode == Alb_baulastUmleitungPanel.MODE.LAGEPLAN) ? "p" : "b";
         return BaulastenPictureFinder.getObjectFilenameWithoutFolder(blattnummer, lfdNummer)
-                    + filenameSuffix;
+                + filenameSuffix;
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @return  DOCUMENT ME!
+     * @return DOCUMENT ME!
      */
     public String getLinkDocument() {
         return tfName.getText();
@@ -312,6 +352,7 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
         tfName.setText("");
         tfName.getDocument().addDocumentListener(this);
     }
+
     /**
      * DOCUMENT ME!
      */
@@ -346,7 +387,7 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
     /**
      * DOCUMENT ME!
      *
-     * @param  c  DOCUMENT ME!
+     * @param c DOCUMENT ME!
      */
     public void setTextColor(final Color c) {
         lblDateiname.setForeground(c);
@@ -367,32 +408,49 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
         if(mode == MODE.LAGEPLAN){
             btnPlatzhalter = new javax.swing.JButton();
         }
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         lblMode = new javax.swing.JLabel();
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        pnlControls = new javax.swing.JPanel();
+        pnlOkButton = new javax.swing.JPanel();
+        btnCreateDocument = new javax.swing.JButton();
+        pnlBusyLabel = new javax.swing.JPanel();
+        jXBusyLabel1 = new JXBusyLabel(new Dimension(16,16))
+        ;
+        pnlEmpty = new javax.swing.JPanel();
+        pnlError = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
 
+        setMaximumSize(new java.awt.Dimension(2147483647, 50));
+        setMinimumSize(new java.awt.Dimension(383, 50));
         setOpaque(false);
+        setPreferredSize(new java.awt.Dimension(802, 50));
         setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(lblDateiname, org.openide.util.NbBundle.getMessage(Alb_baulastUmleitungPanel.class, "Alb_baulastUmleitungPanel.lblDateiname.text")); // NOI18N
+        lblDateiname.setAutoscrolls(true);
+        lblDateiname.setPreferredSize(new java.awt.Dimension(580, 18));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 5);
         add(lblDateiname, gridBagConstraints);
         lblDateiname.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(Alb_baulastUmleitungPanel.class, "Alb_baulastUmleitungPanel.lblDateiname.AccessibleContext.accessibleName")); // NOI18N
 
         tfName.setText(org.openide.util.NbBundle.getMessage(Alb_baulastUmleitungPanel.class, "Alb_baulastUmleitungPanel.tfName.text")); // NOI18N
-        tfName.setMinimumSize(new java.awt.Dimension(150, 27));
-        tfName.setPreferredSize(new java.awt.Dimension(150, 27));
+        tfName.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        tfName.setMinimumSize(new java.awt.Dimension(90, 27));
+        tfName.setPreferredSize(new java.awt.Dimension(90, 27));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 0);
         add(tfName, gridBagConstraints);
 
         if(mode == MODE.LAGEPLAN){
+            btnPlatzhalter.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/icon-file.png"))); // NOI18N
             org.openide.awt.Mnemonics.setLocalizedText(btnPlatzhalter, org.openide.util.NbBundle.getMessage(Alb_baulastUmleitungPanel.class, "Alb_baulastUmleitungPanel.btnPlatzhalter.text")); // NOI18N
+            btnPlatzhalter.setToolTipText(org.openide.util.NbBundle.getMessage(Alb_baulastUmleitungPanel.class, "Alb_baulastUmleitungPanel.btnPlatzhalter.toolTipText")); // NOI18N
+            btnPlatzhalter.setBorderPainted(false);
+            btnPlatzhalter.setContentAreaFilled(false);
             btnPlatzhalter.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     btnPlatzhalterActionPerformed(evt);
@@ -401,42 +459,86 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
         }
         if(mode == MODE.LAGEPLAN){
             gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 0;
-            gridBagConstraints.gridy = 1;
-            gridBagConstraints.gridwidth = 3;
+            gridBagConstraints.gridx = 4;
+            gridBagConstraints.gridy = 0;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-            gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 10);
+            gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
             add(btnPlatzhalter, gridBagConstraints);
         }
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        gridBagConstraints.weighty = 1.0;
-        add(filler1, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(lblMode, org.openide.util.NbBundle.getMessage(Alb_baulastUmleitungPanel.class, "Alb_baulastUmleitungPanel.lblMode.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         add(lblMode, gridBagConstraints);
+
+        pnlControls.setOpaque(false);
+        pnlControls.setLayout(new java.awt.CardLayout());
+
+        pnlOkButton.setOpaque(false);
+        pnlOkButton.setPreferredSize(new java.awt.Dimension(32, 32));
+        pnlOkButton.setLayout(new java.awt.GridBagLayout());
+
+        btnCreateDocument.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/glyphicons_206_ok_2.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnCreateDocument, org.openide.util.NbBundle.getMessage(Alb_baulastUmleitungPanel.class, "Alb_baulastUmleitungPanel.btnCreateDocument.text")); // NOI18N
+        btnCreateDocument.setToolTipText(org.openide.util.NbBundle.getMessage(Alb_baulastUmleitungPanel.class, "Alb_baulastUmleitungPanel.btnCreateDocument.toolTipText")); // NOI18N
+        btnCreateDocument.setBorderPainted(false);
+        btnCreateDocument.setContentAreaFilled(false);
+        btnCreateDocument.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateDocumentActionPerformed(evt);
+            }
+        });
+        pnlOkButton.add(btnCreateDocument, new java.awt.GridBagConstraints());
+
+        pnlControls.add(pnlOkButton, "card3");
+
+        pnlBusyLabel.setOpaque(false);
+        pnlBusyLabel.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jXBusyLabel1, org.openide.util.NbBundle.getMessage(Alb_baulastUmleitungPanel.class, "Alb_baulastUmleitungPanel.jXBusyLabel1.text")); // NOI18N
+        jXBusyLabel1.setMaximumSize(new java.awt.Dimension(16, 16));
+        jXBusyLabel1.setMinimumSize(new java.awt.Dimension(16, 16));
+        pnlBusyLabel.add(jXBusyLabel1, new java.awt.GridBagConstraints());
+
+        pnlControls.add(pnlBusyLabel, "card2");
+
+        pnlEmpty.setOpaque(false);
+        pnlControls.add(pnlEmpty, "card1");
+
+        pnlError.setOpaque(false);
+        pnlError.setLayout(new java.awt.GridBagLayout());
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/icon-warning-sign.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(Alb_baulastUmleitungPanel.class, "Alb_baulastUmleitungPanel.jLabel1.text")); // NOI18N
+        jLabel1.setToolTipText(org.openide.util.NbBundle.getMessage(Alb_baulastUmleitungPanel.class, "Alb_baulastUmleitungPanel.jLabel1.toolTipText")); // NOI18N
+        pnlError.add(jLabel1, new java.awt.GridBagConstraints());
+
+        pnlControls.add(pnlError, "card4");
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        add(filler3, gridBagConstraints);
+        add(pnlControls, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
-     * @param  evt  DOCUMENT ME!
+     * @param evt DOCUMENT ME!
      */
     private void btnPlatzhalterActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlatzhalterActionPerformed
         tfName.setText(PLATZHALTER_DOC_NAME);
         createLinkFile();
     }//GEN-LAST:event_btnPlatzhalterActionPerformed
+
+    private void btnCreateDocumentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateDocumentActionPerformed
+        if ((getLinkDocument() == null) || getLinkDocument().isEmpty()) {
+            deleteFile();
+        } else {
+            createLinkFile();
+        }
+    }//GEN-LAST:event_btnCreateDocumentActionPerformed
 }
