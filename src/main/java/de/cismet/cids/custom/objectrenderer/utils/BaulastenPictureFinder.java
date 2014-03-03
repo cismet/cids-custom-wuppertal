@@ -90,7 +90,7 @@ public final class BaulastenPictureFinder {
      *
      * @return  DOCUMENT ME!
      */
-    private static String getObjectFilename(final String blattnummer, final String laufendeNummer) {
+    public static String getObjectFilename(final String blattnummer, final String laufendeNummer) {
         if (laufendeNummer == null) {
             return null;
         } else {
@@ -107,6 +107,54 @@ public final class BaulastenPictureFinder {
 
             return new StringBuffer(getFolder(number)).append(SEP)
                         .append(String.format("%06d", number))
+                        .append(trenner)
+                        .append(String.format("%02d", lfdNr))
+                        .toString();
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   blattnummer  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static int getBlattnummer(final String blattnummer) {
+        int number = 0;
+        if (blattnummer.length() == 6) {
+            number = new Integer(blattnummer);
+        } else {
+            // length==7
+            number = new Integer(blattnummer.substring(0, 6));
+        }
+        return number;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   blattnummer     DOCUMENT ME!
+     * @param   laufendeNummer  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String getObjectFilenameWithoutFolder(final String blattnummer, final String laufendeNummer) {
+        if (laufendeNummer == null) {
+            return null;
+        } else {
+            final int lfdNr = new Integer(laufendeNummer);
+            String trenner = "-";
+            int number = 0;
+            if (blattnummer.length() == 6) {
+                number = new Integer(blattnummer);
+            } else {
+                // length==7
+                number = new Integer(blattnummer.substring(0, 6));
+                trenner = blattnummer.substring(6, 7);
+            }
+
+            return new StringBuffer().append(String.format("%06d", number))
                         .append(trenner)
                         .append(String.format("%02d", lfdNr))
                         .toString();
@@ -149,7 +197,7 @@ public final class BaulastenPictureFinder {
      *
      * @return  DOCUMENT ME!
      */
-    private static String getFolder(final int number) {
+    public static String getFolder(final int number) {
         int modulo = (number % 1000);
         if (modulo == 0) {
             modulo = 1000;
@@ -163,6 +211,29 @@ public final class BaulastenPictureFinder {
         final String lb = String.format("%06d", lowerBorder);
         final String hb = String.format("%06d", higherBorder);
         return new StringBuffer(PATH).append(lb).append("-").append(hb).toString();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   number  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String getFolderWihoutPath(final int number) {
+        int modulo = (number % 1000);
+        if (modulo == 0) {
+            modulo = 1000;
+        }
+        int lowerBorder = number - modulo;
+        final int higherBorder = lowerBorder + 1000;
+        if (lowerBorder != 0) {
+            lowerBorder += 1;
+        }
+
+        final String lb = String.format("%06d", lowerBorder);
+        final String hb = String.format("%06d", higherBorder);
+        return new StringBuffer().append(lb).append("-").append(hb).toString();
     }
 
     /**
@@ -184,7 +255,7 @@ public final class BaulastenPictureFinder {
      *
      * @return  DOCUMENT ME!
      */
-    private static List<URL> probeWebserverForRightSuffix(final String fileWithoutSuffix, final int recursionDepth) {
+    public static List<URL> probeWebserverForRightSuffix(final String fileWithoutSuffix, final int recursionDepth) {
         if (log.isDebugEnabled()) {
             log.debug("Searching for picture: " + fileWithoutSuffix + "xxx");
         }
