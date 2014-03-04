@@ -16,7 +16,11 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import org.apache.log4j.Logger;
 
+import org.jdesktop.swingx.JXBusyLabel;
+
+import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -44,9 +48,7 @@ import de.cismet.tools.PasswordEncrypter;
 
 import static de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel.BLATTNUMMER_PROPERTY;
 import static de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel.LFDNUMMER_PROPERTY;
-import java.awt.CardLayout;
-import java.awt.Dimension;
-import org.jdesktop.swingx.JXBusyLabel;
+import java.awt.event.KeyEvent;
 
 /**
  * DOCUMENT ME!
@@ -98,16 +100,21 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
         @Override
         public void actionPerformed(final ActionEvent e) {
             t.stop();
-            CardLayout cl = (CardLayout) pnlControls.getLayout();
+            final CardLayout cl = (CardLayout) pnlControls.getLayout();
             cl.show(pnlControls, "card2");
             jXBusyLabel1.setBusy(true);
-            checkIfLinkDocumentExists();
+            if (getLinkDocument() != null && !getLinkDocument().isEmpty()) {
+                checkIfLinkDocumentExists();
+            } else {
+                cl.show(pnlControls, "card3");
+            }
         }
     });
     private long lastChange = 0;
     private WebDavHelper webDavHelper;
     private boolean firstDocumentChange = true;
     private URL lastCheckedURL;
+    private String escapeText;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreateDocument;
     private javax.swing.JButton btnPlatzhalter;
@@ -155,7 +162,10 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
      */
     public void setLinkDocumentText(final String text) {
         tfName.getDocument().removeDocumentListener(this);
+        escapeText = text;
         tfName.setText(text);
+        final CardLayout cl = (CardLayout) pnlControls.getLayout();
+        cl.show(pnlControls, "card1");
         tfName.getDocument().addDocumentListener(this);
     }
 
@@ -177,9 +187,12 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
         lblMode.setText(text);
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     private void showError() {
-        picturePan.dangerAlert();
-        CardLayout cl = (CardLayout) pnlControls.getLayout();
+        picturePan.handleNoDocumentFound();
+        final CardLayout cl = (CardLayout) pnlControls.getLayout();
         cl.show(pnlControls, "card4");
     }
 
@@ -198,12 +211,11 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
                         picturePan.successAlert();
                         picturePan.reloadPictureFromUrl(file);
                         lastCheckedURL = file;
-                        CardLayout cl = (CardLayout) pnlControls.getLayout();
+                        final CardLayout cl = (CardLayout) pnlControls.getLayout();
                         cl.show(pnlControls, "card3");
                     } else {
                         showError();
                     }
-
                 } catch (InterruptedException ex) {
                     LOG.error("Worker Thread interrupter", ex);
                     showError();
@@ -216,6 +228,9 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
             @Override
             protected URL doInBackground() throws Exception {
                 final String input = getLinkDocument();
+                if (!isNummerConsistent(input)) {
+                    return null;
+                }
                 final String blattnummer = input.contains("-") ? input.substring(0, input.indexOf("-"))
                         : input.substring(0, 7);
                 final String lfdNummer = input.substring(input.length() - 2, input.length());
@@ -223,15 +238,29 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
                 if (mode == MODE.LAGEPLAN) {
                     res = BaulastenPictureFinder.findPlanPicture(blattnummer, lfdNummer);
                 } else {
-                    res = BaulastenPictureFinder.findPlanPicture(blattnummer, lfdNummer);
+                    res = BaulastenPictureFinder.findTextblattPicture(blattnummer, lfdNummer);
                 }
-                if (res == null || res.isEmpty()) {
+                if ((res == null) || res.isEmpty()) {
                     return null;
                 }
                 return res.get(0);
             }
         };
         worker.execute();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param baulastnr DOCUMENT ME!
+     *
+     * @return DOCUMENT ME!
+     */
+    private boolean isNummerConsistent(final String baulastnr) {
+        if (!baulastnr.matches("\\d{6}-\\d{2}") && !baulastnr.matches("\\d{6}[a-z]\\d{2}")) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -255,7 +284,7 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
             protected void done() {
                 try {
                     get();
-                    picturePan.setUmleitungChangedFlag(true);
+                    picturePan.handleUmleitungDeleted();
                 } catch (InterruptedException ex) {
                     LOG.error("Deleting link file worker was interrupted", ex);
                 } catch (ExecutionException ex) {
@@ -348,6 +377,7 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
      */
     public void reset() {
         firstDocumentChange = true;
+        escapeText = null;
         tfName.getDocument().removeDocumentListener(this);
         tfName.setText("");
         tfName.getDocument().addDocumentListener(this);
@@ -410,12 +440,12 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
         }
         lblMode = new javax.swing.JLabel();
         pnlControls = new javax.swing.JPanel();
+        pnlEmpty = new javax.swing.JPanel();
         pnlOkButton = new javax.swing.JPanel();
         btnCreateDocument = new javax.swing.JButton();
         pnlBusyLabel = new javax.swing.JPanel();
         jXBusyLabel1 = new JXBusyLabel(new Dimension(16,16))
         ;
-        pnlEmpty = new javax.swing.JPanel();
         pnlError = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
 
@@ -436,10 +466,23 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
         add(lblDateiname, gridBagConstraints);
         lblDateiname.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(Alb_baulastUmleitungPanel.class, "Alb_baulastUmleitungPanel.lblDateiname.AccessibleContext.accessibleName")); // NOI18N
 
+        tfName.setBackground(new Color(255, 255, 255)
+        );
         tfName.setText(org.openide.util.NbBundle.getMessage(Alb_baulastUmleitungPanel.class, "Alb_baulastUmleitungPanel.tfName.text")); // NOI18N
         tfName.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        tfName.setMinimumSize(new java.awt.Dimension(90, 27));
-        tfName.setPreferredSize(new java.awt.Dimension(90, 27));
+        tfName.setMinimumSize(new java.awt.Dimension(82, 23));
+        tfName.setPreferredSize(new java.awt.Dimension(82, 23));
+        tfName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfNameKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tfNameKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfNameKeyTyped(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -451,6 +494,7 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
             btnPlatzhalter.setToolTipText(org.openide.util.NbBundle.getMessage(Alb_baulastUmleitungPanel.class, "Alb_baulastUmleitungPanel.btnPlatzhalter.toolTipText")); // NOI18N
             btnPlatzhalter.setBorderPainted(false);
             btnPlatzhalter.setContentAreaFilled(false);
+            btnPlatzhalter.setFocusPainted(false);
             btnPlatzhalter.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     btnPlatzhalterActionPerformed(evt);
@@ -477,6 +521,9 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
         pnlControls.setOpaque(false);
         pnlControls.setLayout(new java.awt.CardLayout());
 
+        pnlEmpty.setOpaque(false);
+        pnlControls.add(pnlEmpty, "card1");
+
         pnlOkButton.setOpaque(false);
         pnlOkButton.setPreferredSize(new java.awt.Dimension(32, 32));
         pnlOkButton.setLayout(new java.awt.GridBagLayout());
@@ -486,6 +533,7 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
         btnCreateDocument.setToolTipText(org.openide.util.NbBundle.getMessage(Alb_baulastUmleitungPanel.class, "Alb_baulastUmleitungPanel.btnCreateDocument.toolTipText")); // NOI18N
         btnCreateDocument.setBorderPainted(false);
         btnCreateDocument.setContentAreaFilled(false);
+        btnCreateDocument.setFocusPainted(false);
         btnCreateDocument.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCreateDocumentActionPerformed(evt);
@@ -499,21 +547,21 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
         pnlBusyLabel.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(jXBusyLabel1, org.openide.util.NbBundle.getMessage(Alb_baulastUmleitungPanel.class, "Alb_baulastUmleitungPanel.jXBusyLabel1.text")); // NOI18N
+        jXBusyLabel1.setFocusable(false);
         jXBusyLabel1.setMaximumSize(new java.awt.Dimension(16, 16));
         jXBusyLabel1.setMinimumSize(new java.awt.Dimension(16, 16));
         pnlBusyLabel.add(jXBusyLabel1, new java.awt.GridBagConstraints());
 
         pnlControls.add(pnlBusyLabel, "card2");
 
-        pnlEmpty.setOpaque(false);
-        pnlControls.add(pnlEmpty, "card1");
-
+        pnlError.setFocusable(false);
         pnlError.setOpaque(false);
         pnlError.setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/icon-warning-sign.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(Alb_baulastUmleitungPanel.class, "Alb_baulastUmleitungPanel.jLabel1.text")); // NOI18N
         jLabel1.setToolTipText(org.openide.util.NbBundle.getMessage(Alb_baulastUmleitungPanel.class, "Alb_baulastUmleitungPanel.jLabel1.toolTipText")); // NOI18N
+        jLabel1.setFocusable(false);
         pnlError.add(jLabel1, new java.awt.GridBagConstraints());
 
         pnlControls.add(pnlError, "card4");
@@ -534,11 +582,36 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
         createLinkFile();
     }//GEN-LAST:event_btnPlatzhalterActionPerformed
 
-    private void btnCreateDocumentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateDocumentActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param evt DOCUMENT ME!
+     */
+    private void btnCreateDocumentActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateDocumentActionPerformed
         if ((getLinkDocument() == null) || getLinkDocument().isEmpty()) {
             deleteFile();
         } else {
             createLinkFile();
         }
     }//GEN-LAST:event_btnCreateDocumentActionPerformed
+
+    private void tfNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfNameKeyTyped
+
+    }//GEN-LAST:event_tfNameKeyTyped
+
+    private void tfNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfNameKeyPressed
+
+    }//GEN-LAST:event_tfNameKeyPressed
+
+    private void tfNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfNameKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            firstDocumentChange=true;
+            picturePan.handleEscapePressed();
+            if (escapeText != null) {
+                tfName.setText(escapeText);
+            } else {
+                tfName.setText("");
+            }
+        }
+    }//GEN-LAST:event_tfNameKeyReleased
 }
