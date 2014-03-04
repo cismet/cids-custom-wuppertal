@@ -13,7 +13,9 @@ package de.cismet.cids.custom.reports.wunda_blau;
 
 import Sirius.navigator.ui.ComponentRegistry;
 
+import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import java.math.BigDecimal;
 
@@ -21,35 +23,26 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Observable;
 import java.util.Observer;
-import java.util.concurrent.ExecutionException;
 
-import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
-
-import de.cismet.cids.custom.objectrenderer.utils.AbstractJasperReportPrint;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.utils.jasperreports.ReportSwingWorkerDialog;
+import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 
-import de.cismet.cismap.commons.gui.printing.JasperDownload;
-import de.cismet.cismap.commons.interaction.CismapBroker;
-
-import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 
 /**
- * DOCUMENT ME!
+ * Gets the needed information about the billing Buchungsbeleg (or Rechnungsanlage) report and generates a download for
+ * that report.
  *
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
+public class BillingBuchungsbelegReport {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -207,7 +200,7 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
             final int amountEigenerGebrauchGB,
             final int amountWiederverkaufGB,
             final int amountEigenerGebrauchGebührenbefreitGB) {
-        super(REPORT_URL, kundeBean);
+        // super(REPORT_URL, kundeBean);
 
         this.kundeBean = kundeBean;
         if (billingBeans_mwst0 == null) {
@@ -256,7 +249,13 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
 
     //~ Methods ----------------------------------------------------------------
 
-    @Override
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   current  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public Map generateReportParam(final CidsBean current) {
         final HashMap params = new HashMap();
         params.put("kundeBean", kundeBean);
@@ -301,19 +300,57 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
 
         return params;
     }
-    @Override
-    public void print() {
-        final SwingWorker<JasperPrint, Void> old = downloadWorker;
-        if ((old != null) && !old.isDone()) {
-            old.cancel(true);
-        }
-        downloadWorker = new DownloadWorker();
-        downloadWorker.execute();
-    }
 
-    @Override
-    public Map generateReportParam(final Collection<CidsBean> beans) {
-        return generateReportParam(kundeBean);
+    /**
+     * DOCUMENT ME!
+     */
+    public void generateReport() {
+        final JasperReportDownload.JasperReportDataSourceGenerator dataSourceGenerator =
+            new JasperReportDownload.JasperReportDataSourceGenerator() {
+
+                @Override
+                public JRDataSource generateDataSource() {
+                    final ArrayList beans = new ArrayList<CidsBean>();
+                    beans.add(kundeBean);
+                    final JRBeanCollectionDataSource beanArray = new JRBeanCollectionDataSource(beans);
+                    return beanArray;
+                }
+            };
+
+        final JasperReportDownload.JasperReportParametersGenerator parametersGenerator =
+            new JasperReportDownload.JasperReportParametersGenerator() {
+
+                @Override
+                public Map generateParamters() {
+                    return generateReportParam(kundeBean);
+                }
+            };
+
+        if (DownloadManagerDialog.showAskingForUserTitle(ComponentRegistry.getRegistry().getMainWindow())) {
+            final String jobname = DownloadManagerDialog.getJobname();
+            String filename;
+            String title;
+            if (isRechnungsanlage) {
+                filename = "buchungen_rechnungsanlage";
+                title = "Buchungen: Rechnungsanlage";
+            } else {
+                filename = "buchungen_buchungsbeleg";
+                title = "Buchungen: Buchungsbeleg";
+            }
+
+            // worst case: "_null" will be appended to the filename, but at least nothing will break
+            filename += "_" + String.valueOf(kundeBean.getProperty("name_intern"));
+
+            final JasperReportDownload download = new JasperReportDownload(
+                    REPORT_URL,
+                    parametersGenerator,
+                    dataSourceGenerator,
+                    jobname,
+                    title,
+                    filename);
+            download.addObserver(downloadObserver);
+            DownloadManager.instance().add(download);
+        }
     }
 
     /**
@@ -323,77 +360,5 @@ public class BillingBuchungsbelegReport extends AbstractJasperReportPrint {
      */
     public void setDownloadObserver(final Observer downloadObserver) {
         this.downloadObserver = downloadObserver;
-    }
-
-    //~ Inner Classes ----------------------------------------------------------
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    class DownloadWorker extends SwingWorker<JasperPrint, Void> {
-
-        //~ Instance fields ----------------------------------------------------
-
-        ReportSwingWorkerDialog dialog = new ReportSwingWorkerDialog(StaticSwingTools.getParentFrame(
-                    CismapBroker.getInstance().getMappingComponent()),
-                true);
-
-        //~ Methods ------------------------------------------------------------
-
-        @Override
-        protected JasperPrint doInBackground() throws Exception {
-            SwingUtilities.invokeLater(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        StaticSwingTools.showDialog(dialog);
-                    }
-                });
-
-            if (isCancelled()) {
-                return null;
-            } else {
-                return getJasperPrint();
-            }
-        }
-
-        @Override
-        protected void done() {
-            try {
-                final JasperPrint jasperPrint = get();
-
-                if (DownloadManagerDialog.showAskingForUserTitle(ComponentRegistry.getRegistry().getMainWindow())) {
-                    final String jobname = DownloadManagerDialog.getJobname();
-                    String filename;
-                    String title;
-                    if (isRechnungsanlage) {
-                        filename = "buchungen_rechnungsanlage";
-                        title = "Buchungen: Rechnungsanlage";
-                    } else {
-                        filename = "buchungen_buchungsbeleg";
-                        title = "Buchungen: Buchungsbeleg";
-                    }
-
-                    // worst case: "_null" will be appended to the filename, but at least nothing will break
-                    filename += "_" + String.valueOf(kundeBean.getProperty("name_intern"));
-
-                    final JasperDownload download = new JasperDownload(
-                            jasperPrint,
-                            jobname,
-                            title,
-                            filename);
-                    download.addObserver(downloadObserver);
-                    DownloadManager.instance().add(download);
-                }
-            } catch (InterruptedException ex) {
-                log.warn(ex, ex);
-            } catch (ExecutionException ex) {
-                log.error(ex, ex);
-            } finally {
-                dialog.setVisible(false);
-            }
-        }
     }
 }
