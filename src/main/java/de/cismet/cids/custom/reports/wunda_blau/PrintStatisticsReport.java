@@ -11,9 +11,6 @@
  */
 package de.cismet.cids.custom.reports.wunda_blau;
 
-import java.math.BigDecimal;
-
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -21,7 +18,7 @@ import java.util.HashMap;
 import de.cismet.cids.dynamics.CidsBean;
 
 /**
- * DOCUMENT ME!
+ * PrintStatisticsReport gets Billing-CidsBean and evaluates them to generate a BillingStatisticsReport.
  *
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
@@ -92,7 +89,7 @@ public class PrintStatisticsReport {
                     earningsWithCostsWiederver,
                     amountWiederverkaeufe,
                     amountWiederverkaeufeGB);
-            report.print();
+            report.generateReport();
         }
     }
 

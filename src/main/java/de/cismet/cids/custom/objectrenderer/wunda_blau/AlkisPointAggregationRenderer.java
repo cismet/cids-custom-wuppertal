@@ -35,15 +35,8 @@ import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.util.JRLoader;
-
-import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.error.ErrorInfo;
 
 import org.openide.util.NbBundle;
 
@@ -65,7 +58,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -90,8 +82,8 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
-import de.cismet.cismap.commons.gui.printing.JasperDownload;
-import de.cismet.cismap.commons.gui.printing.PrintingWidget;
+import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
+import de.cismet.cismap.commons.gui.printing.JasperReportDownload.JasperReportDataSourceGenerator;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
@@ -359,7 +351,7 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                                 "no.yet",
                                 (Geometry)null,
                                 new ProductGroupAmount("ea", numOfPoints))) {
-                    CismetThreadPool.execute(new GenerateAPMapReport(selectedAlkisPoints));
+                    generateAPMapReport(selectedAlkisPoints);
                 }
             } catch (Exception e) {
                 log.error("Error when trying to produce a alkis product", e);
@@ -832,6 +824,37 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
             768);
     }
 
+    /**
+     * Generates the AP-Map report (Anschlusspunkt-Karten).
+     *
+     * @param  alkisPoints  the points used to generate the report and appearing in the report
+     */
+    private void generateAPMapReport(final Collection<CidsBean> alkisPoints) {
+        final JasperReportDataSourceGenerator dataSourceGenerator = new JasperReportDataSourceGenerator() {
+
+                @Override
+                public JRDataSource generateDataSource() {
+                    final Collection<AlkisPointReportBean> reportBeans = new LinkedList<AlkisPointReportBean>();
+                    reportBeans.add(new AlkisPointReportBean(alkisPoints));
+                    final JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(reportBeans);
+                    return dataSource;
+                }
+            };
+
+        if (DownloadManagerDialog.showAskingForUserTitle(AlkisPointAggregationRenderer.this)) {
+            final String jobname = DownloadManagerDialog.getJobname();
+
+            DownloadManager.instance()
+                    .add(new JasperReportDownload(
+                            "/de/cismet/cids/custom/wunda_blau/res/apmaps.jasper",
+                            new HashMap(),
+                            dataSourceGenerator,
+                            jobname,
+                            "AP-Karten",
+                            "apkarten"));
+        }
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -1055,73 +1078,6 @@ public final class AlkisPointAggregationRenderer extends javax.swing.JPanel impl
                             ex);
                     }
                 }
-            }
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    protected class GenerateAPMapReport implements Runnable {
-
-        //~ Instance fields ----------------------------------------------------
-
-        private Collection<CidsBean> alkisPoints;
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new GenerateAPMapReport object.
-         *
-         * @param  alkisPoints  DOCUMENT ME!
-         */
-        public GenerateAPMapReport(final Collection<CidsBean> alkisPoints) {
-            this.alkisPoints = alkisPoints;
-        }
-
-        //~ Methods ------------------------------------------------------------
-
-        /**
-         * DOCUMENT ME!
-         */
-        @Override
-        public void run() {
-            final Collection<AlkisPointReportBean> reportBeans = new LinkedList<AlkisPointReportBean>();
-            reportBeans.add(new AlkisPointReportBean(alkisPoints));
-            final JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(reportBeans);
-
-            final JasperReport jasperReport;
-            final JasperPrint jasperPrint;
-            try {
-                jasperReport = (JasperReport)JRLoader.loadObject(AlkisPointAggregationRenderer.class
-                                .getResourceAsStream(
-                                    "/de/cismet/cids/custom/wunda_blau/res/apmaps.jasper"));
-                jasperPrint = JasperFillManager.fillReport(jasperReport, new HashMap(), dataSource);
-            } catch (JRException ex) {
-                log.error("Could not generate report for ap maps.", ex);
-
-                final ErrorInfo ei = new ErrorInfo(NbBundle.getMessage(
-                            AlkisPointAggregationRenderer.class,
-                            "AlkisPointAggregationRenderer.GenerateAPMapReport.run().ErrorInfo.title"),   // NOI18N
-                        NbBundle.getMessage(
-                            PrintingWidget.class,
-                            "AlkisPointAggregationRenderer.GenerateAPMapReport.run().ErrorInfo.message"), // NOI18N
-                        null,
-                        null,
-                        ex,
-                        Level.ALL,
-                        null);
-                JXErrorPane.showDialog(AlkisPointAggregationRenderer.this, ei);
-
-                return;
-            }
-
-            if (DownloadManagerDialog.showAskingForUserTitle(AlkisPointAggregationRenderer.this)) {
-                final String jobname = DownloadManagerDialog.getJobname();
-
-                DownloadManager.instance().add(new JasperDownload(jasperPrint, jobname, "AP-Karten", "apkarten"));
             }
         }
     }

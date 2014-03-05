@@ -13,6 +13,7 @@ import Sirius.server.middleware.types.MetaObject;
 
 import com.vividsolutions.jts.geom.Geometry;
 
+import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -71,7 +72,8 @@ import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 import de.cismet.cismap.commons.Crs;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.measuring.MeasuringComponent;
-import de.cismet.cismap.commons.gui.printing.JasperDownload;
+import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
+import de.cismet.cismap.commons.gui.printing.JasperReportDownload.JasperReportDataSourceGenerator;
 
 import de.cismet.security.WebAccessManager;
 
@@ -1030,10 +1032,10 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
      * DOCUMENT ME!
      */
     private void downloadReport() {
-        final Runnable runnable = new Runnable() {
+        final JasperReportDataSourceGenerator dataSourceGenerator = new JasperReportDataSourceGenerator() {
 
                 @Override
-                public void run() {
+                public JRDataSource generateDataSource() {
                     final Collection<CidsBean> nivellementPunkte = new LinkedList<CidsBean>();
                     nivellementPunkte.add(cidsBean);
                     final Collection<NivellementPunktAggregationRenderer.NivellementPunktReportBean> reportBeans =
@@ -1041,44 +1043,21 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
                     reportBeans.add(new NivellementPunktAggregationRenderer.NivellementPunktReportBean(
                             nivellementPunkte));
                     final JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(reportBeans);
-
-                    final HashMap parameters = new HashMap();
-
-                    final JasperReport jasperReport;
-                    final JasperPrint jasperPrint;
-                    try {
-                        jasperReport = (JasperReport)JRLoader.loadObject(getClass().getResourceAsStream(
-                                    "/de/cismet/cids/custom/wunda_blau/res/nivp.jasper"));
-                        jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
-                    } catch (JRException ex) {
-                        LOG.error("Could not generate report for nivellement points.", ex);
-
-                        final ErrorInfo ei = new ErrorInfo(NbBundle.getMessage(
-                                    NivellementPunktEditor.class,
-                                    "NivellementPunktEditor.btnReportActionPerformed(ActionEvent).ErrorInfo.title"),   // NOI18N
-                                NbBundle.getMessage(
-                                    NivellementPunktEditor.class,
-                                    "NivellementPunktEditor.btnReportActionPerformed(ActionEvent).ErrorInfo.message"), // NOI18N
-                                null,
-                                null,
-                                ex,
-                                Level.ALL,
-                                null);
-                        JXErrorPane.showDialog(NivellementPunktEditor.this, ei);
-
-                        return;
-                    }
-
-                    if (DownloadManagerDialog.showAskingForUserTitle(NivellementPunktEditor.this)) {
-                        final String jobname = DownloadManagerDialog.getJobname();
-
-                        DownloadManager.instance()
-                                .add(new JasperDownload(jasperPrint, jobname, "Nivellement-Punkt", "nivp"));
-                    }
+                    return dataSource;
                 }
             };
 
-        CismetThreadPool.execute(runnable);
+        if (DownloadManagerDialog.showAskingForUserTitle(NivellementPunktEditor.this)) {
+            final String jobname = DownloadManagerDialog.getJobname();
+
+            DownloadManager.instance()
+                    .add(new JasperReportDownload(
+                            "/de/cismet/cids/custom/wunda_blau/res/nivp.jasper", // NOI18N
+                            dataSourceGenerator,
+                            jobname,
+                            "Nivellement-Punkt",
+                            "nivp"));
+        }
     }
 
     /**
