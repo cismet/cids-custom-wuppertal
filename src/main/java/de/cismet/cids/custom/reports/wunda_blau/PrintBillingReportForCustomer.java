@@ -9,7 +9,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.cids.custom.objectrenderer.utils.billing;
+package de.cismet.cids.custom.reports.wunda_blau;
 
 import org.apache.log4j.Logger;
 
@@ -28,16 +28,14 @@ import java.util.Observer;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import de.cismet.cids.custom.reports.wunda_blau.BillingBuchungsbelegReport;
-
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cismap.commons.gui.printing.JasperDownload;
+import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 
 import de.cismet.tools.gui.downloadmanager.Download;
 
 /**
- * DOCUMENT ME!
+ * PrintBillingReportForCustomer gets a Customer-CidsBean and evaluates it to generate a BillingBuchungsbelegReport.
  *
  * @version  $Revision$, $Date$
  */
@@ -176,7 +174,7 @@ public class PrintBillingReportForCustomer {
                     amountWiederverkaufGB.size(),
                     amountEigenerGebrauchGebührenbefreitGB.size());
             report.setDownloadObserver(downloadFinishedObserver);
-            report.print();
+            report.generateReport();
         }
     }
 
@@ -351,8 +349,8 @@ public class PrintBillingReportForCustomer {
 
         @Override
         public void update(final Observable o, final Object arg) {
-            if (o instanceof JasperDownload) {
-                final JasperDownload download = (JasperDownload)o;
+            if (o instanceof JasperReportDownload) {
+                final JasperReportDownload download = (JasperReportDownload)o;
                 if (download.getStatus().equals(Download.State.COMPLETED)) {
                     markBillings();
                     additionalFunctionalityIfDownloadCompleted();
