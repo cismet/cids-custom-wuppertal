@@ -100,6 +100,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
     private boolean isPointCentered = false;
     private final GeometryFactory factory = new GeometryFactory(new PrecisionModel(),
             CrsTransformer.extractSridFromCrs(AlkisConstants.COMMONS.SRS_SERVICE));
+    private boolean documentListenersRemoved = false;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnCreate;
@@ -705,6 +706,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
     private void cbSizeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbSizeActionPerformed
         final PredefinedBoxes selectedBox = (PredefinedBoxes)cbSize.getSelectedItem();
         if ((selectedBox != null) && !selectedBox.getDisplayName().equals("keine Auswahl")) {
+            removeDocumentListeners();
             if (cbGeoms.getSelectedItem() instanceof Geometry) {
                 final Geometry g = (Geometry)cbGeoms.getSelectedItem();
                 if (!(g instanceof Point)) {
@@ -712,17 +714,20 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                 }
             }
             firstUpperTFChange = true;
-            tfLowerE.getDocument().removeDocumentListener(this);
-            tfLowerN.getDocument().removeDocumentListener(this);
-            tfUpperE.getDocument().removeDocumentListener(upperTfListeners);
-            tfUpperN.getDocument().removeDocumentListener(upperTfListeners);
+
             if (selectedBox.getDisplayName().startsWith("M")) {
                 isPointCentered = true;
-
-                final double lowerE = ((Point)pointFeature.getGeometry()).getX() - (selectedBox.getEastSize() / 2d);
-                final double lowerN = ((Point)pointFeature.getGeometry()).getY() - (selectedBox.getNorthSize() / 2d);
-                final double upperE = ((Point)pointFeature.getGeometry()).getX() + (selectedBox.getEastSize() / 2d);
-                final double upperN = ((Point)pointFeature.getGeometry()).getY() + (selectedBox.getNorthSize() / 2d);
+                final Point p;
+                if ((!(cbGeoms.getSelectedItem() instanceof Geometry) || !(cbGeoms.getSelectedItem() instanceof Point))
+                            && (rectangleFeature != null)) {
+                    p = rectangleFeature.getGeometry().getEnvelope().getCentroid();
+                } else {
+                    p = (Point)pointFeature.getGeometry();
+                }
+                final double lowerE = p.getX() - (selectedBox.getEastSize() / 2d);
+                final double lowerN = p.getY() - (selectedBox.getNorthSize() / 2d);
+                final double upperE = p.getX() + (selectedBox.getEastSize() / 2d);
+                final double upperN = p.getY() + (selectedBox.getNorthSize() / 2d);
                 tfLowerE.setText(coordFormatter.format(lowerE));
                 tfLowerN.setText(coordFormatter.format(lowerN));
                 tfUpperE.setText(coordFormatter.format(upperE));
@@ -744,10 +749,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
             }
 
             changeMap();
-            tfLowerE.getDocument().addDocumentListener(this);
-            tfLowerN.getDocument().addDocumentListener(this);
-            tfUpperE.getDocument().addDocumentListener(upperTfListeners);
-            tfUpperN.getDocument().addDocumentListener(upperTfListeners);
+            addDocumentListeners();
         } else {
             firstUpperTFChange = false;
         }
@@ -770,10 +772,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
     private void cbGeomsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbGeomsActionPerformed
         final Object obj = cbGeoms.getSelectedItem();
         if ((obj != null) && (obj instanceof Geometry)) {
-            tfLowerE.getDocument().removeDocumentListener(this);
-            tfLowerN.getDocument().removeDocumentListener(this);
-            tfUpperE.getDocument().removeDocumentListener(upperTfListeners);
-            tfUpperN.getDocument().removeDocumentListener(upperTfListeners);
+            removeDocumentListeners();
 
             final Geometry g = ((Geometry)obj);
             if (g.isRectangle()) {
@@ -794,17 +793,40 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
             }
             cbSize.setSelectedItem(noSelectionBox);
             changeMap();
-            tfLowerE.getDocument().addDocumentListener(this);
-            tfLowerN.getDocument().addDocumentListener(this);
-            tfUpperE.getDocument().addDocumentListener(upperTfListeners);
-            tfUpperN.getDocument().addDocumentListener(upperTfListeners);
+            addDocumentListeners();
         }
     } //GEN-LAST:event_cbGeomsActionPerformed
 
     /**
      * DOCUMENT ME!
      */
+    private void addDocumentListeners() {
+        if (!documentListenersRemoved) {
+            removeDocumentListeners();
+        }
+        documentListenersRemoved = false;
+        tfLowerE.getDocument().addDocumentListener(this);
+        tfLowerN.getDocument().addDocumentListener(this);
+        tfUpperE.getDocument().addDocumentListener(upperTfListeners);
+        tfUpperN.getDocument().addDocumentListener(upperTfListeners);
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void removeDocumentListeners() {
+        documentListenersRemoved = true;
+        tfLowerE.getDocument().removeDocumentListener(this);
+        tfLowerN.getDocument().removeDocumentListener(this);
+        tfUpperE.getDocument().removeDocumentListener(upperTfListeners);
+        tfUpperN.getDocument().removeDocumentListener(upperTfListeners);
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
     private void updatePositionFields() {
+        removeDocumentListeners();
         final PredefinedBoxes selectedBox = (PredefinedBoxes)cbSize.getSelectedItem();
         if ((selectedBox != null) && !selectedBox.getDisplayName().equals("keine Auswahl")) {
             final double eSize = selectedBox.getEastSize();
@@ -818,6 +840,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                 tfUpperN.setText("" + (lowerN + nSize));
             }
         }
+        addDocumentListeners();
     }
 
     /**
@@ -879,10 +902,15 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                 @Override
                 public void run() {
                     // set the point feature
-                    if (!map.getFeatureCollection().contains(pointFeature)) {
-                        map.getFeatureCollection().addFeature(pointFeature);
+
+                    if (cbGeoms.getSelectedItem() instanceof Point) {
+                        if (!map.getFeatureCollection().contains(pointFeature)) {
+                            map.getFeatureCollection().addFeature(pointFeature);
+                        }
+                        map.reconsiderFeature(pointFeature);
+                    } else {
+                        map.getFeatureCollection().removeFeature(pointFeature);
                     }
-                    map.reconsiderFeature(pointFeature);
 
                     final Geometry g = createGeometry();
                     if (g != null) {
@@ -894,10 +922,14 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                         map.reconsiderFeature(rectangleFeature);
                     }
 
-                    final XBoundingBox bb;
+                    XBoundingBox bb = null;
                     if ((g == null) || (g.getArea() == 0)) {
-                        // zoom zo the point feature
-                        bb = new XBoundingBox(pointFeature.getGeometry().buffer(MIN_BUFFER));
+                        if (pointFeature.getGeometry() != null) {
+                            // zoom zo the point feature
+                            bb = new XBoundingBox(pointFeature.getGeometry().buffer(MIN_BUFFER));
+                        } else {
+                            bb = (XBoundingBox)map.getInitialBoundingBox();
+                        }
                     } else {
                         // zoom to the rectangle
                         final Envelope env = g.getEnvelopeInternal();
@@ -1200,7 +1232,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
      * DOCUMENT ME!
      */
     private void handleLowerTFAction() {
-        // set the Keine Auswahl element for the geom checkbox
+        // check if the geom checkbox need to be adopted:
         cbGeoms.setSelectedIndex(0);
 
         // adjust the point feature to the right position
@@ -1223,8 +1255,8 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                                 + (selectedBox.getEastSize() / 2d),
                         lowerN
                                 + (selectedBox.getNorthSize() / 2d)));
-            tfLowerE.setText(coordFormatter.format(lowerE - (selectedBox.getEastSize() / 2d)));
-            tfLowerN.setText(coordFormatter.format(lowerN - (selectedBox.getNorthSize() / 2d)));
+//                tfLowerE.setText(coordFormatter.format(lowerE - (selectedBox.getEastSize() / 2d)));
+//                tfLowerN.setText(coordFormatter.format(lowerN - (selectedBox.getNorthSize() / 2d)));
         } else {
             p = factory.createPoint(new Coordinate(lowerE, lowerN));
         }
