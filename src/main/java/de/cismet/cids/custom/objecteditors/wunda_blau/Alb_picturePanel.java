@@ -1,12 +1,10 @@
-/**
- * *************************************************
- *
- * cismet GmbH, Saarbruecken, Germany
- * 
-* ... and it just works.
- * 
-***************************************************
- */
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -56,6 +54,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 import javax.swing.ListModel;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.objectrenderer.utils.BaulastenPictureFinder;
@@ -82,17 +81,17 @@ import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import de.cismet.tools.gui.downloadmanager.HttpDownload;
 import de.cismet.tools.gui.panels.AlertPanel;
 import de.cismet.tools.gui.panels.LayeredAlertPanel;
-import javax.swing.SwingUtilities;
 
 /**
  * DOCUMENT ME!
  *
- * @author srichter
- * @version $Revision$, $Date$
+ * @author   srichter
+ * @version  $Revision$, $Date$
  */
 public class Alb_picturePanel extends javax.swing.JPanel {
 
     //~ Static fields/initializers ---------------------------------------------
+
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Alb_picturePanel.class);
 //    private static final String[] MD5_PROPERTY_NAMES = new String[]{"lageplan_md5", "textblatt_md5"};
     private static final String TEXTBLATT_PROPERTY = "textblatt";
@@ -106,21 +105,22 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     //
     private static final ListModel LADEN_MODEL = new DefaultListModel() {
 
-        {
-            add(0, "Wird geladen...");
-        }
-    };
+            {
+                add(0, "Wird geladen...");
+            }
+        };
 
     private static final ListModel FEHLER_MODEL = new DefaultListModel() {
 
-        {
-            add(0, "Lesefehler.");
-        }
-    };
+            {
+                add(0, "Lesefehler.");
+            }
+        };
 
     private static boolean alreadyWarnedAboutPermissionProblem = false;
 
     //~ Instance fields --------------------------------------------------------
+
     private final JLabel alertWarnMessage = new JLabel(
             "<html> <b>Warnung! </b> Es wurde kein Dokument gefunden. Klicken Sie auf diese Meldung um eine Weiterleitung einzurichten.</html>");
     final AlertPanel alert = new AlertPanel(
@@ -157,6 +157,8 @@ public class Alb_picturePanel extends javax.swing.JPanel {
             this);
     private PictureReaderWorker pictureReaderWorker;
     private boolean umleitungChangedFlag = false;
+    // End of variables declaration//GEN-END:variables
+    private boolean showUmleitung = true;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btnGrpDocs;
     private javax.swing.JButton btnHome;
@@ -203,10 +205,9 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     private javax.swing.JToggleButton togMessenPoly;
     private javax.swing.JToggleButton togPan;
     private javax.swing.JToggleButton togZoom;
-    // End of variables declaration//GEN-END:variables
-    private boolean showUmleitung = true;
 
     //~ Constructors -----------------------------------------------------------
+
     /**
      * Creates new form Alb_picturePanel.
      */
@@ -217,7 +218,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     /**
      * Creates a new Alb_picturePanel object.
      *
-     * @param selfPersisting DOCUMENT ME!
+     * @param  selfPersisting  DOCUMENT ME!
      */
     public Alb_picturePanel(final boolean selfPersisting) {
         this.selfPersisting = selfPersisting;
@@ -226,7 +227,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         initComponents();
         pnlMeasureComp.add(measureComponent, BorderLayout.CENTER);
         alert.setPreferredSize(new Dimension(500, 50));
-        alert.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));    // To change body of generated methods,
+        alert.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); // To change body of generated methods,
         // choose Tools | Templates.
         pnlAlert.add(alert, BorderLayout.CENTER);
         pnlAlert.setBackground(new Color(1f, 1f, 1f, 0.8f));
@@ -241,44 +242,44 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         alert.setVisible(false);
         alert.addMouseListener(new MouseAdapter() {
 
-            @Override
-            public void mouseClicked(final MouseEvent e) {
-                handleAlertClick();
-            }
-        });
+                @Override
+                public void mouseClicked(final MouseEvent e) {
+                    handleAlertClick();
+                }
+            });
         alert.addCloseButtonActionListener(new ActionListener() {
 
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                showUmleitung = true;
-                cancelPictureWorkers();
-                final String editedLink = umleitungsPanel.getLinkDocument();
-                if (jxlUmleitung.getText() == null || jxlUmleitung.getText().isEmpty()) {
-                    lstPictures.setModel(new DefaultListModel());
-                    SwingUtilities.invokeLater(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            showAlert(true);
-                            Alb_picturePanel.this.invalidate();
-                            Alb_picturePanel.this.revalidate();
-                            Alb_picturePanel.this.repaint();
-                        }
-                    });
-
-                } else {
-                    if (!(jxlUmleitung.getText().isEmpty() || jxlUmleitung.getText().contains(editedLink))) {
-                        showMeasureIsLoading();
+                @Override
+                public void actionPerformed(final ActionEvent e) {
+                    showUmleitung = true;
+                    cancelPictureWorkers();
+                    final String editedLink = umleitungsPanel.getLinkDocument();
+                    if ((jxlUmleitung.getText() == null) || jxlUmleitung.getText().isEmpty()) {
                         lstPictures.setModel(new DefaultListModel());
-                        final FileSearchWorker worker = new FileSearchWorker();
-                        worker.execute();
+                        SwingUtilities.invokeLater(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    showAlert(true);
+                                    Alb_picturePanel.this.invalidate();
+                                    Alb_picturePanel.this.revalidate();
+                                    Alb_picturePanel.this.repaint();
+                                }
+                            });
+                    } else {
+                        if (!(jxlUmleitung.getText().isEmpty() || jxlUmleitung.getText().contains(editedLink))) {
+                            showMeasureIsLoading();
+                            lstPictures.setModel(new DefaultListModel());
+                            final FileSearchWorker worker = new FileSearchWorker();
+                            worker.execute();
+                        }
                     }
                 }
-            }
-        });
+            });
     }
 
     //~ Methods ----------------------------------------------------------------
+
     /**
      * DOCUMENT ME!
      */
@@ -308,7 +309,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     /**
      * DOCUMENT ME!
      *
-     * @return the cidsBean
+     * @return  the cidsBean
      */
     public CidsBean getCidsBean() {
         return cidsBean;
@@ -317,7 +318,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     /**
      * DOCUMENT ME!
      *
-     * @param cidsBean the cidsBean to set
+     * @param  cidsBean  the cidsBean to set
      */
     public void setCidsBean(final CidsBean cidsBean) {
         documentURLs = new URL[2];
@@ -329,14 +330,14 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         if (cidsBean != null) {
             updatePicturePathListener = new PropertyChangeListener() {
 
-                @Override
-                public void propertyChange(final PropertyChangeEvent evt) {
-                    final String evtProp = evt.getPropertyName();
-                    if (TEXTBLATT_PROPERTY.equals(evtProp) || LAGEPLAN_PROPERTY.equals(evtProp)) {
-                        pathsChanged = true;
+                    @Override
+                    public void propertyChange(final PropertyChangeEvent evt) {
+                        final String evtProp = evt.getPropertyName();
+                        if (TEXTBLATT_PROPERTY.equals(evtProp) || LAGEPLAN_PROPERTY.equals(evtProp)) {
+                            pathsChanged = true;
+                        }
                     }
-                }
-            };
+                };
             cidsBean.addPropertyChangeListener(WeakListeners.propertyChange(updatePicturePathListener, cidsBean));
         }
         setCurrentDocumentNull();
@@ -362,7 +363,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         pnlAlert = new javax.swing.JPanel();
         pnlMeasureComponentWrapper = new javax.swing.JPanel();
         pnlBusy = new javax.swing.JPanel();
-        jxLBusyMeasure = new JXBusyLabel(new Dimension(64,64));
+        jxLBusyMeasure = new JXBusyLabel(new Dimension(64, 64));
         pnlMeasureComp = new javax.swing.JPanel();
         panPicNavigation = new javax.swing.JPanel();
         spDocuments = new de.cismet.tools.gui.RoundedPanel();
@@ -394,7 +395,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         btnOpen = new javax.swing.JButton();
         panCenter = new javax.swing.JPanel();
-        measureComponentPanel = new LayeredAlertPanel(pnlMeasureComponentWrapper,pnlAlert);
+        measureComponentPanel = new LayeredAlertPanel(pnlMeasureComponentWrapper, pnlAlert);
         semiRoundedPanel1 = new de.cismet.tools.gui.SemiRoundedPanel();
         lblCurrentViewTitle = new javax.swing.JLabel();
         pnlUmleitungLink = new javax.swing.JPanel();
@@ -413,10 +414,12 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         jxlUmleitung.setText("");
         jxlUmleitung.setToolTipText("");
         jxlUmleitung.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jxlUmleitungActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jxlUmleitungActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -477,10 +480,12 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         btnPlan.setMinimumSize(new java.awt.Dimension(53, 33));
         btnPlan.setPreferredSize(new java.awt.Dimension(53, 33));
         btnPlan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPlanActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnPlanActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -496,10 +501,12 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         btnTextblatt.setMinimumSize(new java.awt.Dimension(53, 33));
         btnTextblatt.setPreferredSize(new java.awt.Dimension(53, 33));
         btnTextblatt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTextblattActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnTextblattActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -530,10 +537,12 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         lstPictures.setEnabled(false);
         lstPictures.setFixedCellWidth(75);
         lstPictures.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                lstPicturesValueChanged(evt);
-            }
-        });
+
+                @Override
+                public void valueChanged(final javax.swing.event.ListSelectionEvent evt) {
+                    lstPicturesValueChanged(evt);
+                }
+            });
         scpPictureList.setViewportView(lstPictures);
 
         rpSeiten.add(scpPictureList, java.awt.BorderLayout.CENTER);
@@ -623,17 +632,20 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         rpControls.setLayout(new java.awt.GridBagLayout());
 
         buttonGrpMode.add(togPan);
-        togPan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/pan.gif"))); // NOI18N
+        togPan.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/pan.gif"))); // NOI18N
         togPan.setSelected(true);
         togPan.setText("Verschieben");
         togPan.setToolTipText("Verschieben");
         togPan.setFocusPainted(false);
         togPan.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         togPan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                togPanActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    togPanActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -642,16 +654,19 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         rpControls.add(togPan, gridBagConstraints);
 
         buttonGrpMode.add(togZoom);
-        togZoom.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom.gif"))); // NOI18N
+        togZoom.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/zoom.gif"))); // NOI18N
         togZoom.setText("Zoomen");
         togZoom.setToolTipText("Zoomen");
         togZoom.setFocusPainted(false);
         togZoom.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         togZoom.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                togZoomActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    togZoomActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -660,16 +675,19 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         rpControls.add(togZoom, gridBagConstraints);
 
         buttonGrpMode.add(togMessenLine);
-        togMessenLine.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/newLinestring.png"))); // NOI18N
+        togMessenLine.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/newLinestring.png"))); // NOI18N
         togMessenLine.setText("Messlinie");
         togMessenLine.setToolTipText("Messen (Linie)");
         togMessenLine.setFocusPainted(false);
         togMessenLine.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         togMessenLine.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                togMessenLineActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    togMessenLineActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -678,16 +696,19 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         rpControls.add(togMessenLine, gridBagConstraints);
 
         buttonGrpMode.add(togMessenPoly);
-        togMessenPoly.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/newPolygon.png"))); // NOI18N
+        togMessenPoly.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/newPolygon.png"))); // NOI18N
         togMessenPoly.setText("Messfläche");
         togMessenPoly.setToolTipText("Messen (Polygon)");
         togMessenPoly.setFocusPainted(false);
         togMessenPoly.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         togMessenPoly.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                togMessenPolyActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    togMessenPolyActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
@@ -696,17 +717,20 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         rpControls.add(togMessenPoly, gridBagConstraints);
 
         buttonGrpMode.add(togCalibrate);
-        togCalibrate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/screen.gif"))); // NOI18N
+        togCalibrate.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/screen.gif"))); // NOI18N
         togCalibrate.setText("Kalibrieren");
         togCalibrate.setToolTipText("Kalibrieren");
         togCalibrate.setEnabled(false);
         togCalibrate.setFocusPainted(false);
         togCalibrate.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         togCalibrate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                togCalibrateActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    togCalibrateActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
@@ -714,16 +738,19 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 5, 3, 5);
         rpControls.add(togCalibrate, gridBagConstraints);
 
-        btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/home.gif"))); // NOI18N
+        btnHome.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/home.gif"))); // NOI18N
         btnHome.setText("Übersicht");
         btnHome.setToolTipText("Übersicht");
         btnHome.setFocusPainted(false);
         btnHome.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnHome.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHomeActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnHomeActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -743,16 +770,19 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         rpControls.add(semiRoundedPanel4, gridBagConstraints);
 
-        btnOpen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/folder-image.png"))); // NOI18N
+        btnOpen.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/folder-image.png"))); // NOI18N
         btnOpen.setText("Öffnen");
         btnOpen.setToolTipText("Download zum Öffnen in externer Anwendung");
         btnOpen.setFocusPainted(false);
         btnOpen.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnOpen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOpenActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnOpenActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
@@ -792,18 +822,18 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         panCenter.add(semiRoundedPanel1, java.awt.BorderLayout.NORTH);
 
         add(panCenter, java.awt.BorderLayout.CENTER);
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void lstPicturesValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstPicturesValueChanged
+    private void lstPicturesValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstPicturesValueChanged
         if (!evt.getValueIsAdjusting()) {
             final Object selObj = lstPictures.getSelectedValue();
             if (selObj instanceof Integer) {
-                final int pageNo = (Integer) selObj;
+                final int pageNo = (Integer)selObj;
                 final PictureSelectWorker oldWorkerTest = currentPictureSelectWorker;
                 if (oldWorkerTest != null) {
                     oldWorkerTest.cancel(true);
@@ -813,50 +843,50 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                 CismetThreadPool.execute(currentPictureSelectWorker);
             }
         }
-    }//GEN-LAST:event_lstPicturesValueChanged
+    } //GEN-LAST:event_lstPicturesValueChanged
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void togPanActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togPanActionPerformed
+    private void togPanActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togPanActionPerformed
         measureComponent.actionPan();
-    }//GEN-LAST:event_togPanActionPerformed
+    }                                                                          //GEN-LAST:event_togPanActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void togMessenPolyActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togMessenPolyActionPerformed
+    private void togMessenPolyActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togMessenPolyActionPerformed
         measureComponent.actionMeasurePolygon();
-    }//GEN-LAST:event_togMessenPolyActionPerformed
+    }                                                                                 //GEN-LAST:event_togMessenPolyActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togZoomActionPerformed
+    private void togZoomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togZoomActionPerformed
         measureComponent.actionZoom();
-    }//GEN-LAST:event_togZoomActionPerformed
+    }                                                                           //GEN-LAST:event_togZoomActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void togMessenLineActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togMessenLineActionPerformed
+    private void togMessenLineActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togMessenLineActionPerformed
         measureComponent.actionMeasureLine();
-    }//GEN-LAST:event_togMessenLineActionPerformed
+    }                                                                                 //GEN-LAST:event_togMessenLineActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void togCalibrateActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_togCalibrateActionPerformed
+    private void togCalibrateActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togCalibrateActionPerformed
         if (currentPage != NO_SELECTION) {
             final Double distance = askForDistanceValue();
             if (distance != null) {
@@ -879,33 +909,33 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                     }
                 } else {
                     JOptionPane.showMessageDialog(
-                            StaticSwingTools.getParentFrame(this),
-                            "Eingegebene(r) Distanz bzw. Umfang ist kein gültiger Wert oder gleich 0.",
-                            "Ungültige Eingabe",
-                            JOptionPane.WARNING_MESSAGE);
+                        StaticSwingTools.getParentFrame(this),
+                        "Eingegebene(r) Distanz bzw. Umfang ist kein gültiger Wert oder gleich 0.",
+                        "Ungültige Eingabe",
+                        JOptionPane.WARNING_MESSAGE);
                 }
             }
             togPan.setSelected(true);
         }
-    }//GEN-LAST:event_togCalibrateActionPerformed
+    }                                                                                //GEN-LAST:event_togCalibrateActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
+    private void btnHomeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnHomeActionPerformed
         measureComponent.actionOverview();
-    }//GEN-LAST:event_btnHomeActionPerformed
+    }                                                                           //GEN-LAST:event_btnHomeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
+    private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
         if ((currentDocument == NO_SELECTION) || (documentURLs == null) || (currentDocument >= documentURLs.length)
-                || (currentDocument < 0)) {
+                    || (currentDocument < 0)) {
             return;
         }
 
@@ -922,54 +952,54 @@ public class Alb_picturePanel extends javax.swing.JPanel {
 
         CismetThreadPool.execute(new Runnable() {
 
-            @Override
-            public void run() {
-                final String filename = path.substring(path.lastIndexOf("/") + 1);
-                if (DownloadManagerDialog.showAskingForUserTitle(Alb_picturePanel.this)) {
-                    DownloadManager.instance()
-                            .add(
+                @Override
+                public void run() {
+                    final String filename = path.substring(path.lastIndexOf("/") + 1);
+                    if (DownloadManagerDialog.showAskingForUserTitle(Alb_picturePanel.this)) {
+                        DownloadManager.instance()
+                                .add(
                                     new HttpDownload(
-                                            url,
-                                            "",
-                                            DownloadManagerDialog.getJobname(),
-                                            "Baulast",
-                                            filename.substring(0, filename.lastIndexOf(".")),
-                                            filename.substring(filename.lastIndexOf("."))));
+                                        url,
+                                        "",
+                                        DownloadManagerDialog.getJobname(),
+                                        "Baulast",
+                                        filename.substring(0, filename.lastIndexOf(".")),
+                                        filename.substring(filename.lastIndexOf("."))));
+                    }
                 }
-            }
-        });
-    }//GEN-LAST:event_btnOpenActionPerformed
+            });
+    } //GEN-LAST:event_btnOpenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void btnPlanActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlanActionPerformed
+    private void btnPlanActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnPlanActionPerformed
         umleitungsPanel = new Alb_baulastUmleitungPanel(Alb_baulastUmleitungPanel.MODE.LAGEPLAN, this);
         showUmleitung = true;
         loadPlan();
         checkLinkInTitle();
-    }//GEN-LAST:event_btnPlanActionPerformed
+    }                                                                           //GEN-LAST:event_btnPlanActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void btnTextblattActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTextblattActionPerformed
+    private void btnTextblattActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnTextblattActionPerformed
         umleitungsPanel = new Alb_baulastUmleitungPanel(Alb_baulastUmleitungPanel.MODE.TEXTBLATT, this);
         showUmleitung = true;
         loadTextBlatt();
         checkLinkInTitle();
-    }//GEN-LAST:event_btnTextblattActionPerformed
+    }                                                                                //GEN-LAST:event_btnTextblattActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void jxlUmleitungActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlUmleitungActionPerformed
+    private void jxlUmleitungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlUmleitungActionPerformed
         umleitungsPanel.reset();
         alert.setType(AlertPanel.TYPE.SUCCESS);
         umleitungsPanel.setTextColor(AlertPanel.successMessageColor);
@@ -988,12 +1018,12 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         this.invalidate();
         this.validate();
         this.repaint();
-    }//GEN-LAST:event_jxlUmleitungActionPerformed
+    } //GEN-LAST:event_jxlUmleitungActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     private Collection<CidsBean> getPages() {
         if (cidsBean != null) {
@@ -1004,7 +1034,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                 o = cidsBean.getProperty("lageplan_pages");
             }
             if (o instanceof Collection) {
-                return (Collection<CidsBean>) o;
+                return (Collection<CidsBean>)o;
             }
         }
         return null;
@@ -1013,11 +1043,11 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     /**
      * DOCUMENT ME!
      *
-     * @param geometry DOCUMENT ME!
-     * @param documentNo DOCUMENT ME!
-     * @param pageNo DOCUMENT ME!
+     * @param   geometry    DOCUMENT ME!
+     * @param   documentNo  DOCUMENT ME!
+     * @param   pageNo      DOCUMENT ME!
      *
-     * @throws Exception DOCUMENT ME!
+     * @throws  Exception  DOCUMENT ME!
      */
     private void registerGeometryForPage(final Geometry geometry, final int documentNo, final int pageNo)
             throws Exception {
@@ -1031,7 +1061,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                     for (final CidsBean pageGeom : pageGeoCollection) {
                         final Object pageNumberObj = pageGeom.getProperty("page_number");
                         if (pageNumberObj instanceof Integer) {
-                            if (pageNo == (Integer) pageNumberObj) {
+                            if (pageNo == (Integer)pageNumberObj) {
                                 pageGeom.setProperty("geometry", geometry);
                                 pageFound = true;
                                 break;
@@ -1065,7 +1095,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
      */
     private void showMeasureIsLoading() {
         jxLBusyMeasure.setBusy(true);
-        final CardLayout cl = (CardLayout) pnlMeasureComponentWrapper.getLayout();
+        final CardLayout cl = (CardLayout)pnlMeasureComponentWrapper.getLayout();
         cl.show(pnlMeasureComponentWrapper, "busyCard");
     }
 
@@ -1074,7 +1104,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
      */
     private void showMeasurePanel() {
         jxLBusyMeasure.setBusy(false);
-        final CardLayout cl = (CardLayout) pnlMeasureComponentWrapper.getLayout();
+        final CardLayout cl = (CardLayout)pnlMeasureComponentWrapper.getLayout();
         cl.show(pnlMeasureComponentWrapper, "measureCard");
     }
 
@@ -1102,8 +1132,8 @@ public class Alb_picturePanel extends javax.swing.JPanel {
             showMeasurePanel();
             return;
         } else {
-            final String blattnummer = (String) getCidsBean().getProperty(BLATTNUMMER_PROPERTY);
-            final String lfdNummer = (String) getCidsBean().getProperty(LFDNUMMER_PROPERTY);
+            final String blattnummer = (String)getCidsBean().getProperty(BLATTNUMMER_PROPERTY);
+            final String lfdNummer = (String)getCidsBean().getProperty(LFDNUMMER_PROPERTY);
             final String filename = BaulastenPictureFinder.getPlanPictureFilename(blattnummer, lfdNummer);
             pictureReaderWorker = new PictureReaderWorker(documentURLs[currentDocument]);
             CismetThreadPool.execute(pictureReaderWorker);
@@ -1141,8 +1171,8 @@ public class Alb_picturePanel extends javax.swing.JPanel {
             showMeasurePanel();
             return;
         } else {
-            final String blattnummer = (String) getCidsBean().getProperty(BLATTNUMMER_PROPERTY);
-            final String lfdNummer = (String) getCidsBean().getProperty(LFDNUMMER_PROPERTY);
+            final String blattnummer = (String)getCidsBean().getProperty(BLATTNUMMER_PROPERTY);
+            final String lfdNummer = (String)getCidsBean().getProperty(LFDNUMMER_PROPERTY);
             final String filename = BaulastenPictureFinder.getTextblattPictureFilename(blattnummer, lfdNummer);
             pictureReaderWorker = new PictureReaderWorker(documentURLs[currentDocument]);
             CismetThreadPool.execute(pictureReaderWorker);
@@ -1160,7 +1190,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     /**
      * DOCUMENT ME!
      *
-     * @param url DOCUMENT ME!
+     * @param  url  DOCUMENT ME!
      */
     private void checkLinkInTitle(final URL url) {
         showLinkInTitle(false);
@@ -1176,20 +1206,20 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     private String getDocumentFilename() {
-        final String blattnummer = (String) getCidsBean().getProperty(BLATTNUMMER_PROPERTY);
-        final String lfdNummer = (String) getCidsBean().getProperty(LFDNUMMER_PROPERTY);
+        final String blattnummer = (String)getCidsBean().getProperty(BLATTNUMMER_PROPERTY);
+        final String lfdNummer = (String)getCidsBean().getProperty(LFDNUMMER_PROPERTY);
         return BaulastenPictureFinder.getPlanPictureFilename(blattnummer, lfdNummer);
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param url DOCUMENT ME!
+     * @param   url  DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     private String extractFilenameofUrl(final URL url) {
         final String[] splittedUrl = url.toString().split("/");
@@ -1233,10 +1263,10 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     private void showPermissionWarning() {
         if (!alreadyWarnedAboutPermissionProblem) {
             JOptionPane.showMessageDialog(
-                    StaticSwingTools.getParentFrame(this),
-                    "Kein Schreibrecht",
-                    "Kein Schreibrecht für die Klasse. Änderungen werden nicht gespeichert.",
-                    JOptionPane.WARNING_MESSAGE);
+                StaticSwingTools.getParentFrame(this),
+                "Kein Schreibrecht",
+                "Kein Schreibrecht für die Klasse. Änderungen werden nicht gespeichert.",
+                JOptionPane.WARNING_MESSAGE);
         }
         log.warn("User has no right to save Baulast bean!");
         alreadyWarnedAboutPermissionProblem = true;
@@ -1245,37 +1275,37 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     /**
      * DOCUMENT ME!
      *
-     * @throws Exception DOCUMENT ME!
+     * @throws  Exception  DOCUMENT ME!
      */
     private void persistBean() throws Exception {
         if (CidsBeanSupport.checkWritePermission(cidsBean)) {
             alreadyWarnedAboutPermissionProblem = false;
             final SwingWorker<Void, Void> persistWorker = new SwingWorker<Void, Void>() {
 
-                @Override
-                protected Void doInBackground() throws Exception {
-                    cidsBean.persist();
-                    return null;
-                }
-
-                @Override
-                protected void done() {
-                    try {
-                        get();
-                    } catch (Exception ex) {
-                        log.error(ex, ex);
-                        final ErrorInfo ei = new ErrorInfo(
-                                "Fehler beim Speichern der Kalibrierung",
-                                "Beim Speichern der Kalibrierung ist ein Fehler aufgetreten",
-                                null,
-                                null,
-                                ex,
-                                Level.SEVERE,
-                                null);
-                        JXErrorPane.showDialog(Alb_picturePanel.this, ei);
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        cidsBean.persist();
+                        return null;
                     }
-                }
-            };
+
+                    @Override
+                    protected void done() {
+                        try {
+                            get();
+                        } catch (Exception ex) {
+                            log.error(ex, ex);
+                            final ErrorInfo ei = new ErrorInfo(
+                                    "Fehler beim Speichern der Kalibrierung",
+                                    "Beim Speichern der Kalibrierung ist ein Fehler aufgetreten",
+                                    null,
+                                    null,
+                                    ex,
+                                    Level.SEVERE,
+                                    null);
+                            JXErrorPane.showDialog(Alb_picturePanel.this, ei);
+                        }
+                    }
+                };
             CismetThreadPool.execute(persistWorker);
         } else {
             showPermissionWarning();
@@ -1285,7 +1315,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     private Double askForDistanceValue() {
         try {
@@ -1308,7 +1338,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     public String getCollisionWarning() {
         return collisionWarning;
@@ -1333,7 +1363,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     /**
      * DOCUMENT ME!
      *
-     * @param cf DOCUMENT ME!
+     * @param  cf  DOCUMENT ME!
      */
     private void refreshMeasurementsInStatus(final Collection<Feature> cf) {
         double umfang = 0.0;
@@ -1350,7 +1380,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                         lblArea.setText(StaticDecimalTools.round(area) + " m²");
                     } else {
                         if (MessenGeometryListener.POLYGON.equals(
-                                measureComponent.getMessenInputListener().getMode())) {
+                                        measureComponent.getMessenInputListener().getMode())) {
                             // reduce polygon line length to one way
                             umfang *= 0.5;
                         }
@@ -1368,7 +1398,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     /**
      * DOCUMENT ME!
      *
-     * @param show DOCUMENT ME!
+     * @param  show  DOCUMENT ME!
      */
     private void showAlert(final boolean show) {
         // this means it is editable
@@ -1382,7 +1412,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     /**
      * DOCUMENT ME!
      *
-     * @param flag DOCUMENT ME!
+     * @param  flag  DOCUMENT ME!
      */
     private void showLinkInTitle(final boolean flag) {
         pnlUmleitungLink.removeAll();
@@ -1398,8 +1428,8 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     private void handleAlertClick() {
         if (isErrorMessageVisible) {
             /*
-             *  in this case it is possible that already a umleitungssfile exists so we need to check 
-             * if we have to set a succes or a danger alert
+             *  in this case it is possible that already a umleitungssfile exists so we need to check if we have to set
+             * a succes or a danger alert
              */
             if (showUmleitung) {
                 showUmleitung = false;
@@ -1456,7 +1486,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     /**
      * DOCUMENT ME!
      *
-     * @param url DOCUMENT ME!
+     * @param  url  DOCUMENT ME!
      */
     public void reloadPictureFromUrl(final URL url) {
         cancelPictureWorkers();
@@ -1476,7 +1506,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     /**
      * DOCUMENT ME!
      *
-     * @param aFlag DOCUMENT ME!
+     * @param  aFlag  DOCUMENT ME!
      */
     void setUmleitungChangedFlag(final boolean aFlag) {
         this.umleitungChangedFlag = aFlag;
@@ -1485,7 +1515,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     boolean isUmleitungChangedFlag() {
         return umleitungChangedFlag;
@@ -1494,7 +1524,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     /**
      * DOCUMENT ME!
      *
-     * @param url DOCUMENT ME!
+     * @param  url  DOCUMENT ME!
      */
     public void handleUmleitungCreated(final URL url) {
         showAlert(false);
@@ -1502,9 +1532,11 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         checkLinkInTitle(url);
         final FileSearchWorker worker = new FileSearchWorker(false);
         worker.execute();
-
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     public void handleUmleitungDeleted() {
         showAlert(true);
         documentURLs[currentDocument] = null;
@@ -1515,16 +1547,20 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         this.repaint();
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     public void handleEscapePressed() {
         cancelPictureWorkers();
         measureComponent.removeAllFeatures();
     }
 
     //~ Inner Classes ----------------------------------------------------------
+
     /**
      * DOCUMENT ME!
      *
-     * @version $Revision$, $Date$
+     * @version  $Revision$, $Date$
      */
     //J-
     final class FileSearchWorker extends SwingWorker<List[], Void> {
@@ -1635,24 +1671,26 @@ public class Alb_picturePanel extends javax.swing.JPanel {
             }
         }
     }
-//J+
+    //J+
 
     /**
      * DOCUMENT ME!
      *
-     * @version $Revision$, $Date$
+     * @version  $Revision$, $Date$
      */
     final class PictureReaderWorker extends SwingWorker<ListModel, Void> {
 
         //~ Instance fields ----------------------------------------------------
+
         private final URL pictureURL;
 //        private boolean md5OK = false;
 
         //~ Constructors -------------------------------------------------------
+
         /**
          * Creates a new PictureReaderWorker object.
          *
-         * @param pictureURL DOCUMENT ME!
+         * @param  pictureURL  DOCUMENT ME!
          */
         public PictureReaderWorker(final URL pictureURL) {
             this.pictureURL = pictureURL;
@@ -1664,14 +1702,15 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         }
 
         //~ Methods ------------------------------------------------------------
+
         /**
          * private void updateMD5() throws Exception { expectedMD5Values[currentDocument] = currentActualDocumentMD5;
          * cidsBean.setProperty(MD5_PROPERTY_NAMES[currentDocument], currentActualDocumentMD5); log.debug("saving md5
          * value " + currentActualDocumentMD5); persistBean(); }.
          *
-         * @return DOCUMENT ME!
+         * @return  DOCUMENT ME!
          *
-         * @throws Exception DOCUMENT ME!
+         * @throws  Exception  DOCUMENT ME!
          */
         @Override
         protected ListModel doInBackground() throws Exception {
@@ -1691,7 +1730,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         /**
          * DOCUMENT ME!
          *
-         * @param pageGeoms DOCUMENT ME!
+         * @param  pageGeoms  DOCUMENT ME!
          */
         private void readPageGeometriesIntoMap(final Collection<CidsBean> pageGeoms) {
             pageGeometries.clear();
@@ -1700,7 +1739,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
                     final Object pageNumberObj = bean.getProperty("page_number");
                     final Object geometryObj = bean.getProperty("geometry");
                     if ((pageNumberObj instanceof Integer) && (geometryObj instanceof Geometry)) {
-                        pageGeometries.put((Integer) pageNumberObj, (Geometry) geometryObj);
+                        pageGeometries.put((Integer)pageNumberObj, (Geometry)geometryObj);
                     }
                 }
             }
@@ -1740,18 +1779,20 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     /**
      * DOCUMENT ME!
      *
-     * @version $Revision$, $Date$
+     * @version  $Revision$, $Date$
      */
     final class PictureSelectWorker extends SwingWorker<BufferedImage, Void> {
 
         //~ Instance fields ----------------------------------------------------
+
         private final int pageNumber;
 
         //~ Constructors -------------------------------------------------------
+
         /**
          * Creates a new PictureSelectWorker object.
          *
-         * @param pageNumber DOCUMENT ME!
+         * @param  pageNumber  DOCUMENT ME!
          */
         public PictureSelectWorker(final int pageNumber) {
             this.pageNumber = pageNumber;
@@ -1760,13 +1801,14 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         }
 
         //~ Methods ------------------------------------------------------------
+
         /**
          * DOCUMENT ME!
          *
-         * @return DOCUMENT ME!
+         * @return  DOCUMENT ME!
          *
-         * @throws Exception DOCUMENT ME!
-         * @throws IllegalStateException DOCUMENT ME!
+         * @throws  Exception              DOCUMENT ME!
+         * @throws  IllegalStateException  DOCUMENT ME!
          */
         @Override
         protected BufferedImage doInBackground() throws Exception {
@@ -1813,15 +1855,16 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     /**
      * DOCUMENT ME!
      *
-     * @version $Revision$, $Date$
+     * @version  $Revision$, $Date$
      */
     final class MessenFeatureCollectionListener extends de.cismet.cismap.commons.features.FeatureCollectionAdapter {
 
         //~ Methods ------------------------------------------------------------
+
         /**
          * DOCUMENT ME!
          *
-         * @param fce DOCUMENT ME!
+         * @param  fce  DOCUMENT ME!
          */
         @Override
         public void featuresAdded(final FeatureCollectionEvent fce) {
@@ -1839,7 +1882,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         /**
          * DOCUMENT ME!
          *
-         * @param fce DOCUMENT ME!
+         * @param  fce  DOCUMENT ME!
          */
         @Override
         public void featuresRemoved(final FeatureCollectionEvent fce) {
@@ -1857,7 +1900,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         /**
          * DOCUMENT ME!
          *
-         * @param fce DOCUMENT ME!
+         * @param  fce  DOCUMENT ME!
          */
         @Override
         public void allFeaturesRemoved(final FeatureCollectionEvent fce) {
@@ -1867,7 +1910,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         /**
          * DOCUMENT ME!
          *
-         * @param fce DOCUMENT ME!
+         * @param  fce  DOCUMENT ME!
          */
         @Override
         public void featuresChanged(final FeatureCollectionEvent fce) {
@@ -1877,7 +1920,7 @@ public class Alb_picturePanel extends javax.swing.JPanel {
         /**
          * DOCUMENT ME!
          *
-         * @param fce DOCUMENT ME!
+         * @param  fce  DOCUMENT ME!
          */
         @Override
         public void featureSelectionChanged(final FeatureCollectionEvent fce) {
