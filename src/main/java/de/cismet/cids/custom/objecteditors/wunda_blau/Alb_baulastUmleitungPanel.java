@@ -626,9 +626,11 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
      * @param  evt  DOCUMENT ME!
      */
     private void btnPlatzhalterActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnPlatzhalterActionPerformed
+//        tfName.getDocument().removeDocumentListener(this);
         tfName.setText(PLATZHALTER_DOC_NAME);
-        createLinkFile();
-    }                                                                                  //GEN-LAST:event_btnPlatzhalterActionPerformed
+//        tfName.getDocument().addDocumentListener(this);
+//        createLinkFile();
+    } //GEN-LAST:event_btnPlatzhalterActionPerformed
 
     /**
      * DOCUMENT ME!
