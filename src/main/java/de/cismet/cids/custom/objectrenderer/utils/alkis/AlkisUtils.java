@@ -113,21 +113,16 @@ public class AlkisUtils {
      */
     public static String generateLinkFromCidsBean(final CidsBean bean, final String description) {
         if ((bean != null) && (description != null)) {
-            if (bean.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase("alkis_adresse")
-                        && !description.trim().matches(".*\\(\\d+\\)$")) {
-                return description;
-            } else {
-                final int objectID = bean.getMetaObject().getId();
-                final StringBuilder result = new StringBuilder("<a href=\"");
+            final int objectID = bean.getMetaObject().getId();
+            final StringBuilder result = new StringBuilder("<a href=\"");
 //            result.append(bean.getMetaObject().getMetaClass().getID()).append(LINK_SEPARATOR_TOKEN).append(objectID);
-                result.append(bean.getMetaObject().getMetaClass().getID())
-                        .append(AlkisConstants.LINK_SEPARATOR_TOKEN)
-                        .append(objectID);
-                result.append("\">");
-                result.append(description);
-                result.append("</a>");
-                return result.toString();
-            }
+            result.append(bean.getMetaObject().getMetaClass().getID())
+                    .append(AlkisConstants.LINK_SEPARATOR_TOKEN)
+                    .append(objectID);
+            result.append("\">");
+            result.append(description);
+            result.append("</a>");
+            return result.toString();
         } else {
             return "";
         }
