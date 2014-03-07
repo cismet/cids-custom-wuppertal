@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 
 import org.openide.util.NbBundle;
 
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
@@ -200,6 +201,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrControls;
     private javax.swing.ButtonGroup bgrDocument;
+    private org.jdesktop.swingx.JXBusyLabel blblBusy;
     private javax.swing.JButton btnAddLandparcel;
     private javax.swing.JButton btnCombineGeometries;
     private javax.swing.JButton btnHome;
@@ -236,6 +238,8 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private javax.swing.JList lstLandparcels;
     private javax.swing.JList lstPages;
     private de.cismet.cismap.commons.gui.measuring.MeasuringComponent measuringComponent;
+    private javax.swing.JPanel pnlBusyLable;
+    private javax.swing.JPanel pnlCards;
     private javax.swing.JPanel pnlContainer;
     private de.cismet.tools.gui.RoundedPanel pnlControls;
     private de.cismet.tools.gui.RoundedPanel pnlDocument;
@@ -248,6 +252,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private de.cismet.tools.gui.SemiRoundedPanel pnlHeaderLandparcels;
     private de.cismet.tools.gui.SemiRoundedPanel pnlHeaderPages;
     private de.cismet.tools.gui.RoundedPanel pnlLandparcels;
+    private javax.swing.JPanel pnlMeasuringComponent;
     private de.cismet.tools.gui.RoundedPanel pnlPages;
     private javax.swing.JPanel pnlTitle;
     private javax.swing.JPopupMenu popChangeVeraenderungsart;
@@ -421,10 +426,14 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         pnlDocument = new de.cismet.tools.gui.RoundedPanel();
         pnlHeaderDocument = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeaderDocument = new javax.swing.JLabel();
+        pnlCards = new javax.swing.JPanel();
+        pnlMeasuringComponent = new javax.swing.JPanel();
         measuringComponent = new MeasuringComponent(INITIAL_BOUNDINGBOX, CRS);
-        lblErrorWhileLoadingBild = new javax.swing.JLabel();
-        lblErrorWhileLoadingGrenzniederschrift = new javax.swing.JLabel();
         lblMissingDocuments = new javax.swing.JLabel();
+        lblErrorWhileLoadingGrenzniederschrift = new javax.swing.JLabel();
+        lblErrorWhileLoadingBild = new javax.swing.JLabel();
+        pnlBusyLable = new javax.swing.JPanel();
+        blblBusy = new org.jdesktop.swingx.JXBusyLabel();
         gluGapControls = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
@@ -1212,40 +1221,18 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 0.1;
         pnlDocument.add(pnlHeaderDocument, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 0.1;
-        pnlDocument.add(measuringComponent, gridBagConstraints);
 
-        lblErrorWhileLoadingBild.setBackground(java.awt.Color.white);
-        lblErrorWhileLoadingBild.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblErrorWhileLoadingBild.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/missingRasterdocument.png"))); // NOI18N
-        lblErrorWhileLoadingBild.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.lblErrorWhileLoadingBild.text"));                                                // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 0.1;
-        pnlDocument.add(lblErrorWhileLoadingBild, gridBagConstraints);
+        pnlCards.setLayout(new java.awt.CardLayout());
 
-        lblErrorWhileLoadingGrenzniederschrift.setBackground(java.awt.Color.white);
-        lblErrorWhileLoadingGrenzniederschrift.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblErrorWhileLoadingGrenzniederschrift.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/missingRasterdocument.png"))); // NOI18N
-        lblErrorWhileLoadingGrenzniederschrift.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.lblErrorWhileLoadingGrenzniederschrift.text"));                                  // NOI18N
+        pnlMeasuringComponent.setOpaque(false);
+        pnlMeasuringComponent.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
-        pnlDocument.add(lblErrorWhileLoadingGrenzniederschrift, gridBagConstraints);
+        pnlMeasuringComponent.add(measuringComponent, gridBagConstraints);
 
         lblMissingDocuments.setBackground(java.awt.Color.white);
         lblMissingDocuments.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1259,7 +1246,55 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 0.1;
-        pnlDocument.add(lblMissingDocuments, gridBagConstraints);
+        pnlMeasuringComponent.add(lblMissingDocuments, gridBagConstraints);
+
+        lblErrorWhileLoadingGrenzniederschrift.setBackground(java.awt.Color.white);
+        lblErrorWhileLoadingGrenzniederschrift.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblErrorWhileLoadingGrenzniederschrift.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/missingRasterdocument.png"))); // NOI18N
+        lblErrorWhileLoadingGrenzniederschrift.setText(org.openide.util.NbBundle.getMessage(
+                VermessungRissEditor.class,
+                "VermessungRissEditor.lblErrorWhileLoadingGrenzniederschrift.text"));                                  // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 0.1;
+        pnlMeasuringComponent.add(lblErrorWhileLoadingGrenzniederschrift, gridBagConstraints);
+
+        lblErrorWhileLoadingBild.setBackground(java.awt.Color.white);
+        lblErrorWhileLoadingBild.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblErrorWhileLoadingBild.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/missingRasterdocument.png"))); // NOI18N
+        lblErrorWhileLoadingBild.setText(org.openide.util.NbBundle.getMessage(
+                VermessungRissEditor.class,
+                "VermessungRissEditor.lblErrorWhileLoadingBild.text"));                                                // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 0.1;
+        pnlMeasuringComponent.add(lblErrorWhileLoadingBild, gridBagConstraints);
+
+        pnlCards.add(pnlMeasuringComponent, "MeasuringComponent");
+
+        pnlBusyLable.setLayout(new java.awt.BorderLayout());
+
+        blblBusy.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        blblBusy.setText(org.openide.util.NbBundle.getMessage(
+                VermessungRissEditor.class,
+                "VermessungRissEditor.blblBusy.text")); // NOI18N
+        pnlBusyLable.add(blblBusy, java.awt.BorderLayout.CENTER);
+
+        pnlCards.add(pnlBusyLable, "busy");
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        pnlDocument.add(pnlCards, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -1649,7 +1684,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
         setCurrentDocumentNull();
 
-        EventQueue.invokeLater(new RefreshDocumentWorker());
+        new RefreshDocumentWorker().execute();
     }
 
     /**
@@ -2206,6 +2241,20 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  busy  DOCUMENT ME!
+     */
+    private void showBusy(final boolean busy) {
+        blblBusy.setBusy(busy);
+        if (busy) {
+            ((CardLayout)pnlCards.getLayout()).show(pnlCards, "busy");
+        } else {
+            ((CardLayout)pnlCards.getLayout()).show(pnlCards, "MeasuringComponent");
+        }
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     //J-
@@ -2381,9 +2430,17 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             togPan.setEnabled(false);
             togZoom.setEnabled(false);
             setCurrentDocumentNull();
+
+            showBusy(true);
         }
 
         //~ Methods ------------------------------------------------------------
+        /**
+         * Tries to find a working URL for the Bild (image) and Grenzniederschrift (boundary notes) and saves them to the array documentURLs.
+         * This is done by doing a request to several possible URLs.
+         * @return
+         * @throws Exception
+         */
         @Override
         protected Void doInBackground() throws Exception {
             documentURLs[DOCUMENT_BILD] = null;
@@ -2467,6 +2524,9 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             }
         }
 
+        /**
+         * Depending on the values in the documentURLs the GUI gets configured and the actual documents get loaded.
+         */
         @Override
         protected void done() {
             try {
@@ -2508,6 +2568,8 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                     loadGrenzniederschrift();
                 }
             }
+
+            showBusy(false);
         }
     }
 
