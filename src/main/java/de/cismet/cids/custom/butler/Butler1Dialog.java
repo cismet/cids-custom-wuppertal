@@ -12,7 +12,6 @@
 package de.cismet.cids.custom.butler;
 
 import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.CoordinateSequence;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -926,17 +925,40 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                     if ((g == null) || (g.getArea() == 0)) {
                         if (pointFeature.getGeometry() != null) {
                             // zoom zo the point feature
-                            bb = new XBoundingBox(pointFeature.getGeometry().buffer(MIN_BUFFER));
+                            final Envelope env = pointFeature.getGeometry()
+                                        .buffer(MIN_BUFFER / 2)
+                                        .getEnvelopeInternal();
+                            bb = new XBoundingBox(env.getMinX(),
+                                    env.getMinY(),
+                                    env.getMaxX(),
+                                    env.getMaxY(),
+                                    CrsTransformer.createCrsFromSrid(pointFeature.getGeometry().getSRID()),
+                                    true);
                         } else {
                             bb = (XBoundingBox)map.getInitialBoundingBox();
                         }
                     } else {
                         // zoom to the rectangle
                         final Envelope env = g.getEnvelopeInternal();
-                        final double buffer = Math.sqrt((env.getHeight() * env.getHeight())
-                                        + (env.getWidth() * env.getWidth())) * 0.1d;
-                        bb = new XBoundingBox(g.buffer(buffer));
+                        if ((env.getHeight() > 100) || (env.getWidth() > 100)) {
+                            bb = new XBoundingBox(g);
+                        } else {
+                            final double buffer = (MIN_BUFFER - Math.max(env.getHeight(), env.getWidth())) / 2;
+                            final Envelope e = g.buffer(buffer).getEnvelopeInternal();
+                            bb = new XBoundingBox(e.getMinX(),
+                                    e.getMinY(),
+                                    e.getMaxX(),
+                                    e.getMaxY(),
+                                    CrsTransformer.createCrsFromSrid(g.getSRID()),
+                                    true);
+                        }
                     }
+//                    apply diagonal buffer
+                    final double width = bb.getX2() - bb.getX1();
+                    final double height = bb.getY2() - bb.getY1();
+                    final double buffer = Math.sqrt((height * height)
+                                    + (width * width)) * 0.1d;
+                    bb = new XBoundingBox(bb.getGeometry().buffer(buffer).getEnvelope());
                     map.gotoBoundingBoxWithHistory(bb);
                 }
             };
