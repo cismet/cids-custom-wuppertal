@@ -2171,7 +2171,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         }
 
         currentPictureSelectWorker = new PictureSelectWorker(page);
-        EventQueue.invokeLater(currentPictureSelectWorker);
+        currentPictureSelectWorker.execute();
     }
 
     /**
@@ -2283,6 +2283,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             }
 
             lstPages.setModel(MODEL_LOAD);
+            lstPages.setEnabled(false);
             measuringComponent.removeAllFeatures();
             setDocumentControlsEnabled(false);
             showBusyLabel(true);
