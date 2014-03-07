@@ -2130,7 +2130,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                     "VermessungRissEditor.lblHeaderDocument.text.vermessungsriss"));
         }
 
-        EventQueue.invokeLater(new PictureReaderWorker(url));
+        new PictureReaderWorker(url).execute();
     }
 
     /**
@@ -2156,7 +2156,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                     "VermessungRissEditor.lblHeaderDocument.text.ergaenzendeDokumente"));
         }
 
-        EventQueue.invokeLater(new PictureReaderWorker(url));
+        new PictureReaderWorker(url).execute();
     }
 
     /**
@@ -2285,6 +2285,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             lstPages.setModel(MODEL_LOAD);
             measuringComponent.removeAllFeatures();
             setDocumentControlsEnabled(false);
+            showBusy(true);
         }
 
         //~ Methods ------------------------------------------------------------
@@ -2341,6 +2342,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                     setDocumentControlsEnabled(true);
                 }
             }
+            showBusy(false);
         }
     }
 
