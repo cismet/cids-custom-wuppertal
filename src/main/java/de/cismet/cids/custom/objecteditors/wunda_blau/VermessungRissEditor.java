@@ -238,7 +238,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private javax.swing.JList lstLandparcels;
     private javax.swing.JList lstPages;
     private de.cismet.cismap.commons.gui.measuring.MeasuringComponent measuringComponent;
-    private javax.swing.JPanel pnlBusyLable;
+    private javax.swing.JPanel pnlBusyLabel;
     private javax.swing.JPanel pnlCards;
     private javax.swing.JPanel pnlContainer;
     private de.cismet.tools.gui.RoundedPanel pnlControls;
@@ -432,7 +432,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         lblMissingDocuments = new javax.swing.JLabel();
         lblErrorWhileLoadingGrenzniederschrift = new javax.swing.JLabel();
         lblErrorWhileLoadingBild = new javax.swing.JLabel();
-        pnlBusyLable = new javax.swing.JPanel();
+        pnlBusyLabel = new javax.swing.JPanel();
         blblBusy = new org.jdesktop.swingx.JXBusyLabel();
         gluGapControls = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
@@ -1278,15 +1278,15 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
         pnlCards.add(pnlMeasuringComponent, "MeasuringComponent");
 
-        pnlBusyLable.setLayout(new java.awt.BorderLayout());
+        pnlBusyLabel.setLayout(new java.awt.BorderLayout());
 
         blblBusy.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         blblBusy.setText(org.openide.util.NbBundle.getMessage(
                 VermessungRissEditor.class,
                 "VermessungRissEditor.blblBusy.text")); // NOI18N
-        pnlBusyLable.add(blblBusy, java.awt.BorderLayout.CENTER);
+        pnlBusyLabel.add(blblBusy, java.awt.BorderLayout.CENTER);
 
-        pnlCards.add(pnlBusyLable, "busy");
+        pnlCards.add(pnlBusyLabel, "busy");
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -2246,7 +2246,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      *
      * @param  busy  DOCUMENT ME!
      */
-    private void showBusy(final boolean busy) {
+    private void showBusyLabel(final boolean busy) {
         blblBusy.setBusy(busy);
         if (busy) {
             ((CardLayout)pnlCards.getLayout()).show(pnlCards, "busy");
@@ -2285,7 +2285,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             lstPages.setModel(MODEL_LOAD);
             measuringComponent.removeAllFeatures();
             setDocumentControlsEnabled(false);
-            showBusy(true);
+            showBusyLabel(true);
         }
 
         //~ Methods ------------------------------------------------------------
@@ -2342,7 +2342,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                     setDocumentControlsEnabled(true);
                 }
             }
-            showBusy(false);
+            showBusyLabel(false);
         }
     }
 
@@ -2433,7 +2433,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             togZoom.setEnabled(false);
             setCurrentDocumentNull();
 
-            showBusy(true);
+            showBusyLabel(true);
         }
 
         //~ Methods ------------------------------------------------------------
@@ -2571,7 +2571,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 }
             }
 
-            showBusy(false);
+            showBusyLabel(false);
         }
     }
 
