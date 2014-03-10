@@ -2547,6 +2547,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 lblMissingDocuments.setVisible(true);
                 lstPages.setModel(new DefaultListModel());
                 lstPages.setEnabled(false);
+                showBusyLabel(false);
             } else {
                 if (documentURLs[DOCUMENT_BILD] != null) {
                     togBild.setEnabled(true);
@@ -2571,8 +2572,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                     loadGrenzniederschrift();
                 }
             }
-
-            showBusyLabel(false);
         }
     }
 
