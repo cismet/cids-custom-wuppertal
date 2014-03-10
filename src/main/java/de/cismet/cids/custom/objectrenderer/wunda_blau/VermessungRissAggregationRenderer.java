@@ -13,15 +13,11 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 
 import org.apache.log4j.Logger;
-
-import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.error.ErrorInfo;
 
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
@@ -40,7 +36,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -80,11 +75,11 @@ import de.cismet.tools.CismetThreadPool;
 
 import de.cismet.tools.gui.MultiPagePictureReader;
 import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.downloadmanager.BackgroundTaskMultipleDownload;
 import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import de.cismet.tools.gui.downloadmanager.HttpDownload;
-import de.cismet.tools.gui.downloadmanager.MultipleDownload;
 
 /**
  * DOCUMENT ME!
@@ -98,9 +93,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(VermessungRissAggregationRenderer.class);
-
     private static final double BUFFER = 0.005;
-
     private static final String PARAMETER_JOBNUMBER = "JOBNUMBER";
     private static final String PARAMETER_PROJECTNAME = "PROJECTNAME";
     private static final String PARAMETER_TYPE = "TYPE";
@@ -108,7 +101,6 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
     private static final String PARAMETER_IMAGEAVAILABLE = "IMAGEAVAILABLE";
     private static final String TYPE_VERMESSUNGSRISSE = "Vermessungsrisse";
     private static final String TYPE_COMPLEMENTARYDOCUMENTS = "Ergänzende Dokumente";
-
     // Spaltenueberschriften
     private static final String[] AGR_COMLUMN_NAMES = new String[] {
             "Auswahl",
@@ -128,7 +120,6 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
             "jahr",
             "format"
         };
-
     private static final int[] AGR_COMLUMN_WIDTH = new int[] { 40, 40, 130, 85, 85, 60, 40 };
 
     //~ Instance fields --------------------------------------------------------
@@ -139,7 +130,6 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
     private Map<CidsBean, CidsFeature> features;
     private Comparator<Integer> tableComparator;
     private PrintingWaitDialog printingWaitDialog;
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGenerateReport;
     private javax.swing.JComboBox cmbType;
@@ -481,115 +471,96 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
     private void downloadProducts(final Collection<CidsBean> selectedVermessungsrisse,
             final String type,
             final String host) {
-        final Runnable runnable = new Runnable() {
+        if (DownloadManagerDialog.showAskingForUserTitle(VermessungRissAggregationRenderer.this)) {
+            String projectname = txtProjectname.getText();
+            if ((projectname == null) || (projectname.trim().length() == 0)) {
+                projectname = type;
+            }
+            final String finalProjectname = projectname;
 
-                @Override
-                public void run() {
-                    EventQueue.invokeLater(new Runnable() {
+            final BackgroundTaskMultipleDownload.FetchDownloadsTask fetchDownloadsTask =
+                new BackgroundTaskMultipleDownload.FetchDownloadsTask() {
 
-                            @Override
-                            public void run() {
-                                StaticSwingTools.showDialog(
-                                    StaticSwingTools.getParentFrame(VermessungRissAggregationRenderer.this),
-                                    printingWaitDialog,
-                                    true);
-                            }
-                        });
-
-                    final Collection<VermessungRissReportBean> reportBeans = new LinkedList<VermessungRissReportBean>();
-                    final Collection<VermessungRissImageReportBean> imageBeans =
-                        new LinkedList<VermessungRissImageReportBean>();
-                    final Collection<URL> additionalFilesToDownload = new LinkedList<URL>();
-
-                    // Not the most elegant way, but it works. We have to calculate on which page an image will appear.
-                    // This can't be easily done with JasperReports. In order to let JasperReports calculate which page
-                    // an image appears on, we have to know how many pages the overview will take. And that is not
-                    // possible in JasperReports itself. Whether we evaluate the page calculation "Now" - which means at
-                    // the time one row is written -: Then we only get the current page count, not the future page
-                    // count. Or we evaluate the page calculation "Report", that means after the rest of the reportwas
-                    // created: Then the page count has a fix value for every row. The first page can contain 27 rows,
-                    // the following pages are able to hold 37 rows. The first image will appear on page 2 if there are
-                    // less than 27 rows to write.
-                    final Map startingPages = new HashMap();
-                    int startingPage = 2;
-                    if (selectedVermessungsrisse.size() > 27) {
-                        startingPage += Math.ceil((selectedVermessungsrisse.size() - 27D) / 37D);
-                    }
-
-                    final Map imageAvailable = new HashMap();
-
-                    for (final CidsBean vermessungsriss : selectedVermessungsrisse) {
-                        final String schluessel;
-                        final Integer gemarkung;
-                        final String flur;
-                        final String blatt;
-
-                        try {
-                            schluessel = vermessungsriss.getProperty("schluessel").toString();
-                            gemarkung = (Integer)vermessungsriss.getProperty("gemarkung.id");
-                            flur = vermessungsriss.getProperty("flur").toString();
-                            blatt = vermessungsriss.getProperty("blatt").toString();
-                        } catch (final Exception ex) {
-                            // TODO: User feedback?
-                            LOG.warn("Could not include raster document for vermessungsriss '"
-                                        + vermessungsriss.toJSONString(true)
-                                        + "'.",
-                                ex);
-                            continue;
+                    @Override
+                    public Collection<? extends Download> fetchDownloads() throws Exception {
+                        final Collection<VermessungRissReportBean> reportBeans =
+                            new LinkedList<VermessungRissReportBean>();
+                        final Collection<VermessungRissImageReportBean> imageBeans =
+                            new LinkedList<VermessungRissImageReportBean>();
+                        final Collection<URL> additionalFilesToDownload = new LinkedList<URL>();
+                        // Not the most elegant way, but it works. We have to calculate on which page an image will
+                        // appear. This can't be easily done with JasperReports. In order to let JasperReports calculate
+                        // which page an image appears on, we have to know how many pages the overview will take. And
+                        // that is not possible in JasperReports itself. Whether we evaluate the page calculation "Now"
+                        // - which means at the time one row is written -: Then we only get the current page count, not
+                        // the future page count. Or we evaluate the page calculation "Report", that means after the
+                        // rest of the reportwas created: Then the page count has a fix value for every row. The first
+                        // page can contain 27 rows, the following pages are able to hold 37 rows. The first image will
+                        // appear on page 2 if there are less than 27 rows to write.
+                        final Map startingPages = new HashMap();
+                        int startingPage = 2;
+                        if (selectedVermessungsrisse.size() > 27) {
+                            startingPage += Math.ceil((selectedVermessungsrisse.size() - 27D) / 37D);
                         }
 
-                        final StringBuilder description;
-                        if (TYPE_VERMESSUNGSRISSE.equalsIgnoreCase(type)) {
-                            description = new StringBuilder("Vermessungsriss ");
-                        } else {
-                            description = new StringBuilder("Ergänzende Dokumente zum Vermessungsriss ");
-                        }
-                        description.append(vermessungsriss.getProperty("schluessel"));
-                        description.append(" - ");
-                        description.append(vermessungsriss.getProperty("gemarkung.name"));
-                        description.append(" - ");
-                        description.append(vermessungsriss.getProperty("flur"));
-                        description.append(" - ");
-                        description.append(vermessungsriss.getProperty("blatt"));
-                        description.append(" - Seite ");
+                        final Map imageAvailable = new HashMap();
 
-                        final Map<URL, URL> validURLs = VermessungRissEditor.getCorrespondingURLs(
-                                host,
-                                gemarkung,
-                                flur,
-                                schluessel,
-                                blatt);
+                        for (final CidsBean vermessungsriss : selectedVermessungsrisse) {
+                            final String schluessel;
+                            final Integer gemarkung;
+                            final String flur;
+                            final String blatt;
 
-                        MultiPagePictureReader reader = null;
-                        int pageCount = 0;
-                        final StringBuilder fileReference = new StringBuilder();
-                        for (final Map.Entry<URL, URL> urls : validURLs.entrySet()) {
                             try {
-                                reader = new MultiPagePictureReader(urls.getValue(), false, false);
-                                pageCount = reader.getNumberOfPages();
-                                additionalFilesToDownload.add(urls.getKey());
-
-                                String path = urls.getKey().getPath();
-                                path = path.substring(path.lastIndexOf('/') + 1);
-                                fileReference.append(" (");
-                                fileReference.append(path);
-                                fileReference.append(')');
-                                break;
+                                schluessel = vermessungsriss.getProperty("schluessel").toString();
+                                gemarkung = (Integer)vermessungsriss.getProperty("gemarkung.id");
+                                flur = vermessungsriss.getProperty("flur").toString();
+                                blatt = vermessungsriss.getProperty("blatt").toString();
                             } catch (final Exception ex) {
-                                LOG.warn("Could not read document from URL '" + urls.getValue().toExternalForm()
-                                            + "'. Skipping this url.",
+                                // TODO: User feedback?
+                                LOG.warn("Could not include raster document for vermessungsriss '"
+                                            + vermessungsriss.toJSONString(true)
+                                            + "'.",
                                     ex);
+                                continue;
                             }
-                        }
 
-                        boolean isOfReducedSize = true;
-                        if (reader == null) {
-                            // Didn't find an image of reduced size
+                            final StringBuilder description;
+                            if (TYPE_VERMESSUNGSRISSE.equalsIgnoreCase(type)) {
+                                description = new StringBuilder("Vermessungsriss ");
+                            } else {
+                                description = new StringBuilder("Ergänzende Dokumente zum Vermessungsriss ");
+                            }
+                            description.append(vermessungsriss.getProperty("schluessel"));
+                            description.append(" - ");
+                            description.append(vermessungsriss.getProperty("gemarkung.name"));
+                            description.append(" - ");
+                            description.append(vermessungsriss.getProperty("flur"));
+                            description.append(" - ");
+                            description.append(vermessungsriss.getProperty("blatt"));
+                            description.append(" - Seite ");
+
+                            final Map<URL, URL> validURLs = VermessungRissEditor.getCorrespondingURLs(
+                                    host,
+                                    gemarkung,
+                                    flur,
+                                    schluessel,
+                                    blatt);
+
+                            MultiPagePictureReader reader = null;
+                            int pageCount = 0;
+                            final StringBuilder fileReference = new StringBuilder();
                             for (final Map.Entry<URL, URL> urls : validURLs.entrySet()) {
                                 try {
-                                    reader = new MultiPagePictureReader(urls.getKey(), false, false);
+                                    reader = new MultiPagePictureReader(urls.getValue(), false, false);
                                     pageCount = reader.getNumberOfPages();
-                                    isOfReducedSize = false;
+                                    additionalFilesToDownload.add(urls.getKey());
+
+                                    String path = urls.getKey().getPath();
+                                    path = path.substring(path.lastIndexOf('/') + 1);
+                                    fileReference.append(" (");
+                                    fileReference.append(path);
+                                    fileReference.append(')');
                                     break;
                                 } catch (final Exception ex) {
                                     LOG.warn("Could not read document from URL '" + urls.getValue().toExternalForm()
@@ -597,99 +568,82 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                         ex);
                                 }
                             }
-                        }
 
-                        imageAvailable.put(vermessungsriss.getProperty("id"), Boolean.valueOf(reader != null));
-
-                        if (reader == null) {
-                            // Couldn't open any image.
-                            continue;
-                        }
-
-                        for (int i = 0; i < pageCount; i++) {
-                            imageBeans.add(new VermessungRissImageReportBean(
-                                    description.toString()
-                                            + (i + 1)
-                                            + fileReference.toString(),
-                                    host,
-                                    schluessel,
-                                    gemarkung,
-                                    flur,
-                                    blatt,
-                                    i,
-                                    reader));
-                        }
-
-                        String startingPageString = Integer.toString(startingPage);
-                        if (isOfReducedSize) {
-                            startingPageString = startingPageString.concat("*");
-                        }
-
-                        startingPages.put(vermessungsriss.getProperty("id"), startingPageString);
-                        startingPage += pageCount;
-                    }
-
-                    reportBeans.add(new VermessungRissReportBean(selectedVermessungsrisse, imageBeans));
-                    final JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(reportBeans);
-
-                    final HashMap parameters = new HashMap();
-                    parameters.put(PARAMETER_JOBNUMBER, txtJobnumber.getText());
-                    parameters.put(PARAMETER_PROJECTNAME, txtProjectname.getText());
-                    parameters.put(PARAMETER_TYPE, type);
-                    parameters.put(PARAMETER_STARTINGPAGES, startingPages);
-                    parameters.put(PARAMETER_IMAGEAVAILABLE, imageAvailable);
-
-                    final JasperReport jasperReport;
-                    try {
-                        jasperReport = (JasperReport)JRLoader.loadObject(getClass().getResourceAsStream(
-                                    "/de/cismet/cids/custom/wunda_blau/res/vermessungsrisse.jasper"));
-                    } catch (JRException ex) {
-                        LOG.error("Could not generate report for measurement sketches.", ex);
-
-                        final ErrorInfo ei = new ErrorInfo(NbBundle.getMessage(
-                                    VermessungRissAggregationRenderer.class,
-                                    "VermessungRissAggregationRenderer.btnGenerateReportActionPerformed(ActionEvent).ErrorInfo.title"),   // NOI18N
-                                NbBundle.getMessage(
-                                    VermessungRissAggregationRenderer.class,
-                                    "VermessungRissAggregationRenderer.btnGenerateReportActionPerformed(ActionEvent).ErrorInfo.message"), // NOI18N
-                                null,
-                                null,
-                                ex,
-                                Level.ALL,
-                                null);
-                        JXErrorPane.showDialog(VermessungRissAggregationRenderer.this, ei);
-
-                        return;
-                    } finally {
-                        EventQueue.invokeLater(new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    printingWaitDialog.setVisible(false);
+                            boolean isOfReducedSize = true;
+                            if (reader == null) {
+                                // Didn't find an image of reduced size
+                                for (final Map.Entry<URL, URL> urls : validURLs.entrySet()) {
+                                    try {
+                                        reader = new MultiPagePictureReader(urls.getKey(), false, false);
+                                        pageCount = reader.getNumberOfPages();
+                                        isOfReducedSize = false;
+                                        break;
+                                    } catch (final Exception ex) {
+                                        LOG.warn("Could not read document from URL '" + urls.getValue()
+                                                    .toExternalForm()
+                                                    + "'. Skipping this url.",
+                                            ex);
+                                    }
                                 }
-                            });
-                    }
+                            }
 
-                    if (DownloadManagerDialog.showAskingForUserTitle(VermessungRissAggregationRenderer.this)) {
-                        String projectname = txtProjectname.getText();
-                        if ((projectname == null) || (projectname.trim().length() == 0)) {
-                            projectname = type;
+                            imageAvailable.put(vermessungsriss.getProperty("id"), Boolean.valueOf(reader != null));
+
+                            if (reader == null) {
+                                // Couldn't open any image.
+                                continue;
+                            }
+
+                            for (int i = 0; i < pageCount; i++) {
+                                imageBeans.add(new VermessungRissImageReportBean(
+                                        description.toString()
+                                                + (i + 1)
+                                                + fileReference.toString(),
+                                        host,
+                                        schluessel,
+                                        gemarkung,
+                                        flur,
+                                        blatt,
+                                        i,
+                                        reader));
+                            }
+
+                            String startingPageString = Integer.toString(startingPage);
+                            if (isOfReducedSize) {
+                                startingPageString = startingPageString.concat("*");
+                            }
+
+                            startingPages.put(vermessungsriss.getProperty("id"), startingPageString);
+                            startingPage += pageCount;
                         }
+
+                        reportBeans.add(new VermessungRissReportBean(selectedVermessungsrisse, imageBeans));
+                        final JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(reportBeans);
+
+                        final HashMap parameters = new HashMap();
+                        parameters.put(PARAMETER_JOBNUMBER, txtJobnumber.getText());
+                        parameters.put(PARAMETER_PROJECTNAME, txtProjectname.getText());
+                        parameters.put(PARAMETER_TYPE, type);
+                        parameters.put(PARAMETER_STARTINGPAGES, startingPages);
+                        parameters.put(PARAMETER_IMAGEAVAILABLE, imageAvailable);
+
+                        final JasperReport jasperReport = (JasperReport)JRLoader.loadObject(getClass()
+                                        .getResourceAsStream(
+                                            "/de/cismet/cids/custom/wunda_blau/res/vermessungsrisse.jasper"));
+
                         final String jobname = DownloadManagerDialog.getJobname();
                         final JasperDownload jasperDownload = new JasperDownload(
                                 jasperReport,
                                 parameters,
                                 dataSource,
                                 jobname,
-                                projectname,
+                                finalProjectname,
                                 (TYPE_VERMESSUNGSRISSE.equalsIgnoreCase(type)) ? "vermriss" : "ergdok");
 
-                        if (additionalFilesToDownload.isEmpty()) {
-                            DownloadManager.instance().add(jasperDownload);
-                        } else {
-                            final Collection<Download> downloads = new LinkedList<Download>();
-                            downloads.add(jasperDownload);
+                        final Collection<Download> downloads = new ArrayList<Download>();
+                        downloads.add(jasperDownload);
 
+                        if (!additionalFilesToDownload.isEmpty()) {
                             for (final URL additionalFileToDownload : additionalFilesToDownload) {
                                 final String file = additionalFileToDownload.getFile()
                                             .substring(additionalFileToDownload.getFile().lastIndexOf('/') + 1);
@@ -704,14 +658,13 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                         filename,
                                         extension));
                             }
-
-                            DownloadManager.instance().add(new MultipleDownload(downloads, projectname));
                         }
+                        return downloads;
                     }
-                }
-            };
+                };
 
-        CismetThreadPool.execute(runnable);
+            DownloadManager.instance().add(new BackgroundTaskMultipleDownload(null, projectname, fetchDownloadsTask));
+        }
     }
 
     /**
