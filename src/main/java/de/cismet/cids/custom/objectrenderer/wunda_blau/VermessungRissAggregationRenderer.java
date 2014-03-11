@@ -923,7 +923,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      */
     private static boolean hasVermessungsriss(final CidsBean cidsBean) {
         try {
-            return VermessungRissReportScriptlet.isImageAvailable(
+            return VermessungRissReportScriptlet.isImageAvailable_head(
                     AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER,
                     (String)cidsBean.getProperty("schluessel"),
                     (Integer)cidsBean.getProperty("gemarkung.id"),
@@ -944,7 +944,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      */
     private static boolean hasErgaenzendeDokumente(final CidsBean cidsBean) {
         try {
-            return VermessungRissReportScriptlet.isImageAvailable(
+            return VermessungRissReportScriptlet.isImageAvailable_head(
                     AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN,
                     (String)cidsBean.getProperty("schluessel"),
                     (Integer)cidsBean.getProperty("gemarkung.id"),
