@@ -12,6 +12,7 @@
 package de.cismet.cids.custom.utils;
 
 import Sirius.navigator.connection.SessionManager;
+
 import Sirius.util.image.ImageAnnotator;
 
 import java.awt.image.RenderedImage;
@@ -26,13 +27,15 @@ import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.tools.gui.downloadmanager.AbstractDownload;
 
+import static de.cismet.cids.custom.wunda_blau.search.actions.TifferAction.ParameterType.*;
+
 /**
  * A download which uses TifferAction to annotate an image.
  *
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
- * @see TifferAction
- * @see ImageAnnotator
+ * @see      TifferAction
+ * @see      ImageAnnotator
  */
 public class TifferDownload extends AbstractDownload {
 
@@ -92,20 +95,22 @@ public class TifferDownload extends AbstractDownload {
         stateChanged();
 
         final ServerActionParameter paramNummer = new ServerActionParameter(
-                TifferAction.ParameterType.BILDNUMMER.toString(),
+                BILDNUMMER.toString(),
                 imageNumber);
         final ServerActionParameter paramLocation = new ServerActionParameter(
-                TifferAction.ParameterType.ORT.toString(),
+                ORT.toString(),
                 location);
         final ServerActionParameter paramDateRecorded = new ServerActionParameter(
-                TifferAction.ParameterType.AUFNAHME_DATUM.toString(),
+                AUFNAHME_DATUM.toString(),
                 dateRecorded);
         final ServerActionParameter paramScale = new ServerActionParameter(
-                TifferAction.ParameterType.SCALE.toString(),
+                SCALE.toString(),
                 scale);
         final ServerActionParameter paramFormat = new ServerActionParameter(
-                TifferAction.ParameterType.FORMAT.toString(),
+                FORMAT.toString(),
                 format);
+
+        final ServerActionParameter paramSubdir = createSubDirForURL(imageNumber);
 
         try {
             final byte[] result = (byte[])SessionManager.getProxy()
@@ -117,7 +122,8 @@ public class TifferDownload extends AbstractDownload {
                                 paramLocation,
                                 paramDateRecorded,
                                 paramScale,
-                                paramFormat);
+                                paramFormat,
+                                paramSubdir);
             if (result != null) {
                 final RenderedImage image = ImageIO.read(
                         new ByteArrayInputStream(result));
@@ -138,5 +144,23 @@ public class TifferDownload extends AbstractDownload {
             status = State.COMPLETED;
             stateChanged();
         }
+    }
+
+    /**
+     * The URL later on used by Tiffer consists of the parts base, subdir, filename (prefix and image number) and file
+     * extension. The subdir will be the kind of file (VB (Vorschaubild, low res. image) or SB (Stadtbild, high res.
+     * image)). In this case SB is always used.
+     *
+     * @param   imageNumber  DOCUMENT ME!
+     *
+     * @return  the subdir for an imageNumber as ServerActionParameter
+     */
+    private ServerActionParameter createSubDirForURL(final String imageNumber) {
+        final char firstCharacter = imageNumber.charAt(0);
+        final String subdir = "SB/" + firstCharacter + "/";
+
+        return new ServerActionParameter(
+                SUBDIR.toString(),
+                subdir);
     }
 }
