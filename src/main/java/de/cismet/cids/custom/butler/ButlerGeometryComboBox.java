@@ -160,7 +160,7 @@ public class ButlerGeometryComboBox extends JComboBox {
                     final DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols();
                     formatSymbols.setDecimalSeparator('.');
                     final java.text.DecimalFormat myFormatter = new java.text.DecimalFormat("#.###", formatSymbols);
-                    text = "Polygon (" + "(" + myFormatter.format(env.getMinX()) + ","
+                    text = "Rechteck (" + "(" + myFormatter.format(env.getMinX()) + ","
                                 + myFormatter.format(env.getMinY())
                                 + ")"
                                 + "(" + myFormatter.format(env.getMaxX()) + "," + myFormatter.format(env.getMaxY())

@@ -94,6 +94,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
     private final java.text.DecimalFormat coordFormatter = new java.text.DecimalFormat("#.###");
     private MappingComponent map;
     private PredefinedBoxes noSelectionBox = null;
+    private PredefinedBoxes selectedRectBox = null;
     private DefaultStyledFeature rectangleFeature;
     private DefaultStyledFeature pointFeature;
     private boolean isPointCentered = false;
@@ -144,7 +145,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         final DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols();
         formatSymbols.setDecimalSeparator('.');
         coordFormatter.setDecimalFormatSymbols(formatSymbols);
-        boxes = PredefinedBoxes.butler1Boxes;
+        boxes = new ArrayList<PredefinedBoxes>(PredefinedBoxes.butler1Boxes);
         initComponents();
         tfLowerE.getDocument().addDocumentListener(this);
         tfLowerN.getDocument().addDocumentListener(this);
@@ -716,8 +717,12 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
      */
     private void cbSizeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbSizeActionPerformed
         final PredefinedBoxes selectedBox = (PredefinedBoxes)cbSize.getSelectedItem();
-        if ((selectedBox != null) && !selectedBox.getDisplayName().equals("keine Auswahl")) {
+        if ((selectedBox != null) && !selectedBox.getDisplayName().equals("keine Auswahl")
+                    && (selectedBox != selectedRectBox)) {
             removeDocumentListeners();
+            if (cbSize.getSelectedIndex() != (cbSize.getItemCount() - 1)) {
+                boxes.remove(selectedRectBox);
+            }
             if (cbGeoms.getSelectedItem() instanceof Geometry) {
                 final Geometry g = (Geometry)cbGeoms.getSelectedItem();
                 if (!(g instanceof Point)) {
@@ -725,7 +730,77 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                 }
             }
             firstUpperTFChange = true;
+            createGeomFromSize();
+            changeMap();
+            addDocumentListeners();
+        } else {
+            firstUpperTFChange = false;
+        }
+    }                                                                          //GEN-LAST:event_cbSizeActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
+        this.dispose();                                                           // TODO add your handling code here:
+    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cbGeomsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbGeomsActionPerformed
+        final Object obj = cbGeoms.getSelectedItem();
+        if ((obj != null) && (obj instanceof Geometry)) {
+            removeDocumentListeners();
+            boxes.remove(selectedRectBox);
+            final Geometry g = ((Geometry)obj);
+            if (g.isRectangle()) {
+                final Envelope envelope = g.getEnvelopeInternal();
+                final Point p = g.getFactory().createPoint(new Coordinate(envelope.getMinX(), envelope.getMinY()));
+                pointFeature.setGeometry(p);
+                tfLowerE.setText("" + coordFormatter.format(envelope.getMinX()));
+                tfLowerN.setText("" + coordFormatter.format(envelope.getMinY()));
+                tfUpperE.setText("" + coordFormatter.format(envelope.getMaxX()));
+                tfUpperN.setText("" + coordFormatter.format(envelope.getMaxY()));
+                final double rectWidth = envelope.getMaxX() - envelope.getMinX();
+                final double rectHeight = envelope.getMaxY() - envelope.getMinY();
+                selectedRectBox = new PredefinedBoxes(coordFormatter.format(rectWidth) + "m x "
+                                + coordFormatter.format(rectHeight) + "m",
+                        rectWidth,
+                        rectHeight);
+                boxes.add(selectedRectBox);
+                cbSize.setSelectedIndex(cbSize.getItemCount() - 1);
+            } else if (g instanceof Point) {
+                final Point p = ((Point)g);
+                pointFeature.setGeometry(g);
+                tfLowerE.setText("" + coordFormatter.format(p.getX()));
+                tfLowerN.setText("" + coordFormatter.format(p.getY()));
+                tfUpperE.setText("" + coordFormatter.format(p.getX()));
+                tfUpperN.setText("" + coordFormatter.format(p.getY()));
+                final PredefinedBoxes selectedBox = (PredefinedBoxes)cbSize.getSelectedItem();
+                if ((selectedBox != null) && !selectedBox.getDisplayName().equals("keine Auswahl")
+                            && (selectedBox != selectedRectBox)) {
+                    createGeomFromSize();
+                } else {
+                    cbSize.setSelectedItem(noSelectionBox);
+                }
+            }
+            changeMap();
+            addDocumentListeners();
+        }
+    }                                                                           //GEN-LAST:event_cbGeomsActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void createGeomFromSize() {
+        final PredefinedBoxes selectedBox = (PredefinedBoxes)cbSize.getSelectedItem();
+        if ((selectedBox != null) && !selectedBox.getDisplayName().equals("keine Auswahl")
+                    && (selectedBox != selectedRectBox)) {
             if (selectedBox.getDisplayName().startsWith("M")) {
                 isPointCentered = true;
                 final Point p;
@@ -758,55 +833,8 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
                     updatePositionFields();
                 }
             }
-
-            changeMap();
-            addDocumentListeners();
-        } else {
-            firstUpperTFChange = false;
         }
-    } //GEN-LAST:event_cbSizeActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
-        this.dispose();                                                           // TODO add your handling code here:
-    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void cbGeomsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbGeomsActionPerformed
-        final Object obj = cbGeoms.getSelectedItem();
-        if ((obj != null) && (obj instanceof Geometry)) {
-            removeDocumentListeners();
-
-            final Geometry g = ((Geometry)obj);
-            if (g.isRectangle()) {
-                final Envelope envelope = g.getEnvelopeInternal();
-                final Point p = g.getFactory().createPoint(new Coordinate(envelope.getMinX(), envelope.getMinY()));
-                pointFeature.setGeometry(p);
-                tfLowerE.setText("" + coordFormatter.format(envelope.getMinX()));
-                tfLowerN.setText("" + coordFormatter.format(envelope.getMinY()));
-                tfUpperE.setText("" + coordFormatter.format(envelope.getMaxX()));
-                tfUpperN.setText("" + coordFormatter.format(envelope.getMaxY()));
-            } else if (g instanceof Point) {
-                final Point p = ((Point)g);
-                pointFeature.setGeometry(g);
-                tfLowerE.setText("" + coordFormatter.format(p.getX()));
-                tfLowerN.setText("" + coordFormatter.format(p.getY()));
-                tfUpperE.setText("" + coordFormatter.format(p.getX()));
-                tfUpperN.setText("" + coordFormatter.format(p.getY()));
-            }
-            cbSize.setSelectedItem(noSelectionBox);
-            changeMap();
-            addDocumentListeners();
-        }
-    } //GEN-LAST:event_cbGeomsActionPerformed
+    }
 
     /**
      * DOCUMENT ME!
@@ -844,11 +872,11 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
             final double nSize = selectedBox.getNorthSize();
             if ((tfLowerE.getText() != null) && !tfLowerE.getText().equals("")) {
                 final double lowerE = Double.parseDouble(tfLowerE.getText().replaceAll(",", "."));
-                tfUpperE.setText("" + (lowerE + eSize));
+                tfUpperE.setText(coordFormatter.format((lowerE + eSize)));
             }
             if ((tfLowerN.getText() != null) && !tfLowerN.getText().equals("")) {
                 final double lowerN = Double.parseDouble(tfLowerN.getText().replaceAll(",", "."));
-                tfUpperN.setText("" + (lowerN + nSize));
+                tfUpperN.setText(coordFormatter.format(lowerN + nSize));
             }
         }
         addDocumentListeners();
@@ -1256,6 +1284,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         if ((selectedBox != null) && !selectedBox.getDisplayName().equals("keine Auswahl")) {
             if ((noSelectionBox != null) && !firstUpperTFChange) {
                 firstUpperTFChange = true;
+                boxes.remove(selectedBox);
                 cbSize.setSelectedItem(noSelectionBox);
             }
         }
