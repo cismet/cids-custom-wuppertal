@@ -111,6 +111,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel lblLowerPosition;
     private javax.swing.JLabel lblRequestNumber;
+    private javax.swing.JLabel lblSRSInfo;
     private javax.swing.JLabel lblSize;
     private javax.swing.JLabel lblUpperPosition;
     private javax.swing.JPanel pnlControls;
@@ -255,6 +256,7 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         jLabel1 = new javax.swing.JLabel();
         cbGeoms = new ButlerGeometryComboBox(ButlerGeometryComboBox.GEOM_FILTER_TYPE.BOTH);
         jLabel2 = new javax.swing.JLabel();
+        lblSRSInfo = new javax.swing.JLabel();
         pnlControls = new javax.swing.JPanel();
         btnCreate = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
@@ -469,6 +471,16 @@ public class Butler1Dialog extends javax.swing.JDialog implements DocumentListen
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 15, 0);
         pnlMapSettings.add(jLabel2, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblSRSInfo,
+            org.openide.util.NbBundle.getMessage(Butler1Dialog.class, "Butler1Dialog.lblSRSInfo.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
+        pnlMapSettings.add(lblSRSInfo, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
