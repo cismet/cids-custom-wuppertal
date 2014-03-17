@@ -65,7 +65,7 @@ public class PredefinedBoxes {
      * @param  eSize        DOCUMENT ME!
      * @param  nSize        DOCUMENT ME!
      */
-    private PredefinedBoxes(final String displayName, final double eSize, final double nSize) {
+    public PredefinedBoxes(final String displayName, final double eSize, final double nSize) {
         this.displayName = displayName;
         this.eSize = eSize;
         this.nSize = nSize;
