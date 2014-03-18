@@ -2474,28 +2474,15 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         }
 
         private void tryToLoadImageFromURLs(final Map<URL, URL> urls, final int type) {
-            InputStream streamToReadFrom = null;
-
             //First we try to load an image of reduced size
             for (final Map.Entry<URL, URL> urlEntry : urls.entrySet()) {
                 if (urlEntry.getValue() == null) {
                     continue;
                 }
 
-                try {
-                    streamToReadFrom = WebAccessManager.getInstance().doRequest(urlEntry.getValue());
+                if(WebAccessManager.getInstance().checkIfURLaccessible(urlEntry.getValue())){
                     documentURLs[type] = urlEntry;
                     break;
-                } catch (final Exception ex) {
-                    LOG.debug("An exception occurred while opening URL '" + urlEntry.getValue().toExternalForm()
-                            + "'. Skipping this url.", ex);
-                } finally {
-                    if (streamToReadFrom != null) {
-                        try {
-                            streamToReadFrom.close();
-                        } catch (final IOException ex) {
-                        }
-                    }
                 }
             }
 
@@ -2505,20 +2492,9 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             }
 
             for (final Map.Entry<URL, URL> urlEntry : urls.entrySet()) {
-                try {
-                    streamToReadFrom = WebAccessManager.getInstance().doRequest(urlEntry.getKey());
+                if(WebAccessManager.getInstance().checkIfURLaccessible(urlEntry.getKey())){
                     documentURLs[type] = urlEntry;
                     break;
-                } catch (final Exception ex) {
-                    LOG.debug("An exception occurred while opening URL '" + urlEntry.getKey().toExternalForm()
-                            + "'. Skipping this url.", ex);
-                } finally {
-                    if (streamToReadFrom != null) {
-                        try {
-                            streamToReadFrom.close();
-                        } catch (final IOException ex) {
-                        }
-                    }
                 }
             }
 
