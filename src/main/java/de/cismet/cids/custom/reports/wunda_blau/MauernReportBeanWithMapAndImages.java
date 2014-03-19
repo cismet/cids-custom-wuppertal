@@ -29,6 +29,7 @@ import java.util.concurrent.Future;
 
 import javax.imageio.ImageIO;
 
+import de.cismet.cids.custom.objecteditors.utils.WebDavHelper;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -36,13 +37,10 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cismap.commons.HeadlessMapProvider;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.features.DefaultStyledFeature;
-import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.netutil.Proxy;
-
-import de.cismet.security.WebDavClient;
 
 import de.cismet.tools.CismetThreadPool;
 import de.cismet.tools.PasswordEncrypter;
@@ -69,7 +67,7 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
     Image mapImage = null;
     Image img0 = null;
     Image img1 = null;
-    private final WebDavClient webDavClient;
+    private final WebDavHelper webDavHelper;
     private boolean proceed = false;
     private boolean mapError = false;
     private boolean image0Error = false;
@@ -95,7 +93,7 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
         WEB_DAV_PASSWORD = pass;
         WEB_DAV_USER = bundle.getString("user");
         WEB_DAV_DIRECTORY = bundle.getString("url");
-        this.webDavClient = new WebDavClient(Proxy.fromPreferences(), WEB_DAV_USER, WEB_DAV_PASSWORD, true);
+        this.webDavHelper = new WebDavHelper(Proxy.fromPreferences(), WEB_DAV_USER, WEB_DAV_PASSWORD, true);
 //        final SimpleWMS s = new SimpleWMS(new SimpleWmsGetMapUrl("http://www.wms.nrw.de/geobasis/DOP?&VERSION=1.1.1&REQUEST=GetMap&WIDTH=<cismap:width>&HEIGHT=<cismap:height>&BBOX=<cismap:boundingBox>&SRS=EPSG:25832&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&LAYERS=WMS,0,Metadaten&STYLES="));
 //        final SimpleWMS s = new SimpleWMS(new SimpleWmsGetMapUrl(
 //                    "http://s102x284:8399/arcgis/services/WuNDa-Orthophoto-WUP/MapServer/WMSServer?service=WMS&VERSION=1.1.1&REQUEST=GetMap&WIDTH=<cismap:width>&HEIGHT=<cismap:height>&BBOX=<cismap:boundingBox>&SRS=EPSG:25832&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&LAYERS=6&STYLES=default"));
@@ -144,9 +142,9 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
         for (final CidsBean b : images) {
             final Integer nr = (Integer)b.getProperty("laufende_nummer");
             if (nr == 1) {
-                url0Builder.append(b.getProperty("url").toString());
+                url0Builder.append(b.getProperty("url.object_name").toString());
             } else if (nr == 2) {
-                url1Builder.append(b.getProperty("url").toString());
+                url1Builder.append(b.getProperty("url.object_name").toString());
             }
         }
 
@@ -159,8 +157,9 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
                             image0Error = true;
                             return;
                         }
-                        final InputStream iStream = webDavClient.getInputStream(
-                                url0Builder.toString());
+                        final InputStream iStream = webDavHelper.getFileFromWebDAV(
+                                url0Builder.toString(),
+                                WEB_DAV_DIRECTORY);
                         img0 = ImageIO.read(iStream);
                         if (img0 == null) {
                             image0Error = true;
@@ -183,8 +182,9 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
                             image1Error = true;
                             return;
                         }
-                        final InputStream iStream = webDavClient.getInputStream(
-                                url1Builder.toString());
+                        final InputStream iStream = webDavHelper.getFileFromWebDAV(
+                                url1Builder.toString(),
+                                WEB_DAV_DIRECTORY);
                         img1 = ImageIO.read(iStream);
                         if (img1 == null) {
                             image1Error = true;
