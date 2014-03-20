@@ -46,8 +46,10 @@ public class BillingBuchungsbelegReport {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final String REPORT_BUCHUNGSBELEG_URL = "/de/cismet/cids/custom/reports/wunda_blau/buchungsbeleg.jasper";
-    private static final String REPORT_RECHNUNGSANLAGE_URL = "/de/cismet/cids/custom/reports/wunda_blau/rechnungsanlage.jasper";
+    private static final String REPORT_BUCHUNGSBELEG_URL =
+        "/de/cismet/cids/custom/reports/wunda_blau/buchungsbeleg.jasper";
+    private static final String REPORT_RECHNUNGSANLAGE_URL =
+        "/de/cismet/cids/custom/reports/wunda_blau/rechnungsanlage.jasper";
 
     //~ Instance fields --------------------------------------------------------
 
