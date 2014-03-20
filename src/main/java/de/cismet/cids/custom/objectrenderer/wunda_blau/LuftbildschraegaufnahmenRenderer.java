@@ -60,6 +60,7 @@ import de.cismet.cids.annotations.CidsAttributeVector;
 import de.cismet.cids.custom.deprecated.JBreakLabel;
 import de.cismet.cids.custom.deprecated.JLoadDots;
 import de.cismet.cids.custom.objectrenderer.utils.PrintingWaitDialog;
+import de.cismet.cids.custom.utils.TifferDownload;
 
 import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
 
@@ -67,6 +68,8 @@ import de.cismet.tools.BrowserLauncher;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.downloadmanager.DownloadManager;
+import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 
 /**
  * de.cismet.cids.objectrenderer.CoolLuftBildRenderer.
@@ -274,7 +277,7 @@ public class LuftbildschraegaufnahmenRenderer extends BlurredMapObjectRenderer {
                         @Override
                         public void run() {
                             try {
-                                String url = properties.getProperty("luftbildschraegaufnahmenservicesmall");
+                                final String url = properties.getProperty("luftbildschraegaufnahmenservicesmall");
                                 ImageIcon ii;
                                 if (url == null) {
                                     log.fatal("Aggregation Wupp " + EventQueue.isDispatchThread());
@@ -343,28 +346,45 @@ public class LuftbildschraegaufnahmenRenderer extends BlurredMapObjectRenderer {
 
                                                     @Override
                                                     public void actionPerformed(final ActionEvent e) {
-                                                        String url = "";
-                                                        try {
-                                                            url = properties.getProperty(
-                                                                    "luftbildschraegaufnahmenservicefull");
-                                                            if (url == null) {
-                                                                BrowserLauncher.openURL(
-                                                                    "http://s10220:8098/luft/tiffer?bnr="
-                                                                            + agrNummer.get(index)
-                                                                            + "&scale=1&format=JPG");
-                                                            } else {
-                                                                final String newUrl = url.replaceAll(
-                                                                        "<cismet::nummer>",
-                                                                        agrNummer.get(index));
-                                                                BrowserLauncher.openURL(newUrl);
-                                                            }
-                                                        } catch (Exception ex) {
-                                                            log.error(
-                                                                "Fehler beim OEffnen der URL \""
-                                                                        + url
-                                                                        + "\"",
-                                                                ex);
+                                                        final String url = "";
+                                                        if (DownloadManagerDialog.showAskingForUserTitle(
+                                                                        LuftbildschraegaufnahmenRenderer.this)) {
+                                                            final String jobname = DownloadManagerDialog.getJobname();
+
+                                                            DownloadManager.instance()
+                                                                    .add(
+                                                                        new TifferDownload(
+                                                                            jobname,
+                                                                            "Bild",
+                                                                            "Bild",
+                                                                            nummer,
+                                                                            lage,
+                                                                            aufnahme.toString(),
+                                                                            "1",
+                                                                            "png"));
                                                         }
+
+//                                                        try {
+//                                                            url = properties.getProperty(
+//                                                                    "luftbildschraegaufnahmenservicefull");
+//                                                            if (url == null) {
+//                                                                BrowserLauncher.openURL(
+//                                                                    "http://s10220:8098/luft/tiffer?bnr="
+//                                                                            + agrNummer.get(index)
+//                                                                            + "&scale=1&format=JPG");
+//                                                            } else {
+//                                                                final String newUrl = url.replaceAll(
+//                                                                        "<cismet::nummer>",
+//                                                                        agrNummer.get(index));
+//                                                                BrowserLauncher.openURL(newUrl);
+//                                                            }
+//                                                        } catch (Exception ex) {
+//                                                            log.error(
+//                                                                "Fehler beim OEffnen der URL \""
+//                                                                        + url
+//                                                                        + "\"",
+//                                                                ex);
+//                                                        }
                                                     }
                                                 });
                                         }
@@ -495,7 +515,7 @@ public class LuftbildschraegaufnahmenRenderer extends BlurredMapObjectRenderer {
                     @Override
                     public void run() {
                         try {
-                            String url = properties.getProperty("luftbildschraegaufnahmenservicesmall");
+                            final String url = properties.getProperty("luftbildschraegaufnahmenservicesmall");
                             ImageIcon i;
                             if (url == null) {
                                 log.fatal("Single Wupp " + EventQueue.isDispatchThread());
@@ -551,23 +571,21 @@ public class LuftbildschraegaufnahmenRenderer extends BlurredMapObjectRenderer {
 
                                                 @Override
                                                 public void actionPerformed(final ActionEvent e) {
-                                                    String url = "";
-                                                    try {
-                                                        url = properties.getProperty(
-                                                                "luftbildschraegaufnahmenservicefull");
-                                                        if (url == null) {
-                                                            BrowserLauncher.openURL(
-                                                                "http://s10220:8098/luft/tiffer?bnr="
-                                                                        + nummer
-                                                                        + "&scale=1&format=JPG");
-                                                        } else {
-                                                            final String newUrl = url.replaceAll(
-                                                                    "<cismet::nummer>",
-                                                                    nummer);
-                                                            BrowserLauncher.openURL(newUrl);
-                                                        }
-                                                    } catch (Exception ex) {
-                                                        log.error("Fehler beim ?ffnen der URL \"" + url + "\"", ex);
+                                                    if (DownloadManagerDialog.showAskingForUserTitle(
+                                                                    LuftbildschraegaufnahmenRenderer.this)) {
+                                                        final String jobname = DownloadManagerDialog.getJobname();
+
+                                                        DownloadManager.instance()
+                                                                .add(
+                                                                    new TifferDownload(
+                                                                        jobname,
+                                                                        "Bild",
+                                                                        "Bild",
+                                                                        nummer,
+                                                                        lage,
+                                                                        aufnahme.toString(),
+                                                                        "1",
+                                                                        "png"));
                                                     }
                                                 }
                                             });
