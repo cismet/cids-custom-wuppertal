@@ -46,7 +46,10 @@ public class BillingBuchungsbelegReport {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final String REPORT_URL = "/de/cismet/cids/custom/reports/wunda_blau/buchungsbeleg.jasper";
+    private static final String REPORT_BUCHUNGSBELEG_URL =
+        "/de/cismet/cids/custom/reports/wunda_blau/buchungsbeleg.jasper";
+    private static final String REPORT_RECHNUNGSANLAGE_URL =
+        "/de/cismet/cids/custom/reports/wunda_blau/rechnungsanlage.jasper";
 
     //~ Instance fields --------------------------------------------------------
 
@@ -330,19 +333,22 @@ public class BillingBuchungsbelegReport {
             final String jobname = DownloadManagerDialog.getJobname();
             String filename;
             String title;
+            String resourceName;
             if (isRechnungsanlage) {
                 filename = "buchungen_rechnungsanlage";
                 title = "Buchungen: Rechnungsanlage";
+                resourceName = REPORT_RECHNUNGSANLAGE_URL;
             } else {
                 filename = "buchungen_buchungsbeleg";
                 title = "Buchungen: Buchungsbeleg";
+                resourceName = REPORT_BUCHUNGSBELEG_URL;
             }
 
             // worst case: "_null" will be appended to the filename, but at least nothing will break
             filename += "_" + String.valueOf(kundeBean.getProperty("name_intern"));
 
             final JasperReportDownload download = new JasperReportDownload(
-                    REPORT_URL,
+                    resourceName,
                     parametersGenerator,
                     dataSourceGenerator,
                     jobname,
