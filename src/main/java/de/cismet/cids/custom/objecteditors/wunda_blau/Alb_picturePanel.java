@@ -1211,7 +1211,11 @@ public class Alb_picturePanel extends javax.swing.JPanel {
     private String getDocumentFilename() {
         final String blattnummer = (String)getCidsBean().getProperty(BLATTNUMMER_PROPERTY);
         final String lfdNummer = (String)getCidsBean().getProperty(LFDNUMMER_PROPERTY);
-        return BaulastenPictureFinder.getPlanPictureFilename(blattnummer, lfdNummer);
+        if (currentDocument == LAGEPLAN_DOCUMENT) {
+            return BaulastenPictureFinder.getPlanPictureFilename(blattnummer, lfdNummer);
+        } else {
+            return BaulastenPictureFinder.getTextblattPictureFilename(blattnummer, lfdNummer);
+        }
     }
 
     /**
