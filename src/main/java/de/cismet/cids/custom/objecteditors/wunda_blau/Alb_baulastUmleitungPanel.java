@@ -266,7 +266,7 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
      * @return  DOCUMENT ME!
      */
     private boolean isNummerConsistent(final String baulastnr) {
-        if (!baulastnr.matches("\\d{6}-\\d{2}") && !baulastnr.matches("\\d{6}[a-z]\\d{2}")) {
+        if (!baulastnr.matches("\\d{6}-\\d{2}") && !baulastnr.matches("\\d{6}[a-zA-Z]\\d{2}")) {
             return false;
         }
         return true;
