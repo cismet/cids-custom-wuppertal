@@ -348,7 +348,7 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
 
                 @Override
                 protected Void doInBackground() throws Exception {
-                    final String filename = createFilename();
+                    final String filename = createFilename().toLowerCase();
                     final File f = File.createTempFile(filename, ".txt");
                     final FileWriter fw = new FileWriter(f);
                     final BufferedWriter bfw = new BufferedWriter(fw);
@@ -428,7 +428,7 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
      * @return  DOCUMENT ME!
      */
     public String getLinkDocument() {
-        return tfName.getText();
+        return tfName.getText().toLowerCase();
     }
 
     /**
