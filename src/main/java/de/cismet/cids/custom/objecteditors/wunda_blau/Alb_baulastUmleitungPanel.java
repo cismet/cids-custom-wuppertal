@@ -15,6 +15,8 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import org.apache.log4j.Logger;
 
 import org.jdesktop.swingx.JXBusyLabel;
+import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.error.ErrorInfo;
 
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -32,6 +34,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
 
 import javax.swing.SwingWorker;
 import javax.swing.Timer;
@@ -44,6 +47,8 @@ import de.cismet.cids.custom.objectrenderer.utils.BaulastenPictureFinder;
 import de.cismet.netutil.Proxy;
 
 import de.cismet.tools.PasswordEncrypter;
+
+import de.cismet.tools.gui.StaticSwingTools;
 
 import static de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel.BLATTNUMMER_PROPERTY;
 import static de.cismet.cids.custom.objecteditors.wunda_blau.Alb_picturePanel.LFDNUMMER_PROPERTY;
@@ -271,28 +276,64 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
      * DOCUMENT ME!
      */
     private void deleteFile() {
-        final SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+        final SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
 
                 @Override
-                protected Void doInBackground() throws Exception {
+                protected Boolean doInBackground() throws Exception {
                     final String filename = createFilename();
                     final File f = File.createTempFile(filename, ".txt");
-                    webDavHelper.deleteFileFromWebDAV(
-                        filename
-                                + ".txt",
-                        createDirName());
-                    return null;
+                    return webDavHelper.deleteFileFromWebDAV(
+                            filename
+                                    + ".txt",
+                            createDirName());
                 }
 
                 @Override
                 protected void done() {
                     try {
-                        get();
-                        picturePan.handleUmleitungDeleted();
+                        if (!get()) {
+                            final org.jdesktop.swingx.error.ErrorInfo ei = new ErrorInfo(
+                                    org.openide.util.NbBundle.getMessage(
+                                        Alb_baulastUmleitungPanel.class,
+                                        "Alb_baulastUmleitungPanel.errorDialog.title"),
+                                    org.openide.util.NbBundle.getMessage(
+                                        Alb_baulastUmleitungPanel.class,
+                                        "Alb_baulastUmleitungPanel.errorDialog.delete.message"),
+                                    null,
+                                    null,
+                                    null,
+                                    Level.ALL,
+                                    null);
+                            JXErrorPane.showDialog(StaticSwingTools.getParentFrameIfNotNull(
+                                    Alb_baulastUmleitungPanel.this),
+                                ei);
+                            picturePan.handleEscapePressed();
+                            if (escapeText != null) {
+                                tfName.setText(escapeText);
+                            } else {
+                                tfName.setText("");
+                            }
+                        } else {
+                            picturePan.handleUmleitungDeleted();
+                        }
                     } catch (InterruptedException ex) {
                         LOG.error("Deleting link file worker was interrupted", ex);
                     } catch (ExecutionException ex) {
                         LOG.error("Error in deleting link file worker", ex);
+                        final org.jdesktop.swingx.error.ErrorInfo ei = new ErrorInfo(
+                                org.openide.util.NbBundle.getMessage(
+                                    Alb_baulastUmleitungPanel.class,
+                                    "Alb_baulastUmleitungPanel.errorDialog.title"),
+                                org.openide.util.NbBundle.getMessage(
+                                    Alb_baulastUmleitungPanel.class,
+                                    "Alb_baulastUmleitungPanel.errorDialog.delete.message"),
+                                ex.getMessage(),
+                                null,
+                                ex,
+                                Level.ALL,
+                                null);
+                        JXErrorPane.showDialog(StaticSwingTools.getParentFrameIfNotNull(Alb_baulastUmleitungPanel.this),
+                            ei);
                     }
                 }
             };
@@ -335,6 +376,20 @@ public class Alb_baulastUmleitungPanel extends javax.swing.JPanel implements Doc
                         LOG.error("Create Link File Worker was interrupted.", ex);
                     } catch (ExecutionException ex) {
                         LOG.error("Error in Create Link File worker", ex);
+                        final org.jdesktop.swingx.error.ErrorInfo ei = new ErrorInfo(
+                                org.openide.util.NbBundle.getMessage(
+                                    Alb_baulastUmleitungPanel.class,
+                                    "Alb_baulastUmleitungPanel.errorDialog.title"),
+                                org.openide.util.NbBundle.getMessage(
+                                    Alb_baulastUmleitungPanel.class,
+                                    "Alb_baulastUmleitungPanel.errorDialog.create.message"),
+                                ex.getMessage(),
+                                null,
+                                ex,
+                                Level.ALL,
+                                null);
+                        JXErrorPane.showDialog(StaticSwingTools.getParentFrameIfNotNull(Alb_baulastUmleitungPanel.this),
+                            ei);
                     }
                 }
             };
