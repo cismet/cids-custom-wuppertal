@@ -121,7 +121,6 @@ public class PointNumberDialog extends javax.swing.JDialog {
     private PunktNummerTableModel model = new PunktNummerTableModel();
     private boolean skipLoadAntragsnummern = true;
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnDeSelectAll;
     private javax.swing.JButton btnDone;
     private javax.swing.JButton btnDownload;
@@ -524,7 +523,6 @@ public class PointNumberDialog extends javax.swing.JDialog {
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
-        btnCancel = new javax.swing.JButton();
         btnDone = new javax.swing.JButton();
 
         pnlTabReservieren.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
@@ -876,20 +874,6 @@ public class PointNumberDialog extends javax.swing.JDialog {
         pnlControls.add(filler1, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
-            btnCancel,
-            org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.btnCancel.text")); // NOI18N
-        btnCancel.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnCancelActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 10, 0);
-        pnlControls.add(btnCancel, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
             btnDone,
             org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.btnDone.text")); // NOI18N
         btnDone.addActionListener(new java.awt.event.ActionListener() {
@@ -922,15 +906,6 @@ public class PointNumberDialog extends javax.swing.JDialog {
     private void btnDoneActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDoneActionPerformed
         this.dispose();
     }                                                                           //GEN-LAST:event_btnDoneActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
-        this.dispose();
-    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * DOCUMENT ME!
