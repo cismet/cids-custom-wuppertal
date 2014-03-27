@@ -579,11 +579,16 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                                     protokollPane.addMessage(
                                         "Reservierung für Antragsnummer: "
                                                 + result.getAntragsnummer()
-                                                + ". Folgende Punktnummern wurden reserviert:",
+                                                + ". Folgende Punktnummern wurden reserviert: (gültig bis)",
                                         Styles.SUCCESS);
                                     protokollPane.addMessage("", Styles.INFO);
                                     for (final PointNumberReservation pnr : result.getPointNumbers()) {
-                                        protokollPane.addMessage("" + pnr.getPunktnummern(), Styles.INFO);
+                                        protokollPane.addMessage(
+                                            pnr.getPunktnummern()
+                                                    + " ("
+                                                    + pnr.getAblaufDatum()
+                                                    + ")",
+                                            Styles.INFO);
                                     }
                                     if (!pnrDialog.isErgaenzenMode()) {
                                         pnrDialog.addAnr(result.getAntragsnummer().substring(5));
