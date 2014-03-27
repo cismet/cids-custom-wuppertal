@@ -182,6 +182,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                         protokollPane.addMessage(
                             "Während der Bearbeitung des Auftrags trat ein Fehler auf!",
                             Styles.ERROR);
+                        pnrDialog.enableDoneButton(true);
                         btnErstellen.setEnabled(true);
                         protokollPane.setBusy(false);
                     }
@@ -478,6 +479,8 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                 JOptionPane.ERROR_MESSAGE);
             return;
         }
+        // disable the done Button of the Dialog
+        pnrDialog.enableDoneButton(false);
         btnErstellen.setEnabled(false);
         protokollPane.setBusy(true);
         final String anrPrefix = pnrDialog.getAnrPrefix();
@@ -565,6 +568,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                                                 "Die Protokolldatei mit Fehlerinformationen steht zum Download bereit.",
                                                 Styles.ERROR);
                                         }
+                                        pnrDialog.enableDoneButton(true);
                                         btnErstellen.setEnabled(true);
                                         protokollPane.setBusy(false);
                                         return;
@@ -584,6 +588,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                                     if (!pnrDialog.isErgaenzenMode()) {
                                         pnrDialog.addAnr(result.getAntragsnummer().substring(5));
                                     }
+                                    pnrDialog.enableDoneButton(true);
                                     btnErstellen.setEnabled(true);
                                 } catch (InterruptedException ex) {
                                     LOG.error("Swing worker that executes the reservation was interrupted", ex);
@@ -647,6 +652,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                                         } else {
                                             protokollPane.addMessage("Auftragsnummer existiert bereits", Styles.ERROR);
                                         }
+                                        pnrDialog.enableDoneButton(true);
                                         btnErstellen.setEnabled(true);
                                         protokollPane.setBusy(false);
                                     }

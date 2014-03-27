@@ -926,6 +926,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
                 BusyLoggingTextPane.Styles.ERROR);
             return;
         }
+        enableDoneButton(false);
         btnFreigeben.setEnabled(false);
         protokollPane.setBusy(true);
         protokollPane.addMessage("Sende Freigabeauftrag.", BusyLoggingTextPane.Styles.INFO);
@@ -1018,6 +1019,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
      * DOCUMENT ME!
      */
     private void showError() {
+        enableDoneButton(true);
         btnFreigeben.setEnabled(true);
         if (protokollPane != null) {
             protokollPane.addMessage(
@@ -1136,6 +1138,19 @@ public class PointNumberDialog extends javax.swing.JDialog {
         cbAntragsNummer.repaint();
         this.repaint();
         allAnrLoadWorker.execute();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  enable  DOCUMENT ME!
+     */
+    public void enableDoneButton(final boolean enable) {
+        if (enable) {
+            btnDone.setEnabled(true);
+        } else {
+            btnDone.setEnabled(false);
+        }
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -1473,10 +1488,12 @@ public class PointNumberDialog extends javax.swing.JDialog {
                                         "Die Protokolldatei mit Fehlerinformationen steht zum Download bereit.",
                                         BusyLoggingTextPane.Styles.ERROR);
                                 }
+                                enableDoneButton(true);
                                 btnFreigeben.setEnabled(true);
                                 protokollPane.setBusy(false);
                                 return;
                             }
+                            enableDoneButton(true);
                             btnFreigeben.setEnabled(true);
                             protokollPane.setBusy(false);
                             protokollPane.addMessage(
