@@ -27,6 +27,7 @@ import Sirius.server.newuser.User;
 import org.apache.log4j.Logger;
 
 import org.jdesktop.beansbinding.Converter;
+import org.jdesktop.swingx.calendar.DatePickerFormatter;
 
 import org.jfree.util.Log;
 
@@ -43,10 +44,12 @@ import java.beans.PropertyChangeListener;
 import java.sql.Date;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -62,6 +65,7 @@ import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
+import javax.swing.text.DefaultFormatterFactory;
 
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
@@ -214,6 +218,7 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbBaulastArt);
         lstFlurstueckeBeguenstigt.setCellRenderer(new HyperlinkStyleExistingLandparcelCellRenderer());
         lstFlurstueckeBelastet.setCellRenderer(new HyperlinkStyleExistingLandparcelCellRenderer());
+        changeAutocompleteBehaviourOfDatePickers();
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -1279,6 +1284,37 @@ public class Alb_baulastEditorPanel extends javax.swing.JPanel implements Dispos
         dlgAddBaulastArt.dispose();
         fsDialoge.dispose();
         bindingGroup.unbind();
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void changeAutocompleteBehaviourOfDatePickers() {
+        final SimpleDateFormat longFormat = new SimpleDateFormat("dd.MM.yyyy");
+        final SimpleDateFormat shortFormat = new SimpleDateFormat("dd.MM.yy");
+        final java.util.Date startDate = new GregorianCalendar(1960, 0, 1).getTime();
+        shortFormat.set2DigitYearStart(startDate);
+
+        final DatePickerFormatter formatter = new DatePickerFormatter(
+
+                // invers sequence for parsing to satisfy the year parsing rules
+                new DateFormat[] { shortFormat, longFormat }) {
+
+                @Override
+                public String valueToString(final Object value) {
+                    if (value == null) {
+                        return null;
+                    }
+                    return getFormats()[1].format(value);
+                }
+            };
+
+        final DefaultFormatterFactory factory = new DefaultFormatterFactory(formatter);
+
+        bdcBefristungsdatum.getEditor().setFormatterFactory(factory);
+        bdcEintragungsdatum.getEditor().setFormatterFactory(factory);
+        bdcGeschlossenAm.getEditor().setFormatterFactory(factory);
+        bdcLoeschungsdatum.getEditor().setFormatterFactory(factory);
     }
 
     //~ Inner Classes ----------------------------------------------------------
