@@ -262,7 +262,7 @@
 
                           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                           <SubComponents>
-                            <Component class="javax.swing.JList" name="jList1">
+                            <Component class="javax.swing.JList" name="lstBildnummern">
                               <Properties>
                                 <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
                                   <StringArray count="5">
@@ -274,6 +274,12 @@
                                   </StringArray>
                                 </Property>
                               </Properties>
+                              <BindingProperties>
+                                <BindingProperty name="elements" source="Form" sourcePath="${cidsBean.stadtbilder_arr}" target="lstBildnummern" targetPath="elements" updateStrategy="0" immediately="false"/>
+                              </BindingProperties>
+                              <Events>
+                                <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="lstBildnummernValueChanged"/>
+                              </Events>
                             </Component>
                           </SubComponents>
                         </Container>
@@ -289,7 +295,7 @@
 
                           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                           <SubComponents>
-                            <Component class="javax.swing.JList" name="jList2">
+                            <Component class="javax.swing.JList" name="lstSuchworte">
                               <Properties>
                                 <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
                                   <StringArray count="5">
@@ -301,6 +307,9 @@
                                   </StringArray>
                                 </Property>
                               </Properties>
+                              <BindingProperties>
+                                <BindingProperty name="elements" source="Form" sourcePath="${cidsBean.suchwort_arr}" target="lstSuchworte" targetPath="elements" updateStrategy="0" immediately="false"/>
+                              </BindingProperties>
                             </Component>
                           </SubComponents>
                         </Container>
@@ -588,6 +597,9 @@
                               <Dimension value="[50, 19]"/>
                             </Property>
                           </Properties>
+                          <BindingProperties>
+                            <BindingProperty name="text" source="Form" sourcePath="${cidsBean.hausnummer}" target="defaultBindableJTextField1" targetPath="text" updateStrategy="0" immediately="false"/>
+                          </BindingProperties>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                               <GridBagConstraints gridX="3" gridY="0" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -595,9 +607,9 @@
                           </Constraints>
                         </Component>
                         <Component class="javax.swing.JLabel" name="lblGeomAus">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value="jLabel8"/>
-                          </Properties>
+                          <BindingProperties>
+                            <BindingProperty name="text" source="Form" sourcePath="${cidsBean.geom_aus}" target="lblGeomAus" targetPath="text" updateStrategy="0" immediately="false"/>
+                          </BindingProperties>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                               <GridBagConstraints gridX="3" gridY="2" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -707,7 +719,7 @@
                           </Properties>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                              <GridBagConstraints gridX="-1" gridY="-1" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
+                              <GridBagConstraints gridX="-1" gridY="-1" gridWidth="1" gridHeight="1" fill="3" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
                             </Constraint>
                           </Constraints>
                         </Component>
@@ -729,7 +741,7 @@
                           </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                              <GridBagConstraints gridX="-1" gridY="-1" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
+                              <GridBagConstraints gridX="-1" gridY="-1" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="1.0" weightY="1.0"/>
                             </Constraint>
                           </Constraints>
                         </Component>
