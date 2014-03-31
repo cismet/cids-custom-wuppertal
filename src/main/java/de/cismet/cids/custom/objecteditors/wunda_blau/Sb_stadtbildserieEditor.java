@@ -1531,6 +1531,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 fotos.add(stadtbild);
             }
         }
+        defineButtonStatus();
     }//GEN-LAST:event_btnAddImageNumberActionPerformed
 
     /**
@@ -1578,6 +1579,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                     JXErrorPane.showDialog(StaticSwingTools.getParentFrame(this), ei);
                 }
             }
+            defineButtonStatus();
         }
     }//GEN-LAST:event_btnRemoveImageNumberActionPerformed
 
@@ -1587,7 +1589,15 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
      * @param  evt  DOCUMENT ME!
      */
     private void btnAddSuchwortActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSuchwortActionPerformed
-        // TODO add your handling code here:
+        Sb_stadtbildserieEditorAddSuchwortDialog dialog = new Sb_stadtbildserieEditorAddSuchwortDialog((Frame)
+                SwingUtilities.getWindowAncestor(this), true);
+        CidsBean newSuchwort = dialog.showDialog();
+        if(newSuchwort != null){
+            final List<CidsBean> suchwoerter = cidsBean.getBeanCollectionProperty("suchwort_arr");
+            if(!suchwoerter.contains(newSuchwort)){
+                suchwoerter.add(newSuchwort);
+            }
+        }
     }//GEN-LAST:event_btnAddSuchwortActionPerformed
 
     /**

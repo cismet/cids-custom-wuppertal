@@ -5,8 +5,6 @@
 *              ... and it just works.
 *
 ****************************************************/
-/*
- */
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
@@ -58,7 +56,7 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
 
     private final ArrayList<String> bildnummernToAdd = new ArrayList<String>();
     private final HashMap<String, CidsBean> stadtBilderBeans = new HashMap<String, CidsBean>();
-    private BildnummerEvaluationDocumentListener bildnummerEvaluationDocumentListener =
+    private final BildnummerEvaluationDocumentListener bildnummerEvaluationDocumentListener =
         new BildnummerEvaluationDocumentListener();
     private ShowWarning showWarning;
 
@@ -109,6 +107,7 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle(org.openide.util.NbBundle.getMessage(Sb_stadtbildserieEditorAddBildnummerDialog.class, "Sb_stadtbildserieEditorAddBildnummerDialog.title")); // NOI18N
         setPreferredSize(new java.awt.Dimension(500, 170));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
