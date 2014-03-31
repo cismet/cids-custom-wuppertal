@@ -1136,8 +1136,6 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         btnDownloadHighResImage.setFocusPainted(false);
         btnDownloadHighResImage.setMaximumSize(new java.awt.Dimension(30, 30));
         btnDownloadHighResImage.setMinimumSize(new java.awt.Dimension(30, 30));
-        btnDownloadHighResImage.setOpaque(false);
-        btnDownloadHighResImage.setPreferredSize(new java.awt.Dimension(30, 30));
         btnDownloadHighResImage.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -1151,18 +1149,24 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         pnlCtrlBtn.add(btnDownloadHighResImage, gridBagConstraints);
 
-        btnPrevImg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/arrow-left.png"))); // NOI18N
+        btnPrevImg.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left.png")));          // NOI18N
         btnPrevImg.setText(org.openide.util.NbBundle.getMessage(
                 Sb_stadtbildserieEditor.class,
-                "MauerEditor.btnPrevImg.text"));                                                      // NOI18N
+                "MauerEditor.btnPrevImg.text"));                                                           // NOI18N
         btnPrevImg.setBorder(null);
         btnPrevImg.setBorderPainted(false);
         btnPrevImg.setContentAreaFilled(false);
         btnPrevImg.setFocusPainted(false);
         btnPrevImg.setMaximumSize(new java.awt.Dimension(30, 30));
         btnPrevImg.setMinimumSize(new java.awt.Dimension(30, 30));
-        btnPrevImg.setOpaque(false);
         btnPrevImg.setPreferredSize(new java.awt.Dimension(30, 30));
+        btnPrevImg.setPressedIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-pressed.png")));  // NOI18N
+        btnPrevImg.setRolloverIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-selected.png"))); // NOI18N
+        btnPrevImg.setSelectedIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-left-selected.png"))); // NOI18N
         btnPrevImg.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -1176,10 +1180,11 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
         pnlCtrlBtn.add(btnPrevImg, gridBagConstraints);
 
-        btnNextImg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/arrow-right.png"))); // NOI18N
+        btnNextImg.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-right.png")));          // NOI18N
         btnNextImg.setText(org.openide.util.NbBundle.getMessage(
                 Sb_stadtbildserieEditor.class,
-                "MauerEditor.btnNextImg.text"));                                                       // NOI18N
+                "MauerEditor.btnNextImg.text"));                                                            // NOI18N
         btnNextImg.setBorder(null);
         btnNextImg.setBorderPainted(false);
         btnNextImg.setContentAreaFilled(false);
@@ -1187,6 +1192,12 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         btnNextImg.setMaximumSize(new java.awt.Dimension(30, 30));
         btnNextImg.setMinimumSize(new java.awt.Dimension(30, 30));
         btnNextImg.setPreferredSize(new java.awt.Dimension(30, 30));
+        btnNextImg.setPressedIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-right-pressed.png")));  // NOI18N
+        btnNextImg.setRolloverIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-right-selected.png"))); // NOI18N
+        btnNextImg.setSelectedIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/arrow-right-selected.png"))); // NOI18N
         btnNextImg.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -1213,14 +1224,14 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         pnlCtrlBtn.add(filler2, gridBagConstraints);
 
         tbtnIsPreviewImage.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/1396045018_Select.png"))); // NOI18N
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/tick_32.png"))); // NOI18N
         tbtnIsPreviewImage.setSelected(true);
         tbtnIsPreviewImage.setBorderPainted(false);
         tbtnIsPreviewImage.setDisabledIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/tick.png")));              // NOI18N
+                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/tick.png")));    // NOI18N
         tbtnIsPreviewImage.setMaximumSize(new java.awt.Dimension(30, 30));
         tbtnIsPreviewImage.setMinimumSize(new java.awt.Dimension(30, 30));
-        tbtnIsPreviewImage.setPreferredSize(new java.awt.Dimension(30, 30));
+        tbtnIsPreviewImage.setPreferredSize(new java.awt.Dimension(32, 32));
         tbtnIsPreviewImage.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
