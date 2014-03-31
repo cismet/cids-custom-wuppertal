@@ -1227,8 +1227,6 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/tick_32.png"))); // NOI18N
         tbtnIsPreviewImage.setSelected(true);
         tbtnIsPreviewImage.setBorderPainted(false);
-        tbtnIsPreviewImage.setDisabledIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/tick.png")));    // NOI18N
         tbtnIsPreviewImage.setMaximumSize(new java.awt.Dimension(30, 30));
         tbtnIsPreviewImage.setMinimumSize(new java.awt.Dimension(30, 30));
         tbtnIsPreviewImage.setPreferredSize(new java.awt.Dimension(32, 32));
