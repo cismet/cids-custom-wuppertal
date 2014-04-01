@@ -41,11 +41,14 @@ import java.net.URL;
 
 import java.sql.Timestamp;
 
+import java.text.DateFormat;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
@@ -88,6 +91,7 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.security.WebAccessManager;
 
+import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
@@ -102,7 +106,9 @@ import static de.cismet.cids.custom.objecteditors.wunda_blau.MauerEditor.adjustS
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer, TitleComponentProvider {
+public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
+    TitleComponentProvider,
+    FooterComponentProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -161,6 +167,23 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             }
         };
 
+    private final Converter<Timestamp, String> timeStampToStringConverter = new Converter<Timestamp, String>() {
+
+            @Override
+            public String convertForward(final Timestamp s) {
+                final Date d = new java.util.Date(s.getTime());
+                final DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+                final String formattedDate = df.format(d);
+                return formattedDate;
+            }
+
+            @Override
+            public Timestamp convertReverse(final String t) {
+                LOG.fatal(".convertReverse: Not supported yet.", new Exception()); // NOI18N
+                return null;
+            }
+        };
+
     private final PropertyChangeListener listRepaintListener = new PropertyChangeListener() {
 
             @Override
@@ -212,6 +235,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -219,6 +243,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -238,6 +263,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private javax.swing.JLabel lblDescOrt;
     private javax.swing.JLabel lblDescStrasse;
     private javax.swing.JLabel lblDescSuchworte;
+    private javax.swing.JLabel lblEintragungsdatum;
     private javax.swing.JLabel lblGeomAus;
     private javax.swing.JLabel lblPicture;
     private javax.swing.JLabel lblPrint;
@@ -250,6 +276,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private javax.swing.JPanel panDetails1;
     private javax.swing.JPanel panDetails3;
     private javax.swing.JPanel panDetails4;
+    private javax.swing.JPanel panFooter;
     private javax.swing.JPanel panPrintButton;
     private javax.swing.JPanel panTitle;
     private javax.swing.JPanel panTitleString;
@@ -375,6 +402,10 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         lblPrint = new javax.swing.JLabel();
         roundedPanel1 = new de.cismet.tools.gui.RoundedPanel();
         semiRoundedPanel1 = new de.cismet.tools.gui.SemiRoundedPanel();
+        panFooter = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        lblEintragungsdatum = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
         jPanel3 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -501,6 +532,37 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         panTitle.add(panPrintButton, java.awt.BorderLayout.EAST);
 
         roundedPanel1.add(semiRoundedPanel1, java.awt.BorderLayout.CENTER);
+
+        panFooter.setOpaque(false);
+        panFooter.setLayout(new java.awt.BorderLayout());
+
+        jPanel5.setOpaque(false);
+        jPanel5.setLayout(new java.awt.GridBagLayout());
+
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("eingetragen am:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        jPanel5.add(jLabel4, gridBagConstraints);
+
+        lblEintragungsdatum.setForeground(new java.awt.Color(255, 255, 255));
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.eintragungsdatum}"),
+                lblEintragungsdatum,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setConverter(timeStampToStringConverter);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanel5.add(lblEintragungsdatum, gridBagConstraints);
+
+        panFooter.add(jPanel5, java.awt.BorderLayout.LINE_START);
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
@@ -749,7 +811,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         panContent.add(jScrollPane2, gridBagConstraints);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bildtyp}"),
@@ -1742,6 +1804,11 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     @Override
     public JComponent getTitleComponent() {
         return panTitle;
+    }
+
+    @Override
+    public JComponent getFooterComponent() {
+        return panFooter;
     }
 
     /**
