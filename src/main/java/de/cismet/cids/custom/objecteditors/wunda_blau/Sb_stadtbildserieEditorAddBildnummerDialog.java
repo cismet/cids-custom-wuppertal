@@ -10,27 +10,38 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 
+import Sirius.server.middleware.interfaces.domainserver.MetaService;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
+import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.rmi.RemoteException;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
+import javax.swing.SwingWorker;
 import javax.swing.Timer;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import de.cismet.cids.custom.wunda_blau.search.server.Sb_maxBildnummerFetcherServerSearch;
+
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+
+import de.cismet.cids.server.search.AbstractCidsServerSearch;
+import de.cismet.cids.server.search.SearchException;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -67,6 +78,7 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
     private javax.swing.Box.Filler filler2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private org.jdesktop.swingx.JXBusyLabel lblBusy;
     private javax.swing.JLabel lblWarning;
     private javax.swing.JTextField txtFromBildnummer;
     private javax.swing.JTextField txtTillBildnummer;
@@ -83,6 +95,7 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
     public Sb_stadtbildserieEditorAddBildnummerDialog(final java.awt.Frame parent, final boolean modal) {
         super(parent, modal);
         initComponents();
+        new NextBildNummerFetcherWorker().execute();
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -103,57 +116,82 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
         jLabel2 = new javax.swing.JLabel();
         txtTillBildnummer = new javax.swing.JTextField();
         lblWarning = new javax.swing.JLabel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
+        lblBusy = new org.jdesktop.swingx.JXBusyLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle(org.openide.util.NbBundle.getMessage(Sb_stadtbildserieEditorAddBildnummerDialog.class, "Sb_stadtbildserieEditorAddBildnummerDialog.title")); // NOI18N
+        setTitle(org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieEditorAddBildnummerDialog.class,
+                "Sb_stadtbildserieEditorAddBildnummerDialog.title")); // NOI18N
         setPreferredSize(new java.awt.Dimension(500, 170));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        txtFromBildnummer.setText(org.openide.util.NbBundle.getMessage(Sb_stadtbildserieEditorAddBildnummerDialog.class, "Sb_stadtbildserieEditorAddBildnummerDialog.txtFromBildnummer.text")); // NOI18N
+        txtFromBildnummer.setText(org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieEditorAddBildnummerDialog.class,
+                "Sb_stadtbildserieEditorAddBildnummerDialog.txtFromBildnummer.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtFromBildnummer, gridBagConstraints);
         txtFromBildnummer.getDocument().addDocumentListener(bildnummerEvaluationDocumentListener);
 
-        org.openide.awt.Mnemonics.setLocalizedText(btnOk, org.openide.util.NbBundle.getMessage(Sb_stadtbildserieEditorAddBildnummerDialog.class, "Sb_stadtbildserieEditorAddBildnummerDialog.btnOk.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnOk,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieEditorAddBildnummerDialog.class,
+                "Sb_stadtbildserieEditorAddBildnummerDialog.btnOk.text")); // NOI18N
         btnOk.setEnabled(false);
         btnOk.setPreferredSize(new java.awt.Dimension(75, 26));
         btnOk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOkActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(btnOk, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(btnCancel, org.openide.util.NbBundle.getMessage(Sb_stadtbildserieEditorAddBildnummerDialog.class, "Sb_stadtbildserieEditorAddBildnummerDialog.btnCancel.text")); // NOI18N
-        btnCancel.setPreferredSize(new java.awt.Dimension(110, 26));
-        btnCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelActionPerformed(evt);
-            }
-        });
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnOkActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(btnOk, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnCancel,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieEditorAddBildnummerDialog.class,
+                "Sb_stadtbildserieEditorAddBildnummerDialog.btnCancel.text")); // NOI18N
+        btnCancel.setPreferredSize(new java.awt.Dimension(110, 26));
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnCancelActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnCancel, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(Sb_stadtbildserieEditorAddBildnummerDialog.class, "Sb_stadtbildserieEditorAddBildnummerDialog.jLabel1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel1,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieEditorAddBildnummerDialog.class,
+                "Sb_stadtbildserieEditorAddBildnummerDialog.jLabel1.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -161,7 +199,11 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel1, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(Sb_stadtbildserieEditorAddBildnummerDialog.class, "Sb_stadtbildserieEditorAddBildnummerDialog.jLabel2.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel2,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieEditorAddBildnummerDialog.class,
+                "Sb_stadtbildserieEditorAddBildnummerDialog.jLabel2.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -169,27 +211,35 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel2, gridBagConstraints);
 
-        txtTillBildnummer.setText(org.openide.util.NbBundle.getMessage(Sb_stadtbildserieEditorAddBildnummerDialog.class, "Sb_stadtbildserieEditorAddBildnummerDialog.txtTillBildnummer.text")); // NOI18N
+        txtTillBildnummer.setText(org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieEditorAddBildnummerDialog.class,
+                "Sb_stadtbildserieEditorAddBildnummerDialog.txtTillBildnummer.text")); // NOI18N
         txtTillBildnummer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtTillBildnummerActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    txtTillBildnummerActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtTillBildnummer, gridBagConstraints);
         txtTillBildnummer.getDocument().addDocumentListener(bildnummerEvaluationDocumentListener);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblWarning, org.openide.util.NbBundle.getMessage(Sb_stadtbildserieEditorAddBildnummerDialog.class, "Sb_stadtbildserieEditorAddBildnummerDialog.lblWarning.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblWarning,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieEditorAddBildnummerDialog.class,
+                "Sb_stadtbildserieEditorAddBildnummerDialog.lblWarning.text")); // NOI18N
         lblWarning.setPreferredSize(new java.awt.Dimension(120, 15));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -204,29 +254,39 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 1.0;
         getContentPane().add(filler2, gridBagConstraints);
 
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblBusy,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieEditorAddBildnummerDialog.class,
+                "Sb_stadtbildserieEditorAddBildnummerDialog.lblBusy.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        getContentPane().add(lblBusy, gridBagConstraints);
+
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtTillBildnummerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTillBildnummerActionPerformed
+    private void txtTillBildnummerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtTillBildnummerActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtTillBildnummerActionPerformed
+    } //GEN-LAST:event_txtTillBildnummerActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
+    private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOkActionPerformed
         stadtBilderBeans.clear();
         final StringBuilder bildnummern = new StringBuilder("'" + bildnummernToAdd.get(0) + "'");
         for (int i = 1; i < bildnummernToAdd.size(); i++) {
@@ -270,18 +330,18 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
             setVisible(false);
             dispose();
         }
-    }//GEN-LAST:event_btnOkActionPerformed
+    }                                                                         //GEN-LAST:event_btnOkActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
         stadtBilderBeans.clear();
         setVisible(false);
         dispose();
-    }//GEN-LAST:event_btnCancelActionPerformed
+    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -581,6 +641,61 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
             btnOk.setText("Ok");
             btnOk.setEnabled(true);
             timer.stop();
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class NextBildNummerFetcherWorker extends SwingWorker<Integer, Void> {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new NextBildNummerFetcherWorker object.
+         */
+        public NextBildNummerFetcherWorker() {
+            txtFromBildnummer.setEnabled(false);
+            lblBusy.setVisible(true);
+            lblBusy.setBusy(true);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        protected Integer doInBackground() throws Exception {
+            final Sb_maxBildnummerFetcherServerSearch maxBildnummerFetcher = new Sb_maxBildnummerFetcherServerSearch();
+            final Collection maxBildnummerCollection = SessionManager.getConnection()
+                        .customServerSearch(SessionManager.getSession().getUser(), maxBildnummerFetcher);
+            if ((maxBildnummerCollection != null) && !maxBildnummerCollection.isEmpty()) {
+                final ArrayList firstColumnObject = (ArrayList)maxBildnummerCollection.toArray(new Object[1])[0];
+                final Object firstRowObject = firstColumnObject.get(0);
+                return (Integer)firstRowObject;
+            }
+            return null;
+        }
+
+        @Override
+        protected void done() {
+            Integer maxBildnummer = null;
+            try {
+                maxBildnummer = get();
+            } catch (InterruptedException ex) {
+                LOG.warn(ex, ex);
+            } catch (ExecutionException ex) {
+                LOG.warn(ex, ex);
+            }
+            if (maxBildnummer != null) {
+                final String nextBildnummer = Integer.toString(maxBildnummer + 1);
+                txtFromBildnummer.setText(nextBildnummer);
+            } else {
+                txtFromBildnummer.requestFocusInWindow();
+            }
+            txtFromBildnummer.setEnabled(true);
+            lblBusy.setVisible(false);
+            lblBusy.setBusy(false);
         }
     }
 }
