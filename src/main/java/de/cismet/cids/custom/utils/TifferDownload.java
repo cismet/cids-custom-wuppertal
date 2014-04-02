@@ -13,7 +13,7 @@ package de.cismet.cids.custom.utils;
 
 import Sirius.navigator.connection.SessionManager;
 
-import Sirius.util.image.ImageAnnotator;
+import de.cismet.cids.custom.wunda_blau.search.actions.ImageAnnotator;
 
 import org.apache.log4j.Logger;
 
