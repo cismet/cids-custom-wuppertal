@@ -13,8 +13,6 @@ package de.cismet.cids.custom.utils;
 
 import Sirius.navigator.connection.SessionManager;
 
-import de.cismet.cids.custom.wunda_blau.search.actions.ImageAnnotator;
-
 import org.apache.log4j.Logger;
 
 import java.awt.image.RenderedImage;
@@ -26,6 +24,7 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
+import de.cismet.cids.custom.wunda_blau.search.actions.ImageAnnotator;
 import de.cismet.cids.custom.wunda_blau.search.actions.TifferAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
