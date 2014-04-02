@@ -646,7 +646,7 @@
                     </Property>
                     <Property name="toolTipText" type="java.lang.String" value="Flurst&#xfc;cke der laufenden Nummer in Karte anzeigen"/>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-                      <Color id="Default Cursor"/>
+                      <Color id="Standardcursor"/>
                     </Property>
                   </Properties>
                   <AccessibilityProperties>
