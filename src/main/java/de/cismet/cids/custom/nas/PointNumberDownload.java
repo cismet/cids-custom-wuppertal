@@ -12,12 +12,15 @@
  */
 package de.cismet.cids.custom.nas;
 
+import org.apache.log4j.Logger;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import java.util.GregorianCalendar;
@@ -35,13 +38,18 @@ import de.cismet.tools.gui.downloadmanager.AbstractDownload;
  */
 public class PointNumberDownload extends AbstractDownload {
 
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final Logger LOG = Logger.getLogger(PointNumberDownload.class);
+    private static final DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    private static final DateFormat dateParser = new SimpleDateFormat("dd-MM-yyyy");
+
     //~ Instance fields --------------------------------------------------------
 
     boolean isFreigabeMode = false;
     boolean downloadProtokoll = false;
     private final StringBuilder contentBuilder = new StringBuilder();
     private PointNumberReservationRequest content;
-    private final DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 
     //~ Constructors -----------------------------------------------------------
 
@@ -87,8 +95,14 @@ public class PointNumberDownload extends AbstractDownload {
             contentBuilder.append(pnr.getPunktnummern());
             if (!isFreigabeMode) {
                 contentBuilder.append(" (");
-                contentBuilder.append(pnr.getAblaufDatum());
-                contentBuilder.append(" )");
+                try {
+                    contentBuilder.append(dateFormat.format(dateParser.parse(pnr.getAblaufDatum())));
+                } catch (ParseException ex) {
+                    LOG.info(
+                        "Could not parse the expiration date of a reservation. Using the string representation return by server");
+                    contentBuilder.append(pnr.getAblaufDatum());
+                }
+                contentBuilder.append(")");
             }
             contentBuilder.append(System.getProperty("line.separator"));
         }
@@ -100,7 +114,7 @@ public class PointNumberDownload extends AbstractDownload {
     private void createFileHeader() {
         String header = "Antragsnummer: " + content.getAntragsnummer() + " erstellt am: ";
         final GregorianCalendar cal = new GregorianCalendar();
-        header += df.format(cal.getTime());
+        header += dateFormat.format(cal.getTime());
         header += " Anzahl ";
         if (isFreigabeMode) {
             header += "freigegebener";
