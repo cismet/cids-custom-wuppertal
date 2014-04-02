@@ -20,6 +20,10 @@ import org.apache.log4j.Logger;
 
 import java.awt.EventQueue;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Timer;
@@ -65,6 +69,8 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
     private static final Logger LOG = Logger.getLogger(PointNumberReservationPanel.class);
     private static final String SEVER_ACTION = "pointNumberReservation";
     private static final String WUPP_ZONEN_KENNZIFFER = "32";
+    private static final DateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd");
+    private static final DateFormat dateFormater = new SimpleDateFormat("dd-MM-yyyy");
 
     //~ Instance fields --------------------------------------------------------
 
@@ -586,7 +592,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                                         protokollPane.addMessage(
                                             pnr.getPunktnummern()
                                                     + " ("
-                                                    + pnr.getAblaufDatum()
+                                                    + dateFormater.format(dateParser.parse(pnr.getAblaufDatum()))
                                                     + ")",
                                             Styles.INFO);
                                     }
@@ -600,6 +606,9 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                                     showError();
                                 } catch (ExecutionException ex) {
                                     LOG.error("Error in execution of Swing Worker that executes the reservation", ex);
+                                    showError();
+                                } catch (ParseException ex) {
+                                    LOG.error("Error parsing the ablauf date of a reservation", ex);
                                     showError();
                                 }
                             }
