@@ -18,6 +18,8 @@ import com.vividsolutions.jts.geom.Geometry;
 
 import org.apache.log4j.Logger;
 
+import org.openide.util.Exceptions;
+
 import java.awt.EventQueue;
 
 import java.text.DateFormat;
@@ -180,6 +182,24 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
         lblAnzWarn1.setVisible(false);
         lblAnzWarn2.setVisible(false);
         lblAnzWarnAnzahl.setVisible(false);
+        final JSpinner.NumberEditor ne = (JSpinner.NumberEditor)jspAnzahl.getEditor();
+        ne.getTextField().getDocument().addDocumentListener(new DocumentListener() {
+
+                @Override
+                public void insertUpdate(final DocumentEvent e) {
+                    handleAnzahlSpinnderChanged();
+                }
+
+                @Override
+                public void removeUpdate(final DocumentEvent e) {
+                    handleAnzahlSpinnderChanged();
+                }
+
+                @Override
+                public void changedUpdate(final DocumentEvent e) {
+                    handleAnzahlSpinnderChanged();
+                }
+            });
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -523,7 +543,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnErstellenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnErstellenActionPerformed
+    private void btnErstellenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnErstellenActionPerformed
         // check anr
         final String anr = pnrDialog.getAnr();
         if ((anr == null) || anr.isEmpty()) {
@@ -767,7 +787,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
             };
 
         isAntragExistingWorker.execute();
-    }//GEN-LAST:event_btnErstellenActionPerformed
+    } //GEN-LAST:event_btnErstellenActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -819,31 +839,37 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRefreshNbzActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshNbzActionPerformed
+    private void btnRefreshNbzActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRefreshNbzActionPerformed
         checkNummerierungsbezirke();
         btnRefreshNbz.setVisible(false);
         this.invalidate();
         this.validate();
         this.repaint();
-    }//GEN-LAST:event_btnRefreshNbzActionPerformed
+    }                                                                                 //GEN-LAST:event_btnRefreshNbzActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jspAnzahlStateChanged(final javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jspAnzahlStateChanged
-        handleAnzahlSpinnderChanged();
-    }//GEN-LAST:event_jspAnzahlStateChanged
+    private void jspAnzahlStateChanged(final javax.swing.event.ChangeEvent evt) { //GEN-FIRST:event_jspAnzahlStateChanged
+//        handleAnzahlSpinnderChanged();
+    } //GEN-LAST:event_jspAnzahlStateChanged
 
     /**
      * DOCUMENT ME!
      */
     private void handleAnzahlSpinnderChanged() {
         // We do not allow reservations with more than 100 points
-        final Integer anzahl = (Integer)jspAnzahl.getValue();
-        if (anzahl > 100) {
-            lblAnzWarnAnzahl.setText("" + anzahl);
+        final JSpinner.NumberEditor ne = (JSpinner.NumberEditor)jspAnzahl.getEditor();
+        Number anzahl;
+        try {
+            anzahl = ne.getFormat().parse(ne.getTextField().getText());
+        } catch (ParseException ex) {
+            anzahl = (Number)jspAnzahl.getValue();
+        }
+        if (anzahl.intValue() > 100) {
+            lblAnzWarnAnzahl.setText("" + anzahl.intValue());
             if (!anzahlWarnVisible) {
                 anzahlWarnVisible = true;
                 lblAnzWarn1.setVisible(true);
