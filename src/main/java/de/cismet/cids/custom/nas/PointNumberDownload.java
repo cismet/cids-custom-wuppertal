@@ -170,7 +170,7 @@ public class PointNumberDownload extends AbstractDownload {
         Writer w = null;
         try {
             out = new FileOutputStream(fileToSaveTo);
-            w = new OutputStreamWriter(out, "UTF8");
+            w = new OutputStreamWriter(out, "UTF-8");
             w.write(bytes);
             w.flush();
         } catch (final IOException ex) {
