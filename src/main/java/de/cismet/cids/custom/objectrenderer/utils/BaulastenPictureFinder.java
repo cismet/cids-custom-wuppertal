@@ -154,7 +154,7 @@ public final class BaulastenPictureFinder {
         if (modulo == 0) {
             modulo = 1000;
         }
-        int lowerBorder = number - modulo;
+        int lowerBorder = (number == 0) ? 0 : (number - modulo);
         final int higherBorder = lowerBorder + 1000;
         if (lowerBorder != 0) {
             lowerBorder += 1;
