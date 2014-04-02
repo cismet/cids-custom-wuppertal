@@ -42,7 +42,7 @@ public class PointNumberDownload extends AbstractDownload {
 
     private static final Logger LOG = Logger.getLogger(PointNumberDownload.class);
     private static final DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-    private static final DateFormat dateParser = new SimpleDateFormat("dd-MM-yyyy");
+    private static final DateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd");
 
     //~ Instance fields --------------------------------------------------------
 
