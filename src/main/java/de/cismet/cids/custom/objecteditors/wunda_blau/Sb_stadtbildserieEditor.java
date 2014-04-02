@@ -1640,10 +1640,11 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 final String imageNumber = lstBildnummern.getSelectedValue().toString();
                 new CheckAccessibilityOfHighResImage(imageNumber).execute();
                 loadFoto();
-                final boolean isPreviewImage = cidsBean.getProperty("vorschaubild")
-                            .equals(lstBildnummern.getSelectedValue());
+                final CidsBean oldPreviewImage = (CidsBean)cidsBean.getProperty("vorschaubild");
+                final boolean isPreviewImage = (oldPreviewImage != null)
+                            && oldPreviewImage.equals(lstBildnummern.getSelectedValue());
                 tbtnIsPreviewImage.setSelected(isPreviewImage);
-                tbtnIsPreviewImage.setEnabled(!isPreviewImage);
+                tbtnIsPreviewImage.setEnabled(editable && !isPreviewImage);
                 lstBildnummern.ensureIndexIsVisible(lstBildnummern.getSelectedIndex());
             } else {
                 tbtnIsPreviewImage.setSelected(false);
