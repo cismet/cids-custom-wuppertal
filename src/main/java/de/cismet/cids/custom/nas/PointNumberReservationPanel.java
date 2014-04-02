@@ -31,6 +31,7 @@ import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
 import javax.swing.SwingWorker;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -79,6 +80,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
     private BusyLoggingTextPane protokollPane;
     private ArrayList<String> nbz = new ArrayList<String>();
     private int maxNbz = 4;
+    private boolean anzahlWarnVisible = false;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnErstellen;
@@ -87,7 +89,11 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JSpinner jspAnzahl;
+    private javax.swing.JLabel lblAnzWarn1;
+    private javax.swing.JLabel lblAnzWarn2;
+    private javax.swing.JLabel lblAnzWarnAnzahl;
     private javax.swing.JLabel lblAnzahl;
     private javax.swing.JLabel lblNbz;
     private javax.swing.JLabel lblNbzAnzahl;
@@ -171,6 +177,9 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                 }
             });
         btnRefreshNbz.setVisible(false);
+        lblAnzWarn1.setVisible(false);
+        lblAnzWarn2.setVisible(false);
+        lblAnzWarnAnzahl.setVisible(false);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -240,7 +249,6 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
 
         lblNbz = new javax.swing.JLabel();
         lblAnzahl = new javax.swing.JLabel();
-        jspAnzahl = new javax.swing.JSpinner();
         lblStartwert = new javax.swing.JLabel();
         tfStartWert = new javax.swing.JTextField();
         btnErstellen = new javax.swing.JButton();
@@ -262,6 +270,11 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0),
                 new java.awt.Dimension(40, 0),
                 new java.awt.Dimension(32767, 0));
+        lblAnzWarn2 = new javax.swing.JLabel();
+        jspAnzahl = new javax.swing.JSpinner();
+        jPanel1 = new javax.swing.JPanel();
+        lblAnzWarn1 = new javax.swing.JLabel();
+        lblAnzWarnAnzahl = new javax.swing.JLabel();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -285,23 +298,10 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         add(lblAnzahl, gridBagConstraints);
-
-        jspAnzahl.setModel(new javax.swing.SpinnerNumberModel(
-                Integer.valueOf(0),
-                Integer.valueOf(0),
-                null,
-                Integer.valueOf(1)));
-        jspAnzahl.setMinimumSize(new java.awt.Dimension(100, 28));
-        jspAnzahl.setPreferredSize(new java.awt.Dimension(100, 28));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        add(jspAnzahl, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblStartwert,
@@ -310,7 +310,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
                 "PointNumberReservationPanel.lblStartwert.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         add(lblStartwert, gridBagConstraints);
@@ -322,7 +322,8 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
         tfStartWert.setPreferredSize(new java.awt.Dimension(100, 27));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         add(tfStartWert, gridBagConstraints);
@@ -341,13 +342,14 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         add(btnErstellen, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 1.0;
@@ -365,6 +367,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 0;
+            gridBagConstraints.gridwidth = 2;
             gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
             gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 10);
             add(lblNbzError, gridBagConstraints);
@@ -439,9 +442,80 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         add(pnlNbz, gridBagConstraints);
+
+        lblAnzWarn2.setForeground(new java.awt.Color(255, 0, 0));
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblAnzWarn2,
+            org.openide.util.NbBundle.getMessage(
+                PointNumberReservationPanel.class,
+                "PointNumberReservationPanel.lblAnzWarn2.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 2.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        add(lblAnzWarn2, gridBagConstraints);
+
+        jspAnzahl.setModel(new javax.swing.SpinnerNumberModel(
+                Integer.valueOf(0),
+                Integer.valueOf(0),
+                null,
+                Integer.valueOf(1)));
+        jspAnzahl.setMinimumSize(new java.awt.Dimension(100, 28));
+        jspAnzahl.setPreferredSize(new java.awt.Dimension(100, 28));
+        jspAnzahl.addChangeListener(new javax.swing.event.ChangeListener() {
+
+                @Override
+                public void stateChanged(final javax.swing.event.ChangeEvent evt) {
+                    jspAnzahlStateChanged(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        add(jspAnzahl, gridBagConstraints);
+
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        lblAnzWarn1.setForeground(new java.awt.Color(255, 0, 0));
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblAnzWarn1,
+            org.openide.util.NbBundle.getMessage(
+                PointNumberReservationPanel.class,
+                "PointNumberReservationPanel.lblAnzWarn1.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        jPanel1.add(lblAnzWarn1, gridBagConstraints);
+
+        lblAnzWarnAnzahl.setForeground(new java.awt.Color(255, 0, 0));
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblAnzWarnAnzahl,
+            org.openide.util.NbBundle.getMessage(
+                PointNumberReservationPanel.class,
+                "PointNumberReservationPanel.lblAnzWarnAnzahl.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel1.add(lblAnzWarnAnzahl, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(8, 0, 0, 0);
+        add(jPanel1, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
 
     /**
@@ -449,7 +523,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnErstellenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnErstellenActionPerformed
+    private void btnErstellenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnErstellenActionPerformed
         // check anr
         final String anr = pnrDialog.getAnr();
         if ((anr == null) || anr.isEmpty()) {
@@ -693,7 +767,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
             };
 
         isAntragExistingWorker.execute();
-    } //GEN-LAST:event_btnErstellenActionPerformed
+    }//GEN-LAST:event_btnErstellenActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -745,11 +819,44 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRefreshNbzActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRefreshNbzActionPerformed
+    private void btnRefreshNbzActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshNbzActionPerformed
         checkNummerierungsbezirke();
         btnRefreshNbz.setVisible(false);
         this.invalidate();
         this.validate();
         this.repaint();
-    }                                                                                 //GEN-LAST:event_btnRefreshNbzActionPerformed
+    }//GEN-LAST:event_btnRefreshNbzActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jspAnzahlStateChanged(final javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jspAnzahlStateChanged
+        handleAnzahlSpinnderChanged();
+    }//GEN-LAST:event_jspAnzahlStateChanged
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void handleAnzahlSpinnderChanged() {
+        // We do not allow reservations with more than 100 points
+        final Integer anzahl = (Integer)jspAnzahl.getValue();
+        if (anzahl > 100) {
+            lblAnzWarnAnzahl.setText("" + anzahl);
+            if (!anzahlWarnVisible) {
+                anzahlWarnVisible = true;
+                lblAnzWarn1.setVisible(true);
+                lblAnzWarn2.setVisible(true);
+                lblAnzWarnAnzahl.setVisible(true);
+            }
+        } else {
+            if ((anzahlWarnVisible)) {
+                anzahlWarnVisible = false;
+                lblAnzWarn1.setVisible(false);
+                lblAnzWarn2.setVisible(false);
+                lblAnzWarnAnzahl.setVisible(false);
+            }
+        }
+    }
 }
