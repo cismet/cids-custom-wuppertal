@@ -60,6 +60,7 @@ import de.cismet.cids.annotations.CidsAttributeVector;
 import de.cismet.cids.custom.deprecated.JBreakLabel;
 import de.cismet.cids.custom.deprecated.JLoadDots;
 import de.cismet.cids.custom.objectrenderer.utils.PrintingWaitDialog;
+import de.cismet.cids.custom.utils.TifferDownload;
 
 import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
 
@@ -67,6 +68,8 @@ import de.cismet.tools.BrowserLauncher;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.downloadmanager.DownloadManager;
+import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 
 /**
  * de.cismet.cids.objectrenderer.CoolLuftBildRenderer.
@@ -274,7 +277,7 @@ public class LuftbildschraegaufnahmenRenderer extends BlurredMapObjectRenderer {
                         @Override
                         public void run() {
                             try {
-                                String url = properties.getProperty("luftbildschraegaufnahmenservicesmall");
+                                final String url = properties.getProperty("luftbildschraegaufnahmenservicesmall");
                                 ImageIcon ii;
                                 if (url == null) {
                                     log.fatal("Aggregation Wupp " + EventQueue.isDispatchThread());
@@ -495,7 +498,7 @@ public class LuftbildschraegaufnahmenRenderer extends BlurredMapObjectRenderer {
                     @Override
                     public void run() {
                         try {
-                            String url = properties.getProperty("luftbildschraegaufnahmenservicesmall");
+                            final String url = properties.getProperty("luftbildschraegaufnahmenservicesmall");
                             ImageIcon i;
                             if (url == null) {
                                 log.fatal("Single Wupp " + EventQueue.isDispatchThread());
