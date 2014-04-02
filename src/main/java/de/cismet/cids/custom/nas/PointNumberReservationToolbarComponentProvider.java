@@ -17,8 +17,9 @@ import Sirius.navigator.exception.ConnectionException;
 
 import org.apache.log4j.Logger;
 
+import org.openide.util.NbBundle;
+
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -128,6 +129,9 @@ public class PointNumberReservationToolbarComponentProvider implements ToolbarCo
                             });
                     }
                 });
+            super.setToolTipText(NbBundle.getMessage(
+                    PointNumberReservationToolbarComponentProvider.class,
+                    "PointNumberReservationToolbarComponent.tooltip"));
             this.setIcon(icon);
             setFocusPainted(false);
             setBorderPainted(false);
