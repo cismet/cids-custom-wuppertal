@@ -328,8 +328,10 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
                         log.error(x, x);
                     }
                 }
+                final Object laufendeNr = ((CidsBean)lstLaufendeNummern.getSelectedValue()).getProperty(
+                        "laufende_nummer");
                 final Object blattnummer = cidsBean.getProperty("blattnummer");
-                lblTitle.setText(TITLE_PREFIX + " " + blattnummer);
+                lblTitle.setText("Baulastblatt " + blattnummer + ": lfd. Nummer " + laufendeNr);
                 checkLaufendeNummern();
                 strongReferenceToWeakListener = new PropertyChangeListener() {
 
@@ -858,6 +860,9 @@ public class Alb_baulastblattEditor extends JPanel implements DisposableCidsBean
             btnPasteBaulast.setEnabled(isPastePossible());
             bindingGroup.getBinding("bearbeitet_von").bind();
             bindingGroup.getBinding("bearbeitungsdatum").bind();
+            final Object laufendeNr = selectedBean.getProperty("laufende_nummer");
+            final Object blattNummer = selectedBean.getProperty("blattnummer");
+            lblTitle.setText("Baulastblatt " + blattNummer + ": lfd. Nummer " + laufendeNr);
         }
         final Object[] selectedValues = lstLaufendeNummern.getSelectedValues();
         final Collection<MetaObject> selectedObjects = TypeSafeCollections.newArrayList();
