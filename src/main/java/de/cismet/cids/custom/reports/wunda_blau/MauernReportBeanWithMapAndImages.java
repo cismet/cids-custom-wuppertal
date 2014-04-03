@@ -60,6 +60,7 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
     private static String WEB_DAV_DIRECTORY;
     private static String WEB_DAV_USER;
     private static String WEB_DAV_PASSWORD;
+    private static String MAP_URL;
     private static final int MAP_DPI = 300;
 
     //~ Instance fields --------------------------------------------------------
@@ -83,25 +84,23 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
      */
     public MauernReportBeanWithMapAndImages(final CidsBean mauer) {
         super(mauer);
-        final ResourceBundle bundle = ResourceBundle.getBundle("WebDav");
-        String pass = bundle.getString("password");
+        final ResourceBundle webDavBundle = ResourceBundle.getBundle("WebDav");
+        String pass = webDavBundle.getString("password");
 
         if ((pass != null) && pass.startsWith(PasswordEncrypter.CRYPT_PREFIX)) {
             pass = PasswordEncrypter.decryptString(pass);
         }
 
         WEB_DAV_PASSWORD = pass;
-        WEB_DAV_USER = bundle.getString("user");
-        WEB_DAV_DIRECTORY = bundle.getString("url");
+        WEB_DAV_USER = webDavBundle.getString("user");
+        WEB_DAV_DIRECTORY = webDavBundle.getString("url");
         this.webDavHelper = new WebDavHelper(Proxy.fromPreferences(), WEB_DAV_USER, WEB_DAV_PASSWORD, true);
-//        final SimpleWMS s = new SimpleWMS(new SimpleWmsGetMapUrl("http://www.wms.nrw.de/geobasis/DOP?&VERSION=1.1.1&REQUEST=GetMap&WIDTH=<cismap:width>&HEIGHT=<cismap:height>&BBOX=<cismap:boundingBox>&SRS=EPSG:25832&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&LAYERS=WMS,0,Metadaten&STYLES="));
-//        final SimpleWMS s = new SimpleWMS(new SimpleWmsGetMapUrl(
-//                    "http://s102x284:8399/arcgis/services/WuNDa-Orthophoto-WUP/MapServer/WMSServer?service=WMS&VERSION=1.1.1&REQUEST=GetMap&WIDTH=<cismap:width>&HEIGHT=<cismap:height>&BBOX=<cismap:boundingBox>&SRS=EPSG:25832&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&LAYERS=6&STYLES=default"));
-        final SimpleWMS s = new SimpleWMS(new SimpleWmsGetMapUrl(
-                    "http://S102X284:8399/arcgis/services/WuNDa-DGK/MapServer/WMSServer?&VERSION=1.1.1&REQUEST=GetMap&BBOX=<cismap:boundingBox>&WIDTH=<cismap:width>&HEIGHT=<cismap:height>&SRS=EPSG:25832&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&LAYERS=48&STYLES=default"));
+        MAP_URL = java.util.ResourceBundle.getBundle(
+                "de/cismet/cids/custom/reports/wunda_blau/MauernReport").getString("map_url");
 
-//        final SimpleWMS s = new SimpleWMS(new SimpleWmsGetMapUrl(
-//                    "http://S102X284:8399/arcgis/services/ALKIS-EXPRESS/MapServer/WMSServer?&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image/png&TRANSPARENT=FALSE&BGCOLOR=0xF0F0F0&EXCEPTIONS=application/vnd.ogc.se_xml&LAYERS=2,4,5,6,7,8,10,11,12,13,14,16,17,18,19,20,21,22,23,25,26,27,28,29,30,31,32,33,34,35,36,37,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100&STYLES=&BBOX=<cismap:boundingBox>&WIDTH=<cismap:width>&HEIGHT=<cismap:height>&SRS="));
+        final SimpleWMS s = new SimpleWMS(new SimpleWmsGetMapUrl(
+                    MAP_URL));
+
         final Geometry g = (Geometry)mauer.getProperty("georeferenz.geo_field");
 
         final DefaultStyledFeature dsf = new DefaultStyledFeature();
