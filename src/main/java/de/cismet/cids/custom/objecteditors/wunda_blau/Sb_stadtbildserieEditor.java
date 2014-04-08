@@ -334,7 +334,6 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         this.editable = editable;
         initComponents();
         makeEditable();
-        decorateComboBoxes();
         jScrollPane5.getViewport().setOpaque(false);
         title = "";
         ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(
@@ -398,12 +397,6 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
      */
     private void decorateComboBoxes() {
         StaticSwingTools.decorateWithFixedAutoCompleteDecorator(bcbStrasse);
-        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(dbcAuftraggeber);
-        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(dbcBildtyp);
-        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(dbcFilmart);
-        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(dbcFotograf);
-        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(dbcLager);
-        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(dbcOrt);
     }
 
     /**
@@ -1849,9 +1842,9 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 cidsBean);
             this.cidsBean = cidsBean;
             bindingGroup.bind();
+            decorateComboBoxes();
             lstBildnummern.setSelectedValue(cidsBean.getProperty("vorschaubild"), true);
             initMap();
-
             final String obj = String.valueOf(cidsBean.getProperty("vorschaubild"));
 //            lblPicture.setPictureURL(StaticProperties.ARCHIVAR_URL_PREFIX + obj + StaticProperties.ARCHIVAR_URL_SUFFIX);
         }
