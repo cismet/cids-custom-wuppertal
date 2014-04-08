@@ -334,6 +334,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         this.editable = editable;
         initComponents();
         makeEditable();
+        decorateComboBoxes();
         jScrollPane5.getViewport().setOpaque(false);
         title = "";
         ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(
@@ -390,6 +391,19 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 Cursor.HAND_CURSOR,
                 Cursor.DEFAULT_CURSOR);
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void decorateComboBoxes() {
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(bcbStrasse);
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(dbcAuftraggeber);
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(dbcBildtyp);
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(dbcFilmart);
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(dbcFotograf);
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(dbcLager);
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(dbcOrt);
     }
 
     /**
@@ -826,6 +840,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         panContent.add(jScrollPane2, gridBagConstraints);
 
+        dbcBildtyp.setEditable(true);
+
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
@@ -841,6 +857,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         panContent.add(dbcBildtyp, gridBagConstraints);
+
+        dbcLager.setEditable(true);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -957,6 +975,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         panDetails.add(lblDescAuftraggeber, gridBagConstraints);
 
+        dbcAuftraggeber.setEditable(true);
+
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
@@ -974,6 +994,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         panDetails.add(dbcAuftraggeber, gridBagConstraints);
 
+        dbcFotograf.setEditable(true);
+
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
@@ -990,6 +1012,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         panDetails.add(dbcFotograf, gridBagConstraints);
+
+        dbcFilmart.setEditable(true);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -1068,6 +1092,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         panDetails1.add(lblDescStrasse, gridBagConstraints);
+
+        dbcOrt.setEditable(true);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -1159,6 +1185,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         panDetails1.add(dbcGeom, gridBagConstraints);
 
         ((FastBindableReferenceCombo)bcbStrasse).setSorted(true);
+        bcbStrasse.setEditable(true);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,

@@ -28,6 +28,7 @@
   <SubComponents>
     <Component class="de.cismet.cids.editors.FastBindableReferenceCombo" name="cboSuchwort">
       <Properties>
+        <Property name="editable" type="boolean" value="true"/>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[225, 24]"/>
         </Property>

@@ -482,6 +482,9 @@
                           </SubComponents>
                         </Container>
                         <Component class="de.cismet.cids.editors.DefaultBindableReferenceCombo" name="dbcBildtyp">
+                          <Properties>
+                            <Property name="editable" type="boolean" value="true"/>
+                          </Properties>
                           <BindingProperties>
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.bildtyp}" target="dbcBildtyp" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
@@ -492,6 +495,9 @@
                           </Constraints>
                         </Component>
                         <Component class="de.cismet.cids.editors.DefaultBindableReferenceCombo" name="dbcLager">
+                          <Properties>
+                            <Property name="editable" type="boolean" value="true"/>
+                          </Properties>
                           <BindingProperties>
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.lager}" target="dbcLager" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
@@ -621,6 +627,9 @@
                           </Constraints>
                         </Component>
                         <Component class="de.cismet.cids.editors.DefaultBindableReferenceCombo" name="dbcAuftraggeber">
+                          <Properties>
+                            <Property name="editable" type="boolean" value="true"/>
+                          </Properties>
                           <BindingProperties>
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.auftraggeber}" target="dbcAuftraggeber" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
@@ -631,6 +640,9 @@
                           </Constraints>
                         </Component>
                         <Component class="de.cismet.cids.editors.DefaultBindableReferenceCombo" name="dbcFotograf">
+                          <Properties>
+                            <Property name="editable" type="boolean" value="true"/>
+                          </Properties>
                           <BindingProperties>
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fotograf}" target="dbcFotograf" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
@@ -641,6 +653,9 @@
                           </Constraints>
                         </Component>
                         <Component class="de.cismet.cids.editors.DefaultBindableReferenceCombo" name="dbcFilmart">
+                          <Properties>
+                            <Property name="editable" type="boolean" value="true"/>
+                          </Properties>
                           <BindingProperties>
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.filmart}" target="dbcFilmart" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
@@ -733,6 +748,9 @@
                           </Constraints>
                         </Component>
                         <Component class="de.cismet.cids.editors.DefaultBindableReferenceCombo" name="dbcOrt">
+                          <Properties>
+                            <Property name="editable" type="boolean" value="true"/>
+                          </Properties>
                           <BindingProperties>
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.ort}" target="dbcOrt" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
@@ -808,6 +826,9 @@
                           </Constraints>
                         </Component>
                         <Component class="de.cismet.cids.editors.FastBindableReferenceCombo" name="bcbStrasse">
+                          <Properties>
+                            <Property name="editable" type="boolean" value="true"/>
+                          </Properties>
                           <BindingProperties>
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.strasse}" target="bcbStrasse" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
