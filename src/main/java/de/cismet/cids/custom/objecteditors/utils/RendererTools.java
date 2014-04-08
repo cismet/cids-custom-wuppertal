@@ -53,7 +53,7 @@ public class RendererTools {
             dc.setEnabled(false);
         } else if (comp instanceof JCheckBox) {
             ((JCheckBox)comp).setEnabled(false);
-        } else {
+        } else if (comp != null) {
             comp.setEnabled(false);
         }
     }
