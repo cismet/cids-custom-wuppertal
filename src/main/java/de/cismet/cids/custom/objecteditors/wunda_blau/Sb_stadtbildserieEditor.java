@@ -446,7 +446,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         jScrollPane1 = new javax.swing.JScrollPane();
         lstBildnummern = new JXList();
         jScrollPane2 = new javax.swing.JScrollPane();
-        lstSuchworte = new javax.swing.JList();
+        lstSuchworte = new JXList();
         dbcBildtyp = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
         dbcLager = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -1833,6 +1833,16 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
 
     /**
      * DOCUMENT ME!
+     */
+    private void automaticallySortLists() {
+        ((JXList)lstBildnummern).setAutoCreateRowSorter(true);
+        ((JXList)lstBildnummern).setSortOrder(SortOrder.ASCENDING);
+        ((JXList)lstSuchworte).setAutoCreateRowSorter(true);
+        ((JXList)lstSuchworte).setSortOrder(SortOrder.ASCENDING);
+    }
+
+    /**
+     * DOCUMENT ME!
      *
      * @param  cidsBean  DOCUMENT ME!
      */
@@ -1846,8 +1856,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             this.cidsBean = cidsBean;
             bindingGroup.bind();
             decorateComboBoxes();
-            ((JXList)lstBildnummern).setAutoCreateRowSorter(true);
-            ((JXList)lstBildnummern).setSortOrder(SortOrder.ASCENDING);
+            automaticallySortLists();
             lstBildnummern.setSelectedValue(cidsBean.getProperty("vorschaubild"), true);
             initMap();
             final String obj = String.valueOf(cidsBean.getProperty("vorschaubild"));
