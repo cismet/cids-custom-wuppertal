@@ -68,6 +68,7 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
             mos = cboSuchwort.receiveLightweightMetaObjects();
             final DefaultComboBoxModel model = new DefaultComboBoxModel(mos);
             cboSuchwort.setModel(model);
+            StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cboSuchwort);
         } catch (Exception ex) {
             Log.error(ex, ex);
         }
@@ -105,6 +106,7 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
                 "Sb_stadtbildserieEditorAddSuchwortDialog.title")); // NOI18N
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
+        cboSuchwort.setEditable(true);
         cboSuchwort.setPreferredSize(new java.awt.Dimension(225, 24));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
