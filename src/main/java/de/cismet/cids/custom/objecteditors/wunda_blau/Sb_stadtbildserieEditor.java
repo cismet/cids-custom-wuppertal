@@ -16,6 +16,7 @@ import edu.umd.cs.piccolo.event.PInputEvent;
 
 import org.jdesktop.beansbinding.Converter;
 import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.JXList;
 import org.jdesktop.swingx.error.ErrorInfo;
 
 import java.awt.BorderLayout;
@@ -59,6 +60,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SortOrder;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.Timer;
@@ -442,7 +444,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         lblDescBildtyp = new javax.swing.JLabel();
         lblDescSuchworte = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstBildnummern = new javax.swing.JList();
+        lstBildnummern = new JXList();
         jScrollPane2 = new javax.swing.JScrollPane();
         lstSuchworte = new javax.swing.JList();
         dbcBildtyp = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
@@ -1843,6 +1845,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             this.cidsBean = cidsBean;
             bindingGroup.bind();
             decorateComboBoxes();
+            ((JXList)lstBildnummern).setAutoCreateRowSorter(true);
+            ((JXList)lstBildnummern).setSortOrder(SortOrder.ASCENDING);
             lstBildnummern.setSelectedValue(cidsBean.getProperty("vorschaubild"), true);
             initMap();
             final String obj = String.valueOf(cidsBean.getProperty("vorschaubild"));
