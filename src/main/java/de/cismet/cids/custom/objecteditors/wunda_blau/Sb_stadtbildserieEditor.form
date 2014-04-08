@@ -481,6 +481,9 @@
                               <BindingProperties>
                                 <BindingProperty name="elements" source="Form" sourcePath="${cidsBean.suchwort_arr}" target="lstSuchworte" targetPath="elements" updateStrategy="0" immediately="false"/>
                               </BindingProperties>
+                              <AuxValues>
+                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new JXList() "/>
+                              </AuxValues>
                             </Component>
                           </SubComponents>
                         </Container>
@@ -1310,6 +1313,7 @@
                             <Component class="javax.swing.JTextArea" name="jTextArea2">
                               <Properties>
                                 <Property name="columns" type="int" value="20"/>
+                                <Property name="lineWrap" type="boolean" value="true"/>
                                 <Property name="rows" type="int" value="5"/>
                               </Properties>
                               <BindingProperties>

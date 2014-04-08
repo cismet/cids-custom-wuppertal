@@ -1497,6 +1497,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         panDetails3.add(chbPruefen, gridBagConstraints);
 
         jTextArea2.setColumns(20);
+        jTextArea2.setLineWrap(true);
         jTextArea2.setRows(5);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
