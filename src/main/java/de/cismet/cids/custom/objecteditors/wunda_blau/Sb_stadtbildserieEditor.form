@@ -449,7 +449,7 @@
                                 <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="lstBildnummernValueChanged"/>
                               </Events>
                               <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new JXList()&#xa;"/>
+                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new JXListBugFixes()&#xa;"/>
                               </AuxValues>
                             </Component>
                           </SubComponents>
@@ -482,7 +482,7 @@
                                 <BindingProperty name="elements" source="Form" sourcePath="${cidsBean.suchwort_arr}" target="lstSuchworte" targetPath="elements" updateStrategy="0" immediately="false"/>
                               </BindingProperties>
                               <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new JXList() "/>
+                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new JXListBugFixes() "/>
                               </AuxValues>
                             </Component>
                           </SubComponents>
