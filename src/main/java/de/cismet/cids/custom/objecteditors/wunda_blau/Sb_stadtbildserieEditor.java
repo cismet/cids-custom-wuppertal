@@ -19,6 +19,8 @@ import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.JXList;
 import org.jdesktop.swingx.error.ErrorInfo;
 
+import org.openide.util.NbBundle;
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -1857,6 +1859,10 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             bindingGroup.bind();
             decorateComboBoxes();
             automaticallySortLists();
+            final String vorschaubild = (String)cidsBean.getProperty("vorschaubild.bildnummer");
+            this.title = "Stadtbildserie "
+                        + ((vorschaubild != null) ? vorschaubild : "");
+            lblTitle.setText(this.title);
             lstBildnummern.setSelectedValue(cidsBean.getProperty("vorschaubild"), true);
             initMap();
             final String obj = String.valueOf(cidsBean.getProperty("vorschaubild"));
@@ -1880,8 +1886,11 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
      * @param  title  DOCUMENT ME!
      */
     @Override
-    public void setTitle(final String title) {
-        this.title = "Stadtbild " + title;
+    public void setTitle(String title) {
+        if (title == null) {
+            title = "<Error>";
+        }
+        this.title = "Stadtbildserie " + title;
         lblTitle.setText(this.title);
     }
 
