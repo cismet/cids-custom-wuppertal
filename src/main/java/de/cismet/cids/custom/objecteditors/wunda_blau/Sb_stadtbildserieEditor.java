@@ -228,13 +228,13 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private javax.swing.JButton btnRemoveImageNumber;
     private javax.swing.JButton btnRemoveSuchwort;
     private javax.swing.JCheckBox chbPruefen;
-    private de.cismet.cids.editors.DefaultBindableReferenceCombo dbcAuftraggeber;
-    private de.cismet.cids.editors.DefaultBindableReferenceCombo dbcBildtyp;
-    private de.cismet.cids.editors.DefaultBindableReferenceCombo dbcFilmart;
-    private de.cismet.cids.editors.DefaultBindableReferenceCombo dbcFotograf;
+    private javax.swing.JComboBox dbcAuftraggeber;
+    private javax.swing.JComboBox dbcBildtyp;
+    private javax.swing.JComboBox dbcFilmart;
+    private javax.swing.JComboBox dbcFotograf;
     private de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor dbcGeom;
-    private de.cismet.cids.editors.DefaultBindableReferenceCombo dbcLager;
-    private de.cismet.cids.editors.DefaultBindableReferenceCombo dbcOrt;
+    private javax.swing.JComboBox dbcLager;
+    private javax.swing.JComboBox dbcOrt;
     private org.jdesktop.swingx.JXDatePicker dpAufnahmedatum;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
@@ -399,6 +399,12 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
      */
     private void decorateComboBoxes() {
         StaticSwingTools.decorateWithFixedAutoCompleteDecorator(bcbStrasse);
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(dbcAuftraggeber);
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(dbcBildtyp);
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(dbcFilmart);
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(dbcFotograf);
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(dbcLager);
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(dbcOrt);
     }
 
     /**
@@ -447,8 +453,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         lstBildnummern = new JXListBugFixes();
         jScrollPane2 = new javax.swing.JScrollPane();
         lstSuchworte = new JXListBugFixes();
-        dbcBildtyp = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
-        dbcLager = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
+        dbcBildtyp = new FastBindableReferenceCombo();
+        dbcLager = new FastBindableReferenceCombo();
         jScrollPane3 = new javax.swing.JScrollPane();
         txtaComment = new javax.swing.JTextArea();
         dpAufnahmedatum = new org.jdesktop.swingx.JXDatePicker();
@@ -459,9 +465,9 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         lblDescFilmart = new javax.swing.JLabel();
         lblDescFotograf = new javax.swing.JLabel();
         lblDescAuftraggeber = new javax.swing.JLabel();
-        dbcAuftraggeber = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
-        dbcFotograf = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
-        dbcFilmart = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
+        dbcAuftraggeber = new FastBindableReferenceCombo();
+        dbcFotograf = new FastBindableReferenceCombo();
+        dbcFilmart = new FastBindableReferenceCombo();
         roundedPanel4 = new de.cismet.tools.gui.RoundedPanel();
         semiRoundedPanel5 = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -469,7 +475,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         lblDescGeometrie = new javax.swing.JLabel();
         lblDescOrt = new javax.swing.JLabel();
         lblDescStrasse = new javax.swing.JLabel();
-        dbcOrt = new de.cismet.cids.editors.DefaultBindableReferenceCombo();
+        dbcOrt = new FastBindableReferenceCombo();
         jLabel7 = new javax.swing.JLabel();
         txtHausnummer = new de.cismet.cids.editors.DefaultBindableJTextField();
         lblGeomAus = new javax.swing.JLabel();
@@ -835,6 +841,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         panContent.add(jScrollPane2, gridBagConstraints);
 
+        ((FastBindableReferenceCombo)dbcBildtyp).setSorted(true);
         dbcBildtyp.setEditable(true);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -853,6 +860,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         panContent.add(dbcBildtyp, gridBagConstraints);
 
+        ((FastBindableReferenceCombo)dbcLager).setSorted(true);
         dbcLager.setEditable(true);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -970,6 +978,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         panDetails.add(lblDescAuftraggeber, gridBagConstraints);
 
+        ((FastBindableReferenceCombo)dbcAuftraggeber).setSorted(true);
         dbcAuftraggeber.setEditable(true);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -989,6 +998,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         panDetails.add(dbcAuftraggeber, gridBagConstraints);
 
+        ((FastBindableReferenceCombo)dbcFotograf).setSorted(true);
         dbcFotograf.setEditable(true);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -1008,6 +1018,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         panDetails.add(dbcFotograf, gridBagConstraints);
 
+        ((FastBindableReferenceCombo)dbcFilmart).setSorted(true);
         dbcFilmart.setEditable(true);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -1088,6 +1099,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         panDetails1.add(lblDescStrasse, gridBagConstraints);
 
+        ((FastBindableReferenceCombo)dbcOrt).setSorted(true);
         dbcOrt.setEditable(true);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -1900,6 +1912,11 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         return panTitle;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getFooterComponent() {
         return panFooter;
@@ -2108,6 +2125,13 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception  DOCUMENT ME!
+         */
         @Override
         protected ImageIcon doInBackground() throws Exception {
             if (image != null) {
@@ -2118,6 +2142,9 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             }
         }
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         protected void done() {
             if (!isCancelled()) {
@@ -2170,6 +2197,13 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception  DOCUMENT ME!
+         */
         @Override
         protected BufferedImage doInBackground() throws Exception {
             if ((bildnummer != null) && (bildnummer.length() > 0)) {
@@ -2208,6 +2242,9 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             return null;
         }
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         protected void done() {
             try {
@@ -2259,11 +2296,21 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception  DOCUMENT ME!
+         */
         @Override
         protected Boolean doInBackground() throws Exception {
             return TifferDownload.getFormatOfHighResPicture(imageNumber) != null;
         }
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         protected void done() {
             try {
