@@ -487,26 +487,34 @@
                             </Component>
                           </SubComponents>
                         </Container>
-                        <Component class="de.cismet.cids.editors.DefaultBindableReferenceCombo" name="dbcBildtyp">
+                        <Component class="javax.swing.JComboBox" name="dbcBildtyp">
                           <Properties>
                             <Property name="editable" type="boolean" value="true"/>
                           </Properties>
                           <BindingProperties>
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.bildtyp}" target="dbcBildtyp" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo()"/>
+                            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((FastBindableReferenceCombo)dbcBildtyp).setSorted(true);"/>
+                          </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                               <GridBagConstraints gridX="1" gridY="3" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="10" weightX="1.0" weightY="0.0"/>
                             </Constraint>
                           </Constraints>
                         </Component>
-                        <Component class="de.cismet.cids.editors.DefaultBindableReferenceCombo" name="dbcLager">
+                        <Component class="javax.swing.JComboBox" name="dbcLager">
                           <Properties>
                             <Property name="editable" type="boolean" value="true"/>
                           </Properties>
                           <BindingProperties>
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.lager}" target="dbcLager" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo()"/>
+                            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((FastBindableReferenceCombo)dbcLager).setSorted(true);"/>
+                          </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                               <GridBagConstraints gridX="1" gridY="4" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="10" weightX="1.0" weightY="0.0"/>
@@ -632,39 +640,51 @@
                             </Constraint>
                           </Constraints>
                         </Component>
-                        <Component class="de.cismet.cids.editors.DefaultBindableReferenceCombo" name="dbcAuftraggeber">
+                        <Component class="javax.swing.JComboBox" name="dbcAuftraggeber">
                           <Properties>
                             <Property name="editable" type="boolean" value="true"/>
                           </Properties>
                           <BindingProperties>
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.auftraggeber}" target="dbcAuftraggeber" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo()"/>
+                            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((FastBindableReferenceCombo)dbcAuftraggeber).setSorted(true);"/>
+                          </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                               <GridBagConstraints gridX="1" gridY="0" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="17" weightX="1.0" weightY="0.0"/>
                             </Constraint>
                           </Constraints>
                         </Component>
-                        <Component class="de.cismet.cids.editors.DefaultBindableReferenceCombo" name="dbcFotograf">
+                        <Component class="javax.swing.JComboBox" name="dbcFotograf">
                           <Properties>
                             <Property name="editable" type="boolean" value="true"/>
                           </Properties>
                           <BindingProperties>
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.fotograf}" target="dbcFotograf" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo()"/>
+                            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((FastBindableReferenceCombo)dbcFotograf).setSorted(true);"/>
+                          </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                               <GridBagConstraints gridX="1" gridY="1" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="17" weightX="1.0" weightY="0.0"/>
                             </Constraint>
                           </Constraints>
                         </Component>
-                        <Component class="de.cismet.cids.editors.DefaultBindableReferenceCombo" name="dbcFilmart">
+                        <Component class="javax.swing.JComboBox" name="dbcFilmart">
                           <Properties>
                             <Property name="editable" type="boolean" value="true"/>
                           </Properties>
                           <BindingProperties>
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.filmart}" target="dbcFilmart" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo()"/>
+                            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((FastBindableReferenceCombo)dbcFilmart).setSorted(true);"/>
+                          </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                               <GridBagConstraints gridX="1" gridY="2" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="17" weightX="1.0" weightY="0.0"/>
@@ -753,13 +773,17 @@
                             </Constraint>
                           </Constraints>
                         </Component>
-                        <Component class="de.cismet.cids.editors.DefaultBindableReferenceCombo" name="dbcOrt">
+                        <Component class="javax.swing.JComboBox" name="dbcOrt">
                           <Properties>
                             <Property name="editable" type="boolean" value="true"/>
                           </Properties>
                           <BindingProperties>
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.ort}" target="dbcOrt" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo()"/>
+                            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((FastBindableReferenceCombo)dbcOrt).setSorted(true);"/>
+                          </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                               <GridBagConstraints gridX="1" gridY="1" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="17" weightX="1.0" weightY="0.0"/>
@@ -839,7 +863,7 @@
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.strasse}" target="bcbStrasse" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo(&quot;select s.strassenschluessel,s.name from strasse s&quot; ,&#xa;                strasseFormater, new String[] { &quot;NAME&quot; })&#xa;"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo() "/>
                             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((FastBindableReferenceCombo)bcbStrasse).setSorted(true);"/>
                           </AuxValues>
                           <Constraints>
