@@ -7,16 +7,15 @@
 ****************************************************/
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-import Sirius.server.middleware.types.AbstractAttributeRepresentationFormater;
-import Sirius.server.middleware.types.MetaObject;
-
-import org.jfree.util.Log;
+import Sirius.server.middleware.types.MetaClass;
 
 import javax.swing.DefaultComboBoxModel;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.editors.FastBindableReferenceCombo;
+import de.cismet.cids.editors.DefaultBindableReferenceCombo;
+
+import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -28,23 +27,19 @@ import de.cismet.tools.gui.StaticSwingTools;
  */
 public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialog {
 
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
+            Sb_stadtbildserieEditorAddSuchwortDialog.class);
+
     //~ Instance fields --------------------------------------------------------
 
     CidsBean beanToReturn;
 
-    private final AbstractAttributeRepresentationFormater suchwortFormater =
-        new AbstractAttributeRepresentationFormater() {
-
-            @Override
-            public final String getRepresentation() {
-                return String.valueOf(getAttribute("name"));
-            }
-        };
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnOk;
-    private de.cismet.cids.editors.FastBindableReferenceCombo cboSuchwort;
+    private javax.swing.JComboBox cbSuchwort;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.JLabel jLabel1;
@@ -61,17 +56,15 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
     public Sb_stadtbildserieEditorAddSuchwortDialog(final java.awt.Frame parent, final boolean modal) {
         super(parent, modal);
         initComponents();
-        final MetaObject[] mos;
+        final MetaClass suchwortMC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "SB_SUCHWORT");
+        final DefaultComboBoxModel cbSuchwortModel;
         try {
-            cboSuchwort.setSorted(true);
-            cboSuchwort.setMetaClassFromTableName("WUNDA_BLAU", "SB_SUCHWORT");
-            mos = cboSuchwort.receiveLightweightMetaObjects();
-            final DefaultComboBoxModel model = new DefaultComboBoxModel(mos);
-            cboSuchwort.setModel(model);
-            StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cboSuchwort);
+            cbSuchwortModel = DefaultBindableReferenceCombo.getModelByMetaClass(suchwortMC, true);
+            cbSuchwort.setModel(cbSuchwortModel);
         } catch (Exception ex) {
-            Log.error(ex, ex);
+            LOG.error(ex, ex);
         }
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbSuchwort);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -85,11 +78,7 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        cboSuchwort = new FastBindableReferenceCombo(
-                "select s.id,s.name from sb_suchwort s",
-                suchwortFormater,
-                new String[] { "NAME" });
-        ;
+        cbSuchwort = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
         btnOk = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
@@ -106,8 +95,8 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
                 "Sb_stadtbildserieEditorAddSuchwortDialog.title")); // NOI18N
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        cboSuchwort.setEditable(true);
-        cboSuchwort.setPreferredSize(new java.awt.Dimension(225, 24));
+        cbSuchwort.setEditable(true);
+        cbSuchwort.setPreferredSize(new java.awt.Dimension(225, 24));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -115,7 +104,7 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 5, 5, 5);
-        getContentPane().add(cboSuchwort, gridBagConstraints);
+        getContentPane().add(cbSuchwort, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel1,
@@ -198,7 +187,7 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
      * @param  evt  DOCUMENT ME!
      */
     private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOkActionPerformed
-        beanToReturn = (CidsBean)cboSuchwort.getSelectedItem();
+        beanToReturn = (CidsBean)cbSuchwort.getSelectedItem();
         setVisible(false);
         dispose();
     }                                                                         //GEN-LAST:event_btnOkActionPerformed
