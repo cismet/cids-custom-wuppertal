@@ -863,7 +863,7 @@
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.strasse}" target="bcbStrasse" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo(&quot;select s.strassenschluessel,s.name from strasse s&quot; ,&#xa;                strasseFormater, new String[] { &quot;NAME&quot; })&#xa;"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo() "/>
                             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((FastBindableReferenceCombo)bcbStrasse).setSorted(true);"/>
                           </AuxValues>
                           <Constraints>

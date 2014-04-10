@@ -199,15 +199,6 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             }
         };
 
-    private final AbstractAttributeRepresentationFormater strasseFormater =
-        new AbstractAttributeRepresentationFormater() {
-
-            @Override
-            public final String getRepresentation() {
-                return String.valueOf(getAttribute("name"));
-            }
-        };
-
     private CidsBean fotoCidsBean;
 
     private BufferedImage image;
@@ -481,10 +472,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         lblGeomAus = new javax.swing.JLabel();
         btnCombineGeometries = new javax.swing.JButton();
         dbcGeom = new de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor();
-        bcbStrasse = new FastBindableReferenceCombo(
-                "select s.strassenschluessel,s.name from strasse s",
-                strasseFormater,
-                new String[] { "NAME" });
+        bcbStrasse = new FastBindableReferenceCombo();
         jPanel2 = new javax.swing.JPanel();
         pnlVorschau = new de.cismet.tools.gui.RoundedPanel();
         semiRoundedPanel2 = new de.cismet.tools.gui.SemiRoundedPanel();
