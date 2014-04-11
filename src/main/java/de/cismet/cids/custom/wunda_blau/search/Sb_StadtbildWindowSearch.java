@@ -721,7 +721,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         if (this.lstSuchworte.getSelectedIndices().length > 0) {
             final int[] selectedIndices = lstSuchworte.getSelectedIndices();
             for (int i = selectedIndices.length - 1; i >= 0; i--) {
-                dlm.removeElementAt(selectedIndices[i]);
+                dlm.removeElementAt(((JXList)lstSuchworte).convertIndexToModel(selectedIndices[i]));
             }
         }
     } //GEN-LAST:event_btnRemoveSuchwortActionPerformed

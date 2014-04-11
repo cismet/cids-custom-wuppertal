@@ -252,8 +252,8 @@
                         </Property>
                       </Properties>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new Sb_stadtbildserieEditor.JXListBugFixes()&#xa;"/>
-                        <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="        ((JXList)lstSuchworte).setAutoCreateRowSorter(true);&#xa;        ((JXList)lstSuchworte).setSortOrder(SortOrder.ASCENDING);"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new Sb_stadtbildserieEditor.JXListBugFixes()"/>
+                        <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="((JXList)lstSuchworte).setAutoCreateRowSorter(true);&#xa;((JXList)lstSuchworte).setSortOrder(SortOrder.ASCENDING);"/>
                       </AuxValues>
                     </Component>
                   </SubComponents>
