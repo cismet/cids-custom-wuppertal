@@ -784,11 +784,21 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public JComponent getSearchWindowComponent() {
         return this;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public MetaObjectNodeServerSearch getServerSearch() {
         final MetaObjectNodesStadtbildSerieSearchStatement stadtbildSerieSearchStatement =
@@ -831,46 +841,94 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         final String hausnummer = txtHausnummer.getText();
         stadtbildSerieSearchStatement.setHausnummer(hausnummer);
 
+        final String imageNrTo = txtImageNrTo.getText();
+        stadtbildSerieSearchStatement.setImageNrTo(imageNrTo);
+
+        final String imageNrFrom = txtImageNrFrom.getText();
+        stadtbildSerieSearchStatement.setImageNrFrom(imageNrFrom);
+
+        System.out.println(stadtbildSerieSearchStatement.generateQuery());
         return stadtbildSerieSearchStatement;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public ImageIcon getIcon() {
         return icon;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getName() {
         return NbBundle.getMessage(Sb_StadtbildWindowSearch.class, "Sb_StadtbildWindowSearch.name");
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public MetaObjectNodeServerSearch assembleSearch() {
         return getServerSearch();
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void searchStarted() {
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  numberOfResults  DOCUMENT ME!
+     */
     @Override
     public void searchDone(final int numberOfResults) {
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void searchCanceled() {
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public boolean suppressEmptyResultMessage() {
         return false;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public boolean checkActionTag() {
         return ObjectRendererUtils.checkActionTag(ACTION_TAG);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
         if (Sb_StadtbildserieCreateSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
@@ -908,7 +966,6 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         } catch (ConnectionException ex) {
             LOG.error(ex, ex);
         }
-
         return null;
     }
 }
