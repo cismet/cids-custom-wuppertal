@@ -2326,7 +2326,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
      *
      * @version  $Revision$, $Date$
      */
-    private class JXListBugFixes extends JXList {
+    public static class JXListBugFixes extends JXList {
 
         //~ Methods ------------------------------------------------------------
 

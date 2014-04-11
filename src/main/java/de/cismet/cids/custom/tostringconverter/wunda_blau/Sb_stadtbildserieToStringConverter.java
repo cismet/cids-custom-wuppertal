@@ -17,17 +17,17 @@ import de.cismet.cids.tools.CustomToStringConverter;
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class Sb_stadtbildToStringConverter extends CustomToStringConverter {
+public class Sb_stadtbildserieToStringConverter extends CustomToStringConverter {
 
     //~ Instance fields --------------------------------------------------------
 
-    @CidsAttribute("bildnummer")
-    public String bildnummer = "Bildnummer nicht bekannt";
+    @CidsAttribute("vorschaubild.bildnummer")
+    public String vorschaubild = "kein Vorschaubild";
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
     public String createString() {
-        return bildnummer;
+        return vorschaubild;
     }
 }
