@@ -14,7 +14,6 @@ package de.cismet.cids.custom.wunda_blau.search;
 import Sirius.navigator.actiontag.ActionTagProtected;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
-import Sirius.navigator.search.CidsSearchExecutor;
 import Sirius.navigator.search.dynamic.SearchControlListener;
 import Sirius.navigator.search.dynamic.SearchControlPanel;
 
@@ -22,6 +21,8 @@ import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
 import com.vividsolutions.jts.geom.Geometry;
+
+import org.apache.commons.lang.StringUtils;
 
 import org.jdesktop.swingx.JXList;
 
@@ -38,15 +39,19 @@ import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
+import java.util.regex.Pattern;
 
 import javax.swing.Box;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SortOrder;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
@@ -92,6 +97,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             Sb_StadtbildWindowSearch.class);
     private static final String ACTION_TAG = "custom.stadtbilder.search@WUNDA_BLAU";
     private static final CidsBean WUPPERTAL = getOrtWupertal();
+    private static final Pattern SIX_DIGIT_INTEGER_PATTERN = Pattern.compile("\\d{6}");
 
     //~ Instance fields --------------------------------------------------------
 
@@ -301,12 +307,12 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 "Sb_StadtbildWindowSearch.chboLuftbildschraegaufnahme.text")); // NOI18N
         pnlKindOfImage.add(chboLuftbildschraegaufnahme);
 
+        chboLuftbildsenkrechtaufnahme.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(
             chboLuftbildsenkrechtaufnahme,
             org.openide.util.NbBundle.getMessage(
                 Sb_StadtbildWindowSearch.class,
                 "Sb_StadtbildWindowSearch.chboLuftbildsenkrechtaufnahme.text")); // NOI18N
-        chboLuftbildsenkrechtaufnahme.setEnabled(false);
         pnlKindOfImage.add(chboLuftbildsenkrechtaufnahme);
 
         chboBodennaheAufnahme.setSelected(true);
@@ -804,6 +810,26 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         final MetaObjectNodesStadtbildSerieSearchStatement stadtbildSerieSearchStatement =
             new MetaObjectNodesStadtbildSerieSearchStatement(SessionManager.getSession().getUser());
 
+        final String imageNrFrom = txtImageNrFrom.getText();
+        final String imageNrTo = txtImageNrTo.getText();
+        if (StringUtils.isNotBlank(imageNrFrom) && StringUtils.isNotBlank(imageNrTo)) {
+            if (!SIX_DIGIT_INTEGER_PATTERN.matcher(imageNrFrom).matches()
+                        || !SIX_DIGIT_INTEGER_PATTERN.matcher(imageNrTo).matches()) {
+                JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                    NbBundle.getMessage(
+                        Sb_StadtbildWindowSearch.class,
+                        "Sb_StadtbildWindowSearch.getServerSearch().dialog.message"),
+                    NbBundle.getMessage(
+                        Sb_StadtbildWindowSearch.class,
+                        "Sb_StadtbildWindowSearch.getServerSearch().dialog.title"),
+                    JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
+        }
+
+        stadtbildSerieSearchStatement.setImageNrTo(imageNrTo);
+        stadtbildSerieSearchStatement.setImageNrFrom(imageNrFrom);
+
         final ArrayList<MetaObjectNodesStadtbildSerieSearchStatement.Bildtyp> bildtyp =
             new ArrayList<MetaObjectNodesStadtbildSerieSearchStatement.Bildtyp>();
         if (chboBodennaheAufnahme.isSelected()) {
@@ -841,13 +867,6 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         final String hausnummer = txtHausnummer.getText();
         stadtbildSerieSearchStatement.setHausnummer(hausnummer);
 
-        final String imageNrTo = txtImageNrTo.getText();
-        stadtbildSerieSearchStatement.setImageNrTo(imageNrTo);
-
-        final String imageNrFrom = txtImageNrFrom.getText();
-        stadtbildSerieSearchStatement.setImageNrFrom(imageNrFrom);
-
-        System.out.println(stadtbildSerieSearchStatement.generateQuery());
         return stadtbildSerieSearchStatement;
     }
 
