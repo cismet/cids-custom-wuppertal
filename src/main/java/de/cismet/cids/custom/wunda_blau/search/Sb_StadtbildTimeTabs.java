@@ -11,7 +11,10 @@
  */
 package de.cismet.cids.custom.wunda_blau.search;
 
+import java.awt.Component;
+
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * DOCUMENT ME!
@@ -19,7 +22,7 @@ import java.util.Calendar;
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class Arc_StadtbildTimeTabs extends javax.swing.JPanel {
+public class Sb_StadtbildTimeTabs extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cboYear;
@@ -39,20 +42,20 @@ public class Arc_StadtbildTimeTabs extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JPanel tabDay;
     private javax.swing.JPanel tabFrom;
     private javax.swing.JPanel tabFromTill;
     private javax.swing.JPanel tabTo;
     private javax.swing.JPanel tabYear;
+    private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates new form Arc_StadtbildTimeTabs.
+     * Creates new form Sb_StadtbildTimeTabs.
      */
-    public Arc_StadtbildTimeTabs() {
+    public Sb_StadtbildTimeTabs() {
         initComponents();
         setTimeRelatedModels();
 
@@ -75,9 +78,43 @@ public class Arc_StadtbildTimeTabs extends javax.swing.JPanel {
         final int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         final Integer[] years = new Integer[100];
         for (int i = 0; i < 100; i++) {
-            years[i] = new Integer(currentYear - i);
+            years[i] = currentYear - i;
         }
         cboYear.setModel(new javax.swing.DefaultComboBoxModel<Integer>(years));
+    }
+
+    /**
+     * a Date array with two elements representing a time span (the two dates are not null), a single day (the second
+     * date is null) or nothing (both dates are null). date[0] = from Date date[1] = till Date
+     *
+     * @return  DOCUMENT ME!
+     */
+    public Date[] chooseDates() {
+        final Component selectedComponent = tabbedPane.getSelectedComponent();
+        // default value is today
+        final Date[] fromDate_tillDate = new Date[] { null, null };
+        if (tabDay.equals(selectedComponent)) {
+            fromDate_tillDate[0] = dpDay.getDate();
+        } else if (tabYear.equals(selectedComponent)) {
+            final Calendar calendar = Calendar.getInstance();
+            calendar.clear();
+            calendar.set(Calendar.DATE, 1);
+            calendar.set(Calendar.MONTH, Calendar.JANUARY);
+            calendar.set(Calendar.YEAR, (Integer)cboYear.getSelectedItem());
+            fromDate_tillDate[0] = calendar.getTime();
+            calendar.set(Calendar.DATE, 31);
+            calendar.set(Calendar.MONTH, Calendar.DECEMBER);
+            calendar.set(Calendar.YEAR, (Integer)cboYear.getSelectedItem());
+            fromDate_tillDate[1] = calendar.getTime();
+        } else if (tabFrom.equals(selectedComponent)) {
+            fromDate_tillDate[0] = dpFrom.getDate();
+        } else if (tabTo.equals(selectedComponent)) {
+            fromDate_tillDate[1] = dpTo.getDate();
+        } else if (tabFromTill.equals(selectedComponent)) {
+            fromDate_tillDate[0] = dpFTFrom.getDate();
+            fromDate_tillDate[1] = dpFTTill.getDate();
+        }
+        return fromDate_tillDate;
     }
 
     /**
@@ -89,7 +126,7 @@ public class Arc_StadtbildTimeTabs extends javax.swing.JPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        tabbedPane = new javax.swing.JTabbedPane();
         tabDay = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         dpDay = new org.jdesktop.swingx.JXDatePicker();
@@ -129,7 +166,7 @@ public class Arc_StadtbildTimeTabs extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel1,
-            org.openide.util.NbBundle.getMessage(Arc_StadtbildTimeTabs.class, "Arc_StadtbildTimeTabs.jLabel1.text")); // NOI18N
+            org.openide.util.NbBundle.getMessage(Sb_StadtbildTimeTabs.class, "Sb_StadtbildTimeTabs.jLabel1.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(7, 5, 5, 5);
         tabDay.add(jLabel1, gridBagConstraints);
@@ -143,16 +180,16 @@ public class Arc_StadtbildTimeTabs extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         tabDay.add(filler1, gridBagConstraints);
 
-        jTabbedPane1.addTab(org.openide.util.NbBundle.getMessage(
-                Arc_StadtbildTimeTabs.class,
-                "Arc_StadtbildTimeTabs.tabDay.TabConstraints.tabTitle"),
+        tabbedPane.addTab(org.openide.util.NbBundle.getMessage(
+                Sb_StadtbildTimeTabs.class,
+                "Sb_StadtbildTimeTabs.tabDay.TabConstraints.tabTitle"),
             tabDay); // NOI18N
 
         tabYear.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel2,
-            org.openide.util.NbBundle.getMessage(Arc_StadtbildTimeTabs.class, "Arc_StadtbildTimeTabs.jLabel2.text")); // NOI18N
+            org.openide.util.NbBundle.getMessage(Sb_StadtbildTimeTabs.class, "Sb_StadtbildTimeTabs.jLabel2.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(7, 5, 5, 5);
         tabYear.add(jLabel2, gridBagConstraints);
@@ -172,16 +209,16 @@ public class Arc_StadtbildTimeTabs extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(7, 0, 5, 5);
         tabYear.add(cboYear, gridBagConstraints);
 
-        jTabbedPane1.addTab(org.openide.util.NbBundle.getMessage(
-                Arc_StadtbildTimeTabs.class,
-                "Arc_StadtbildTimeTabs.tabYear.TabConstraints.tabTitle"),
+        tabbedPane.addTab(org.openide.util.NbBundle.getMessage(
+                Sb_StadtbildTimeTabs.class,
+                "Sb_StadtbildTimeTabs.tabYear.TabConstraints.tabTitle"),
             tabYear); // NOI18N
 
         tabFrom.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel3,
-            org.openide.util.NbBundle.getMessage(Arc_StadtbildTimeTabs.class, "Arc_StadtbildTimeTabs.jLabel3.text")); // NOI18N
+            org.openide.util.NbBundle.getMessage(Sb_StadtbildTimeTabs.class, "Sb_StadtbildTimeTabs.jLabel3.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(7, 5, 5, 5);
         tabFrom.add(jLabel3, gridBagConstraints);
@@ -195,16 +232,16 @@ public class Arc_StadtbildTimeTabs extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         tabFrom.add(filler3, gridBagConstraints);
 
-        jTabbedPane1.addTab(org.openide.util.NbBundle.getMessage(
-                Arc_StadtbildTimeTabs.class,
-                "Arc_StadtbildTimeTabs.tabFrom.TabConstraints.tabTitle"),
+        tabbedPane.addTab(org.openide.util.NbBundle.getMessage(
+                Sb_StadtbildTimeTabs.class,
+                "Sb_StadtbildTimeTabs.tabFrom.TabConstraints.tabTitle"),
             tabFrom); // NOI18N
 
         tabTo.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel4,
-            org.openide.util.NbBundle.getMessage(Arc_StadtbildTimeTabs.class, "Arc_StadtbildTimeTabs.jLabel4.text")); // NOI18N
+            org.openide.util.NbBundle.getMessage(Sb_StadtbildTimeTabs.class, "Sb_StadtbildTimeTabs.jLabel4.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(7, 5, 5, 5);
         tabTo.add(jLabel4, gridBagConstraints);
@@ -218,16 +255,16 @@ public class Arc_StadtbildTimeTabs extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         tabTo.add(filler4, gridBagConstraints);
 
-        jTabbedPane1.addTab(org.openide.util.NbBundle.getMessage(
-                Arc_StadtbildTimeTabs.class,
-                "Arc_StadtbildTimeTabs.tabTo.TabConstraints.tabTitle"),
+        tabbedPane.addTab(org.openide.util.NbBundle.getMessage(
+                Sb_StadtbildTimeTabs.class,
+                "Sb_StadtbildTimeTabs.tabTo.TabConstraints.tabTitle"),
             tabTo); // NOI18N
 
         tabFromTill.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel5,
-            org.openide.util.NbBundle.getMessage(Arc_StadtbildTimeTabs.class, "Arc_StadtbildTimeTabs.jLabel5.text")); // NOI18N
+            org.openide.util.NbBundle.getMessage(Sb_StadtbildTimeTabs.class, "Sb_StadtbildTimeTabs.jLabel5.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(7, 5, 5, 5);
         tabFromTill.add(jLabel5, gridBagConstraints);
@@ -237,7 +274,7 @@ public class Arc_StadtbildTimeTabs extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel6,
-            org.openide.util.NbBundle.getMessage(Arc_StadtbildTimeTabs.class, "Arc_StadtbildTimeTabs.jLabel6.text")); // NOI18N
+            org.openide.util.NbBundle.getMessage(Sb_StadtbildTimeTabs.class, "Sb_StadtbildTimeTabs.jLabel6.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -255,11 +292,11 @@ public class Arc_StadtbildTimeTabs extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         tabFromTill.add(filler5, gridBagConstraints);
 
-        jTabbedPane1.addTab(org.openide.util.NbBundle.getMessage(
-                Arc_StadtbildTimeTabs.class,
-                "Arc_StadtbildTimeTabs.tabFromTill.TabConstraints.tabTitle"),
+        tabbedPane.addTab(org.openide.util.NbBundle.getMessage(
+                Sb_StadtbildTimeTabs.class,
+                "Sb_StadtbildTimeTabs.tabFromTill.TabConstraints.tabTitle"),
             tabFromTill); // NOI18N
 
-        add(jTabbedPane1, java.awt.BorderLayout.CENTER);
+        add(tabbedPane, java.awt.BorderLayout.CENTER);
     } // </editor-fold>//GEN-END:initComponents
 }
