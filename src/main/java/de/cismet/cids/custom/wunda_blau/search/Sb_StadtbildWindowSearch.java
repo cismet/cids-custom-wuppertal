@@ -42,7 +42,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
 import javax.swing.Box;
@@ -173,7 +172,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 new Double(pre.getHeight() + 5).intValue()));
         pnlButtons.add(pnlSearchCancel);
 
-        metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "mauer"); // NOI18N
+        metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "sb_stadtbildserie"); // NOI18N
 
         byte[] iconDataFromMetaclass = new byte[] {};
 
