@@ -35,9 +35,12 @@ import java.awt.Frame;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import java.lang.reflect.InvocationTargetException;
+
 import java.net.URL;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
@@ -155,7 +158,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     public Sb_StadtbildWindowSearch() {
         initComponents();
 
-        final JPanel pnlSearchCancel = new SearchControlPanel(this);
+        final JPanel pnlSearchCancel = new CountSearchResultsSearchControlPanel(this);
         final Dimension max = pnlSearchCancel.getMaximumSize();
         final Dimension min = pnlSearchCancel.getMinimumSize();
         final Dimension pre = pnlSearchCancel.getPreferredSize();
@@ -986,5 +989,89 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             LOG.error(ex, ex);
         }
         return null;
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * A subclass of SearchControlPanel, which checks first how many results (Stadtbildserien) were found.
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class CountSearchResultsSearchControlPanel extends SearchControlPanel {
+
+        //~ Instance fields ----------------------------------------------------
+
+        boolean showResults;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new CountSearchResultsSearchControlPanel object.
+         *
+         * @param  listener  DOCUMENT ME!
+         */
+        public CountSearchResultsSearchControlPanel(final SearchControlListener listener) {
+            super(listener);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public boolean checkIfSearchShouldBeStarted(final SwingWorker calledBySwingWorker,
+                final MetaObjectNodeServerSearch search) {
+            if (search instanceof MetaObjectNodesStadtbildSerieSearchStatement) {
+                Integer amountResults = 0;
+                try {
+                    ((MetaObjectNodesStadtbildSerieSearchStatement)search).setPreparationExecution(true);
+                    final Collection searchResult = SessionManager.getProxy()
+                                .customServerSearch(SessionManager.getSession().getUser(), search);
+                    if (!searchResult.isEmpty()) {
+                        final Object firstResult = searchResult.toArray()[0];
+                        if (firstResult instanceof Integer) {
+                            amountResults = (Integer)firstResult;
+                        }
+                    }
+                } catch (ConnectionException ex) {
+                    LOG.error(ex, ex);
+                } finally {
+                    ((MetaObjectNodesStadtbildSerieSearchStatement)search).setPreparationExecution(false);
+                }
+
+                if (amountResults < 100) {
+                    return true;
+                } else {
+                    showResults = false;
+                    try {
+                        final int amountOfResults = amountResults;
+                        if (!calledBySwingWorker.isCancelled()) {
+                            SwingUtilities.invokeAndWait(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        final int choosenOption = JOptionPane.showConfirmDialog(
+                                                StaticSwingTools.getParentFrame(
+                                                    CountSearchResultsSearchControlPanel.this),
+                                                "Es wurden "
+                                                        + amountOfResults
+                                                        + " Stadtbildserien gefunden. Sollen diese angezeigt werden?",
+                                                "Große Anzahl an Suchergebnissen",
+                                                JOptionPane.YES_NO_OPTION,
+                                                JOptionPane.QUESTION_MESSAGE);
+                                        showResults = choosenOption == JOptionPane.YES_OPTION;
+                                    }
+                                });
+                        }
+                    } catch (InterruptedException ex) {
+                        LOG.error("Search results will not be shown.", ex);
+                    } catch (InvocationTargetException ex) {
+                        LOG.error("Search results will not be shown.", ex);
+                    }
+                    return showResults;
+                }
+            } else {
+                return true;
+            }
+        }
     }
 }
