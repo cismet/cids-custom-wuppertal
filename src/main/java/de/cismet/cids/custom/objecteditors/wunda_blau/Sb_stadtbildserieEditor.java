@@ -7,8 +7,6 @@
 ****************************************************/
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-import Sirius.server.middleware.types.AbstractAttributeRepresentationFormater;
-
 import com.vividsolutions.jts.geom.Geometry;
 
 import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
@@ -81,6 +79,8 @@ import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+
+import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
@@ -1169,6 +1169,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geom}"),
                 dbcGeom,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding.setConverter(((DefaultCismapGeometryComboBoxEditor)dbcGeom).getConverter());
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
