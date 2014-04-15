@@ -14,6 +14,7 @@ package de.cismet.cids.custom.wunda_blau.search;
 import Sirius.navigator.actiontag.ActionTagProtected;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
+import Sirius.navigator.search.CidsSearchExecutor;
 import Sirius.navigator.search.dynamic.SearchControlListener;
 import Sirius.navigator.search.dynamic.SearchControlPanel;
 
@@ -74,6 +75,8 @@ import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
 
+import de.cismet.cismap.commons.CrsTransformer;
+import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
@@ -118,7 +121,6 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     private javax.swing.JComboBox cboImageNrTo;
     private javax.swing.JComboBox cboOrt;
     private javax.swing.JComboBox cboStreet;
-    private javax.swing.JCheckBox chbOutsideWuppertal;
     private javax.swing.JCheckBox chboBodennaheAufnahme;
     private javax.swing.JCheckBox chboLuftbildschraegaufnahme;
     private javax.swing.JCheckBox chboLuftbildsenkrechtaufnahme;
@@ -200,16 +202,17 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         geoSearchEnabled = mappingComponent != null;
         if (geoSearchEnabled) {
             final Sb_StadtbildserieCreateSearchGeometryListener stadtbildserieCreateSearchGeometryListener =
-                new Sb_StadtbildserieCreateSearchGeometryListener(mappingComponent,
-                    new MauernSearchTooltip(icon));
+                new Sb_StadtbildserieCreateSearchGeometryListener(
+                    mappingComponent,
+                    new Sb_StadtbildSearchTooltip(icon));
             stadtbildserieCreateSearchGeometryListener.addPropertyChangeListener(this);
             btnGeoSearch = new GeoSearchButton(
                     Sb_StadtbildserieCreateSearchGeometryListener.STADTBILDSERIE_CREATE_SEARCH_GEOMETRY,
                     mappingComponent,
                     null,
                     org.openide.util.NbBundle.getMessage(
-                        MauernWindowSearch.class,
-                        "MauernWindowSearch.btnGeoSearch.toolTipText")); // NOI18N
+                        Sb_StadtbildWindowSearch.class,
+                        "Sb_StadtbildWindowSearch.btnGeoSearch.toolTipText")); // NOI18N
             pnlButtons.add(btnGeoSearch);
         }
 
@@ -272,7 +275,6 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         pnlStrassenzuordnung = new javax.swing.JPanel();
         lblStrasse = new javax.swing.JLabel();
         cboStreet = new FastBindableReferenceCombo();
-        chbOutsideWuppertal = new javax.swing.JCheckBox();
         lblOrtsname = new javax.swing.JLabel();
         cboOrt = new FastBindableReferenceCombo();
         lblHausnummer = new javax.swing.JLabel();
@@ -391,7 +393,10 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
 
         txtImageNrTo.setText(org.openide.util.NbBundle.getMessage(
                 Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.txtImageNrTo.text")); // NOI18N
+                "Sb_StadtbildWindowSearch.txtImageNrTo.text"));        // NOI18N
+        txtImageNrTo.setToolTipText(org.openide.util.NbBundle.getMessage(
+                Sb_StadtbildWindowSearch.class,
+                "Sb_StadtbildWindowSearch.txtImageNrTo.toolTipText")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
@@ -402,14 +407,10 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
 
         txtImageNrFrom.setText(org.openide.util.NbBundle.getMessage(
                 Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.txtImageNrFrom.text")); // NOI18N
-        txtImageNrFrom.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    txtImageNrFromActionPerformed(evt);
-                }
-            });
+                "Sb_StadtbildWindowSearch.txtImageNrFrom.text"));        // NOI18N
+        txtImageNrFrom.setToolTipText(org.openide.util.NbBundle.getMessage(
+                Sb_StadtbildWindowSearch.class,
+                "Sb_StadtbildWindowSearch.txtImageNrFrom.toolTipText")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -555,39 +556,19 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cboStreet);
 
         org.openide.awt.Mnemonics.setLocalizedText(
-            chbOutsideWuppertal,
-            org.openide.util.NbBundle.getMessage(
-                Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.chbOutsideWuppertal.text")); // NOI18N
-        chbOutsideWuppertal.addChangeListener(new javax.swing.event.ChangeListener() {
-
-                @Override
-                public void stateChanged(final javax.swing.event.ChangeEvent evt) {
-                    chbOutsideWuppertalStateChanged(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlStrassenzuordnung.add(chbOutsideWuppertal, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
             lblOrtsname,
             org.openide.util.NbBundle.getMessage(
                 Sb_StadtbildWindowSearch.class,
                 "Sb_StadtbildWindowSearch.lblOrtsname.text")); // NOI18N
-        lblOrtsname.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlStrassenzuordnung.add(lblOrtsname, gridBagConstraints);
 
         ((FastBindableReferenceCombo)cboOrt).setSorted(true);
         cboOrt.setEditable(true);
-        cboOrt.setEnabled(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_ONCE,
@@ -597,8 +578,15 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
+        cboOrt.addItemListener(new java.awt.event.ItemListener() {
+
+                @Override
+                public void itemStateChanged(final java.awt.event.ItemEvent evt) {
+                    cboOrtItemStateChanged(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -620,7 +608,10 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
 
         txtHausnummer.setText(org.openide.util.NbBundle.getMessage(
                 Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.txtHausnummer.text")); // NOI18N
+                "Sb_StadtbildWindowSearch.txtHausnummer.text"));        // NOI18N
+        txtHausnummer.setToolTipText(org.openide.util.NbBundle.getMessage(
+                Sb_StadtbildWindowSearch.class,
+                "Sb_StadtbildWindowSearch.txtHausnummer.toolTipText")); // NOI18N
         txtHausnummer.setPreferredSize(new java.awt.Dimension(56, 19));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
@@ -740,17 +731,15 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtImageNrFromActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtImageNrFromActionPerformed
-        // TODO add your handling code here:
-    } //GEN-LAST:event_txtImageNrFromActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void chbOutsideWuppertalStateChanged(final javax.swing.event.ChangeEvent evt) { //GEN-FIRST:event_chbOutsideWuppertalStateChanged
-        if (chbOutsideWuppertal.isSelected()) {
+    private void cboOrtItemStateChanged(final java.awt.event.ItemEvent evt) { //GEN-FIRST:event_cboOrtItemStateChanged
+        final Object selectedItem = cboOrt.getSelectedItem();
+        if (selectedItem.equals(WUPPERTAL)) {
+            // inside of Wuppertal
+            cboStreet.setEnabled(true);
+            lblStrasse.setEnabled(true);
+            txtHausnummer.setEnabled(true);
+            lblHausnummer.setEnabled(true);
+        } else {
             // outside of Wuppertal
             cboStreet.setEnabled(false);
             cboStreet.setSelectedItem(null);
@@ -758,21 +747,8 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             txtHausnummer.setEnabled(false);
             txtHausnummer.setText("");
             lblHausnummer.setEnabled(false);
-
-            cboOrt.setEnabled(true);
-            lblOrtsname.setEnabled(true);
-        } else {
-            // inside of Wuppertal
-            cboStreet.setEnabled(true);
-            lblStrasse.setEnabled(true);
-            txtHausnummer.setEnabled(true);
-            lblHausnummer.setEnabled(true);
-
-            cboOrt.setEnabled(false);
-            cboOrt.setSelectedItem(WUPPERTAL);
-            lblOrtsname.setEnabled(false);
         }
-    } //GEN-LAST:event_chbOutsideWuppertalStateChanged
+    } //GEN-LAST:event_cboOrtItemStateChanged
 
     /**
      * DOCUMENT ME!
@@ -803,13 +779,20 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         return this;
     }
 
+    @Override
+    public MetaObjectNodeServerSearch getServerSearch() {
+        return getServerSearch(null);
+    }
+
     /**
      * DOCUMENT ME!
      *
+     * @param   geometry  DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
-    @Override
-    public MetaObjectNodeServerSearch getServerSearch() {
+
+    public MetaObjectNodeServerSearch getServerSearch(final Geometry geometry) {
         final MetaObjectNodesStadtbildSerieSearchStatement stadtbildSerieSearchStatement =
             new MetaObjectNodesStadtbildSerieSearchStatement(SessionManager.getSession().getUser());
 
@@ -869,6 +852,26 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
 
         final String hausnummer = txtHausnummer.getText();
         stadtbildSerieSearchStatement.setHausnummer(hausnummer);
+
+        // Geometry
+        Geometry geometryToSearchFor = null;
+        if (geometry != null) {
+            geometryToSearchFor = geometry;
+        } else {
+            if (cbMapSearch.isSelected()) {
+                geometryToSearchFor =
+                    ((XBoundingBox)CismapBroker.getInstance().getMappingComponent().getCurrentBoundingBox())
+                            .getGeometry();
+            }
+        }
+        final Geometry transformedBoundingBox;
+        if (geometryToSearchFor != null) {
+            transformedBoundingBox = CrsTransformer.transformToDefaultCrs(geometryToSearchFor);
+            transformedBoundingBox.setSRID(CismapBroker.getInstance().getDefaultCrsAlias());
+        } else {
+            transformedBoundingBox = null;
+        }
+        stadtbildSerieSearchStatement.setGeometryToSearchFor(transformedBoundingBox);
 
         return stadtbildSerieSearchStatement;
     }
@@ -955,8 +958,8 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     public void propertyChange(final PropertyChangeEvent evt) {
         if (Sb_StadtbildserieCreateSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
             if ((evt.getNewValue() != null) && (evt.getNewValue() instanceof Geometry)) {
-//                final MetaObjectNodeServerSearch search = getServerSearch((Geometry)evt.getNewValue());
-//                CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);
+                final MetaObjectNodeServerSearch search = getServerSearch((Geometry)evt.getNewValue());
+                CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);
             }
         }
     }
