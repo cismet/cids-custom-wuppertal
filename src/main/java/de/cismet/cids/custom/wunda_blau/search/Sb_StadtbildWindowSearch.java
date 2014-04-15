@@ -395,7 +395,10 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
 
         txtImageNrTo.setText(org.openide.util.NbBundle.getMessage(
                 Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.txtImageNrTo.text")); // NOI18N
+                "Sb_StadtbildWindowSearch.txtImageNrTo.text"));        // NOI18N
+        txtImageNrTo.setToolTipText(org.openide.util.NbBundle.getMessage(
+                Sb_StadtbildWindowSearch.class,
+                "Sb_StadtbildWindowSearch.txtImageNrTo.toolTipText")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
@@ -406,7 +409,10 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
 
         txtImageNrFrom.setText(org.openide.util.NbBundle.getMessage(
                 Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.txtImageNrFrom.text")); // NOI18N
+                "Sb_StadtbildWindowSearch.txtImageNrFrom.text"));        // NOI18N
+        txtImageNrFrom.setToolTipText(org.openide.util.NbBundle.getMessage(
+                Sb_StadtbildWindowSearch.class,
+                "Sb_StadtbildWindowSearch.txtImageNrFrom.toolTipText")); // NOI18N
         txtImageNrFrom.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -624,7 +630,10 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
 
         txtHausnummer.setText(org.openide.util.NbBundle.getMessage(
                 Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.txtHausnummer.text")); // NOI18N
+                "Sb_StadtbildWindowSearch.txtHausnummer.text"));        // NOI18N
+        txtHausnummer.setToolTipText(org.openide.util.NbBundle.getMessage(
+                Sb_StadtbildWindowSearch.class,
+                "Sb_StadtbildWindowSearch.txtHausnummer.toolTipText")); // NOI18N
         txtHausnummer.setPreferredSize(new java.awt.Dimension(56, 19));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
