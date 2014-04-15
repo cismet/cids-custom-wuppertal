@@ -14,6 +14,7 @@ package de.cismet.cids.custom.wunda_blau.search;
 import Sirius.navigator.actiontag.ActionTagProtected;
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
+import Sirius.navigator.search.CidsSearchExecutor;
 import Sirius.navigator.search.dynamic.SearchControlListener;
 import Sirius.navigator.search.dynamic.SearchControlPanel;
 
@@ -74,6 +75,8 @@ import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
 import de.cismet.cids.tools.search.clientstuff.CidsWindowSearch;
 
+import de.cismet.cismap.commons.CrsTransformer;
+import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 
@@ -200,16 +203,17 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         geoSearchEnabled = mappingComponent != null;
         if (geoSearchEnabled) {
             final Sb_StadtbildserieCreateSearchGeometryListener stadtbildserieCreateSearchGeometryListener =
-                new Sb_StadtbildserieCreateSearchGeometryListener(mappingComponent,
-                    new MauernSearchTooltip(icon));
+                new Sb_StadtbildserieCreateSearchGeometryListener(
+                    mappingComponent,
+                    new Sb_StadtbildSearchTooltip(icon));
             stadtbildserieCreateSearchGeometryListener.addPropertyChangeListener(this);
             btnGeoSearch = new GeoSearchButton(
                     Sb_StadtbildserieCreateSearchGeometryListener.STADTBILDSERIE_CREATE_SEARCH_GEOMETRY,
                     mappingComponent,
                     null,
                     org.openide.util.NbBundle.getMessage(
-                        MauernWindowSearch.class,
-                        "MauernWindowSearch.btnGeoSearch.toolTipText")); // NOI18N
+                        Sb_StadtbildWindowSearch.class,
+                        "Sb_StadtbildWindowSearch.btnGeoSearch.toolTipText")); // NOI18N
             pnlButtons.add(btnGeoSearch);
         }
 
@@ -803,13 +807,20 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         return this;
     }
 
+    @Override
+    public MetaObjectNodeServerSearch getServerSearch() {
+        return getServerSearch(null);
+    }
+
     /**
      * DOCUMENT ME!
      *
+     * @param   geometry  DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
-    @Override
-    public MetaObjectNodeServerSearch getServerSearch() {
+
+    public MetaObjectNodeServerSearch getServerSearch(final Geometry geometry) {
         final MetaObjectNodesStadtbildSerieSearchStatement stadtbildSerieSearchStatement =
             new MetaObjectNodesStadtbildSerieSearchStatement(SessionManager.getSession().getUser());
 
@@ -869,6 +880,26 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
 
         final String hausnummer = txtHausnummer.getText();
         stadtbildSerieSearchStatement.setHausnummer(hausnummer);
+
+        // Geometry
+        Geometry geometryToSearchFor = null;
+        if (geometry != null) {
+            geometryToSearchFor = geometry;
+        } else {
+            if (cbMapSearch.isSelected()) {
+                geometryToSearchFor =
+                    ((XBoundingBox)CismapBroker.getInstance().getMappingComponent().getCurrentBoundingBox())
+                            .getGeometry();
+            }
+        }
+        final Geometry transformedBoundingBox;
+        if (geometryToSearchFor != null) {
+            transformedBoundingBox = CrsTransformer.transformToDefaultCrs(geometryToSearchFor);
+            transformedBoundingBox.setSRID(CismapBroker.getInstance().getDefaultCrsAlias());
+        } else {
+            transformedBoundingBox = null;
+        }
+        stadtbildSerieSearchStatement.setGeometryToSearchFor(transformedBoundingBox);
 
         return stadtbildSerieSearchStatement;
     }
@@ -955,8 +986,8 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     public void propertyChange(final PropertyChangeEvent evt) {
         if (Sb_StadtbildserieCreateSearchGeometryListener.ACTION_SEARCH_STARTED.equals(evt.getPropertyName())) {
             if ((evt.getNewValue() != null) && (evt.getNewValue() instanceof Geometry)) {
-//                final MetaObjectNodeServerSearch search = getServerSearch((Geometry)evt.getNewValue());
-//                CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);
+                final MetaObjectNodeServerSearch search = getServerSearch((Geometry)evt.getNewValue());
+                CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);
             }
         }
     }
