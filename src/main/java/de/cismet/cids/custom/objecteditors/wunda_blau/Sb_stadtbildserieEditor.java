@@ -376,9 +376,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             RendererTools.makeReadOnly(txtaComment);
             RendererTools.makeReadOnly(bcbStrasse);
             RendererTools.makeReadOnly(dbcOrt);
-            RendererTools.makeReadOnly(dbcGeom);
             RendererTools.makeReadOnly(txtHausnummer);
-            btnCombineGeometries.setVisible(false);
             RendererTools.makeReadOnly(dbcAuftraggeber);
             RendererTools.makeReadOnly(dbcFotograf);
             RendererTools.makeReadOnly(dbcFilmart);
@@ -1632,7 +1630,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblPrintMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblPrintMouseClicked
+    private void lblPrintMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPrintMouseClicked
         if ((evt != null) && !evt.isPopupTrigger()) {
             final CidsBean bean = cidsBean;
             if (bean != null) {
@@ -1640,32 +1638,32 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 jp.print();
             }
         }
-    }                                                                        //GEN-LAST:event_lblPrintMouseClicked
+    }//GEN-LAST:event_lblPrintMouseClicked
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnPrevImgActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnPrevImgActionPerformed
+    private void btnPrevImgActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevImgActionPerformed
         lstBildnummern.setSelectedIndex(lstBildnummern.getSelectedIndex() - 1);
-    }                                                                              //GEN-LAST:event_btnPrevImgActionPerformed
+    }//GEN-LAST:event_btnPrevImgActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnNextImgActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnNextImgActionPerformed
+    private void btnNextImgActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImgActionPerformed
         lstBildnummern.setSelectedIndex(lstBildnummern.getSelectedIndex() + 1);
-    }                                                                              //GEN-LAST:event_btnNextImgActionPerformed
+    }//GEN-LAST:event_btnNextImgActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnDownloadHighResImageActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDownloadHighResImageActionPerformed
+    private void btnDownloadHighResImageActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadHighResImageActionPerformed
         if (DownloadManagerDialog.showAskingForUserTitle(
                         this)) {
             final String jobname = DownloadManagerDialog.getJobname();
@@ -1681,14 +1679,14 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                             lstBildnummern.getSelectedValue().toString(),
                             "1"));
         }
-    }                                                                                           //GEN-LAST:event_btnDownloadHighResImageActionPerformed
+    }//GEN-LAST:event_btnDownloadHighResImageActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lstBildnummernValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstBildnummernValueChanged
+    private void lstBildnummernValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstBildnummernValueChanged
         if (!evt.getValueIsAdjusting()) {
             if (!lstBildnummern.isSelectionEmpty()) {
                 final String imageNumber = lstBildnummern.getSelectedValue().toString();
@@ -1705,14 +1703,14 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 tbtnIsPreviewImage.setEnabled(false);
             }
         }
-    }                                                                                         //GEN-LAST:event_lstBildnummernValueChanged
+    }//GEN-LAST:event_lstBildnummernValueChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddImageNumberActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddImageNumberActionPerformed
+    private void btnAddImageNumberActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddImageNumberActionPerformed
         final Sb_stadtbildserieEditorAddBildnummerDialog dialog = new Sb_stadtbildserieEditorAddBildnummerDialog((Frame)
                 SwingUtilities.getWindowAncestor(this),
                 true);
@@ -1731,14 +1729,14 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             }
         }
         defineButtonStatus();
-    }                                                                                     //GEN-LAST:event_btnAddImageNumberActionPerformed
+    }//GEN-LAST:event_btnAddImageNumberActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveImageNumberActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveImageNumberActionPerformed
+    private void btnRemoveImageNumberActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveImageNumberActionPerformed
         final Object selection = lstBildnummern.getSelectedValue();
         if ((selection != null) && (selection instanceof CidsBean)) {
             final CidsBean cidesBeanToRemove = (CidsBean)selection;
@@ -1780,14 +1778,14 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             }
             defineButtonStatus();
         }
-    } //GEN-LAST:event_btnRemoveImageNumberActionPerformed
+    }//GEN-LAST:event_btnRemoveImageNumberActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddSuchwortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddSuchwortActionPerformed
+    private void btnAddSuchwortActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSuchwortActionPerformed
         final Sb_stadtbildserieEditorAddSuchwortDialog dialog = new Sb_stadtbildserieEditorAddSuchwortDialog((Frame)
                 SwingUtilities.getWindowAncestor(this),
                 true);
@@ -1798,14 +1796,14 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 suchwoerter.add(newSuchwort);
             }
         }
-    }                                                                                  //GEN-LAST:event_btnAddSuchwortActionPerformed
+    }//GEN-LAST:event_btnAddSuchwortActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveSuchwortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveSuchwortActionPerformed
+    private void btnRemoveSuchwortActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveSuchwortActionPerformed
         final Object[] selection = lstSuchworte.getSelectedValues();
         if ((selection != null) && (selection.length > 0)) {
             final int answer = JOptionPane.showConfirmDialog(
@@ -1834,14 +1832,14 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 }
             }
         }
-    }                                                                                     //GEN-LAST:event_btnRemoveSuchwortActionPerformed
+    }//GEN-LAST:event_btnRemoveSuchwortActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnIsPreviewImageActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnIsPreviewImageActionPerformed
+    private void tbtnIsPreviewImageActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnIsPreviewImageActionPerformed
         if (tbtnIsPreviewImage.isSelected()) {
             try {
                 cidsBean.setProperty("vorschaubild", lstBildnummern.getSelectedValue());
@@ -1850,14 +1848,14 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 LOG.error("Error while setting the preview image of the CidsBean", e);
             }
         }
-    }                                                                                      //GEN-LAST:event_tbtnIsPreviewImageActionPerformed
+    }//GEN-LAST:event_tbtnIsPreviewImageActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void dbcOrtItemStateChanged(final java.awt.event.ItemEvent evt) { //GEN-FIRST:event_dbcOrtItemStateChanged
+    private void dbcOrtItemStateChanged(final java.awt.event.ItemEvent evt) {//GEN-FIRST:event_dbcOrtItemStateChanged
         final Object selectedItem = dbcOrt.getSelectedItem();
         if ((selectedItem != null) && selectedItem.equals(Sb_stadtbildUtils.getWUPPERTAL())) {
             // inside of Wuppertal
@@ -1874,7 +1872,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             txtHausnummer.setText("");
             lblHausnummer.setEnabled(false);
         }
-    } //GEN-LAST:event_dbcOrtItemStateChanged
+    }//GEN-LAST:event_dbcOrtItemStateChanged
 
     /**
      * DOCUMENT ME!
