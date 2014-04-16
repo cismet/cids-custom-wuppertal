@@ -69,6 +69,7 @@ import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objectrenderer.utils.AbstractJasperReportPrint;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.wunda_blau.StadtbildJasperReportPrint;
+import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 import de.cismet.cids.custom.utils.TifferDownload;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 
@@ -237,7 +238,6 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -267,6 +267,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private javax.swing.JLabel lblDescSuchworte;
     private javax.swing.JLabel lblEintragungsdatum;
     private javax.swing.JLabel lblGeomAus;
+    private javax.swing.JLabel lblHausnummer;
     private javax.swing.JLabel lblPicture;
     private javax.swing.JLabel lblPrint;
     private javax.swing.JLabel lblTitle;
@@ -351,6 +352,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                     }
                 });
         timer.setRepeats(false);
+
+        dbcOrt.setSelectedItem(Sb_stadtbildUtils.getWUPPERTAL());
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -467,7 +470,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         lblDescOrt = new javax.swing.JLabel();
         lblDescStrasse = new javax.swing.JLabel();
         dbcOrt = new FastBindableReferenceCombo();
-        jLabel7 = new javax.swing.JLabel();
+        lblHausnummer = new javax.swing.JLabel();
         txtHausnummer = new de.cismet.cids.editors.DefaultBindableJTextField();
         lblGeomAus = new javax.swing.JLabel();
         btnCombineGeometries = new javax.swing.JButton();
@@ -1098,6 +1101,13 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
+        dbcOrt.addItemListener(new java.awt.event.ItemListener() {
+
+                @Override
+                public void itemStateChanged(final java.awt.event.ItemEvent evt) {
+                    dbcOrtItemStateChanged(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -1107,12 +1117,12 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         panDetails1.add(dbcOrt, gridBagConstraints);
 
-        jLabel7.setText("Hs.-Nr.:");
+        lblHausnummer.setText("Hs.-Nr.:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-        panDetails1.add(jLabel7, gridBagConstraints);
+        panDetails1.add(lblHausnummer, gridBagConstraints);
 
         txtHausnummer.setPreferredSize(new java.awt.Dimension(50, 19));
 
@@ -1820,6 +1830,30 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             }
         }
     }                                                                                      //GEN-LAST:event_tbtnIsPreviewImageActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void dbcOrtItemStateChanged(final java.awt.event.ItemEvent evt) { //GEN-FIRST:event_dbcOrtItemStateChanged
+        final Object selectedItem = dbcOrt.getSelectedItem();
+        if (selectedItem.equals(Sb_stadtbildUtils.getWUPPERTAL())) {
+            // inside of Wuppertal
+            bcbStrasse.setEnabled(true);
+            lblDescStrasse.setEnabled(true);
+            txtHausnummer.setEnabled(true);
+            lblHausnummer.setEnabled(true);
+        } else {
+            // outside of Wuppertal
+            bcbStrasse.setEnabled(false);
+            bcbStrasse.setSelectedItem(null);
+            lblDescStrasse.setEnabled(false);
+            txtHausnummer.setEnabled(false);
+            txtHausnummer.setText("");
+            lblHausnummer.setEnabled(false);
+        }
+    } //GEN-LAST:event_dbcOrtItemStateChanged
 
     /**
      * DOCUMENT ME!
