@@ -730,7 +730,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
      */
     private void cboOrtItemStateChanged(final java.awt.event.ItemEvent evt) { //GEN-FIRST:event_cboOrtItemStateChanged
         final Object selectedItem = cboOrt.getSelectedItem();
-        if (selectedItem.equals(Sb_stadtbildUtils.getWUPPERTAL())) {
+        if ((selectedItem != null) && selectedItem.equals(Sb_stadtbildUtils.getWUPPERTAL())) {
             // inside of Wuppertal
             cboStreet.setEnabled(true);
             lblStrasse.setEnabled(true);
