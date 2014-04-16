@@ -2018,7 +2018,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
      */
     private void initMap() {
         if (cidsBean != null) {
-            final Object geoObj = cidsBean.getProperty("geom");
+            final Object geoObj = cidsBean.getProperty("geom.geo_field");
             if (geoObj instanceof Geometry) {
                 final Geometry pureGeom = CrsTransformer.transformToGivenCrs((Geometry)geoObj,
                         AlkisConstants.COMMONS.SRS_SERVICE);
@@ -2048,7 +2048,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                                     true));
                             final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
                                         AlkisConstants.COMMONS.MAP_CALL_STRING));
-                            swms.setName("Mauer");
+                            swms.setName("Stadtbildserie");
                             final StyledFeature dsf = new DefaultStyledFeature();
                             dsf.setGeometry(pureGeom);
                             dsf.setFillingPaint(new Color(1, 0, 0, 0.5f));
