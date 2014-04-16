@@ -78,6 +78,7 @@ import de.cismet.cids.custom.utils.TifferDownload;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 
 import de.cismet.cids.dynamics.CidsBean;
+import de.cismet.cids.dynamics.Disposable;
 
 import de.cismet.cids.editors.DefaultBindableJCheckBox;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
@@ -1956,6 +1957,9 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     @Override
     public void dispose() {
         bindingGroup.unbind();
+        if (editable) {
+            ((DefaultCismapGeometryComboBoxEditor)dbcGeom).dispose();
+        }
     }
 
     /**
