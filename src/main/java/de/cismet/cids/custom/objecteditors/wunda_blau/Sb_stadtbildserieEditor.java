@@ -469,15 +469,21 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         semiRoundedPanel5 = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel3 = new javax.swing.JLabel();
         panDetails1 = new RoundedPanel();
-        lblDescGeometrie = new javax.swing.JLabel();
+        if (editable) {
+            lblDescGeometrie = new javax.swing.JLabel();
+        }
         lblDescOrt = new javax.swing.JLabel();
         lblDescStrasse = new javax.swing.JLabel();
         dbcOrt = new FastBindableReferenceCombo();
         lblHausnummer = new javax.swing.JLabel();
         txtHausnummer = new de.cismet.cids.editors.DefaultBindableJTextField();
         lblGeomAus = new javax.swing.JLabel();
-        btnCombineGeometries = new javax.swing.JButton();
-        dbcGeom = new de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor();
+        if (editable) {
+            btnCombineGeometries = new javax.swing.JButton();
+        }
+        if (editable) {
+            dbcGeom = new de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor();
+        }
         bcbStrasse = new FastBindableReferenceCombo();
         jPanel2 = new javax.swing.JPanel();
         pnlVorschau = new de.cismet.tools.gui.RoundedPanel();
@@ -1070,13 +1076,17 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         panDetails1.setOpaque(false);
         panDetails1.setLayout(new java.awt.GridBagLayout());
 
-        lblDescGeometrie.setText("Geometrie:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-        panDetails1.add(lblDescGeometrie, gridBagConstraints);
+        if (editable) {
+            lblDescGeometrie.setText("Geometrie:");
+        }
+        if (editable) {
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 2;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+            gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
+            panDetails1.add(lblDescGeometrie, gridBagConstraints);
+        }
 
         lblDescOrt.setText("Ort:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1160,39 +1170,46 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         panDetails1.add(lblGeomAus, gridBagConstraints);
 
-        btnCombineGeometries.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wizard.png"))); // NOI18N
-        btnCombineGeometries.setText(org.openide.util.NbBundle.getMessage(
-                Sb_stadtbildserieEditor.class,
-                "VermessungRissEditor.btnCombineGeometries.text"));                                     // NOI18N
-        btnCombineGeometries.setToolTipText(org.openide.util.NbBundle.getMessage(
-                Sb_stadtbildserieEditor.class,
-                "VermessungRissEditor.btnCombineGeometries.toolTipText"));                              // NOI18N
-        btnCombineGeometries.setEnabled(false);
-        btnCombineGeometries.setFocusPainted(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-        panDetails1.add(btnCombineGeometries, gridBagConstraints);
+        if (editable) {
+            btnCombineGeometries.setIcon(new javax.swing.ImageIcon(
+                    getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/wizard.png"))); // NOI18N
+            btnCombineGeometries.setText(org.openide.util.NbBundle.getMessage(
+                    Sb_stadtbildserieEditor.class,
+                    "VermessungRissEditor.btnCombineGeometries.text"));                                     // NOI18N
+            btnCombineGeometries.setToolTipText(org.openide.util.NbBundle.getMessage(
+                    Sb_stadtbildserieEditor.class,
+                    "VermessungRissEditor.btnCombineGeometries.toolTipText"));                              // NOI18N
+            btnCombineGeometries.setEnabled(false);
+            btnCombineGeometries.setFocusPainted(false);
+        }
+        if (editable) {
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 2;
+            gridBagConstraints.gridy = 2;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+            gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
+            panDetails1.add(btnCombineGeometries, gridBagConstraints);
+        }
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geom}"),
-                dbcGeom,
-                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        binding.setConverter(((DefaultCismapGeometryComboBoxEditor)dbcGeom).getConverter());
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-        panDetails1.add(dbcGeom, gridBagConstraints);
+        if (editable) {
+            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                    org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geom}"),
+                    dbcGeom,
+                    org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+            binding.setConverter(((DefaultCismapGeometryComboBoxEditor)dbcGeom).getConverter());
+            bindingGroup.addBinding(binding);
+        }
+        if (editable) {
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridy = 2;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
+            panDetails1.add(dbcGeom, gridBagConstraints);
+        }
 
         ((FastBindableReferenceCombo)bcbStrasse).setSorted(true);
         bcbStrasse.setEditable(true);
@@ -1888,10 +1905,11 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     public void setCidsBean(final CidsBean cidsBean) {
         bindingGroup.unbind();
         if (cidsBean != null) {
+            this.cidsBean = cidsBean;
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
                 bindingGroup,
-                cidsBean);
-            this.cidsBean = cidsBean;
+                this.cidsBean);
+            initMap();
             bindingGroup.bind();
             if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW) {
                 setDefaultValuesForNewCidsBean();
@@ -1903,7 +1921,6 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                         + ((vorschaubild != null) ? vorschaubild : "");
             lblTitle.setText(this.title);
             lstBildnummern.setSelectedValue(cidsBean.getProperty("vorschaubild"), true);
-            initMap();
         }
     }
 
