@@ -62,6 +62,7 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.Sb_stadtbildserieEditor;
 import de.cismet.cids.custom.objecteditors.wunda_blau.Sb_stadtbildserieEditorAddSuchwortDialog;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 import de.cismet.cids.custom.wunda_blau.search.server.MetaObjectNodesStadtbildSerieSearchStatement;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -101,7 +102,6 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             Sb_StadtbildWindowSearch.class);
     private static final String ACTION_TAG = "custom.stadtbilder.search@WUNDA_BLAU";
-    private static CidsBean WUPPERTAL;
     private static final Pattern SIX_DIGIT_INTEGER_PATTERN = Pattern.compile("\\d{6}");
 
     //~ Instance fields --------------------------------------------------------
@@ -228,10 +228,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         }
         bindingGroup.bind();
 
-        if (WUPPERTAL == null) {
-            WUPPERTAL = getOrtWupertal();
-        }
-        cboOrt.setSelectedItem(WUPPERTAL);
+        cboOrt.setSelectedItem(Sb_stadtbildUtils.getWUPPERTAL());
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -733,7 +730,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
      */
     private void cboOrtItemStateChanged(final java.awt.event.ItemEvent evt) { //GEN-FIRST:event_cboOrtItemStateChanged
         final Object selectedItem = cboOrt.getSelectedItem();
-        if (selectedItem.equals(WUPPERTAL)) {
+        if (selectedItem.equals(Sb_stadtbildUtils.getWUPPERTAL())) {
             // inside of Wuppertal
             cboStreet.setEnabled(true);
             lblStrasse.setEnabled(true);
@@ -962,42 +959,6 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);
             }
         }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private static CidsBean getOrtWupertal() {
-        try {
-            final MetaClass ortClass = ClassCacheMultiple.getMetaClass(
-                    "WUNDA_BLAU",
-                    "sb_ort");
-            if (ortClass != null) {
-                final StringBuffer wuppertalQuery = new StringBuffer("select ").append(ortClass.getId())
-                            .append(", ")
-                            .append(ortClass.getPrimaryKey())
-                            .append(" from ")
-                            .append(ortClass.getTableName())
-                            .append(" where name ilike 'Wuppertal'");
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("SQL: wuppertalQuery:" + wuppertalQuery.toString());
-                }
-                final MetaObject[] wuppertal;
-                try {
-                    wuppertal = SessionManager.getProxy().getMetaObjectByQuery(wuppertalQuery.toString(), 0);
-                    if (wuppertal.length > 0) {
-                        return wuppertal[0].getBean();
-                    }
-                } catch (ConnectionException ex) {
-                    LOG.error(ex, ex);
-                }
-            }
-        } catch (Exception ex) {
-            LOG.error("The Location Wuppertal could not be loaded.", ex);
-        }
-        return null;
     }
 
     //~ Inner Classes ----------------------------------------------------------
