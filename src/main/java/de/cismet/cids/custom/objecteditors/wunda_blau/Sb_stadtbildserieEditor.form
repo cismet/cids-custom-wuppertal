@@ -497,6 +497,7 @@
                           <AuxValues>
                             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo()"/>
                             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((FastBindableReferenceCombo)dbcBildtyp).setSorted(true);"/>
+                            <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="((FastBindableReferenceCombo)dbcBildtyp).setNullable(false);"/>
                           </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

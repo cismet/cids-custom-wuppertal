@@ -7,6 +7,8 @@
 ****************************************************/
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.server.middleware.types.MetaObject;
+
 import com.vividsolutions.jts.geom.Geometry;
 
 import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
@@ -16,6 +18,8 @@ import org.jdesktop.beansbinding.Converter;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.JXList;
 import org.jdesktop.swingx.error.ErrorInfo;
+
+import org.openide.util.Exceptions;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -352,8 +356,6 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                     }
                 });
         timer.setRepeats(false);
-
-        dbcOrt.setSelectedItem(Sb_stadtbildUtils.getWUPPERTAL());
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -850,6 +852,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         panContent.add(dbcBildtyp, gridBagConstraints);
+        ((FastBindableReferenceCombo)dbcBildtyp).setNullable(false);
 
         ((FastBindableReferenceCombo)dbcLager).setSorted(true);
         dbcLager.setEditable(true);
@@ -1889,6 +1892,9 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 cidsBean);
             this.cidsBean = cidsBean;
             bindingGroup.bind();
+            if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW) {
+                setDefaultValuesForNewCidsBean();
+            }
             decorateComboBoxes();
             automaticallySortLists();
             final String vorschaubild = (String)cidsBean.getProperty("vorschaubild.bildnummer");
@@ -2122,6 +2128,21 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                     EventQueue.invokeLater(mapRunnable);
                 }
             }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void setDefaultValuesForNewCidsBean() {
+        try {
+            cidsBean.setProperty("ort", Sb_stadtbildUtils.getWUPPERTAL());
+        } catch (Exception ex) {
+            LOG.error(ex, ex);
+        }
+        dpAufnahmedatum.setDate(new Date());
+        if (dbcBildtyp.getItemCount() > 0) {
+            dbcBildtyp.setSelectedIndex(0);
         }
     }
 
