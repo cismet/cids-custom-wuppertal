@@ -7,19 +7,26 @@
 ****************************************************/
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
+import Sirius.navigator.types.treenode.DefaultMetaTreeNode;
+import Sirius.navigator.types.treenode.RootTreeNode;
+import Sirius.navigator.ui.ComponentRegistry;
+
 import Sirius.server.middleware.types.MetaObject;
+import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.vividsolutions.jts.geom.Geometry;
 
 import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
 import edu.umd.cs.piccolo.event.PInputEvent;
 
+import org.apache.commons.lang.StringUtils;
+
 import org.jdesktop.beansbinding.Converter;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.JXList;
 import org.jdesktop.swingx.error.ErrorInfo;
-
-import org.openide.util.Exceptions;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -49,6 +56,7 @@ import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -66,6 +74,11 @@ import javax.swing.SortOrder;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.Timer;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
@@ -76,13 +89,15 @@ import de.cismet.cids.custom.objectrenderer.wunda_blau.StadtbildJasperReportPrin
 import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 import de.cismet.cids.custom.utils.TifferDownload;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+import de.cismet.cids.custom.wunda_blau.search.actions.Sb_stadtbildserieUpdatePruefhinweisAction;
 
 import de.cismet.cids.dynamics.CidsBean;
-import de.cismet.cids.dynamics.Disposable;
 
 import de.cismet.cids.editors.DefaultBindableJCheckBox;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
+
+import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
@@ -224,6 +239,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private javax.swing.JButton btnPrevImg;
     private javax.swing.JButton btnRemoveImageNumber;
     private javax.swing.JButton btnRemoveSuchwort;
+    private javax.swing.JButton btnSavePruefhinweis;
     private javax.swing.JCheckBox chbPruefen;
     private javax.swing.JComboBox dbcAuftraggeber;
     private javax.swing.JComboBox dbcBildtyp;
@@ -236,7 +252,6 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -256,7 +271,6 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JTextArea jTextArea2;
     private org.jdesktop.swingx.JXBusyLabel lblBusy;
     private javax.swing.JLabel lblDescAufnahmedatum;
     private javax.swing.JLabel lblDescAuftraggeber;
@@ -312,6 +326,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private javax.swing.JToggleButton tbtnIsPreviewImage;
     private de.cismet.cids.editors.DefaultBindableJTextField txtHausnummer;
     private javax.swing.JTextArea txtaComment;
+    private javax.swing.JTextArea txtaPruefhinweis;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -357,6 +372,38 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                     }
                 });
         timer.setRepeats(false);
+
+        txtaPruefhinweis.getDocument().addDocumentListener(new DocumentListener() {
+
+                @Override
+                public void insertUpdate(final DocumentEvent e) {
+                    selectCheckBox();
+                }
+
+                @Override
+                public void removeUpdate(final DocumentEvent e) {
+                    selectCheckBox();
+                }
+
+                @Override
+                public void changedUpdate(final DocumentEvent e) {
+                    selectCheckBox();
+                }
+
+                private void selectCheckBox() {
+                    if (StringUtils.isNotBlank(txtaPruefhinweis.getText())) {
+                        chbPruefen.setSelected(true);
+                        if (!editable) {
+                            btnSavePruefhinweis.setEnabled(true);
+                        }
+                    } else {
+                        chbPruefen.setSelected(false);
+                        if (!editable) {
+                            btnSavePruefhinweis.setEnabled(false);
+                        }
+                    }
+                }
+            });
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -513,8 +560,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         panDetails3 = new RoundedPanel();
         chbPruefen = new DefaultBindableJCheckBox();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
+        txtaPruefhinweis = new javax.swing.JTextArea();
+        btnSavePruefhinweis = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -1526,19 +1573,19 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 10);
         panDetails3.add(chbPruefen, gridBagConstraints);
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setLineWrap(true);
-        jTextArea2.setRows(5);
+        txtaPruefhinweis.setColumns(20);
+        txtaPruefhinweis.setLineWrap(true);
+        txtaPruefhinweis.setRows(5);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.pruefen_kommentar}"),
-                jTextArea2,
+                txtaPruefhinweis,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        jScrollPane4.setViewportView(jTextArea2);
+        jScrollPane4.setViewportView(txtaPruefhinweis);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -1547,20 +1594,29 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 10);
         panDetails3.add(jScrollPane4, gridBagConstraints);
 
-        jButton1.setText("Prüfhinweis speichern");
-        jButton1.setEnabled(false);
+        btnSavePruefhinweis.setText("Prüfhinweis speichern");
+        btnSavePruefhinweis.setEnabled(false);
+        btnSavePruefhinweis.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnSavePruefhinweisActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 10, 10);
-        panDetails3.add(jButton1, gridBagConstraints);
+        panDetails3.add(btnSavePruefhinweis, gridBagConstraints);
 
         jPanel6.setOpaque(false);
         jPanel6.setLayout(new java.awt.GridBagLayout());
 
         jLabel8.setText("erstellt von:");
-        jPanel6.add(jLabel8, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        jPanel6.add(jLabel8, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -1877,6 +1933,44 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     /**
      * DOCUMENT ME!
      *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnSavePruefhinweisActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSavePruefhinweisActionPerformed
+        if (StringUtils.isNotBlank(txtaPruefhinweis.getText())) {
+            final ServerActionParameter paramComment = new ServerActionParameter(
+                    Sb_stadtbildserieUpdatePruefhinweisAction.ParameterType.COMMENT.toString(),
+                    txtaPruefhinweis.getText());
+            final ServerActionParameter paramSBSid = new ServerActionParameter(
+                    Sb_stadtbildserieUpdatePruefhinweisAction.ParameterType.STADTBILDSERIE_ID.toString(),
+                    cidsBean.getPrimaryKeyValue());
+
+            try {
+                SessionManager.getProxy()
+                        .executeTask(
+                            Sb_stadtbildserieUpdatePruefhinweisAction.TASK_NAME,
+                            "WUNDA_BLAU",
+                            null,
+                            paramComment,
+                            paramSBSid);
+
+                final RootTreeNode rootTreeNode = new RootTreeNode(SessionManager.getProxy().getRoots());
+                ((DefaultTreeModel)ComponentRegistry.getRegistry().getCatalogueTree().getModel()).setRoot(rootTreeNode);
+                ((DefaultTreeModel)ComponentRegistry.getRegistry().getCatalogueTree().getModel()).reload();
+            } catch (ConnectionException ex) {
+                LOG.error("Problem while updating the Pruefhinweis", ex);
+            }
+        } else {
+            JOptionPane.showMessageDialog(
+                StaticSwingTools.getParentFrame(this),
+                "Das Kommentarfeld für den Prüfhinweis ist leer.",
+                "Kommentarfeld leer",
+                JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btnSavePruefhinweisActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
      * @return  DOCUMENT ME!
      */
     @Override
@@ -1919,6 +2013,17 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                         + ((vorschaubild != null) ? vorschaubild : "");
             lblTitle.setText(this.title);
             lstBildnummern.setSelectedValue(cidsBean.getProperty("vorschaubild"), true);
+
+            final String pruefhinweis = (String)cidsBean.getProperty("pruefen_kommentar");
+            if (StringUtils.isNotBlank(pruefhinweis) && !editable) {
+                // the Pruefhinweis can not be changed in the renderer if a pruefhinweis already exists.
+                chbPruefen.setEnabled(false);
+                btnSavePruefhinweis.setEnabled(false);
+                txtaPruefhinweis.setEnabled(false);
+            }
+            if (chbPruefen.isSelected() && !editable) {
+                chbPruefen.setEnabled(false);
+            }
         }
     }
 
