@@ -153,16 +153,6 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
                     changeMap();
                 }
             });
-
-        jxlKarte.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_KARTE));
-        jxlFlurstuecksnachweis.setEnabled(ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS)
-                    && BillingPopup.isBillingAllowed());
-        jxlNachweisKommunal.setEnabled(ObjectRendererUtils.checkActionTag(
-                PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM) && BillingPopup.isBillingAllowed());
-        jxlNachweisKommunalIntern.setEnabled(ObjectRendererUtils.checkActionTag(
-                PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN));
-        jxlNachweisNRW.setEnabled(ObjectRendererUtils.checkActionTag(
-                PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW) && BillingPopup.isBillingAllowed());
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -599,11 +589,19 @@ public class AlkisLandparcelAggregationRenderer extends javax.swing.JPanel imple
      * @param  enable  DOCUMENT ME!
      */
     private void changeButtonAvailability(final boolean enable) {
-        jxlFlurstuecksnachweis.setEnabled(enable);
-        jxlNachweisNRW.setEnabled(enable);
-        jxlNachweisKommunal.setEnabled(enable);
-        jxlNachweisKommunalIntern.setEnabled(enable);
-        jxlKarte.setEnabled(enable);
+        jxlKarte.setEnabled(enable && ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_KARTE));
+        jxlFlurstuecksnachweis.setEnabled(enable
+                    && ObjectRendererUtils.checkActionTag(PRODUCT_ACTION_TAG_FLURSTUECKSNACHWEIS)
+                    && BillingPopup.isBillingAllowed());
+        jxlNachweisKommunal.setEnabled(enable
+                    && ObjectRendererUtils.checkActionTag(
+                        PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM) && BillingPopup.isBillingAllowed());
+        jxlNachweisKommunalIntern.setEnabled(enable
+                    && ObjectRendererUtils.checkActionTag(
+                        PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_KOM_INTERN));
+        jxlNachweisNRW.setEnabled(enable
+                    && ObjectRendererUtils.checkActionTag(
+                        PRODUCT_ACTION_TAG_FLURSTUECKS_EIGENTUMSNACHWEIS_NRW) && BillingPopup.isBillingAllowed());
     }
 
     /**
