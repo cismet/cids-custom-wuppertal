@@ -21,7 +21,7 @@ import de.cismet.cids.tools.CustomToStringConverter;
  * @author   thorsten
  * @version  $Revision$, $Date$
  */
-public class ZaehlungswetterToStringConverter extends CustomToStringConverter {
+public class ZaehlungwetterToStringConverter extends CustomToStringConverter {
 
     //~ Instance fields --------------------------------------------------------
 
