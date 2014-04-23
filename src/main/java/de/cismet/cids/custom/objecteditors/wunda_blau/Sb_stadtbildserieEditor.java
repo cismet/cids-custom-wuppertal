@@ -931,6 +931,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         panContent.add(dbcLager, gridBagConstraints);
 
         txtaComment.setColumns(20);
+        txtaComment.setLineWrap(true);
         txtaComment.setRows(5);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
