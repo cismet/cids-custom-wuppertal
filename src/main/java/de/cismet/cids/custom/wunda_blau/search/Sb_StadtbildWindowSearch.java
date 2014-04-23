@@ -68,8 +68,6 @@ import de.cismet.cids.custom.wunda_blau.search.server.MetaObjectNodesStadtbildSe
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.editors.DefaultBindableReferenceCombo;
-import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
@@ -179,8 +177,9 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         try {
             final FastBindableReferenceCombo combo = new FastBindableReferenceCombo();
             combo.setSorted(true);
+            combo.setNullable(true);
             combo.setMetaClass(strasseMC);
-            cbStrasseModel = combo.createModelForMetaClass(true);
+            cbStrasseModel = (DefaultComboBoxModel)combo.getModel();
             cboStreet.setModel(cbStrasseModel);
         } catch (Exception ex) {
             LOG.error(ex, ex);
@@ -192,8 +191,9 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         try {
             final FastBindableReferenceCombo combo = new FastBindableReferenceCombo();
             combo.setSorted(true);
+            combo.setNullable(true);
             combo.setMetaClass(ortMC);
-            cbOrtModel = combo.createModelForMetaClass(true);
+            cbOrtModel = (DefaultComboBoxModel)combo.getModel();
             cboOrt.setModel(cbOrtModel);
         } catch (Exception ex) {
             LOG.error(ex, ex);
@@ -841,7 +841,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             stadtbildSerieSearchStatement.setStreetID(strasse.getPrimaryKeyValue().toString());
         }
 
-        final CidsBean ort = (CidsBean)cboOrt.getSelectedItem();
+        CidsBean ort = null;
+        final Object selectOrt = cboOrt.getSelectedItem();
+        if (selectOrt instanceof CidsBean) {
+            ort = (CidsBean)selectOrt;
+        } else if (selectOrt instanceof LightweightMetaObject) {
+            ort = ((LightweightMetaObject)selectOrt).getBean();
+        }
+
         if (ort != null) {
             stadtbildSerieSearchStatement.setOrtID(ort.getPrimaryKeyValue().toString());
         }
