@@ -84,8 +84,9 @@ public class Sb_StadtbildTimeTabs extends javax.swing.JPanel {
     }
 
     /**
-     * a Date array with two elements representing a time span (the two dates are not null), a single day (the second
-     * date is null) or nothing (both dates are null). date[0] = from Date date[1] = till Date
+     * a Date array with two elements representing a time span (the two dates are not null, an open-ended timespan (till
+     * date or from date is null)), a single day (the second dates are the same) or nothing (both dates are null).
+     * date[0] = from Date date[1] = till Date
      *
      * @return  DOCUMENT ME!
      */
@@ -95,6 +96,7 @@ public class Sb_StadtbildTimeTabs extends javax.swing.JPanel {
         final Date[] fromDate_tillDate = new Date[] { null, null };
         if (tabDay.equals(selectedComponent)) {
             fromDate_tillDate[0] = dpDay.getDate();
+            fromDate_tillDate[1] = dpDay.getDate();
         } else if (tabYear.equals(selectedComponent)) {
             final Calendar calendar = Calendar.getInstance();
             calendar.clear();
