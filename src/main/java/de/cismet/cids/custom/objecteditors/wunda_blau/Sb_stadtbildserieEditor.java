@@ -522,7 +522,9 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         dbcOrt = new FastBindableReferenceCombo();
         lblHausnummer = new javax.swing.JLabel();
         txtHausnummer = new de.cismet.cids.editors.DefaultBindableJTextField();
-        lblGeomAus = new javax.swing.JLabel();
+        if (editable) {
+            lblGeomAus = new javax.swing.JLabel();
+        }
         if (editable) {
             btnCombineGeometries = new javax.swing.JButton();
         }
@@ -1200,20 +1202,24 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         panDetails1.add(txtHausnummer, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geom_aus}"),
-                lblGeomAus,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
+        if (editable) {
+            lblGeomAus.setText("Adresse");
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-        panDetails1.add(lblGeomAus, gridBagConstraints);
+            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                    org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                    this,
+                    org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geom_aus.abkuerzung}"),
+                    lblGeomAus,
+                    org.jdesktop.beansbinding.BeanProperty.create("text"));
+            bindingGroup.addBinding(binding);
+        }
+        if (editable) {
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 3;
+            gridBagConstraints.gridy = 2;
+            gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
+            panDetails1.add(lblGeomAus, gridBagConstraints);
+        }
 
         if (editable) {
             btnCombineGeometries.setIcon(new javax.swing.ImageIcon(
@@ -1862,6 +1868,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private void btnRemoveSuchwortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveSuchwortActionPerformed
         final Object[] selection = lstSuchworte.getSelectedValues();
         if ((selection != null) && (selection.length > 0)) {
+            final int selectedIndex = lstSuchworte.getSelectedIndex();
             final int answer = JOptionPane.showConfirmDialog(
                     StaticSwingTools.getParentFrame(this),
                     "Sollen die Suchwörter wirklich entfernt werden?",
@@ -1873,6 +1880,14 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                     final List<CidsBean> suchwoerter = cidsBean.getBeanCollectionProperty("suchwort_arr");
                     if (suchwoerter != null) {
                         suchwoerter.removeAll(removeList);
+                    }
+                    final int listSize = lstSuchworte.getModel().getSize();
+                    if (listSize > 0) {
+                        if (selectedIndex < listSize) {
+                            lstSuchworte.setSelectedIndex(selectedIndex);
+                        } else {
+                            lstSuchworte.setSelectedIndex(listSize - 1);
+                        }
                     }
                 } catch (Exception e) {
                     LOG.error(e, e);
