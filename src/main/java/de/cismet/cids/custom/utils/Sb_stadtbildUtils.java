@@ -31,9 +31,11 @@ public class Sb_stadtbildUtils {
             Sb_stadtbildUtils.class);
 
     private static final CidsBean WUPPERTAL;
+    private static final CidsBean R102;
 
     static {
         WUPPERTAL = getOrtWupertal();
+        R102 = getLagerR102();
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -45,6 +47,14 @@ public class Sb_stadtbildUtils {
      */
     public static CidsBean getWUPPERTAL() {
         return WUPPERTAL;
+    }
+    /**
+     * Get the CidsBean of the Sb_Lager with the name 'R102'. Might be null.
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static CidsBean getR102() {
+        return R102;
     }
     /**
      * DOCUMENT ME!
@@ -78,6 +88,42 @@ public class Sb_stadtbildUtils {
             }
         } catch (Exception ex) {
             LOG.error("The Location Wuppertal could not be loaded.", ex);
+        }
+        return null;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static CidsBean getLagerR102() {
+        try {
+            final MetaClass lagerClass = ClassCacheMultiple.getMetaClass(
+                    "WUNDA_BLAU",
+                    "sb_lager");
+            if (lagerClass != null) {
+                final StringBuffer r102Query = new StringBuffer("select ").append(lagerClass.getId())
+                            .append(", ")
+                            .append(lagerClass.getPrimaryKey())
+                            .append(" from ")
+                            .append(lagerClass.getTableName())
+                            .append(" where name = 'R102'");
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("SQL: r102Query:" + r102Query.toString());
+                }
+                final MetaObject[] r102;
+                try {
+                    r102 = SessionManager.getProxy().getMetaObjectByQuery(r102Query.toString(), 0);
+                    if (r102.length > 0) {
+                        return r102[0].getBean();
+                    }
+                } catch (ConnectionException ex) {
+                    LOG.error(ex, ex);
+                }
+            }
+        } catch (Exception ex) {
+            LOG.error("The storage location R102 could not be loaded.", ex);
         }
         return null;
     }

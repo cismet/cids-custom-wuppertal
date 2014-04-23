@@ -2264,6 +2264,11 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         } catch (Exception ex) {
             LOG.error(ex, ex);
         }
+        try {
+            cidsBean.setProperty("lager", Sb_stadtbildUtils.getR102());
+        } catch (Exception ex) {
+            LOG.error(ex, ex);
+        }
         dpAufnahmedatum.setDate(new Date());
         if (dbcBildtyp.getItemCount() > 0) {
             dbcBildtyp.setSelectedIndex(0);
