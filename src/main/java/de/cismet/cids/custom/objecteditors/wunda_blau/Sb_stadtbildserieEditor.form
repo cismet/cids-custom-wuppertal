@@ -851,6 +851,9 @@
                           </Constraints>
                         </Component>
                         <Component class="javax.swing.JLabel" name="lblGeomAus">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="Geom. aus"/>
+                          </Properties>
                           <BindingProperties>
                             <BindingProperty name="text" source="Form" sourcePath="${cidsBean.geom_aus.abkuerzung}" target="lblGeomAus" targetPath="text" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
@@ -1377,6 +1380,9 @@
                               </Property>
                             </BindingProperty>
                           </BindingProperties>
+                          <Events>
+                            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="chbPruefenItemStateChanged"/>
+                          </Events>
                           <AuxValues>
                             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableJCheckBox()&#xa;"/>
                           </AuxValues>
@@ -1446,9 +1452,9 @@
                                 </Constraint>
                               </Constraints>
                             </Component>
-                            <Component class="javax.swing.JLabel" name="jLabel9">
+                            <Component class="javax.swing.JLabel" name="lblPruefhinweisVon">
                               <BindingProperties>
-                                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.pruefhinweis_von}" target="jLabel9" targetPath="text" updateStrategy="0" immediately="false"/>
+                                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.pruefhinweis_von}" target="lblPruefhinweisVon" targetPath="text" updateStrategy="0" immediately="false"/>
                               </BindingProperties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

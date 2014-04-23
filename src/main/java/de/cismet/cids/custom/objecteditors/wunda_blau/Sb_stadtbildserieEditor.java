@@ -260,7 +260,6 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -290,6 +289,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private javax.swing.JLabel lblHausnummer;
     private javax.swing.JLabel lblPicture;
     private javax.swing.JLabel lblPrint;
+    private javax.swing.JLabel lblPruefhinweisVon;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JLabel lblVorschau;
     private javax.swing.JList lstBildnummern;
@@ -569,7 +569,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         btnSavePruefhinweis = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
+        lblPruefhinweisVon = new javax.swing.JLabel();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
@@ -1229,6 +1229,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         panDetails1.add(txtHausnummer, gridBagConstraints);
 
         if (editable) {
+            lblGeomAus.setText("Geom. aus");
+
             binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                     org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                     this,
@@ -1599,6 +1601,13 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         binding.setConverter(((DefaultBindableJCheckBox)chbPruefen).getConverter());
         bindingGroup.addBinding(binding);
 
+        chbPruefen.addItemListener(new java.awt.event.ItemListener() {
+
+                @Override
+                public void itemStateChanged(final java.awt.event.ItemEvent evt) {
+                    chbPruefenItemStateChanged(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 10);
@@ -1653,13 +1662,13 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.pruefhinweis_von}"),
-                jLabel9,
+                lblPruefhinweisVon,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        jPanel6.add(jLabel9, gridBagConstraints);
+        jPanel6.add(lblPruefhinweisVon, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -2007,6 +2016,18 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 JOptionPane.WARNING_MESSAGE);
         }
     } //GEN-LAST:event_btnSavePruefhinweisActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void chbPruefenItemStateChanged(final java.awt.event.ItemEvent evt) { //GEN-FIRST:event_chbPruefenItemStateChanged
+        if (!chbPruefen.isSelected()) {
+            txtaPruefhinweis.setText("");
+            lblPruefhinweisVon.setText("");
+        }
+    }                                                                             //GEN-LAST:event_chbPruefenItemStateChanged
 
     /**
      * DOCUMENT ME!
