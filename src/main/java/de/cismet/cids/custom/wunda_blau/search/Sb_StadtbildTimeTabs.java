@@ -77,8 +77,9 @@ public class Sb_StadtbildTimeTabs extends javax.swing.JPanel {
         // put the last 100 year numbers into the comboboxes
         final int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         final Integer[] years = new Integer[100];
-        for (int i = 0; i < 100; i++) {
-            years[i] = currentYear - i;
+        years[0] = null;
+        for (int i = 1; i < 100; i++) {
+            years[i] = currentYear - i + 1;
         }
         cboYear.setModel(new javax.swing.DefaultComboBoxModel<Integer>(years));
     }
@@ -92,22 +93,25 @@ public class Sb_StadtbildTimeTabs extends javax.swing.JPanel {
      */
     public Date[] chooseDates() {
         final Component selectedComponent = tabbedPane.getSelectedComponent();
-        // default value is today
+        // default value is nothing
         final Date[] fromDate_tillDate = new Date[] { null, null };
         if (tabDay.equals(selectedComponent)) {
             fromDate_tillDate[0] = dpDay.getDate();
             fromDate_tillDate[1] = dpDay.getDate();
         } else if (tabYear.equals(selectedComponent)) {
-            final Calendar calendar = Calendar.getInstance();
-            calendar.clear();
-            calendar.set(Calendar.DATE, 1);
-            calendar.set(Calendar.MONTH, Calendar.JANUARY);
-            calendar.set(Calendar.YEAR, (Integer)cboYear.getSelectedItem());
-            fromDate_tillDate[0] = calendar.getTime();
-            calendar.set(Calendar.DATE, 31);
-            calendar.set(Calendar.MONTH, Calendar.DECEMBER);
-            calendar.set(Calendar.YEAR, (Integer)cboYear.getSelectedItem());
-            fromDate_tillDate[1] = calendar.getTime();
+            final Integer selectedYear = (Integer)cboYear.getSelectedItem();
+            if (selectedYear != null) {
+                final Calendar calendar = Calendar.getInstance();
+                calendar.clear();
+                calendar.set(Calendar.DATE, 1);
+                calendar.set(Calendar.MONTH, Calendar.JANUARY);
+                calendar.set(Calendar.YEAR, selectedYear);
+                fromDate_tillDate[0] = calendar.getTime();
+                calendar.set(Calendar.DATE, 31);
+                calendar.set(Calendar.MONTH, Calendar.DECEMBER);
+                calendar.set(Calendar.YEAR, selectedYear);
+                fromDate_tillDate[1] = calendar.getTime();
+            }
         } else if (tabFrom.equals(selectedComponent)) {
             fromDate_tillDate[0] = dpFrom.getDate();
         } else if (tabTo.equals(selectedComponent)) {
