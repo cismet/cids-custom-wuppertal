@@ -393,7 +393,7 @@
                           </Properties>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                              <GridBagConstraints gridX="0" gridY="5" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="10" insetsRight="10" anchor="18" weightX="0.0" weightY="0.0"/>
+                              <GridBagConstraints gridX="0" gridY="6" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="10" insetsRight="10" anchor="18" weightX="0.0" weightY="0.0"/>
                             </Constraint>
                           </Constraints>
                         </Component>
@@ -497,6 +497,7 @@
                           <AuxValues>
                             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo()"/>
                             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((FastBindableReferenceCombo)dbcBildtyp).setSorted(true);"/>
+                            <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="((FastBindableReferenceCombo)dbcBildtyp).setNullable(false);"/>
                           </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -527,7 +528,7 @@
                           </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                              <GridBagConstraints gridX="1" gridY="5" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="10" insetsRight="10" anchor="10" weightX="1.0" weightY="1.0"/>
+                              <GridBagConstraints gridX="1" gridY="6" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="10" insetsRight="10" anchor="23" weightX="1.0" weightY="1.0"/>
                             </Constraint>
                           </Constraints>
 
@@ -536,6 +537,7 @@
                             <Component class="javax.swing.JTextArea" name="txtaComment">
                               <Properties>
                                 <Property name="columns" type="int" value="20"/>
+                                <Property name="lineWrap" type="boolean" value="true"/>
                                 <Property name="rows" type="int" value="5"/>
                               </Properties>
                               <BindingProperties>
@@ -555,6 +557,28 @@
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                               <GridBagConstraints gridX="1" gridY="2" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="10" weightX="1.0" weightY="0.0"/>
+                            </Constraint>
+                          </Constraints>
+                        </Component>
+                        <Component class="javax.swing.JCheckBox" name="chbIntern">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="Nur f&#xfc;r den internen Gebrauch"/>
+                          </Properties>
+                          <BindingProperties>
+                            <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.interner_gebrauch}" target="chbIntern" targetPath="selected" updateStrategy="0" immediately="false">
+                              <Property name="nullValue" type="boolean" value="false"/>
+                              <Property name="incompletePathValue" type="boolean" value="false"/>
+                              <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                <Connection code="((DefaultBindableJCheckBox)chbIntern).getConverter()" type="code"/>
+                              </Property>
+                            </BindingProperty>
+                          </BindingProperties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableJCheckBox()&#xa;"/>
+                          </AuxValues>
+                          <Constraints>
+                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                              <GridBagConstraints gridX="1" gridY="5" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="23" weightX="0.0" weightY="0.0"/>
                             </Constraint>
                           </Constraints>
                         </Component>
@@ -616,7 +640,7 @@
                           </Properties>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                              <GridBagConstraints gridX="0" gridY="2" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="17" weightX="0.0" weightY="0.0"/>
+                              <GridBagConstraints gridX="0" gridY="3" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="17" weightX="0.0" weightY="0.0"/>
                             </Constraint>
                           </Constraints>
                         </Component>
@@ -626,7 +650,7 @@
                           </Properties>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                              <GridBagConstraints gridX="0" gridY="1" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="17" weightX="0.0" weightY="0.0"/>
+                              <GridBagConstraints gridX="0" gridY="2" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="17" weightX="0.0" weightY="0.0"/>
                             </Constraint>
                           </Constraints>
                         </Component>
@@ -636,7 +660,7 @@
                           </Properties>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                              <GridBagConstraints gridX="0" gridY="0" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="17" weightX="0.0" weightY="0.0"/>
+                              <GridBagConstraints gridX="0" gridY="1" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="17" weightX="0.0" weightY="0.0"/>
                             </Constraint>
                           </Constraints>
                         </Component>
@@ -653,7 +677,7 @@
                           </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                              <GridBagConstraints gridX="1" gridY="0" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="17" weightX="1.0" weightY="0.0"/>
+                              <GridBagConstraints gridX="1" gridY="1" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="17" weightX="1.0" weightY="0.0"/>
                             </Constraint>
                           </Constraints>
                         </Component>
@@ -670,7 +694,7 @@
                           </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                              <GridBagConstraints gridX="1" gridY="1" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="17" weightX="1.0" weightY="0.0"/>
+                              <GridBagConstraints gridX="1" gridY="2" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="17" weightX="1.0" weightY="0.0"/>
                             </Constraint>
                           </Constraints>
                         </Component>
@@ -687,7 +711,7 @@
                           </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                              <GridBagConstraints gridX="1" gridY="2" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="17" weightX="1.0" weightY="0.0"/>
+                              <GridBagConstraints gridX="1" gridY="3" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="17" weightX="1.0" weightY="0.0"/>
                             </Constraint>
                           </Constraints>
                         </Component>
@@ -747,6 +771,14 @@
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Geometrie:"/>
                           </Properties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
+                            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(editable) {"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(editable) {"/>
+                            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
+                            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(editable) {"/>
+                          </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                               <GridBagConstraints gridX="0" gridY="2" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="17" weightX="0.0" weightY="0.0"/>
@@ -780,6 +812,9 @@
                           <BindingProperties>
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.ort}" target="dbcOrt" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
+                          <Events>
+                            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="dbcOrtItemStateChanged"/>
+                          </Events>
                           <AuxValues>
                             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo()"/>
                             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((FastBindableReferenceCombo)dbcOrt).setSorted(true);"/>
@@ -790,7 +825,7 @@
                             </Constraint>
                           </Constraints>
                         </Component>
-                        <Component class="javax.swing.JLabel" name="jLabel7">
+                        <Component class="javax.swing.JLabel" name="lblHausnummer">
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Hs.-Nr.:"/>
                           </Properties>
@@ -817,11 +852,19 @@
                         </Component>
                         <Component class="javax.swing.JLabel" name="lblGeomAus">
                           <BindingProperties>
-                            <BindingProperty name="text" source="Form" sourcePath="${cidsBean.geom_aus}" target="lblGeomAus" targetPath="text" updateStrategy="0" immediately="false"/>
+                            <BindingProperty name="text" source="Form" sourcePath="${cidsBean.geom_aus.abkuerzung}" target="lblGeomAus" targetPath="text" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
+                            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(editable) {"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(editable) {"/>
+                            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
+                            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(editable) {"/>
+                          </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                              <GridBagConstraints gridX="3" gridY="2" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="10" weightX="0.0" weightY="0.0"/>
+                              <GridBagConstraints gridX="3" gridY="2" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="10" weightX="0.0" weightY="0.0"/>
                             </Constraint>
                           </Constraints>
                         </Component>
@@ -839,6 +882,14 @@
                             <Property name="enabled" type="boolean" value="false"/>
                             <Property name="focusPainted" type="boolean" value="false"/>
                           </Properties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
+                            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(editable) {"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(editable) {"/>
+                            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
+                            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(editable) {"/>
+                          </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                               <GridBagConstraints gridX="2" gridY="2" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="23" weightX="0.0" weightY="0.0"/>
@@ -853,6 +904,14 @@
                               </Property>
                             </BindingProperty>
                           </BindingProperties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
+                            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(editable) {"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(editable) {"/>
+                            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
+                            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(editable) {"/>
+                          </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                               <GridBagConstraints gridX="1" gridY="2" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="5" insetsRight="10" anchor="10" weightX="1.0" weightY="0.0"/>
@@ -1260,7 +1319,7 @@
                 <Container class="de.cismet.tools.gui.RoundedPanel" name="roundedPanel6">
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                      <GridBagConstraints gridX="0" gridY="2" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="10" weightX="1.0" weightY="1.0"/>
+                      <GridBagConstraints gridX="0" gridY="2" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="10" weightX="1.0" weightY="0.0"/>
                     </Constraint>
                   </Constraints>
 
@@ -1312,6 +1371,7 @@
                           <BindingProperties>
                             <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.pruefen}" target="chbPruefen" targetPath="selected" updateStrategy="0" immediately="false">
                               <Property name="nullValue" type="boolean" value="false"/>
+                              <Property name="incompletePathValue" type="boolean" value="false"/>
                               <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                                 <Connection code="((DefaultBindableJCheckBox)chbPruefen).getConverter()" type="code"/>
                               </Property>
@@ -1338,23 +1398,26 @@
 
                           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                           <SubComponents>
-                            <Component class="javax.swing.JTextArea" name="jTextArea2">
+                            <Component class="javax.swing.JTextArea" name="txtaPruefhinweis">
                               <Properties>
                                 <Property name="columns" type="int" value="20"/>
                                 <Property name="lineWrap" type="boolean" value="true"/>
                                 <Property name="rows" type="int" value="5"/>
                               </Properties>
                               <BindingProperties>
-                                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.pruefen_kommentar}" target="jTextArea2" targetPath="text" updateStrategy="0" immediately="false"/>
+                                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.pruefen_kommentar}" target="txtaPruefhinweis" targetPath="text" updateStrategy="0" immediately="false"/>
                               </BindingProperties>
                             </Component>
                           </SubComponents>
                         </Container>
-                        <Component class="javax.swing.JButton" name="jButton1">
+                        <Component class="javax.swing.JButton" name="btnSavePruefhinweis">
                           <Properties>
                             <Property name="text" type="java.lang.String" value="Pr&#xfc;fhinweis speichern"/>
                             <Property name="enabled" type="boolean" value="false"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSavePruefhinweisActionPerformed"/>
+                          </Events>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                               <GridBagConstraints gridX="1" gridY="2" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="10" insetsRight="10" anchor="22" weightX="0.0" weightY="0.0"/>
@@ -1379,7 +1442,7 @@
                               </Properties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                                  <GridBagConstraints gridX="-1" gridY="-1" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
+                                  <GridBagConstraints gridX="-1" gridY="-1" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="5" anchor="10" weightX="0.0" weightY="0.0"/>
                                 </Constraint>
                               </Constraints>
                             </Component>

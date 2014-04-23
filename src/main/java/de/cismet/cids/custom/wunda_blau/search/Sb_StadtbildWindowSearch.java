@@ -18,8 +18,8 @@ import Sirius.navigator.search.CidsSearchExecutor;
 import Sirius.navigator.search.dynamic.SearchControlListener;
 import Sirius.navigator.search.dynamic.SearchControlPanel;
 
+import Sirius.server.middleware.types.LightweightMetaObject;
 import Sirius.server.middleware.types.MetaClass;
-import Sirius.server.middleware.types.MetaObject;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -46,6 +46,7 @@ import java.util.Date;
 import java.util.regex.Pattern;
 
 import javax.swing.Box;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -62,11 +63,11 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.Sb_stadtbildserieEditor;
 import de.cismet.cids.custom.objecteditors.wunda_blau.Sb_stadtbildserieEditorAddSuchwortDialog;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 import de.cismet.cids.custom.wunda_blau.search.server.MetaObjectNodesStadtbildSerieSearchStatement;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
@@ -101,7 +102,6 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             Sb_StadtbildWindowSearch.class);
     private static final String ACTION_TAG = "custom.stadtbilder.search@WUNDA_BLAU";
-    private static CidsBean WUPPERTAL;
     private static final Pattern SIX_DIGIT_INTEGER_PATTERN = Pattern.compile("\\d{6}");
 
     //~ Instance fields --------------------------------------------------------
@@ -111,7 +111,6 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     private MappingComponent mappingComponent;
     private ImageIcon icon;
     private boolean geoSearchEnabled;
-    private CidsBean cidsBean;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSuchwort;
@@ -148,7 +147,6 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     private javax.swing.JTextField txtHausnummer;
     private javax.swing.JTextField txtImageNrFrom;
     private javax.swing.JTextField txtImageNrTo;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -173,6 +171,34 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 new Double(pre.getWidth() + 6).intValue(),
                 new Double(pre.getHeight() + 5).intValue()));
         pnlButtons.add(pnlSearchCancel);
+
+        final MetaClass strasseMC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "STRASSE");
+        final DefaultComboBoxModel cbStrasseModel;
+        try {
+            final FastBindableReferenceCombo combo = new FastBindableReferenceCombo();
+            combo.setSorted(true);
+            combo.setNullable(true);
+            combo.setMetaClass(strasseMC);
+            cbStrasseModel = (DefaultComboBoxModel)combo.getModel();
+            cboStreet.setModel(cbStrasseModel);
+        } catch (Exception ex) {
+            LOG.error(ex, ex);
+        }
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cboStreet);
+
+        final MetaClass ortMC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "SB_ORT");
+        final DefaultComboBoxModel cbOrtModel;
+        try {
+            final FastBindableReferenceCombo combo = new FastBindableReferenceCombo();
+            combo.setSorted(true);
+            combo.setNullable(true);
+            combo.setMetaClass(ortMC);
+            cbOrtModel = (DefaultComboBoxModel)combo.getModel();
+            cboOrt.setModel(cbOrtModel);
+        } catch (Exception ex) {
+            LOG.error(ex, ex);
+        }
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cboOrt);
 
         metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "sb_stadtbildserie"); // NOI18N
 
@@ -216,22 +242,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             pnlButtons.add(btnGeoSearch);
         }
 
-        bindingGroup.unbind();
-
-        try {
-            cidsBean = CidsBeanSupport.createNewCidsBeanFromTableName("sb_stadtbildserie");
-            DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
-                bindingGroup,
-                cidsBean);
-        } catch (Exception ex) {
-            LOG.error(ex, ex);
-        }
-        bindingGroup.bind();
-
-        if (WUPPERTAL == null) {
-            WUPPERTAL = getOrtWupertal();
-        }
-        cboOrt.setSelectedItem(WUPPERTAL);
+        cboOrt.setSelectedItem(Sb_stadtbildUtils.getWUPPERTAL());
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -244,7 +255,6 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
-        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         jScrollPane1 = new javax.swing.JScrollPane();
         pnlScrollPane = new javax.swing.JPanel();
@@ -274,9 +284,9 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         sb_StadtbilderTimeTabs = new de.cismet.cids.custom.wunda_blau.search.Sb_StadtbildTimeTabs();
         pnlStrassenzuordnung = new javax.swing.JPanel();
         lblStrasse = new javax.swing.JLabel();
-        cboStreet = new FastBindableReferenceCombo();
+        cboStreet = new javax.swing.JComboBox();
         lblOrtsname = new javax.swing.JLabel();
-        cboOrt = new FastBindableReferenceCombo();
+        cboOrt = new javax.swing.JComboBox();
         lblHausnummer = new javax.swing.JLabel();
         txtHausnummer = new javax.swing.JTextField();
         pnlFooter = new javax.swing.JPanel();
@@ -534,17 +544,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlStrassenzuordnung.add(lblStrasse, gridBagConstraints);
 
-        ((FastBindableReferenceCombo)cboStreet).setSorted(true);
         cboStreet.setEditable(true);
-
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_ONCE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.strasse}"),
-                cboStreet,
-                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -553,7 +553,6 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
         pnlStrassenzuordnung.add(cboStreet, gridBagConstraints);
-        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cboStreet);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblOrtsname,
@@ -567,17 +566,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlStrassenzuordnung.add(lblOrtsname, gridBagConstraints);
 
-        ((FastBindableReferenceCombo)cboOrt).setSorted(true);
         cboOrt.setEditable(true);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_ONCE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ort}"),
-                cboOrt,
-                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
-        bindingGroup.addBinding(binding);
-
         cboOrt.addItemListener(new java.awt.event.ItemListener() {
 
                 @Override
@@ -593,7 +582,6 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
         pnlStrassenzuordnung.add(cboOrt, gridBagConstraints);
-        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cboOrt);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblHausnummer,
@@ -681,8 +669,6 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         jScrollPane1.setViewportView(pnlScrollPane);
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
-
-        bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
 
     /**
@@ -719,9 +705,19 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         final DefaultListModel dlm = (DefaultListModel)lstSuchworte.getModel();
 
         if (this.lstSuchworte.getSelectedIndices().length > 0) {
+            final int selectedIndex = lstSuchworte.getSelectedIndex();
             final int[] selectedIndices = lstSuchworte.getSelectedIndices();
             for (int i = selectedIndices.length - 1; i >= 0; i--) {
                 dlm.removeElementAt(((JXList)lstSuchworte).convertIndexToModel(selectedIndices[i]));
+            }
+
+            final int listSize = lstSuchworte.getModel().getSize();
+            if (listSize > 0) {
+                if (selectedIndex < listSize) {
+                    lstSuchworte.setSelectedIndex(selectedIndex);
+                } else {
+                    lstSuchworte.setSelectedIndex(listSize - 1);
+                }
             }
         }
     } //GEN-LAST:event_btnRemoveSuchwortActionPerformed
@@ -732,8 +728,12 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
      * @param  evt  DOCUMENT ME!
      */
     private void cboOrtItemStateChanged(final java.awt.event.ItemEvent evt) { //GEN-FIRST:event_cboOrtItemStateChanged
-        final Object selectedItem = cboOrt.getSelectedItem();
-        if (selectedItem.equals(WUPPERTAL)) {
+        Object selectedItem = cboOrt.getSelectedItem();
+        if (selectedItem instanceof LightweightMetaObject) {
+            selectedItem = ((LightweightMetaObject)selectedItem).getBean();
+        }
+
+        if ((selectedItem != null) && selectedItem.equals(Sb_stadtbildUtils.getWUPPERTAL())) {
             // inside of Wuppertal
             cboStreet.setEnabled(true);
             lblStrasse.setEnabled(true);
@@ -840,12 +840,25 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         stadtbildSerieSearchStatement.setFrom(fromDate_tillDate[0]);
         stadtbildSerieSearchStatement.setTill(fromDate_tillDate[1]);
 
-        final CidsBean strasse = (CidsBean)cboStreet.getSelectedItem();
+        CidsBean strasse = null;
+        final Object selectedStreet = cboStreet.getSelectedItem();
+        if (selectedStreet instanceof CidsBean) {
+            strasse = (CidsBean)selectedStreet;
+        } else if (selectedStreet instanceof LightweightMetaObject) {
+            strasse = ((LightweightMetaObject)selectedStreet).getBean();
+        }
         if (strasse != null) {
             stadtbildSerieSearchStatement.setStreetID(strasse.getPrimaryKeyValue().toString());
         }
 
-        final CidsBean ort = (CidsBean)cboOrt.getSelectedItem();
+        CidsBean ort = null;
+        final Object selectOrt = cboOrt.getSelectedItem();
+        if (selectOrt instanceof CidsBean) {
+            ort = (CidsBean)selectOrt;
+        } else if (selectOrt instanceof LightweightMetaObject) {
+            ort = ((LightweightMetaObject)selectOrt).getBean();
+        }
+
         if (ort != null) {
             stadtbildSerieSearchStatement.setOrtID(ort.getPrimaryKeyValue().toString());
         }
@@ -962,42 +975,6 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 CidsSearchExecutor.searchAndDisplayResultsWithDialog(search);
             }
         }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private static CidsBean getOrtWupertal() {
-        try {
-            final MetaClass ortClass = ClassCacheMultiple.getMetaClass(
-                    "WUNDA_BLAU",
-                    "sb_ort");
-            if (ortClass != null) {
-                final StringBuffer wuppertalQuery = new StringBuffer("select ").append(ortClass.getId())
-                            .append(", ")
-                            .append(ortClass.getPrimaryKey())
-                            .append(" from ")
-                            .append(ortClass.getTableName())
-                            .append(" where name ilike 'Wuppertal'");
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("SQL: wuppertalQuery:" + wuppertalQuery.toString());
-                }
-                final MetaObject[] wuppertal;
-                try {
-                    wuppertal = SessionManager.getProxy().getMetaObjectByQuery(wuppertalQuery.toString(), 0);
-                    if (wuppertal.length > 0) {
-                        return wuppertal[0].getBean();
-                    }
-                } catch (ConnectionException ex) {
-                    LOG.error(ex, ex);
-                }
-            }
-        } catch (Exception ex) {
-            LOG.error("The Location Wuppertal could not be loaded.", ex);
-        }
-        return null;
     }
 
     //~ Inner Classes ----------------------------------------------------------
