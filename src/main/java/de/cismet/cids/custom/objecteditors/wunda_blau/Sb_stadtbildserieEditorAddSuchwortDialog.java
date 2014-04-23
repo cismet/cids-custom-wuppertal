@@ -187,7 +187,12 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
      * @param  evt  DOCUMENT ME!
      */
     private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOkActionPerformed
-        beanToReturn = (CidsBean)cbSuchwort.getSelectedItem();
+        final Object selectedItem = cbSuchwort.getSelectedItem();
+        if (selectedItem instanceof CidsBean) {
+            beanToReturn = (CidsBean)selectedItem;
+        } else {
+            beanToReturn = null;
+        }
         setVisible(false);
         dispose();
     }                                                                         //GEN-LAST:event_btnOkActionPerformed
