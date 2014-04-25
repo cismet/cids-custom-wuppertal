@@ -346,6 +346,20 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     public Sb_stadtbildserieEditor(final boolean editable) {
         this.editable = editable;
         initComponents();
+        final java.awt.GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
+        if (!editable) { // renderer
+            gridBagConstraints.gridx = 2;
+            gridBagConstraints.gridy = 1;
+            gridBagConstraints.gridwidth = 2;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        } else {
+            gridBagConstraints.gridx = 3;
+            gridBagConstraints.gridy = 2;
+        }
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
+        panDetails1.add(lblGeomAus, gridBagConstraints);
+
         makeEditable();
         jScrollPane5.getViewport().setOpaque(false);
         title = "";
@@ -480,6 +494,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         jPanel5 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         lblEintragungsdatum = new javax.swing.JLabel();
+        lblGeomAus = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
         jPanel3 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -531,9 +546,6 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         dbcOrt = new FastBindableReferenceCombo();
         lblHausnummer = new javax.swing.JLabel();
         txtHausnummer = new de.cismet.cids.editors.DefaultBindableJTextField();
-        if (editable) {
-            lblGeomAus = new javax.swing.JLabel();
-        }
         if (editable) {
             btnCombineGeometries = new javax.swing.JButton();
         }
@@ -649,6 +661,21 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         jPanel5.add(lblEintragungsdatum, gridBagConstraints);
 
         panFooter.add(jPanel5, java.awt.BorderLayout.LINE_START);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geom_aus.abkuerzung}"),
+                lblGeomAus,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geom_aus.comment}"),
+                lblGeomAus,
+                org.jdesktop.beansbinding.BeanProperty.create("toolTipText"));
+        bindingGroup.addBinding(binding);
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
@@ -939,6 +966,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         txtaComment.setColumns(20);
         txtaComment.setLineWrap(true);
         txtaComment.setRows(5);
+        txtaComment.setWrapStyleWord(true);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -1214,6 +1242,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         panDetails1.add(lblHausnummer, gridBagConstraints);
 
@@ -1233,23 +1262,6 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         panDetails1.add(txtHausnummer, gridBagConstraints);
-
-        if (editable) {
-            binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                    org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                    this,
-                    org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geom_aus.abkuerzung}"),
-                    lblGeomAus,
-                    org.jdesktop.beansbinding.BeanProperty.create("text"));
-            bindingGroup.addBinding(binding);
-        }
-        if (editable) {
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 3;
-            gridBagConstraints.gridy = 2;
-            gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-            panDetails1.add(lblGeomAus, gridBagConstraints);
-        }
 
         if (editable) {
             btnCombineGeometries.setIcon(new javax.swing.ImageIcon(
@@ -1621,6 +1633,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         txtaPruefhinweis.setColumns(20);
         txtaPruefhinweis.setLineWrap(true);
         txtaPruefhinweis.setRows(5);
+        txtaPruefhinweis.setWrapStyleWord(true);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
