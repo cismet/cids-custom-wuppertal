@@ -172,33 +172,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 new Double(pre.getHeight() + 5).intValue()));
         pnlButtons.add(pnlSearchCancel);
 
-        final MetaClass strasseMC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "STRASSE");
-        final DefaultComboBoxModel cbStrasseModel;
-        try {
-            final FastBindableReferenceCombo combo = new FastBindableReferenceCombo();
-            combo.setSorted(true);
-            combo.setNullable(true);
-            combo.setMetaClass(strasseMC);
-            cbStrasseModel = (DefaultComboBoxModel)combo.getModel();
-            cboStreet.setModel(cbStrasseModel);
-        } catch (Exception ex) {
-            LOG.error(ex, ex);
-        }
-        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cboStreet);
-
-        final MetaClass ortMC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "SB_ORT");
-        final DefaultComboBoxModel cbOrtModel;
-        try {
-            final FastBindableReferenceCombo combo = new FastBindableReferenceCombo();
-            combo.setSorted(true);
-            combo.setNullable(true);
-            combo.setMetaClass(ortMC);
-            cbOrtModel = (DefaultComboBoxModel)combo.getModel();
-            cboOrt.setModel(cbOrtModel);
-        } catch (Exception ex) {
-            LOG.error(ex, ex);
-        }
-        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cboOrt);
+        setModelForComboBoxes();
 
         metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "sb_stadtbildserie"); // NOI18N
 
@@ -767,6 +741,39 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void setModelForComboBoxes() {
+        final MetaClass strasseMC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "STRASSE");
+        final DefaultComboBoxModel cbStrasseModel;
+        try {
+            final FastBindableReferenceCombo combo = new FastBindableReferenceCombo();
+            combo.setSorted(true);
+            combo.setNullable(true);
+            combo.setMetaClass(strasseMC);
+            cbStrasseModel = (DefaultComboBoxModel)combo.getModel();
+            cboStreet.setModel(cbStrasseModel);
+        } catch (Exception ex) {
+            LOG.error(ex, ex);
+        }
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cboStreet);
+
+        final MetaClass ortMC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "SB_ORT");
+        final DefaultComboBoxModel cbOrtModel;
+        try {
+            final FastBindableReferenceCombo combo = new FastBindableReferenceCombo();
+            combo.setSorted(true);
+            combo.setNullable(true);
+            combo.setMetaClass(ortMC);
+            cbOrtModel = (DefaultComboBoxModel)combo.getModel();
+            cboOrt.setModel(cbOrtModel);
+        } catch (Exception ex) {
+            LOG.error(ex, ex);
+        }
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cboOrt);
     }
 
     /**
