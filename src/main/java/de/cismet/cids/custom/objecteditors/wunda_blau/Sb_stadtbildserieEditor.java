@@ -9,12 +9,10 @@ package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
-import Sirius.navigator.types.treenode.DefaultMetaTreeNode;
 import Sirius.navigator.types.treenode.RootTreeNode;
 import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.MetaObject;
-import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -56,7 +54,6 @@ import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -77,9 +74,7 @@ import javax.swing.SwingWorker;
 import javax.swing.Timer;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
@@ -1963,20 +1958,22 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
      */
     private void dbcOrtItemStateChanged(final java.awt.event.ItemEvent evt) { //GEN-FIRST:event_dbcOrtItemStateChanged
         final Object selectedItem = dbcOrt.getSelectedItem();
-        if ((selectedItem != null) && selectedItem.equals(Sb_stadtbildUtils.getWUPPERTAL())) {
-            // inside of Wuppertal
-            bcbStrasse.setEnabled(true);
-            lblDescStrasse.setEnabled(true);
-            txtHausnummer.setEnabled(true);
-            lblHausnummer.setEnabled(true);
-        } else {
-            // outside of Wuppertal
-            bcbStrasse.setEnabled(false);
-            bcbStrasse.setSelectedItem(null);
-            lblDescStrasse.setEnabled(false);
-            txtHausnummer.setEnabled(false);
-            txtHausnummer.setText("");
-            lblHausnummer.setEnabled(false);
+        if (editable) {
+            if ((selectedItem != null) && selectedItem.equals(Sb_stadtbildUtils.getWUPPERTAL())) {
+                // inside of Wuppertal
+                bcbStrasse.setEnabled(true);
+                lblDescStrasse.setEnabled(true);
+                txtHausnummer.setEnabled(true);
+                lblHausnummer.setEnabled(true);
+            } else {
+                // outside of Wuppertal
+                bcbStrasse.setEnabled(false);
+                bcbStrasse.setSelectedItem(null);
+                lblDescStrasse.setEnabled(false);
+                txtHausnummer.setEnabled(false);
+                txtHausnummer.setText("");
+                lblHausnummer.setEnabled(false);
+            }
         }
     } //GEN-LAST:event_dbcOrtItemStateChanged
 
