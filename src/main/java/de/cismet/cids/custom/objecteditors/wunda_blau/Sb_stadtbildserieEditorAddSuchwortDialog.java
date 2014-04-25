@@ -8,17 +8,10 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.server.middleware.types.LightweightMetaObject;
-import Sirius.server.middleware.types.MetaClass;
-
-import javax.swing.DefaultComboBoxModel;
 
 import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
-
-import de.cismet.cids.editors.DefaultBindableReferenceCombo;
-
-import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.tools.gui.StaticSwingTools;
 

@@ -46,7 +46,6 @@ import java.util.Date;
 import java.util.regex.Pattern;
 
 import javax.swing.Box;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;

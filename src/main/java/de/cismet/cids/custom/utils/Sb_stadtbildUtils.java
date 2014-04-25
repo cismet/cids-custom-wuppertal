@@ -136,10 +136,10 @@ public class Sb_stadtbildUtils {
     }
 
     /**
-     * Fills the model of combobox with the LightweightMetaObjects for all elements of a certain cids-class.
-     * The method creates a temporary FastBindableReferenceCombo and set its MetaClass to the class given as argument.
-     * Then the model of the FastBindableReferenceCombo is set as the model of the combobox.
-     * Finally the combobox is decorated with the AutoCompleteDecorator.
+     * Fills the model of combobox with the LightweightMetaObjects for all elements of a certain cids-class. The method
+     * creates a temporary FastBindableReferenceCombo and set its MetaClass to the class given as argument. Then the
+     * model of the FastBindableReferenceCombo is set as the model of the combobox. Finally the combobox is decorated
+     * with the AutoCompleteDecorator.
      *
      * @param  combobox   The model of that combobox will be replaced
      * @param  className  the cids class name. The elements of this class will be fetched.
