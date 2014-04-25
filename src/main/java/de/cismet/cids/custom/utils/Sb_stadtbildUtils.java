@@ -136,10 +136,13 @@ public class Sb_stadtbildUtils {
     }
 
     /**
-     * DOCUMENT ME!
+     * Fills the model of combobox with the LightweightMetaObjects for all elements of a certain cids-class.
+     * The method creates a temporary FastBindableReferenceCombo and set its MetaClass to the class given as argument.
+     * Then the model of the FastBindableReferenceCombo is set as the model of the combobox.
+     * Finally the combobox is decorated with the AutoCompleteDecorator.
      *
-     * @param  combobox   DOCUMENT ME!
-     * @param  className  DOCUMENT ME!
+     * @param  combobox   The model of that combobox will be replaced
+     * @param  className  the cids class name. The elements of this class will be fetched.
      */
     public static void setModelForComboBoxesAndDecorateIt(final JComboBox combobox, final String className) {
         final MetaClass metaClass = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", className);
