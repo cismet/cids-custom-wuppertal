@@ -67,6 +67,7 @@ import java.util.logging.Level;
 import javax.imageio.ImageIO;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -163,6 +164,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     //~ Instance fields --------------------------------------------------------
 
     private CidsBean cidsBean;
+    private boolean internalUsage = false;
     private String title;
     private final Converter<Timestamp, Date> timeStampConverter = new Converter<Timestamp, Date>() {
 
@@ -544,7 +546,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         jPanel4 = new javax.swing.JPanel();
         lblPicture = new javax.swing.JLabel();
         pnlCtrlBtn = new javax.swing.JPanel();
-        btnDownloadHighResImage = new javax.swing.JButton();
+        btnDownloadHighResImage = new EnableOnlyIfNotInternalUsageJButton();
         btnPrevImg = new javax.swing.JButton();
         btnNextImg = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
@@ -1229,8 +1231,6 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         panDetails1.add(txtHausnummer, gridBagConstraints);
 
         if (editable) {
-            lblGeomAus.setText("Geom. aus");
-
             binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                     org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                     this,
@@ -2085,6 +2085,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             if (chbPruefen.isSelected() && !editable) {
                 chbPruefen.setEnabled(false);
             }
+
+            internalUsage = (Boolean)cidsBean.getProperty("interner_gebrauch");
         }
     }
 
@@ -2538,7 +2540,11 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
          */
         @Override
         protected Boolean doInBackground() throws Exception {
-            return TifferDownload.getFormatOfHighResPicture(imageNumber) != null;
+            if (internalUsage) {
+                return false;
+            } else {
+                return TifferDownload.getFormatOfHighResPicture(imageNumber) != null;
+            }
         }
 
         /**
@@ -2645,6 +2651,21 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 selectedValues[i] = getElementAt(selectedIndexes[i]);
             }
             return selectedValues;
+        }
+    }
+
+    /**
+     * A JButton which gets only enabled if the internal usage is false.
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class EnableOnlyIfNotInternalUsageJButton extends JButton {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void setEnabled(final boolean enable) {
+            super.setEnabled(enable && !internalUsage);
         }
     }
 }
