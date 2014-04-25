@@ -1395,6 +1395,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         btnDownloadHighResImage.setBorder(null);
         btnDownloadHighResImage.setBorderPainted(false);
         btnDownloadHighResImage.setContentAreaFilled(false);
+        btnDownloadHighResImage.setEnabled(false);
         btnDownloadHighResImage.setFocusPainted(false);
         btnDownloadHighResImage.setMaximumSize(new java.awt.Dimension(30, 30));
         btnDownloadHighResImage.setMinimumSize(new java.awt.Dimension(30, 30));
@@ -2063,6 +2064,10 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 bindingGroup,
                 this.cidsBean);
             initMap();
+
+            final boolean internalUsage = Boolean.TRUE.equals((Boolean)cidsBean.getProperty("interner_gebrauch"));
+            rendererAndInternalUsage = !editable && internalUsage;
+
             bindingGroup.bind();
             if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW) {
                 setDefaultValuesForNewCidsBean();
@@ -2085,9 +2090,6 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             if (chbPruefen.isSelected() && !editable) {
                 chbPruefen.setEnabled(false);
             }
-
-            final boolean internalUsage = (Boolean)cidsBean.getProperty("interner_gebrauch");
-            rendererAndInternalUsage = !editable && internalUsage;
         }
     }
 
@@ -2224,6 +2226,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         lblPicture.setIcon(ERROR_ICON);
         lblPicture.setText("Fehler beim Übertragen des Bildes!");
         lblPicture.setToolTipText(tooltip);
+        showWait(false);
     }
 
     /**
@@ -2233,6 +2236,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         lblPicture.setIcon(ERROR_ICON);
         lblPicture.setText("Bild ist nicht zur Publikation freigegeben!");
         lblPicture.setToolTipText("");
+        showWait(false);
     }
 
     /**
@@ -2502,6 +2506,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                     IMAGE_CACHE.put(bildnummer, new SoftReference<BufferedImage>(image));
                     resizeListenerEnabled = true;
                     timer.restart();
+                    showWait(false);
                 } else {
                     indicateError("Bild konnte nicht geladen werden.");
                 }
@@ -2512,10 +2517,6 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 image = null;
                 LOG.error(ex, ex);
                 indicateError(ex.getMessage());
-            } finally {
-                if (image == null) {
-                    showWait(false);
-                }
             }
         }
     }
