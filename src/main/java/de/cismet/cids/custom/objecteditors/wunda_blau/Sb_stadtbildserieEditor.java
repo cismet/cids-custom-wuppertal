@@ -164,7 +164,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     //~ Instance fields --------------------------------------------------------
 
     private CidsBean cidsBean;
-    private boolean internalUsage = false;
+    private boolean rendererAndInternalUsage = true;
     private String title;
     private final Converter<Timestamp, Date> timeStampConverter = new Converter<Timestamp, Date>() {
 
@@ -546,7 +546,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         jPanel4 = new javax.swing.JPanel();
         lblPicture = new javax.swing.JLabel();
         pnlCtrlBtn = new javax.swing.JPanel();
-        btnDownloadHighResImage = new EnableOnlyIfNotInternalUsageJButton();
+        btnDownloadHighResImage = new EnableOnlyIfNotInternalUsageAndNotRendererJButton();
         btnPrevImg = new javax.swing.JButton();
         btnNextImg = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
@@ -2086,7 +2086,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 chbPruefen.setEnabled(false);
             }
 
-            internalUsage = (Boolean)cidsBean.getProperty("interner_gebrauch");
+            final boolean internalUsage = (Boolean)cidsBean.getProperty("interner_gebrauch");
+            rendererAndInternalUsage = !editable && internalUsage;
         }
     }
 
@@ -2540,7 +2541,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
          */
         @Override
         protected Boolean doInBackground() throws Exception {
-            if (internalUsage) {
+            if (rendererAndInternalUsage) {
                 return false;
             } else {
                 return TifferDownload.getFormatOfHighResPicture(imageNumber) != null;
@@ -2655,17 +2656,18 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     }
 
     /**
-     * A JButton which gets only enabled if the internal usage is false.
+     * A JButton which gets only enabled if the shown Stadtbildserie is not in the renderer and not for internal usage
+     * only.
      *
      * @version  $Revision$, $Date$
      */
-    private class EnableOnlyIfNotInternalUsageJButton extends JButton {
+    private class EnableOnlyIfNotInternalUsageAndNotRendererJButton extends JButton {
 
         //~ Methods ------------------------------------------------------------
 
         @Override
         public void setEnabled(final boolean enable) {
-            super.setEnabled(enable && !internalUsage);
+            super.setEnabled(enable && !rendererAndInternalUsage);
         }
     }
 }
