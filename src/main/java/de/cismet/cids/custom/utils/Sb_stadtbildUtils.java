@@ -13,9 +13,16 @@ import Sirius.navigator.exception.ConnectionException;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.editors.FastBindableReferenceCombo;
+
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -126,5 +133,27 @@ public class Sb_stadtbildUtils {
             LOG.error("The storage location R102 could not be loaded.", ex);
         }
         return null;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  combobox   DOCUMENT ME!
+     * @param  className  DOCUMENT ME!
+     */
+    public static void setModelForComboBoxesAndDecorateIt(final JComboBox combobox, final String className) {
+        final MetaClass metaClass = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", className);
+        final DefaultComboBoxModel comboBoxModel;
+        try {
+            final FastBindableReferenceCombo tempFastBindableCombo = new FastBindableReferenceCombo();
+            tempFastBindableCombo.setSorted(true);
+            tempFastBindableCombo.setNullable(true);
+            tempFastBindableCombo.setMetaClass(metaClass);
+            comboBoxModel = (DefaultComboBoxModel)tempFastBindableCombo.getModel();
+            combobox.setModel(comboBoxModel);
+        } catch (Exception ex) {
+            LOG.error(ex, ex);
+        }
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(combobox);
     }
 }
