@@ -2150,34 +2150,38 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
      * DOCUMENT ME!
      */
     private void loadFoto() {
-        final Object stadtbild = lstBildnummern.getSelectedValue();
-        if (fotoCidsBean != null) {
-            fotoCidsBean.removePropertyChangeListener(listRepaintListener);
-        }
-        if (stadtbild instanceof CidsBean) {
-            fotoCidsBean = (CidsBean)stadtbild;
-            fotoCidsBean.addPropertyChangeListener(listRepaintListener);
-            final String bildnummer = (String)fotoCidsBean.getProperty("bildnummer");
-            boolean cacheHit = false;
-            if (bildnummer != null) {
-                final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
-                if (cachedImageRef != null) {
-                    final BufferedImage cachedImage = cachedImageRef.get();
-                    if (cachedImage != null) {
-                        showWait(true);
-                        cacheHit = true;
-                        image = cachedImage;
-                        resizeListenerEnabled = true;
-                        timer.restart();
+        if (rendererAndInternalUsage) {
+            indicateInternalUsage();
+        } else {
+            final Object stadtbild = lstBildnummern.getSelectedValue();
+            if (fotoCidsBean != null) {
+                fotoCidsBean.removePropertyChangeListener(listRepaintListener);
+            }
+            if (stadtbild instanceof CidsBean) {
+                fotoCidsBean = (CidsBean)stadtbild;
+                fotoCidsBean.addPropertyChangeListener(listRepaintListener);
+                final String bildnummer = (String)fotoCidsBean.getProperty("bildnummer");
+                boolean cacheHit = false;
+                if (bildnummer != null) {
+                    final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
+                    if (cachedImageRef != null) {
+                        final BufferedImage cachedImage = cachedImageRef.get();
+                        if (cachedImage != null) {
+                            showWait(true);
+                            cacheHit = true;
+                            image = cachedImage;
+                            resizeListenerEnabled = true;
+                            timer.restart();
+                        }
+                    }
+                    if (!cacheHit) {
+                        new Sb_stadtbildserieEditor.LoadSelectedImageWorker(bildnummer).execute();
                     }
                 }
-                if (!cacheHit) {
-                    new Sb_stadtbildserieEditor.LoadSelectedImageWorker(bildnummer).execute();
-                }
+            } else {
+                image = null;
+                lblPicture.setIcon(FOLDER_ICON);
             }
-        } else {
-            image = null;
-            lblPicture.setIcon(FOLDER_ICON);
         }
     }
 
@@ -2220,6 +2224,15 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         lblPicture.setIcon(ERROR_ICON);
         lblPicture.setText("Fehler beim Übertragen des Bildes!");
         lblPicture.setToolTipText(tooltip);
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void indicateInternalUsage() {
+        lblPicture.setIcon(ERROR_ICON);
+        lblPicture.setText("Bild ist nicht zur Publikation freigegeben!");
+        lblPicture.setToolTipText("");
     }
 
     /**
