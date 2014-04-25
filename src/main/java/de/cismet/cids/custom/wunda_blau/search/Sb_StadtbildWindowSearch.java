@@ -46,7 +46,6 @@ import java.util.Date;
 import java.util.regex.Pattern;
 
 import javax.swing.Box;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -106,14 +105,15 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
 
     //~ Instance fields --------------------------------------------------------
 
-    private MetaClass metaClass;
+    private final MetaClass metaClass;
     private GeoSearchButton btnGeoSearch;
-    private MappingComponent mappingComponent;
-    private ImageIcon icon;
-    private boolean geoSearchEnabled;
+    private final MappingComponent mappingComponent;
+    private final ImageIcon icon;
+    private final boolean geoSearchEnabled;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSuchwort;
+    private javax.swing.JButton btnNewSearch;
     private javax.swing.JButton btnRemoveSuchwort;
     private javax.swing.JCheckBox cbMapSearch;
     private javax.swing.JComboBox cboImageNrFrom;
@@ -127,6 +127,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
+    private javax.swing.Box.Filler filler5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
@@ -156,6 +157,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
      */
     public Sb_StadtbildWindowSearch() {
         initComponents();
+        setModelForComboBoxes();
 
         final JPanel pnlSearchCancel = new CountSearchResultsSearchControlPanel(this);
         final Dimension max = pnlSearchCancel.getMaximumSize();
@@ -170,35 +172,11 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         pnlSearchCancel.setPreferredSize(new java.awt.Dimension(
                 new Double(pre.getWidth() + 6).intValue(),
                 new Double(pre.getHeight() + 5).intValue()));
-        pnlButtons.add(pnlSearchCancel);
 
-        final MetaClass strasseMC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "STRASSE");
-        final DefaultComboBoxModel cbStrasseModel;
-        try {
-            final FastBindableReferenceCombo combo = new FastBindableReferenceCombo();
-            combo.setSorted(true);
-            combo.setNullable(true);
-            combo.setMetaClass(strasseMC);
-            cbStrasseModel = (DefaultComboBoxModel)combo.getModel();
-            cboStreet.setModel(cbStrasseModel);
-        } catch (Exception ex) {
-            LOG.error(ex, ex);
-        }
-        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cboStreet);
-
-        final MetaClass ortMC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "SB_ORT");
-        final DefaultComboBoxModel cbOrtModel;
-        try {
-            final FastBindableReferenceCombo combo = new FastBindableReferenceCombo();
-            combo.setSorted(true);
-            combo.setNullable(true);
-            combo.setMetaClass(ortMC);
-            cbOrtModel = (DefaultComboBoxModel)combo.getModel();
-            cboOrt.setModel(cbOrtModel);
-        } catch (Exception ex) {
-            LOG.error(ex, ex);
-        }
-        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cboOrt);
+        final java.awt.GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        pnlButtons.add(pnlSearchCancel, gridBagConstraints);
 
         metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "sb_stadtbildserie"); // NOI18N
 
@@ -222,7 +200,8 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             }
         }
 
-        pnlButtons.add(Box.createHorizontalStrut(5));
+        gridBagConstraints.gridx = 3;
+        pnlButtons.add(Box.createHorizontalStrut(5), gridBagConstraints);
 
         mappingComponent = CismapBroker.getInstance().getMappingComponent();
         geoSearchEnabled = mappingComponent != null;
@@ -239,7 +218,9 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                     org.openide.util.NbBundle.getMessage(
                         Sb_StadtbildWindowSearch.class,
                         "Sb_StadtbildWindowSearch.btnGeoSearch.toolTipText")); // NOI18N
-            pnlButtons.add(btnGeoSearch);
+
+            gridBagConstraints.gridx = 4;
+            pnlButtons.add(btnGeoSearch, gridBagConstraints);
         }
 
         cboOrt.setSelectedItem(Sb_stadtbildUtils.getWUPPERTAL());
@@ -292,6 +273,10 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         pnlFooter = new javax.swing.JPanel();
         cbMapSearch = new javax.swing.JCheckBox();
         pnlButtons = new javax.swing.JPanel();
+        btnNewSearch = new javax.swing.JButton();
+        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
@@ -639,11 +624,40 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(0, 9, 5, 0);
         pnlFooter.add(cbMapSearch, gridBagConstraints);
 
-        pnlButtons.setLayout(new javax.swing.BoxLayout(pnlButtons, javax.swing.BoxLayout.LINE_AXIS));
+        pnlButtons.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnNewSearch,
+            org.openide.util.NbBundle.getMessage(
+                Sb_StadtbildWindowSearch.class,
+                "Sb_StadtbildWindowSearch.btnNewSearch.text"));        // NOI18N
+        btnNewSearch.setToolTipText(org.openide.util.NbBundle.getMessage(
+                Sb_StadtbildWindowSearch.class,
+                "Sb_StadtbildWindowSearch.btnNewSearch.toolTipText")); // NOI18N
+        btnNewSearch.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnNewSearchActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        pnlButtons.add(btnNewSearch, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        pnlButtons.add(filler5, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 9, 0, 0);
         pnlFooter.add(pnlButtons, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -753,6 +767,26 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     /**
      * DOCUMENT ME!
      *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnNewSearchActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnNewSearchActionPerformed
+        chboBodennaheAufnahme.setSelected(true);
+        chboLuftbildschraegaufnahme.setSelected(true);
+        chboLuftbildsenkrechtaufnahme.setSelected(true);
+        txtImageNrFrom.setText("");
+        txtImageNrTo.setText("");
+        final DefaultListModel dlm = (DefaultListModel)lstSuchworte.getModel();
+        dlm.clear();
+        sb_StadtbilderTimeTabs.clear();
+        cboStreet.setSelectedItem(null);
+        cboOrt.setSelectedItem(Sb_stadtbildUtils.getWUPPERTAL());
+        txtHausnummer.setText("");
+        cbMapSearch.setSelected(false);
+    }                                                                                //GEN-LAST:event_btnNewSearchActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param  args  DOCUMENT ME!
      */
     public static void main(final String[] args) {
@@ -767,6 +801,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void setModelForComboBoxes() {
+        Sb_stadtbildUtils.setModelForComboBoxesAndDecorateIt(cboStreet, "STRASSE");
+        Sb_stadtbildUtils.setModelForComboBoxesAndDecorateIt(cboOrt, "SB_ORT");
     }
 
     /**

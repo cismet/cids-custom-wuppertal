@@ -13,9 +13,16 @@ import Sirius.navigator.exception.ConnectionException;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.editors.FastBindableReferenceCombo;
+
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -126,5 +133,30 @@ public class Sb_stadtbildUtils {
             LOG.error("The storage location R102 could not be loaded.", ex);
         }
         return null;
+    }
+
+    /**
+     * Fills the model of combobox with the LightweightMetaObjects for all elements of a certain cids-class. The method
+     * creates a temporary FastBindableReferenceCombo and set its MetaClass to the class given as argument. Then the
+     * model of the FastBindableReferenceCombo is set as the model of the combobox. Finally the combobox is decorated
+     * with the AutoCompleteDecorator.
+     *
+     * @param  combobox   The model of that combobox will be replaced
+     * @param  className  the cids class name. The elements of this class will be fetched.
+     */
+    public static void setModelForComboBoxesAndDecorateIt(final JComboBox combobox, final String className) {
+        final MetaClass metaClass = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", className);
+        final DefaultComboBoxModel comboBoxModel;
+        try {
+            final FastBindableReferenceCombo tempFastBindableCombo = new FastBindableReferenceCombo();
+            tempFastBindableCombo.setSorted(true);
+            tempFastBindableCombo.setNullable(true);
+            tempFastBindableCombo.setMetaClass(metaClass);
+            comboBoxModel = (DefaultComboBoxModel)tempFastBindableCombo.getModel();
+            combobox.setModel(comboBoxModel);
+        } catch (Exception ex) {
+            LOG.error(ex, ex);
+        }
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(combobox);
     }
 }

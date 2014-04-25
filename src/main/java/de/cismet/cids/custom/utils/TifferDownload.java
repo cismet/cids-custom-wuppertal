@@ -168,11 +168,13 @@ public class TifferDownload extends AbstractDownload {
     }
 
     /**
-     * DOCUMENT ME!
+     * Gets an imageNumber for a Stadtbild and checks if a high-res image for that number exists. This check is done by
+     * sending a HEAD-request to different URLS, whose difference is the file ending. The file endings are taken from
+     * IMAGE_FILE_FORMATS.
      *
-     * @param   imageNumber  DOCUMENT ME!
+     * @param   imageNumber  an imageNumber for a Stadtbild
      *
-     * @return  DOCUMENT ME!
+     * @return  if a high-res image exists, then its file ending. Otherwise null.
      */
     public static String getFormatOfHighResPicture(final String imageNumber) {
         final char firstCharacter = imageNumber.charAt(0);

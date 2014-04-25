@@ -11,6 +11,9 @@
  */
 package de.cismet.cids.custom.objecteditors.utils;
 
+import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -55,6 +58,18 @@ public class RendererTools {
             ((JCheckBox)comp).setEnabled(false);
         } else if (comp != null) {
             comp.setEnabled(false);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  comboBox  DOCUMENT ME!
+     */
+    public static void makeTextBlackOfDisabledComboBox(final JComboBox comboBox) {
+        final Component editorComponent = comboBox.getEditor().getEditorComponent();
+        if (editorComponent instanceof JTextComponent) {
+            ((JTextComponent)editorComponent).setDisabledTextColor(Color.black);
         }
     }
 }

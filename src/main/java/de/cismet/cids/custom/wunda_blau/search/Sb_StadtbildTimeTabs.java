@@ -305,4 +305,16 @@ public class Sb_StadtbildTimeTabs extends javax.swing.JPanel {
 
         add(tabbedPane, java.awt.BorderLayout.CENTER);
     } // </editor-fold>//GEN-END:initComponents
+
+    /**
+     * DOCUMENT ME!
+     */
+    void clear() {
+        dpDay.setDate(null);
+        cboYear.setSelectedItem(null);
+        dpFrom.setDate(null);
+        dpTo.setDate(null);
+        dpFTFrom.setDate(null);
+        dpFTTill.setDate(null);
+    }
 }

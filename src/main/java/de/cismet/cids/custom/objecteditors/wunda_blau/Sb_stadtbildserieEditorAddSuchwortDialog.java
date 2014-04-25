@@ -7,15 +7,11 @@
 ****************************************************/
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
-import Sirius.server.middleware.types.MetaClass;
+import Sirius.server.middleware.types.LightweightMetaObject;
 
-import javax.swing.DefaultComboBoxModel;
+import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
-
-import de.cismet.cids.editors.DefaultBindableReferenceCombo;
-
-import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -56,15 +52,7 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
     public Sb_stadtbildserieEditorAddSuchwortDialog(final java.awt.Frame parent, final boolean modal) {
         super(parent, modal);
         initComponents();
-        final MetaClass suchwortMC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "SB_SUCHWORT");
-        final DefaultComboBoxModel cbSuchwortModel;
-        try {
-            cbSuchwortModel = DefaultBindableReferenceCombo.getModelByMetaClass(suchwortMC, true);
-            cbSuchwort.setModel(cbSuchwortModel);
-        } catch (Exception ex) {
-            LOG.error(ex, ex);
-        }
-        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cbSuchwort);
+        Sb_stadtbildUtils.setModelForComboBoxesAndDecorateIt(cbSuchwort, "SB_SUCHWORT");
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -190,6 +178,8 @@ public class Sb_stadtbildserieEditorAddSuchwortDialog extends javax.swing.JDialo
         final Object selectedItem = cbSuchwort.getSelectedItem();
         if (selectedItem instanceof CidsBean) {
             beanToReturn = (CidsBean)selectedItem;
+        } else if (selectedItem instanceof LightweightMetaObject) {
+            beanToReturn = ((LightweightMetaObject)selectedItem).getBean();
         } else {
             beanToReturn = null;
         }
