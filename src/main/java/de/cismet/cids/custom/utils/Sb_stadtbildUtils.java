@@ -13,6 +13,9 @@ import Sirius.navigator.exception.ConnectionException;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 
@@ -21,6 +24,8 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+
+import de.cismet.security.WebAccessManager;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -36,6 +41,8 @@ public class Sb_stadtbildUtils {
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             Sb_stadtbildUtils.class);
+
+    private static final String[] IMAGE_FILE_FORMATS = { "jpg", "tiff" };
 
     private static final CidsBean WUPPERTAL;
     private static final CidsBean R102;
@@ -158,5 +165,57 @@ public class Sb_stadtbildUtils {
             LOG.error(ex, ex);
         }
         StaticSwingTools.decorateWithFixedAutoCompleteDecorator(combobox);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   imageNumber  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static URL getURLOfLowResPicture(final String imageNumber) {
+        final char firstCharacter = imageNumber.charAt(0);
+        final String locationOfPreviewImage = "VB/" + firstCharacter + "/VB_" + imageNumber;
+        for (final String fileEnding : IMAGE_FILE_FORMATS) {
+            try {
+                final String urlName = "http://s102x003/archivar/" + locationOfPreviewImage + "." + fileEnding;
+                final URL url = new URL(urlName);
+                final boolean accessible = WebAccessManager.getInstance().checkIfURLaccessible(url);
+                if (accessible) {
+                    return url;
+                }
+            } catch (MalformedURLException ex) {
+                LOG.warn(ex, ex);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Gets a Stadtbild-imageNumber as argument and checks if a high-res image for that number exists. This check is
+     * done by sending a HEAD-request to different URLS, whose difference is the file ending. The file endings are taken
+     * from IMAGE_FILE_FORMATS.
+     *
+     * @param   imageNumber  an imageNumber for a Stadtbild
+     *
+     * @return  if a high-res image exists, then its file ending. Otherwise null.
+     */
+    public static String getFormatOfHighResPicture(final String imageNumber) {
+        final char firstCharacter = imageNumber.charAt(0);
+        final String locationOfPreviewImage = "SB/" + firstCharacter + "/SB_" + imageNumber;
+        for (final String fileEnding : IMAGE_FILE_FORMATS) {
+            try {
+                final String urlName = "http://s102x003/archivar/" + locationOfPreviewImage + "." + fileEnding;
+                final URL url = new URL(urlName);
+                final boolean accessible = WebAccessManager.getInstance().checkIfURLaccessible(url);
+                if (accessible) {
+                    return fileEnding;
+                }
+            } catch (MalformedURLException ex) {
+                LOG.warn(ex, ex);
+            }
+        }
+        return null;
     }
 }
