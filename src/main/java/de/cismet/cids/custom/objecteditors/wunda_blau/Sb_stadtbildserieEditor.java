@@ -153,17 +153,6 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private static final String REPORT_STADTBILDSERIE_URL =
         "/de/cismet/cids/custom/reports/wunda_blau/StadtbildserieA4Q.jasper";
 
-    private static final int CACHE_SIZE = 20;
-
-    private static final Map<String, SoftReference<BufferedImage>> IMAGE_CACHE =
-        new LinkedHashMap<String, SoftReference<BufferedImage>>(CACHE_SIZE) {
-
-            @Override
-            protected boolean removeEldestEntry(final Map.Entry<String, SoftReference<BufferedImage>> eldest) {
-                return size() >= CACHE_SIZE;
-            }
-        };
-
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(Sb_stadtbildserieEditor.class);
 
     //~ Instance fields --------------------------------------------------------
@@ -1880,7 +1869,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                     if (fotos != null) {
                         fotos.remove(cidesBeanToRemove);
                     }
-                    IMAGE_CACHE.remove(cidesBeanToRemove.toString());
+                    Sb_stadtbildUtils.removeFromImageCache(cidesBeanToRemove);
                 } catch (Exception e) {
                     LOG.error(e, e);
                     final ErrorInfo ei = new ErrorInfo(
@@ -2224,22 +2213,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 fotoCidsBean = (CidsBean)stadtbild;
                 fotoCidsBean.addPropertyChangeListener(listRepaintListener);
                 final String bildnummer = (String)fotoCidsBean.getProperty("bildnummer");
-                boolean cacheHit = false;
                 if (bildnummer != null) {
-                    final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
-                    if (cachedImageRef != null) {
-                        final BufferedImage cachedImage = cachedImageRef.get();
-                        if (cachedImage != null) {
-                            showWait(true);
-                            cacheHit = true;
-                            image = cachedImage;
-                            resizeListenerEnabled = true;
-                            timer.restart();
-                        }
-                    }
-                    if (!cacheHit) {
-                        new Sb_stadtbildserieEditor.LoadSelectedImageWorker(bildnummer).execute();
-                    }
+                    new Sb_stadtbildserieEditor.LoadSelectedImageWorker(bildnummer).execute();
                 }
             } else {
                 image = null;
@@ -2473,7 +2448,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 LOG.error(ex, ex);
             }
 
-            final Image vorschaubild = downloadImageFromUrl((String)cidsBean.getProperty(
+            final Image vorschaubild = Sb_stadtbildUtils.downloadImageForBildnummer((String)cidsBean.getProperty(
                         "vorschaubild.bildnummer"));
             params.put("vorschaubild", vorschaubild);
 
@@ -2481,35 +2456,6 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             params.put("suchwoerter", StringUtils.join(suchwoerter, ", "));
 
             return params;
-        }
-        /**
-         * copied from LoadSelectedImageWorker.
-         *
-         * @param   bildnummer  DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        private BufferedImage downloadImageFromUrl(final String bildnummer) {
-            final URL urlLowResImage = Sb_stadtbildUtils.getURLOfLowResPicture(bildnummer);
-            if (urlLowResImage != null) {
-                InputStream is = null;
-                try {
-                    is = WebAccessManager.getInstance().doRequest(urlLowResImage);
-                    final BufferedImage img = ImageIO.read(is);
-                    return img;
-                } catch (Exception ex) {
-                    LOG.warn("Image could not be loaded.", ex);
-                } finally {
-                    if (is != null) {
-                        try {
-                            is.close();
-                        } catch (IOException ex) {
-                            LOG.warn("Error during closing InputStream.", ex);
-                        }
-                    }
-                }
-            }
-            return null;
         }
     }
 
@@ -2615,37 +2561,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         @Override
         protected BufferedImage doInBackground() throws Exception {
             if ((bildnummer != null) && (bildnummer.length() > 0)) {
-                return downloadImageFromUrl(bildnummer);
-            }
-            return null;
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @param   bildnummer  DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        private BufferedImage downloadImageFromUrl(final String bildnummer) {
-            final URL urlLowResImage = Sb_stadtbildUtils.getURLOfLowResPicture(bildnummer);
-            if (urlLowResImage != null) {
-                InputStream is = null;
-                try {
-                    is = WebAccessManager.getInstance().doRequest(urlLowResImage);
-                    final BufferedImage img = ImageIO.read(is);
-                    return img;
-                } catch (Exception ex) {
-                    LOG.warn("Image could not be loaded.", ex);
-                } finally {
-                    if (is != null) {
-                        try {
-                            is.close();
-                        } catch (IOException ex) {
-                            LOG.warn("Error during closing InputStream.", ex);
-                        }
-                    }
-                }
+                return Sb_stadtbildUtils.downloadImageForBildnummer(bildnummer);
             }
             return null;
         }
@@ -2658,7 +2574,6 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             try {
                 image = get();
                 if (image != null) {
-                    IMAGE_CACHE.put(bildnummer, new SoftReference<BufferedImage>(image));
                     resizeListenerEnabled = true;
                     timer.restart();
                     showWait(false);

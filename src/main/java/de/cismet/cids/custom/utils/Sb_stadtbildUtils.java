@@ -13,8 +13,20 @@ import Sirius.navigator.exception.ConnectionException;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
+import java.awt.image.BufferedImage;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import java.lang.ref.SoftReference;
+
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import javax.imageio.ImageIO;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -46,6 +58,17 @@ public class Sb_stadtbildUtils {
 
     private static final CidsBean WUPPERTAL;
     private static final CidsBean R102;
+
+    private static final int CACHE_SIZE = 20;
+
+    private static final Map<String, SoftReference<BufferedImage>> IMAGE_CACHE =
+        new LinkedHashMap<String, SoftReference<BufferedImage>>(CACHE_SIZE) {
+
+            @Override
+            protected boolean removeEldestEntry(final Map.Entry<String, SoftReference<BufferedImage>> eldest) {
+                return size() >= CACHE_SIZE;
+            }
+        };
 
     static {
         WUPPERTAL = getOrtWupertal();
@@ -217,5 +240,54 @@ public class Sb_stadtbildUtils {
             }
         }
         return null;
+    }
+
+    /**
+     * Fetches an image of a bildnummer. Receives an image number as argument and checks if its image is already in the
+     * cache. If this is the case the cached image is returned. If not the image corresponding to the number is
+     * downloaded and returned.
+     *
+     * @param   bildnummer  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static BufferedImage downloadImageForBildnummer(final String bildnummer) {
+        final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
+        if (cachedImageRef != null) {
+            return cachedImageRef.get();
+        }
+
+        final URL urlLowResImage = Sb_stadtbildUtils.getURLOfLowResPicture(bildnummer);
+        if (urlLowResImage != null) {
+            InputStream is = null;
+            try {
+                is = WebAccessManager.getInstance().doRequest(urlLowResImage);
+                final BufferedImage img = ImageIO.read(is);
+                if (img != null) {
+                    IMAGE_CACHE.put(bildnummer, new SoftReference<BufferedImage>(img));
+                }
+                return img;
+            } catch (Exception ex) {
+                LOG.warn("Image could not be loaded.", ex);
+            } finally {
+                if (is != null) {
+                    try {
+                        is.close();
+                    } catch (IOException ex) {
+                        LOG.warn("Error during closing InputStream.", ex);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Removes a bildnummer from the image cache.
+     *
+     * @param  cidsBean  DOCUMENT ME!
+     */
+    public static void removeFromImageCache(final CidsBean cidsBean) {
+        IMAGE_CACHE.remove(cidsBean.toString());
     }
 }
