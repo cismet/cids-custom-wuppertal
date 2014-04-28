@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<parameter name="image" class="java.lang.Object" isForPrompting="false"/>
+	<parameter name="bildnummer" class="de.cismet.cids.dynamics.CidsBean"/>
+	<parameter name="isSerie" class="java.lang.Boolean"/>
+	<parameter name="serieAnfang" class="de.cismet.cids.dynamics.CidsBean"/>
+	<parameter name="serieEnde" class="de.cismet.cids.dynamics.CidsBean"/>
+	<parameter name="vorschaubild" class="java.lang.Object"/>
+	<parameter name="suchwoerter" class="java.lang.String"/>
+	<field name="fotograf" class="de.cismet.cids.dynamics.CidsBean"/>
+	<field name="ort" class="de.cismet.cids.dynamics.CidsBean"/>
+	<field name="aufnahmedatum" class="java.util.Date"/>
+	<field name="hausnummer" class="java.lang.String"/>
+	<field name="kommentar" class="java.lang.String"/>
+	<field name="filmart" class="de.cismet.cids.dynamics.CidsBean"/>
+	<field name="lager" class="de.cismet.cids.dynamics.CidsBean"/>
+	<field name="strasse" class="de.cismet.cids.dynamics.CidsBean"/>
+	<field name="vorschaubild" class="de.cismet.cids.dynamics.CidsBean"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="508" splitType="Stretch">
+			<image scaleImage="RetainShape" hAlign="Center" vAlign="Middle">
+				<reportElement key="image-2" x="0" y="33" width="283" height="279" forecolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<imageExpression class="java.awt.Image"><![CDATA[$P{image}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="374" y="33" width="179" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{strasse} == null ? "" : $F{strasse}.toString()) + ($F{hausnummer} == null ? "" : " " + $F{hausnummer}) + (($F{strasse} == null && $F{hausnummer} == null) ? "" : ", ") + $F{ort}.toString()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="293" y="33" width="81" height="20"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ort:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="374" y="53" width="179" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{suchwoerter}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="293" y="53" width="81" height="20"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Suchworte:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="293" y="153" width="81" height="67"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Kommentar:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="374" y="153" width="179" height="67"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{kommentar}.toString()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="374" y="93" width="179" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{filmart}.toString()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="293" y="93" width="81" height="20"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Filmart:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="374" y="113" width="179" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{lager}.toString()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="293" y="113" width="81" height="20"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lagerort:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="374" y="133" width="179" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{aufnahmedatum}.toString()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="293" y="133" width="81" height="20"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Aufnahmedatum:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="350" width="81" height="20"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Bildnummer:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="81" y="350" width="179" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{bildnummer}.toString()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="381" width="542" height="20">
+					<printWhenExpression><![CDATA[$P{isSerie}]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Das Bild gehört zur Stadtbildserie "+$F{vorschaubild}.toString()+" (Bildnummern "+$P{serieAnfang}.toString()+" bis "+$P{serieEnde}.toString()+")"]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Center" vAlign="Middle">
+				<reportElement x="0" y="401" width="157" height="94" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$P{isSerie}]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.awt.Image"><![CDATA[$P{vorschaubild}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+</jasperReport>
