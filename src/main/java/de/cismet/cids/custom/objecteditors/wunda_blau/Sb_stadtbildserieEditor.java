@@ -2576,7 +2576,6 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 if (image != null) {
                     resizeListenerEnabled = true;
                     timer.restart();
-                    showWait(false);
                 } else {
                     indicateError("Bild konnte nicht geladen werden.");
                 }
