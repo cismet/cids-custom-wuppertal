@@ -49,8 +49,6 @@ public class TifferDownload extends AbstractDownload {
 
     private static final Logger LOG = Logger.getLogger(TifferDownload.class);
 
-    private static final String[] IMAGE_FILE_FORMATS = { "jpg", "tiff" };
-
     //~ Instance fields --------------------------------------------------------
 
     private final String imageNumber;
@@ -80,7 +78,7 @@ public class TifferDownload extends AbstractDownload {
 
         status = State.WAITING;
 
-        format = getFormatOfHighResPicture(imageNumber);
+        format = Sb_stadtbildUtils.getFormatOfHighResPicture(imageNumber);
         if (format != null) {
             determineDestinationFile(filename, "." + format.toLowerCase());
         }
@@ -165,57 +163,5 @@ public class TifferDownload extends AbstractDownload {
         return new ServerActionParameter(
                 SUBDIR.toString(),
                 subdir);
-    }
-
-    /**
-     * Gets an imageNumber for a Stadtbild and checks if a high-res image for that number exists. This check is done by
-     * sending a HEAD-request to different URLS, whose difference is the file ending. The file endings are taken from
-     * IMAGE_FILE_FORMATS.
-     *
-     * @param   imageNumber  an imageNumber for a Stadtbild
-     *
-     * @return  if a high-res image exists, then its file ending. Otherwise null.
-     */
-    public static String getFormatOfHighResPicture(final String imageNumber) {
-        final char firstCharacter = imageNumber.charAt(0);
-        final String locationOfPreviewImage = "SB/" + firstCharacter + "/SB_" + imageNumber;
-        for (final String fileEnding : IMAGE_FILE_FORMATS) {
-            try {
-                final String urlName = "http://s102x003/archivar/" + locationOfPreviewImage + "." + fileEnding;
-                final URL url = new URL(urlName);
-                final boolean accessible = WebAccessManager.getInstance().checkIfURLaccessible(url);
-                if (accessible) {
-                    return fileEnding;
-                }
-            } catch (MalformedURLException ex) {
-                LOG.warn(ex, ex);
-            }
-        }
-        return null;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   imageNumber  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static URL getURLOfLowResPicture(final String imageNumber) {
-        final char firstCharacter = imageNumber.charAt(0);
-        final String locationOfPreviewImage = "VB/" + firstCharacter + "/VB_" + imageNumber;
-        for (final String fileEnding : IMAGE_FILE_FORMATS) {
-            try {
-                final String urlName = "http://s102x003/archivar/" + locationOfPreviewImage + "." + fileEnding;
-                final URL url = new URL(urlName);
-                final boolean accessible = WebAccessManager.getInstance().checkIfURLaccessible(url);
-                if (accessible) {
-                    return url;
-                }
-            } catch (MalformedURLException ex) {
-                LOG.warn(ex, ex);
-            }
-        }
-        return null;
     }
 }
