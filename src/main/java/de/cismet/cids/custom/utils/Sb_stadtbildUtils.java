@@ -39,6 +39,8 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.security.WebAccessManager;
 
+import de.cismet.security.exceptions.RequestFailedException;
+
 import de.cismet.tools.gui.StaticSwingTools;
 
 /**
@@ -250,8 +252,10 @@ public class Sb_stadtbildUtils {
      * @param   bildnummer  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  java.lang.Exception
      */
-    public static BufferedImage downloadImageForBildnummer(final String bildnummer) {
+    public static BufferedImage downloadImageForBildnummer(final String bildnummer) throws Exception {
         final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
         if (cachedImageRef != null) {
             return cachedImageRef.get();
@@ -267,8 +271,6 @@ public class Sb_stadtbildUtils {
                     IMAGE_CACHE.put(bildnummer, new SoftReference<BufferedImage>(img));
                 }
                 return img;
-            } catch (Exception ex) {
-                LOG.warn("Image could not be loaded.", ex);
             } finally {
                 if (is != null) {
                     try {
