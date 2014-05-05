@@ -14,6 +14,8 @@ import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.MetaObject;
 
+import com.sun.jersey.api.client.UniformInterfaceException;
+
 import com.vividsolutions.jts.geom.Geometry;
 
 import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
@@ -46,13 +48,7 @@ import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import java.lang.ref.SoftReference;
 import java.lang.reflect.InvocationTargetException;
-
-import java.net.URL;
 
 import java.sql.Timestamp;
 
@@ -63,14 +59,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
-
-import javax.imageio.ImageIO;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -117,8 +110,6 @@ import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
-import de.cismet.security.WebAccessManager;
-
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
@@ -140,7 +131,6 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
 
     //~ Static fields/initializers ---------------------------------------------
 
-    public static final String REPORT_FILE = "/de/cismet/cids/custom/wunda_blau/res/StadtbildA4H.jasper";
     private static final ImageIcon FOLDER_ICON = new ImageIcon(Sb_stadtbildserieEditor.class.getResource(
                 "/de/cismet/cids/custom/objecteditors/wunda_blau/inode-directory.png"));
 
@@ -252,6 +242,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
+    private javax.swing.Box.Filler filler4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -502,7 +493,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         roundedPanel2 = new de.cismet.tools.gui.RoundedPanel();
         semiRoundedPanel3 = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel1 = new javax.swing.JLabel();
-        panContent = new RoundedPanel();
+        panContent = new javax.swing.JPanel();
         pnlCtrlButtons1 = new javax.swing.JPanel();
         btnAddSuchwort = new javax.swing.JButton();
         btnRemoveSuchwort = new javax.swing.JButton();
@@ -528,7 +519,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         roundedPanel3 = new de.cismet.tools.gui.RoundedPanel();
         semiRoundedPanel4 = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel2 = new javax.swing.JLabel();
-        panDetails = new RoundedPanel();
+        panDetails = new javax.swing.JPanel();
         lblDescFilmart = new javax.swing.JLabel();
         lblDescFotograf = new javax.swing.JLabel();
         lblDescAuftraggeber = new javax.swing.JLabel();
@@ -538,7 +529,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         roundedPanel4 = new de.cismet.tools.gui.RoundedPanel();
         semiRoundedPanel5 = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel3 = new javax.swing.JLabel();
-        panDetails1 = new RoundedPanel();
+        panDetails1 = new javax.swing.JPanel();
         if (editable) {
             lblDescGeometrie = new javax.swing.JLabel();
         }
@@ -576,12 +567,12 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         roundedPanel7 = new de.cismet.tools.gui.RoundedPanel();
         semiRoundedPanel8 = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel6 = new javax.swing.JLabel();
-        panDetails4 = new RoundedPanel();
+        panDetails4 = new javax.swing.JPanel();
         pnlMap = new javax.swing.JPanel();
         roundedPanel6 = new de.cismet.tools.gui.RoundedPanel();
         semiRoundedPanel7 = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel5 = new javax.swing.JLabel();
-        panDetails3 = new RoundedPanel();
+        panDetails3 = new javax.swing.JPanel();
         chbPruefen = new DefaultBindableJCheckBox();
         jScrollPane4 = new javax.swing.JScrollPane();
         txtaPruefhinweis = new javax.swing.JTextArea();
@@ -593,6 +584,9 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
         lblBusyPruef = new org.jdesktop.swingx.JXBusyLabel();
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
 
         panTitle.setOpaque(false);
         panTitle.setLayout(new java.awt.BorderLayout());
@@ -1660,7 +1654,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -1677,9 +1671,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 10, 10);
         panDetails3.add(btnSavePruefhinweis, gridBagConstraints);
@@ -1713,16 +1706,24 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panDetails3.add(jPanel6, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 10, 0);
         panDetails3.add(lblBusyPruef, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        panDetails3.add(filler4, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -2267,6 +2268,18 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
 
     /**
      * DOCUMENT ME!
+     *
+     * @param  tooltip  DOCUMENT ME!
+     */
+    private void indicateNotAvailable(final String tooltip) {
+        lblPicture.setIcon(ERROR_ICON);
+        lblPicture.setText("Kein Vorschaubild vorhanden.");
+        lblPicture.setToolTipText(tooltip);
+        showWait(false);
+    }
+
+    /**
+     * DOCUMENT ME!
      */
     private void indicateInternalUsage() {
         lblPicture.setIcon(ERROR_ICON);
@@ -2283,27 +2296,27 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
      * @throws  Exception  DOCUMENT ME!
      */
     public static void main(final String[] args) throws Exception {
-//        DevelopmentTools.createEditorInFrameFromRMIConnectionOnLocalhost(
-//            "WUNDA_BLAU",
-//            "Administratoren",
-//            "admin",
-//            "kif",
-//            "sb_stadtbildserie",
-//            161078, // id 161078 high res, id 18 = interval
-//            1280,
-//            1024);
+        DevelopmentTools.createEditorInFrameFromRMIConnectionOnLocalhost(
+            "WUNDA_BLAU",
+            "Administratoren",
+            "admin",
+            "kif",
+            "sb_stadtbildserie",
+            18, // id 161078 high res, id 18 = interval
+            1280,
+            1024);
 
-        final CidsBean[] beans = DevelopmentTools.createCidsBeansFromRMIConnectionOnLocalhost(
-                "WUNDA_BLAU",
-                "Administratoren",
-                "admin",
-                "kif",
-                "sb_stadtbildserie",
-                18);
-
-        DevelopmentTools.showReportForBeans(
-            REPORT_STADTBILDSERIE_URL,
-            Arrays.asList(beans));
+//        final CidsBean[] beans = DevelopmentTools.createCidsBeansFromRMIConnectionOnLocalhost(
+//                "WUNDA_BLAU",
+//                "Administratoren",
+//                "admin",
+//                "kif",
+//                "sb_stadtbildserie",
+//                18);
+//
+//        DevelopmentTools.showReportForBeans(
+//            REPORT_STADTBILDSERIE_URL,
+//            Arrays.asList(beans));
     }
 
     /**
@@ -2448,8 +2461,15 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 LOG.error(ex, ex);
             }
 
-            final Image vorschaubild = Sb_stadtbildUtils.downloadImageForBildnummer((String)cidsBean.getProperty(
-                        "vorschaubild.bildnummer"));
+            Image vorschaubild = ERROR_ICON.getImage();
+            try {
+                vorschaubild = Sb_stadtbildUtils.downloadImageForBildnummer((String)cidsBean.getProperty(
+                            "vorschaubild.bildnummer"));
+            } catch (Exception ex) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug(ex, ex);
+                }
+            }
             params.put("vorschaubild", vorschaubild);
 
             final Collection suchwoerter = cidsBean.getBeanCollectionProperty("suchwort_arr");
@@ -2577,7 +2597,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                     resizeListenerEnabled = true;
                     timer.restart();
                 } else {
-                    indicateError("Bild konnte nicht geladen werden.");
+                    indicateNotAvailable("");
                 }
             } catch (InterruptedException ex) {
                 image = null;
@@ -2585,7 +2605,11 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             } catch (ExecutionException ex) {
                 image = null;
                 LOG.error(ex, ex);
-                indicateError(ex.getMessage());
+                if (ex.getCause() instanceof UniformInterfaceException) {
+                    indicateNotAvailable("");
+                } else {
+                    indicateError(ex.getMessage());
+                }
             }
         }
     }
