@@ -248,17 +248,13 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         cboImageNrFrom = new FastBindableReferenceCombo("%1$2s", new String[] { "BILDNUMMER" });
         jLabel2 = new javax.swing.JLabel();
         cboImageNrTo = new FastBindableReferenceCombo("%1$2s", new String[] { "BILDNUMMER" });
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         txtImageNrTo = new javax.swing.JTextField();
         txtImageNrFrom = new javax.swing.JTextField();
         pnlSearchWords = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         lstSuchworte = new Sb_stadtbildserieEditor.JXListBugFixes();
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         pnlCtrlButtons1 = new javax.swing.JPanel();
         btnAddSuchwort = new javax.swing.JButton();
         btnRemoveSuchwort = new javax.swing.JButton();
@@ -274,15 +270,9 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         cbMapSearch = new javax.swing.JCheckBox();
         pnlButtons = new javax.swing.JPanel();
         btnNewSearch = new javax.swing.JButton();
-        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
-        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
+        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
 
         setPreferredSize(new java.awt.Dimension(70, 20));
         setLayout(new java.awt.BorderLayout());
@@ -293,34 +283,19 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         pnlScrollPane.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         pnlScrollPane.setLayout(new java.awt.GridBagLayout());
 
-        pnlKindOfImage.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                org.openide.util.NbBundle.getMessage(
-                    Sb_StadtbildWindowSearch.class,
-                    "Sb_StadtbildWindowSearch.pnlKindOfImage.border.title"))); // NOI18N
+        pnlKindOfImage.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(Sb_StadtbildWindowSearch.class, "Sb_StadtbildWindowSearch.pnlKindOfImage.border.title"))); // NOI18N
         pnlKindOfImage.setLayout(new javax.swing.BoxLayout(pnlKindOfImage, javax.swing.BoxLayout.PAGE_AXIS));
 
         chboLuftbildschraegaufnahme.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(
-            chboLuftbildschraegaufnahme,
-            org.openide.util.NbBundle.getMessage(
-                Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.chboLuftbildschraegaufnahme.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(chboLuftbildschraegaufnahme, org.openide.util.NbBundle.getMessage(Sb_StadtbildWindowSearch.class, "Sb_StadtbildWindowSearch.chboLuftbildschraegaufnahme.text")); // NOI18N
         pnlKindOfImage.add(chboLuftbildschraegaufnahme);
 
         chboLuftbildsenkrechtaufnahme.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(
-            chboLuftbildsenkrechtaufnahme,
-            org.openide.util.NbBundle.getMessage(
-                Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.chboLuftbildsenkrechtaufnahme.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(chboLuftbildsenkrechtaufnahme, org.openide.util.NbBundle.getMessage(Sb_StadtbildWindowSearch.class, "Sb_StadtbildWindowSearch.chboLuftbildsenkrechtaufnahme.text")); // NOI18N
         pnlKindOfImage.add(chboLuftbildsenkrechtaufnahme);
 
         chboBodennaheAufnahme.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(
-            chboBodennaheAufnahme,
-            org.openide.util.NbBundle.getMessage(
-                Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.chboBodennaheAufnahme.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(chboBodennaheAufnahme, org.openide.util.NbBundle.getMessage(Sb_StadtbildWindowSearch.class, "Sb_StadtbildWindowSearch.chboBodennaheAufnahme.text")); // NOI18N
         pnlKindOfImage.add(chboBodennaheAufnahme);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -329,17 +304,10 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlScrollPane.add(pnlKindOfImage, gridBagConstraints);
 
-        pnlImageNumber.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                org.openide.util.NbBundle.getMessage(
-                    Sb_StadtbildWindowSearch.class,
-                    "Sb_StadtbildWindowSearch.pnlImageNumber.border.title"))); // NOI18N
+        pnlImageNumber.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(Sb_StadtbildWindowSearch.class, "Sb_StadtbildWindowSearch.pnlImageNumber.border.title"))); // NOI18N
         pnlImageNumber.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel1,
-            org.openide.util.NbBundle.getMessage(
-                Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.jLabel1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(Sb_StadtbildWindowSearch.class, "Sb_StadtbildWindowSearch.jLabel1.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlImageNumber.add(jLabel1, gridBagConstraints);
@@ -356,11 +324,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cboImageNrFrom);
         cboImageNrFrom.setVisible(false);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel2,
-            org.openide.util.NbBundle.getMessage(
-                Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.jLabel2.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(Sb_StadtbildWindowSearch.class, "Sb_StadtbildWindowSearch.jLabel2.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -386,12 +350,8 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         gridBagConstraints.weightx = 1.0;
         pnlImageNumber.add(filler2, gridBagConstraints);
 
-        txtImageNrTo.setText(org.openide.util.NbBundle.getMessage(
-                Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.txtImageNrTo.text"));        // NOI18N
-        txtImageNrTo.setToolTipText(org.openide.util.NbBundle.getMessage(
-                Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.txtImageNrTo.toolTipText")); // NOI18N
+        txtImageNrTo.setText(org.openide.util.NbBundle.getMessage(Sb_StadtbildWindowSearch.class, "Sb_StadtbildWindowSearch.txtImageNrTo.text")); // NOI18N
+        txtImageNrTo.setToolTipText(org.openide.util.NbBundle.getMessage(Sb_StadtbildWindowSearch.class, "Sb_StadtbildWindowSearch.txtImageNrTo.toolTipText")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
@@ -400,12 +360,8 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 20);
         pnlImageNumber.add(txtImageNrTo, gridBagConstraints);
 
-        txtImageNrFrom.setText(org.openide.util.NbBundle.getMessage(
-                Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.txtImageNrFrom.text"));        // NOI18N
-        txtImageNrFrom.setToolTipText(org.openide.util.NbBundle.getMessage(
-                Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.txtImageNrFrom.toolTipText")); // NOI18N
+        txtImageNrFrom.setText(org.openide.util.NbBundle.getMessage(Sb_StadtbildWindowSearch.class, "Sb_StadtbildWindowSearch.txtImageNrFrom.text")); // NOI18N
+        txtImageNrFrom.setToolTipText(org.openide.util.NbBundle.getMessage(Sb_StadtbildWindowSearch.class, "Sb_StadtbildWindowSearch.txtImageNrFrom.toolTipText")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -422,10 +378,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlScrollPane.add(pnlImageNumber, gridBagConstraints);
 
-        pnlSearchWords.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                org.openide.util.NbBundle.getMessage(
-                    Sb_StadtbildWindowSearch.class,
-                    "Sb_StadtbildWindowSearch.pnlSearchWords.border.title"))); // NOI18N
+        pnlSearchWords.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(Sb_StadtbildWindowSearch.class, "Sb_StadtbildWindowSearch.pnlSearchWords.border.title"))); // NOI18N
         pnlSearchWords.setLayout(new java.awt.GridBagLayout());
 
         lstSuchworte.setModel(new DefaultListModel());
@@ -438,7 +391,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 20);
         pnlSearchWords.add(jScrollPane2, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -452,40 +405,26 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         pnlCtrlButtons1.setOpaque(false);
         pnlCtrlButtons1.setLayout(new java.awt.GridBagLayout());
 
-        btnAddSuchwort.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(
-            btnAddSuchwort,
-            org.openide.util.NbBundle.getMessage(
-                Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.btnAddSuchwort.text"));                                              // NOI18N
+        btnAddSuchwort.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_add_mini.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnAddSuchwort, org.openide.util.NbBundle.getMessage(Sb_StadtbildWindowSearch.class, "Sb_StadtbildWindowSearch.btnAddSuchwort.text")); // NOI18N
         btnAddSuchwort.setPreferredSize(new java.awt.Dimension(46, 21));
         btnAddSuchwort.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnAddSuchwortActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddSuchwortActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
         pnlCtrlButtons1.add(btnAddSuchwort, gridBagConstraints);
 
-        btnRemoveSuchwort.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(
-            btnRemoveSuchwort,
-            org.openide.util.NbBundle.getMessage(
-                Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.btnRemoveSuchwort.text"));                                              // NOI18N
+        btnRemoveSuchwort.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objecteditors/wunda_blau/edit_remove_mini.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnRemoveSuchwort, org.openide.util.NbBundle.getMessage(Sb_StadtbildWindowSearch.class, "Sb_StadtbildWindowSearch.btnRemoveSuchwort.text")); // NOI18N
         btnRemoveSuchwort.setPreferredSize(new java.awt.Dimension(46, 21));
         btnRemoveSuchwort.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnRemoveSuchwortActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveSuchwortActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 5, 10);
@@ -513,17 +452,10 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(5, 17, 5, 22);
         pnlScrollPane.add(sb_StadtbilderTimeTabs, gridBagConstraints);
 
-        pnlStrassenzuordnung.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                org.openide.util.NbBundle.getMessage(
-                    Sb_StadtbildWindowSearch.class,
-                    "Sb_StadtbildWindowSearch.pnlStrassenzuordnung.border.title"))); // NOI18N
+        pnlStrassenzuordnung.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(Sb_StadtbildWindowSearch.class, "Sb_StadtbildWindowSearch.pnlStrassenzuordnung.border.title"))); // NOI18N
         pnlStrassenzuordnung.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblStrasse,
-            org.openide.util.NbBundle.getMessage(
-                Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.lblStrasse.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblStrasse, org.openide.util.NbBundle.getMessage(Sb_StadtbildWindowSearch.class, "Sb_StadtbildWindowSearch.lblStrasse.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -539,11 +471,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
         pnlStrassenzuordnung.add(cboStreet, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblOrtsname,
-            org.openide.util.NbBundle.getMessage(
-                Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.lblOrtsname.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblOrtsname, org.openide.util.NbBundle.getMessage(Sb_StadtbildWindowSearch.class, "Sb_StadtbildWindowSearch.lblOrtsname.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -553,12 +481,10 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
 
         cboOrt.setEditable(true);
         cboOrt.addItemListener(new java.awt.event.ItemListener() {
-
-                @Override
-                public void itemStateChanged(final java.awt.event.ItemEvent evt) {
-                    cboOrtItemStateChanged(evt);
-                }
-            });
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cboOrtItemStateChanged(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -568,23 +494,15 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
         pnlStrassenzuordnung.add(cboOrt, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblHausnummer,
-            org.openide.util.NbBundle.getMessage(
-                Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.lblHausnummer.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblHausnummer, org.openide.util.NbBundle.getMessage(Sb_StadtbildWindowSearch.class, "Sb_StadtbildWindowSearch.lblHausnummer.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlStrassenzuordnung.add(lblHausnummer, gridBagConstraints);
 
-        txtHausnummer.setText(org.openide.util.NbBundle.getMessage(
-                Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.txtHausnummer.text"));        // NOI18N
-        txtHausnummer.setToolTipText(org.openide.util.NbBundle.getMessage(
-                Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.txtHausnummer.toolTipText")); // NOI18N
+        txtHausnummer.setText(org.openide.util.NbBundle.getMessage(Sb_StadtbildWindowSearch.class, "Sb_StadtbildWindowSearch.txtHausnummer.text")); // NOI18N
+        txtHausnummer.setToolTipText(org.openide.util.NbBundle.getMessage(Sb_StadtbildWindowSearch.class, "Sb_StadtbildWindowSearch.txtHausnummer.toolTipText")); // NOI18N
         txtHausnummer.setPreferredSize(new java.awt.Dimension(56, 19));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
@@ -603,18 +521,12 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
 
         pnlFooter.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            cbMapSearch,
-            org.openide.util.NbBundle.getMessage(
-                Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.cbMapSearch.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(cbMapSearch, org.openide.util.NbBundle.getMessage(Sb_StadtbildWindowSearch.class, "Sb_StadtbildWindowSearch.cbMapSearch.text")); // NOI18N
         cbMapSearch.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    cbMapSearchActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbMapSearchActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -626,21 +538,13 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
 
         pnlButtons.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            btnNewSearch,
-            org.openide.util.NbBundle.getMessage(
-                Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.btnNewSearch.text"));        // NOI18N
-        btnNewSearch.setToolTipText(org.openide.util.NbBundle.getMessage(
-                Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.btnNewSearch.toolTipText")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnNewSearch, org.openide.util.NbBundle.getMessage(Sb_StadtbildWindowSearch.class, "Sb_StadtbildWindowSearch.btnNewSearch.text")); // NOI18N
+        btnNewSearch.setToolTipText(org.openide.util.NbBundle.getMessage(Sb_StadtbildWindowSearch.class, "Sb_StadtbildWindowSearch.btnNewSearch.toolTipText")); // NOI18N
         btnNewSearch.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnNewSearchActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewSearchActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         pnlButtons.add(btnNewSearch, gridBagConstraints);
@@ -683,23 +587,23 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         jScrollPane1.setViewportView(pnlScrollPane);
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbMapSearchActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbMapSearchActionPerformed
+    private void cbMapSearchActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbMapSearchActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_cbMapSearchActionPerformed
+    }//GEN-LAST:event_cbMapSearchActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddSuchwortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddSuchwortActionPerformed
+    private void btnAddSuchwortActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSuchwortActionPerformed
         final Sb_stadtbildserieEditorAddSuchwortDialog dialog = new Sb_stadtbildserieEditorAddSuchwortDialog((Frame)
                 SwingUtilities.getWindowAncestor(this),
                 true);
@@ -708,14 +612,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             final DefaultListModel dlm = (DefaultListModel)lstSuchworte.getModel();
             dlm.addElement(newSuchwort);
         }
-    }                                                                                  //GEN-LAST:event_btnAddSuchwortActionPerformed
+    }//GEN-LAST:event_btnAddSuchwortActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveSuchwortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveSuchwortActionPerformed
+    private void btnRemoveSuchwortActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveSuchwortActionPerformed
         final DefaultListModel dlm = (DefaultListModel)lstSuchworte.getModel();
 
         if (this.lstSuchworte.getSelectedIndices().length > 0) {
@@ -734,14 +638,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 }
             }
         }
-    } //GEN-LAST:event_btnRemoveSuchwortActionPerformed
+    }//GEN-LAST:event_btnRemoveSuchwortActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboOrtItemStateChanged(final java.awt.event.ItemEvent evt) { //GEN-FIRST:event_cboOrtItemStateChanged
+    private void cboOrtItemStateChanged(final java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboOrtItemStateChanged
         Object selectedItem = cboOrt.getSelectedItem();
         if (selectedItem instanceof LightweightMetaObject) {
             selectedItem = ((LightweightMetaObject)selectedItem).getBean();
@@ -762,14 +666,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             txtHausnummer.setText("");
             lblHausnummer.setEnabled(false);
         }
-    } //GEN-LAST:event_cboOrtItemStateChanged
+    }//GEN-LAST:event_cboOrtItemStateChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnNewSearchActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnNewSearchActionPerformed
+    private void btnNewSearchActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewSearchActionPerformed
         chboBodennaheAufnahme.setSelected(true);
         chboLuftbildschraegaufnahme.setSelected(true);
         chboLuftbildsenkrechtaufnahme.setSelected(true);
@@ -782,7 +686,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         cboOrt.setSelectedItem(Sb_stadtbildUtils.getWUPPERTAL());
         txtHausnummer.setText("");
         cbMapSearch.setSelected(false);
-    }                                                                                //GEN-LAST:event_btnNewSearchActionPerformed
+    }//GEN-LAST:event_btnNewSearchActionPerformed
 
     /**
      * DOCUMENT ME!
