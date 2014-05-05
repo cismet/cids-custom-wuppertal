@@ -583,7 +583,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
-        lblBusyPruef = new org.jdesktop.swingx.JXBusyLabel();
+        lblBusyPruef = new org.jdesktop.swingx.JXBusyLabel(new java.awt.Dimension(20, 20));
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
@@ -1011,7 +1011,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         panContent.add(dpAufnahmedatum, gridBagConstraints);
 
-        chbIntern.setText("Nur für den internen Gebrauch");
+        chbIntern.setText("nicht zur Publikation freigegeben");
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -2486,17 +2486,6 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
      */
     final class ImageResizeWorker extends SwingWorker<ImageIcon, Void> {
 
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new ImageResizeWorker object.
-         */
-        public ImageResizeWorker() {
-            if (image != null) {
-                lblPicture.setText("Wird neu skaliert...");
-            }
-        }
-
         //~ Methods ------------------------------------------------------------
 
         /**
@@ -2532,6 +2521,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                     LOG.warn(ex, ex);
                 } catch (ExecutionException ex) {
                     LOG.error(ex, ex);
+                    lblPicture.setIcon(null);
                     lblPicture.setText("Fehler beim Skalieren!");
                 } finally {
                     showWait(false);

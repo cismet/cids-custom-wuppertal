@@ -578,7 +578,7 @@
                         </Component>
                         <Component class="javax.swing.JCheckBox" name="chbIntern">
                           <Properties>
-                            <Property name="text" type="java.lang.String" value="Nur f&#xfc;r den internen Gebrauch"/>
+                            <Property name="text" type="java.lang.String" value="nicht zur Publikation freigegeben"/>
                           </Properties>
                           <BindingProperties>
                             <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.interner_gebrauch}" target="chbIntern" targetPath="selected" updateStrategy="0" immediately="false">
@@ -1468,6 +1468,9 @@
                           </SubComponents>
                         </Container>
                         <Component class="org.jdesktop.swingx.JXBusyLabel" name="lblBusyPruef">
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new org.jdesktop.swingx.JXBusyLabel(new java.awt.Dimension(20, 20))"/>
+                          </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
                               <GridBagConstraints gridX="2" gridY="2" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="10" insetsBottom="10" insetsRight="0" anchor="22" weightX="0.0" weightY="0.0"/>
