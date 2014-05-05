@@ -115,7 +115,7 @@ public class Sb_stadtbildserieEditorAddBildnummerDialog extends javax.swing.JDia
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
-        lblBusy = new org.jdesktop.swingx.JXBusyLabel();
+        lblBusy = new org.jdesktop.swingx.JXBusyLabel(new java.awt.Dimension(20, 20));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(org.openide.util.NbBundle.getMessage(

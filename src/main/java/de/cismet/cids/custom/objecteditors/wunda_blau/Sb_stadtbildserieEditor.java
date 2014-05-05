@@ -583,7 +583,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
-        lblBusyPruef = new org.jdesktop.swingx.JXBusyLabel();
+        lblBusyPruef = new org.jdesktop.swingx.JXBusyLabel(new java.awt.Dimension(20, 20));
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
