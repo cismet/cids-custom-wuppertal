@@ -2486,17 +2486,6 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
      */
     final class ImageResizeWorker extends SwingWorker<ImageIcon, Void> {
 
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new ImageResizeWorker object.
-         */
-        public ImageResizeWorker() {
-            if (image != null) {
-                lblPicture.setText("Wird neu skaliert...");
-            }
-        }
-
         //~ Methods ------------------------------------------------------------
 
         /**
@@ -2532,6 +2521,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                     LOG.warn(ex, ex);
                 } catch (ExecutionException ex) {
                     LOG.error(ex, ex);
+                    lblPicture.setIcon(null);
                     lblPicture.setText("Fehler beim Skalieren!");
                 } finally {
                     showWait(false);
