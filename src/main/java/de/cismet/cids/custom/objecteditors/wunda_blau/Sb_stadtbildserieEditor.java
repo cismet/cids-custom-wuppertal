@@ -2715,23 +2715,23 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         protected void done() {
             try {
                 get();
-                throw new InterruptedException();
+                final String username = SessionManager.getSession().getUser().toString();
+                lblPruefhinweisVon.setText(username);
+
+                try {
+                    final RootTreeNode rootTreeNode = new RootTreeNode(SessionManager.getProxy().getRoots());
+                    ((DefaultTreeModel)ComponentRegistry.getRegistry().getCatalogueTree().getModel()).setRoot(
+                        rootTreeNode);
+                    ((DefaultTreeModel)ComponentRegistry.getRegistry().getCatalogueTree().getModel()).reload();
+                } catch (ConnectionException ex) {
+                    LOG.error("Problem while reloading the catalogue", ex);
+                }
             } catch (InterruptedException ex) {
                 exceptionHandling(ex);
             } catch (ExecutionException ex) {
                 exceptionHandling(ex);
             } finally {
                 lblBusyPruef.setBusy(false);
-            }
-            final String username = SessionManager.getSession().getUser().toString();
-            lblPruefhinweisVon.setText(username);
-
-            try {
-                final RootTreeNode rootTreeNode = new RootTreeNode(SessionManager.getProxy().getRoots());
-                ((DefaultTreeModel)ComponentRegistry.getRegistry().getCatalogueTree().getModel()).setRoot(rootTreeNode);
-                ((DefaultTreeModel)ComponentRegistry.getRegistry().getCatalogueTree().getModel()).reload();
-            } catch (ConnectionException ex) {
-                LOG.error("Problem while reloading the catalogue", ex);
             }
         }
 
@@ -2744,7 +2744,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             LOG.error("Problem while updating the Pruefhinweis", ex);
             final ErrorInfo ei = new ErrorInfo(
                     "Fehler",
-                    "Beim Speicher des Prüfhinweises ist ein Fehler aufgetreten",
+                    "Beim Speichern des Prüfhinweises ist ein Fehler aufgetreten",
                     null,
                     null,
                     ex,
