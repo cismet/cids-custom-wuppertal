@@ -578,7 +578,7 @@
                         </Component>
                         <Component class="javax.swing.JCheckBox" name="chbIntern">
                           <Properties>
-                            <Property name="text" type="java.lang.String" value="Nur f&#xfc;r den internen Gebrauch"/>
+                            <Property name="text" type="java.lang.String" value="nicht zur Publikation freigegeben"/>
                           </Properties>
                           <BindingProperties>
                             <BindingProperty name="selected" source="Form" sourcePath="${cidsBean.interner_gebrauch}" target="chbIntern" targetPath="selected" updateStrategy="0" immediately="false">
