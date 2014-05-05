@@ -29,6 +29,8 @@ import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.JXList;
 import org.jdesktop.swingx.error.ErrorInfo;
 
+import org.openide.util.Exceptions;
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -269,6 +271,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private org.jdesktop.swingx.JXBusyLabel lblBusy;
+    private org.jdesktop.swingx.JXBusyLabel lblBusyPruef;
     private javax.swing.JLabel lblDescAufnahmedatum;
     private javax.swing.JLabel lblDescAuftraggeber;
     private javax.swing.JLabel lblDescBildnummer;
@@ -589,6 +592,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
+        lblBusyPruef = new org.jdesktop.swingx.JXBusyLabel();
 
         panTitle.setOpaque(false);
         panTitle.setLayout(new java.awt.BorderLayout());
@@ -1654,6 +1658,9 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         jScrollPane4.setViewportView(txtaPruefhinweis);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -1670,8 +1677,9 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 10, 10);
         panDetails3.add(btnSavePruefhinweis, gridBagConstraints);
@@ -1705,10 +1713,16 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panDetails3.add(jPanel6, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 10, 0);
+        panDetails3.add(lblBusyPruef, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -2006,21 +2020,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                     Sb_stadtbildserieUpdatePruefhinweisAction.ParameterType.STADTBILDSERIE_ID.toString(),
                     cidsBean.getPrimaryKeyValue());
 
-            try {
-                SessionManager.getProxy()
-                        .executeTask(
-                            Sb_stadtbildserieUpdatePruefhinweisAction.TASK_NAME,
-                            "WUNDA_BLAU",
-                            null,
-                            paramComment,
-                            paramSBSid);
-
-                final RootTreeNode rootTreeNode = new RootTreeNode(SessionManager.getProxy().getRoots());
-                ((DefaultTreeModel)ComponentRegistry.getRegistry().getCatalogueTree().getModel()).setRoot(rootTreeNode);
-                ((DefaultTreeModel)ComponentRegistry.getRegistry().getCatalogueTree().getModel()).reload();
-            } catch (ConnectionException ex) {
-                LOG.error("Problem while updating the Pruefhinweis", ex);
-            }
+            new SavePruefhinweisWorker(paramComment, paramSBSid).execute();
         } else {
             JOptionPane.showMessageDialog(
                 StaticSwingTools.getParentFrame(this),
@@ -2650,6 +2650,96 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             } catch (ExecutionException ex) {
                 LOG.warn(ex, ex);
             }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    final class SavePruefhinweisWorker extends SwingWorker<Void, Void> {
+
+        //~ Instance fields ----------------------------------------------------
+
+        ServerActionParameter paramComment;
+        ServerActionParameter paramSBSid;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new SavePruefhinweisWorker object.
+         *
+         * @param  paramComment  DOCUMENT ME!
+         * @param  paramSBSid    DOCUMENT ME!
+         */
+        public SavePruefhinweisWorker(final ServerActionParameter paramComment,
+                final ServerActionParameter paramSBSid) {
+            this.paramComment = paramComment;
+            this.paramSBSid = paramSBSid;
+            lblBusyPruef.setBusy(true);
+            chbPruefen.setEnabled(false);
+            btnSavePruefhinweis.setEnabled(false);
+            txtaPruefhinweis.setEnabled(false);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        protected Void doInBackground() throws Exception {
+            SessionManager.getProxy()
+                    .executeTask(
+                        Sb_stadtbildserieUpdatePruefhinweisAction.TASK_NAME,
+                        "WUNDA_BLAU",
+                        null,
+                        paramComment,
+                        paramSBSid);
+            return null;
+        }
+
+        @Override
+        protected void done() {
+            try {
+                get();
+                throw new InterruptedException();
+            } catch (InterruptedException ex) {
+                exceptionHandling(ex);
+            } catch (ExecutionException ex) {
+                exceptionHandling(ex);
+            } finally {
+                lblBusyPruef.setBusy(false);
+            }
+            final String username = SessionManager.getSession().getUser().toString();
+            lblPruefhinweisVon.setText(username);
+
+            try {
+                final RootTreeNode rootTreeNode = new RootTreeNode(SessionManager.getProxy().getRoots());
+                ((DefaultTreeModel)ComponentRegistry.getRegistry().getCatalogueTree().getModel()).setRoot(rootTreeNode);
+                ((DefaultTreeModel)ComponentRegistry.getRegistry().getCatalogueTree().getModel()).reload();
+            } catch (ConnectionException ex) {
+                LOG.error("Problem while reloading the catalogue", ex);
+            }
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  ex  DOCUMENT ME!
+         */
+        private void exceptionHandling(final Exception ex) {
+            LOG.error("Problem while updating the Pruefhinweis", ex);
+            final ErrorInfo ei = new ErrorInfo(
+                    "Fehler",
+                    "Beim Speicher des Prüfhinweises ist ein Fehler aufgetreten",
+                    null,
+                    null,
+                    ex,
+                    Level.WARNING,
+                    null);
+            JXErrorPane.showDialog(StaticSwingTools.getParentFrame(Sb_stadtbildserieEditor.this), ei);
+            chbPruefen.setEnabled(true);
+            btnSavePruefhinweis.setEnabled(true);
+            txtaPruefhinweis.setEnabled(true);
         }
     }
 
