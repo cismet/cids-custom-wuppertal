@@ -2716,17 +2716,18 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         protected void done() {
             try {
                 get();
-                // refresh the tree path of the selected node. This will remove the current node from the catalogue
-                // and also its empty parents.
                 final DefaultMetaTreeNode node = ComponentRegistry.getRegistry().getCatalogueTree().getSelectedNode();
-                final Set<Future> futuresReloadingTheOkBranch = ComponentRegistry.getRegistry()
-                            .getCatalogueTree()
-                            .refreshTreePath(new TreePath(node.getPath()));
 
                 new SwingWorker<Void, Void>() {
 
                         @Override
                         protected Void doInBackground() throws Exception {
+                            // refresh the tree path of the selected node. This will remove the current node from the
+                            // catalogue and also its empty parents.
+                            final Set<Future> futuresReloadingTheOkBranch = ComponentRegistry.getRegistry()
+                                        .getCatalogueTree()
+                                        .refreshTreePath(new TreePath(node.getPath()));
+
                             // refreshes every subtree of the "Prüfen"-subtree via its artificial_id. This will add
                             // the previously removed node to one of these subtrees, if it is expanded.
                             ComponentRegistry.getRegistry().getCatalogueTree().requestRefreshNode(
