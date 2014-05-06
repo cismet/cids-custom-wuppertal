@@ -8,11 +8,12 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
-import Sirius.navigator.exception.ConnectionException;
-import Sirius.navigator.types.treenode.RootTreeNode;
+import Sirius.navigator.types.treenode.DefaultMetaTreeNode;
+import Sirius.navigator.types.treenode.ObjectTreeNode;
 import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.MetaObject;
+import Sirius.server.middleware.types.MetaObjectNode;
 
 import com.sun.jersey.api.client.UniformInterfaceException;
 
@@ -30,8 +31,6 @@ import org.jdesktop.beansbinding.Converter;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.JXList;
 import org.jdesktop.swingx.error.ErrorInfo;
-
-import org.openide.util.Exceptions;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -62,7 +61,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 
 import javax.swing.Icon;
@@ -77,7 +78,7 @@ import javax.swing.SwingWorker;
 import javax.swing.Timer;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
@@ -111,7 +112,6 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.tools.gui.FooterComponentProvider;
-import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
@@ -2668,7 +2668,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     }
 
     /**
-     * DOCUMENT ME!
+     * Saves the Pruefhinweis of a Stadtbildserie via a ServerAction. Afterwards the catalogue tree has to be refreshed
+     * as the position of the Stadtbildserie changed from the Ok-subtree to the Prüfen-subtree.
      *
      * @version  $Revision$, $Date$
      */
@@ -2715,17 +2716,55 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         protected void done() {
             try {
                 get();
-                final String username = SessionManager.getSession().getUser().toString();
-                lblPruefhinweisVon.setText(username);
+                // refresh the tree path of the selected node. This will remove the current node from the catalogue
+                // and also its empty parents.
+                final DefaultMetaTreeNode node = ComponentRegistry.getRegistry().getCatalogueTree().getSelectedNode();
+                final Set<Future> futuresReloadingTheOkBranch = ComponentRegistry.getRegistry()
+                            .getCatalogueTree()
+                            .refreshTreePath(new TreePath(node.getPath()));
 
-                try {
-                    final RootTreeNode rootTreeNode = new RootTreeNode(SessionManager.getProxy().getRoots());
-                    ((DefaultTreeModel)ComponentRegistry.getRegistry().getCatalogueTree().getModel()).setRoot(
-                        rootTreeNode);
-                    ((DefaultTreeModel)ComponentRegistry.getRegistry().getCatalogueTree().getModel()).reload();
-                } catch (ConnectionException ex) {
-                    LOG.error("Problem while reloading the catalogue", ex);
-                }
+                new SwingWorker<Void, Void>() {
+
+                        @Override
+                        protected Void doInBackground() throws Exception {
+                            // refreshes every subtree of the "Prüfen"-subtree via its artificial_id. This will add
+                            // the previously removed node to one of these subtrees, if it is expanded.
+                            ComponentRegistry.getRegistry().getCatalogueTree().requestRefreshNode(
+                                "Bodennahe Aufnahme");
+                            ComponentRegistry.getRegistry().getCatalogueTree().requestRefreshNode("Keine");
+                            ComponentRegistry.getRegistry()
+                                    .getCatalogueTree()
+                                    .requestRefreshNode(
+                                        "Luftbildschrägaufnahme");
+                            ComponentRegistry.getRegistry()
+                                    .getCatalogueTree()
+                                    .requestRefreshNode(
+                                        "Luftbildsenkrechtaufnahme");
+
+                            // wait till the current node is removed this is important as the catalogue loses its
+                            // selection and wants to show a NoDescriptionPane
+                            for (final Future f : futuresReloadingTheOkBranch) {
+                                f.get();
+                            }
+                            return null;
+                        }
+
+                        @Override
+                        protected void done() {
+                            try {
+                                get();
+                            } catch (InterruptedException ex) {
+                                LOG.error("Error while waiting till Ok-branch of catalogue reloaded.", ex);
+                            } catch (ExecutionException ex) {
+                                LOG.error("Error while waiting till Ok-branch of catalogue reloaded.", ex);
+                            }
+                            // after the node has been removed, reload the renderer of the current Stadtbildserie.
+                            // However it will not be selected in catalogue.
+                            final List mos = new ArrayList();
+                            mos.add(new ObjectTreeNode(new MetaObjectNode(cidsBean)));
+                            ComponentRegistry.getRegistry().getDescriptionPane().setNodesDescriptions(mos);
+                        }
+                    }.execute();
             } catch (InterruptedException ex) {
                 exceptionHandling(ex);
             } catch (ExecutionException ex) {
