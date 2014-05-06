@@ -1893,7 +1893,8 @@ public class AlkisLandparcelRenderer extends javax.swing.JPanel implements Borde
             if (hausnummernToBeans.isEmpty()) {
                 for (final CidsBean bean : beansWithThisStreet) {
                     adressenContent.append("<tr><td>");
-                    if ((strasse != null) && !strasse.trim().matches(".*\\(\\d+\\)$")) {
+                    if ((strasse != null) && !strasse.trim().matches(".*\\(\\d+\\)$")
+                                && !strasse.trim().matches("^\\(\\d+\\).*")) {
                         adressenContent.append(strasse);
                     } else {
                         adressenContent.append(AlkisUtils.generateLinkFromCidsBean(bean, strasse));
