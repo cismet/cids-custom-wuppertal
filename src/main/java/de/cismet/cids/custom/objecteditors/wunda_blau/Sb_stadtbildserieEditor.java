@@ -8,8 +8,6 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
-import Sirius.navigator.exception.ConnectionException;
-import Sirius.navigator.types.treenode.RootTreeNode;
 import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.MetaObject;
@@ -30,8 +28,6 @@ import org.jdesktop.beansbinding.Converter;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.JXList;
 import org.jdesktop.swingx.error.ErrorInfo;
-
-import org.openide.util.Exceptions;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -78,6 +74,7 @@ import javax.swing.Timer;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
@@ -111,7 +108,6 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.tools.gui.FooterComponentProvider;
-import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
@@ -2718,17 +2714,16 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 final String username = SessionManager.getSession().getUser().toString();
                 lblPruefhinweisVon.setText(username);
 
-                try {
-                    final RootTreeNode rootTreeNode = new RootTreeNode(SessionManager.getProxy().getRoots());
-                    ((DefaultTreeModel)ComponentRegistry.getRegistry().getCatalogueTree().getModel()).setRoot(
-                        rootTreeNode);
-                    ((DefaultTreeModel)ComponentRegistry.getRegistry().getCatalogueTree().getModel()).reload();
-                } catch (ConnectionException ex) {
-                    LOG.error("Problem while reloading the catalogue", ex);
+                final TreeNode selectedNode = ComponentRegistry.getRegistry().getCatalogueTree().getSelectedNode();
+                if (selectedNode != null) {
+                    ((DefaultTreeModel)ComponentRegistry.getRegistry().getCatalogueTree().getModel()).nodeChanged(
+                        selectedNode);
                 }
             } catch (InterruptedException ex) {
                 exceptionHandling(ex);
             } catch (ExecutionException ex) {
+                exceptionHandling(ex);
+            } catch (Exception ex) {
                 exceptionHandling(ex);
             } finally {
                 lblBusyPruef.setBusy(false);
