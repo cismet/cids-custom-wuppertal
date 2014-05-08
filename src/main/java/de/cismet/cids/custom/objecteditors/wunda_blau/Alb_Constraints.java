@@ -16,8 +16,8 @@ import java.util.Date;
 import java.util.List;
 
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
-import de.cismet.cids.custom.wunda_blau.search.Alb_BaulastChecker;
-import de.cismet.cids.custom.wunda_blau.search.Alb_BaulastblattChecker;
+import de.cismet.cids.custom.wunda_blau.search.server.Alb_BaulastChecker;
+import de.cismet.cids.custom.wunda_blau.search.server.Alb_BaulastblattChecker;
 
 import de.cismet.cids.dynamics.CidsBean;
 

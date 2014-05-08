@@ -9,6 +9,8 @@ package de.cismet.cids.custom.wunda_blau.search;
 
 import javax.swing.ImageIcon;
 
+import de.cismet.cids.custom.wunda_blau.search.server.FullTextSearchStatement;
+
 import de.cismet.cids.server.search.MetaObjectNodeServerSearch;
 
 import de.cismet.cids.tools.search.clientstuff.CidsToolbarSearch;
