@@ -154,7 +154,7 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
             super.setPopupMenu(popUpMenu);
             setFocusPainted(false);
             setBorderPainted(false);
-            this.addActionListener(new ActionListener() {
+            addActionListener(new ActionListener() {
 
                     @Override
                     public void actionPerformed(final ActionEvent e) {
@@ -164,6 +164,7 @@ public class DigitalDataExportToolbarComponentProvider implements ToolbarCompone
                                 public void run() {
                                     if (!popUpMenu.isVisible() && !setsPopUpVisible) {
                                         setsPopUpVisible = true;
+                                        popUpMenu.show(DataExportButton.this, 0, DataExportButton.this.getHeight());
                                         popUpMenu.setVisible(true);
                                     } else {
                                         if (!popUpMenu.isVisible()) {
