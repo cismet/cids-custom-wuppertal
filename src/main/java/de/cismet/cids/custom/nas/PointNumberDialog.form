@@ -407,10 +407,10 @@
               <StringArray count="0"/>
             </Property>
             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[60, 27]"/>
+              <Dimension value="[70, 27]"/>
             </Property>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[60, 27]"/>
+              <Dimension value="[70, 27]"/>
             </Property>
           </Properties>
           <Events>
