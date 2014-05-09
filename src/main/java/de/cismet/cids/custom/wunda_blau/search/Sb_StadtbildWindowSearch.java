@@ -966,19 +966,22 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             
             for (int i = begin; i <= end; i++) {
                 if(bothNull){
-                    
+                    listWithNumbers.add(prefix + String.format(intToStringFormat, i));
                 } else {
-                 
-                    for (int j = letterOfNrFrom; j <= letterOfNrTo; j++) {
-                    listWithNumbers.add(prefix + String.format(intToStringFormat, i) + (char) j);
-                }     
+                    char startLetter;
+                    if(letterOfNrFrom == '\0'){
+                        listWithNumbers.add(prefix + String.format(intToStringFormat, i));
+                        startLetter='a';
+                    } else {
+                        startLetter = letterOfNrFrom;
+                    }
+                    for (int j = startLetter; j <= letterOfNrTo; j++) {
+                        listWithNumbers.add(prefix + String.format(intToStringFormat, i) + (char) j);
+                    }     
                 }
             }
 
-        
-        
-        
-        return null;
+       stadtbildSerieSearchStatement.setFancyIntervall(listWithNumbers);
     }
     
     private static String greatestCommonPrefix(String a, String b) {
