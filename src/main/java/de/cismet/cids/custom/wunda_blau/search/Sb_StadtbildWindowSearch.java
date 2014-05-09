@@ -690,16 +690,16 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbMapSearchActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbMapSearchActionPerformed
+    private void cbMapSearchActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbMapSearchActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_cbMapSearchActionPerformed
+    }//GEN-LAST:event_cbMapSearchActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddSuchwortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddSuchwortActionPerformed
+    private void btnAddSuchwortActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSuchwortActionPerformed
         final Sb_stadtbildserieEditorAddSuchwortDialog dialog = new Sb_stadtbildserieEditorAddSuchwortDialog((Frame)
                 SwingUtilities.getWindowAncestor(this),
                 true);
@@ -708,14 +708,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             final DefaultListModel dlm = (DefaultListModel)lstSuchworte.getModel();
             dlm.addElement(newSuchwort);
         }
-    }                                                                                  //GEN-LAST:event_btnAddSuchwortActionPerformed
+    }//GEN-LAST:event_btnAddSuchwortActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveSuchwortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveSuchwortActionPerformed
+    private void btnRemoveSuchwortActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveSuchwortActionPerformed
         final DefaultListModel dlm = (DefaultListModel)lstSuchworte.getModel();
 
         if (this.lstSuchworte.getSelectedIndices().length > 0) {
@@ -734,14 +734,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 }
             }
         }
-    } //GEN-LAST:event_btnRemoveSuchwortActionPerformed
+    }//GEN-LAST:event_btnRemoveSuchwortActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboOrtItemStateChanged(final java.awt.event.ItemEvent evt) { //GEN-FIRST:event_cboOrtItemStateChanged
+    private void cboOrtItemStateChanged(final java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboOrtItemStateChanged
         Object selectedItem = cboOrt.getSelectedItem();
         if (selectedItem instanceof LightweightMetaObject) {
             selectedItem = ((LightweightMetaObject)selectedItem).getBean();
@@ -762,14 +762,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             txtHausnummer.setText("");
             lblHausnummer.setEnabled(false);
         }
-    } //GEN-LAST:event_cboOrtItemStateChanged
+    }//GEN-LAST:event_cboOrtItemStateChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnNewSearchActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnNewSearchActionPerformed
+    private void btnNewSearchActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewSearchActionPerformed
         chboBodennaheAufnahme.setSelected(true);
         chboLuftbildschraegaufnahme.setSelected(true);
         chboLuftbildsenkrechtaufnahme.setSelected(true);
@@ -782,7 +782,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         cboOrt.setSelectedItem(Sb_stadtbildUtils.getWUPPERTAL());
         txtHausnummer.setText("");
         cbMapSearch.setSelected(false);
-    }                                                                                //GEN-LAST:event_btnNewSearchActionPerformed
+    }//GEN-LAST:event_btnNewSearchActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -840,7 +840,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
 
         try {
             setBildnummerInSearch(stadtbildSerieSearchStatement);
-        } catch (NotAValidIntervallException ex) {
+        } catch (NotAValidIntervalException ex) {
             JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                 NbBundle.getMessage(
                     Sb_StadtbildWindowSearch.class,
@@ -926,14 +926,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     }
 
     /**
-     * DOCUMENT ME!
+     * Sets the bildnummern in a object of MetaObjectNodesStadtbildSerieSearchStatement.
      *
      * @param   stadtbildSerieSearchStatement  DOCUMENT ME!
      *
-     * @throws  NotAValidIntervallException  DOCUMENT ME!
+     * @throws  NotAValidIntervalException  DOCUMENT ME!
      */
     private void setBildnummerInSearch(final MetaObjectNodesStadtbildSerieSearchStatement stadtbildSerieSearchStatement)
-            throws NotAValidIntervallException {
+            throws NotAValidIntervalException {
         final String imageNrFrom = txtImageNrFrom.getText();
         final String imageNrTo = txtImageNrTo.getText();
 
@@ -945,7 +945,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 stadtbildSerieSearchStatement.setImageNrTo(imageNrTo);
                 stadtbildSerieSearchStatement.setImageNrFrom(imageNrFrom);
             } else {
-                setFancyIntervallInSearch(stadtbildSerieSearchStatement, imageNrFrom, imageNrTo);
+                setFancyIntervalInSearch(stadtbildSerieSearchStatement, imageNrFrom, imageNrTo);
             }
         } else {
             // no or only one number set
@@ -955,23 +955,25 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     }
 
     /**
-     * DOCUMENT ME!
+     * Calculates the elements of a fancy interval like N4711-N4712, 4711-4712c or even N4711-N4712c.
+     * These elements are put in a list and are given to a MetaObjectNodesStadtbildSerieSearchStatement object.
+     * If the interval is even too fancy for this method a NotAValidIntervalException will be thrown.
      *
      * @param   stadtbildSerieSearchStatement  DOCUMENT ME!
      * @param   imageNrFrom                    DOCUMENT ME!
      * @param   imageNrTo                      DOCUMENT ME!
      *
-     * @throws  NotAValidIntervallException  DOCUMENT ME!
+     * @throws  NotAValidIntervalException  DOCUMENT ME!
      */
-    private void setFancyIntervallInSearch(
+    private void setFancyIntervalInSearch(
             final MetaObjectNodesStadtbildSerieSearchStatement stadtbildSerieSearchStatement,
             String imageNrFrom,
-            String imageNrTo) throws NotAValidIntervallException {
+            String imageNrTo) throws NotAValidIntervalException {
         char lastCharacter = imageNrFrom.charAt(imageNrFrom.length() - 1);
         final char letterOfNrFrom = Character.isLetter(lastCharacter) ? lastCharacter : '\0';
         if (Character.isLetter(lastCharacter)) {
             imageNrFrom = imageNrFrom.substring(0, imageNrFrom.length() - 1);
-        }
+        }        
         lastCharacter = imageNrTo.charAt(imageNrTo.length() - 1);
         final char letterOfNrTo = Character.isLetter(lastCharacter) ? lastCharacter : '\0';
         if (Character.isLetter(lastCharacter)) {
@@ -980,10 +982,10 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
 
         if (((letterOfNrFrom != '\0') && (letterOfNrTo != '\0'))) {
             if ((letterOfNrFrom >= letterOfNrTo)) {
-                throw new NotAValidIntervallException();
+                throw new NotAValidIntervalException();
             }
         } else if (imageNrFrom.length() != imageNrTo.length()) {
-            throw new NotAValidIntervallException();
+            throw new NotAValidIntervalException();
         }
 
         final ArrayList<String> listWithNumbers = new ArrayList<String>();
@@ -992,7 +994,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         final int prefix_length = prefix.length();
 
         if (StringUtils.isBlank(prefix)) {
-            throw new NotAValidIntervallException();
+            throw new NotAValidIntervalException();
         } else if (prefix.equals(imageNrFrom)) {
             // both numbers have the same number base, only the last character was different
             char startLetter;
@@ -1012,7 +1014,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             final int end = Integer.parseInt(end_str);
 
             if (begin > end) {
-                throw new NotAValidIntervallException();
+                throw new NotAValidIntervalException();
             }
 
             final String intToStringFormat = "%0" + end_str.length() + "d";
@@ -1036,7 +1038,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             }
         }
 
-        stadtbildSerieSearchStatement.setFancyIntervall(listWithNumbers);
+        stadtbildSerieSearchStatement.setFancyInterval(listWithNumbers);
     }
 
     /**
@@ -1152,7 +1154,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
      *
      * @version  $Revision$, $Date$
      */
-    private class NotAValidIntervallException extends Exception {
+    private class NotAValidIntervalException extends Exception {
     }
 
     /**
