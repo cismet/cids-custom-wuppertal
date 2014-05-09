@@ -101,7 +101,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             Sb_StadtbildWindowSearch.class);
     private static final String ACTION_TAG = "custom.stadtbilder.search@WUNDA_BLAU";
-    private static final Pattern SIX_DIGIT_INTEGER_PATTERN = Pattern.compile("\\d{6}");
+    private static final Pattern ONLY_DIGITS_INTEGER_PATTERN = Pattern.compile("\\d+");
 
     //~ Instance fields --------------------------------------------------------
 
@@ -690,16 +690,16 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbMapSearchActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbMapSearchActionPerformed
+    private void cbMapSearchActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbMapSearchActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_cbMapSearchActionPerformed
+    }//GEN-LAST:event_cbMapSearchActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddSuchwortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddSuchwortActionPerformed
+    private void btnAddSuchwortActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSuchwortActionPerformed
         final Sb_stadtbildserieEditorAddSuchwortDialog dialog = new Sb_stadtbildserieEditorAddSuchwortDialog((Frame)
                 SwingUtilities.getWindowAncestor(this),
                 true);
@@ -708,14 +708,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             final DefaultListModel dlm = (DefaultListModel)lstSuchworte.getModel();
             dlm.addElement(newSuchwort);
         }
-    }                                                                                  //GEN-LAST:event_btnAddSuchwortActionPerformed
+    }//GEN-LAST:event_btnAddSuchwortActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveSuchwortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveSuchwortActionPerformed
+    private void btnRemoveSuchwortActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveSuchwortActionPerformed
         final DefaultListModel dlm = (DefaultListModel)lstSuchworte.getModel();
 
         if (this.lstSuchworte.getSelectedIndices().length > 0) {
@@ -734,14 +734,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 }
             }
         }
-    } //GEN-LAST:event_btnRemoveSuchwortActionPerformed
+    }//GEN-LAST:event_btnRemoveSuchwortActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboOrtItemStateChanged(final java.awt.event.ItemEvent evt) { //GEN-FIRST:event_cboOrtItemStateChanged
+    private void cboOrtItemStateChanged(final java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboOrtItemStateChanged
         Object selectedItem = cboOrt.getSelectedItem();
         if (selectedItem instanceof LightweightMetaObject) {
             selectedItem = ((LightweightMetaObject)selectedItem).getBean();
@@ -762,14 +762,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             txtHausnummer.setText("");
             lblHausnummer.setEnabled(false);
         }
-    } //GEN-LAST:event_cboOrtItemStateChanged
+    }//GEN-LAST:event_cboOrtItemStateChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnNewSearchActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnNewSearchActionPerformed
+    private void btnNewSearchActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewSearchActionPerformed
         chboBodennaheAufnahme.setSelected(true);
         chboLuftbildschraegaufnahme.setSelected(true);
         chboLuftbildsenkrechtaufnahme.setSelected(true);
@@ -782,7 +782,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         cboOrt.setSelectedItem(Sb_stadtbildUtils.getWUPPERTAL());
         txtHausnummer.setText("");
         cbMapSearch.setSelected(false);
-    }                                                                                //GEN-LAST:event_btnNewSearchActionPerformed
+    }//GEN-LAST:event_btnNewSearchActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -837,13 +837,11 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     public MetaObjectNodeServerSearch getServerSearch(final Geometry geometry) {
         final MetaObjectNodesStadtbildSerieSearchStatement stadtbildSerieSearchStatement =
             new MetaObjectNodesStadtbildSerieSearchStatement(SessionManager.getSession().getUser());
-
-        final String imageNrFrom = txtImageNrFrom.getText();
-        final String imageNrTo = txtImageNrTo.getText();
-        if (StringUtils.isNotBlank(imageNrFrom) && StringUtils.isNotBlank(imageNrTo)) {
-            if (!SIX_DIGIT_INTEGER_PATTERN.matcher(imageNrFrom).matches()
-                        || !SIX_DIGIT_INTEGER_PATTERN.matcher(imageNrTo).matches()) {
-                JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+        
+        try {
+            setBildnummerInSearch(stadtbildSerieSearchStatement);
+        } catch (NotAValidIntervallException ex) {
+                            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
                     NbBundle.getMessage(
                         Sb_StadtbildWindowSearch.class,
                         "Sb_StadtbildWindowSearch.getServerSearch().dialog.message"),
@@ -851,12 +849,8 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                         Sb_StadtbildWindowSearch.class,
                         "Sb_StadtbildWindowSearch.getServerSearch().dialog.title"),
                     JOptionPane.ERROR_MESSAGE);
-                return null;
-            }
+                            return null;
         }
-
-        stadtbildSerieSearchStatement.setImageNrTo(imageNrTo);
-        stadtbildSerieSearchStatement.setImageNrFrom(imageNrFrom);
 
         final ArrayList<MetaObjectNodesStadtbildSerieSearchStatement.Bildtyp> bildtyp =
             new ArrayList<MetaObjectNodesStadtbildSerieSearchStatement.Bildtyp>();
@@ -930,7 +924,47 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
 
         return stadtbildSerieSearchStatement;
     }
+    
+    private void setBildnummerInSearch(MetaObjectNodesStadtbildSerieSearchStatement stadtbildSerieSearchStatement) throws NotAValidIntervallException {
+        
+        final String imageNrFrom = txtImageNrFrom.getText();
+        final String imageNrTo = txtImageNrTo.getText();
+        
+        if(StringUtils.isNotBlank(imageNrFrom) && StringUtils.isNotBlank(imageNrTo)){
+            // 'normal' interval, numbers have same length and consists only of digits
+            if(imageNrFrom.length() == imageNrTo.length() && ONLY_DIGITS_INTEGER_PATTERN.matcher(imageNrFrom).matches() && ONLY_DIGITS_INTEGER_PATTERN.matcher(imageNrTo).matches()){
+                stadtbildSerieSearchStatement.setImageNrTo(imageNrTo);
+                stadtbildSerieSearchStatement.setImageNrFrom(imageNrFrom);
+            } else {
+                setFancyIntervallInSearch(stadtbildSerieSearchStatement);
+            }            
+        } else {
+            // no or only one number set
+            stadtbildSerieSearchStatement.setImageNrTo(imageNrTo);
+            stadtbildSerieSearchStatement.setImageNrFrom(imageNrFrom);
+        }
+    }
 
+    
+    private void setFancyIntervallInSearch(MetaObjectNodesStadtbildSerieSearchStatement stadtbildSerieSearchStatement) throws NotAValidIntervallException {
+        LOG.fatal("Sb_StadtbildWindowSearch.setFancyIntervallInSearch: Not supported yet.", new Exception()); //NOI18N
+        return null;
+    }
+    
+    private static String greatestCommonPrefix(String a, String b) {
+        int minLength = Math.min(a.length(), b.length());
+        for (int i = 0; i < minLength; i++) {
+            if (a.charAt(i) != b.charAt(i)) {
+                return a.substring(0, i);
+            }
+        }
+        return a.substring(0, minLength);
+    }
+
+    private class NotAValidIntervallException extends Exception{
+        
+    }
+    
     /**
      * DOCUMENT ME!
      *
