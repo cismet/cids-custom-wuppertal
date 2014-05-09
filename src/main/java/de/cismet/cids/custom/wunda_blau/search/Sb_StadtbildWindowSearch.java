@@ -1010,6 +1010,11 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             final String end_str = imageNrTo.substring(prefix_length);
             final int begin = Integer.parseInt(begin_str);
             final int end = Integer.parseInt(end_str);
+
+            if (begin > end) {
+                throw new NotAValidIntervallException();
+            }
+
             final String intToStringFormat = "%0" + end_str.length() + "d";
             final boolean bothNull = (letterOfNrFrom == '\0') && (letterOfNrTo == '\0');
 
