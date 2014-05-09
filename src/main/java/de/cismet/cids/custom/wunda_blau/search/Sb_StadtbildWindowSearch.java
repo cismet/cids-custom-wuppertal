@@ -101,7 +101,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             Sb_StadtbildWindowSearch.class);
     private static final String ACTION_TAG = "custom.stadtbilder.search@WUNDA_BLAU";
-    private static final Pattern SIX_DIGIT_INTEGER_PATTERN = Pattern.compile("\\d{6}");
+    private static final Pattern ONLY_DIGITS_INTEGER_PATTERN = Pattern.compile("\\d+");
 
     //~ Instance fields --------------------------------------------------------
 
@@ -838,25 +838,19 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         final MetaObjectNodesStadtbildSerieSearchStatement stadtbildSerieSearchStatement =
             new MetaObjectNodesStadtbildSerieSearchStatement(SessionManager.getSession().getUser());
 
-        final String imageNrFrom = txtImageNrFrom.getText();
-        final String imageNrTo = txtImageNrTo.getText();
-        if (StringUtils.isNotBlank(imageNrFrom) && StringUtils.isNotBlank(imageNrTo)) {
-            if (!SIX_DIGIT_INTEGER_PATTERN.matcher(imageNrFrom).matches()
-                        || !SIX_DIGIT_INTEGER_PATTERN.matcher(imageNrTo).matches()) {
-                JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                    NbBundle.getMessage(
-                        Sb_StadtbildWindowSearch.class,
-                        "Sb_StadtbildWindowSearch.getServerSearch().dialog.message"),
-                    NbBundle.getMessage(
-                        Sb_StadtbildWindowSearch.class,
-                        "Sb_StadtbildWindowSearch.getServerSearch().dialog.title"),
-                    JOptionPane.ERROR_MESSAGE);
-                return null;
-            }
+        try {
+            setBildnummerInSearch(stadtbildSerieSearchStatement);
+        } catch (NotAValidIntervalException ex) {
+            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                NbBundle.getMessage(
+                    Sb_StadtbildWindowSearch.class,
+                    "Sb_StadtbildWindowSearch.getServerSearch().dialog.message"),
+                NbBundle.getMessage(
+                    Sb_StadtbildWindowSearch.class,
+                    "Sb_StadtbildWindowSearch.getServerSearch().dialog.title"),
+                JOptionPane.ERROR_MESSAGE);
+            return null;
         }
-
-        stadtbildSerieSearchStatement.setImageNrTo(imageNrTo);
-        stadtbildSerieSearchStatement.setImageNrFrom(imageNrFrom);
 
         final ArrayList<MetaObjectNodesStadtbildSerieSearchStatement.Bildtyp> bildtyp =
             new ArrayList<MetaObjectNodesStadtbildSerieSearchStatement.Bildtyp>();
@@ -929,6 +923,158 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         stadtbildSerieSearchStatement.setGeometryToSearchFor(transformedBoundingBox);
 
         return stadtbildSerieSearchStatement;
+    }
+
+    /**
+     * Sets the bildnummern in a object of MetaObjectNodesStadtbildSerieSearchStatement.
+     *
+     * @param   stadtbildSerieSearchStatement  DOCUMENT ME!
+     *
+     * @throws  NotAValidIntervalException  DOCUMENT ME!
+     */
+    private void setBildnummerInSearch(final MetaObjectNodesStadtbildSerieSearchStatement stadtbildSerieSearchStatement)
+            throws NotAValidIntervalException {
+        final String imageNrFrom = txtImageNrFrom.getText();
+        final String imageNrTo = txtImageNrTo.getText();
+
+        if (StringUtils.isNotBlank(imageNrFrom) && StringUtils.isNotBlank(imageNrTo)) {
+            // 'normal' interval, numbers have same length and consists only of digits
+            if ((imageNrFrom.length() == imageNrTo.length())
+                        && ONLY_DIGITS_INTEGER_PATTERN.matcher(imageNrFrom).matches()
+                        && ONLY_DIGITS_INTEGER_PATTERN.matcher(imageNrTo).matches()) {
+                stadtbildSerieSearchStatement.setImageNrTo(imageNrTo);
+                stadtbildSerieSearchStatement.setImageNrFrom(imageNrFrom);
+            } else {
+                setFancyIntervalInSearch(stadtbildSerieSearchStatement, imageNrFrom, imageNrTo);
+            }
+        } else {
+            // no or only one number set
+            stadtbildSerieSearchStatement.setImageNrTo(imageNrTo);
+            stadtbildSerieSearchStatement.setImageNrFrom(imageNrFrom);
+        }
+    }
+
+    /**
+     * Calculates the elements of a fancy interval like N4711-N4712, 4711-4712c or even N4711-N4712c. These elements are
+     * put in a list and are given to a MetaObjectNodesStadtbildSerieSearchStatement object. If the interval is even too
+     * fancy for this method a NotAValidIntervalException will be thrown.
+     *
+     * @param   stadtbildSerieSearchStatement  DOCUMENT ME!
+     * @param   imageNrFrom                    DOCUMENT ME!
+     * @param   imageNrTo                      DOCUMENT ME!
+     *
+     * @throws  NotAValidIntervalException  DOCUMENT ME!
+     */
+    private void setFancyIntervalInSearch(
+            final MetaObjectNodesStadtbildSerieSearchStatement stadtbildSerieSearchStatement,
+            String imageNrFrom,
+            String imageNrTo) throws NotAValidIntervalException {
+        char lastCharacter = imageNrFrom.charAt(imageNrFrom.length() - 1);
+        char letterOfNrFrom;
+        if (Character.isLetter(lastCharacter)) {
+            // remove the last letter and save it
+            imageNrFrom = imageNrFrom.substring(0, imageNrFrom.length() - 1);
+            letterOfNrFrom = lastCharacter;
+        } else {
+            letterOfNrFrom = '\0';
+        }
+
+        lastCharacter = imageNrTo.charAt(imageNrTo.length() - 1);
+        char letterOfNrTo;
+        if (Character.isLetter(lastCharacter)) {
+            // remove the last letter and save it
+            imageNrTo = imageNrTo.substring(0, imageNrTo.length() - 1);
+            letterOfNrTo = lastCharacter;
+        } else {
+            letterOfNrTo = '\0';
+        }
+
+        if (((letterOfNrFrom != '\0') && (letterOfNrTo != '\0'))) {
+            if ((letterOfNrFrom >= letterOfNrTo)) {
+                // the letter of the first number must be smaller than that of the second number
+                // except they do not have a number at all
+                throw new NotAValidIntervalException();
+            }
+        } else if (imageNrFrom.length() != imageNrTo.length()) {
+            // the two numbers must have the same length
+            throw new NotAValidIntervalException();
+        }
+
+        final ArrayList<String> listWithNumbers = new ArrayList<String>();
+        final String prefix = greatestCommonPrefix(imageNrFrom, imageNrTo);
+        final int prefix_length = prefix.length();
+
+        if (StringUtils.isBlank(prefix)) {
+            // if the two numbers do not have a common prefix, than they are two different
+            throw new NotAValidIntervalException();
+        } else if (prefix.equals(imageNrFrom)) {
+            // both numbers have the digits, only the last character was different
+            char startLetter;
+            if (letterOfNrFrom == '\0') {
+                listWithNumbers.add(prefix);
+                startLetter = 'a';
+            } else {
+                startLetter = letterOfNrFrom;
+            }
+            for (int j = startLetter; j <= letterOfNrTo; j++) {
+                listWithNumbers.add(prefix + (char)j);
+            }
+        } else {
+            // both numbers have diferent digits and the last character was different
+            final String begin_str = imageNrFrom.substring(prefix_length);
+            final String end_str = imageNrTo.substring(prefix_length);
+            final int begin = Integer.parseInt(begin_str);
+            final int end = Integer.parseInt(end_str);
+
+            if (begin > end) {
+                // the last number was bigger than the first number
+                throw new NotAValidIntervalException();
+            }
+
+            final String intToStringFormat = "%0" + end_str.length() + "d";
+            final boolean bothNull = (letterOfNrFrom == '\0') && (letterOfNrTo == '\0');
+
+            for (int i = begin; i <= end; i++) {
+                if (bothNull) {
+                    // the numbers do not have a last letter, simply add the number
+                    listWithNumbers.add(prefix + String.format(intToStringFormat, i));
+                } else {
+                    // the numbers do have a last letter, also iterate over the letters
+                    char startLetter;
+                    if (letterOfNrFrom == '\0') {
+                        // the first number does not have a letter. Add it to the list and set the letter to 'a'
+                        // Thus an iteration of letters is possible
+                        listWithNumbers.add(prefix + String.format(intToStringFormat, i));
+                        startLetter = 'a';
+                    } else {
+                        startLetter = letterOfNrFrom;
+                    }
+                    for (int j = startLetter; j <= letterOfNrTo; j++) {
+                        listWithNumbers.add(prefix + String.format(intToStringFormat, i) + (char)j);
+                    }
+                }
+            }
+        }
+
+        stadtbildSerieSearchStatement.setFancyInterval(listWithNumbers);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   a  DOCUMENT ME!
+     * @param   b  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static String greatestCommonPrefix(final String a, final String b) {
+        final int minLength = Math.min(a.length(), b.length());
+        for (int i = 0; i < minLength; i++) {
+            if (a.charAt(i) != b.charAt(i)) {
+                return a.substring(0, i);
+            }
+        }
+        return a.substring(0, minLength);
     }
 
     /**
@@ -1020,6 +1166,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     }
 
     //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class NotAValidIntervalException extends Exception {
+    }
 
     /**
      * A subclass of SearchControlPanel, which checks first how many results (Stadtbildserien) were found.
