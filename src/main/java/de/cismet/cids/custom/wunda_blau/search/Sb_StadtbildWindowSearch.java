@@ -690,16 +690,16 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbMapSearchActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbMapSearchActionPerformed
+    private void cbMapSearchActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbMapSearchActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbMapSearchActionPerformed
+    } //GEN-LAST:event_cbMapSearchActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddSuchwortActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSuchwortActionPerformed
+    private void btnAddSuchwortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddSuchwortActionPerformed
         final Sb_stadtbildserieEditorAddSuchwortDialog dialog = new Sb_stadtbildserieEditorAddSuchwortDialog((Frame)
                 SwingUtilities.getWindowAncestor(this),
                 true);
@@ -708,14 +708,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             final DefaultListModel dlm = (DefaultListModel)lstSuchworte.getModel();
             dlm.addElement(newSuchwort);
         }
-    }//GEN-LAST:event_btnAddSuchwortActionPerformed
+    }                                                                                  //GEN-LAST:event_btnAddSuchwortActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveSuchwortActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveSuchwortActionPerformed
+    private void btnRemoveSuchwortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveSuchwortActionPerformed
         final DefaultListModel dlm = (DefaultListModel)lstSuchworte.getModel();
 
         if (this.lstSuchworte.getSelectedIndices().length > 0) {
@@ -734,14 +734,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveSuchwortActionPerformed
+    } //GEN-LAST:event_btnRemoveSuchwortActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboOrtItemStateChanged(final java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboOrtItemStateChanged
+    private void cboOrtItemStateChanged(final java.awt.event.ItemEvent evt) { //GEN-FIRST:event_cboOrtItemStateChanged
         Object selectedItem = cboOrt.getSelectedItem();
         if (selectedItem instanceof LightweightMetaObject) {
             selectedItem = ((LightweightMetaObject)selectedItem).getBean();
@@ -762,14 +762,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             txtHausnummer.setText("");
             lblHausnummer.setEnabled(false);
         }
-    }//GEN-LAST:event_cboOrtItemStateChanged
+    } //GEN-LAST:event_cboOrtItemStateChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnNewSearchActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewSearchActionPerformed
+    private void btnNewSearchActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnNewSearchActionPerformed
         chboBodennaheAufnahme.setSelected(true);
         chboLuftbildschraegaufnahme.setSelected(true);
         chboLuftbildsenkrechtaufnahme.setSelected(true);
@@ -782,7 +782,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         cboOrt.setSelectedItem(Sb_stadtbildUtils.getWUPPERTAL());
         txtHausnummer.setText("");
         cbMapSearch.setSelected(false);
-    }//GEN-LAST:event_btnNewSearchActionPerformed
+    }                                                                                //GEN-LAST:event_btnNewSearchActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -837,19 +837,19 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     public MetaObjectNodeServerSearch getServerSearch(final Geometry geometry) {
         final MetaObjectNodesStadtbildSerieSearchStatement stadtbildSerieSearchStatement =
             new MetaObjectNodesStadtbildSerieSearchStatement(SessionManager.getSession().getUser());
-        
+
         try {
             setBildnummerInSearch(stadtbildSerieSearchStatement);
         } catch (NotAValidIntervallException ex) {
-                            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
-                    NbBundle.getMessage(
-                        Sb_StadtbildWindowSearch.class,
-                        "Sb_StadtbildWindowSearch.getServerSearch().dialog.message"),
-                    NbBundle.getMessage(
-                        Sb_StadtbildWindowSearch.class,
-                        "Sb_StadtbildWindowSearch.getServerSearch().dialog.title"),
-                    JOptionPane.ERROR_MESSAGE);
-                            return null;
+            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+                NbBundle.getMessage(
+                    Sb_StadtbildWindowSearch.class,
+                    "Sb_StadtbildWindowSearch.getServerSearch().dialog.message"),
+                NbBundle.getMessage(
+                    Sb_StadtbildWindowSearch.class,
+                    "Sb_StadtbildWindowSearch.getServerSearch().dialog.title"),
+                JOptionPane.ERROR_MESSAGE);
+            return null;
         }
 
         final ArrayList<MetaObjectNodesStadtbildSerieSearchStatement.Bildtyp> bildtyp =
@@ -924,20 +924,29 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
 
         return stadtbildSerieSearchStatement;
     }
-    
-    private void setBildnummerInSearch(MetaObjectNodesStadtbildSerieSearchStatement stadtbildSerieSearchStatement) throws NotAValidIntervallException {
-        
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   stadtbildSerieSearchStatement  DOCUMENT ME!
+     *
+     * @throws  NotAValidIntervallException  DOCUMENT ME!
+     */
+    private void setBildnummerInSearch(final MetaObjectNodesStadtbildSerieSearchStatement stadtbildSerieSearchStatement)
+            throws NotAValidIntervallException {
         final String imageNrFrom = txtImageNrFrom.getText();
         final String imageNrTo = txtImageNrTo.getText();
-        
-        if(StringUtils.isNotBlank(imageNrFrom) && StringUtils.isNotBlank(imageNrTo)){
+
+        if (StringUtils.isNotBlank(imageNrFrom) && StringUtils.isNotBlank(imageNrTo)) {
             // 'normal' interval, numbers have same length and consists only of digits
-            if(imageNrFrom.length() == imageNrTo.length() && ONLY_DIGITS_INTEGER_PATTERN.matcher(imageNrFrom).matches() && ONLY_DIGITS_INTEGER_PATTERN.matcher(imageNrTo).matches()){
+            if ((imageNrFrom.length() == imageNrTo.length())
+                        && ONLY_DIGITS_INTEGER_PATTERN.matcher(imageNrFrom).matches()
+                        && ONLY_DIGITS_INTEGER_PATTERN.matcher(imageNrTo).matches()) {
                 stadtbildSerieSearchStatement.setImageNrTo(imageNrTo);
                 stadtbildSerieSearchStatement.setImageNrFrom(imageNrFrom);
             } else {
                 setFancyIntervallInSearch(stadtbildSerieSearchStatement, imageNrFrom, imageNrTo);
-            }            
+            }
         } else {
             // no or only one number set
             stadtbildSerieSearchStatement.setImageNrTo(imageNrTo);
@@ -945,47 +954,96 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         }
     }
 
-    
-    private void setFancyIntervallInSearch(MetaObjectNodesStadtbildSerieSearchStatement stadtbildSerieSearchStatement, String imageNrFrom, String imageNrTo) throws NotAValidIntervallException {
-        char lastCharacter = imageNrFrom.charAt(imageNrFrom.length()-1);
-        char letterOfNrFrom = Character.isLetter(lastCharacter) ? lastCharacter : '\0';
-        lastCharacter = imageNrTo.charAt(imageNrTo.length()-1);
-        char letterOfNrTo = Character.isLetter(lastCharacter) ? lastCharacter : '\0';
-        
-        ArrayList<String> listWithNumbers = new ArrayList<String>();
-        
-        String prefix = greatestCommonPrefix(imageNrFrom, imageNrTo);
-        int prefix_length = prefix.length();
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   stadtbildSerieSearchStatement  DOCUMENT ME!
+     * @param   imageNrFrom                    DOCUMENT ME!
+     * @param   imageNrTo                      DOCUMENT ME!
+     *
+     * @throws  NotAValidIntervallException  DOCUMENT ME!
+     */
+    private void setFancyIntervallInSearch(
+            final MetaObjectNodesStadtbildSerieSearchStatement stadtbildSerieSearchStatement,
+            String imageNrFrom,
+            String imageNrTo) throws NotAValidIntervallException {
+        char lastCharacter = imageNrFrom.charAt(imageNrFrom.length() - 1);
+        final char letterOfNrFrom = Character.isLetter(lastCharacter) ? lastCharacter : '\0';
+        if (Character.isLetter(lastCharacter)) {
+            imageNrFrom = imageNrFrom.substring(0, imageNrFrom.length() - 1);
+        }
+        lastCharacter = imageNrTo.charAt(imageNrTo.length() - 1);
+        final char letterOfNrTo = Character.isLetter(lastCharacter) ? lastCharacter : '\0';
+        if (Character.isLetter(lastCharacter)) {
+            imageNrTo = imageNrTo.substring(0, imageNrTo.length() - 1);
+        }
 
-                        String begin_str = imageNrFrom.substring(prefix_length);
-            String end_str = imageNrTo.substring(prefix_length);
-            int begin = Integer.parseInt(begin_str);
-            int end = Integer.parseInt(end_str);
-            String intToStringFormat = "%0" + end_str.length() + "d";
-            boolean bothNull = letterOfNrFrom == '\0' && letterOfNrTo == '\0';
-            
+        if (((letterOfNrFrom != '\0') && (letterOfNrTo != '\0'))) {
+            if ((letterOfNrFrom >= letterOfNrTo)) {
+                throw new NotAValidIntervallException();
+            }
+        } else if (imageNrFrom.length() != imageNrTo.length()) {
+            throw new NotAValidIntervallException();
+        }
+
+        final ArrayList<String> listWithNumbers = new ArrayList<String>();
+
+        final String prefix = greatestCommonPrefix(imageNrFrom, imageNrTo);
+        final int prefix_length = prefix.length();
+
+        if (StringUtils.isBlank(prefix)) {
+            throw new NotAValidIntervallException();
+        } else if (prefix.equals(imageNrFrom)) {
+            // both numbers have the same number base, only the last character was different
+            char startLetter;
+            if (letterOfNrFrom == '\0') {
+                listWithNumbers.add(prefix);
+                startLetter = 'a';
+            } else {
+                startLetter = letterOfNrFrom;
+            }
+            for (int j = startLetter; j <= letterOfNrTo; j++) {
+                listWithNumbers.add(prefix + (char)j);
+            }
+        } else {
+            final String begin_str = imageNrFrom.substring(prefix_length);
+            final String end_str = imageNrTo.substring(prefix_length);
+            final int begin = Integer.parseInt(begin_str);
+            final int end = Integer.parseInt(end_str);
+            final String intToStringFormat = "%0" + end_str.length() + "d";
+            final boolean bothNull = (letterOfNrFrom == '\0') && (letterOfNrTo == '\0');
+
             for (int i = begin; i <= end; i++) {
-                if(bothNull){
+                if (bothNull) {
                     listWithNumbers.add(prefix + String.format(intToStringFormat, i));
                 } else {
                     char startLetter;
-                    if(letterOfNrFrom == '\0'){
+                    if (letterOfNrFrom == '\0') {
                         listWithNumbers.add(prefix + String.format(intToStringFormat, i));
-                        startLetter='a';
+                        startLetter = 'a';
                     } else {
                         startLetter = letterOfNrFrom;
                     }
                     for (int j = startLetter; j <= letterOfNrTo; j++) {
-                        listWithNumbers.add(prefix + String.format(intToStringFormat, i) + (char) j);
-                    }     
+                        listWithNumbers.add(prefix + String.format(intToStringFormat, i) + (char)j);
+                    }
                 }
             }
+        }
 
-       stadtbildSerieSearchStatement.setFancyIntervall(listWithNumbers);
+        stadtbildSerieSearchStatement.setFancyIntervall(listWithNumbers);
     }
-    
-    private static String greatestCommonPrefix(String a, String b) {
-        int minLength = Math.min(a.length(), b.length());
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   a  DOCUMENT ME!
+     * @param   b  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static String greatestCommonPrefix(final String a, final String b) {
+        final int minLength = Math.min(a.length(), b.length());
         for (int i = 0; i < minLength; i++) {
             if (a.charAt(i) != b.charAt(i)) {
                 return a.substring(0, i);
@@ -994,10 +1052,6 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         return a.substring(0, minLength);
     }
 
-    private class NotAValidIntervallException extends Exception{
-        
-    }
-    
     /**
      * DOCUMENT ME!
      *
@@ -1087,6 +1141,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     }
 
     //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class NotAValidIntervallException extends Exception {
+    }
 
     /**
      * A subclass of SearchControlPanel, which checks first how many results (Stadtbildserien) were found.
