@@ -936,7 +936,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 stadtbildSerieSearchStatement.setImageNrTo(imageNrTo);
                 stadtbildSerieSearchStatement.setImageNrFrom(imageNrFrom);
             } else {
-                setFancyIntervallInSearch(stadtbildSerieSearchStatement);
+                setFancyIntervallInSearch(stadtbildSerieSearchStatement, imageNrFrom, imageNrTo);
             }            
         } else {
             // no or only one number set
@@ -946,8 +946,38 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     }
 
     
-    private void setFancyIntervallInSearch(MetaObjectNodesStadtbildSerieSearchStatement stadtbildSerieSearchStatement) throws NotAValidIntervallException {
-        LOG.fatal("Sb_StadtbildWindowSearch.setFancyIntervallInSearch: Not supported yet.", new Exception()); //NOI18N
+    private void setFancyIntervallInSearch(MetaObjectNodesStadtbildSerieSearchStatement stadtbildSerieSearchStatement, String imageNrFrom, String imageNrTo) throws NotAValidIntervallException {
+        char lastCharacter = imageNrFrom.charAt(imageNrFrom.length()-1);
+        char letterOfNrFrom = Character.isLetter(lastCharacter) ? lastCharacter : '\0';
+        lastCharacter = imageNrTo.charAt(imageNrTo.length()-1);
+        char letterOfNrTo = Character.isLetter(lastCharacter) ? lastCharacter : '\0';
+        
+        ArrayList<String> listWithNumbers = new ArrayList<String>();
+        
+        String prefix = greatestCommonPrefix(imageNrFrom, imageNrTo);
+        int prefix_length = prefix.length();
+
+                        String begin_str = imageNrFrom.substring(prefix_length);
+            String end_str = imageNrTo.substring(prefix_length);
+            int begin = Integer.parseInt(begin_str);
+            int end = Integer.parseInt(end_str);
+            String intToStringFormat = "%0" + end_str.length() + "d";
+            boolean bothNull = letterOfNrFrom == '\0' && letterOfNrTo == '\0';
+            
+            for (int i = begin; i <= end; i++) {
+                if(bothNull){
+                    
+                } else {
+                 
+                    for (int j = letterOfNrFrom; j <= letterOfNrTo; j++) {
+                    listWithNumbers.add(prefix + String.format(intToStringFormat, i) + (char) j);
+                }     
+                }
+            }
+
+        
+        
+        
         return null;
     }
     
