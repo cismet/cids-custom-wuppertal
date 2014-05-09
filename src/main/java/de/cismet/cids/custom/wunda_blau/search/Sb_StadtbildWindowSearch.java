@@ -690,16 +690,16 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbMapSearchActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbMapSearchActionPerformed
+    private void cbMapSearchActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbMapSearchActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbMapSearchActionPerformed
+    } //GEN-LAST:event_cbMapSearchActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddSuchwortActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSuchwortActionPerformed
+    private void btnAddSuchwortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddSuchwortActionPerformed
         final Sb_stadtbildserieEditorAddSuchwortDialog dialog = new Sb_stadtbildserieEditorAddSuchwortDialog((Frame)
                 SwingUtilities.getWindowAncestor(this),
                 true);
@@ -708,14 +708,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             final DefaultListModel dlm = (DefaultListModel)lstSuchworte.getModel();
             dlm.addElement(newSuchwort);
         }
-    }//GEN-LAST:event_btnAddSuchwortActionPerformed
+    }                                                                                  //GEN-LAST:event_btnAddSuchwortActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveSuchwortActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveSuchwortActionPerformed
+    private void btnRemoveSuchwortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveSuchwortActionPerformed
         final DefaultListModel dlm = (DefaultListModel)lstSuchworte.getModel();
 
         if (this.lstSuchworte.getSelectedIndices().length > 0) {
@@ -734,14 +734,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveSuchwortActionPerformed
+    } //GEN-LAST:event_btnRemoveSuchwortActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboOrtItemStateChanged(final java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboOrtItemStateChanged
+    private void cboOrtItemStateChanged(final java.awt.event.ItemEvent evt) { //GEN-FIRST:event_cboOrtItemStateChanged
         Object selectedItem = cboOrt.getSelectedItem();
         if (selectedItem instanceof LightweightMetaObject) {
             selectedItem = ((LightweightMetaObject)selectedItem).getBean();
@@ -762,14 +762,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             txtHausnummer.setText("");
             lblHausnummer.setEnabled(false);
         }
-    }//GEN-LAST:event_cboOrtItemStateChanged
+    } //GEN-LAST:event_cboOrtItemStateChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnNewSearchActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewSearchActionPerformed
+    private void btnNewSearchActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnNewSearchActionPerformed
         chboBodennaheAufnahme.setSelected(true);
         chboLuftbildschraegaufnahme.setSelected(true);
         chboLuftbildsenkrechtaufnahme.setSelected(true);
@@ -782,7 +782,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         cboOrt.setSelectedItem(Sb_stadtbildUtils.getWUPPERTAL());
         txtHausnummer.setText("");
         cbMapSearch.setSelected(false);
-    }//GEN-LAST:event_btnNewSearchActionPerformed
+    }                                                                                //GEN-LAST:event_btnNewSearchActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -955,9 +955,9 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     }
 
     /**
-     * Calculates the elements of a fancy interval like N4711-N4712, 4711-4712c or even N4711-N4712c.
-     * These elements are put in a list and are given to a MetaObjectNodesStadtbildSerieSearchStatement object.
-     * If the interval is even too fancy for this method a NotAValidIntervalException will be thrown.
+     * Calculates the elements of a fancy interval like N4711-N4712, 4711-4712c or even N4711-N4712c. These elements are
+     * put in a list and are given to a MetaObjectNodesStadtbildSerieSearchStatement object. If the interval is even too
+     * fancy for this method a NotAValidIntervalException will be thrown.
      *
      * @param   stadtbildSerieSearchStatement  DOCUMENT ME!
      * @param   imageNrFrom                    DOCUMENT ME!
@@ -970,33 +970,45 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             String imageNrFrom,
             String imageNrTo) throws NotAValidIntervalException {
         char lastCharacter = imageNrFrom.charAt(imageNrFrom.length() - 1);
-        final char letterOfNrFrom = Character.isLetter(lastCharacter) ? lastCharacter : '\0';
+        char letterOfNrFrom;
         if (Character.isLetter(lastCharacter)) {
+            // remove the last letter and save it
             imageNrFrom = imageNrFrom.substring(0, imageNrFrom.length() - 1);
-        }        
+            letterOfNrFrom = lastCharacter;
+        } else {
+            letterOfNrFrom = '\0';
+        }
+
         lastCharacter = imageNrTo.charAt(imageNrTo.length() - 1);
-        final char letterOfNrTo = Character.isLetter(lastCharacter) ? lastCharacter : '\0';
+        char letterOfNrTo;
         if (Character.isLetter(lastCharacter)) {
+            // remove the last letter and save it
             imageNrTo = imageNrTo.substring(0, imageNrTo.length() - 1);
+            letterOfNrTo = lastCharacter;
+        } else {
+            letterOfNrTo = '\0';
         }
 
         if (((letterOfNrFrom != '\0') && (letterOfNrTo != '\0'))) {
             if ((letterOfNrFrom >= letterOfNrTo)) {
+                // the letter of the first number must be smaller than that of the second number
+                // except they do not have a number at all
                 throw new NotAValidIntervalException();
             }
         } else if (imageNrFrom.length() != imageNrTo.length()) {
+            // the two numbers must have the same length
             throw new NotAValidIntervalException();
         }
 
         final ArrayList<String> listWithNumbers = new ArrayList<String>();
-
         final String prefix = greatestCommonPrefix(imageNrFrom, imageNrTo);
         final int prefix_length = prefix.length();
 
         if (StringUtils.isBlank(prefix)) {
+            // if the two numbers do not have a common prefix, than they are two different
             throw new NotAValidIntervalException();
         } else if (prefix.equals(imageNrFrom)) {
-            // both numbers have the same number base, only the last character was different
+            // both numbers have the digits, only the last character was different
             char startLetter;
             if (letterOfNrFrom == '\0') {
                 listWithNumbers.add(prefix);
@@ -1008,12 +1020,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 listWithNumbers.add(prefix + (char)j);
             }
         } else {
+            // both numbers have diferent digits and the last character was different
             final String begin_str = imageNrFrom.substring(prefix_length);
             final String end_str = imageNrTo.substring(prefix_length);
             final int begin = Integer.parseInt(begin_str);
             final int end = Integer.parseInt(end_str);
 
             if (begin > end) {
+                // the last number was bigger than the first number
                 throw new NotAValidIntervalException();
             }
 
@@ -1022,10 +1036,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
 
             for (int i = begin; i <= end; i++) {
                 if (bothNull) {
+                    // the numbers do not have a last letter, simply add the number
                     listWithNumbers.add(prefix + String.format(intToStringFormat, i));
                 } else {
+                    // the numbers do have a last letter, also iterate over the letters
                     char startLetter;
                     if (letterOfNrFrom == '\0') {
+                        // the first number does not have a letter. Add it to the list and set the letter to 'a'
+                        // Thus an iteration of letters is possible
                         listWithNumbers.add(prefix + String.format(intToStringFormat, i));
                         startLetter = 'a';
                     } else {
