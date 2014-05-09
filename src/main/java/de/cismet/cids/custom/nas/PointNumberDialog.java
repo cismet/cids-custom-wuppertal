@@ -491,8 +491,10 @@ public class PointNumberDialog extends javax.swing.JDialog {
         pnlLeft = new javax.swing.JPanel();
         lblAntragsnummer = new javax.swing.JLabel();
         tbpModus = new javax.swing.JTabbedPane();
-        pnlReservieren = new PointNumberReservationPanel(this);
-        pnlErgaenzen = new PointNumberReservationPanel(this);
+        pnlReservieren = new PointNumberReservationPanel(this)
+        ;
+        pnlErgaenzen = new PointNumberReservationPanel(this)
+        ;
         pnlFreigeben = new javax.swing.JPanel();
         pnlWait = new javax.swing.JPanel();
         jxFreigebenWaitLabel = new org.jdesktop.swingx.JXBusyLabel();
@@ -502,14 +504,13 @@ public class PointNumberDialog extends javax.swing.JDialog {
         pnlFreigabeListControls = new javax.swing.JPanel();
         btnSelectAll = new javax.swing.JButton();
         btnDeSelectAll = new javax.swing.JButton();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         jScrollPane2 = new javax.swing.JScrollPane();
         tblPunktnummern = new javax.swing.JTable();
         pnlFreigebenError = new javax.swing.JPanel();
         lblFreigebenError = new javax.swing.JLabel();
-        cbAntragPrefix = new WideComboBox();
+        cbAntragPrefix = new WideComboBox()
+        ;
         lblAnrSeperator = new javax.swing.JLabel();
         pnlAntragsnummer = new javax.swing.JPanel();
         cbAntragsNummer = new javax.swing.JComboBox();
@@ -517,52 +518,44 @@ public class PointNumberDialog extends javax.swing.JDialog {
         pnlRight = new javax.swing.JPanel();
         lblProtokoll = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        protokollPane = new BusyLoggingTextPane(50, 50);
+        protokollPane = new BusyLoggingTextPane(50,50);
         btnDownload = new javax.swing.JButton();
         pnlControls = new javax.swing.JPanel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         btnDone = new javax.swing.JButton();
 
         pnlTabReservieren.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         pnlTabReservieren.setOpaque(false);
 
-        lblTabReservieren.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/nas/glyphicons_153_unchecked.png")));                    // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblTabReservieren,
-            org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.lblTabReservieren.text")); // NOI18N
+        lblTabReservieren.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/nas/glyphicons_153_unchecked.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblTabReservieren, org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.lblTabReservieren.text")); // NOI18N
         pnlTabReservieren.add(lblTabReservieren);
 
         pnlTabErgaenzen.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         pnlTabErgaenzen.setOpaque(false);
 
-        lblTabErgaenzen.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/nas/glyphicons_154_more_windows.png")));               // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblTabErgaenzen,
-            org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.lblTabErgaenzen.text")); // NOI18N
+        lblTabErgaenzen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/nas/glyphicons_154_more_windows.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblTabErgaenzen, org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.lblTabErgaenzen.text")); // NOI18N
         pnlTabErgaenzen.add(lblTabErgaenzen);
 
         pnlTabFreigeben.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         pnlTabFreigeben.setOpaque(false);
 
-        lblTabFreigeben.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/nas/glyphicons_151_new_window.png")));                 // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblTabFreigeben,
-            org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.lblTabFreigeben.text")); // NOI18N
+        lblTabFreigeben.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/nas/glyphicons_151_new_window.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblTabFreigeben, org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.lblTabFreigeben.text")); // NOI18N
         pnlTabFreigeben.add(lblTabFreigeben);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][] {
-                    { null, null, null, null },
-                    { null, null, null, null },
-                    { null, null, null, null },
-                    { null, null, null, null }
-                },
-                new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
         jScrollPane3.setViewportView(jTable1);
 
         jPanel1.add(jScrollPane3);
@@ -574,9 +567,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
         pnlLeft.setPreferredSize(new java.awt.Dimension(500, 378));
         pnlLeft.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblAntragsnummer,
-            org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.lblAntragsnummer.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblAntragsnummer, org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.lblAntragsnummer.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -584,52 +575,32 @@ public class PointNumberDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         pnlLeft.add(lblAntragsnummer, gridBagConstraints);
 
-        tbpModus.addTab(org.openide.util.NbBundle.getMessage(
-                PointNumberDialog.class,
-                "PointNumberDialog.pnlReservieren.TabConstraints.tabTitle"),
-            null,
-            pnlReservieren,
-            org.openide.util.NbBundle.getMessage(
-                PointNumberDialog.class,
-                "PointNumberDialog.pnlReservieren.TabConstraints.tabToolTip")); // NOI18N
-        tbpModus.addTab(org.openide.util.NbBundle.getMessage(
-                PointNumberDialog.class,
-                "PointNumberDialog.pnlErgaenzen.TabConstraints.tabTitle"),
-            pnlErgaenzen);                                                      // NOI18N
+        tbpModus.addTab(org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.pnlReservieren.TabConstraints.tabTitle"), null, pnlReservieren, org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.pnlReservieren.TabConstraints.tabToolTip")); // NOI18N
+        tbpModus.addTab(org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.pnlErgaenzen.TabConstraints.tabTitle"), pnlErgaenzen); // NOI18N
 
         pnlFreigeben.setLayout(new java.awt.CardLayout());
 
         pnlWait.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jxFreigebenWaitLabel,
-            org.openide.util.NbBundle.getMessage(
-                PointNumberDialog.class,
-                "PointNumberDialog.jxFreigebenWaitLabel.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jxFreigebenWaitLabel, org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.jxFreigebenWaitLabel.text")); // NOI18N
         pnlWait.add(jxFreigebenWaitLabel, new java.awt.GridBagConstraints());
 
         pnlFreigeben.add(pnlWait, "card1");
 
         pnlFreigebenCard.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblPunktNummern,
-            org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.lblPunktNummern.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblPunktNummern, org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.lblPunktNummern.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         pnlFreigebenCard.add(lblPunktNummern, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            btnFreigeben,
-            org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.btnFreigeben.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnFreigeben, org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.btnFreigeben.text")); // NOI18N
         btnFreigeben.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnFreigebenActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFreigebenActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -639,43 +610,29 @@ public class PointNumberDialog extends javax.swing.JDialog {
 
         pnlFreigabeListControls.setLayout(new java.awt.GridBagLayout());
 
-        btnSelectAll.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/nas/icon-selectionadd.png")));                      // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(
-            btnSelectAll,
-            org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.btnSelectAll.text")); // NOI18N
-        btnSelectAll.setToolTipText(org.openide.util.NbBundle.getMessage(
-                PointNumberDialog.class,
-                "PointNumberDialog.btnSelectAll.toolTipText"));                                                    // NOI18N
+        btnSelectAll.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/nas/icon-selectionadd.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnSelectAll, org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.btnSelectAll.text")); // NOI18N
+        btnSelectAll.setToolTipText(org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.btnSelectAll.toolTipText")); // NOI18N
         btnSelectAll.setPreferredSize(new java.awt.Dimension(30, 28));
         btnSelectAll.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnSelectAllActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSelectAllActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         pnlFreigabeListControls.add(btnSelectAll, gridBagConstraints);
 
-        btnDeSelectAll.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/nas/icon-selectionremove.png")));                     // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(
-            btnDeSelectAll,
-            org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.btnDeSelectAll.text")); // NOI18N
-        btnDeSelectAll.setToolTipText(org.openide.util.NbBundle.getMessage(
-                PointNumberDialog.class,
-                "PointNumberDialog.btnDeSelectAll.toolTipText"));                                                    // NOI18N
+        btnDeSelectAll.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/nas/icon-selectionremove.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnDeSelectAll, org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.btnDeSelectAll.text")); // NOI18N
+        btnDeSelectAll.setToolTipText(org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.btnDeSelectAll.toolTipText")); // NOI18N
         btnDeSelectAll.setPreferredSize(new java.awt.Dimension(30, 28));
         btnDeSelectAll.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnDeSelectAllActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeSelectAllActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -714,21 +671,13 @@ public class PointNumberDialog extends javax.swing.JDialog {
 
         pnlFreigebenError.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblFreigebenError,
-            org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.lblFreigebenError.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblFreigebenError, org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.lblFreigebenError.text")); // NOI18N
         pnlFreigebenError.add(lblFreigebenError, new java.awt.GridBagConstraints());
 
         pnlFreigeben.add(pnlFreigebenError, "card3");
-        pnlFreigebenError.getAccessibleContext()
-                .setAccessibleName(org.openide.util.NbBundle.getMessage(
-                        PointNumberDialog.class,
-                        "PointNumberDialog.pnlFreigebenError.AccessibleContext.accessibleName")); // NOI18N
+        pnlFreigebenError.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.pnlFreigebenError.AccessibleContext.accessibleName")); // NOI18N
 
-        tbpModus.addTab(org.openide.util.NbBundle.getMessage(
-                PointNumberDialog.class,
-                "PointNumberDialog.pnlFreigeben.TabConstraints.tabTitle"),
-            pnlFreigeben); // NOI18N
+        tbpModus.addTab(org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.pnlFreigeben.TabConstraints.tabTitle"), pnlFreigeben); // NOI18N
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -741,24 +690,20 @@ public class PointNumberDialog extends javax.swing.JDialog {
         pnlLeft.add(tbpModus, gridBagConstraints);
 
         cbAntragPrefix.setEditable(true);
-        cbAntragPrefix.setMinimumSize(new java.awt.Dimension(60, 27));
-        cbAntragPrefix.setPreferredSize(new java.awt.Dimension(60, 27));
+        cbAntragPrefix.setMinimumSize(new java.awt.Dimension(70, 27));
+        cbAntragPrefix.setPreferredSize(new java.awt.Dimension(70, 27));
         cbAntragPrefix.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    cbAntragPrefixActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbAntragPrefixActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
         pnlLeft.add(cbAntragPrefix, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblAnrSeperator,
-            org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.lblAnrSeperator.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblAnrSeperator, org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.lblAnrSeperator.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -772,12 +717,10 @@ public class PointNumberDialog extends javax.swing.JDialog {
         cbAntragsNummer.setMinimumSize(new java.awt.Dimension(209, 29));
         cbAntragsNummer.setPreferredSize(new java.awt.Dimension(209, 29));
         cbAntragsNummer.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    cbAntragsNummerActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbAntragsNummerActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -790,9 +733,7 @@ public class PointNumberDialog extends javax.swing.JDialog {
         gridBagConstraints.weightx = 1.0;
         pnlLeft.add(pnlAntragsnummer, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblVnr,
-            org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.lblVnr.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblVnr, org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.lblVnr.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -813,10 +754,8 @@ public class PointNumberDialog extends javax.swing.JDialog {
         pnlRight.setPreferredSize(new java.awt.Dimension(400, 0));
         pnlRight.setLayout(new java.awt.GridBagLayout());
 
-        lblProtokoll.setFont(new java.awt.Font("FreeMono", 1, 20));                                                // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblProtokoll,
-            org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.lblProtokoll.text")); // NOI18N
+        lblProtokoll.setFont(new java.awt.Font("FreeMono", 1, 20)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblProtokoll, org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.lblProtokoll.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -837,25 +776,18 @@ public class PointNumberDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         pnlRight.add(jScrollPane1, gridBagConstraints);
 
-        btnDownload.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/nas/icon-download-alt.png")));                     // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(
-            btnDownload,
-            org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.btnDownload.text")); // NOI18N
-        btnDownload.setToolTipText(org.openide.util.NbBundle.getMessage(
-                PointNumberDialog.class,
-                "PointNumberDialog.btnDownload.toolTipText"));                                                    // NOI18N
+        btnDownload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/nas/icon-download-alt.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnDownload, org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.btnDownload.text")); // NOI18N
+        btnDownload.setToolTipText(org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.btnDownload.toolTipText")); // NOI18N
         btnDownload.setBorderPainted(false);
         btnDownload.setContentAreaFilled(false);
         btnDownload.setFocusPainted(false);
         btnDownload.setPreferredSize(new java.awt.Dimension(32, 32));
         btnDownload.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnDownloadActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDownloadActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
@@ -873,16 +805,12 @@ public class PointNumberDialog extends javax.swing.JDialog {
         gridBagConstraints.weightx = 1.0;
         pnlControls.add(filler1, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            btnDone,
-            org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.btnDone.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnDone, org.openide.util.NbBundle.getMessage(PointNumberDialog.class, "PointNumberDialog.btnDone.text")); // NOI18N
         btnDone.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnDoneActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDoneActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 10, 10);
         pnlControls.add(btnDone, gridBagConstraints);
@@ -896,23 +824,23 @@ public class PointNumberDialog extends javax.swing.JDialog {
         getContentPane().add(pnlControls, gridBagConstraints);
 
         pack();
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnDoneActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDoneActionPerformed
+    private void btnDoneActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDoneActionPerformed
         this.dispose();
-    }                                                                           //GEN-LAST:event_btnDoneActionPerformed
+    }//GEN-LAST:event_btnDoneActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnFreigebenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnFreigebenActionPerformed
+    private void btnFreigebenActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFreigebenActionPerformed
         freigebenWorker = new FreigebenWorker();
 
         try {
@@ -932,14 +860,14 @@ public class PointNumberDialog extends javax.swing.JDialog {
         protokollPane.addMessage("Sende Freigabeauftrag.", BusyLoggingTextPane.Styles.INFO);
 
         freigebenWorker.execute();
-    } //GEN-LAST:event_btnFreigebenActionPerformed
+    }//GEN-LAST:event_btnFreigebenActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnDownloadActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDownloadActionPerformed
+    private void btnDownloadActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
         if (result == null) {
             return;
         }
@@ -960,39 +888,39 @@ public class PointNumberDialog extends javax.swing.JDialog {
         }
 
         DownloadManager.instance().add(download);
-    } //GEN-LAST:event_btnDownloadActionPerformed
+    }//GEN-LAST:event_btnDownloadActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbAntragPrefixActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbAntragPrefixActionPerformed
+    private void cbAntragPrefixActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAntragPrefixActionPerformed
 //        skipLoadAntragsnummern = true;
 //        loadAllAntragsNummern();
 //        skipLoadAntragsnummern = false;
-    } //GEN-LAST:event_cbAntragPrefixActionPerformed
+    }//GEN-LAST:event_cbAntragPrefixActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnDeSelectAllActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDeSelectAllActionPerformed
+    private void btnDeSelectAllActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeSelectAllActionPerformed
         for (int i = 0; i < punktnummern.size(); i++) {
             final CheckListItem item = (CheckListItem)punktnummern.get(i);
             item.setSelected(true);
             model.setValueAt(item, i, 0);
         }
         tblPunktnummern.repaint();
-    }                                                                                  //GEN-LAST:event_btnDeSelectAllActionPerformed
+    }//GEN-LAST:event_btnDeSelectAllActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnSelectAllActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnSelectAllActionPerformed
+    private void btnSelectAllActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAllActionPerformed
         for (int i = 0; i < punktnummern.size(); i++) {
             final CheckListItem item = (CheckListItem)punktnummern.get(i);
             // inverts the selection for the item
@@ -1000,20 +928,20 @@ public class PointNumberDialog extends javax.swing.JDialog {
             model.setValueAt(item, i, 0);
         }
         tblPunktnummern.repaint();
-    } //GEN-LAST:event_btnSelectAllActionPerformed
+    }//GEN-LAST:event_btnSelectAllActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbAntragsNummerActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbAntragsNummerActionPerformed
+    private void cbAntragsNummerActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAntragsNummerActionPerformed
         // since the combobox in the freigeben tab is  not editable no document events are fired when changing the
         // selected item
         if (!cbAntragsNummer.isEditable() && (tbpModus.getSelectedIndex() == 2)) {
             loadPointNumbers();
         }
-    } //GEN-LAST:event_cbAntragsNummerActionPerformed
+    }//GEN-LAST:event_cbAntragsNummerActionPerformed
 
     /**
      * DOCUMENT ME!
