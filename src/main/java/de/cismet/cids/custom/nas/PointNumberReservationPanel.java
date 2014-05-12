@@ -18,15 +18,19 @@ import com.vividsolutions.jts.geom.Geometry;
 
 import org.apache.log4j.Logger;
 
-import org.openide.util.Exceptions;
-
 import java.awt.EventQueue;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -74,6 +78,7 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
     private static final String WUPP_ZONEN_KENNZIFFER = "32";
     private static final DateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd");
     private static final DateFormat dateFormater = new SimpleDateFormat("dd-MM-yyyy");
+    private static final ArrayList<String> nbzWhitelist = new ArrayList<String>();
 
     //~ Instance fields --------------------------------------------------------
 
@@ -127,6 +132,14 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
         try {
             props.load(PointNumberReservationPanel.class.getResourceAsStream("pointNumberSettings.properties"));
             maxNbz = Integer.parseInt(props.getProperty("maxNbz")); // NOI18N
+            final BufferedReader whitelistReader = new BufferedReader(new InputStreamReader(
+                        PointNumberReservationPanel.class.getResourceAsStream("pnr_nbz_whitelist.properties")));
+            String nbzWhitelistEntry = null;
+            while ((nbzWhitelistEntry = whitelistReader.readLine()) != null) {
+                nbzWhitelist.add(nbzWhitelistEntry);
+            }
+
+            Collections.sort(nbzWhitelist);
             if (!loadNummerierungsbezirke()) {
                 showErrorLbl = true;
             }
@@ -245,16 +258,21 @@ public class PointNumberReservationPanel extends javax.swing.JPanel {
         final int diffX = (((upperX - lowerX) + 1) == 0) ? 1 : ((upperX - lowerX) + 1);
         final int diffY = (((upperY - lowerY) + 1) == 0) ? 1 : ((upperY - lowerY) + 1);
 
-        if ((diffX * diffY) > maxNbz) {
-            return false;
-        }
+        final ArrayList<String> mapNbz = new ArrayList<String>();
         for (int i = 0; i < diffX; i++) {
             final int x = lowerX + i;
             for (int j = 0; j < diffY; j++) {
                 final int y = lowerY + j;
-                nbz.add(WUPP_ZONEN_KENNZIFFER + x + y);
+                final String currNbz = WUPP_ZONEN_KENNZIFFER + x + y;
+                if (Collections.binarySearch(nbzWhitelist, currNbz) > 0) {
+                    mapNbz.add(currNbz);
+                }
             }
         }
+        if (mapNbz.size() > maxNbz) {
+            return false;
+        }
+        nbz.addAll(mapNbz);
         return true;
     }
 
