@@ -118,7 +118,7 @@ public class Sb_StadtbildWindowSearchTest {
             Exceptions.printStackTrace(ex);
         }
     }
-    
+
     @Test
     public void testFancyIntervall_prefixLetter_sameNumberBase_FirstNumberHasSuffixLetter() {
         Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
@@ -157,5 +157,26 @@ public class Sb_StadtbildWindowSearchTest {
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
         }
+    }
+
+    @Test(expected = Exception.class)
+    public void testFancyIntervall_invalid_second_bigger_than_first_number() throws Exception {
+        Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
+        final Object[] resultArray = instance.setFancyIntervalInSearch("N04715", "N04713");
+        fail("Should throw an exception.");
+    }
+    
+    @Test(expected = Exception.class)
+    public void testFancyIntervall_invalid_no_prefix() throws Exception {
+        Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
+        final Object[] resultArray = instance.setFancyIntervalInSearch("F04713", "N04714");
+        fail("Should throw an exception.");
+    }
+    
+    @Test(expected = Exception.class)
+    public void testFancyIntervall_invalid_different_length() throws Exception {
+        Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
+        final Object[] resultArray = instance.setFancyIntervalInSearch("04713c", "047134");
+        fail("Should throw an exception.");
     }
 }
