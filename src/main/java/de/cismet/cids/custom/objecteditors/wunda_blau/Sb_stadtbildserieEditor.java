@@ -1,18 +1,16 @@
-/**
- * *************************************************
- *
- * cismet GmbH, Saarbruecken, Germany
- * 
-* ... and it just works.
- * 
-***************************************************
- */
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.ComponentRegistry;
-import Sirius.server.middleware.types.MetaClass;
 
+import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
 import com.sun.jersey.api.client.UniformInterfaceException;
@@ -24,6 +22,7 @@ import edu.umd.cs.piccolo.event.PInputEvent;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.design.events.PropagationChangeListener;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -85,6 +84,7 @@ import javax.swing.tree.TreeNode;
 import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
+import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 import de.cismet.cids.custom.utils.TifferDownload;
@@ -97,15 +97,20 @@ import de.cismet.cids.editors.DefaultBindableJCheckBox;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
 
+import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+
 import de.cismet.cids.server.actions.ServerActionParameter;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+
+import de.cismet.cids.utils.CidsBeanDeepPropertyListener;
 
 import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.features.DefaultStyledFeature;
+import de.cismet.cismap.commons.features.Feature;
 import de.cismet.cismap.commons.features.StyledFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
@@ -120,97 +125,96 @@ import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 
 import static de.cismet.cids.custom.objecteditors.wunda_blau.MauerEditor.adjustScale;
-import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
-import de.cismet.cids.navigator.utils.ClassCacheMultiple;
-import de.cismet.cids.utils.CidsBeanDeepPropertyListener;
-import net.sf.jasperreports.engine.design.events.PropagationChangeListener;
 
 /**
  * DOCUMENT ME!
  *
- * @author Gilles Baatz
- * @version $Revision$, $Date$
+ * @author   Gilles Baatz
+ * @version  $Revision$, $Date$
  */
 public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
-        TitleComponentProvider,
-        FooterComponentProvider {
+    TitleComponentProvider,
+    FooterComponentProvider {
 
     //~ Static fields/initializers ---------------------------------------------
+
     private static final ImageIcon FOLDER_ICON = new ImageIcon(Sb_stadtbildserieEditor.class.getResource(
-            "/de/cismet/cids/custom/objecteditors/wunda_blau/inode-directory.png"));
+                "/de/cismet/cids/custom/objecteditors/wunda_blau/inode-directory.png"));
 
     private static final ImageIcon ERROR_ICON = new ImageIcon(Sb_stadtbildserieEditor.class.getResource(
-            "/de/cismet/cids/custom/objecteditors/wunda_blau/file-broken.png"));
+                "/de/cismet/cids/custom/objecteditors/wunda_blau/file-broken.png"));
 
     private static final ImageIcon TICK = new javax.swing.ImageIcon(Sb_stadtbildserieEditor.class.getResource(
-            "/de/cismet/cids/custom/wunda_blau/res/tick_32.png"));
+                "/de/cismet/cids/custom/wunda_blau/res/tick_32.png"));
     private static final ImageIcon TICK_BW = new javax.swing.ImageIcon(Sb_stadtbildserieEditor.class.getResource(
-            "/de/cismet/cids/custom/wunda_blau/res/tick_32bw.png"));
+                "/de/cismet/cids/custom/wunda_blau/res/tick_32bw.png"));
 
-    private static final String REPORT_STADTBILDSERIE_URL
-            = "/de/cismet/cids/custom/reports/wunda_blau/StadtbildserieA4Q.jasper";
+    private static final String REPORT_STADTBILDSERIE_URL =
+        "/de/cismet/cids/custom/reports/wunda_blau/StadtbildserieA4Q.jasper";
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(Sb_stadtbildserieEditor.class);
 
     //~ Instance fields --------------------------------------------------------
+
+    final StyledFeature previewGeometry = new DefaultStyledFeature();
     private CidsBean cidsBean;
     private boolean rendererAndInternalUsage = true;
     private String title;
     private final Converter<Timestamp, Date> timeStampConverter = new Converter<Timestamp, Date>() {
 
-        @Override
-        public Date convertForward(final Timestamp value) {
-            try {
-                if (value != null) {
-                    return new java.util.Date(value.getTime());
-                } else {
-                    return null;
+            @Override
+            public Date convertForward(final Timestamp value) {
+                try {
+                    if (value != null) {
+                        return new java.util.Date(value.getTime());
+                    } else {
+                        return null;
+                    }
+                } catch (Exception ex) {
+                    LOG.fatal(ex);
+                    return new java.util.Date(System.currentTimeMillis());
                 }
-            } catch (Exception ex) {
-                LOG.fatal(ex);
-                return new java.util.Date(System.currentTimeMillis());
             }
-        }
 
-        @Override
-        public Timestamp convertReverse(final Date value) {
-            try {
-                if (value != null) {
-                    return new Timestamp(value.getTime());
-                } else {
-                    return null;
+            @Override
+            public Timestamp convertReverse(final Date value) {
+                try {
+                    if (value != null) {
+                        return new Timestamp(value.getTime());
+                    } else {
+                        return null;
+                    }
+                } catch (Exception ex) {
+                    LOG.fatal(ex);
+                    return new Timestamp(System.currentTimeMillis());
                 }
-            } catch (Exception ex) {
-                LOG.fatal(ex);
-                return new Timestamp(System.currentTimeMillis());
             }
-        }
-    };
+        };
 
     private final Converter<Timestamp, String> timeStampToStringConverter = new Converter<Timestamp, String>() {
 
-        @Override
-        public String convertForward(final Timestamp s) {
-            final Date d = new java.util.Date(s.getTime());
-            final DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
-            final String formattedDate = df.format(d);
-            return formattedDate;
-        }
+            @Override
+            public String convertForward(final Timestamp s) {
+                final Date d = new java.util.Date(s.getTime());
+                final DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+                final String formattedDate = df.format(d);
+                return formattedDate;
+            }
 
-        @Override
-        public Timestamp convertReverse(final String t) {
-            LOG.fatal(".convertReverse: Not supported yet.", new Exception()); // NOI18N
-            return null;
-        }
-    };
+            @Override
+            public Timestamp convertReverse(final String t) {
+                LOG.fatal(".convertReverse: Not supported yet.", new Exception()); // NOI18N
+                return null;
+            }
+        };
 
     private final PropertyChangeListener listRepaintListener = new PropertyChangeListener() {
 
-        @Override
-        public void propertyChange(final PropertyChangeEvent evt) {
-            lstBildnummern.repaint();
-        }
-    };
+            @Override
+            public void propertyChange(final PropertyChangeEvent evt) {
+                lstBildnummern.repaint();
+            }
+        };
 
     private CidsBean fotoCidsBean;
 
@@ -218,7 +222,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private boolean resizeListenerEnabled;
     private final Timer timer;
     private Sb_stadtbildserieEditor.ImageResizeWorker currentResizeWorker;
-    private MappingComponent map;
+    private MappingComponent previewMap;
     private boolean editable;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -326,6 +330,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
+
     /**
      * Creates a new Sb_stadtbildserieEditor object.
      */
@@ -336,7 +341,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     /**
      * Creates new form Arc_stadtbildRenderer.
      *
-     * @param editable DOCUMENT ME!
+     * @param  editable  DOCUMENT ME!
      */
     public Sb_stadtbildserieEditor(final boolean editable) {
         this.editable = editable;
@@ -359,62 +364,63 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         jScrollPane5.getViewport().setOpaque(false);
         title = "";
         ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(
-                btnReport,
-                Cursor.HAND_CURSOR,
-                Cursor.DEFAULT_CURSOR);
-        map = new MappingComponent();
+            btnReport,
+            Cursor.HAND_CURSOR,
+            Cursor.DEFAULT_CURSOR);
+        previewMap = new MappingComponent();
         pnlMap.setLayout(new BorderLayout());
-        pnlMap.add(map, BorderLayout.CENTER);
+        pnlMap.add(previewMap, BorderLayout.CENTER);
 
         timer = new Timer(300, new ActionListener() {
 
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (resizeListenerEnabled) {
-                    if (currentResizeWorker != null) {
-                        currentResizeWorker.cancel(true);
+                    @Override
+                    public void actionPerformed(final ActionEvent e) {
+                        if (resizeListenerEnabled) {
+                            if (currentResizeWorker != null) {
+                                currentResizeWorker.cancel(true);
+                            }
+                            currentResizeWorker = new Sb_stadtbildserieEditor.ImageResizeWorker();
+                            currentResizeWorker.execute();
+                        }
                     }
-                    currentResizeWorker = new Sb_stadtbildserieEditor.ImageResizeWorker();
-                    currentResizeWorker.execute();
-                }
-            }
-        });
+                });
         timer.setRepeats(false);
 
         txtaPruefhinweis.getDocument().addDocumentListener(new DocumentListener() {
 
-            @Override
-            public void insertUpdate(final DocumentEvent e) {
-                selectCheckBox();
-            }
+                @Override
+                public void insertUpdate(final DocumentEvent e) {
+                    selectCheckBox();
+                }
 
-            @Override
-            public void removeUpdate(final DocumentEvent e) {
-                selectCheckBox();
-            }
+                @Override
+                public void removeUpdate(final DocumentEvent e) {
+                    selectCheckBox();
+                }
 
-            @Override
-            public void changedUpdate(final DocumentEvent e) {
-                selectCheckBox();
-            }
+                @Override
+                public void changedUpdate(final DocumentEvent e) {
+                    selectCheckBox();
+                }
 
-            private void selectCheckBox() {
-                if (StringUtils.isNotBlank(txtaPruefhinweis.getText())) {
-                    chbPruefen.setSelected(true);
-                    if (!editable) {
-                        btnSavePruefhinweis.setEnabled(true);
-                    }
-                } else {
-                    chbPruefen.setSelected(false);
-                    if (!editable) {
-                        btnSavePruefhinweis.setEnabled(false);
+                private void selectCheckBox() {
+                    if (StringUtils.isNotBlank(txtaPruefhinweis.getText())) {
+                        chbPruefen.setSelected(true);
+                        if (!editable) {
+                            btnSavePruefhinweis.setEnabled(true);
+                        }
+                    } else {
+                        chbPruefen.setSelected(false);
+                        if (!editable) {
+                            btnSavePruefhinweis.setEnabled(false);
+                        }
                     }
                 }
-            }
-        });
+            });
     }
 
     //~ Methods ----------------------------------------------------------------
+
     /**
      * DOCUMENT ME!
      */
@@ -446,9 +452,9 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             RendererTools.makeReadOnly(chbIntern);
         } else {
             ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(
-                    tbtnIsPreviewImage,
-                    Cursor.HAND_CURSOR,
-                    Cursor.DEFAULT_CURSOR);
+                tbtnIsPreviewImage,
+                Cursor.HAND_CURSOR,
+                Cursor.DEFAULT_CURSOR);
         }
     }
 
@@ -466,9 +472,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     }
 
     /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -1775,58 +1780,58 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void btnPrevImgActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevImgActionPerformed
+    private void btnPrevImgActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnPrevImgActionPerformed
         lstBildnummern.setSelectedIndex(lstBildnummern.getSelectedIndex() - 1);
-    }//GEN-LAST:event_btnPrevImgActionPerformed
+    }                                                                              //GEN-LAST:event_btnPrevImgActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void btnNextImgActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImgActionPerformed
+    private void btnNextImgActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnNextImgActionPerformed
         lstBildnummern.setSelectedIndex(lstBildnummern.getSelectedIndex() + 1);
-    }//GEN-LAST:event_btnNextImgActionPerformed
+    }                                                                              //GEN-LAST:event_btnNextImgActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void btnDownloadHighResImageActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadHighResImageActionPerformed
+    private void btnDownloadHighResImageActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDownloadHighResImageActionPerformed
         if (DownloadManagerDialog.showAskingForUserTitle(
-                this)) {
+                        this)) {
             final String jobname = DownloadManagerDialog.getJobname();
-            final String imageNumber = (String) ((CidsBean) lstBildnummern.getSelectedValue()).getProperty("bildnummer");
+            final String imageNumber = (String)((CidsBean)lstBildnummern.getSelectedValue()).getProperty("bildnummer");
             DownloadManager.instance()
                     .add(
-                            new TifferDownload(
-                                    jobname,
-                                    "Stadtbild "
-                                    + imageNumber,
-                                    "stadtbild_"
-                                    + imageNumber,
-                                    lstBildnummern.getSelectedValue().toString(),
-                                    "1"));
+                        new TifferDownload(
+                            jobname,
+                            "Stadtbild "
+                            + imageNumber,
+                            "stadtbild_"
+                            + imageNumber,
+                            lstBildnummern.getSelectedValue().toString(),
+                            "1"));
         }
-    }//GEN-LAST:event_btnDownloadHighResImageActionPerformed
+    }                                                                                           //GEN-LAST:event_btnDownloadHighResImageActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void lstBildnummernValueChanged(final javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstBildnummernValueChanged
+    private void lstBildnummernValueChanged(final javax.swing.event.ListSelectionEvent evt) { //GEN-FIRST:event_lstBildnummernValueChanged
         if (!evt.getValueIsAdjusting()) {
             if (!lstBildnummern.isSelectionEmpty()) {
                 final String imageNumber = lstBildnummern.getSelectedValue().toString();
                 new CheckAccessibilityOfHighResImage(imageNumber).execute();
                 loadFoto();
-                final CidsBean oldPreviewImage = (CidsBean) cidsBean.getProperty("vorschaubild");
+                final CidsBean oldPreviewImage = (CidsBean)cidsBean.getProperty("vorschaubild");
                 final boolean isPreviewImage = (oldPreviewImage != null)
-                        && oldPreviewImage.equals(lstBildnummern.getSelectedValue());
+                            && oldPreviewImage.equals(lstBildnummern.getSelectedValue());
                 tbtnIsPreviewImage.setSelected(isPreviewImage);
                 tbtnIsPreviewImage.setEnabled(editable && !isPreviewImage);
                 lstBildnummern.ensureIndexIsVisible(lstBildnummern.getSelectedIndex());
@@ -1835,15 +1840,16 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 tbtnIsPreviewImage.setEnabled(false);
             }
         }
-    }//GEN-LAST:event_lstBildnummernValueChanged
+    }                                                                                         //GEN-LAST:event_lstBildnummernValueChanged
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void btnAddImageNumberActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddImageNumberActionPerformed
-        final Sb_stadtbildserieEditorAddBildnummerDialog dialog = new Sb_stadtbildserieEditorAddBildnummerDialog((Frame) SwingUtilities.getWindowAncestor(this),
+    private void btnAddImageNumberActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddImageNumberActionPerformed
+        final Sb_stadtbildserieEditorAddBildnummerDialog dialog = new Sb_stadtbildserieEditorAddBildnummerDialog((Frame)
+                SwingUtilities.getWindowAncestor(this),
                 true);
         final Collection<CidsBean> bildnummern = dialog.showDialog();
         final List<CidsBean> fotos = cidsBean.getBeanCollectionProperty("stadtbilder_arr");
@@ -1860,17 +1866,17 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             }
         }
         defineButtonStatus();
-    }//GEN-LAST:event_btnAddImageNumberActionPerformed
+    }                                                                                     //GEN-LAST:event_btnAddImageNumberActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveImageNumberActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveImageNumberActionPerformed
+    private void btnRemoveImageNumberActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveImageNumberActionPerformed
         final Object selection = lstBildnummern.getSelectedValue();
         if ((selection != null) && (selection instanceof CidsBean)) {
-            final CidsBean cidesBeanToRemove = (CidsBean) selection;
+            final CidsBean cidesBeanToRemove = (CidsBean)selection;
             final int answer = JOptionPane.showConfirmDialog(
                     StaticSwingTools.getParentFrame(this),
                     "Soll die Bildnummer wirklich entfernt werden?",
@@ -1909,15 +1915,16 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             }
             defineButtonStatus();
         }
-    }//GEN-LAST:event_btnRemoveImageNumberActionPerformed
+    } //GEN-LAST:event_btnRemoveImageNumberActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void btnAddSuchwortActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSuchwortActionPerformed
-        final Sb_stadtbildserieEditorAddSuchwortDialog dialog = new Sb_stadtbildserieEditorAddSuchwortDialog((Frame) SwingUtilities.getWindowAncestor(this),
+    private void btnAddSuchwortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddSuchwortActionPerformed
+        final Sb_stadtbildserieEditorAddSuchwortDialog dialog = new Sb_stadtbildserieEditorAddSuchwortDialog((Frame)
+                SwingUtilities.getWindowAncestor(this),
                 true);
         final CidsBean newSuchwort = dialog.showDialog();
         if (newSuchwort != null) {
@@ -1926,14 +1933,14 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 suchwoerter.add(newSuchwort);
             }
         }
-    }//GEN-LAST:event_btnAddSuchwortActionPerformed
+    }                                                                                  //GEN-LAST:event_btnAddSuchwortActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveSuchwortActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveSuchwortActionPerformed
+    private void btnRemoveSuchwortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveSuchwortActionPerformed
         final Object[] selection = lstSuchworte.getSelectedValues();
         if ((selection != null) && (selection.length > 0)) {
             final int selectedIndex = lstSuchworte.getSelectedIndex();
@@ -1971,14 +1978,14 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 }
             }
         }
-    }//GEN-LAST:event_btnRemoveSuchwortActionPerformed
+    }                                                                                     //GEN-LAST:event_btnRemoveSuchwortActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void tbtnIsPreviewImageActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnIsPreviewImageActionPerformed
+    private void tbtnIsPreviewImageActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnIsPreviewImageActionPerformed
         if (tbtnIsPreviewImage.isSelected()) {
             try {
                 cidsBean.setProperty("vorschaubild", lstBildnummern.getSelectedValue());
@@ -1987,14 +1994,14 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 LOG.error("Error while setting the preview image of the CidsBean", e);
             }
         }
-    }//GEN-LAST:event_tbtnIsPreviewImageActionPerformed
+    }                                                                                      //GEN-LAST:event_tbtnIsPreviewImageActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void dbcOrtItemStateChanged(final java.awt.event.ItemEvent evt) {//GEN-FIRST:event_dbcOrtItemStateChanged
+    private void dbcOrtItemStateChanged(final java.awt.event.ItemEvent evt) { //GEN-FIRST:event_dbcOrtItemStateChanged
         final Object selectedItem = dbcOrt.getSelectedItem();
         if (editable) {
             if ((selectedItem != null) && selectedItem.equals(Sb_stadtbildUtils.getWUPPERTAL())) {
@@ -2013,14 +2020,14 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 lblHausnummer.setEnabled(false);
             }
         }
-    }//GEN-LAST:event_dbcOrtItemStateChanged
+    } //GEN-LAST:event_dbcOrtItemStateChanged
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void btnSavePruefhinweisActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSavePruefhinweisActionPerformed
+    private void btnSavePruefhinweisActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnSavePruefhinweisActionPerformed
         if (StringUtils.isNotBlank(txtaPruefhinweis.getText())) {
             final ServerActionParameter paramComment = new ServerActionParameter(
                     Sb_stadtbildserieUpdatePruefhinweisAction.ParameterType.COMMENT.toString(),
@@ -2032,49 +2039,49 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             new SavePruefhinweisWorker(paramComment, paramSBSid).execute();
         } else {
             JOptionPane.showMessageDialog(
-                    StaticSwingTools.getParentFrame(this),
-                    "Das Kommentarfeld für den Prüfhinweis ist leer.",
-                    "Kommentarfeld leer",
-                    JOptionPane.WARNING_MESSAGE);
+                StaticSwingTools.getParentFrame(this),
+                "Das Kommentarfeld für den Prüfhinweis ist leer.",
+                "Kommentarfeld leer",
+                JOptionPane.WARNING_MESSAGE);
         }
-    }//GEN-LAST:event_btnSavePruefhinweisActionPerformed
+    } //GEN-LAST:event_btnSavePruefhinweisActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void chbPruefenItemStateChanged(final java.awt.event.ItemEvent evt) {//GEN-FIRST:event_chbPruefenItemStateChanged
+    private void chbPruefenItemStateChanged(final java.awt.event.ItemEvent evt) { //GEN-FIRST:event_chbPruefenItemStateChanged
         if (!chbPruefen.isSelected()) {
             txtaPruefhinweis.setText("");
             lblPruefhinweisVon.setText("");
         }
-    }//GEN-LAST:event_chbPruefenItemStateChanged
+    }                                                                             //GEN-LAST:event_chbPruefenItemStateChanged
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
-        final JasperReportDownload.JasperReportDataSourceGenerator dataSourceGenerator
-                = new JasperReportDownload.JasperReportDataSourceGenerator() {
+    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
+        final JasperReportDownload.JasperReportDataSourceGenerator dataSourceGenerator =
+            new JasperReportDownload.JasperReportDataSourceGenerator() {
 
-                    @Override
-                    public JRDataSource generateDataSource() {
-                        final ArrayList beans = new ArrayList<CidsBean>();
-                        beans.add(cidsBean);
-                        final JRBeanCollectionDataSource beanArray = new JRBeanCollectionDataSource(beans);
-                        return beanArray;
-                    }
-                };
+                @Override
+                public JRDataSource generateDataSource() {
+                    final ArrayList beans = new ArrayList<CidsBean>();
+                    beans.add(cidsBean);
+                    final JRBeanCollectionDataSource beanArray = new JRBeanCollectionDataSource(beans);
+                    return beanArray;
+                }
+            };
 
-        final JasperReportDownload.JasperReportParametersGenerator parametersGenerator
-                = new StadtbildserieReportParameterGenerator();
+        final JasperReportDownload.JasperReportParametersGenerator parametersGenerator =
+            new StadtbildserieReportParameterGenerator();
 
         if (DownloadManagerDialog.showAskingForUserTitle(ComponentRegistry.getRegistry().getMainWindow())) {
             final String jobname = DownloadManagerDialog.getJobname();
-            final String vorschaubildnummer = (String) cidsBean.getProperty("vorschaubild.bildnummer");
+            final String vorschaubildnummer = (String)cidsBean.getProperty("vorschaubild.bildnummer");
             final String filename = "stadbildserie_" + vorschaubildnummer;
             final String downloadTitle = "Stadbildserie " + vorschaubildnummer;
             final String resourceName = REPORT_STADTBILDSERIE_URL;
@@ -2087,21 +2094,20 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                     filename);
             DownloadManager.instance().add(download);
         }
-    }//GEN-LAST:event_btnReportActionPerformed
+    } //GEN-LAST:event_btnReportActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param evt DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void btnCombineGeometriesActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCombineGeometriesActionPerformed
-
-    }//GEN-LAST:event_btnCombineGeometriesActionPerformed
+    private void btnCombineGeometriesActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCombineGeometriesActionPerformed
+    }                                                                                        //GEN-LAST:event_btnCombineGeometriesActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     @Override
     public CidsBean getCidsBean() {
@@ -2112,16 +2118,16 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
      * DOCUMENT ME!
      */
     private void automaticallySortLists() {
-        ((JXList) lstBildnummern).setAutoCreateRowSorter(true);
-        ((JXList) lstBildnummern).setSortOrder(SortOrder.ASCENDING);
-        ((JXList) lstSuchworte).setAutoCreateRowSorter(true);
-        ((JXList) lstSuchworte).setSortOrder(SortOrder.ASCENDING);
+        ((JXList)lstBildnummern).setAutoCreateRowSorter(true);
+        ((JXList)lstBildnummern).setSortOrder(SortOrder.ASCENDING);
+        ((JXList)lstSuchworte).setAutoCreateRowSorter(true);
+        ((JXList)lstSuchworte).setSortOrder(SortOrder.ASCENDING);
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param cidsBean DOCUMENT ME!
+     * @param  cidsBean  DOCUMENT ME!
      */
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
@@ -2129,11 +2135,11 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         if (cidsBean != null) {
             this.cidsBean = cidsBean;
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
-                    bindingGroup,
-                    this.cidsBean);
+                bindingGroup,
+                this.cidsBean);
             initMap();
 
-            final boolean internalUsage = Boolean.TRUE.equals((Boolean) cidsBean.getProperty("interner_gebrauch"));
+            final boolean internalUsage = Boolean.TRUE.equals((Boolean)cidsBean.getProperty("interner_gebrauch"));
             rendererAndInternalUsage = !editable && internalUsage;
 
             bindingGroup.bind();
@@ -2142,13 +2148,13 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             }
             decorateComboBoxes();
             automaticallySortLists();
-            final String vorschaubild = (String) cidsBean.getProperty("vorschaubild.bildnummer");
+            final String vorschaubild = (String)cidsBean.getProperty("vorschaubild.bildnummer");
             this.title = "Stadtbildserie "
-                    + ((vorschaubild != null) ? vorschaubild : "");
+                        + ((vorschaubild != null) ? vorschaubild : "");
             lblTitle.setText(this.title);
             lstBildnummern.setSelectedValue(cidsBean.getProperty("vorschaubild"), true);
 
-            final String pruefhinweis = (String) cidsBean.getProperty("pruefen_kommentar");
+            final String pruefhinweis = (String)cidsBean.getProperty("pruefen_kommentar");
             if (StringUtils.isNotBlank(pruefhinweis) && !editable) {
                 // the Pruefhinweis can not be changed in the renderer if a pruefhinweis already exists.
                 chbPruefen.setEnabled(false);
@@ -2163,20 +2169,28 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
 
         cidsBean.addPropertyChangeListener(new PropertyChangeListener() {
 
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                if (evt.getPropertyName().equals("strasse")) {
-                    handleEnabledStateOfBtnCombineGeometries();
+                @Override
+                public void propertyChange(final PropertyChangeEvent evt) {
+                    if (evt.getPropertyName().equals("strasse")) {
+                        handleEnabledStateOfBtnCombineGeometries();
+                    }
                 }
-            }
-        });
+            });
 
+        new CidsBeanDeepPropertyListener(cidsBean, "geom.geo_field").addPropertyChangeListener(
+            new PropertyChangeListener() {
+
+                @Override
+                public void propertyChange(final PropertyChangeEvent evt) {
+                    refreshPreviewGeometry();
+                }
+            });
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     @Override
     public String getTitle() {
@@ -2199,7 +2213,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     /**
      * DOCUMENT ME!
      *
-     * @param title DOCUMENT ME!
+     * @param  title  DOCUMENT ME!
      */
     @Override
     public void setTitle(String title) {
@@ -2213,7 +2227,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     @Override
     public JComponent getTitleComponent() {
@@ -2223,7 +2237,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     @Override
     public JComponent getFooterComponent() {
@@ -2237,7 +2251,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     public void dispose() {
         bindingGroup.unbind();
         if (editable) {
-            ((DefaultCismapGeometryComboBoxEditor) dbcGeom).dispose();
+            ((DefaultCismapGeometryComboBoxEditor)dbcGeom).dispose();
         }
     }
 
@@ -2253,9 +2267,9 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 fotoCidsBean.removePropertyChangeListener(listRepaintListener);
             }
             if (stadtbild instanceof CidsBean) {
-                fotoCidsBean = (CidsBean) stadtbild;
+                fotoCidsBean = (CidsBean)stadtbild;
                 fotoCidsBean.addPropertyChangeListener(listRepaintListener);
-                final String bildnummer = (String) fotoCidsBean.getProperty("bildnummer");
+                final String bildnummer = (String)fotoCidsBean.getProperty("bildnummer");
                 if (bildnummer != null) {
                     new Sb_stadtbildserieEditor.LoadSelectedImageWorker(bildnummer).execute();
                 }
@@ -2278,19 +2292,19 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     /**
      * DOCUMENT ME!
      *
-     * @param wait DOCUMENT ME!
+     * @param  wait  DOCUMENT ME!
      */
     private void showWait(final boolean wait) {
         if (wait) {
             if (!lblBusy.isBusy()) {
-                ((CardLayout) pnlFoto.getLayout()).show(pnlFoto, "busy");
+                ((CardLayout)pnlFoto.getLayout()).show(pnlFoto, "busy");
 //                lblPicture.setIcon(null);
                 lblBusy.setBusy(true);
                 btnPrevImg.setEnabled(false);
                 btnNextImg.setEnabled(false);
             }
         } else {
-            ((CardLayout) pnlFoto.getLayout()).show(pnlFoto, "image");
+            ((CardLayout)pnlFoto.getLayout()).show(pnlFoto, "image");
             lblBusy.setBusy(false);
             defineButtonStatus();
         }
@@ -2299,7 +2313,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     /**
      * DOCUMENT ME!
      *
-     * @param tooltip DOCUMENT ME!
+     * @param  tooltip  DOCUMENT ME!
      */
     private void indicateError(final String tooltip) {
         lblPicture.setIcon(ERROR_ICON);
@@ -2311,7 +2325,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     /**
      * DOCUMENT ME!
      *
-     * @param tooltip DOCUMENT ME!
+     * @param  tooltip  DOCUMENT ME!
      */
     private void indicateNotAvailable(final String tooltip) {
         lblPicture.setIcon(ERROR_ICON);
@@ -2333,20 +2347,20 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     /**
      * DOCUMENT ME!
      *
-     * @param args DOCUMENT ME!
+     * @param   args  DOCUMENT ME!
      *
-     * @throws Exception DOCUMENT ME!
+     * @throws  Exception  DOCUMENT ME!
      */
     public static void main(final String[] args) throws Exception {
         DevelopmentTools.createEditorInFrameFromRMIConnectionOnLocalhost(
-                "WUNDA_BLAU",
-                "Administratoren",
-                "admin",
-                "kif",
-                "sb_stadtbildserie",
-                18, // id 161078 high res, id 18 = interval
-                1280,
-                1024);
+            "WUNDA_BLAU",
+            "Administratoren",
+            "admin",
+            "kif",
+            "sb_stadtbildserie",
+            18, // id 161078 high res, id 18 = interval
+            1280,
+            1024);
 
 //        final CidsBean[] beans = DevelopmentTools.createCidsBeansFromRMIConnectionOnLocalhost(
 //                "WUNDA_BLAU",
@@ -2368,74 +2382,97 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         if (cidsBean != null) {
             final Object geoObj = cidsBean.getProperty("geom.geo_field");
             if (geoObj instanceof Geometry) {
-                final Geometry pureGeom = CrsTransformer.transformToGivenCrs((Geometry) geoObj,
+                final Geometry pureGeom = CrsTransformer.transformToGivenCrs((Geometry)geoObj,
                         AlkisConstants.COMMONS.SRS_SERVICE);
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("ALKISConstatns.Commons.GeoBUffer: " + AlkisConstants.COMMONS.GEO_BUFFER);
                 }
                 final XBoundingBox box = new XBoundingBox(pureGeom.getEnvelope().buffer(
-                        AlkisConstants.COMMONS.GEO_BUFFER));
+                            AlkisConstants.COMMONS.GEO_BUFFER));
                 final double diagonalLength = Math.sqrt((box.getWidth() * box.getWidth())
-                        + (box.getHeight() * box.getHeight()));
+                                + (box.getHeight() * box.getHeight()));
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Buffer for map: " + diagonalLength);
                 }
                 final XBoundingBox bufferedBox = new XBoundingBox(box.getGeometry().buffer(diagonalLength));
                 final Runnable mapRunnable = new Runnable() {
 
-                    @Override
-                    public void run() {
-                        final ActiveLayerModel mappingModel = new ActiveLayerModel();
-                        mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
-                        mappingModel.addHome(new XBoundingBox(
-                                bufferedBox.getX1(),
-                                bufferedBox.getY1(),
-                                bufferedBox.getX2(),
-                                bufferedBox.getY2(),
-                                AlkisConstants.COMMONS.SRS_SERVICE,
-                                true));
-                        final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
-                                AlkisConstants.COMMONS.MAP_CALL_STRING));
-                        swms.setName("Stadtbildserie");
-                        final StyledFeature dsf = new DefaultStyledFeature();
-                        dsf.setGeometry(pureGeom);
-                        dsf.setFillingPaint(new Color(1, 0, 0, 0.5f));
-                        dsf.setLineWidth(3);
-                        dsf.setLinePaint(new Color(1, 0, 0, 1f));
-                        // add the raster layer to the model
-                        mappingModel.addLayer(swms);
-                        // set the model
-                        map.setMappingModel(mappingModel);
-                        // initial positioning of the map
-                        final int duration = map.getAnimationDuration();
-                        map.setAnimationDuration(0);
-                        map.gotoInitialBoundingBox();
-                        // interaction mode
-                        map.setInteractionMode(MappingComponent.ZOOM);
-                        // finally when all configurations are done ...
-                        map.unlock();
-                        map.addCustomInputListener("MUTE", new PBasicInputEventHandler() {
+                        @Override
+                        public void run() {
+                            final ActiveLayerModel mappingModel = new ActiveLayerModel();
+                            mappingModel.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                            mappingModel.addHome(new XBoundingBox(
+                                    bufferedBox.getX1(),
+                                    bufferedBox.getY1(),
+                                    bufferedBox.getX2(),
+                                    bufferedBox.getY2(),
+                                    AlkisConstants.COMMONS.SRS_SERVICE,
+                                    true));
+                            final SimpleWMS swms = new SimpleWMS(new SimpleWmsGetMapUrl(
+                                        AlkisConstants.COMMONS.MAP_CALL_STRING));
+                            swms.setName("Stadtbildserie");
 
-                            @Override
-                            public void mouseClicked(final PInputEvent evt) {
-                                if (evt.getClickCount() > 1) {
-                                    final CidsBean bean = cidsBean;
-                                    ObjectRendererUtils.switchToCismapMap();
-                                    ObjectRendererUtils.addBeanGeomAsFeatureToCismapMap(bean, false);
-                                }
-                            }
-                        });
-                        map.setInteractionMode("MUTE");
-                        map.getFeatureCollection().addFeature(dsf);
-                        map.setAnimationDuration(duration);
-                    }
-                };
+                            previewGeometry.setGeometry(pureGeom);
+                            previewGeometry.setFillingPaint(new Color(1, 0, 0, 0.5f));
+                            previewGeometry.setLineWidth(3);
+                            previewGeometry.setLinePaint(new Color(1, 0, 0, 1f));
+                            // add the raster layer to the model
+                            mappingModel.addLayer(swms);
+                            // set the model
+                            previewMap.setMappingModel(mappingModel);
+                            // initial positioning of the map
+                            final int duration = previewMap.getAnimationDuration();
+                            previewMap.setAnimationDuration(0);
+                            previewMap.gotoInitialBoundingBox();
+                            // interaction mode
+                            previewMap.setInteractionMode(MappingComponent.ZOOM);
+                            // finally when all configurations are done ...
+                            previewMap.unlock();
+                            previewMap.addCustomInputListener("MUTE", new PBasicInputEventHandler() {
+
+                                    @Override
+                                    public void mouseClicked(final PInputEvent evt) {
+                                        if (evt.getClickCount() > 1) {
+                                            final CidsBean bean = cidsBean;
+                                            ObjectRendererUtils.switchToCismapMap();
+                                            ObjectRendererUtils.addBeanGeomAsFeatureToCismapMap(bean, false);
+                                        }
+                                    }
+                                });
+                            previewMap.setInteractionMode("MUTE");
+                            previewMap.getFeatureCollection().addFeature(previewGeometry);
+                            previewMap.setAnimationDuration(duration);
+                        }
+                    };
                 if (EventQueue.isDispatchThread()) {
                     mapRunnable.run();
                 } else {
                     EventQueue.invokeLater(mapRunnable);
                 }
             }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void refreshPreviewGeometry() {
+        final Object geoObj = cidsBean.getProperty("geom.geo_field");
+        if (geoObj instanceof Geometry) {
+            if (!previewMap.getFeatureCollection().contains(previewGeometry)) {
+                previewMap.getFeatureCollection().addFeature(previewGeometry);
+            }
+            final Geometry pureGeom = CrsTransformer.transformToGivenCrs((Geometry)geoObj,
+                    AlkisConstants.COMMONS.SRS_SERVICE);
+            previewGeometry.setGeometry(pureGeom);
+            previewMap.reconsiderFeature(previewGeometry);
+            final XBoundingBox box = new XBoundingBox(pureGeom.getEnvelope().buffer(
+                        AlkisConstants.COMMONS.GEO_BUFFER));
+            final double diagonalLength = Math.sqrt((box.getWidth() * box.getWidth())
+                            + (box.getHeight() * box.getHeight()));
+            previewMap.gotoBoundingBox(box, true, true, 1000);
+        } else {
+            previewMap.getFeatureCollection().removeAllFeatures();
         }
     }
 
@@ -2460,15 +2497,17 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     }
 
     //~ Inner Classes ----------------------------------------------------------
+
     /**
      * DOCUMENT ME!
      *
-     * @version $Revision$, $Date$
+     * @version  $Revision$, $Date$
      */
     private class StadtbildserieReportParameterGenerator
             implements JasperReportDownload.JasperReportParametersGenerator {
 
         //~ Methods ------------------------------------------------------------
+
         @Override
         public Map generateParamters() {
             final HashMap params = new HashMap();
@@ -2476,25 +2515,25 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             try {
                 SwingUtilities.invokeAndWait(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        final Icon icon = lblPicture.getIcon();
-                        if (icon instanceof ImageIcon) {
-                            params.put("image", ((ImageIcon) icon).getImage());
-                        } else {
-                            params.put("image", ERROR_ICON.getImage());
-                        }
+                        @Override
+                        public void run() {
+                            final Icon icon = lblPicture.getIcon();
+                            if (icon instanceof ImageIcon) {
+                                params.put("image", ((ImageIcon)icon).getImage());
+                            } else {
+                                params.put("image", ERROR_ICON.getImage());
+                            }
 
-                        params.put("bildnummer", lstBildnummern.getSelectedValue());
+                            params.put("bildnummer", lstBildnummern.getSelectedValue());
 
-                        final int size = ((JXList) lstBildnummern).getElementCount();
-                        params.put("isSerie", size > 1);
-                        if (size > 1) {
-                            params.put("serieAnfang", ((JXList) lstBildnummern).getElementAt(0));
-                            params.put("serieEnde", ((JXList) lstBildnummern).getElementAt(size - 1));
+                            final int size = ((JXList)lstBildnummern).getElementCount();
+                            params.put("isSerie", size > 1);
+                            if (size > 1) {
+                                params.put("serieAnfang", ((JXList)lstBildnummern).getElementAt(0));
+                                params.put("serieEnde", ((JXList)lstBildnummern).getElementAt(size - 1));
+                            }
                         }
-                    }
-                });
+                    });
             } catch (InterruptedException ex) {
                 LOG.error(ex, ex);
             } catch (InvocationTargetException ex) {
@@ -2503,8 +2542,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
 
             Image vorschaubild = ERROR_ICON.getImage();
             try {
-                vorschaubild = Sb_stadtbildUtils.downloadImageForBildnummer((String) cidsBean.getProperty(
-                        "vorschaubild.bildnummer"));
+                vorschaubild = Sb_stadtbildUtils.downloadImageForBildnummer((String)cidsBean.getProperty(
+                            "vorschaubild.bildnummer"));
             } catch (Exception ex) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug(ex, ex);
@@ -2522,17 +2561,18 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     /**
      * DOCUMENT ME!
      *
-     * @version $Revision$, $Date$
+     * @version  $Revision$, $Date$
      */
     final class ImageResizeWorker extends SwingWorker<ImageIcon, Void> {
 
         //~ Methods ------------------------------------------------------------
+
         /**
          * DOCUMENT ME!
          *
-         * @return DOCUMENT ME!
+         * @return  DOCUMENT ME!
          *
-         * @throws Exception DOCUMENT ME!
+         * @throws  Exception  DOCUMENT ME!
          */
         @Override
         protected ImageIcon doInBackground() throws Exception {
@@ -2576,18 +2616,20 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     /**
      * DOCUMENT ME!
      *
-     * @version $Revision$, $Date$
+     * @version  $Revision$, $Date$
      */
     final class LoadSelectedImageWorker extends SwingWorker<BufferedImage, Void> {
 
         //~ Instance fields ----------------------------------------------------
+
         private final String bildnummer;
 
         //~ Constructors -------------------------------------------------------
+
         /**
          * Creates a new LoadSelectedImageWorker object.
          *
-         * @param toLoad DOCUMENT ME!
+         * @param  toLoad  DOCUMENT ME!
          */
         public LoadSelectedImageWorker(final String toLoad) {
             this.bildnummer = toLoad;
@@ -2597,12 +2639,13 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         }
 
         //~ Methods ------------------------------------------------------------
+
         /**
          * DOCUMENT ME!
          *
-         * @return DOCUMENT ME!
+         * @return  DOCUMENT ME!
          *
-         * @throws Exception DOCUMENT ME!
+         * @throws  Exception  DOCUMENT ME!
          */
         @Override
         protected BufferedImage doInBackground() throws Exception {
@@ -2643,18 +2686,20 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     /**
      * DOCUMENT ME!
      *
-     * @version $Revision$, $Date$
+     * @version  $Revision$, $Date$
      */
     final class CheckAccessibilityOfHighResImage extends SwingWorker<Boolean, Void> {
 
         //~ Instance fields ----------------------------------------------------
+
         private final String imageNumber;
 
         //~ Constructors -------------------------------------------------------
+
         /**
          * Creates a new CheckAccessibilityOfHighResImage object.
          *
-         * @param imageNumber DOCUMENT ME!
+         * @param  imageNumber  DOCUMENT ME!
          */
         public CheckAccessibilityOfHighResImage(final String imageNumber) {
             this.imageNumber = imageNumber;
@@ -2662,12 +2707,13 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         }
 
         //~ Methods ------------------------------------------------------------
+
         /**
          * DOCUMENT ME!
          *
-         * @return DOCUMENT ME!
+         * @return  DOCUMENT ME!
          *
-         * @throws Exception DOCUMENT ME!
+         * @throws  Exception  DOCUMENT ME!
          */
         @Override
         protected Boolean doInBackground() throws Exception {
@@ -2688,9 +2734,9 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 btnDownloadHighResImage.setEnabled(accessible);
                 if (accessible) {
                     ObjectRendererUtils.decorateComponentWithMouseOverCursorChange(
-                            btnDownloadHighResImage,
-                            Cursor.HAND_CURSOR,
-                            Cursor.DEFAULT_CURSOR);
+                        btnDownloadHighResImage,
+                        Cursor.HAND_CURSOR,
+                        Cursor.DEFAULT_CURSOR);
                 }
             } catch (InterruptedException ex) {
                 LOG.warn(ex, ex);
@@ -2703,20 +2749,22 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     /**
      * DOCUMENT ME!
      *
-     * @version $Revision$, $Date$
+     * @version  $Revision$, $Date$
      */
     final class SavePruefhinweisWorker extends SwingWorker<Void, Void> {
 
         //~ Instance fields ----------------------------------------------------
+
         ServerActionParameter paramComment;
         ServerActionParameter paramSBSid;
 
         //~ Constructors -------------------------------------------------------
+
         /**
          * Creates a new SavePruefhinweisWorker object.
          *
-         * @param paramComment DOCUMENT ME!
-         * @param paramSBSid DOCUMENT ME!
+         * @param  paramComment  DOCUMENT ME!
+         * @param  paramSBSid    DOCUMENT ME!
          */
         public SavePruefhinweisWorker(final ServerActionParameter paramComment,
                 final ServerActionParameter paramSBSid) {
@@ -2729,15 +2777,16 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         }
 
         //~ Methods ------------------------------------------------------------
+
         @Override
         protected Void doInBackground() throws Exception {
             SessionManager.getProxy()
                     .executeTask(
-                            Sb_stadtbildserieUpdatePruefhinweisAction.TASK_NAME,
-                            "WUNDA_BLAU",
-                            null,
-                            paramComment,
-                            paramSBSid);
+                        Sb_stadtbildserieUpdatePruefhinweisAction.TASK_NAME,
+                        "WUNDA_BLAU",
+                        null,
+                        paramComment,
+                        paramSBSid);
             return null;
         }
 
@@ -2750,8 +2799,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
 
                 final TreeNode selectedNode = ComponentRegistry.getRegistry().getCatalogueTree().getSelectedNode();
                 if (selectedNode != null) {
-                    ((DefaultTreeModel) ComponentRegistry.getRegistry().getCatalogueTree().getModel()).nodeChanged(
-                            selectedNode);
+                    ((DefaultTreeModel)ComponentRegistry.getRegistry().getCatalogueTree().getModel()).nodeChanged(
+                        selectedNode);
                 }
             } catch (InterruptedException ex) {
                 exceptionHandling(ex);
@@ -2767,7 +2816,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         /**
          * DOCUMENT ME!
          *
-         * @param ex DOCUMENT ME!
+         * @param  ex  DOCUMENT ME!
          */
         private void exceptionHandling(final Exception ex) {
             LOG.error("Problem while updating the Pruefhinweis", ex);
@@ -2787,34 +2836,30 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     }
 
     /**
-     * The JXList from SwingX 1.6 contains bugs in the methods
-     * JXList.getSelectedValue(), JXList.getSelectedValues() and
+     * The JXList from SwingX 1.6 contains bugs in the methods JXList.getSelectedValue(), JXList.getSelectedValues() and
      * JXList.setSelectedValue(). See also:
      * https://java.net/jira/browse/SWINGX-1263?page=com.atlassian.jira.plugin.system.issuetabpanels%3Aall-tabpanel
      * Therefor the method were copied from SwingX 1.6.5-1.
      *
-     * @version $Revision$, $Date$
+     * @version  $Revision$, $Date$
      */
     public static class JXListBugFixes extends JXList {
 
         //~ Methods ------------------------------------------------------------
+
         /**
-         * Returns the value for the smallest selected cell index; <i>the
-         * selected value</i> when only a single item is selected in the list.
-         * When multiple items are selected, it is simply the value for the
-         * smallest selected index. Returns {@code null} if there is no
-         * selection.
+         * Returns the value for the smallest selected cell index; <i>the selected value</i> when only a single item is
+         * selected in the list. When multiple items are selected, it is simply the value for the smallest selected
+         * index. Returns {@code null} if there is no selection.
          *
-         * <p>
-         * This is a convenience method that simply returns the model value for
-         * {@code getMinSelectionIndex}, taking into account sorting and
-         * filtering.</p>
+         * <p>This is a convenience method that simply returns the model value for {@code getMinSelectionIndex}, taking
+         * into account sorting and filtering.</p>
          *
-         * @return the first selected value
+         * @return  the first selected value
          *
-         * @see #getMinSelectionIndex
-         * @see #getModel
-         * @see #addListSelectionListener
+         * @see     #getMinSelectionIndex
+         * @see     #getModel
+         * @see     #addListSelectionListener
          */
         @Override
         public Object getSelectedValue() {
@@ -2823,12 +2868,11 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         }
 
         /**
-         * Selects the specified object from the list, taking into account
-         * sorting and filtering.
+         * Selects the specified object from the list, taking into account sorting and filtering.
          *
-         * @param anObject the object to select
-         * @param shouldScroll {@code true} if the list should scroll to display
-         * the selected object, if one exists; otherwise {@code false}
+         * @param  anObject      the object to select
+         * @param  shouldScroll {@code true} if the list should scroll to display the selected object, if one exists;
+         *                       otherwise {@code false}
          */
         @Override
         public void setSelectedValue(final Object anObject, final boolean shouldScroll) {
@@ -2864,15 +2908,14 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         }
 
         /**
-         * Returns an array of all the selected values, in increasing order
-         * based on their indices in the list and taking into account sourting
-         * and filtering.
+         * Returns an array of all the selected values, in increasing order based on their indices in the list and
+         * taking into account sourting and filtering.
          *
-         * @return the selected values, or an empty array if nothing is selected
+         * @return  the selected values, or an empty array if nothing is selected
          *
-         * @see #isSelectedIndex
-         * @see #getModel
-         * @see #addListSelectionListener
+         * @see     #isSelectedIndex
+         * @see     #getModel
+         * @see     #addListSelectionListener
          */
         @Override
         public Object[] getSelectedValues() {
@@ -2886,14 +2929,15 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     }
 
     /**
-     * A JButton which gets only enabled if the shown Stadtbildserie is not in
-     * the renderer and not for internal usage only.
+     * A JButton which gets only enabled if the shown Stadtbildserie is not in the renderer and not for internal usage
+     * only.
      *
-     * @version $Revision$, $Date$
+     * @version  $Revision$, $Date$
      */
     private class EnableOnlyIfNotInternalUsageAndNotRendererJButton extends JButton {
 
         //~ Methods ------------------------------------------------------------
+
         @Override
         public void setEnabled(final boolean enable) {
             super.setEnabled(enable && !rendererAndInternalUsage);
