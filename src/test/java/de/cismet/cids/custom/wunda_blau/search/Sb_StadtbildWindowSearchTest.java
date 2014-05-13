@@ -118,6 +118,23 @@ public class Sb_StadtbildWindowSearchTest {
             Exceptions.printStackTrace(ex);
         }
     }
+    
+    @Test
+    public void testFancyIntervall_prefixLetter_sameNumberBase_FirstNumberHasSuffixLetter() {
+        Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
+        try {
+            final Object[] resultArray = instance.setFancyIntervalInSearch("N04713y", "N04713");
+            assertEquals(true, resultArray[0]);
+
+            ArrayList<String> expectedNumbers = new ArrayList<String>();
+            expectedNumbers.add("N04713");
+            expectedNumbers.add("N04713y");
+            expectedNumbers.add("N04713z");
+            assertEquals(expectedNumbers, resultArray[1]);
+        } catch (Exception ex) {
+            Exceptions.printStackTrace(ex);
+        }
+    }
 
     @Test
     public void testFancyIntervall_prefixLetter_BothNumbersHaveSuffixLetter() {
