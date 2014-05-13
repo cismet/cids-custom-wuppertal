@@ -116,8 +116,6 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     private javax.swing.JButton btnNewSearch;
     private javax.swing.JButton btnRemoveSuchwort;
     private javax.swing.JCheckBox cbMapSearch;
-    private javax.swing.JComboBox cboImageNrFrom;
-    private javax.swing.JComboBox cboImageNrTo;
     private javax.swing.JComboBox cboOrt;
     private javax.swing.JComboBox cboStreet;
     private javax.swing.JCheckBox chboBodennaheAufnahme;
@@ -245,9 +243,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         chboBodennaheAufnahme = new javax.swing.JCheckBox();
         pnlImageNumber = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        cboImageNrFrom = new FastBindableReferenceCombo("%1$2s", new String[] { "BILDNUMMER" });
         jLabel2 = new javax.swing.JLabel();
-        cboImageNrTo = new FastBindableReferenceCombo("%1$2s", new String[] { "BILDNUMMER" });
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
@@ -344,18 +340,6 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlImageNumber.add(jLabel1, gridBagConstraints);
 
-        ((FastBindableReferenceCombo)cboImageNrFrom).setSorted(true);
-        cboImageNrFrom.setEditable(true);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 20);
-        pnlImageNumber.add(cboImageNrFrom, gridBagConstraints);
-        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cboImageNrFrom);
-        cboImageNrFrom.setVisible(false);
-
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel2,
             org.openide.util.NbBundle.getMessage(
@@ -366,19 +350,6 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
         pnlImageNumber.add(jLabel2, gridBagConstraints);
-
-        ((FastBindableReferenceCombo)cboImageNrTo).setSorted(true);
-        cboImageNrTo.setEditable(true);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
-        pnlImageNumber.add(cboImageNrTo, gridBagConstraints);
-        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(cboImageNrTo);
-        cboImageNrTo.setVisible(false);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 0;
@@ -941,10 +912,8 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             final Object[] resultArray = setFancyIntervalInSearch(imageNrFrom, imageNrTo);
             stadtbildSerieSearchStatement.setFancyIntervalExactMatch((Boolean)resultArray[0]);
             stadtbildSerieSearchStatement.setFancyInterval((ArrayList<String>)resultArray[1]);
-        } else {
-            // no or only one number set
-            stadtbildSerieSearchStatement.setImageNrTo(imageNrTo);
-            stadtbildSerieSearchStatement.setImageNrFrom(imageNrFrom);
+        } else if (StringUtils.isNotBlank(imageNrFrom)) {
+            stadtbildSerieSearchStatement.setSingleImageNumber(imageNrFrom);
         }
     }
 
