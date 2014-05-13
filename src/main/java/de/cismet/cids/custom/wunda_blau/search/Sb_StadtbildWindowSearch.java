@@ -967,14 +967,22 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             throw new NotAValidIntervalException();
         } else if (prefix.equals(imageNrFrom)) {
             // both numbers have the same digits, only the last character was different
+            // If the letters are not set yet, they have to be set artificially, thus an iteration is possible
             char startLetter;
+            char targetLetter;
             if (letterOfNrFrom == '\0') {
                 listWithNumbers.add(prefix);
                 startLetter = 'a';
             } else {
                 startLetter = letterOfNrFrom;
             }
-            for (int j = startLetter; j <= letterOfNrTo; j++) {
+            if (letterOfNrTo == '\0') {
+                listWithNumbers.add(prefix);
+                targetLetter = 'z';
+            } else {
+                targetLetter = letterOfNrTo;
+            }
+            for (int j = startLetter; j <= targetLetter; j++) {
                 listWithNumbers.add(prefix + (char)j);
             }
         } else {
