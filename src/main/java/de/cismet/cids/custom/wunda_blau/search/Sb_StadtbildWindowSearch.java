@@ -989,13 +989,6 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             throw new NotAValidIntervalException();
         }
 
-        if ((letterOfNrFrom >= letterOfNrTo)) {
-            // the letter of the first number must be smaller than that of the second number
-            final char swap = letterOfNrFrom;
-            letterOfNrFrom = letterOfNrTo;
-            letterOfNrTo = swap;
-        }
-
         final ArrayList<String> listWithNumbers = new ArrayList<String>();
         final String prefix = greatestCommonPrefix(imageNrFrom, imageNrTo);
         final int prefix_length = prefix.length();
@@ -1038,15 +1031,32 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 } else {
                     // the numbers do have a last letter, also iterate over the letters
                     char startLetter;
+                    char targetLetter;
                     if (letterOfNrFrom == '\0') {
                         // the first number does not have a letter. Add it to the list and set the letter to 'a'
-                        // Thus an iteration of letters is possible
+                        // Thus an iteration over letters is possible
                         listWithNumbers.add(prefix + String.format(intToStringFormat, i));
                         startLetter = 'a';
                     } else {
                         startLetter = letterOfNrFrom;
                     }
-                    for (int j = startLetter; j <= letterOfNrTo; j++) {
+                    if (letterOfNrTo == '\0') {
+                        // the second number does not have a letter.
+                        // Therefor the first number should only appear WITH its letters in the results.
+                        // The second number should only appear WITHOUT its letter in the results.
+                        final String numberToAdd = prefix + String.format(intToStringFormat, i);
+                        if (!numberToAdd.equals(imageNrFrom)) {
+                            listWithNumbers.add(numberToAdd);
+                        }
+                        if (numberToAdd.equals(imageNrTo)) {
+                            break;
+                        }
+                        // Set the letter to 'z', thus an iteration over letters is possible
+                        targetLetter = 'z';
+                    } else {
+                        targetLetter = letterOfNrTo;
+                    }
+                    for (int j = startLetter; j <= targetLetter; j++) {
                         listWithNumbers.add(prefix + String.format(intToStringFormat, i) + (char)j);
                     }
                 }
