@@ -763,6 +763,41 @@
                             <Property name="text" type="java.lang.String" value="Ortbezogene Informationen"/>
                           </Properties>
                         </Component>
+                        <Component class="javax.swing.JLabel" name="jLabel7">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="    "/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="lblGeomDigitized">
+                          <Properties>
+                            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                              <Image iconType="3" name="/res/16/digitized.png"/>
+                            </Property>
+                          </Properties>
+                          <BindingProperties>
+                            <BindingProperty name="toolTipText" source="Form" sourcePath="${cidsBean.geom_aus.comment}" target="lblGeomDigitized" targetPath="toolTipText" updateStrategy="0" immediately="false"/>
+                          </BindingProperties>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="lblGeomAusAdresse">
+                          <Properties>
+                            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                              <Image iconType="3" name="/res/16/adresse.gif"/>
+                            </Property>
+                          </Properties>
+                          <BindingProperties>
+                            <BindingProperty name="toolTipText" source="Form" sourcePath="${cidsBean.geom_aus.comment}" target="lblGeomAusAdresse" targetPath="toolTipText" updateStrategy="0" immediately="false"/>
+                          </BindingProperties>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="lblGeomAusStrasse">
+                          <Properties>
+                            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                              <Image iconType="3" name="/res/16/strasse.gif"/>
+                            </Property>
+                          </Properties>
+                          <BindingProperties>
+                            <BindingProperty name="toolTipText" source="Form" sourcePath="${cidsBean.geom_aus.comment}" target="lblGeomAusStrasse" targetPath="toolTipText" updateStrategy="0" immediately="false"/>
+                          </BindingProperties>
+                        </Component>
                       </SubComponents>
                     </Container>
                     <Container class="javax.swing.JPanel" name="panDetails1">
@@ -880,8 +915,7 @@
                           <AuxValues>
                             <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="}"/>
                             <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="if(editable) {"/>
-                            <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="}"/>
-                            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="if(editable) {"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="if(!editable) {&#xa;    btnCombineGeometries.setVisible(false);&#xa;}"/>
                             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="}"/>
                             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="if(editable) {"/>
                           </AuxValues>

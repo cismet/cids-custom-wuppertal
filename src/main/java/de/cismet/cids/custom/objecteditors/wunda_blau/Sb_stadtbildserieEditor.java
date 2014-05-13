@@ -8,6 +8,8 @@
 package de.cismet.cids.custom.objecteditors.wunda_blau;
 
 import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.tools.CacheException;
+import Sirius.navigator.tools.MetaObjectCache;
 import Sirius.navigator.ui.ComponentRegistry;
 
 import Sirius.server.middleware.types.MetaClass;
@@ -22,17 +24,16 @@ import edu.umd.cs.piccolo.event.PInputEvent;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.design.events.PropagationChangeListener;
 
 import org.apache.commons.lang.StringUtils;
 
-import org.jdesktop.beansbinding.Binding;
-import org.jdesktop.beansbinding.BindingListener;
 import org.jdesktop.beansbinding.Converter;
-import org.jdesktop.beansbinding.PropertyStateEvent;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.JXList;
 import org.jdesktop.swingx.error.ErrorInfo;
+
+import org.openide.util.Exceptions;
+import org.openide.util.NbBundle;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -110,11 +111,11 @@ import de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor;
 import de.cismet.cismap.commons.CrsTransformer;
 import de.cismet.cismap.commons.XBoundingBox;
 import de.cismet.cismap.commons.features.DefaultStyledFeature;
-import de.cismet.cismap.commons.features.Feature;
 import de.cismet.cismap.commons.features.StyledFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
+import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
@@ -154,9 +155,30 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(Sb_stadtbildserieEditor.class);
 
+    private static final String GEOM_AUS_ADRESSE_QUERY =
+        "select (select id from cs_class where table_name ilike 'sb_geom_aus') as class_id,0 as id";
+    private static final String GEOM_AUS_STRASSE_QUERY =
+        "select (select id from cs_class where table_name ilike 'sb_geom_aus') as class_id,1 as id";
+    private static final String GEOM_AUS_DIGI_QUERY =
+        "select (select id from cs_class where table_name ilike 'sb_geom_aus') as class_id,2 as id";
+
+    private static final String GET_GEOM_FROM_ADRESSE =
+        "SELECT (select id from cs_class where table_name ilike 'geom') as class_id, geom.id as id \n"
+                + "FROM adresse,\n"
+                + "     geom\n"
+                + "WHERE \n"
+                + "  adresse.strasse=%d\n"
+                + "  AND adresse.hausnummer = '%s'\n"
+                + "  AND adresse.umschreibendes_rechteck = geom.id\n";
+
     //~ Instance fields --------------------------------------------------------
 
     final StyledFeature previewGeometry = new DefaultStyledFeature();
+    DigitizedSetterPropertyChangeListener digitizedSetter = new DigitizedSetterPropertyChangeListener();
+
+    /** DOCUMENT ME! */
+    Geometry lastRefreshedGeometry = null;
+    XBoundingBox lastRefreshedBoundingBox = null;
     private CidsBean cidsBean;
     private boolean rendererAndInternalUsage = true;
     private String title;
@@ -216,6 +238,9 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             }
         };
 
+    private CidsBean geomFromDigitizedAction;
+    private CidsBean geomFromAdresse;
+    private CidsBean geomFromStrasse;
     private CidsBean fotoCidsBean;
 
     private BufferedImage image;
@@ -257,6 +282,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -285,6 +311,9 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private javax.swing.JLabel lblDescSuchworte;
     private javax.swing.JLabel lblEintragungsdatum;
     private javax.swing.JLabel lblGeomAus;
+    private javax.swing.JLabel lblGeomAusAdresse;
+    private javax.swing.JLabel lblGeomAusStrasse;
+    private javax.swing.JLabel lblGeomDigitized;
     private javax.swing.JLabel lblHausnummer;
     private javax.swing.JLabel lblPicture;
     private javax.swing.JLabel lblPruefhinweisVon;
@@ -347,18 +376,18 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         this.editable = editable;
         initComponents();
         final java.awt.GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
-        if (!editable) { // renderer
-            gridBagConstraints.gridx = 2;
-            gridBagConstraints.gridy = 1;
-            gridBagConstraints.gridwidth = 2;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        } else {
-            gridBagConstraints.gridx = 3;
-            gridBagConstraints.gridy = 2;
-        }
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-        panDetails1.add(lblGeomAus, gridBagConstraints);
+//        if (!editable) { // renderer
+//            gridBagConstraints.gridx = 2;
+//            gridBagConstraints.gridy = 1;
+//            gridBagConstraints.gridwidth = 2;
+//            gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+//            gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+//        } else {
+//            gridBagConstraints.gridx = 3;
+//            gridBagConstraints.gridy = 2;
+//        }
+//        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
+//        panDetails1.add(lblGeomAus, gridBagConstraints);
 
         makeEditable();
         jScrollPane5.getViewport().setOpaque(false);
@@ -537,6 +566,10 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         roundedPanel4 = new de.cismet.tools.gui.RoundedPanel();
         semiRoundedPanel5 = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel3 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        lblGeomDigitized = new javax.swing.JLabel();
+        lblGeomAusAdresse = new javax.swing.JLabel();
+        lblGeomAusStrasse = new javax.swing.JLabel();
         panDetails1 = new javax.swing.JPanel();
         if (editable) {
             lblDescGeometrie = new javax.swing.JLabel();
@@ -546,8 +579,9 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         dbcOrt = new FastBindableReferenceCombo();
         lblHausnummer = new javax.swing.JLabel();
         txtHausnummer = new de.cismet.cids.editors.DefaultBindableJTextField();
-        if (editable) {
-            btnCombineGeometries = new javax.swing.JButton();
+        btnCombineGeometries = new javax.swing.JButton();
+        if (!editable) {
+            btnCombineGeometries.setVisible(false);
         }
         if (editable) {
             dbcGeom = new de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor();
@@ -1186,6 +1220,45 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Ortbezogene Informationen");
         semiRoundedPanel5.add(jLabel3);
+
+        jLabel7.setText("    ");
+        semiRoundedPanel5.add(jLabel7);
+
+        lblGeomDigitized.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/16/digitized.png"))); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geom_aus.comment}"),
+                lblGeomDigitized,
+                org.jdesktop.beansbinding.BeanProperty.create("toolTipText"));
+        bindingGroup.addBinding(binding);
+
+        semiRoundedPanel5.add(lblGeomDigitized);
+
+        lblGeomAusAdresse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/16/adresse.gif"))); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geom_aus.comment}"),
+                lblGeomAusAdresse,
+                org.jdesktop.beansbinding.BeanProperty.create("toolTipText"));
+        bindingGroup.addBinding(binding);
+
+        semiRoundedPanel5.add(lblGeomAusAdresse);
+
+        lblGeomAusStrasse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/16/strasse.gif"))); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.geom_aus.comment}"),
+                lblGeomAusStrasse,
+                org.jdesktop.beansbinding.BeanProperty.create("toolTipText"));
+        bindingGroup.addBinding(binding);
+
+        semiRoundedPanel5.add(lblGeomAusStrasse);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -2082,8 +2155,10 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         if (DownloadManagerDialog.showAskingForUserTitle(ComponentRegistry.getRegistry().getMainWindow())) {
             final String jobname = DownloadManagerDialog.getJobname();
             final String vorschaubildnummer = (String)cidsBean.getProperty("vorschaubild.bildnummer");
-            final String filename = "stadbildserie_" + vorschaubildnummer;
-            final String downloadTitle = "Stadbildserie " + vorschaubildnummer;
+            final String filename = "stadbildserie_"
+                        + vorschaubildnummer;
+            final String downloadTitle = "Stadbildserie "
+                        + vorschaubildnummer;
             final String resourceName = REPORT_STADTBILDSERIE_URL;
             final JasperReportDownload download = new JasperReportDownload(
                     resourceName,
@@ -2102,7 +2177,95 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
      * @param  evt  DOCUMENT ME!
      */
     private void btnCombineGeometriesActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCombineGeometriesActionPerformed
-    }                                                                                        //GEN-LAST:event_btnCombineGeometriesActionPerformed
+        final CidsBean geom_aus = (CidsBean)cidsBean.getProperty("geom_aus");
+        if ((geom_aus == null) || geom_aus.getPrimaryKeyValue().equals(geomFromDigitizedAction.getPrimaryKeyValue())) {
+            final Object[] options = { "Ja, Geometrie überschreiben", "Abbrechen" };
+            final int result = JOptionPane.showOptionDialog(StaticSwingTools.getParentFrame(this),
+                    "Durch diese Aktion wird die digitalisierte Geometrie überschrieben. Wollen Sie das wirklich?",
+                    "Geometrie überschreiben?",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.WARNING_MESSAGE,
+                    null,
+                    options,
+                    options[1]);
+            if ((result == JOptionPane.CLOSED_OPTION) || (result == 1)) {
+                return;
+            }
+        }
+
+        if (cidsBean.getProperty("strasse") != null) {
+            final CidsBean sbGeom = (CidsBean)cidsBean.getProperty("geom");
+
+            boolean hausnummerHit = false;
+            if (cidsBean.getProperty("hausnummer") != null) {
+                // Regel R2 aus https://github.com/cismet/wupp/issues/406
+                // Serversearch
+                // wenn Treffer dann hausnummerHit=true setzen
+                try {
+                    final String query = String.format(
+                            GET_GEOM_FROM_ADRESSE,
+                            ((CidsBean)cidsBean.getProperty("strasse")).getPrimaryKeyValue().intValue(),
+                            txtHausnummer.getText());
+                    final MetaObject[] results = SessionManager.getProxy().getMetaObjectByQuery(query, 0);
+                    if (results.length > 0) {
+                        final CidsBean result = results[0].getBean();
+                        final Geometry geometry = (Geometry)result.getProperty("geo_field");
+                        try {
+                            if (geometry != null) {
+                                digitizedSetter.setActivated(false);
+                                final Geometry expanded = geometry.buffer(20).getEnvelope();
+                                if (sbGeom != null) {
+                                    cidsBean.setProperty("geom.geo_field", expanded);
+                                    dbcGeom.getConverter().convertForward(sbGeom);
+                                } else {
+                                    final MetaClass geomMetaClass = ClassCacheMultiple.getMetaClass(
+                                            CidsBeanSupport.DOMAIN_NAME,
+                                            "geom");
+                                    final CidsBean geom = geomMetaClass.getEmptyInstance().getBean();
+                                    geom.setProperty("geo_field", expanded);
+                                    cidsBean.setProperty("geom", geom);
+                                }
+                                cidsBean.setProperty("geom_aus", geomFromAdresse);
+                                hausnummerHit = true;
+                            }
+                        } catch (Exception ex) {
+                            LOG.fatal(ex, ex);
+                        } finally {
+                            digitizedSetter.setActivated(true);
+                        }
+                    }
+                } catch (Exception e) {
+                    LOG.fatal("Error during ServerSearch", e);
+                }
+            }
+            if (!hausnummerHit) {
+                // Regel R1 aus https://github.com/cismet/wupp/issues/406
+                final Geometry geometry = (Geometry)cidsBean.getProperty("strasse.bsa_bbox.geo_field");
+
+                try {
+                    if (geometry != null) {
+                        digitizedSetter.setActivated(false);
+                        if (sbGeom != null) {
+                            cidsBean.setProperty("geom.geo_field", geometry);
+                            dbcGeom.getConverter().convertForward(sbGeom);
+                        } else {
+                            final MetaClass geomMetaClass = ClassCacheMultiple.getMetaClass(
+                                    CidsBeanSupport.DOMAIN_NAME,
+                                    "geom");
+                            final CidsBean geom = geomMetaClass.getEmptyInstance().getBean();
+                            geom.setProperty("geo_field", geometry);
+                            cidsBean.setProperty("geom", geom);
+                        }
+                        cidsBean.setProperty("geom_aus", geomFromStrasse);
+                    }
+                } catch (Exception ex) {
+                    LOG.fatal(ex, ex);
+                } finally {
+                    digitizedSetter.setActivated(true);
+                }
+            }
+        }
+    } //GEN-LAST:event_btnCombineGeometriesActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -2127,11 +2290,21 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     /**
      * DOCUMENT ME!
      *
-     * @param  cidsBean  DOCUMENT ME!
+     * @param   cidsBean  DOCUMENT ME!
+     *
+     * @throws  RuntimeException  DOCUMENT ME!
      */
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         bindingGroup.unbind();
+        try {
+            geomFromAdresse = MetaObjectCache.getInstance().getMetaObjectsByQuery(GEOM_AUS_ADRESSE_QUERY)[0].getBean();
+            geomFromStrasse = MetaObjectCache.getInstance().getMetaObjectsByQuery(GEOM_AUS_STRASSE_QUERY)[0].getBean();
+            geomFromDigitizedAction =
+                MetaObjectCache.getInstance().getMetaObjectsByQuery(GEOM_AUS_DIGI_QUERY)[0].getBean();
+        } catch (CacheException ex) {
+            throw new RuntimeException("Geometry origin state could not be loaded. That should not happen.", ex);
+        }
         if (cidsBean != null) {
             this.cidsBean = cidsBean;
             DefaultCustomObjectEditor.setMetaClassInformationToMetaClassStoreComponentsInBindingGroup(
@@ -2140,7 +2313,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             initMap();
 
             final boolean internalUsage = Boolean.TRUE.equals((Boolean)cidsBean.getProperty("interner_gebrauch"));
-            rendererAndInternalUsage = !editable && internalUsage;
+            rendererAndInternalUsage = !editable
+                        && internalUsage;
 
             bindingGroup.bind();
             if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW) {
@@ -2165,26 +2339,45 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 chbPruefen.setEnabled(false);
             }
         }
-        handleEnabledStateOfBtnCombineGeometries();
+        handleVisibilityOfGeomAusIcons();
+        if (editable) {
+            handleEnabledStateOfBtnCombineGeometries();
 
-        cidsBean.addPropertyChangeListener(new PropertyChangeListener() {
+            cidsBean.addPropertyChangeListener(new PropertyChangeListener() {
 
-                @Override
-                public void propertyChange(final PropertyChangeEvent evt) {
-                    if (evt.getPropertyName().equals("strasse")) {
-                        handleEnabledStateOfBtnCombineGeometries();
+                    @Override
+                    public void propertyChange(final PropertyChangeEvent evt) {
+                        if (evt.getPropertyName().equals("strasse")) {
+                            handleEnabledStateOfBtnCombineGeometries();
+                        }
+                        if (evt.getPropertyName().equals("geom_aus")) {
+                            handleVisibilityOfGeomAusIcons();
+                        }
+                        if (evt.getPropertyName().equals("geom")) {
+                            if (evt.getOldValue() == null) {
+                                try {
+                                    initMap();
+                                    refreshPreviewGeometry();
+                                    cidsBean.setProperty("geom_aus", geomFromDigitizedAction);
+                                } catch (Exception ex) {
+                                    throw new RuntimeException("Error when setting geom origin.", ex);
+                                }
+                            }
+                        }
                     }
-                }
-            });
+                });
 
-        new CidsBeanDeepPropertyListener(cidsBean, "geom.geo_field").addPropertyChangeListener(
-            new PropertyChangeListener() {
+            new CidsBeanDeepPropertyListener(cidsBean, "geom.geo_field").addPropertyChangeListener(
+                new PropertyChangeListener() {
 
-                @Override
-                public void propertyChange(final PropertyChangeEvent evt) {
-                    refreshPreviewGeometry();
-                }
-            });
+                    @Override
+                    public void propertyChange(final PropertyChangeEvent evt) {
+                        refreshPreviewGeometry();
+                    }
+                });
+
+            new CidsBeanDeepPropertyListener(cidsBean, "geom.geo_field").addPropertyChangeListener(digitizedSetter);
+        }
     }
 
     /**
@@ -2212,6 +2405,32 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
 
     /**
      * DOCUMENT ME!
+     */
+    private void handleVisibilityOfGeomAusIcons() {
+        try {
+            final int id = (Integer)cidsBean.getProperty("geom_aus.id");
+            if (id == 0) {
+                lblGeomAusAdresse.setVisible(true);
+                lblGeomAusStrasse.setVisible(false);
+                lblGeomDigitized.setVisible(false);
+            } else if (id == 1) {
+                lblGeomAusAdresse.setVisible(false);
+                lblGeomAusStrasse.setVisible(true);
+                lblGeomDigitized.setVisible(false);
+            } else if (id == 2) {
+                lblGeomAusAdresse.setVisible(false);
+                lblGeomAusStrasse.setVisible(false);
+                lblGeomDigitized.setVisible(true);
+            }
+        } catch (Exception e) {
+            lblGeomAusAdresse.setVisible(false);
+            lblGeomAusStrasse.setVisible(false);
+            lblGeomDigitized.setVisible(false);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
      *
      * @param  title  DOCUMENT ME!
      */
@@ -2220,7 +2439,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         if (title == null) {
             title = "<Error>";
         }
-        this.title = "Stadtbildserie " + title;
+        this.title = "Stadtbildserie "
+                    + title;
         lblTitle.setText(this.title);
     }
 
@@ -2457,20 +2677,26 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
      * DOCUMENT ME!
      */
     private void refreshPreviewGeometry() {
-        final Object geoObj = cidsBean.getProperty("geom.geo_field");
+        final Geometry geoObj = (Geometry)cidsBean.getProperty("geom.geo_field");
         if (geoObj instanceof Geometry) {
-            if (!previewMap.getFeatureCollection().contains(previewGeometry)) {
-                previewMap.getFeatureCollection().addFeature(previewGeometry);
+            if (true || (lastRefreshedGeometry == null) || !geoObj.equals(lastRefreshedGeometry)) {
+                lastRefreshedGeometry = (Geometry)geoObj;
+                if (!previewMap.getFeatureCollection().contains(previewGeometry)) {
+                    previewMap.getFeatureCollection().addFeature(previewGeometry);
+                }
+                final Geometry pureGeom = CrsTransformer.transformToGivenCrs((Geometry)geoObj,
+                        AlkisConstants.COMMONS.SRS_SERVICE);
+                previewGeometry.setGeometry(pureGeom);
+                previewMap.reconsiderFeature(previewGeometry);
+                final XBoundingBox box = new XBoundingBox(pureGeom.getEnvelope().buffer(
+                            AlkisConstants.COMMONS.GEO_BUFFER));
+                final double diagonalLength = Math.sqrt((box.getWidth() * box.getWidth())
+                                + (box.getHeight() * box.getHeight()));
+                final XBoundingBox bufferedBox = new XBoundingBox(box.getGeometry().buffer(diagonalLength));
+                LOG.fatal("gotoBoundingBox" + bufferedBox, new Exception());
+
+                previewMap.gotoBoundingBox(bufferedBox, true, true, 1000);
             }
-            final Geometry pureGeom = CrsTransformer.transformToGivenCrs((Geometry)geoObj,
-                    AlkisConstants.COMMONS.SRS_SERVICE);
-            previewGeometry.setGeometry(pureGeom);
-            previewMap.reconsiderFeature(previewGeometry);
-            final XBoundingBox box = new XBoundingBox(pureGeom.getEnvelope().buffer(
-                        AlkisConstants.COMMONS.GEO_BUFFER));
-            final double diagonalLength = Math.sqrt((box.getWidth() * box.getWidth())
-                            + (box.getHeight() * box.getHeight()));
-            previewMap.gotoBoundingBox(box, true, true, 1000);
         } else {
             previewMap.getFeatureCollection().removeAllFeatures();
         }
@@ -2497,6 +2723,49 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     }
 
     //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class DigitizedSetterPropertyChangeListener implements PropertyChangeListener {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private boolean activated = true;
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public boolean isActivated() {
+            return activated;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  activated  DOCUMENT ME!
+         */
+        public void setActivated(final boolean activated) {
+            this.activated = activated;
+        }
+
+        @Override
+        public void propertyChange(final PropertyChangeEvent evt) {
+            if (activated) {
+                try {
+                    cidsBean.setProperty("geom_aus", geomFromDigitizedAction);
+                } catch (Exception ex) {
+                    LOG.fatal("Error when setting geom_aus", ex);
+                }
+            }
+        }
+    }
 
     /**
      * DOCUMENT ME!
@@ -2720,7 +2989,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             if (rendererAndInternalUsage) {
                 return false;
             } else {
-                return Sb_stadtbildUtils.getFormatOfHighResPicture(imageNumber) != null;
+                return Sb_stadtbildUtils.getFormatOfHighResPicture(imageNumber)
+                            != null;
             }
         }
 
