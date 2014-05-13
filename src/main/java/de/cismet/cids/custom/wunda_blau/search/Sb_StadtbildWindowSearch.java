@@ -938,15 +938,9 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         final String imageNrTo = txtImageNrTo.getText();
 
         if (StringUtils.isNotBlank(imageNrFrom) && StringUtils.isNotBlank(imageNrTo)) {
-            // 'normal' interval, numbers have same length and consists only of digits
-            if ((imageNrFrom.length() == imageNrTo.length())
-                        && ONLY_DIGITS_INTEGER_PATTERN.matcher(imageNrFrom).matches()
-                        && ONLY_DIGITS_INTEGER_PATTERN.matcher(imageNrTo).matches()) {
-                stadtbildSerieSearchStatement.setImageNrTo(imageNrTo);
-                stadtbildSerieSearchStatement.setImageNrFrom(imageNrFrom);
-            } else {
-                setFancyIntervalInSearch(stadtbildSerieSearchStatement, imageNrFrom, imageNrTo);
-            }
+            final Object[] resultArray = setFancyIntervalInSearch(imageNrFrom, imageNrTo);
+            stadtbildSerieSearchStatement.setFancyIntervalExactMatch((Boolean)resultArray[0]);
+            stadtbildSerieSearchStatement.setFancyInterval((ArrayList<String>)resultArray[1]);
         } else {
             // no or only one number set
             stadtbildSerieSearchStatement.setImageNrTo(imageNrTo);
@@ -959,16 +953,17 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
      * put in a list and are given to a MetaObjectNodesStadtbildSerieSearchStatement object. If the interval is even too
      * fancy for this method a NotAValidIntervalException will be thrown.
      *
-     * @param   stadtbildSerieSearchStatement  DOCUMENT ME!
-     * @param   imageNrFrom                    DOCUMENT ME!
-     * @param   imageNrTo                      DOCUMENT ME!
+     * @param   imageNrFrom  DOCUMENT ME!
+     * @param   imageNrTo    DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
      *
      * @throws  NotAValidIntervalException  DOCUMENT ME!
      */
-    private void setFancyIntervalInSearch(
-            final MetaObjectNodesStadtbildSerieSearchStatement stadtbildSerieSearchStatement,
+    Object[] setFancyIntervalInSearch(
             String imageNrFrom,
             String imageNrTo) throws NotAValidIntervalException {
+        boolean exactMatch = true;
         char lastCharacter = imageNrFrom.charAt(imageNrFrom.length() - 1);
         char letterOfNrFrom;
         if (Character.isLetter(lastCharacter)) {
@@ -989,15 +984,16 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             letterOfNrTo = '\0';
         }
 
-        if (((letterOfNrFrom != '\0') && (letterOfNrTo != '\0'))) {
-            if ((letterOfNrFrom >= letterOfNrTo)) {
-                // the letter of the first number must be smaller than that of the second number
-                // except they do not have a number at all
-                throw new NotAValidIntervalException();
-            }
-        } else if (imageNrFrom.length() != imageNrTo.length()) {
+        if (imageNrFrom.length() != imageNrTo.length()) {
             // the two numbers must have the same length
             throw new NotAValidIntervalException();
+        }
+
+        if ((letterOfNrFrom >= letterOfNrTo)) {
+            // the letter of the first number must be smaller than that of the second number
+            final char swap = letterOfNrFrom;
+            letterOfNrFrom = letterOfNrTo;
+            letterOfNrTo = swap;
         }
 
         final ArrayList<String> listWithNumbers = new ArrayList<String>();
@@ -1005,10 +1001,10 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         final int prefix_length = prefix.length();
 
         if (StringUtils.isBlank(prefix)) {
-            // if the two numbers do not have a common prefix, than they are two different
+            // if the two numbers do not have a common prefix, than they are too different
             throw new NotAValidIntervalException();
         } else if (prefix.equals(imageNrFrom)) {
-            // both numbers have the digits, only the last character was different
+            // both numbers have the same digits, only the last character was different
             char startLetter;
             if (letterOfNrFrom == '\0') {
                 listWithNumbers.add(prefix);
@@ -1020,7 +1016,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 listWithNumbers.add(prefix + (char)j);
             }
         } else {
-            // both numbers have diferent digits and the last character was different
+            // both numbers have different digits and the last character was different
             final String begin_str = imageNrFrom.substring(prefix_length);
             final String end_str = imageNrTo.substring(prefix_length);
             final int begin = Integer.parseInt(begin_str);
@@ -1033,6 +1029,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
 
             final String intToStringFormat = "%0" + end_str.length() + "d";
             final boolean bothNull = (letterOfNrFrom == '\0') && (letterOfNrTo == '\0');
+            exactMatch = !bothNull;
 
             for (int i = begin; i <= end; i++) {
                 if (bothNull) {
@@ -1055,8 +1052,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 }
             }
         }
-
-        stadtbildSerieSearchStatement.setFancyInterval(listWithNumbers);
+        return new Object[] { exactMatch, listWithNumbers };
     }
 
     /**
