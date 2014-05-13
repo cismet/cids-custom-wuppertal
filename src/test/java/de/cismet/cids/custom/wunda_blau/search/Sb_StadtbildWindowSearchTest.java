@@ -108,13 +108,9 @@ public class Sb_StadtbildWindowSearchTest {
 
             ArrayList<String> expectedNumbers = new ArrayList<String>();
             expectedNumbers.add("N04711y");
-            expectedNumbers.add("N04711v");
-            expectedNumbers.add("N04711w");
             expectedNumbers.add("N04711z");
             expectedNumbers.add("N04712");
             expectedNumbers.add("N04712y");
-            expectedNumbers.add("N04712v");
-            expectedNumbers.add("N04712w");
             expectedNumbers.add("N04712z");
             expectedNumbers.add("N04713");
             assertEquals(expectedNumbers, resultArray[1]);
