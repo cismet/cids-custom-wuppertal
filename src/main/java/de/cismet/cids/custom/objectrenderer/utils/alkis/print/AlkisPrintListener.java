@@ -43,6 +43,7 @@ import de.cismet.cismap.commons.features.StyledFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.piccolo.PFeature;
 import de.cismet.cismap.commons.gui.piccolo.eventlistener.FeatureMoveListener;
+import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.tools.PFeatureTools;
 import de.cismet.cismap.commons.util.FormatToRealWordCalculator;
 
@@ -82,6 +83,7 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
     private boolean cleared;
     private String oldInteractionMode;
     private StyledFeature printTemplateStyledFeature;
+    private boolean oldOverlappingCheck = true;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -214,13 +216,15 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
         printTemplateStyledFeature.setGeometry(polygon);
         printFeatureCollection.clear();
         printFeatureCollection.add(printTemplateStyledFeature);
-        if (backupFeature.isEmpty() && !MappingComponent.ALKIS_PRINT.equals(mappingComponent.getInteractionMode())) {
-            backupFeature.addAll(mapFeatureCol.getAllFeatures());
-            backupHoldFeature.addAll(mapFeatureCol.getHoldFeatures());
-        }
+        oldOverlappingCheck = CismapBroker.getInstance().isCheckForOverlappingGeometriesAfterFeatureRotation();
+        CismapBroker.getInstance().setCheckForOverlappingGeometriesAfterFeatureRotation(false);
+//        if (backupFeature.isEmpty() && !MappingComponent.ALKIS_PRINT.equals(mappingComponent.getInteractionMode())) {
+//            backupFeature.addAll(mapFeatureCol.getAllFeatures());
+//            backupHoldFeature.addAll(mapFeatureCol.getHoldFeatures());
+//        }
         diagonal = Math.sqrt((polygonBB.getWidth() * polygonBB.getWidth())
                         + (polygonBB.getHeight() * polygonBB.getHeight()));
-        mapFeatureCol.clear();
+//        mapFeatureCol.clear();
         // TODO: bug, buggy bug: selection is no more done if we call hold() :-/
         mapFeatureCol.holdFeature(printTemplateStyledFeature);
         mapFeatureCol.addFeature(printTemplateStyledFeature);
@@ -329,20 +333,21 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
             final FeatureCollection mapFeatureCollection = mappingComponent.getFeatureCollection();
             mapFeatureCollection.unholdFeature(printTemplateStyledFeature);
             mapFeatureCollection.removeFeature(printTemplateStyledFeature);
-            if (!backupFeature.isEmpty()) {
-                mapFeatureCollection.addFeatures(backupFeature);
-                for (final Feature toHold : backupHoldFeature) {
-                    mapFeatureCollection.holdFeature(toHold);
-                }
-                mappingComponent.zoomToFeatureCollection();
-            }
-            backupFeature.clear();
-            backupHoldFeature.clear();
+//            if (!backupFeature.isEmpty()) {
+//                mapFeatureCollection.addFeatures(backupFeature);
+//                for (final Feature toHold : backupHoldFeature) {
+//                    mapFeatureCollection.holdFeature(toHold);
+//                }
+//                mappingComponent.zoomToFeatureCollection();
+//            }
+//            backupFeature.clear();
+//            backupHoldFeature.clear();
             if (MappingComponent.ALKIS_PRINT.equals(mappingComponent.getInteractionMode())) {
                 mappingComponent.setInteractionMode(oldInteractionMode);
             }
         }
         cleared = true;
+        CismapBroker.getInstance().setCheckForOverlappingGeometriesAfterFeatureRotation(oldOverlappingCheck);
     }
 
     /**
