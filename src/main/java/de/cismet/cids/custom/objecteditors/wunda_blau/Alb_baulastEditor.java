@@ -156,7 +156,7 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
         try {
             if ((cidsBean != null) && (cidsBean.getMetaObject().getStatus() == MetaObject.MODIFIED)) {
                 final Object geprueftObj = cidsBean.getProperty("geprueft");
-                if ((geprueftObj instanceof Boolean) && !((Boolean)geprueftObj)) {
+                if ((geprueftObj == null) || ((geprueftObj instanceof Boolean) && !((Boolean)geprueftObj))) {
                     cidsBean.setProperty("bearbeitet_von", SessionManager.getSession().getUser().getName());
                     cidsBean.setProperty("bearbeitungsdatum", new Date(System.currentTimeMillis()));
                 }
