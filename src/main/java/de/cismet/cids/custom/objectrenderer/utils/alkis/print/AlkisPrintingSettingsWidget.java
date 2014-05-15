@@ -88,6 +88,9 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
     private final DefaultListModel flurstueckListModel;
     private final AlkisPrintListener mapPrintListener;
     private Geometry allLandparcelGeometryUnion;
+
+    private AlkisProductDescription defaultProduct = null;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRemove;
     private javax.swing.JComboBox cbClazz;
@@ -137,8 +140,13 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         initComponents();
         getRootPane().setDefaultButton(cmdOk);
         cbClazz.setModel(getProductClassModel());
-        cbClazz.setSelectedIndex(cbClazz.getModel().getSize() - 1);
-        cbProduct.setSelectedIndex(cbProduct.getModel().getSize() - 1);
+        if (defaultProduct != null) {
+            cbClazz.setSelectedItem(defaultProduct.getClazz());
+            cbProduct.setSelectedItem(defaultProduct.getType());
+        } else {
+            cbClazz.setSelectedIndex(cbClazz.getModel().getSize() - 1);
+            cbProduct.setSelectedIndex(cbProduct.getModel().getSize() - 1);
+        }
         this.panDesc.setBackground(new Color(216, 228, 248));
         this.mappingComponent = mappingComponent;
         // enable D&D
@@ -195,6 +203,9 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
 //        log.fatal(AlkisCommons.USER);
         for (final AlkisProductDescription product : AlkisUtils.PRODUCTS.ALKIS_MAP_PRODUCTS) {
             classes.add(product.getClazz());
+            if (product.isDefaultProduct()) {
+                defaultProduct = product;
+            }
         }
         return new DefaultComboBoxModel(classes.toArray());
     }
