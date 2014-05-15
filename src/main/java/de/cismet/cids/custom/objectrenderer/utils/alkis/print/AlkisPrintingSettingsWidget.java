@@ -363,7 +363,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         panDesc.setPreferredSize(new java.awt.Dimension(150, 150));
         panDesc.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel1.setText("Schritte");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -439,7 +439,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         panSettings.setPreferredSize(new java.awt.Dimension(425, 300));
         panSettings.setLayout(new java.awt.GridBagLayout());
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel6.setText("1. Einstellungen");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -534,12 +534,28 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSettings.add(jLabel10, gridBagConstraints);
+
+        cbScales.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cbScalesActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panSettings.add(cbScales, gridBagConstraints);
+
+        cbFormat.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cbFormatActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -718,6 +734,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
     private void cbClazzActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbClazzActionPerformed
         cbProduct.setModel(getProductTypeModel());
         cbProductActionPerformed(null);
+        updateFormatProposal();
     }                                                                           //GEN-LAST:event_cbClazzActionPerformed
 
     /**
@@ -729,7 +746,25 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         final ComboBoxModel[] models = getProductDetailModels();
         cbFormat.setModel(models[0]);
         cbScales.setModel(models[1]);
+        updateFormatProposal();
     }                                                                             //GEN-LAST:event_cbProductActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cbScalesActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbScalesActionPerformed
+    }                                                                            //GEN-LAST:event_cbScalesActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cbFormatActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbFormatActionPerformed
+        // TODO add your handling code here:
+    } //GEN-LAST:event_cbFormatActionPerformed
 
     /**
      * DOCUMENT ME!
