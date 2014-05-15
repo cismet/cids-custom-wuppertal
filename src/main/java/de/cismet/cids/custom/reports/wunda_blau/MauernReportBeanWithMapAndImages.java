@@ -107,6 +107,7 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
         dsf.setGeometry(g);
         dsf.setLineWidth(5);
         dsf.setLinePaint(Color.RED);
+        dsf.setFillingPaint(new Color(1, 0, 0, 0.5f));
 
         final HeadlessMapProvider mapProvider = new HeadlessMapProvider();
         mapProvider.addLayer(s);
