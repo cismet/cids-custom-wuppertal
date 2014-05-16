@@ -102,37 +102,41 @@ public class MauernReportBeanWithMapAndImages extends MauernReportBean {
                     MAP_URL));
 
         final Geometry g = (Geometry)mauer.getProperty("georeferenz.geo_field");
-
-        final DefaultStyledFeature dsf = new DefaultStyledFeature();
-        dsf.setGeometry(g);
-        dsf.setLineWidth(5);
-        dsf.setLinePaint(Color.RED);
-        dsf.setFillingPaint(new Color(1, 0, 0, 0.5f));
-
-        final HeadlessMapProvider mapProvider = new HeadlessMapProvider();
-        mapProvider.addLayer(s);
-        mapProvider.addFeature(dsf);
-        mapProvider.setMinimumScaleDenomimator(750);
-        mapProvider.setRoundScaleTo(HeadlessMapProvider.RoundingPrecision.HUNDRETH);
-        mapProvider.setCenterMapOnResize(true);
-
-        final int height = Integer.parseInt(NbBundle.getMessage(
-                    MauernReportBeanWithMapAndImages.class,
-                    "MauernReportBeanWithMapAndImages.mapHeight"));
-        final int width = Integer.parseInt(NbBundle.getMessage(
-                    MauernReportBeanWithMapAndImages.class,
-                    "MauernReportBeanWithMapAndImages.mapWidth"));
-        final XBoundingBox boundingBox = new XBoundingBox(g);
-        mapProvider.setBoundingBox(boundingBox);
-        final Future<Image> f = mapProvider.getImage(72, MAP_DPI, width, height);
-        try {
-            final Image img = f.get();
-            masstab = "1:" + NumberFormat.getIntegerInstance().format(mapProvider.getImageScaleDenominator());
-            mapImage = img;
-        } catch (InterruptedException ex) {
+        if (g == null) {
             mapError = true;
-        } catch (ExecutionException ex) {
-            mapError = true;
+            LOG.info("Geometry is null. Can not create a map for the mauer katasterblatt report");
+        } else {
+            final DefaultStyledFeature dsf = new DefaultStyledFeature();
+            dsf.setGeometry(g);
+            dsf.setLineWidth(5);
+            dsf.setLinePaint(Color.RED);
+            dsf.setFillingPaint(new Color(1, 0, 0, 0.5f));
+
+            final HeadlessMapProvider mapProvider = new HeadlessMapProvider();
+            mapProvider.addLayer(s);
+            mapProvider.addFeature(dsf);
+            mapProvider.setMinimumScaleDenomimator(750);
+            mapProvider.setRoundScaleTo(HeadlessMapProvider.RoundingPrecision.HUNDRETH);
+            mapProvider.setCenterMapOnResize(true);
+
+            final int height = Integer.parseInt(NbBundle.getMessage(
+                        MauernReportBeanWithMapAndImages.class,
+                        "MauernReportBeanWithMapAndImages.mapHeight"));
+            final int width = Integer.parseInt(NbBundle.getMessage(
+                        MauernReportBeanWithMapAndImages.class,
+                        "MauernReportBeanWithMapAndImages.mapWidth"));
+            final XBoundingBox boundingBox = new XBoundingBox(g);
+            mapProvider.setBoundingBox(boundingBox);
+            final Future<Image> f = mapProvider.getImage(72, MAP_DPI, width, height);
+            try {
+                final Image img = f.get();
+                masstab = "1:" + NumberFormat.getIntegerInstance().format(mapProvider.getImageScaleDenominator());
+                mapImage = img;
+            } catch (InterruptedException ex) {
+                mapError = true;
+            } catch (ExecutionException ex) {
+                mapError = true;
+            }
         }
 
         final List<CidsBean> images = CidsBeanSupport.getBeanCollectionFromProperty(mauer, "bilder");
