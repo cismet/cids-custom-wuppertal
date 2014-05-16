@@ -371,9 +371,16 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
 
                 @Override
                 public void run() {
-                    final XBoundingBox boxToGoto = new XBoundingBox(selectedCidsBeanWrapper.getGeometry().getEnvelope()
-                                    .buffer(
-                                        AlkisConstants.COMMONS.GEO_BUFFER),
+                    if (selectedCidsBeanWrapper == null) {
+                        return;
+                    }
+                    final Geometry g = selectedCidsBeanWrapper.getGeometry();
+                    if (g == null) {
+                        LOG.info("No Geoemtry available for the selected Mauer Geometry. Can not change Map");
+                        return;
+                    }
+                    final XBoundingBox boxToGoto = new XBoundingBox(g.getEnvelope().buffer(
+                                AlkisConstants.COMMONS.GEO_BUFFER),
                             AlkisConstants.COMMONS.SRS_SERVICE,
                             true);
                     boxToGoto.setX1(boxToGoto.getX1()
@@ -431,7 +438,6 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
 
     @Override
     public void dispose() {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -444,7 +450,6 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
 
     @Override
     public void setTitle(final String title) {
-//        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     /**
@@ -514,9 +519,16 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
                         map.unlock();
                         map.setInteractionMode("MUTE");
                         for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
-                            map.getFeatureCollection().addFeature(cidsBeanWrapper.getFeature());
-                            pointFeatures.add(cidsBeanWrapper.getPointFeature());
-                            map.getFeatureCollection().addFeature(cidsBeanWrapper.getPointFeature());
+                            final Feature mauerGeomFeature = cidsBeanWrapper.getFeature();
+                            final Feature mauerPointFeature = cidsBeanWrapper.getPointFeature();
+                            ;
+                            if (mauerGeomFeature != null) {
+                                map.getFeatureCollection().addFeature(mauerGeomFeature);
+                            }
+                            if (mauerGeomFeature != null) {
+                                pointFeatures.add(mauerPointFeature);
+                                map.getFeatureCollection().addFeature(mauerPointFeature);
+                            }
                         }
                         map.setAnimationDuration(duration);
 
@@ -526,35 +538,39 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
                     private XBoundingBox getBoundingBox() {
                         XBoundingBox result = null;
                         for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
-                            final Geometry geometry = CrsTransformer.transformToGivenCrs(cidsBeanWrapper.getGeometry(),
-                                    AlkisConstants.COMMONS.SRS_SERVICE);
+                            final Geometry g = cidsBeanWrapper.getGeometry();
+                            if (g != null) {
+                                final Geometry geometry = CrsTransformer.transformToGivenCrs(
+                                        g,
+                                        AlkisConstants.COMMONS.SRS_SERVICE);
 
-                            if (result == null) {
-                                result = new XBoundingBox(geometry.getEnvelope().buffer(
-                                            AlkisConstants.COMMONS.GEO_BUFFER),
-                                        AlkisConstants.COMMONS.SRS_SERVICE,
-                                        true);
-                                result.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
-                                result.setMetric(true);
-                            } else {
-                                final XBoundingBox temp = new XBoundingBox(geometry.getEnvelope().buffer(
-                                            AlkisConstants.COMMONS.GEO_BUFFER),
-                                        AlkisConstants.COMMONS.SRS_SERVICE,
-                                        true);
-                                temp.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
-                                temp.setMetric(true);
+                                if (result == null) {
+                                    result = new XBoundingBox(geometry.getEnvelope().buffer(
+                                                AlkisConstants.COMMONS.GEO_BUFFER),
+                                            AlkisConstants.COMMONS.SRS_SERVICE,
+                                            true);
+                                    result.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                                    result.setMetric(true);
+                                } else {
+                                    final XBoundingBox temp = new XBoundingBox(geometry.getEnvelope().buffer(
+                                                AlkisConstants.COMMONS.GEO_BUFFER),
+                                            AlkisConstants.COMMONS.SRS_SERVICE,
+                                            true);
+                                    temp.setSrs(AlkisConstants.COMMONS.SRS_SERVICE);
+                                    temp.setMetric(true);
 
-                                if (temp.getX1() < result.getX1()) {
-                                    result.setX1(temp.getX1());
-                                }
-                                if (temp.getY1() < result.getY1()) {
-                                    result.setY1(temp.getY1());
-                                }
-                                if (temp.getX2() > result.getX2()) {
-                                    result.setX2(temp.getX2());
-                                }
-                                if (temp.getY2() > result.getY2()) {
-                                    result.setY2(temp.getY2());
+                                    if (temp.getX1() < result.getX1()) {
+                                        result.setX1(temp.getX1());
+                                    }
+                                    if (temp.getY1() < result.getY1()) {
+                                        result.setY1(temp.getY1());
+                                    }
+                                    if (temp.getX2() > result.getX2()) {
+                                        result.setX2(temp.getX2());
+                                    }
+                                    if (temp.getY2() > result.getY2()) {
+                                        result.setY2(temp.getY2());
+                                    }
                                 }
                             }
                         }
@@ -728,50 +744,54 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
             } else {
                 this.stuetzmauertyp = stuetzTypObj.toString();
             }
-            if (cidsBean.getProperty("georeferenz.geo_field") instanceof Geometry) {
+
+            if ((cidsBean.getProperty("georeferenz.geo_field") != null)
+                        && (cidsBean.getProperty("georeferenz.geo_field") instanceof Geometry)) {
                 this.geometry = CrsTransformer.transformToGivenCrs((Geometry)cidsBean.getProperty(
                             "georeferenz.geo_field"),
                         AlkisConstants.COMMONS.SRS_SERVICE);
             }
 
-            final StyledFeature dsf = new DefaultStyledFeature();
-            dsf.setLineWidth(3);
-            dsf.setGeometry(this.geometry);
-            dsf.setTransparency(0.9F);
-            this.feature = dsf;
+            if (this.geometry != null) {
+                final StyledFeature dsf = new DefaultStyledFeature();
+                dsf.setLineWidth(3);
+                dsf.setGeometry(this.geometry);
+                dsf.setTransparency(0.9F);
+                this.feature = dsf;
 
-            final StyledFeature pointDsf = new DefaultStyledFeature();
-            pointDsf.setGeometry(geometry.getEnvelope().getCentroid());
-            FeatureAnnotationSymbol result;
-            URL urlToIcon = null;
-            urlToIcon = getClass().getResource(
-                    "/de/cismet/cids/custom/featurerenderer/wunda_blau/pointicon_mauer_silver.png");
-            final Color pointColor = new Color(0xC0, 0xC0, 0xC0);
-            ImageIcon pointIcon = null;
-            if (urlToIcon != null) {
-                pointIcon = new ImageIcon(urlToIcon);
+                final StyledFeature pointDsf = new DefaultStyledFeature();
+                pointDsf.setGeometry(geometry.getEnvelope().getCentroid());
+                FeatureAnnotationSymbol result;
+                URL urlToIcon = null;
+                urlToIcon = getClass().getResource(
+                        "/de/cismet/cids/custom/featurerenderer/wunda_blau/pointicon_mauer_silver.png");
+                final Color pointColor = new Color(0xC0, 0xC0, 0xC0);
+                ImageIcon pointIcon = null;
+                if (urlToIcon != null) {
+                    pointIcon = new ImageIcon(urlToIcon);
+                }
+                if (pointIcon != null) {
+                    result = new FeatureAnnotationSymbol(pointIcon.getImage());
+                    result.setSweetSpotX(0.5D);
+                    result.setSweetSpotY(0.9D);
+                } else {
+                    final int fallbackSymbolSize = 8;
+                    final BufferedImage bufferedImage = new BufferedImage(
+                            fallbackSymbolSize,
+                            fallbackSymbolSize,
+                            BufferedImage.TYPE_INT_ARGB);
+
+                    final Graphics2D graphics = (Graphics2D)bufferedImage.getGraphics();
+                    graphics.setColor(pointColor);
+                    graphics.fillOval(0, 0, fallbackSymbolSize, fallbackSymbolSize);
+
+                    result = new FeatureAnnotationSymbol(bufferedImage);
+                    result.setSweetSpotX(0.5);
+                    result.setSweetSpotY(0.5);
+                }
+                pointDsf.setPointAnnotationSymbol(result);
+                this.pointFeature = pointDsf;
             }
-            if (pointIcon != null) {
-                result = new FeatureAnnotationSymbol(pointIcon.getImage());
-                result.setSweetSpotX(0.5D);
-                result.setSweetSpotY(0.9D);
-            } else {
-                final int fallbackSymbolSize = 8;
-                final BufferedImage bufferedImage = new BufferedImage(
-                        fallbackSymbolSize,
-                        fallbackSymbolSize,
-                        BufferedImage.TYPE_INT_ARGB);
-
-                final Graphics2D graphics = (Graphics2D)bufferedImage.getGraphics();
-                graphics.setColor(pointColor);
-                graphics.fillOval(0, 0, fallbackSymbolSize, fallbackSymbolSize);
-
-                result = new FeatureAnnotationSymbol(bufferedImage);
-                result.setSweetSpotX(0.5);
-                result.setSweetSpotY(0.5);
-            }
-            pointDsf.setPointAnnotationSymbol(result);
-            this.pointFeature = pointDsf;
         }
 
         //~ Methods ------------------------------------------------------------
@@ -801,8 +821,10 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
          */
         public void setColor(final Color color) {
             this.color = color;
-            feature.setFillingPaint(this.color);
-            feature.setLinePaint(this.color);
+            if (feature != null) {
+                feature.setFillingPaint(this.color);
+                feature.setLinePaint(this.color);
+            }
         }
 
         /**
