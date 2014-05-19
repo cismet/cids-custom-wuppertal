@@ -138,7 +138,7 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
         if ((massstab != 0) && !mappingComponent.isFixedMapScale()) {
             mappingComponent.queryServices();
         }
-        initMapTemplate(serviceConformGeometry, findOptimalRotation, realWorldWidth, realWorldHeight);
+        initMapTemplate(product, serviceConformGeometry, findOptimalRotation, realWorldWidth, realWorldHeight);
         mappingComponent.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         mappingComponent.setPointerAnnotation(PRINTING_TOOLTIP);
         mappingComponent.setPointerAnnotationVisibility(true);
@@ -154,12 +154,14 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
     /**
      * DOCUMENT ME!
      *
+     * @param  product              DOCUMENT ME!
      * @param  geom                 DOCUMENT ME!
      * @param  findOptimalRotation  DOCUMENT ME!
      * @param  realWorldWidth       DOCUMENT ME!
      * @param  realWorldHeight      DOCUMENT ME!
      */
-    private void initMapTemplate(final Geometry geom,
+    private void initMapTemplate(final AlkisProductDescription product,
+            final Geometry geom,
             final boolean findOptimalRotation,
             final double realWorldWidth,
             final double realWorldHeight) {
@@ -172,16 +174,54 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
         final double halfRealWorldWidth = realWorldWidth / 2d;
         final double halfRealWorldHeigth = realWorldHeight / 2d;
         // build geometry for sheet with center in origin
-        final Coordinate[] coords = new Coordinate[5];
-        coords[0] = new Coordinate(-halfRealWorldWidth, -halfRealWorldHeigth);
-        coords[1] = new Coordinate(+halfRealWorldWidth, -halfRealWorldHeigth);
-        coords[2] = new Coordinate(+halfRealWorldWidth, +halfRealWorldHeigth);
-        coords[3] = new Coordinate(-halfRealWorldWidth, +halfRealWorldHeigth);
-        coords[4] = new Coordinate(-halfRealWorldWidth, -halfRealWorldHeigth);
+        final Coordinate[] outerCoords = new Coordinate[5];
+        outerCoords[0] = new Coordinate(-halfRealWorldWidth, -halfRealWorldHeigth);
+        outerCoords[1] = new Coordinate(+halfRealWorldWidth, -halfRealWorldHeigth);
+        outerCoords[2] = new Coordinate(+halfRealWorldWidth, +halfRealWorldHeigth);
+        outerCoords[3] = new Coordinate(-halfRealWorldWidth, +halfRealWorldHeigth);
+        outerCoords[4] = new Coordinate(-halfRealWorldWidth, -halfRealWorldHeigth);
+
         // create the geometry from coordinates
-        final LinearRing ring = GEOMETRY_FACTORY.createLinearRing(coords);
-        final Geometry polygon = GEOMETRY_FACTORY.createPolygon(ring, null);
-        final BoundingBox polygonBB = new BoundingBox(polygon);
+        LinearRing outerRing = GEOMETRY_FACTORY.createLinearRing(outerCoords);
+        LinearRing[] innerRings = null;
+
+        // translate to target landparcel position
+        final AffineTransformation translateToDestination = AffineTransformation.translationInstance(centerX, centerY);
+        outerRing = (LinearRing)translateToDestination.transform(outerRing);
+
+        // Check for Stempelfeld
+        if (product.getStempelfeldInfo() != null) {
+            log.fatal(product.getStempelfeldInfo());
+            // coords[0] lower left
+            final double fromX = product.getStempelfeldInfo().getFromX();
+            final double fromY = product.getStempelfeldInfo().getFromY();
+            final double toX = product.getStempelfeldInfo().getToX();
+            final double toY = product.getStempelfeldInfo().getToY();
+
+            final double stempelfeldWidth = realWorldWidth * (toX - fromX);
+            final double stempelfeldHeight = realWorldHeight * (toY - fromY);
+
+            final Coordinate[] innerCoords = new Coordinate[5];
+            final Coordinate base = new Coordinate(outerCoords[0].x + (fromX * realWorldWidth),
+                    outerCoords[0].y
+                            + (fromY * realWorldHeight));
+
+            innerCoords[0] = base;
+            innerCoords[1] = new Coordinate(base.x, base.y + stempelfeldHeight);
+            innerCoords[2] = new Coordinate(base.x + stempelfeldWidth, base.y + stempelfeldHeight);
+            innerCoords[3] = new Coordinate(base.x + stempelfeldWidth, base.y);
+            innerCoords[4] = base;
+            LinearRing innerRing = GEOMETRY_FACTORY.createLinearRing(innerCoords);
+            innerRings = new LinearRing[1];
+//            innerRing.apply(translateToDestination);
+            innerRing = (LinearRing)translateToDestination.transform(innerRing);
+
+            innerRings[0] = innerRing;
+        }
+
+        final BoundingBox polygonBB = new BoundingBox(outerRing);
+
+        AffineTransformation rotation = null;
         if (findOptimalRotation) {
             // determine the minimum diameter line
             final LineString minimumDiameter = new MinimumDiameter(geom).getDiameter();
@@ -203,12 +243,13 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
             }
             final double angle = Math.atan(tangens);
             // rotate to optimal angle
-            final AffineTransformation rotation = AffineTransformation.rotationInstance(angle);
-            polygon.apply(rotation);
+            rotation = AffineTransformation.rotationInstance(angle, centerX, centerY);
+            outerRing = (LinearRing)rotation.transform(outerRing);
+            innerRings[0] = (LinearRing)rotation.transform(innerRings[0]);
         }
-        // translate to target landparcel position
-        final AffineTransformation translateToDestination = AffineTransformation.translationInstance(centerX, centerY);
-        polygon.apply(translateToDestination);
+
+        final Geometry polygon = GEOMETRY_FACTORY.createPolygon(outerRing, innerRings);
+
         printTemplateStyledFeature = new PrintFeature();
         printTemplateStyledFeature.setFillingPaint(BORDER_COLOR);
         printTemplateStyledFeature.setCanBeSelected(true);
