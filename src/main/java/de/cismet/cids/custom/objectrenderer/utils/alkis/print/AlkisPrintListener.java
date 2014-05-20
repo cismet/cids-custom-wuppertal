@@ -246,9 +246,8 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
             outerRing = (LinearRing)rotation.transform(outerRing);
             innerRings[0] = (LinearRing)rotation.transform(innerRings[0]);
         }
-
         final Geometry polygon = GEOMETRY_FACTORY.createPolygon(outerRing, innerRings);
-
+        final Feature oldPrintFeature = printTemplateStyledFeature;
         printTemplateStyledFeature = new PrintFeature();
         printTemplateStyledFeature.setFillingPaint(BORDER_COLOR);
         printTemplateStyledFeature.setCanBeSelected(true);
@@ -256,14 +255,20 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
         printTemplateStyledFeature.setGeometry(polygon);
         printFeatureCollection.clear();
         printFeatureCollection.add(printTemplateStyledFeature);
-        oldOverlappingCheck = CismapBroker.getInstance().isCheckForOverlappingGeometriesAfterFeatureRotation();
-        CismapBroker.getInstance().setCheckForOverlappingGeometriesAfterFeatureRotation(false);
         diagonal = Math.sqrt((polygonBB.getWidth() * polygonBB.getWidth())
                         + (polygonBB.getHeight() * polygonBB.getHeight()));
         // TODO: bug, buggy bug: selection is no more done if we call hold() :-/
+        if (oldPrintFeature != null) {
+            mapFeatureCol.unholdFeature(oldPrintFeature);
+            mapFeatureCol.removeFeature(oldPrintFeature);
+        } else {
+            oldOverlappingCheck = CismapBroker.getInstance().isCheckForOverlappingGeometriesAfterFeatureRotation();
+            CismapBroker.getInstance().setCheckForOverlappingGeometriesAfterFeatureRotation(false);
+        }
         mapFeatureCol.holdFeature(printTemplateStyledFeature);
         mapFeatureCol.addFeature(printTemplateStyledFeature);
         final PFeature printPFeature = mappingComponent.getPFeatureHM().get(printTemplateStyledFeature);
+
         printPFeature.addPropertyChangeListener(new PropertyChangeListener() {
 
                 @Override
@@ -368,6 +373,7 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
             final FeatureCollection mapFeatureCollection = mappingComponent.getFeatureCollection();
             mapFeatureCollection.unholdFeature(printTemplateStyledFeature);
             mapFeatureCollection.removeFeature(printTemplateStyledFeature);
+            printTemplateStyledFeature = null;
             if (MappingComponent.ALKIS_PRINT.equals(mappingComponent.getInteractionMode())) {
                 mappingComponent.setInteractionMode(oldInteractionMode);
             }
