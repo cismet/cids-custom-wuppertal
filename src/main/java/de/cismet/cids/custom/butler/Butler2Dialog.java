@@ -40,6 +40,7 @@ import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
@@ -89,17 +90,21 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(Butler2Dialog.class);
-    private static HashMap<String, CoordWrapper> rahmenKartenMap = new HashMap<String, CoordWrapper>();
+    private static HashMap<String, CoordWrapper> gkRahmenKartenMap = new HashMap<String, CoordWrapper>();
+    private static HashMap<String, CoordWrapper> etrsRahmenKartenMap = new HashMap<String, CoordWrapper>();
     private static final String FELDVERGLEICH = "0903";
     private static final String FELDVERGLEICH_BOX = "600m x 350m";
     private static final String RASTER_DATEN_BILLING_KEY = "skmekomtiff";
     private static final String DXF_BILLING_KEY = "skmekomdxf";
 
     static {
-        final Properties prop = new Properties();
+        final Properties gkRahmenProp = new Properties();
+        final Properties etrsRahmenProp = new Properties();
         try {
-            prop.load(Butler2Dialog.class.getResourceAsStream("rahmenkarten.properties"));
-            loadPropertiesIntoMap(prop);
+            gkRahmenProp.load(Butler2Dialog.class.getResourceAsStream("rahmenkarten_gk.properties"));
+            loadPropertiesIntoMap(gkRahmenProp, gkRahmenKartenMap);
+            etrsRahmenProp.load(Butler2Dialog.class.getResourceAsStream("rahmenkarten_etrs.properties"));
+            loadPropertiesIntoMap(etrsRahmenProp, etrsRahmenKartenMap);
         } catch (IOException ex) {
             LOG.error("Could not read property file with defined boxes for butler 1", ex);
         }
@@ -113,6 +118,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
     private MappingComponent map = new MappingComponent();
     private boolean mapInitDone = false;
     private PredefinedBoxes feldVergleichBox = null;
+    private boolean isEtrsRahmenkarte = false;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnCreate;
@@ -227,23 +233,40 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
      * DOCUMENT ME!
      */
     private void updateForRahmenKartenNr() {
+        boolean inputError = false;
+        isEtrsRahmenkarte = false;
         CoordWrapper coord = null;
         if (tfRahmenkartenNr.getText().length() == 5) {
-            coord = rahmenKartenMap.get(tfRahmenkartenNr.getText());
+            // GK-Rahmenkartennummer
+            coord = gkRahmenKartenMap.get(tfRahmenkartenNr.getText());
             if (coord != null) {
                 tfLowerE.setText("" + coord.getMiddleE());
                 tfLowerN.setText("" + coord.getMiddleN());
             } else {
-                JOptionPane.showMessageDialog(
-                    StaticSwingTools.getParentFrame(Butler2Dialog.this),
-                    org.openide.util.NbBundle.getMessage(
-                        Butler2Dialog.class,
-                        "Butler2Dialog.RahmenkartenNrCheck.JOptionPane.message"),
-                    org.openide.util.NbBundle.getMessage(
-                        Butler2Dialog.class,
-                        "Butler2Dialog.RahmenkartenNrCheck.JOptionPane.title"),
-                    JOptionPane.ERROR_MESSAGE);
+                // ETRS-Rahmenkartennummer
+                coord = etrsRahmenKartenMap.get(tfRahmenkartenNr.getText());
+                if (coord != null) {
+                    tfLowerE.setText("" + coord.getMiddleE());
+                    tfLowerN.setText("" + coord.getMiddleN());
+                    isEtrsRahmenkarte = true;
+                } else {
+                    inputError = true;
+                }
             }
+        }
+//        else if (tfRahmenkartenNr.getText().length() == 6) {
+//
+//        }
+        if (inputError) {
+            JOptionPane.showMessageDialog(
+                StaticSwingTools.getParentFrame(Butler2Dialog.this),
+                org.openide.util.NbBundle.getMessage(
+                    Butler2Dialog.class,
+                    "Butler2Dialog.RahmenkartenNrCheck.JOptionPane.message"),
+                org.openide.util.NbBundle.getMessage(
+                    Butler2Dialog.class,
+                    "Butler2Dialog.RahmenkartenNrCheck.JOptionPane.title"),
+                JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -251,8 +274,9 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
      * DOCUMENT ME!
      *
      * @param  prop  DOCUMENT ME!
+     * @param  map   DOCUMENT ME!
      */
-    private static void loadPropertiesIntoMap(final Properties prop) {
+    private static void loadPropertiesIntoMap(final Properties prop, final Map map) {
         final Enumeration keys = prop.propertyNames();
         final ArrayList<String> keyList = new ArrayList<String>();
         while (keys.hasMoreElements()) {
@@ -264,7 +288,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
             final double middleE = Double.parseDouble(splittedVal[0]);
             final double middleN = Double.parseDouble(splittedVal[1]);
             final CoordWrapper coord = new CoordWrapper(middleE, middleN);
-            rahmenKartenMap.put(key, coord);
+            map.put(key, coord);
         }
     }
 
@@ -601,25 +625,25 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
+    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         this.dispose();                                                           // TODO add your handling code here:
-    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
+    }//GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbSizeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbSizeActionPerformed
+    private void cbSizeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSizeActionPerformed
         changeMap();
-    }                                                                          //GEN-LAST:event_cbSizeActionPerformed
+    }//GEN-LAST:event_cbSizeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCreateActionPerformed
+    private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
         SwingUtilities.invokeLater(new Runnable() {
 
                 @Override
@@ -715,6 +739,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                                         + "_"
                                         + (i + 1),
                                 bp,
+                                isEtrsRahmenkarte,
                                 box.getKey(),
                                 middleX,
                                 middleY);
@@ -741,14 +766,14 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                     Butler2Dialog.this.dispose();
                 }
             });
-    } //GEN-LAST:event_btnCreateActionPerformed
+    }//GEN-LAST:event_btnCreateActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbPointGeomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbPointGeomActionPerformed
+    private void cbPointGeomActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPointGeomActionPerformed
         final Object obj = cbPointGeom.getSelectedItem();
         if ((obj != null) && (obj instanceof Point)) {
             final Point p = (Point)obj;
@@ -760,7 +785,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
             tfLowerE.getDocument().addDocumentListener(this);
             tfLowerN.getDocument().addDocumentListener(this);
         }
-    }                                                                               //GEN-LAST:event_cbPointGeomActionPerformed
+    }//GEN-LAST:event_cbPointGeomActionPerformed
 
     /**
      * DOCUMENT ME!

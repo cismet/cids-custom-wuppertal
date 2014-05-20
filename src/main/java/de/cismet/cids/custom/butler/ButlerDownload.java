@@ -93,22 +93,25 @@ public class ButlerDownload extends HttpDownload {
     private boolean useZipFile = false;
     private boolean isButler2 = false;
     private String boxSize;
+    private boolean isEtrsRahmenkarte = false;
 
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Constructor for a Butler 2 request.
      *
-     * @param  directory  DOCUMENT ME!
-     * @param  orderId    DOCUMENT ME!
-     * @param  product    DOCUMENT ME!
-     * @param  boxSize    DOCUMENT ME!
-     * @param  middleX    DOCUMENT ME!
-     * @param  middleY    DOCUMENT ME!
+     * @param  directory          DOCUMENT ME!
+     * @param  orderId            DOCUMENT ME!
+     * @param  product            DOCUMENT ME!
+     * @param  isEtrsRahmenkarte  DOCUMENT ME!
+     * @param  boxSize            DOCUMENT ME!
+     * @param  middleX            DOCUMENT ME!
+     * @param  middleY            DOCUMENT ME!
      */
     public ButlerDownload(final String directory,
             final String orderId,
             final ButlerProduct product,
+            final boolean isEtrsRahmenkarte,
             final String boxSize,
             final double middleX,
             final double middleY) {
@@ -116,6 +119,7 @@ public class ButlerDownload extends HttpDownload {
         this.directory = directory;
         this.orderId = orderId;
         this.product = product;
+        this.isEtrsRahmenkarte = isEtrsRahmenkarte;
         this.minX = middleX;
         this.minY = middleY;
 //        this.maxX = maxX;C
@@ -383,6 +387,9 @@ public class ButlerDownload extends HttpDownload {
             final ServerActionParameter paramIsWmps = new ServerActionParameter(ButlerQueryAction.PARAMETER_TYPE.IS_WMPS
                             .toString(),
                     true);
+            final ServerActionParameter etrsRahmenkarte = new ServerActionParameter(
+                    ButlerQueryAction.PARAMETER_TYPE.ETRS_BLATTSCHNITT.toString(),
+                    this.isEtrsRahmenkarte);
             try {
                 return (String)SessionManager.getProxy()
                             .executeTask(
@@ -392,6 +399,7 @@ public class ButlerDownload extends HttpDownload {
                                     paramMethod,
                                     paramOrderId,
                                     paramProduct,
+                                    etrsRahmenkarte,
                                     paramMinX,
                                     paramMinY,
                                     paramBoxSize,
