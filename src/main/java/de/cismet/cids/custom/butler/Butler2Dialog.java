@@ -1236,7 +1236,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                         final Butler2ProductPanel productPanel = (Butler2ProductPanel)tbpProducts.getComponentAt(i);
                         final ButlerProduct product = productPanel.getSelectedProduct();
                         if ((product != null) && (product.getKey() != null)) {
-                            if (product.getKey().equals(FELDVERGLEICH)) {
+                            if (product.getKey().startsWith(FELDVERGLEICH)) {
                                 return true;
                             }
                         }

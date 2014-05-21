@@ -79,7 +79,7 @@
             "butlerResolutions": [
                 {
                     "key": "ohne",
-                    "description":""
+                    "description": ""
                 }
             ]
         }, {
@@ -132,13 +132,13 @@
             "butlerResolutions": [
                 {
                     "key": "10",
-                    "description":"cm/Pixel (Beste Qualität)"
+                    "description": "cm/Pixel (Beste Qualität)"
                 }, {
                     "key": "15",
-                    "description":"cm/Pixel (Normale Qualität)"
+                    "description": "cm/Pixel (Normale Qualität)"
                 }, {
                     "key": "31",
-                    "description":"cm/Pixel (Entwurfsqualität)"
+                    "description": "cm/Pixel (Entwurfsqualität)"
                 }
             ]
         }, {
@@ -212,13 +212,13 @@
             "butlerResolutions": [
                 {
                     "key": "50",
-                    "description":"cm/Pixel (Beste Qualität)"
+                    "description": "cm/Pixel (Beste Qualität)"
                 }, {
                     "key": "70",
-                    "description":"cm/Pixel (Normale Qualität)"
+                    "description": "cm/Pixel (Normale Qualität)"
                 }, {
                     "key": "150",
-                    "description":"cm/Pixel (Entwurfsqualität)"
+                    "description": "cm/Pixel (Entwurfsqualität)"
                 }
             ]
         }, {
@@ -271,13 +271,13 @@
             "butlerResolutions": [
                 {
                     "key": "10",
-                    "description":"cm/Pixel (Beste Qualität)"
+                    "description": "cm/Pixel (Beste Qualität)"
                 }, {
                     "key": "15",
-                    "description":"cm/Pixel (Normale Qualität)"
+                    "description": "cm/Pixel (Normale Qualität)"
                 }, {
                     "key": "31",
-                    "description":"cm/Pixel (Entwurfsqualität)"
+                    "description": "cm/Pixel (Entwurfsqualität)"
                 }
             ]
         }, {
@@ -316,13 +316,14 @@
             "butlerResolutions": [
                 {
                     "key": "ohne",
-                    "description":""
+                    "description": ""
                 }
             ]
         }
     ],
     "butler2ProductGroups": [
-        {"key": "Butler2",
+        {
+            "key": "Butler2",
             "butlerProducts": [
                 {
                     "name": "Stadtgrundkarte mit kommunalen Ergänzungen, farbig",
@@ -339,11 +340,32 @@
                     "resolution": null,
                     "volumeParamText": "Fläche (km²):"
                 }, {
-                    "name": "Karte für Feldvergleich",
+                    "name": "Karte für Feldvergleich 1:500 Farbe",
+                    "key": "0903g",
+                    "colorDepth": null,
+                    "format": null,
+                    "scale": "500",
+                    "volumeParamText": "Fläche (km²):"
+                }, {
+                    "name": "Karte für Feldvergleich 1:500 Grauwert",
                     "key": "0903",
                     "colorDepth": null,
                     "format": null,
-                    "resolution": null,
+                    "scale": "500",
+                    "volumeParamText": "Fläche (km²):"
+                }, {
+                    "name": "Karte für Feldvergleich 1:1000 Farbe",
+                    "key": "0903g",
+                    "colorDepth": null,
+                    "format": null,
+                    "scale": "1000",
+                    "volumeParamText": "Fläche (km²):"
+                }, {
+                    "name": "Karte für Feldvergleich 1:1000 Grauwert",
+                    "key": "0903",
+                    "colorDepth": null,
+                    "format": null,
+                    "scale": "1000",
                     "volumeParamText": "Fläche (km²):"
                 }
             ],
@@ -358,8 +380,11 @@
             ],
             "butlerResolutions": [
                 {
-                    "key": "ohne",
-                    "description":""
+                    "key": "500",
+                    "description": "1:500"
+                }, {
+                    "key": "1000",
+                    "description": "1:1000"
                 }
             ]
 
