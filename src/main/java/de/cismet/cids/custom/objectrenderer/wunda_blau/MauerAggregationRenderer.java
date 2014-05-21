@@ -187,11 +187,11 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
         pnlHeaderMauernLayout.setHorizontalGroup(
             pnlHeaderMauernLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                174,
+                201,
                 Short.MAX_VALUE).addGroup(
                 pnlHeaderMauernLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                    pnlHeaderMauernLayout.createSequentialGroup().addGap(0, 23, Short.MAX_VALUE).addComponent(
-                        lblHeaderMauern).addGap(0, 22, Short.MAX_VALUE))));
+                    pnlHeaderMauernLayout.createSequentialGroup().addGap(0, 28, Short.MAX_VALUE).addComponent(
+                        lblHeaderMauern).addGap(0, 28, Short.MAX_VALUE))));
         pnlHeaderMauernLayout.setVerticalGroup(
             pnlHeaderMauernLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
@@ -251,11 +251,11 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
         pnlHeaderProductsLayout.setHorizontalGroup(
             pnlHeaderProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                175,
+                202,
                 Short.MAX_VALUE).addGroup(
                 pnlHeaderProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                    pnlHeaderProductsLayout.createSequentialGroup().addGap(0, 44, Short.MAX_VALUE).addComponent(
-                        lblheaderProdutke).addGap(0, 44, Short.MAX_VALUE))));
+                    pnlHeaderProductsLayout.createSequentialGroup().addGap(0, 67, Short.MAX_VALUE).addComponent(
+                        lblheaderProdutke).addGap(0, 67, Short.MAX_VALUE))));
         pnlHeaderProductsLayout.setVerticalGroup(
             pnlHeaderProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
@@ -290,10 +290,11 @@ public class MauerAggregationRenderer extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(7, 10, 10, 10);
         pnlProducts.add(jxlKatasterblatt, gridBagConstraints);
 
-        jxlHauptinfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
+        jxlHauptinfo.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/icons/page_white_excel.png"))); // NOI18N
         jxlHauptinfo.setText(org.openide.util.NbBundle.getMessage(
                 MauerAggregationRenderer.class,
-                "MauerAggregationRenderer.jxlHauptinfo.text"));                                                          // NOI18N
+                "MauerAggregationRenderer.jxlHauptinfo.text"));                                // NOI18N
         jxlHauptinfo.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
