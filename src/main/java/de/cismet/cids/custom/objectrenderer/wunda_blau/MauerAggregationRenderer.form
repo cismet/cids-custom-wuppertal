@@ -61,12 +61,12 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="174" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="201" max="32767" attributes="0"/>
                   <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <EmptySpace min="0" pref="23" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="28" max="32767" attributes="0"/>
                           <Component id="lblHeaderMauern" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="22" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="28" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -134,7 +134,9 @@
             </Constraint>
           </Constraints>
 
-          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout"/>
+          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
+            <Property name="useNullLayout" type="boolean" value="true"/>
+          </Layout>
         </Container>
       </SubComponents>
     </Container>
@@ -162,12 +164,12 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="175" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="202" max="32767" attributes="0"/>
                   <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <EmptySpace min="0" pref="44" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="67" max="32767" attributes="0"/>
                           <Component id="lblheaderProdutke" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="44" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="67" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -219,7 +221,7 @@
         <Component class="org.jdesktop.swingx.JXHyperlink" name="jxlHauptinfo">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/de/cismet/cids/custom/icons/pdf.png"/>
+              <Image iconType="3" name="/de/cismet/cids/custom/icons/page_white_excel.png"/>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
               <ResourceString bundle="de/cismet/cids/custom/objectrenderer/wunda_blau/Bundle.properties" key="MauerAggregationRenderer.jxlHauptinfo.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
