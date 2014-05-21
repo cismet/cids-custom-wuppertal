@@ -234,30 +234,41 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
      */
     private void updateForRahmenKartenNr() {
         boolean inputError = false;
+        boolean possibleEtrsNumber = false;
         isEtrsRahmenkarte = false;
         CoordWrapper coord = null;
-        if (tfRahmenkartenNr.getText().length() == 5) {
+        final String enteredRahmenKartenNr = tfRahmenkartenNr.getText();
+        if (enteredRahmenKartenNr.length() == 5) {
             // GK-Rahmenkartennummer
-            coord = gkRahmenKartenMap.get(tfRahmenkartenNr.getText());
+            coord = gkRahmenKartenMap.get(enteredRahmenKartenNr);
             if (coord != null) {
                 tfLowerE.setText("" + coord.getMiddleE());
                 tfLowerN.setText("" + coord.getMiddleN());
             } else {
-                // ETRS-Rahmenkartennummer
-                coord = etrsRahmenKartenMap.get(tfRahmenkartenNr.getText());
-                if (coord != null) {
-                    tfLowerE.setText("" + coord.getMiddleE());
-                    tfLowerN.setText("" + coord.getMiddleN());
-                    isEtrsRahmenkarte = true;
-                } else {
-                    inputError = true;
+                // we need to check if the entered number can be a valid etrs rahmenkartennummer
+                inputError = true;
+                for (int i = 1; i <= 9; i++) {
+                    final String etrsRahmenNumber = enteredRahmenKartenNr + "" + i;
+                    if (etrsRahmenKartenMap.get(etrsRahmenNumber) != null) {
+                        possibleEtrsNumber = true;
+                        break;
+                    }
                 }
             }
+        } else if (enteredRahmenKartenNr.length() == 6) {
+            // ETRS-Rahmenkartennummer
+            coord = etrsRahmenKartenMap.get(enteredRahmenKartenNr);
+            if (coord != null) {
+                tfLowerE.setText("" + coord.getMiddleE());
+                tfLowerN.setText("" + coord.getMiddleN());
+                isEtrsRahmenkarte = true;
+            } else {
+                inputError = true;
+            }
+        } else if (enteredRahmenKartenNr.length() > 6) {
+            inputError = true;
         }
-//        else if (tfRahmenkartenNr.getText().length() == 6) {
-//
-//        }
-        if (inputError) {
+        if (inputError && !possibleEtrsNumber) {
             JOptionPane.showMessageDialog(
                 StaticSwingTools.getParentFrame(Butler2Dialog.this),
                 org.openide.util.NbBundle.getMessage(
@@ -625,25 +636,25 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
         this.dispose();                                                           // TODO add your handling code here:
-    }//GEN-LAST:event_btnCancelActionPerformed
+    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbSizeActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSizeActionPerformed
+    private void cbSizeActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbSizeActionPerformed
         changeMap();
-    }//GEN-LAST:event_cbSizeActionPerformed
+    }                                                                          //GEN-LAST:event_cbSizeActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
+    private void btnCreateActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCreateActionPerformed
         SwingUtilities.invokeLater(new Runnable() {
 
                 @Override
@@ -766,14 +777,14 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                     Butler2Dialog.this.dispose();
                 }
             });
-    }//GEN-LAST:event_btnCreateActionPerformed
+    } //GEN-LAST:event_btnCreateActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbPointGeomActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPointGeomActionPerformed
+    private void cbPointGeomActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbPointGeomActionPerformed
         final Object obj = cbPointGeom.getSelectedItem();
         if ((obj != null) && (obj instanceof Point)) {
             final Point p = (Point)obj;
@@ -785,7 +796,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
             tfLowerE.getDocument().addDocumentListener(this);
             tfLowerN.getDocument().addDocumentListener(this);
         }
-    }//GEN-LAST:event_cbPointGeomActionPerformed
+    }                                                                               //GEN-LAST:event_cbPointGeomActionPerformed
 
     /**
      * DOCUMENT ME!
