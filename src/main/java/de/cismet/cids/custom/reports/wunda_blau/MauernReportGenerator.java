@@ -27,6 +27,7 @@ import javax.swing.Timer;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cismap.commons.gui.printing.JasperReportCsvDownload;
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload.JasperReportDataSourceGenerator;
 
@@ -137,7 +138,7 @@ public class MauernReportGenerator {
             final String jobname = DownloadManagerDialog.getJobname();
 
             DownloadManager.instance()
-                    .add(new JasperReportDownload(
+                    .add(new JasperReportCsvDownload(
                             "/de/cismet/cids/custom/reports/wunda_blau/mauer-hauptinfo.jasper",
                             dataSourceGenerator,
                             jobname,
