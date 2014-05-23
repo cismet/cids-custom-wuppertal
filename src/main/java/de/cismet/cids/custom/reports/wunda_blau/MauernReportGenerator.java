@@ -30,6 +30,7 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cismap.commons.gui.printing.JasperReportCsvDownload;
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload.JasperReportDataSourceGenerator;
+import de.cismet.cismap.commons.gui.printing.JasperReportExcelDownload;
 
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
@@ -116,7 +117,7 @@ public class MauernReportGenerator {
                 public JRDataSource generateDataSource() {
                     final Collection<MauernReportBean> reportBeans = new LinkedList<MauernReportBean>();
                     for (final CidsBean b : cidsBeans) {
-                        reportBeans.add(new MauernReportBeanWithMapAndImages(b));
+                        reportBeans.add(new MauernReportBean(b));
                     }
                     boolean ready;
                     do {
@@ -138,11 +139,11 @@ public class MauernReportGenerator {
             final String jobname = DownloadManagerDialog.getJobname();
 
             DownloadManager.instance()
-                    .add(new JasperReportCsvDownload(
+                    .add(new JasperReportExcelDownload(
                             "/de/cismet/cids/custom/reports/wunda_blau/mauer-hauptinfo.jasper",
                             dataSourceGenerator,
                             jobname,
-                            "Mauer Katasterblatt",
+                            "Mauer Hauptinfo",
                             "mauern_hauptinfo"));
         }
     }
