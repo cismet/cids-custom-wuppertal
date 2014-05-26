@@ -340,32 +340,16 @@
                     "resolution": null,
                     "volumeParamText": "Fläche (km²):"
                 }, {
-                    "name": "Karte für Feldvergleich 1:500 Farbe",
+                    "name": "Karte für Feldvergleich Farbe",
                     "key": "0903g",
                     "colorDepth": null,
                     "format": null,
-                    "scale": "500",
                     "volumeParamText": "Fläche (km²):"
                 }, {
-                    "name": "Karte für Feldvergleich 1:500 Grauwert",
+                    "name": "Karte für Feldvergleich  Grauwert",
                     "key": "0903",
                     "colorDepth": null,
                     "format": null,
-                    "scale": "500",
-                    "volumeParamText": "Fläche (km²):"
-                }, {
-                    "name": "Karte für Feldvergleich 1:1000 Farbe",
-                    "key": "0903g",
-                    "colorDepth": null,
-                    "format": null,
-                    "scale": "1000",
-                    "volumeParamText": "Fläche (km²):"
-                }, {
-                    "name": "Karte für Feldvergleich 1:1000 Grauwert",
-                    "key": "0903",
-                    "colorDepth": null,
-                    "format": null,
-                    "scale": "1000",
                     "volumeParamText": "Fläche (km²):"
                 }
             ],
