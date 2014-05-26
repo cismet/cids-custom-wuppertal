@@ -1,12 +1,10 @@
-/**
- * *************************************************
- *
- * cismet GmbH, Saarbruecken, Germany
- * 
-* ... and it just works.
- * 
-***************************************************
- */
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -52,12 +50,13 @@ import de.cismet.tools.gui.downloadmanager.HttpDownload;
 /**
  * DOCUMENT ME!
  *
- * @author daniel
- * @version $Revision$, $Date$
+ * @author   daniel
+ * @version  $Revision$, $Date$
  */
 public class ButlerDownload extends HttpDownload {
 
     //~ Static fields/initializers ---------------------------------------------
+
     private static final String SERVER_ACTION = "butler1Query";
     private static final String TITLE = "Butler Download";
     private static final long WAIT_PERIOD = 5000;
@@ -81,6 +80,7 @@ public class ButlerDownload extends HttpDownload {
     }
 
     //~ Instance fields --------------------------------------------------------
+
     private String orderId;
     private ButlerProduct product;
     private double minX;
@@ -96,16 +96,17 @@ public class ButlerDownload extends HttpDownload {
     private boolean isEtrsRahmenkarte = false;
 
     //~ Constructors -----------------------------------------------------------
+
     /**
      * Constructor for a Butler 2 request.
      *
-     * @param directory DOCUMENT ME!
-     * @param orderId DOCUMENT ME!
-     * @param product DOCUMENT ME!
-     * @param isEtrsRahmenkarte DOCUMENT ME!
-     * @param boxSize DOCUMENT ME!
-     * @param middleX DOCUMENT ME!
-     * @param middleY DOCUMENT ME!
+     * @param  directory          DOCUMENT ME!
+     * @param  orderId            DOCUMENT ME!
+     * @param  product            DOCUMENT ME!
+     * @param  isEtrsRahmenkarte  DOCUMENT ME!
+     * @param  boxSize            DOCUMENT ME!
+     * @param  middleX            DOCUMENT ME!
+     * @param  middleY            DOCUMENT ME!
      */
     public ButlerDownload(final String directory,
             final String orderId,
@@ -133,13 +134,13 @@ public class ButlerDownload extends HttpDownload {
     /**
      * Creates a new ButlerDownload object.
      *
-     * @param directory DOCUMENT ME!
-     * @param orderId DOCUMENT ME!
-     * @param product DOCUMENT ME!
-     * @param minX DOCUMENT ME!
-     * @param minY DOCUMENT ME!
-     * @param maxX DOCUMENT ME!
-     * @param maxY DOCUMENT ME!
+     * @param  directory  DOCUMENT ME!
+     * @param  orderId    DOCUMENT ME!
+     * @param  product    DOCUMENT ME!
+     * @param  minX       DOCUMENT ME!
+     * @param  minY       DOCUMENT ME!
+     * @param  maxX       DOCUMENT ME!
+     * @param  maxY       DOCUMENT ME!
      */
     public ButlerDownload(final String directory,
             final String orderId,
@@ -169,9 +170,9 @@ public class ButlerDownload extends HttpDownload {
     /**
      * Creates a new ButlerDownload object.
      *
-     * @param requestId DOCUMENT ME!
-     * @param userOrderId DOCUMENT ME!
-     * @param product DOCUMENT ME!
+     * @param  requestId    DOCUMENT ME!
+     * @param  userOrderId  DOCUMENT ME!
+     * @param  product      DOCUMENT ME!
      */
     ButlerDownload(final String requestId, final String userOrderId, final ButlerProduct product) {
         omitSendingRequest = true;
@@ -190,6 +191,7 @@ public class ButlerDownload extends HttpDownload {
     }
 
     //~ Methods ----------------------------------------------------------------
+
     @Override
     public void run() {
         if (status != State.WAITING) {
@@ -225,7 +227,7 @@ public class ButlerDownload extends HttpDownload {
         }
         try {
             if (!downloadFuture.isCancelled()) {
-                result = (ArrayList<URL>) pollingFuture.get(1, TimeUnit.HOURS);
+                result = (ArrayList<URL>)pollingFuture.get(1, TimeUnit.HOURS);
             } else {
                 doCancellationHandling(true, true);
             }
@@ -266,7 +268,7 @@ public class ButlerDownload extends HttpDownload {
     /**
      * DOCUMENT ME!
      *
-     * @param result DOCUMENT ME!
+     * @param  result  DOCUMENT ME!
      */
     private void saveFile(final ArrayList<URL> result) {
         FileOutputStream out = null;
@@ -292,8 +294,8 @@ public class ButlerDownload extends HttpDownload {
     /**
      * DOCUMENT ME!
      *
-     * @param unzippedFiles DOCUMENT ME!
-     * @param zipFile DOCUMENT ME!
+     * @param  unzippedFiles  DOCUMENT ME!
+     * @param  zipFile        DOCUMENT ME!
      */
     private void saveZipFileOfUnzippedFileCollection(
             final ArrayList<URL> unzippedFiles,
@@ -333,8 +335,8 @@ public class ButlerDownload extends HttpDownload {
     /**
      * DOCUMENT ME!
      *
-     * @param cancelServerRequest DOCUMENT ME!
-     * @param cancelPollingThread DOCUMENT ME!
+     * @param  cancelServerRequest  DOCUMENT ME!
+     * @param  cancelPollingThread  DOCUMENT ME!
      */
     private void doCancellationHandling(final boolean cancelServerRequest, final boolean cancelPollingThread) {
         log.warn("Butler Download was interuppted");
@@ -359,72 +361,72 @@ public class ButlerDownload extends HttpDownload {
     /**
      * DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     private String sendRequest() {
         final ServerActionParameter paramMethod = new ServerActionParameter(ButlerQueryAction.PARAMETER_TYPE.METHOD
-                .toString(),
+                        .toString(),
                 ButlerQueryAction.METHOD_TYPE.ADD);
         final ServerActionParameter paramOrderId = new ServerActionParameter(ButlerQueryAction.PARAMETER_TYPE.ORDER_ID
-                .toString(),
+                        .toString(),
                 orderId);
         final ServerActionParameter paramProduct = new ServerActionParameter(
                 ButlerQueryAction.PARAMETER_TYPE.BUTLER_PRODUCT.toString(),
                 product);
 
         final ServerActionParameter paramMinX = new ServerActionParameter(ButlerQueryAction.PARAMETER_TYPE.MIN_X
-                .toString(),
+                        .toString(),
                 minX);
         final ServerActionParameter paramMinY = new ServerActionParameter(ButlerQueryAction.PARAMETER_TYPE.MIN_Y
-                .toString(),
+                        .toString(),
                 minY);
         if (isButler2) {
             final ServerActionParameter paramBoxSize = new ServerActionParameter(
                     ButlerQueryAction.PARAMETER_TYPE.BOX_SIZE.toString(),
                     boxSize);
             final ServerActionParameter paramIsWmps = new ServerActionParameter(ButlerQueryAction.PARAMETER_TYPE.IS_WMPS
-                    .toString(),
+                            .toString(),
                     true);
             final ServerActionParameter etrsRahmenkarte = new ServerActionParameter(
                     ButlerQueryAction.PARAMETER_TYPE.ETRS_BLATTSCHNITT.toString(),
                     this.isEtrsRahmenkarte);
             try {
-                return (String) SessionManager.getProxy()
-                        .executeTask(
-                                SERVER_ACTION,
-                                "WUNDA_BLAU",
-                                null,
-                                paramMethod,
-                                paramOrderId,
-                                paramProduct,
-                                etrsRahmenkarte,
-                                paramMinX,
-                                paramMinY,
-                                paramBoxSize,
-                                paramIsWmps);
+                return (String)SessionManager.getProxy()
+                            .executeTask(
+                                    SERVER_ACTION,
+                                    "WUNDA_BLAU",
+                                    null,
+                                    paramMethod,
+                                    paramOrderId,
+                                    paramProduct,
+                                    etrsRahmenkarte,
+                                    paramMinX,
+                                    paramMinY,
+                                    paramBoxSize,
+                                    paramIsWmps);
             } catch (ConnectionException ex) {
                 Exceptions.printStackTrace(ex);
             }
         } else {
             final ServerActionParameter paramMaxX = new ServerActionParameter(ButlerQueryAction.PARAMETER_TYPE.MAX_X
-                    .toString(),
+                            .toString(),
                     maxX);
             final ServerActionParameter paramMaxY = new ServerActionParameter(ButlerQueryAction.PARAMETER_TYPE.MAX_Y
-                    .toString(),
+                            .toString(),
                     maxY);
             try {
-                return (String) SessionManager.getProxy()
-                        .executeTask(
-                                SERVER_ACTION,
-                                "WUNDA_BLAU",
-                                null,
-                                paramMethod,
-                                paramOrderId,
-                                paramProduct,
-                                paramMinX,
-                                paramMinY,
-                                paramMaxX,
-                                paramMaxY);
+                return (String)SessionManager.getProxy()
+                            .executeTask(
+                                    SERVER_ACTION,
+                                    "WUNDA_BLAU",
+                                    null,
+                                    paramMethod,
+                                    paramOrderId,
+                                    paramProduct,
+                                    paramMinX,
+                                    paramMinY,
+                                    paramMaxX,
+                                    paramMaxY);
             } catch (ConnectionException ex) {
                 Exceptions.printStackTrace(ex);
             }
@@ -450,49 +452,53 @@ public class ButlerDownload extends HttpDownload {
      */
     private void removeRequestFromServer() {
         final ServerActionParameter paramOrderId = new ServerActionParameter(ButlerQueryAction.PARAMETER_TYPE.REQUEST_ID
-                .toString(),
+                        .toString(),
                 requestId);
         final ServerActionParameter paramMethod = new ServerActionParameter(ButlerQueryAction.PARAMETER_TYPE.METHOD
-                .toString(),
+                        .toString(),
                 ButlerQueryAction.METHOD_TYPE.CANCEL);
         try {
             SessionManager.getProxy().executeTask(
-                    SERVER_ACTION,
-                    "WUNDA_BLAU",
-                    null,
-                    paramOrderId,
-                    paramMethod);
+                SERVER_ACTION,
+                "WUNDA_BLAU",
+                null,
+                paramOrderId,
+                paramMethod);
         } catch (Exception ex) {
             log.error("error during enqueuing nas server request", ex);
         }
     }
 
     //~ Inner Classes ----------------------------------------------------------
+
     /**
      * DOCUMENT ME!
      *
-     * @version $Revision$, $Date$
+     * @version  $Revision$, $Date$
      */
     private final class ButlerPollingRunnable implements Callable<ArrayList<URL>> {
 
         //~ Instance fields ----------------------------------------------------
+
         private String requestId;
 
         //~ Constructors -------------------------------------------------------
+
         /**
          * Creates a new ButlerPollingRunnable object.
          *
-         * @param requestId DOCUMENT ME!
+         * @param  requestId  DOCUMENT ME!
          */
         public ButlerPollingRunnable(final String requestId) {
             this.requestId = requestId;
         }
 
         //~ Methods ------------------------------------------------------------
+
         /**
          * DOCUMENT ME!
          *
-         * @return DOCUMENT ME!
+         * @return  DOCUMENT ME!
          */
         private ArrayList<URL> getDownloadURLs() {
             final ArrayList<URL> result = new ArrayList<URL>();
@@ -554,7 +560,7 @@ public class ButlerDownload extends HttpDownload {
                     } else {
                         return null;
                     }
-                } 
+                }
                 if (Thread.interrupted()) {
                     if (log.isDebugEnabled()) {
                         log.debug("Butler polling future was cancelled");
