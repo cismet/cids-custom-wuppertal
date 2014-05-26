@@ -570,7 +570,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
         jPanel2.add(jLabel1, gridBagConstraints);
 
-        cbRahmenkartenScale.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1:500", "1:1000", " " }));
+        cbRahmenkartenScale.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1:500", "1:1000" }));
         cbRahmenkartenScale.setEnabled(false);
         cbRahmenkartenScale.addActionListener(new java.awt.event.ActionListener() {
 
