@@ -2074,32 +2074,16 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
          * @throws  ConnectionException  DOCUMENT ME!
          */
         private void retrieveAlkisLandparcelForLightweightLandparcels3A() throws ConnectionException {
-            if ((landParcel3AList != null) && (landParcel3AList.size() > 0)) {
-                final StringBuilder inBuilder = new StringBuilder("(");
-                for (final LightweightLandParcel3A landParcel3A : landParcel3AList) {
-                    if (inBuilder.length() > 1) {
-                        inBuilder.append(",");
-                    }
-                    inBuilder.append("'");
-                    inBuilder.append(landParcel3A.getLandparcelCode());
-                    inBuilder.append("'");
+            if ((landParcel3AList != null) && !landParcel3AList.isEmpty()) {
+                final HashMap<String, CidsBean> tmp = new HashMap<String, CidsBean>(landParcel3AList.size());
+                for (final CidsBean iteratingBean : cidsBean.getBeanCollectionProperty("landparcels")) {
+                    tmp.put((String)iteratingBean.getProperty("landparcelcode"), iteratingBean);
                 }
-                inBuilder.append(")");
-                final User user = SessionManager.getSession().getUser();
-                final MetaClass mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "alkis_landparcel");
-                final String query = "select " + mc.getID() + "," + mc.getPrimaryKey() + " from " + mc.getTableName()
-                            + " where alkis_id in " + inBuilder.toString();
-                final MetaObject[] moArr = SessionManager.getProxy()
-                            .getMetaObjectByQuery(user, query, CidsBeanSupport.DOMAIN_NAME);
-
                 for (final LightweightLandParcel3A landParcel3A : landParcel3AList) {
-                    for (final MetaObject mo : moArr) {
-                        final CidsBean bean = mo.getBean();
-                        if (landParcel3A.getLandparcelCode().equals(bean.getProperty("alkis_id"))) {
-                            landParcel3A.setFullObjectID((Integer)bean.getProperty("id"));
-                            landParcel3A.setGeometry((Geometry)bean.getProperty("geometrie.geo_field"));
-                            break;
-                        }
+                    final CidsBean currentBean = tmp.get(landParcel3A.getLandparcelCode());
+                    if (currentBean != null) {
+                        landParcel3A.setFullObjectID((Integer)currentBean.getProperty("fullobjectid"));
+                        landParcel3A.setGeometry((Geometry)currentBean.getProperty("geometrie.geo_field"));
                     }
                 }
             }
