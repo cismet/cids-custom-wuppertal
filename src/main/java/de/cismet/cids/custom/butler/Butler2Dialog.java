@@ -40,6 +40,7 @@ import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
@@ -89,17 +90,22 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger LOG = Logger.getLogger(Butler2Dialog.class);
-    private static HashMap<String, CoordWrapper> rahmenKartenMap = new HashMap<String, CoordWrapper>();
+    private static HashMap<String, CoordWrapper> gkRahmenKartenMap = new HashMap<String, CoordWrapper>();
+    private static HashMap<String, CoordWrapper> etrsRahmenKartenMap = new HashMap<String, CoordWrapper>();
     private static final String FELDVERGLEICH = "0903";
-    private static final String FELDVERGLEICH_BOX = "600m x 350m";
+    private static final String FELDVERGLEICH_BOX_500 = "600m x 350m";
+    private static final String FELDVERGLEICH_BOX_1000 = "1200m x 700m";
     private static final String RASTER_DATEN_BILLING_KEY = "skmekomtiff";
     private static final String DXF_BILLING_KEY = "skmekomdxf";
 
     static {
-        final Properties prop = new Properties();
+        final Properties gkRahmenProp = new Properties();
+        final Properties etrsRahmenProp = new Properties();
         try {
-            prop.load(Butler2Dialog.class.getResourceAsStream("rahmenkarten.properties"));
-            loadPropertiesIntoMap(prop);
+            gkRahmenProp.load(Butler2Dialog.class.getResourceAsStream("rahmenkarten_gk.properties"));
+            loadPropertiesIntoMap(gkRahmenProp, gkRahmenKartenMap);
+            etrsRahmenProp.load(Butler2Dialog.class.getResourceAsStream("rahmenkarten_etrs.properties"));
+            loadPropertiesIntoMap(etrsRahmenProp, etrsRahmenKartenMap);
         } catch (IOException ex) {
             LOG.error("Could not read property file with defined boxes for butler 1", ex);
         }
@@ -112,14 +118,20 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
     private DefaultStyledFeature rectangleFeature;
     private MappingComponent map = new MappingComponent();
     private boolean mapInitDone = false;
-    private PredefinedBoxes feldVergleichBox = null;
+    private PredefinedBoxes feldVergleichBox500 = null;
+    private PredefinedBoxes feldVergleichBox1000 = null;
+    private boolean isEtrsRahmenkarte = false;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnCreate;
     private de.cismet.cids.custom.butler.Butler2ProductPanel butler2ProductPanel1;
     private javax.swing.JComboBox cbPointGeom;
+    private javax.swing.JComboBox cbRahmenkartenScale;
     private javax.swing.JComboBox cbSize;
+    private javax.swing.Box.Filler filler1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblGeomTitle;
     private javax.swing.JLabel lblLowerPosition;
     private javax.swing.JLabel lblPointGeoms;
@@ -199,9 +211,10 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                 }
             });
         for (final PredefinedBoxes box : boxes) {
-            if (box.getDisplayName().equals(FELDVERGLEICH_BOX)) {
-                feldVergleichBox = box;
-                break;
+            if (box.getDisplayName().equals(FELDVERGLEICH_BOX_500)) {
+                feldVergleichBox500 = box;
+            } else if (box.getDisplayName().equals(FELDVERGLEICH_BOX_1000)) {
+                feldVergleichBox1000 = box;
             }
         }
         final JPanel addPan = new JPanel();
@@ -227,23 +240,51 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
      * DOCUMENT ME!
      */
     private void updateForRahmenKartenNr() {
+        boolean inputError = false;
+        boolean possibleEtrsNumber = false;
+        isEtrsRahmenkarte = false;
         CoordWrapper coord = null;
-        if (tfRahmenkartenNr.getText().length() == 5) {
-            coord = rahmenKartenMap.get(tfRahmenkartenNr.getText());
+        final String enteredRahmenKartenNr = tfRahmenkartenNr.getText();
+        if (enteredRahmenKartenNr.length() == 5) {
+            // GK-Rahmenkartennummer
+            coord = gkRahmenKartenMap.get(enteredRahmenKartenNr);
             if (coord != null) {
                 tfLowerE.setText("" + coord.getMiddleE());
                 tfLowerN.setText("" + coord.getMiddleN());
             } else {
-                JOptionPane.showMessageDialog(
-                    StaticSwingTools.getParentFrame(Butler2Dialog.this),
-                    org.openide.util.NbBundle.getMessage(
-                        Butler2Dialog.class,
-                        "Butler2Dialog.RahmenkartenNrCheck.JOptionPane.message"),
-                    org.openide.util.NbBundle.getMessage(
-                        Butler2Dialog.class,
-                        "Butler2Dialog.RahmenkartenNrCheck.JOptionPane.title"),
-                    JOptionPane.ERROR_MESSAGE);
+                // we need to check if the entered number can be a valid etrs rahmenkartennummer
+                inputError = true;
+                for (int i = 1; i <= 9; i++) {
+                    final String etrsRahmenNumber = enteredRahmenKartenNr + "" + i;
+                    if (etrsRahmenKartenMap.get(etrsRahmenNumber) != null) {
+                        possibleEtrsNumber = true;
+                        break;
+                    }
+                }
             }
+        } else if (enteredRahmenKartenNr.length() == 6) {
+            // ETRS-Rahmenkartennummer
+            coord = etrsRahmenKartenMap.get(enteredRahmenKartenNr);
+            if (coord != null) {
+                tfLowerE.setText("" + coord.getMiddleE());
+                tfLowerN.setText("" + coord.getMiddleN());
+                isEtrsRahmenkarte = true;
+            } else {
+                inputError = true;
+            }
+        } else if (enteredRahmenKartenNr.length() > 6) {
+            inputError = true;
+        }
+        if (inputError && !possibleEtrsNumber) {
+            JOptionPane.showMessageDialog(
+                StaticSwingTools.getParentFrame(Butler2Dialog.this),
+                org.openide.util.NbBundle.getMessage(
+                    Butler2Dialog.class,
+                    "Butler2Dialog.RahmenkartenNrCheck.JOptionPane.message"),
+                org.openide.util.NbBundle.getMessage(
+                    Butler2Dialog.class,
+                    "Butler2Dialog.RahmenkartenNrCheck.JOptionPane.title"),
+                JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -251,8 +292,9 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
      * DOCUMENT ME!
      *
      * @param  prop  DOCUMENT ME!
+     * @param  map   DOCUMENT ME!
      */
-    private static void loadPropertiesIntoMap(final Properties prop) {
+    private static void loadPropertiesIntoMap(final Properties prop, final Map map) {
         final Enumeration keys = prop.propertyNames();
         final ArrayList<String> keyList = new ArrayList<String>();
         while (keys.hasMoreElements()) {
@@ -264,7 +306,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
             final double middleE = Double.parseDouble(splittedVal[0]);
             final double middleN = Double.parseDouble(splittedVal[1]);
             final CoordWrapper coord = new CoordWrapper(middleE, middleN);
-            rahmenKartenMap.put(key, coord);
+            map.put(key, coord);
         }
     }
 
@@ -288,12 +330,18 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
         pnlMap = new javax.swing.JPanel();
         lblRahmenkartenNr = new javax.swing.JLabel();
         lblPointGeoms = new javax.swing.JLabel();
-        tfRahmenkartenNr = new javax.swing.JTextField();
         cbPointGeom = new ButlerGeometryComboBox(ButlerGeometryComboBox.GEOM_FILTER_TYPE.POINT);
         jPanel1 = new javax.swing.JPanel();
         tfLowerN = new javax.swing.JTextField();
         tfLowerE = new javax.swing.JTextField();
         lblGeomTitle = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        tfRahmenkartenNr = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        cbRahmenkartenScale = new javax.swing.JComboBox();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
         pnlControls = new javax.swing.JPanel();
         btnCreate = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
@@ -435,18 +483,6 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         pnlMapSettings.add(lblPointGeoms, gridBagConstraints);
 
-        tfRahmenkartenNr.setText(org.openide.util.NbBundle.getMessage(
-                Butler2Dialog.class,
-                "Butler2Dialog.tfRahmenkartenNr.text")); // NOI18N
-        tfRahmenkartenNr.setEnabled(false);
-        tfRahmenkartenNr.setMinimumSize(new java.awt.Dimension(70, 27));
-        tfRahmenkartenNr.setPreferredSize(new java.awt.Dimension(90, 27));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
-        pnlMapSettings.add(tfRahmenkartenNr, gridBagConstraints);
-
         final org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
@@ -510,6 +546,57 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 15, 0);
         pnlMapSettings.add(lblGeomTitle, gridBagConstraints);
+
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
+        tfRahmenkartenNr.setText(org.openide.util.NbBundle.getMessage(
+                Butler2Dialog.class,
+                "Butler2Dialog.tfRahmenkartenNr.text")); // NOI18N
+        tfRahmenkartenNr.setEnabled(false);
+        tfRahmenkartenNr.setMinimumSize(new java.awt.Dimension(70, 27));
+        tfRahmenkartenNr.setPreferredSize(new java.awt.Dimension(90, 27));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        jPanel2.add(tfRahmenkartenNr, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel1,
+            org.openide.util.NbBundle.getMessage(Butler2Dialog.class, "Butler2Dialog.jLabel1.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
+        jPanel2.add(jLabel1, gridBagConstraints);
+
+        cbRahmenkartenScale.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1:500", "1:1000" }));
+        cbRahmenkartenScale.setEnabled(false);
+        cbRahmenkartenScale.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cbRahmenkartenScaleActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
+        jPanel2.add(cbRahmenkartenScale, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel2.add(filler1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        pnlMapSettings.add(jPanel2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -708,6 +795,10 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                     for (int i = 0; i < (tbpProducts.getTabCount() - 1); i++) {
                         final Butler2ProductPanel productPanel = (Butler2ProductPanel)tbpProducts.getComponentAt(i);
                         final ButlerProduct bp = productPanel.getSelectedProduct();
+                        if (bp.getKey().startsWith(FELDVERGLEICH)) {
+                            final String scale = cbRahmenkartenScale.getSelectedItem().equals("1:500") ? "500" : "1000";
+                            bp.setScale(scale);
+                        }
                         final ButlerFormat format = bp.getFormat();
                         final ButlerDownload download = new ButlerDownload(
                                 jobnameBuilder.toString(),
@@ -715,6 +806,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                                         + "_"
                                         + (i + 1),
                                 bp,
+                                isEtrsRahmenkarte,
                                 box.getKey(),
                                 middleX,
                                 middleY);
@@ -761,6 +853,19 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
             tfLowerN.getDocument().addDocumentListener(this);
         }
     }                                                                               //GEN-LAST:event_cbPointGeomActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cbRahmenkartenScaleActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbRahmenkartenScaleActionPerformed
+        if (cbRahmenkartenScale.getSelectedItem().equals("1:500")) {
+            cbSize.setSelectedItem(feldVergleichBox500);
+        } else {
+            cbSize.setSelectedItem(feldVergleichBox1000);
+        }
+    }                                                                                       //GEN-LAST:event_cbRahmenkartenScaleActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1200,7 +1305,7 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                         final Butler2ProductPanel productPanel = (Butler2ProductPanel)tbpProducts.getComponentAt(i);
                         final ButlerProduct product = productPanel.getSelectedProduct();
                         if ((product != null) && (product.getKey() != null)) {
-                            if (product.getKey().equals(FELDVERGLEICH)) {
+                            if (product.getKey().startsWith(FELDVERGLEICH)) {
                                 return true;
                             }
                         }
@@ -1216,22 +1321,28 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
 
                         if (isFeldvergleichSelected) {
                             tfRahmenkartenNr.setEnabled(true);
-                            cbSize.setSelectedItem(feldVergleichBox);
+                            cbRahmenkartenScale.setEnabled(true);
+                            if (cbRahmenkartenScale.getSelectedItem().equals("1:500")) {
+                                cbSize.setSelectedItem(feldVergleichBox500);
+                            } else {
+                                cbSize.setSelectedItem(feldVergleichBox1000);
+                            }
                             cbSize.setEnabled(false);
                             cbPointGeom.setEnabled(false);
                             tfLowerE.setEnabled(false);
                             tfLowerN.setEnabled((false));
                         } else {
                             tfRahmenkartenNr.setEnabled(false);
+                            cbRahmenkartenScale.setEnabled(false);
                             cbSize.setEnabled(true);
                             cbPointGeom.setEnabled(true);
                             tfLowerE.setEnabled(true);
                             tfLowerN.setEnabled((true));
                         }
                     } catch (InterruptedException ex) {
-                        Exceptions.printStackTrace(ex);
+                        LOG.error(ex);
                     } catch (ExecutionException ex) {
-                        Exceptions.printStackTrace(ex);
+                        LOG.error(ex);
                     }
                 }
             };

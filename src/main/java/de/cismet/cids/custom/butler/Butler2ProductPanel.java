@@ -27,9 +27,7 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -39,8 +37,6 @@ import de.cismet.cids.custom.utils.butler.ButlerFormat;
 import de.cismet.cids.custom.utils.butler.ButlerProduct;
 import de.cismet.cids.custom.utils.butler.ButlerResolution;
 import de.cismet.cids.custom.utils.nas.NasProductTemplate;
-
-import static java.awt.image.ImageObserver.WIDTH;
 
 /**
  * DOCUMENT ME!
