@@ -45,7 +45,6 @@ import de.cismet.cismap.commons.gui.piccolo.PFeature;
 import de.cismet.cismap.commons.gui.piccolo.eventlistener.FeatureMoveListener;
 import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.tools.PFeatureTools;
-import de.cismet.cismap.commons.util.FormatToRealWordCalculator;
 
 import de.cismet.tools.collections.TypeSafeCollections;
 
@@ -133,8 +132,8 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
                 AlkisConstants.COMMONS.SRS_SERVICE);
         final String currentInteractionMode = mappingComponent.getInteractionMode();
         final double massstab = Double.parseDouble(product.getMassstab());
-        final double realWorldWidth = FormatToRealWordCalculator.toRealWorldValue(product.getWidth(), massstab);
-        final double realWorldHeight = FormatToRealWordCalculator.toRealWorldValue(product.getHeight(), massstab);
+        final double realWorldWidth = product.getWidth() / 1000.0d * massstab;
+        final double realWorldHeight = product.getHeight() / 1000.0d * massstab;
         if ((massstab != 0) && !mappingComponent.isFixedMapScale()) {
             mappingComponent.queryServices();
         }
