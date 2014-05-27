@@ -42,7 +42,6 @@ import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
-import de.cismet.cids.custom.objectrenderer.wunda_blau.AlkisLandparcelAggregationRenderer;
 import de.cismet.cids.custom.utils.alkis.AlkisProductDescription;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -53,7 +52,6 @@ import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 import de.cismet.cismap.commons.BoundingBox;
 import de.cismet.cismap.commons.features.Feature;
 import de.cismet.cismap.commons.gui.MappingComponent;
-import de.cismet.cismap.commons.util.FormatToRealWordCalculator;
 
 import de.cismet.cismap.navigatorplugin.CidsFeature;
 
@@ -1224,8 +1222,8 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
             final int width,
             final int height,
             final double scale) {
-        final double realWorldLayoutWidth = FormatToRealWordCalculator.toRealWorldValue(width, scale);
-        final double realWorldLayoutHeigth = FormatToRealWordCalculator.toRealWorldValue(height, scale);
+        final double realWorldLayoutWidth = ((double)width) / 1000.0d * scale;
+        final double realWorldLayoutHeigth = ((double)height) / 1000.0d * scale;
         return (realWorldLayoutWidth >= box.getWidth()) && (realWorldLayoutHeigth >= box.getHeight());
     }
 
