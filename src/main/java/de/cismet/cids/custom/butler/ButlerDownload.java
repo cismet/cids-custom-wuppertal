@@ -212,6 +212,10 @@ public class ButlerDownload extends HttpDownload {
         }
         if (requestId == null) {
             // log that something went terribly wrong...
+            log.error("could not register butler request.");
+            error(new IllegalStateException("Fehler beim Senden des Butler Auftrags."));
+            this.status = State.COMPLETED_WITH_ERROR;
+            stateChanged();
             return;
         }
 
@@ -234,11 +238,16 @@ public class ButlerDownload extends HttpDownload {
         } catch (InterruptedException ex) {
             doCancellationHandling(true, true);
             Thread.currentThread().interrupt();
+            log.error("Butler Download was interrupted", ex);
+            error(ex);
             return;
         } catch (ExecutionException ex) {
-            log.warn("could not execute butler download", ex);
+            log.error("could not execute butler download", ex);
+            error(ex);
         } catch (TimeoutException ex) {
-            log.warn("the maximum timeout for butler download is exceeded", ex);
+            log.error("the maximum timeout for butler download is exceeded", ex);
+            error(new TimeoutException(
+                    org.openide.util.NbBundle.getMessage(ButlerDownload.class, "ButlerDownload.timeoutErrorMessage")));
         }
 
         if ((result == null) || (result.isEmpty())) {
