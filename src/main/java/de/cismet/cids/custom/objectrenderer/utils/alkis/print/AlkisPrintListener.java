@@ -382,7 +382,7 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
      * @return  DOCUMENT ME!
      */
     private Point getTemplateCenter() {
-        return printTemplateStyledFeature.getGeometry().getCentroid();
+        return printTemplateStyledFeature.getGeometry().getEnvelope().getCentroid();
     }
 
     /**
