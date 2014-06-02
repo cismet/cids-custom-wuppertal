@@ -18,7 +18,6 @@ import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.GeometryCollection;
 
 import org.openide.util.Cancellable;
-import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 import java.io.File;
@@ -242,6 +241,9 @@ public class NASDownload extends AbstractDownload implements Cancellable {
         stateChanged();
         if (!omitSendingRequest) {
             if (!downloadFuture.isCancelled()) {
+                if (log.isDebugEnabled()) {
+                    log.debug("NAS Download: sending request to server");
+                }
                 orderId = sendNasRequest();
             } else {
                 doCancellationHandling(false, false);
@@ -267,6 +269,9 @@ public class NASDownload extends AbstractDownload implements Cancellable {
         /*
          * Phase 2: retrive the result from the cids server
          */
+        if (log.isDebugEnabled()) {
+            log.debug("NAS Download: Request correctly sended start polling the result from server (max 1 hour)");
+        }
         final ExecutorService executor = Executors.newSingleThreadExecutor();
         if (!downloadFuture.isCancelled()) {
             pollingFuture = executor.submit(new ServerPollingRunnable());
@@ -277,6 +282,9 @@ public class NASDownload extends AbstractDownload implements Cancellable {
         try {
             if (!downloadFuture.isCancelled() && (pollingFuture != null)) {
                 content = pollingFuture.get(1, TimeUnit.HOURS).getByteArray();
+                if (log.isDebugEnabled()) {
+                    log.debug("NAS Download: Polling is finished.");
+                }
             } else {
                 doCancellationHandling(true, true);
                 return;
@@ -284,12 +292,15 @@ public class NASDownload extends AbstractDownload implements Cancellable {
         } catch (InterruptedException ex) {
             doCancellationHandling(true, true);
             Thread.currentThread().interrupt();
+            error(ex);
             return;
         } catch (ExecutionException ex) {
             log.warn("could not execute nas download", ex);
-            Exceptions.printStackTrace(ex);
+            error(ex);
         } catch (TimeoutException ex) {
-            log.warn("the maximum timeout for nas download is exceeded", ex);
+            log.error("the maximum timeout for butler download is exceeded", ex);
+            error(new TimeoutException(
+                    org.openide.util.NbBundle.getMessage(NASDownload.class, "NASDownload.timeoutErrorMessage")));
         }
 
         if (!downloadFuture.isCancelled()) {
@@ -298,7 +309,7 @@ public class NASDownload extends AbstractDownload implements Cancellable {
         }
 
         if ((content == null) || (content.length <= 0)) {
-            log.info("Downloaded content seems to be empty..");
+            log.info("NAS Download: Downloaded content seems to be empty..");
 
             if ((status == State.RUNNING) && !Thread.interrupted()) {
                 status = State.COMPLETED_WITH_ERROR;
@@ -312,6 +323,9 @@ public class NASDownload extends AbstractDownload implements Cancellable {
         FileOutputStream out = null;
         try {
             if (!downloadFuture.isCancelled()) {
+                if (log.isDebugEnabled()) {
+                    log.debug("NAS Download: Start writing the result to file");
+                }
                 out = new FileOutputStream(fileToSaveTo);
                 out.write(content);
             } else {
@@ -319,18 +333,25 @@ public class NASDownload extends AbstractDownload implements Cancellable {
                 return;
             }
         } catch (final IOException ex) {
-            log.warn("Couldn't write downloaded content to file '" + fileToSaveTo + "'.", ex);
+            log.error("Couldn't write downloaded content to file '" + fileToSaveTo + "'.", ex);
             error(ex);
             return;
+        } catch (final Exception ex) {
+            log.error("Couldn't write downloaded content to file '" + fileToSaveTo + "'.", ex);
+            error(ex);
         } finally {
             if (out != null) {
                 try {
                     out.close();
                 } catch (Exception e) {
+                    log.error("Couldn't write downloaded content to file '" + fileToSaveTo + "'.", e);
+                    error(e);
                 }
             }
         }
-
+        if (log.isDebugEnabled()) {
+            log.debug("NAS Download: done.");
+        }
         if (!downloadFuture.isCancelled()) {
             setTitleForPhase(Phase.DONE);
             status = State.COMPLETED;
