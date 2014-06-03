@@ -789,9 +789,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="lblTxtDatenerhebung">
               <BindingProperties>
-                <BindingProperty name="text" source="cbPunktorte" sourcePath="${selectedItem.qualitaetsangabenHerkunft}" target="lblTxtDatenerhebung" targetPath="text" updateStrategy="1" immediately="false">
-                  <Property name="nullValue" type="java.lang.String" value="keine Angabe"/>
-                  <Property name="incompletePathValue" type="java.lang.String" value="&lt;Error&gt;"/>
+                <BindingProperty name="text" source="cbPunktorte" sourcePath="${selectedItem.qualitaetsangabenHerkunft}" target="lblTxtDatenerhebung" targetPath="text" updateStrategy="0" immediately="false">
                   <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                     <Connection code="ALKIS_ERHEBUNG_CONVERTER" type="code"/>
                   </Property>
