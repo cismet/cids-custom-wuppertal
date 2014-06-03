@@ -1348,6 +1348,9 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         panLocationInfos.add(lblTxtGenauigkeitsstufe, gridBagConstraints);
 
+        lblTxtDatenerhebung.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        lblTxtDatenerhebung.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 cbPunktorte,
@@ -1361,7 +1364,7 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 11;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 7, 7);
         panLocationInfos.add(lblTxtDatenerhebung, gridBagConstraints);
 
         srpHeadLocInfo.setBackground(java.awt.Color.darkGray);
