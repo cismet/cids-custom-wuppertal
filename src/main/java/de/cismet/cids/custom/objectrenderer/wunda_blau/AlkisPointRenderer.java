@@ -16,7 +16,6 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import com.sun.media.jai.codec.ImageCodec;
@@ -25,7 +24,6 @@ import com.sun.media.jai.codec.TIFFDecodeParam;
 
 import com.vividsolutions.jts.geom.Geometry;
 
-import de.aedsicad.aaaweb.client.alkis.AlkisUtil;
 import de.aedsicad.aaaweb.service.alkis.info.ALKISInfoServices;
 import de.aedsicad.aaaweb.service.util.Point;
 import de.aedsicad.aaaweb.service.util.PointLocation;
@@ -34,7 +32,10 @@ import org.jdesktop.beansbinding.Converter;
 import org.jdesktop.swingx.error.ErrorInfo;
 import org.jdesktop.swingx.graphics.ReflectionRenderer;
 
-import org.mortbay.jetty.SessionIdManager;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.filter.ElementFilter;
+import org.jdom.input.SAXBuilder;
 
 import org.openide.util.Exceptions;
 
@@ -50,6 +51,8 @@ import java.awt.image.RenderedImage;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -57,13 +60,13 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
@@ -134,8 +137,6 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
 
     private static final String ICON_RES_PACKAGE = "/de/cismet/cids/custom/wunda_blau/res/";
     private static final String ALKIS_RES_PACKAGE = ICON_RES_PACKAGE + "alkis/";
-    private static final Pattern ERHEBUNG_FILTER_PATTERN = Pattern.compile(
-            "<LI_Source><description>(.*)</description></LI_Source>");
     private static final String CARD_1 = "CARD_1";
     private static final String CARD_2 = "CARD_2";
     private static final String CARD_PREVIEW = "preview";
@@ -205,24 +206,34 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
 
             @Override
             public String convertForward(final String s) {
+                String descr = "keine Angabe (-)";
+                String searchKey = "0000";
                 if (s != null) {
-                    final Matcher matcher = ERHEBUNG_FILTER_PATTERN.matcher(s);
-                    if (matcher.find()) {
-                        // take the 4 digit code
-                        final String matcherResultG1 = matcher.group(1);
-                        if ((matcherResultG1 != null) && (matcherResultG1.length() > 3)) {
-                            final String searchKey = matcherResultG1.substring(0, 4);
-                            // lookup description for code
-                            final String descr = datenerhebungWerte.getProperty(searchKey);
-                            if (descr != null) {
-                                // return result + format with html (max. column length)
-                                return "<html><table width=\"300\" border=\"0\"><tr><td>(" + searchKey + ") " + descr
-                                            + "</tr></table></html>";
-                            } else {
-                                log.warn("No description found for Erhebung with key: " + searchKey);
-                            }
+                    try {
+                        final SAXBuilder builder = new SAXBuilder();
+
+                        final Reader in = new StringReader(s);
+                        final Document doc = builder.build(in);
+                        final Element root = doc.getRootElement();
+                        final ElementFilter filter = new ElementFilter("AX_Datenerhebung_Punktort");
+                        final Iterator it = root.getDescendants(filter);
+                        while (it.hasNext()) {
+                            final Element c = (Element)it.next();
+                            searchKey = c.getTextNormalize();
                         }
+                        // lookup description for code
+                        descr = datenerhebungWerte.getProperty(searchKey);
+                        if (descr != null) {
+                            // return result + format with html (max. column length)
+                            return "<html><table width=\"300\" border=\"0\"><tr><td>(" + searchKey + ") " + descr
+                                        + "</tr></table></html>";
+                        } else {
+                            log.warn("No description found for Erhebung with key: " + searchKey);
+                        }
+                    } catch (Exception e) {
+                        log.error("Error in converter", e);
                     }
+
                     log.warn("Could not translate response: " + s);
                 }
                 return "keine Angabe";
@@ -1338,13 +1349,11 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
         panLocationInfos.add(lblTxtGenauigkeitsstufe, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 cbPunktorte,
                 org.jdesktop.beansbinding.ELProperty.create("${selectedItem.qualitaetsangabenHerkunft}"),
                 lblTxtDatenerhebung,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceNullValue("keine Angabe");
-        binding.setSourceUnreadableValue("<Error>");
         binding.setConverter(ALKIS_ERHEBUNG_CONVERTER);
         bindingGroup.addBinding(binding);
 
