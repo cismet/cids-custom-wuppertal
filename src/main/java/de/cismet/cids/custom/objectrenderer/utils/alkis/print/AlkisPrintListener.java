@@ -120,17 +120,36 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
 
     /**
      * DOCUMENT ME!
+     */
+    public void init() {
+        mappingComponent.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        mappingComponent.setPointerAnnotation(PRINTING_TOOLTIP);
+        mappingComponent.setPointerAnnotationVisibility(true);
+        final String currentInteractionMode = mappingComponent.getInteractionMode();
+
+        // do not add listener again if we are already in print mode
+        if (!MappingComponent.ALKIS_PRINT.equals(currentInteractionMode)) {
+            this.oldInteractionMode = currentInteractionMode;
+            mappingComponent.addPropertyChangeListener(mapInteractionModeListener);
+        }
+        mappingComponent.setInteractionMode(MappingComponent.ALKIS_PRINT);
+        cleared = false;
+    }
+
+    /**
+     * DOCUMENT ME!
      *
      * @param  product              DOCUMENT ME!
      * @param  geom                 DOCUMENT ME!
      * @param  findOptimalRotation  DOCUMENT ME!
      */
-    public void init(final AlkisProductDescription product, final Geometry geom, final boolean findOptimalRotation) {
+    public void refreshPreviewGeometry(final AlkisProductDescription product,
+            final Geometry geom,
+            final boolean findOptimalRotation) {
         // translate from alkis db geom srid to alkis service srid
         final Geometry serviceConformGeometry = CrsTransformer.transformToGivenCrs(
                 geom,
                 AlkisConstants.COMMONS.SRS_SERVICE);
-        final String currentInteractionMode = mappingComponent.getInteractionMode();
         final double massstab = Double.parseDouble(product.getMassstab());
         final double realWorldWidth = product.getWidth() / 1000.0d * massstab;
         final double realWorldHeight = product.getHeight() / 1000.0d * massstab;
@@ -141,13 +160,6 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
         mappingComponent.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         mappingComponent.setPointerAnnotation(PRINTING_TOOLTIP);
         mappingComponent.setPointerAnnotationVisibility(true);
-        // do not add listener again if we are already in print mode
-        if (!MappingComponent.ALKIS_PRINT.equals(currentInteractionMode)) {
-            this.oldInteractionMode = currentInteractionMode;
-            mappingComponent.addPropertyChangeListener(mapInteractionModeListener);
-        }
-        mappingComponent.setInteractionMode(MappingComponent.ALKIS_PRINT);
-        cleared = false;
     }
 
     /**
@@ -190,7 +202,6 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
 
         // Check for Stempelfeld
         if (product.getStempelfeldInfo() != null) {
-            log.fatal(product.getStempelfeldInfo());
             // coords[0] lower left
             final double fromX = product.getStempelfeldInfo().getFromX();
             final double fromY = product.getStempelfeldInfo().getFromY();
@@ -244,7 +255,9 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
             // rotate to optimal angle
             rotation = AffineTransformation.rotationInstance(angle, centerX, centerY);
             outerRing = (LinearRing)rotation.transform(outerRing);
-            innerRings[0] = (LinearRing)rotation.transform(innerRings[0]);
+            if (innerRings != null) {
+                innerRings[0] = (LinearRing)rotation.transform(innerRings[0]);
+            }
         }
         final Geometry polygon = GEOMETRY_FACTORY.createPolygon(outerRing, innerRings);
         final Feature oldPrintFeature = printTemplateStyledFeature;
@@ -277,11 +290,10 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
                         gotoPrintAreaWithBuffer();
 //                        mappingComponent.zoomToAFeatureCollection(printFeatureCollection, false, false);
                     } else if ("visible".equals(evt.getPropertyName()) && (evt.getNewValue() == null)) {
-                        cleanUpAndRestoreFeatures();
+                        // cleanUpAndRestoreFeatures();
                     }
                 }
             });
-//        mappingComponent.zoomToFeatureCollection();
         gotoPrintAreaWithBuffer();
         mapFeatureCol.select(printTemplateStyledFeature);
         mappingComponent.setHandleInteractionMode(MappingComponent.ROTATE_POLYGON);
@@ -367,7 +379,7 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
     /**
      * DOCUMENT ME!
      */
-    private void cleanUpAndRestoreFeatures() {
+    public void cleanUpAndRestoreFeatures() {
         if (!cleared) {
             mappingComponent.removePropertyChangeListener(mapInteractionModeListener);
             final FeatureCollection mapFeatureCollection = mappingComponent.getFeatureCollection();
