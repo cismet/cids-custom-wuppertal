@@ -23,6 +23,8 @@
  */
 package de.cismet.cids.custom.objectrenderer.utils.alkis.print;
 
+import Sirius.navigator.ui.ComponentRegistry;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -112,6 +114,8 @@ final class AlkisPrintJButton extends JButton {
         try {
             this.printWidget = new AlkisPrintingSettingsWidget(false, CismapBroker.getInstance().getMappingComponent());
             printWidget.setLocationRelativeTo(CismapBroker.getInstance().getMappingComponent());
+            // printWidget.setLocationRelativeTo(CismapBroker.getInstance().getMappingComponent());
+            printWidget.setLocationRelativeTo(ComponentRegistry.getRegistry().getCatalogueTree());
         } catch (Exception ex) {
             log.fatal(ex, ex);
             throw new RuntimeException(ex);
