@@ -134,6 +134,9 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
         }
         mappingComponent.setInteractionMode(MappingComponent.ALKIS_PRINT);
         cleared = false;
+        mappingComponent.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        mappingComponent.setPointerAnnotation(PRINTING_TOOLTIP);
+        mappingComponent.setPointerAnnotationVisibility(true);
     }
 
     /**
@@ -146,20 +149,19 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
     public void refreshPreviewGeometry(final AlkisProductDescription product,
             final Geometry geom,
             final boolean findOptimalRotation) {
-        // translate from alkis db geom srid to alkis service srid
-        final Geometry serviceConformGeometry = CrsTransformer.transformToGivenCrs(
-                geom,
-                AlkisConstants.COMMONS.SRS_SERVICE);
-        final double massstab = Double.parseDouble(product.getMassstab());
-        final double realWorldWidth = product.getWidth() / 1000.0d * massstab;
-        final double realWorldHeight = product.getHeight() / 1000.0d * massstab;
-        if ((massstab != 0) && !mappingComponent.isFixedMapScale()) {
-            mappingComponent.queryServices();
+        if (geom != null) {
+            // translate from alkis db geom srid to alkis service srid
+            final Geometry serviceConformGeometry = CrsTransformer.transformToGivenCrs(
+                    geom,
+                    AlkisConstants.COMMONS.SRS_SERVICE);
+            final double massstab = Double.parseDouble(product.getMassstab());
+            final double realWorldWidth = product.getWidth() / 1000.0d * massstab;
+            final double realWorldHeight = product.getHeight() / 1000.0d * massstab;
+            if ((massstab != 0) && !mappingComponent.isFixedMapScale()) {
+                mappingComponent.queryServices();
+            }
+            initMapTemplate(product, serviceConformGeometry, findOptimalRotation, realWorldWidth, realWorldHeight);
         }
-        initMapTemplate(product, serviceConformGeometry, findOptimalRotation, realWorldWidth, realWorldHeight);
-        mappingComponent.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        mappingComponent.setPointerAnnotation(PRINTING_TOOLTIP);
-        mappingComponent.setPointerAnnotationVisibility(true);
     }
 
     /**

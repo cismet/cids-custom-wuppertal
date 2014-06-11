@@ -21,7 +21,10 @@ import Sirius.server.middleware.types.MetaObject;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 
+import org.openide.util.Exceptions;
+
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -33,6 +36,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -75,6 +80,8 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final String ALKIS_LANDPARCEL_TABLE = "ALKIS_LANDPARCEL";
+    private static final String X_POS = "X_POS";
+    private static final String Y_POS = "Y_POS";
 
     //~ Instance fields --------------------------------------------------------
 
@@ -256,6 +263,33 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         return new DefaultComboBoxModel(typesOrdered.toArray());
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static Dimension getPreferredPositionOnScreen() {
+        final Preferences backingStore = Preferences.userNodeForPackage(AlkisPrintJButton.class);
+        final Dimension ret = new Dimension(-1, -1);
+        final int x = backingStore.getInt(X_POS, -1);
+        final int y = backingStore.getInt(Y_POS, -1);
+        ret.setSize(x, y);
+        return ret;
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void storePreferredPositionOnScreen() {
+        final Preferences backingStore = Preferences.userNodeForPackage(AlkisPrintJButton.class);
+        backingStore.putInt(X_POS, this.getX());
+        backingStore.putInt(Y_POS, this.getY());
+        try {
+            backingStore.flush();
+        } catch (BackingStoreException ex) {
+            log.warn("Error when storing preferres position on screen", ex);
+        }
+    }
     /**
      * DOCUMENT ME!
      *
@@ -733,6 +767,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
      * @param  evt  DOCUMENT ME!
      */
     private void cmdOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdOkActionPerformed
+        storePreferredPositionOnScreen();
         dispose();
     }                                                                         //GEN-LAST:event_cmdOkActionPerformed
     /**
@@ -742,6 +777,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
      */
     private void cmdCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdCancelActionPerformed
         mapPrintListener.cleanUpAndRestoreFeatures();
+        storePreferredPositionOnScreen();
         dispose();
     }                                                                             //GEN-LAST:event_cmdCancelActionPerformed
 
@@ -1162,6 +1198,8 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
             log.error(e);
         }
         // hier kommt evtl. noch ein dispose() hin
+        storePreferredPositionOnScreen();
+        dispose();
     }
 
     /**
