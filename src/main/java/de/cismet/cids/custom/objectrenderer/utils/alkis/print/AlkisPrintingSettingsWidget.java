@@ -21,7 +21,12 @@ import Sirius.server.middleware.types.MetaObject;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 
+import org.openide.util.Exceptions;
+
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import java.net.URL;
 
@@ -31,6 +36,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -73,6 +80,8 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final String ALKIS_LANDPARCEL_TABLE = "ALKIS_LANDPARCEL";
+    private static final String X_POS = "X_POS";
+    private static final String Y_POS = "Y_POS";
 
     //~ Instance fields --------------------------------------------------------
 
@@ -86,6 +95,16 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
     private final DefaultListModel flurstueckListModel;
     private final AlkisPrintListener mapPrintListener;
     private Geometry allLandparcelGeometryUnion;
+    private final ActionListener updatePrintingGeometryAction = new ActionListener() {
+
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                mapPrintListener.refreshPreviewGeometry(
+                    getSelectedProduct(),
+                    allLandparcelGeometryUnion,
+                    chkRotation.isSelected());
+            }
+        };
 
     private AlkisProductDescription defaultProduct = null;
 
@@ -149,7 +168,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         this.mappingComponent = mappingComponent;
         // enable D&D
         new CidsBeanDropTarget(this);
-        // init PrintListener
+        // refreshPreviewGeometry PrintListener
         this.mapPrintListener = new AlkisPrintListener(mappingComponent, this);
         this.mappingComponent.addInputListener(MappingComponent.ALKIS_PRINT, mapPrintListener);
 //        updateFormatProposal();
@@ -165,6 +184,9 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
     @Override
     public void setVisible(final boolean b) {
         flurstueckListModel.clear();
+        cbFormat.removeActionListener(updatePrintingGeometryAction);
+        cbScales.removeActionListener(updatePrintingGeometryAction);
+        chkRotation.removeActionListener(updatePrintingGeometryAction);
         Collection<CidsBean> beansToPrint = getAlkisFlurstueckBeansInMap();
         if (beansToPrint.isEmpty()) {
             beansToPrint = getAlkisFlurstueckBeansFromTreeSelection();
@@ -185,6 +207,20 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
 
         updateFormatProposal();
         syncOkButtonWithListStatus();
+        mapPrintListener.init();
+        mapPrintListener.refreshPreviewGeometry(
+            getSelectedProduct(),
+            allLandparcelGeometryUnion,
+            chkRotation.isSelected());
+        if (b) {
+            cbFormat.addActionListener(updatePrintingGeometryAction);
+            cbScales.addActionListener(updatePrintingGeometryAction);
+            chkRotation.addActionListener(updatePrintingGeometryAction);
+        } else {
+            cbFormat.removeActionListener(updatePrintingGeometryAction);
+            cbScales.removeActionListener(updatePrintingGeometryAction);
+            chkRotation.removeActionListener(updatePrintingGeometryAction);
+        }
         super.setVisible(b);
     }
 
@@ -227,6 +263,33 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         return new DefaultComboBoxModel(typesOrdered.toArray());
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static Dimension getPreferredPositionOnScreen() {
+        final Preferences backingStore = Preferences.userNodeForPackage(AlkisPrintJButton.class);
+        final Dimension ret = new Dimension(-1, -1);
+        final int x = backingStore.getInt(X_POS, -1);
+        final int y = backingStore.getInt(Y_POS, -1);
+        ret.setSize(x, y);
+        return ret;
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void storePreferredPositionOnScreen() {
+        final Preferences backingStore = Preferences.userNodeForPackage(AlkisPrintJButton.class);
+        backingStore.putInt(X_POS, this.getX());
+        backingStore.putInt(Y_POS, this.getY());
+        try {
+            backingStore.flush();
+        } catch (BackingStoreException ex) {
+            log.warn("Error when storing preferres position on screen", ex);
+        }
+    }
     /**
      * DOCUMENT ME!
      *
@@ -361,7 +424,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         cmdCancel = new javax.swing.JButton();
         cmdOk = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setAlwaysOnTop(true);
         setMinimumSize(new java.awt.Dimension(750, 500));
         getContentPane().setLayout(new java.awt.GridBagLayout());
@@ -704,13 +767,8 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
      * @param  evt  DOCUMENT ME!
      */
     private void cmdOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdOkActionPerformed
-        try {
-            final AlkisProductDescription selectedProduct = getSelectedProduct();
-            mapPrintListener.init(selectedProduct, allLandparcelGeometryUnion, chkRotation.isSelected());
-            dispose();
-        } catch (Exception e) {
-            log.error("Fehler beim Verarbeiten der Druckeinstellungen", e);
-        }
+        storePreferredPositionOnScreen();
+        dispose();
     }                                                                         //GEN-LAST:event_cmdOkActionPerformed
     /**
      * DOCUMENT ME!
@@ -718,6 +776,8 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
      * @param  evt  DOCUMENT ME!
      */
     private void cmdCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdCancelActionPerformed
+        mapPrintListener.cleanUpAndRestoreFeatures();
+        storePreferredPositionOnScreen();
         dispose();
     }                                                                             //GEN-LAST:event_cmdCancelActionPerformed
 
@@ -772,8 +832,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
      * @param  evt  DOCUMENT ME!
      */
     private void cbFormatActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbFormatActionPerformed
-        // TODO add your handling code here:
-    } //GEN-LAST:event_cbFormatActionPerformed
+    }                                                                            //GEN-LAST:event_cbFormatActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -1138,6 +1197,9 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
                 AlkisPrintingSettingsWidget.this);
             log.error(e);
         }
+        // hier kommt evtl. noch ein dispose() hin
+        storePreferredPositionOnScreen();
+        dispose();
     }
 
     /**

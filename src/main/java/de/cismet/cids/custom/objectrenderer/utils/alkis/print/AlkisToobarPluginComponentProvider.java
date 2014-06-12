@@ -23,6 +23,10 @@
  */
 package de.cismet.cids.custom.objectrenderer.utils.alkis.print;
 
+import Sirius.navigator.ui.ComponentRegistry;
+
+import java.awt.Dimension;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -111,7 +115,9 @@ final class AlkisPrintJButton extends JButton {
     public AlkisPrintJButton() {
         try {
             this.printWidget = new AlkisPrintingSettingsWidget(false, CismapBroker.getInstance().getMappingComponent());
-            printWidget.setLocationRelativeTo(CismapBroker.getInstance().getMappingComponent());
+//            printWidget.setLocationRelativeTo(CismapBroker.getInstance().getMappingComponent());
+            // printWidget.setLocationRelativeTo(CismapBroker.getInstance().getMappingComponent());
+            printWidget.setLocationRelativeTo(ComponentRegistry.getRegistry().getCatalogueTree());
         } catch (Exception ex) {
             log.fatal(ex, ex);
             throw new RuntimeException(ex);
@@ -125,12 +131,21 @@ final class AlkisPrintJButton extends JButton {
         setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/alkisframeprint.png")));
         setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+
         addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    final Dimension pos = AlkisPrintingSettingsWidget.getPreferredPositionOnScreen();
                     printWidget.pack();
-                    StaticSwingTools.showDialog(printWidget);
+                    final int x = pos.width;
+                    final int y = pos.height;
+                    if ((x == -1) || (y == -1)) {
+                        StaticSwingTools.showDialog(printWidget);
+                    } else {
+                        printWidget.setLocation(x, y);
+                        printWidget.setVisible(true);
+                    }
                 }
             });
     }
