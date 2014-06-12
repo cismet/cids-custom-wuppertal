@@ -285,18 +285,6 @@ public class AlkisPrintListener extends FeatureMoveListener {
         mapFeatureCol.addFeature(printTemplateStyledFeature);
         final PFeature printPFeature = mappingComponent.getPFeatureHM().get(printTemplateStyledFeature);
 
-        printPFeature.addPropertyChangeListener(new PropertyChangeListener() {
-
-                @Override
-                public void propertyChange(final PropertyChangeEvent evt) {
-                    if ("parent".equals(evt.getPropertyName()) && (evt.getNewValue() != null)) {
-//                        gotoPrintAreaWithBuffer();
-//                        mappingComponent.zoomToAFeatureCollection(printFeatureCollection, false, false);
-                    } else if ("visible".equals(evt.getPropertyName()) && (evt.getNewValue() == null)) {
-                        // cleanUpAndRestoreFeatures();
-                    }
-                }
-            });
         gotoPrintAreaWithBuffer();
         mapFeatureCol.select(printTemplateStyledFeature);
         mappingComponent.setHandleInteractionMode(MappingComponent.ROTATE_POLYGON);
