@@ -17,7 +17,6 @@ import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.PrecisionModel;
 import com.vividsolutions.jts.geom.util.AffineTransformation;
 
-import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
 import edu.umd.cs.piccolo.event.PInputEvent;
 
 import java.awt.Color;
@@ -54,7 +53,7 @@ import de.cismet.tools.collections.TypeSafeCollections;
  * @author   stefan
  * @version  $Revision$, $Date$
  */
-public class AlkisPrintListener extends PBasicInputEventHandler {
+public class AlkisPrintListener extends FeatureMoveListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -74,7 +73,7 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
     private final PropertyChangeListener mapInteractionModeListener;
     private final MappingComponent mappingComponent;
     private final Collection<Feature> printFeatureCollection;
-    private final FeatureMoveListener featureMoveListenerDelegate;
+    // private final FeatureMoveListener featureMoveListenerDelegate;
     private final List<Feature> backupFeature;
     private final List<Feature> backupHoldFeature;
     private final AlkisPrintingSettingsWidget printWidget;
@@ -93,12 +92,13 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
      * @param  printWidget       DOCUMENT ME!
      */
     public AlkisPrintListener(final MappingComponent mappingComponent, final AlkisPrintingSettingsWidget printWidget) {
+        super(mappingComponent);
         this.diagonal = 0d;
         this.cleared = true;
         this.printFeatureCollection = TypeSafeCollections.newArrayList(1);
         this.mappingComponent = mappingComponent;
         this.printWidget = printWidget;
-        this.featureMoveListenerDelegate = new FeatureMoveListener(mappingComponent);
+//        this.featureMoveListenerDelegate = new FeatureMoveListener(mappingComponent);
         this.backupFeature = TypeSafeCollections.newArrayList();
         this.backupHoldFeature = TypeSafeCollections.newArrayList();
         this.oldInteractionMode = "PAN";
@@ -133,6 +133,7 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
             mappingComponent.addPropertyChangeListener(mapInteractionModeListener);
         }
         mappingComponent.setInteractionMode(MappingComponent.ALKIS_PRINT);
+
         cleared = false;
         mappingComponent.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         mappingComponent.setPointerAnnotation(PRINTING_TOOLTIP);
@@ -289,7 +290,7 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
                 @Override
                 public void propertyChange(final PropertyChangeEvent evt) {
                     if ("parent".equals(evt.getPropertyName()) && (evt.getNewValue() != null)) {
-                        gotoPrintAreaWithBuffer();
+//                        gotoPrintAreaWithBuffer();
 //                        mappingComponent.zoomToAFeatureCollection(printFeatureCollection, false, false);
                     } else if ("visible".equals(evt.getPropertyName()) && (evt.getNewValue() == null)) {
                         // cleanUpAndRestoreFeatures();
@@ -321,13 +322,6 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
         mappingComponent.gotoBoundingBoxWithHistory(gotoBB);
     }
 
-    @Override
-    public void mouseReleased(final PInputEvent e) {
-        super.mouseReleased(e);
-        featureMoveListenerDelegate.mouseReleased(e);
-//        mappingComponent.zoomToAFeatureCollection(printFeatureCollection, false, false);
-    }
-
     /**
      * DOCUMENT ME!
      *
@@ -347,27 +341,6 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
     }
 
     @Override
-    public void mousePressed(final PInputEvent e) {
-        ensureSelection(e);
-        featureMoveListenerDelegate.mousePressed(e);
-    }
-
-    @Override
-    public void mouseMoved(final PInputEvent event) {
-        // NOP
-    }
-
-    @Override
-    public void mouseDragged(final PInputEvent e) {
-        featureMoveListenerDelegate.mouseDragged(e);
-    }
-
-    @Override
-    public void mouseWheelRotated(final PInputEvent event) {
-        // NOP
-    }
-
-    @Override
     public void mouseClicked(final PInputEvent event) {
         super.mouseClicked(event);
         if ((event.getClickCount() > 1) && event.isLeftMouseButton()) {
@@ -376,6 +349,12 @@ public class AlkisPrintListener extends PBasicInputEventHandler {
             printWidget.downloadProduct(templateCenter, rotationAngle);
             cleanUpAndRestoreFeatures();
         }
+    }
+
+    @Override
+    public void mouseReleased(final PInputEvent e) {
+        super.mouseReleased(e);
+        gotoPrintAreaWithBuffer();
     }
 
     /**
