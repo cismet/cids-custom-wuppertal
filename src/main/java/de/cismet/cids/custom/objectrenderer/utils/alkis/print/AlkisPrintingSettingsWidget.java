@@ -424,7 +424,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         cmdCancel = new javax.swing.JButton();
         cmdOk = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setAlwaysOnTop(true);
         setMinimumSize(new java.awt.Dimension(750, 500));
         getContentPane().setLayout(new java.awt.GridBagLayout());
@@ -767,8 +767,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
      * @param  evt  DOCUMENT ME!
      */
     private void cmdOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdOkActionPerformed
-        storePreferredPositionOnScreen();
-        dispose();
+        super.dispose();
     }                                                                         //GEN-LAST:event_cmdOkActionPerformed
     /**
      * DOCUMENT ME!
@@ -776,11 +775,15 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
      * @param  evt  DOCUMENT ME!
      */
     private void cmdCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdCancelActionPerformed
-        mapPrintListener.cleanUpAndRestoreFeatures();
-        storePreferredPositionOnScreen();
         dispose();
     }                                                                             //GEN-LAST:event_cmdCancelActionPerformed
 
+    @Override
+    public void dispose() {
+        mapPrintListener.cleanUpAndRestoreFeatures();
+        storePreferredPositionOnScreen();
+        super.dispose();
+    }
     /**
      * DOCUMENT ME!
      *
@@ -1198,7 +1201,6 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
             log.error(e);
         }
         // hier kommt evtl. noch ein dispose() hin
-        storePreferredPositionOnScreen();
         dispose();
     }
 

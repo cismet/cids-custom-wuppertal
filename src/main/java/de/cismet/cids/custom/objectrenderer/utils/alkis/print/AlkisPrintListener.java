@@ -351,10 +351,12 @@ public class AlkisPrintListener extends FeatureMoveListener {
     public void cleanUpAndRestoreFeatures() {
         if (!cleared) {
             mappingComponent.removePropertyChangeListener(mapInteractionModeListener);
-            final FeatureCollection mapFeatureCollection = mappingComponent.getFeatureCollection();
-            mapFeatureCollection.unholdFeature(printTemplateStyledFeature);
-            mapFeatureCollection.removeFeature(printTemplateStyledFeature);
-            printTemplateStyledFeature = null;
+            if (printTemplateStyledFeature != null) {
+                final FeatureCollection mapFeatureCollection = mappingComponent.getFeatureCollection();
+                mapFeatureCollection.unholdFeature(printTemplateStyledFeature);
+                mapFeatureCollection.removeFeature(printTemplateStyledFeature);
+                printTemplateStyledFeature = null;
+            }
             if (MappingComponent.ALKIS_PRINT.equals(mappingComponent.getInteractionMode())) {
                 mappingComponent.setInteractionMode(oldInteractionMode);
             }

@@ -2,7 +2,7 @@
 
 <Form version="1.4" maxVersion="1.4" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
   <Properties>
-    <Property name="defaultCloseOperation" type="int" value="0"/>
+    <Property name="defaultCloseOperation" type="int" value="2"/>
     <Property name="alwaysOnTop" type="boolean" value="true"/>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
       <Dimension value="[750, 500]"/>
