@@ -40,18 +40,19 @@ public class AlkisPrintingToolTip extends PNode {
      */
     public AlkisPrintingToolTip(final Color backgroundColor) {
         final PImage image = new PImage(new javax.swing.ImageIcon(
-                    getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/alkis/frameprint64.png")).getImage());
+                    getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/alkis/frameprint64.png")).getImage()); // NOI18N
         image.setOffset(10, 10);
-        final PText t1 = new PText("Heading");
+        final PText t1 = new PText(java.util.ResourceBundle.getBundle(
+                    "PrintingTooltipBundle").getString("HEADING"));
         final Font defaultFont = t1.getFont();
         final Font boldDefaultFont = new Font(defaultFont.getName(),
                 defaultFont.getStyle()
                         + Font.BOLD,
                 defaultFont.getSize());
         t1.setFont(boldDefaultFont);
-        final PText t2 = new PText("-Anweisung 1");
-        final PText t3 = new PText("-Anweisung 2");
-        final PText t4 = new PText("-Anweisung 3");
+        final PText t2 = new PText(java.util.ResourceBundle.getBundle("PrintingTooltipBundle").getString("TEXT1"));
+        final PText t3 = new PText(java.util.ResourceBundle.getBundle("PrintingTooltipBundle").getString("TEXT2"));
+        final PText t4 = new PText(java.util.ResourceBundle.getBundle("PrintingTooltipBundle").getString("TEXT3"));
         final double textHeight = t1.getHeight() + 5 + t2.getHeight() + 5 + t3.getHeight() + 5 + t4.getHeight();
         final double textWidth = Math.max(Math.max(t1.getWidth(), t2.getWidth()),
                 Math.max(t3.getWidth(), t4.getWidth()));
