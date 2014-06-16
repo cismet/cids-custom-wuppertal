@@ -15,6 +15,7 @@ import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.Icon;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -127,9 +128,9 @@ public class RendererTools {
         cb.getEditor().getEditorComponent().setBackground(backgroundColor);
         cb.getEditor().getEditorComponent().setForeground(foregroundColor);
         final Component[] comps = cb.getComponents();
-        for (int i = 0; i < comps.length; i++) { // hack valid only for Metal L&F
-            if (comps[i] instanceof MetalComboBoxButton) {
-                final MetalComboBoxButton coloredArrowsButton = (MetalComboBoxButton)comps[i];
+        for (int i = 0; i < comps.length; i++) {
+            if (comps[i] instanceof JButton) {
+                final JButton coloredArrowsButton = (JButton)comps[i];
                 coloredArrowsButton.setBackground(null);
                 coloredArrowsButton.setForeground(null);
                 break;
