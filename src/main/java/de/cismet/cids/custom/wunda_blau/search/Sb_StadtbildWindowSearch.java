@@ -20,6 +20,7 @@ import Sirius.navigator.search.dynamic.SearchControlPanel;
 
 import Sirius.server.middleware.types.LightweightMetaObject;
 import Sirius.server.middleware.types.MetaClass;
+import Sirius.server.middleware.types.MetaObject;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -43,7 +44,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.regex.Pattern;
 
 import javax.swing.Box;
 import javax.swing.DefaultListModel;
@@ -58,6 +58,7 @@ import javax.swing.SwingWorker;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
+import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.wunda_blau.Sb_stadtbildserieEditor;
 import de.cismet.cids.custom.objecteditors.wunda_blau.Sb_stadtbildserieEditorAddSuchwortDialog;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
@@ -66,8 +67,6 @@ import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 import de.cismet.cids.custom.wunda_blau.search.server.MetaObjectNodesStadtbildSerieSearchStatement;
 
 import de.cismet.cids.dynamics.CidsBean;
-
-import de.cismet.cids.editors.FastBindableReferenceCombo;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
@@ -101,7 +100,6 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             Sb_StadtbildWindowSearch.class);
     private static final String ACTION_TAG = "custom.stadtbilder.search@WUNDA_BLAU";
-    private static final Pattern ONLY_DIGITS_INTEGER_PATTERN = Pattern.compile("\\d+");
 
     //~ Instance fields --------------------------------------------------------
 
@@ -501,6 +499,13 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         pnlStrassenzuordnung.add(lblStrasse, gridBagConstraints);
 
         cboStreet.setEditable(true);
+        cboStreet.addItemListener(new java.awt.event.ItemListener() {
+
+                @Override
+                public void itemStateChanged(final java.awt.event.ItemEvent evt) {
+                    cboStreetItemStateChanged(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -716,24 +721,18 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         Object selectedItem = cboOrt.getSelectedItem();
         if (selectedItem instanceof LightweightMetaObject) {
             selectedItem = ((LightweightMetaObject)selectedItem).getBean();
-        }
-
-        if ((selectedItem != null) && selectedItem.equals(Sb_stadtbildUtils.getWUPPERTAL())) {
-            // inside of Wuppertal
-            cboStreet.setEnabled(true);
-            lblStrasse.setEnabled(true);
-            txtHausnummer.setEnabled(true);
-            lblHausnummer.setEnabled(true);
+            checkIfPlaceInsideWuppertal((CidsBean)selectedItem);
+            RendererTools.showNormalState(cboOrt);
+        } else if (selectedItem instanceof CidsBean) {
+            checkIfPlaceInsideWuppertal((CidsBean)selectedItem);
+            RendererTools.showNormalState(cboOrt);
+        } else if (selectedItem == null) {
+            checkIfPlaceInsideWuppertal(null);
+            RendererTools.showNormalState(cboOrt);
         } else {
-            // outside of Wuppertal
-            cboStreet.setEnabled(false);
-            cboStreet.setSelectedItem(null);
-            lblStrasse.setEnabled(false);
-            txtHausnummer.setEnabled(false);
-            txtHausnummer.setText("");
-            lblHausnummer.setEnabled(false);
+            RendererTools.showErrorState(cboOrt);
         }
-    } //GEN-LAST:event_cboOrtItemStateChanged
+    }                                                                         //GEN-LAST:event_cboOrtItemStateChanged
 
     /**
      * DOCUMENT ME!
@@ -755,6 +754,42 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         cbMapSearch.setSelected(false);
     }                                                                                //GEN-LAST:event_btnNewSearchActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cboStreetItemStateChanged(final java.awt.event.ItemEvent evt) { //GEN-FIRST:event_cboStreetItemStateChanged
+        final Object selectedItem = cboStreet.getSelectedItem();
+        if ((selectedItem == null) || (selectedItem instanceof CidsBean) || (selectedItem instanceof MetaObject)) {
+            RendererTools.showNormalState(cboStreet);
+        } else {
+            RendererTools.showErrorState(cboStreet);
+        }
+    }                                                                            //GEN-LAST:event_cboStreetItemStateChanged
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  place  DOCUMENT ME!
+     */
+    private void checkIfPlaceInsideWuppertal(final CidsBean place) {
+        if ((place != null) && place.equals(Sb_stadtbildUtils.getWUPPERTAL())) {
+            // inside of Wuppertal
+            cboStreet.setEnabled(true);
+            lblStrasse.setEnabled(true);
+            txtHausnummer.setEnabled(true);
+            lblHausnummer.setEnabled(true);
+        } else {
+            // outside of Wuppertal
+            cboStreet.setEnabled(false);
+            cboStreet.setSelectedItem(null);
+            lblStrasse.setEnabled(false);
+            txtHausnummer.setEnabled(false);
+            txtHausnummer.setText("");
+            lblHausnummer.setEnabled(false);
+        }
+    }
     /**
      * DOCUMENT ME!
      *
