@@ -730,6 +730,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             checkIfPlaceInsideWuppertal(null);
             RendererTools.showNormalState(cboOrt);
         } else {
+            checkIfPlaceInsideWuppertal(null);
             RendererTools.showErrorState(cboOrt);
         }
     }                                                                         //GEN-LAST:event_cboOrtItemStateChanged
@@ -847,14 +848,12 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         try {
             setBildnummerInSearch(stadtbildSerieSearchStatement);
         } catch (NotAValidIntervalException ex) {
-            JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+            showErrorDialog(NbBundle.getMessage(
+                    Sb_StadtbildWindowSearch.class,
+                    "Sb_StadtbildWindowSearch.getServerSearch().dialog.bildnummer.title"),
                 NbBundle.getMessage(
                     Sb_StadtbildWindowSearch.class,
-                    "Sb_StadtbildWindowSearch.getServerSearch().dialog.message"),
-                NbBundle.getMessage(
-                    Sb_StadtbildWindowSearch.class,
-                    "Sb_StadtbildWindowSearch.getServerSearch().dialog.title"),
-                JOptionPane.ERROR_MESSAGE);
+                    "Sb_StadtbildWindowSearch.getServerSearch().dialog.bildnummer.message"));
             return null;
         }
 
@@ -884,10 +883,19 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
 
         CidsBean strasse = null;
         final Object selectedStreet = cboStreet.getSelectedItem();
+        // the street must be a CidsBean, LightweightMetaObject or null
         if (selectedStreet instanceof CidsBean) {
             strasse = (CidsBean)selectedStreet;
         } else if (selectedStreet instanceof LightweightMetaObject) {
             strasse = ((LightweightMetaObject)selectedStreet).getBean();
+        } else if (selectedStreet != null) {
+            showErrorDialog(NbBundle.getMessage(
+                    Sb_StadtbildWindowSearch.class,
+                    "Sb_StadtbildWindowSearch.getServerSearch().dialog.strasse.title"),
+                NbBundle.getMessage(
+                    Sb_StadtbildWindowSearch.class,
+                    "Sb_StadtbildWindowSearch.getServerSearch().dialog.strasse.message"));
+            return null;
         }
         if (strasse != null) {
             stadtbildSerieSearchStatement.setStreetID(strasse.getPrimaryKeyValue().toString());
@@ -895,10 +903,19 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
 
         CidsBean ort = null;
         final Object selectOrt = cboOrt.getSelectedItem();
+        // the ort must be a CidsBean, LightweightMetaObject or null
         if (selectOrt instanceof CidsBean) {
             ort = (CidsBean)selectOrt;
         } else if (selectOrt instanceof LightweightMetaObject) {
             ort = ((LightweightMetaObject)selectOrt).getBean();
+        } else if (selectOrt != null) {
+            showErrorDialog(NbBundle.getMessage(
+                    Sb_StadtbildWindowSearch.class,
+                    "Sb_StadtbildWindowSearch.getServerSearch().dialog.ort.title"),
+                NbBundle.getMessage(
+                    Sb_StadtbildWindowSearch.class,
+                    "Sb_StadtbildWindowSearch.getServerSearch().dialog.ort.message"));
+            return null;
         }
 
         if (ort != null) {
@@ -929,6 +946,19 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         stadtbildSerieSearchStatement.setGeometryToSearchFor(transformedBoundingBox);
 
         return stadtbildSerieSearchStatement;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  title    DOCUMENT ME!
+     * @param  message  DOCUMENT ME!
+     */
+    private void showErrorDialog(final String title, final String message) {
+        JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+            message,
+            title,
+            JOptionPane.ERROR_MESSAGE);
     }
 
     /**
