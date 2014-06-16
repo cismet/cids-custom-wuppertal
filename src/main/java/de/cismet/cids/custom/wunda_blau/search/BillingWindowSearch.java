@@ -22,10 +22,11 @@ import Sirius.server.middleware.types.MetaObject;
 
 import org.apache.log4j.Logger;
 
-import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 import java.awt.Dimension;
+
+import java.net.URL;
 
 import java.util.Date;
 
@@ -64,7 +65,7 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
     //~ Instance fields --------------------------------------------------------
 
     private SearchControlPanel pnlSearchCancel;
-
+    private ImageIcon icon;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox cboAbgerechnet;
     private javax.swing.JComboBox cboAbrechnungsturnus;
@@ -106,6 +107,17 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
             initComponents();
             setAbrechnungsturnusIntoComboBox();
             setUsersIntoComboBox();
+
+            URL urlToIcon = getClass().getResource("/de/cismet/cids/custom/wunda_blau/search/billing_search.png");
+            if (urlToIcon == null) {
+                urlToIcon = getClass().getResource("/de/cismet/cids/custom/wunda_blau/search/search.png");
+            }
+
+            if (urlToIcon != null) {
+                icon = new ImageIcon(urlToIcon);
+            } else {
+                icon = new ImageIcon(new byte[] {});
+            }
 
             pnlSearchCancel = new SearchControlPanel(this);
             final Dimension max = pnlSearchCancel.getMaximumSize();
@@ -614,7 +626,7 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
 
     @Override
     public ImageIcon getIcon() {
-        return null;
+        return icon;
     }
 
     @Override
