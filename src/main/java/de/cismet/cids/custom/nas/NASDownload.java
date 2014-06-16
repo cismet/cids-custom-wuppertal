@@ -1,10 +1,12 @@
-/***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+/**
+ * *************************************************
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ * 
+* ... and it just works.
+ * 
+***************************************************
+ */
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -17,7 +19,6 @@ import Sirius.navigator.exception.ConnectionException;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.GeometryCollection;
 
-import org.openide.util.Cancellable;
 import org.openide.util.NbBundle;
 
 import java.io.File;
@@ -36,24 +37,22 @@ import de.cismet.cids.custom.utils.nas.NasProductTemplate;
 import de.cismet.cids.custom.wunda_blau.search.actions.NasDataQueryAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
-
-import de.cismet.tools.gui.downloadmanager.AbstractDownload;
+import de.cismet.tools.gui.downloadmanager.AbstractCancellableDownload;
 
 /**
  * DOCUMENT ME!
  *
- * @author   daniel
- * @version  $Revision$, $Date$
+ * @author daniel
+ * @version $Revision$, $Date$
  */
-public class NASDownload extends AbstractDownload implements Cancellable {
+public class NASDownload extends AbstractCancellableDownload {
 
     //~ Static fields/initializers ---------------------------------------------
-
     private static String SEVER_ACTION = "nasDataQuery";
     private static String XML_EXTENSION = ".xml";
     private static String ZIP_EXTENSION = ".zip";
     private static final String BASE_TITLE;
-
+    
     static {
         BASE_TITLE = NbBundle.getMessage(
                 NASDownload.class,
@@ -61,21 +60,18 @@ public class NASDownload extends AbstractDownload implements Cancellable {
     }
 
     //~ Enums ------------------------------------------------------------------
-
     /**
      * DOCUMENT ME!
      *
-     * @version  $Revision$, $Date$
+     * @version $Revision$, $Date$
      */
     private enum Phase {
 
         //~ Enum constants -----------------------------------------------------
-
         REQEUST_GEN, RETRIEVAL, DOWNLOAD, DONE
     }
 
     //~ Instance fields --------------------------------------------------------
-
     protected String filename = null;
     private Future<ByteArrayWrapper> pollingFuture;
     private NasProductTemplate template;
@@ -86,13 +82,12 @@ public class NASDownload extends AbstractDownload implements Cancellable {
     private String requestId;
 
     //~ Constructors -----------------------------------------------------------
-
     /**
      * Creates a new NASDownload object.
      *
-     * @param  orderId     DOCUMENT ME!
-     * @param  isSplitted  DOCUMENT ME!
-     * @param  requestId   DOCUMENT ME!
+     * @param orderId DOCUMENT ME!
+     * @param isSplitted DOCUMENT ME!
+     * @param requestId DOCUMENT ME!
      */
     public NASDownload(final String orderId, final boolean isSplitted, final String requestId) {
         omitSendingRequest = true;
@@ -120,12 +115,12 @@ public class NASDownload extends AbstractDownload implements Cancellable {
     /**
      * Creates a new NASDownload object.
      *
-     * @param  title      DOCUMENT ME!
-     * @param  filename   DOCUMENT ME!
-     * @param  directory  DOCUMENT ME!
-     * @param  requestId  DOCUMENT ME!
-     * @param  template   DOCUMENT ME!
-     * @param  g          DOCUMENT ME!
+     * @param title DOCUMENT ME!
+     * @param filename DOCUMENT ME!
+     * @param directory DOCUMENT ME!
+     * @param requestId DOCUMENT ME!
+     * @param template DOCUMENT ME!
+     * @param g DOCUMENT ME!
      */
 // public NASDownload(final String title,
 // final String directory,
@@ -142,12 +137,12 @@ public class NASDownload extends AbstractDownload implements Cancellable {
     /**
      * Creates a new NASDownload object.
      *
-     * @param  title      DOCUMENT ME!
-     * @param  filename   DOCUMENT ME!
-     * @param  directory  DOCUMENT ME!
-     * @param  requestId  DOCUMENT ME!
-     * @param  template   DOCUMENT ME!
-     * @param  g          DOCUMENT ME!
+     * @param title DOCUMENT ME!
+     * @param filename DOCUMENT ME!
+     * @param directory DOCUMENT ME!
+     * @param requestId DOCUMENT ME!
+     * @param template DOCUMENT ME!
+     * @param g DOCUMENT ME!
      */
     public NASDownload(final String title,
             final String filename,
@@ -183,19 +178,18 @@ public class NASDownload extends AbstractDownload implements Cancellable {
     }
 
     //~ Methods ----------------------------------------------------------------
-
     /**
      * DOCUMENT ME!
      *
-     * @param   geoms  DOCUMENT ME!
+     * @param geoms DOCUMENT ME!
      *
-     * @return  DOCUMENT ME!
+     * @return DOCUMENT ME!
      */
     private boolean isOrderSplitted(final GeometryCollection geoms) {
         final Envelope env = geoms.getEnvelopeInternal();
         final double xSize = env.getMaxX() - env.getMinX();
         final double ySize = env.getMaxY() - env.getMinY();
-
+        
         if ((xSize > 500) && (ySize > 500)) {
             return true;
         }
@@ -209,161 +203,171 @@ public class NASDownload extends AbstractDownload implements Cancellable {
         status = State.ABORTED;
         stateChanged();
     }
-
+    
     @Override
     public boolean cancel() {
         boolean cancelled = true;
+        boolean isDone = false;
         if (downloadFuture != null) {
+            isDone = downloadFuture.isDone();
             cancelled = downloadFuture.cancel(true);
         }
         if (pollingFuture != null) {
             pollingFuture.cancel(true);
         }
-        if (cancelled) {
+        if (cancelled || isDone) {
             status = State.ABORTED;
             stateChanged();
         }
-
+        
         return downloadFuture.isCancelled();
     }
-
+    
     @Override
     public void run() {
-        if (status != State.WAITING) {
-            return;
-        }
-        /*
-         * Phase 1: sending the reqeust to the server
-         */
-        setTitleForPhase(Phase.REQEUST_GEN);
-        titleChanged();
-        status = State.RUNNING;
-        stateChanged();
-        if (!omitSendingRequest) {
-            if (!downloadFuture.isCancelled()) {
-                if (log.isDebugEnabled()) {
-                    log.debug("NAS Download: sending request to server");
-                }
-                orderId = sendNasRequest();
-            } else {
-                doCancellationHandling(false, false);
-                return;
-            }
-            if (orderId == null) {
-                log.error("nas server request returned no orderId, cannot continue with NAS download");
-                this.status = State.COMPLETED_WITH_ERROR;
-                stateChanged();
-                return;
-            }
-            if ((filename == null) && (requestId != null)) {
-//                filename = orderId;
-                filename = requestId;
-            }
-        }
-
-        if (!downloadFuture.isCancelled()) {
-            setTitleForPhase(Phase.RETRIEVAL);
-            titleChanged();
-        }
-
-        /*
-         * Phase 2: retrive the result from the cids server
-         */
-        if (log.isDebugEnabled()) {
-            log.debug("NAS Download: Request correctly sended start polling the result from server (max 1 hour)");
-        }
-        final ExecutorService executor = Executors.newSingleThreadExecutor();
-        if (!downloadFuture.isCancelled()) {
-            pollingFuture = executor.submit(new ServerPollingRunnable());
-        } else {
-            doCancellationHandling(true, false);
-            return;
-        }
         try {
-            if (!downloadFuture.isCancelled() && (pollingFuture != null)) {
-                content = pollingFuture.get(1, TimeUnit.HOURS).getByteArray();
-                if (log.isDebugEnabled()) {
-                    log.debug("NAS Download: Polling is finished.");
-                }
-            } else {
-                doCancellationHandling(true, true);
+            if (status != State.WAITING) {
                 return;
             }
-        } catch (InterruptedException ex) {
-            doCancellationHandling(true, true);
-            Thread.currentThread().interrupt();
-            error(ex);
-            return;
-        } catch (ExecutionException ex) {
-            log.warn("could not execute nas download", ex);
-            error(ex);
-        } catch (TimeoutException ex) {
-            log.error("the maximum timeout for butler download is exceeded", ex);
-            error(new TimeoutException(
-                    org.openide.util.NbBundle.getMessage(NASDownload.class, "NASDownload.timeoutErrorMessage")));
-        }
-
-        if (!downloadFuture.isCancelled()) {
-            setTitleForPhase(Phase.DOWNLOAD);
+            /*
+             * Phase 1: sending the reqeust to the server
+             */
+            setTitleForPhase(Phase.REQEUST_GEN);
             titleChanged();
-        }
-
-        if ((content == null) || (content.length <= 0)) {
-            log.info("NAS Download: Downloaded content seems to be empty..");
-
-            if ((status == State.RUNNING) && !Thread.interrupted()) {
-                status = State.COMPLETED_WITH_ERROR;
-                stateChanged();
-            }
-            return;
-        }
-        /*
-         * Phase 3: save the result file
-         */
-        FileOutputStream out = null;
-        try {
-            if (!downloadFuture.isCancelled()) {
-                if (log.isDebugEnabled()) {
-                    log.debug("NAS Download: Start writing the result to file");
-                }
-                out = new FileOutputStream(fileToSaveTo);
-                out.write(content);
-            } else {
-                doCancellationHandling(false, false);
-                return;
-            }
-        } catch (final IOException ex) {
-            log.error("Couldn't write downloaded content to file '" + fileToSaveTo + "'.", ex);
-            error(ex);
-            return;
-        } catch (final Exception ex) {
-            log.error("Couldn't write downloaded content to file '" + fileToSaveTo + "'.", ex);
-            error(ex);
-        } finally {
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (Exception e) {
-                    log.error("Couldn't write downloaded content to file '" + fileToSaveTo + "'.", e);
-                    error(e);
-                }
-            }
-        }
-        if (log.isDebugEnabled()) {
-            log.debug("NAS Download: done.");
-        }
-        if (!downloadFuture.isCancelled()) {
-            setTitleForPhase(Phase.DONE);
-            status = State.COMPLETED;
+            status = State.RUNNING;
             stateChanged();
+            if (!omitSendingRequest) {
+                if (!downloadFuture.isCancelled()) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("NAS Download: sending request to server");
+                    }
+                    orderId = sendNasRequest();
+                } else {
+                    doCancellationHandling(false, false);
+                    return;
+                }
+                if (orderId == null) {
+                    log.error("nas server request returned no orderId, cannot continue with NAS download");
+                    this.status = State.COMPLETED_WITH_ERROR;
+                    stateChanged();
+                    return;
+                }
+                if ((filename == null) && (requestId != null)) {
+//                filename = orderId;
+                    filename = requestId;
+                }
+            }
+            
+            if (!downloadFuture.isCancelled()) {
+                setTitleForPhase(Phase.RETRIEVAL);
+                titleChanged();
+            }
+
+            /*
+             * Phase 2: retrive the result from the cids server
+             */
+            if (log.isDebugEnabled()) {
+                log.debug("NAS Download: Request correctly sended start polling the result from server (max 1 hour)");
+            }
+            final ExecutorService executor = Executors.newSingleThreadExecutor();
+            if (!downloadFuture.isCancelled()) {
+                pollingFuture = executor.submit(new ServerPollingRunnable());
+            } else {
+                doCancellationHandling(true, false);
+                return;
+            }
+            try {
+                if (!downloadFuture.isCancelled() && (pollingFuture != null)) {
+                    content = pollingFuture.get(1, TimeUnit.HOURS).getByteArray();
+                    if (log.isDebugEnabled()) {
+                        log.debug("NAS Download: Polling is finished.");
+                    }
+                } else {
+                    doCancellationHandling(true, true);
+                    return;
+                }
+            } catch (InterruptedException ex) {
+                log.error("The polling thread was interrupted.", ex);
+                doCancellationHandling(true, true);
+                Thread.currentThread().interrupt();
+                error(ex);
+            } catch (ExecutionException ex) {
+                log.warn("could not execute nas download", ex);
+                error(ex);
+            } catch (TimeoutException ex) {
+                log.error("the maximum timeout for butler download is exceeded", ex);
+                error(new TimeoutException(
+                        org.openide.util.NbBundle.getMessage(NASDownload.class, "NASDownload.timeoutErrorMessage")));
+            } catch (Exception ex) {
+                log.error("Exception during waiting / polling on NAS Result", ex);
+                error(ex);
+            }
+            
+            if (!downloadFuture.isCancelled()) {
+                setTitleForPhase(Phase.DOWNLOAD);
+                titleChanged();
+            }
+            
+            if ((content == null) || (content.length <= 0)) {
+                log.info("NAS Download: Downloaded content seems to be empty..");
+                
+                if ((status == State.RUNNING) && !Thread.interrupted()) {
+                    status = State.COMPLETED_WITH_ERROR;
+                    stateChanged();
+                }
+                return;
+            }
+            /*
+             * Phase 3: save the result file
+             */
+            FileOutputStream out = null;
+            try {
+                if (!downloadFuture.isCancelled()) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("NAS Download: Start writing the result to file");
+                    }
+                    out = new FileOutputStream(fileToSaveTo);
+                    out.write(content);
+                } else {
+                    doCancellationHandling(false, false);
+                    return;
+                }
+            } catch (final IOException ex) {
+                log.error("Couldn't write downloaded content to file '" + fileToSaveTo + "'.", ex);
+                error(ex);
+                return;
+            } catch (final Exception ex) {
+                log.error("Couldn't write downloaded content to file '" + fileToSaveTo + "'.", ex);
+                error(ex);
+            } finally {
+                if (out != null) {
+                    try {
+                        out.close();
+                    } catch (Exception e) {
+                        log.error("Couldn't write downloaded content to file '" + fileToSaveTo + "'.", e);
+                        error(e);
+                    }
+                }
+            }
+            if (log.isDebugEnabled()) {
+                log.debug("NAS Download: done.");
+            }
+            if (!downloadFuture.isCancelled()) {
+                setTitleForPhase(Phase.DONE);
+                status = State.COMPLETED;
+                stateChanged();
+            }
+        } catch (Exception ex) {
+            log.error("Exception during NASDownload " + NASDownload.this.filename, ex);
+            error(ex);
         }
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param  cancelServerRequest  DOCUMENT ME!
-     * @param  cancelPollingThread  DOCUMENT ME!
+     * @param cancelServerRequest DOCUMENT ME!
+     * @param cancelPollingThread DOCUMENT ME!
      */
     private void doCancellationHandling(final boolean cancelServerRequest, final boolean cancelPollingThread) {
         log.warn("NAS Download was interuppted");
@@ -380,7 +384,7 @@ public class NASDownload extends AbstractDownload implements Cancellable {
     /**
      * DOCUMENT ME!
      *
-     * @param  p  DOCUMENT ME!
+     * @param p DOCUMENT ME!
      */
     private void setTitleForPhase(final Phase p) {
         String appendix = "";
@@ -400,35 +404,35 @@ public class NASDownload extends AbstractDownload implements Cancellable {
     /**
      * DOCUMENT ME!
      *
-     * @return  DOCUMENT ME!
+     * @return DOCUMENT ME!
      */
     private String sendNasRequest() {
         final ServerActionParameter paramTemplate = new ServerActionParameter(NasDataQueryAction.PARAMETER_TYPE.TEMPLATE
-                        .toString(),
+                .toString(),
                 template);
         final ServerActionParameter paramGeom = new ServerActionParameter(
                 NasDataQueryAction.PARAMETER_TYPE.GEOMETRY_COLLECTION.toString(),
                 geometries);
         final ServerActionParameter paramMethod = new ServerActionParameter(NasDataQueryAction.PARAMETER_TYPE.METHOD
-                        .toString(),
+                .toString(),
                 NasDataQueryAction.METHOD_TYPE.ADD);
         final ServerActionParameter paramRequest = new ServerActionParameter(
                 NasDataQueryAction.PARAMETER_TYPE.REQUEST_ID.toString(),
                 requestId);
         try {
-            return (String)SessionManager.getProxy()
-                        .executeTask(
-                                SEVER_ACTION,
-                                "WUNDA_BLAU",
-                                null,
-                                paramTemplate,
-                                paramGeom,
-                                paramRequest,
-                                paramMethod);
+            return (String) SessionManager.getProxy()
+                    .executeTask(
+                            SEVER_ACTION,
+                            "WUNDA_BLAU",
+                            null,
+                            paramTemplate,
+                            paramGeom,
+                            paramRequest,
+                            paramMethod);
         } catch (Exception ex) {
             log.error("error during enqueuing nas server request", ex);
         }
-
+        
         return null;
     }
 
@@ -437,18 +441,18 @@ public class NASDownload extends AbstractDownload implements Cancellable {
      */
     private void cancelNasRequest() {
         final ServerActionParameter paramOrderId = new ServerActionParameter(NasDataQueryAction.PARAMETER_TYPE.ORDER_ID
-                        .toString(),
+                .toString(),
                 orderId);
         final ServerActionParameter paramMethod = new ServerActionParameter(NasDataQueryAction.PARAMETER_TYPE.METHOD
-                        .toString(),
+                .toString(),
                 NasDataQueryAction.METHOD_TYPE.CANCEL);
         try {
             SessionManager.getProxy().executeTask(
-                SEVER_ACTION,
-                "WUNDA_BLAU",
-                null,
-                paramOrderId,
-                paramMethod);
+                    SEVER_ACTION,
+                    "WUNDA_BLAU",
+                    null,
+                    paramOrderId,
+                    paramMethod);
         } catch (Exception ex) {
             log.error("error during enqueuing nas server request", ex);
         }
@@ -464,22 +468,20 @@ public class NASDownload extends AbstractDownload implements Cancellable {
     }
 
     //~ Inner Classes ----------------------------------------------------------
-
     /**
      * DOCUMENT ME!
      *
-     * @version  $Revision$, $Date$
+     * @version $Revision$, $Date$
      */
     private class ServerPollingRunnable implements Callable<ByteArrayWrapper> {
 
         //~ Methods ------------------------------------------------------------
-
         @Override
         public ByteArrayWrapper call() {
             final ServerActionParameter paramMethod = new ServerActionParameter(NasDataQueryAction.PARAMETER_TYPE.METHOD
-                            .toString(),
+                    .toString(),
                     NasDataQueryAction.METHOD_TYPE.GET);
-
+            
             final ServerActionParameter paramOrderId = new ServerActionParameter(
                     NasDataQueryAction.PARAMETER_TYPE.ORDER_ID.toString(),
                     orderId);
@@ -490,13 +492,13 @@ public class NASDownload extends AbstractDownload implements Cancellable {
                     return null;
                 }
                 try {
-                    result = (byte[])SessionManager.getProxy()
-                                .executeTask(
-                                        SEVER_ACTION,
-                                        "WUNDA_BLAU",
-                                        null,
-                                        paramOrderId,
-                                        paramMethod);
+                    result = (byte[]) SessionManager.getProxy()
+                            .executeTask(
+                                    SEVER_ACTION,
+                                    "WUNDA_BLAU",
+                                    null,
+                                    paramOrderId,
+                                    paramMethod);
                 } catch (ConnectionException ex) {
                     log.error("error during pulling nas result from server", ex);
                 }
@@ -521,31 +523,28 @@ public class NASDownload extends AbstractDownload implements Cancellable {
     /**
      * DOCUMENT ME!
      *
-     * @version  $Revision$, $Date$
+     * @version $Revision$, $Date$
      */
     private class ByteArrayWrapper {
 
         //~ Instance fields ----------------------------------------------------
-
         private byte[] byteArray;
 
         //~ Constructors -------------------------------------------------------
-
         /**
          * Creates a new ByteArrayWrapper object.
          *
-         * @param  ba  DOCUMENT ME!
+         * @param ba DOCUMENT ME!
          */
         private ByteArrayWrapper(final byte[] ba) {
             byteArray = ba;
         }
 
         //~ Methods ------------------------------------------------------------
-
         /**
          * DOCUMENT ME!
          *
-         * @return  DOCUMENT ME!
+         * @return DOCUMENT ME!
          */
         public byte[] getByteArray() {
             return byteArray;
@@ -554,7 +553,7 @@ public class NASDownload extends AbstractDownload implements Cancellable {
         /**
          * DOCUMENT ME!
          *
-         * @param  b  DOCUMENT ME!
+         * @param b DOCUMENT ME!
          */
         public void setByteArray(final byte[] b) {
             this.byteArray = b;
