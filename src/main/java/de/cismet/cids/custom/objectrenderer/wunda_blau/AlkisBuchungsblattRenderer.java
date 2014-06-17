@@ -1884,7 +1884,9 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      */
     @Override
     public void dispose() {
-        landparcel3AListBinding.unbind();
+        if (landparcel3AListBinding.isBound()) {
+            landparcel3AListBinding.unbind();
+        }
         if (!continueInBackground) {
             AlkisSOAPWorkerService.cancel(retrieveWorker);
             setWaiting(false);
