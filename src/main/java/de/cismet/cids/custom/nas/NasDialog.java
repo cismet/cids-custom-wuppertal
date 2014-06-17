@@ -630,8 +630,10 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                                         null,
                                         goupAmounts)) {
                             doDownload(requestId, template);
-                            dispose();
+                        } else {
+                            log.error("do billing returns false. can not start download");
                         }
+                        dispose();
                     } catch (Exception ex) {
                         log.error(ex, ex);
                     }
