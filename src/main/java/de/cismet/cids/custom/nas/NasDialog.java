@@ -633,7 +633,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                             dispose();
                         }
                     } catch (Exception ex) {
-                        Exceptions.printStackTrace(ex);
+                        log.error(ex, ex);
                     }
                 }
             });
