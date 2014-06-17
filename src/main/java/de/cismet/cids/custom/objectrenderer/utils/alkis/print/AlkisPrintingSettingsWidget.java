@@ -290,6 +290,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
             log.warn("Error when storing preferres position on screen", ex);
         }
     }
+
     /**
      * DOCUMENT ME!
      *
@@ -784,6 +785,7 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
         storePreferredPositionOnScreen();
         super.dispose();
     }
+
     /**
      * DOCUMENT ME!
      *
@@ -858,32 +860,79 @@ public class AlkisPrintingSettingsWidget extends javax.swing.JDialog implements 
     }
 
     /**
-     * private boolean doCurrentLandparcelsFitNordedToSelectedFormatAndScale() { BoundingBox allGeomBB = new
-     * BoundingBox(allLandparcelGeometryUnion); return doesBoundingBoxFitIntoLayout(allGeomBB, (ProduktLayout)
-     * cbFormat.getSelectedItem(), (Integer) cbScales.getSelectedItem()); }.
+     * DOCUMENT ME!
+     *
+     * @param   defaultScale  DOCUMENT ME!
+     * @param   allGeomBB     DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private boolean checkAndSet(final Integer defaultScale, final BoundingBox allGeomBB) {
+        boolean hit = false;
+        // firstofall: test whether prefereed scalle exists and if it matches any format
+        if (defaultScale != null) {
+            final int preferredScaleIndex = ((DefaultComboBoxModel)cbScales.getModel()).getIndexOf(
+                    defaultScale.toString());
+            if (preferredScaleIndex > -1) {
+                hit = formatCheckAndSet(preferredScaleIndex, allGeomBB);
+                if (hit) {
+                    return true;
+                }
+            }
+        }
+
+        // after thet checking all formats starting with the smalles scale
+        for (int j = 0; j < cbScales.getModel().getSize(); ++j) {
+            hit = formatCheckAndSet(j, allGeomBB);
+            if (hit) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   scaleIndex  DOCUMENT ME!
+     * @param   allGeomBB   DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private boolean formatCheckAndSet(final int scaleIndex, final BoundingBox allGeomBB) {
+        for (int i = 0; i < cbFormat.getModel().getSize(); ++i) {
+            final LayoutMetaInfo currentLayout = (LayoutMetaInfo)cbFormat.getItemAt(i);
+            final Integer currentMassstab = Integer.parseInt(String.valueOf(cbScales.getItemAt(scaleIndex)));
+            if (doesBoundingBoxFitIntoLayout(
+                            allGeomBB,
+                            currentLayout.width,
+                            currentLayout.heigth,
+                            currentMassstab)) {
+                cbFormat.setSelectedIndex(i);
+                cbScales.setSelectedIndex(scaleIndex);
+                chkRotation.setSelected(false);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * DOCUMENT ME!
      */
     private void updateFormatProposal() {
         this.allLandparcelGeometryUnion = unionAllLandparcelGeometries();
         if (allLandparcelGeometryUnion != null) {
             final BoundingBox allGeomBB = new BoundingBox(allLandparcelGeometryUnion);
-            // current: erst auf passendes format durchtesten, dann massstaebe
-// String clazz = String.valueOf(cbClazz.getSelectedItem());
-// String type = String.valueOf(cbProduct.getSelectedItem());
-            for (int j = 0; j < cbScales.getModel().getSize(); ++j) {
-                for (int i = 0; i < cbFormat.getModel().getSize(); ++i) {
-                    final LayoutMetaInfo currentLayout = (LayoutMetaInfo)cbFormat.getItemAt(i);
-                    final Integer currentMassstab = Integer.parseInt(String.valueOf(cbScales.getItemAt(j)));
-                    if (doesBoundingBoxFitIntoLayout(
-                                    allGeomBB,
-                                    currentLayout.width,
-                                    currentLayout.heigth,
-                                    currentMassstab)) {
-                        cbFormat.setSelectedIndex(i);
-                        cbScales.setSelectedIndex(j);
-                        chkRotation.setSelected(false);
-                        return;
-                    }
-                }
+
+            Integer productDefaultScale = null;
+            if (getSelectedProduct() != null) {
+                productDefaultScale = getSelectedProduct().getProductDefaultScale();
+            }
+
+            final boolean hit = checkAndSet(productDefaultScale, allGeomBB);
+            if (hit) {
+                return;
             }
             chkRotation.setSelected(true);
             String formatHint;
