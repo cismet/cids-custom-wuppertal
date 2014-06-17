@@ -105,8 +105,11 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
     public BillingWindowSearch() {
         try {
             initComponents();
-            setAbrechnungsturnusIntoComboBox();
-            setUsersIntoComboBox();
+            if (ObjectRendererUtils.checkActionTag(ACTION_TAG)) {
+                // do only if really needed because this is time consuming
+                setAbrechnungsturnusIntoComboBox();
+                setUsersIntoComboBox();
+            }
 
             URL urlToIcon = getClass().getResource("/de/cismet/cids/custom/wunda_blau/search/billing_search.png");
             if (urlToIcon == null) {

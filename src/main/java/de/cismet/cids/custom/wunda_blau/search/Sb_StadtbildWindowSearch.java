@@ -103,11 +103,11 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
 
     //~ Instance fields --------------------------------------------------------
 
-    private final MetaClass metaClass;
+    private MetaClass metaClass;
     private GeoSearchButton btnGeoSearch;
-    private final MappingComponent mappingComponent;
-    private final ImageIcon icon;
-    private final boolean geoSearchEnabled;
+    private MappingComponent mappingComponent;
+    private ImageIcon icon;
+    private boolean geoSearchEnabled;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSuchwort;
@@ -152,74 +152,81 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
      * Creates new form Sb_StadtbildWindowSearch.
      */
     public Sb_StadtbildWindowSearch() {
-        initComponents();
-        setModelForComboBoxes();
-
-        final JPanel pnlSearchCancel = new CountSearchResultsSearchControlPanel(this);
-        final Dimension max = pnlSearchCancel.getMaximumSize();
-        final Dimension min = pnlSearchCancel.getMinimumSize();
-        final Dimension pre = pnlSearchCancel.getPreferredSize();
-        pnlSearchCancel.setMaximumSize(new java.awt.Dimension(
-                new Double(max.getWidth()).intValue(),
-                new Double(max.getHeight() + 5).intValue()));
-        pnlSearchCancel.setMinimumSize(new java.awt.Dimension(
-                new Double(min.getWidth()).intValue(),
-                new Double(min.getHeight() + 5).intValue()));
-        pnlSearchCancel.setPreferredSize(new java.awt.Dimension(
-                new Double(pre.getWidth() + 6).intValue(),
-                new Double(pre.getHeight() + 5).intValue()));
-
-        final java.awt.GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        pnlButtons.add(pnlSearchCancel, gridBagConstraints);
-
-        metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "sb_stadtbildserie"); // NOI18N
-
-        byte[] iconDataFromMetaclass = new byte[] {};
-
-        if (metaClass != null) {
-            iconDataFromMetaclass = metaClass.getIconData();
-        }
-
-        if (iconDataFromMetaclass.length > 0) {
-            LOG.info("Using icon from metaclass.");                                                              // NOI18N
-            icon = new ImageIcon(metaClass.getIconData());
-        } else {
-            LOG.warn("Metaclass icon is not set. Trying to load default icon.");                                 // NOI18N
-            final URL urlToIcon = getClass().getResource("/de/cismet/cids/custom/wunda_blau/search/search.png"); // NOI18N
-
-            if (urlToIcon != null) {
-                icon = new ImageIcon(urlToIcon);
-            } else {
-                icon = new ImageIcon(new byte[] {});
+        try {
+            initComponents();
+            if (ObjectRendererUtils.checkActionTag(ACTION_TAG)) {
+                // do only if really needed because this is time consuming
+                setModelForComboBoxes();
             }
+
+            final JPanel pnlSearchCancel = new CountSearchResultsSearchControlPanel(this);
+            final Dimension max = pnlSearchCancel.getMaximumSize();
+            final Dimension min = pnlSearchCancel.getMinimumSize();
+            final Dimension pre = pnlSearchCancel.getPreferredSize();
+            pnlSearchCancel.setMaximumSize(new java.awt.Dimension(
+                    new Double(max.getWidth()).intValue(),
+                    new Double(max.getHeight() + 5).intValue()));
+            pnlSearchCancel.setMinimumSize(new java.awt.Dimension(
+                    new Double(min.getWidth()).intValue(),
+                    new Double(min.getHeight() + 5).intValue()));
+            pnlSearchCancel.setPreferredSize(new java.awt.Dimension(
+                    new Double(pre.getWidth() + 6).intValue(),
+                    new Double(pre.getHeight() + 5).intValue()));
+
+            final java.awt.GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 2;
+            gridBagConstraints.gridy = 0;
+            pnlButtons.add(pnlSearchCancel, gridBagConstraints);
+
+            metaClass = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "sb_stadtbildserie"); // NOI18N
+
+            byte[] iconDataFromMetaclass = new byte[] {};
+
+            if (metaClass != null) {
+                iconDataFromMetaclass = metaClass.getIconData();
+            }
+
+            if (iconDataFromMetaclass.length > 0) {
+                LOG.info("Using icon from metaclass.");                                                              // NOI18N
+                icon = new ImageIcon(metaClass.getIconData());
+            } else {
+                LOG.warn("Metaclass icon is not set. Trying to load default icon.");                                 // NOI18N
+                final URL urlToIcon = getClass().getResource("/de/cismet/cids/custom/wunda_blau/search/search.png"); // NOI18N
+
+                if (urlToIcon != null) {
+                    icon = new ImageIcon(urlToIcon);
+                } else {
+                    icon = new ImageIcon(new byte[] {});
+                }
+            }
+
+            gridBagConstraints.gridx = 3;
+            pnlButtons.add(Box.createHorizontalStrut(5), gridBagConstraints);
+
+            mappingComponent = CismapBroker.getInstance().getMappingComponent();
+            geoSearchEnabled = mappingComponent != null;
+            if (geoSearchEnabled) {
+                final Sb_StadtbildserieCreateSearchGeometryListener stadtbildserieCreateSearchGeometryListener =
+                    new Sb_StadtbildserieCreateSearchGeometryListener(
+                        mappingComponent,
+                        new Sb_StadtbildSearchTooltip(icon));
+                stadtbildserieCreateSearchGeometryListener.addPropertyChangeListener(this);
+                btnGeoSearch = new GeoSearchButton(
+                        Sb_StadtbildserieCreateSearchGeometryListener.STADTBILDSERIE_CREATE_SEARCH_GEOMETRY,
+                        mappingComponent,
+                        null,
+                        org.openide.util.NbBundle.getMessage(
+                            Sb_StadtbildWindowSearch.class,
+                            "Sb_StadtbildWindowSearch.btnGeoSearch.toolTipText")); // NOI18N
+
+                gridBagConstraints.gridx = 4;
+                pnlButtons.add(btnGeoSearch, gridBagConstraints);
+            }
+
+            cboOrt.setSelectedItem(Sb_stadtbildUtils.getWUPPERTAL());
+        } catch (Throwable e) {
+            LOG.warn("Error in Constructor of Sb_StadtbildWindowSearch. Search will not work properly.", e);
         }
-
-        gridBagConstraints.gridx = 3;
-        pnlButtons.add(Box.createHorizontalStrut(5), gridBagConstraints);
-
-        mappingComponent = CismapBroker.getInstance().getMappingComponent();
-        geoSearchEnabled = mappingComponent != null;
-        if (geoSearchEnabled) {
-            final Sb_StadtbildserieCreateSearchGeometryListener stadtbildserieCreateSearchGeometryListener =
-                new Sb_StadtbildserieCreateSearchGeometryListener(
-                    mappingComponent,
-                    new Sb_StadtbildSearchTooltip(icon));
-            stadtbildserieCreateSearchGeometryListener.addPropertyChangeListener(this);
-            btnGeoSearch = new GeoSearchButton(
-                    Sb_StadtbildserieCreateSearchGeometryListener.STADTBILDSERIE_CREATE_SEARCH_GEOMETRY,
-                    mappingComponent,
-                    null,
-                    org.openide.util.NbBundle.getMessage(
-                        Sb_StadtbildWindowSearch.class,
-                        "Sb_StadtbildWindowSearch.btnGeoSearch.toolTipText")); // NOI18N
-
-            gridBagConstraints.gridx = 4;
-            pnlButtons.add(btnGeoSearch, gridBagConstraints);
-        }
-
-        cboOrt.setSelectedItem(Sb_stadtbildUtils.getWUPPERTAL());
     }
 
     //~ Methods ----------------------------------------------------------------

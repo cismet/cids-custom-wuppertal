@@ -39,8 +39,6 @@ import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.security.WebAccessManager;
 
-import de.cismet.security.exceptions.RequestFailedException;
-
 import de.cismet.tools.gui.StaticSwingTools;
 
 /**
@@ -178,18 +176,22 @@ public class Sb_stadtbildUtils {
      */
     public static void setModelForComboBoxesAndDecorateIt(final JComboBox combobox, final String className) {
         final MetaClass metaClass = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", className);
-        final DefaultComboBoxModel comboBoxModel;
-        try {
-            final FastBindableReferenceCombo tempFastBindableCombo = new FastBindableReferenceCombo();
-            tempFastBindableCombo.setSorted(true);
-            tempFastBindableCombo.setNullable(true);
-            tempFastBindableCombo.setMetaClass(metaClass);
-            comboBoxModel = (DefaultComboBoxModel)tempFastBindableCombo.getModel();
-            combobox.setModel(comboBoxModel);
-        } catch (Exception ex) {
-            LOG.error(ex, ex);
+        if (metaClass != null) {
+            final DefaultComboBoxModel comboBoxModel;
+            try {
+                final FastBindableReferenceCombo tempFastBindableCombo = new FastBindableReferenceCombo();
+                tempFastBindableCombo.setSorted(true);
+                tempFastBindableCombo.setNullable(true);
+                tempFastBindableCombo.setMetaClass(metaClass);
+                comboBoxModel = (DefaultComboBoxModel)tempFastBindableCombo.getModel();
+                combobox.setModel(comboBoxModel);
+            } catch (Exception ex) {
+                LOG.error(ex, ex);
+            }
+            StaticSwingTools.decorateWithFixedAutoCompleteDecorator(combobox);
+        } else {
+            LOG.warn("MetaClass is null. Probably the permissions for the class " + className + " are missing.");
         }
-        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(combobox);
     }
 
     /**
