@@ -42,7 +42,7 @@
 
   </Layernamen>
   <Karte>
-    <Kartenklasse ID="LK.GDBNRW.A" Name="Gdb-NRW-Amtlich">
+    <Kartenklasse ID="LK.GDBNRW.A" Name="Gdb-NRW-AmtlichZOMG">
       <GUIKartenProdukt Antragsart="NW03" ID="LK.GDBNRW.A.F" Name="Liegenschaftskarte, farbig" Logo="logo-aaa-wappen-wup-f" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Karte (farbig)" ProduktnameAuswertung="Liegenschaftskarte, farbig" ProduktnameGUI="LiKa, farbig" Zusatzlegende="false">
         <KartenProdukt ID="LK.GDBNRW.A.F.1" Kartenname="Karte" Layout="LKA4H" Praesentationshinweis1="Flurkarte NRW 1:500">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="500"/>
@@ -2168,7 +2168,7 @@
         
       </GUIKartenProdukt>
 	  <!-- ########################################-->
-       <GUIKartenProdukt defaultProduct="true" Antragsart="KS04" ID="LK.NRW.K.BSW" Name="mit kommunalen Erg., grau" Logo="logo-aaa-wappen-wup-sw" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte mit kom. Erg. (sw)" ProduktnameAuswertung="Stadtgrundkarte m. kom. Erg., schwarz-weiß" ProduktnameGUI="mit kommunalen Erg., grau" Zusatzlegende="false">
+       <GUIKartenProdukt defaultProduct="true" productDefaultScale="1000" Antragsart="KS04" ID="LK.NRW.K.BSW" Name="mit kommunalen Erg., grau" Logo="logo-aaa-wappen-wup-sw" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte mit kom. Erg. (sw)" ProduktnameAuswertung="Stadtgrundkarte m. kom. Erg., schwarz-weiß" ProduktnameGUI="mit kommunalen Erg., grau" Zusatzlegende="false">
         <KartenProdukt ID="LK.NRW.K.BSW.1" Kartenname="KarteNameSGK" Layout="SGKA4H" Praesentationshinweis1="Stadtgrundkarte 1:500" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
