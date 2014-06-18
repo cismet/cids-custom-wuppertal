@@ -218,7 +218,7 @@
             <Component class="javax.swing.JList" name="lstFlurstuecke">
               <Properties>
                 <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="flurstueckListModel" type="code"/>
+                  <Connection code="alkisObjectListModel" type="code"/>
                 </Property>
               </Properties>
             </Component>
@@ -226,7 +226,8 @@
         </Container>
         <Component class="javax.swing.JLabel" name="jLabel11">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Flurst&#xfc;cke:"/>
+            <Property name="text" type="java.lang.String" value="ALKIS-Objekte:"/>
+            <Property name="toolTipText" type="java.lang.String" value="Flurst&#xfc;cke, Buchungsbl&#xe4;tter"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
