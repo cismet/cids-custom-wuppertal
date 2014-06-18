@@ -20,7 +20,7 @@ public class Fnp_aenderungenToStringConverter extends CustomToStringConverter {
 
     @Override
     public String createString() {
-        final String verfahrensnummer = (String)cidsBean.getProperty("Verfahrensnummer");
+        final String verfahrensnummer = Integer.toString((Integer)cidsBean.getProperty("fnp_aender"));
         if (verfahrensnummer != null) {
             return verfahrensnummer;
         } else {

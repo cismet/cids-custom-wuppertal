@@ -20,7 +20,7 @@ public class Wbf_miet_typToStringConverter extends CustomToStringConverter {
 
     @Override
     public String createString() {
-        final String value = (String)cidsBean.getProperty("Value");
+        final String value = (String)cidsBean.getProperty("typ");
         if (value != null) {
             return value;
         } else {

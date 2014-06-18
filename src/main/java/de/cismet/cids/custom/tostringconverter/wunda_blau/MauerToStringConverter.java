@@ -21,7 +21,7 @@ public class MauerToStringConverter extends CustomToStringConverter {
 
     @Override
     public String createString() {
-        final String lagebezeichnung = (String)cidsBean.getProperty("Lagebezeichnung");
+        final String lagebezeichnung = (String)cidsBean.getProperty("lagebezeichnung");
         if (lagebezeichnung != null) {
             return lagebezeichnung;
         } else {
