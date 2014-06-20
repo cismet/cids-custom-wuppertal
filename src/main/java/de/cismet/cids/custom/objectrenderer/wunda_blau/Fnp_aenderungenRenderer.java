@@ -11,11 +11,11 @@ import javax.swing.JPanel;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
-import de.cismet.cids.custom.deprecated.JLoadDots;
-
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
+
+import de.cismet.tools.gui.RoundedPanel;
 
 /**
  * DOCUMENT ME!
@@ -33,14 +33,15 @@ public class Fnp_aenderungenRenderer extends JPanel implements CidsBeanRenderer 
     private CidsBean cidsBean;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel lblNummer;
-    private javax.swing.JLabel lblRechtswirksam;
-    private javax.swing.JPanel panInhalt;
-    private javax.swing.JPanel panInter;
-    private javax.swing.JPanel panMap;
-    private javax.swing.JPanel panSpinner;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel lblNummer1;
+    private javax.swing.JLabel lblRechtswirksam1;
+    private javax.swing.JPanel panDescription;
+    private javax.swing.JPanel panMainInfo;
+    private de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel panPreviewMap;
+    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel2;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -64,110 +65,103 @@ public class Fnp_aenderungenRenderer extends JPanel implements CidsBeanRenderer 
         java.awt.GridBagConstraints gridBagConstraints;
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        panInter = new javax.swing.JPanel();
-        panInhalt = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        lblNummer = new javax.swing.JLabel();
-        lblRechtswirksam = new javax.swing.JLabel();
-        panMap = new javax.swing.JPanel();
-        panSpinner = new JLoadDots();
+        panDescription = new javax.swing.JPanel();
+        panMainInfo = new RoundedPanel();
+        semiRoundedPanel2 = new de.cismet.tools.gui.SemiRoundedPanel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        lblNummer1 = new javax.swing.JLabel();
+        lblRechtswirksam1 = new javax.swing.JLabel();
+        panPreviewMap = new de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel();
 
         setLayout(new java.awt.BorderLayout());
 
-        panInter.setOpaque(false);
+        panDescription.setOpaque(false);
+        panDescription.setLayout(new java.awt.GridBagLayout());
 
-        final javax.swing.GroupLayout panInterLayout = new javax.swing.GroupLayout(panInter);
-        panInter.setLayout(panInterLayout);
-        panInterLayout.setHorizontalGroup(
-            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                415,
-                Short.MAX_VALUE));
-        panInterLayout.setVerticalGroup(
-            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                20,
-                Short.MAX_VALUE));
+        panMainInfo.setLayout(new java.awt.GridBagLayout());
 
-        add(panInter, java.awt.BorderLayout.SOUTH);
+        semiRoundedPanel2.setBackground(java.awt.Color.darkGray);
+        semiRoundedPanel2.setLayout(new java.awt.GridBagLayout());
 
-        panInhalt.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 15, 20, 20));
-        panInhalt.setMinimumSize(new java.awt.Dimension(200, 150));
-        panInhalt.setOpaque(false);
-        panInhalt.setLayout(new java.awt.GridBagLayout());
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText(org.openide.util.NbBundle.getMessage(
+                Fnp_aenderungenRenderer.class,
+                "FlurstueckRenderer.jLabel6.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        semiRoundedPanel2.add(jLabel6, gridBagConstraints);
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel2.setText("Rechtswirksam seit:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        panMainInfo.add(semiRoundedPanel2, gridBagConstraints);
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel3.setText("Rechtswirksam seit:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
-        panInhalt.add(jLabel2, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 10);
+        panMainInfo.add(jLabel3, gridBagConstraints);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel1.setText("Verfahrensnummer:");
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel4.setText("Verfahrensnummer:");
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 20);
-        panInhalt.add(jLabel1, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 10, 10);
+        panMainInfo.add(jLabel4, gridBagConstraints);
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fnp_aender}"),
-                lblNummer,
+                lblNummer1,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 5);
-        panInhalt.add(lblNummer, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 10, 10);
+        panMainInfo.add(lblNummer1, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.rechtswirk}"),
-                lblRechtswirksam,
+                lblRechtswirksam1,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
-        panInhalt.add(lblRechtswirksam, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 10);
+        panMainInfo.add(lblRechtswirksam1, gridBagConstraints);
 
-        add(panInhalt, java.awt.BorderLayout.WEST);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 5);
+        panDescription.add(panMainInfo, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 5);
+        panDescription.add(panPreviewMap, gridBagConstraints);
 
-        panMap.setOpaque(false);
-        panMap.setLayout(new java.awt.GridBagLayout());
-
-        panSpinner.setMinimumSize(new java.awt.Dimension(80, 80));
-        panSpinner.setOpaque(false);
-
-        final javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
-        panSpinner.setLayout(panSpinnerLayout);
-        panSpinnerLayout.setHorizontalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                80,
-                Short.MAX_VALUE));
-        panSpinnerLayout.setVerticalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                80,
-                Short.MAX_VALUE));
-
-        panMap.add(panSpinner, new java.awt.GridBagConstraints());
-
-        add(panMap, java.awt.BorderLayout.CENTER);
-        panMap.setVisible(false);
+        add(panDescription, java.awt.BorderLayout.CENTER);
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
@@ -202,6 +196,7 @@ public class Fnp_aenderungenRenderer extends JPanel implements CidsBeanRenderer 
         bindingGroup.unbind();
         if (cidsBean != null) {
             this.cidsBean = cidsBean;
+            panPreviewMap.initMap(cidsBean, "geometrie.geo_field");
             bindingGroup.bind();
         }
     }
