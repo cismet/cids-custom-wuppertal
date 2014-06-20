@@ -26,12 +26,8 @@ import java.util.Properties;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
-import de.cismet.cids.annotations.CidsAttribute;
-
 import de.cismet.cids.featurerenderer.*;
 
-
-//import de.cismet.tools.BrowserLauncher;
 import de.cismet.cismap.commons.Refreshable;
 import de.cismet.cismap.commons.gui.piccolo.CustomFixedWidthStroke;
 
@@ -43,21 +39,17 @@ import de.cismet.cismap.commons.gui.piccolo.CustomFixedWidthStroke;
  */
 public class Bplan_planFeatureRenderer extends CustomCidsFeatureRenderer {
 
-    //~ Instance fields --------------------------------------------------------
+    //~ Static fields/initializers ---------------------------------------------
 
-    @CidsAttribute("Status")
-    public String status;
-    @CidsAttribute("Nummer")
-    public String nummer;
-    @CidsAttribute("qualitaet")
-    public String qualitaet;
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
+            Bplan_planFeatureRenderer.class);
+
+    //~ Instance fields --------------------------------------------------------
 
     ImageIcon errorimage = new javax.swing.ImageIcon(getClass().getResource(
                 "/de/cismet/cids/tools/metaobjectrenderer/examples/error.png"));
     /** Creates new form LSAFeatureRenderer. */
     Properties properties = new Properties();
-
-    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(Bplan_planFeatureRenderer.class);
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
@@ -72,7 +64,7 @@ public class Bplan_planFeatureRenderer extends CustomCidsFeatureRenderer {
      */
     public Bplan_planFeatureRenderer() {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("BebauungsplanPlanfeatureRenderer init()");
+            LOG.debug("Bplan_planFeatureRenderer init()");
         }
         initComponents();
         setOpaque(false);
@@ -88,63 +80,61 @@ public class Bplan_planFeatureRenderer extends CustomCidsFeatureRenderer {
 
     @Override
     public void assign() {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("ASSIGN");
-            LOG.debug("Nummer=" + nummer);
-        }
-        // prbLoad.setVisible(true);
-        final Thread t = new Thread(new Runnable() {
+        this.cidsBean = metaObject.getBean();
+        if (cidsBean != null) {
+            final String status = (String)cidsBean.getProperty("status");
+            final String nummer = (String)cidsBean.getProperty("nummer");
 
-                    @Override
-                    public void run() {
-                        try {
-                            String subpath = "bplaene/images/nicht_rechtskraeftig/";
-                            final String url = properties.getProperty("bebauungsplanurl");
-                            ImageIcon i;
-                            if (status.equals("rechtskraeftig")) {
-                                subpath = "bplaene/images/nicht_rechtskraeftig/";
+            final Thread t = new Thread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            try {
+                                String subpath = "bplaene/images/nicht_rechtskraeftig/";
+                                final String url = properties.getProperty("bebauungsplanurl");
+                                ImageIcon i;
+                                if ("rechtskraeftig".equals(status)) {
+                                    subpath = "bplaene/images/nicht_rechtskraeftig/";
+                                }
+                                if (url == null) {
+                                    i = new ImageIcon(
+                                            new URL(
+                                                "http://s10221.wuppertal-intra.de:80"
+                                                        + subpath
+                                                        + "B"
+                                                        + nummer
+                                                        + "_TEXT.gif"));
+                                } else {
+                                    final String newUrl = url.replaceAll("<cismet::nummer>", nummer);
+                                    i = new ImageIcon(new URL(newUrl));
+                                }
+
+                                final ImageIcon icon = i;
+                                EventQueue.invokeLater(new Runnable() {
+
+                                        @Override
+                                        public void run() {
+                                            lblImagePreview.setIcon(icon);
+                                            Bplan_planFeatureRenderer.this.setPreferredSize(
+                                                new Dimension(icon.getIconWidth(), icon.getIconHeight()));
+                                            Bplan_planFeatureRenderer.this.setSize(
+                                                new Dimension(icon.getIconWidth(), icon.getIconHeight()));
+                                            revalidate();
+                                        }
+                                    });
+                            } catch (Exception e) {
+                                EventQueue.invokeLater(new Runnable() {
+
+                                        @Override
+                                        public void run() {
+                                            lblImagePreview.setIcon(errorimage);
+                                        }
+                                    });
                             }
-                            if (url == null) {
-                                i = new ImageIcon(
-                                        new URL(
-                                            "http://s10221.wuppertal-intra.de:80"
-                                                    + subpath
-                                                    + "B"
-                                                    + nummer
-                                                    + "_TEXT.gif"));
-                            } else {
-                                final String newUrl = url.replaceAll("<cismet::nummer>", nummer);
-                                i = new ImageIcon(new URL(newUrl));
-                            }
-
-                            final ImageIcon icon = i;
-                            EventQueue.invokeLater(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-                                        lblImagePreview.setIcon(icon);
-                                        Bplan_planFeatureRenderer.this.setPreferredSize(
-                                            new Dimension(icon.getIconWidth(), icon.getIconHeight()));
-                                        Bplan_planFeatureRenderer.this.setSize(
-                                            new Dimension(icon.getIconWidth(), icon.getIconHeight()));
-                                        revalidate();
-                                        // prbLoad.setVisible(false);
-                                    }
-                                });
-                        } catch (Exception e) {
-                            EventQueue.invokeLater(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-                                        lblImagePreview.setIcon(errorimage);
-                                        // prbLoad.setVisible(false);
-                                    }
-                                });
                         }
-                    }
-                });
-        t.start();
-//        //((TitledBorder)getBorder()).setTitle(title);
+                    });
+            t.start();
+        }
     }
 
     @Override
@@ -154,17 +144,14 @@ public class Bplan_planFeatureRenderer extends CustomCidsFeatureRenderer {
 
     @Override
     public Paint getFillingStyle() {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("BebauungsplanPlanfeatureRenderer GetFillingStyle " + status);
-        }
-
         return new Color(255, 255, 255, 0);
     }
 
     @Override
     public Stroke getLineStyle() {
+        final String qualitaet = (String)cidsBean.getProperty("qualitaet");
         if (LOG.isDebugEnabled()) {
-            LOG.debug("BebauungsplanVerfahrenfeatureRenderer GetLineStyle " + qualitaet);
+            LOG.debug("Bplan_planFeatureRenderer GetLineStyle " + qualitaet);
         }
         if (qualitaet == null) {
             return new BasicStroke(20.0f);
@@ -178,13 +165,14 @@ public class Bplan_planFeatureRenderer extends CustomCidsFeatureRenderer {
 
     @Override
     public Paint getLinePaint() {
+        final String status = (String)cidsBean.getProperty("status");
         if (LOG.isDebugEnabled()) {
-            LOG.debug("BebauungsplanVerfahrenfeatureRenderer GetLinePaint " + status);
+            LOG.debug("Bplan_planFeatureRenderer GetLinePaint " + status);
         }
         if (status == null) {
             return new Color(0, 0, 0, 255);
         } else {
-            if (status.equals("rechtskräftig")) {
+            if ("rechtskräftig".equals(status)) {
                 return new Color(0, 255, 0, 50);
             }
             return new Color(255, 0, 0, 50);
@@ -199,6 +187,7 @@ public class Bplan_planFeatureRenderer extends CustomCidsFeatureRenderer {
 
     @Override
     public String getAlternativeName() {
+        final String nummer = (String)cidsBean.getProperty("nummer");
         return nummer;
     }
 
