@@ -57,7 +57,7 @@ public class Bplan_planFeatureRenderer extends CustomCidsFeatureRenderer {
     /** Creates new form LSAFeatureRenderer. */
     Properties properties = new Properties();
 
-    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(Bplan_planFeatureRenderer.class);
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
@@ -71,8 +71,8 @@ public class Bplan_planFeatureRenderer extends CustomCidsFeatureRenderer {
      * Creates a new BebauungsplanPlanfeatureRenderer object.
      */
     public Bplan_planFeatureRenderer() {
-        if (log.isDebugEnabled()) {
-            log.debug("BebauungsplanPlanfeatureRenderer init()");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("BebauungsplanPlanfeatureRenderer init()");
         }
         initComponents();
         setOpaque(false);
@@ -80,7 +80,7 @@ public class Bplan_planFeatureRenderer extends CustomCidsFeatureRenderer {
         try {
             properties.load(getClass().getResourceAsStream("/renderer.properties"));
         } catch (Exception e) {
-            log.warn("Fehler beim Laden der Properties", e);
+            LOG.warn("Fehler beim Laden der Properties", e);
         }
     }
 
@@ -88,9 +88,9 @@ public class Bplan_planFeatureRenderer extends CustomCidsFeatureRenderer {
 
     @Override
     public void assign() {
-        if (log.isDebugEnabled()) {
-            log.debug("ASSIGN");
-            log.debug("Nummer=" + nummer);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("ASSIGN");
+            LOG.debug("Nummer=" + nummer);
         }
         // prbLoad.setVisible(true);
         final Thread t = new Thread(new Runnable() {
@@ -154,8 +154,8 @@ public class Bplan_planFeatureRenderer extends CustomCidsFeatureRenderer {
 
     @Override
     public Paint getFillingStyle() {
-        if (log.isDebugEnabled()) {
-            log.debug("BebauungsplanPlanfeatureRenderer GetFillingStyle " + status);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("BebauungsplanPlanfeatureRenderer GetFillingStyle " + status);
         }
 
         return new Color(255, 255, 255, 0);
@@ -163,8 +163,8 @@ public class Bplan_planFeatureRenderer extends CustomCidsFeatureRenderer {
 
     @Override
     public Stroke getLineStyle() {
-        if (log.isDebugEnabled()) {
-            log.debug("BebauungsplanVerfahrenfeatureRenderer GetLineStyle " + qualitaet);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("BebauungsplanVerfahrenfeatureRenderer GetLineStyle " + qualitaet);
         }
         if (qualitaet == null) {
             return new BasicStroke(20.0f);
@@ -178,8 +178,8 @@ public class Bplan_planFeatureRenderer extends CustomCidsFeatureRenderer {
 
     @Override
     public Paint getLinePaint() {
-        if (log.isDebugEnabled()) {
-            log.debug("BebauungsplanVerfahrenfeatureRenderer GetLinePaint " + status);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("BebauungsplanVerfahrenfeatureRenderer GetLinePaint " + status);
         }
         if (status == null) {
             return new Color(0, 0, 0, 255);
@@ -248,25 +248,25 @@ public class Bplan_planFeatureRenderer extends CustomCidsFeatureRenderer {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblImagePreviewMouseExited(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblImagePreviewMouseExited
+    private void lblImagePreviewMouseExited(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImagePreviewMouseExited
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-    }                                                                              //GEN-LAST:event_lblImagePreviewMouseExited
+    }//GEN-LAST:event_lblImagePreviewMouseExited
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblImagePreviewMouseEntered(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblImagePreviewMouseEntered
+    private void lblImagePreviewMouseEntered(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImagePreviewMouseEntered
         setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-    }                                                                               //GEN-LAST:event_lblImagePreviewMouseEntered
+    }//GEN-LAST:event_lblImagePreviewMouseEntered
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblImagePreviewMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblImagePreviewMouseClicked
+    private void lblImagePreviewMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImagePreviewMouseClicked
         try {
             final String url = properties.getProperty("luftbildschraegaufnahmenservicefull");
             final String newUrl = null;
@@ -280,5 +280,5 @@ public class Bplan_planFeatureRenderer extends CustomCidsFeatureRenderer {
 //            BrowserLauncher.openURL(newUrl);
         } catch (Exception e) {
         }
-    }                                                                               //GEN-LAST:event_lblImagePreviewMouseClicked
+    }//GEN-LAST:event_lblImagePreviewMouseClicked
 }
