@@ -5,11 +5,6 @@
 *              ... and it just works.
 *
 ****************************************************/
-/*
- * LSAFeatureRenderer.java
- *
- * Created on 1. Juni 2007, 10:15
- */
 package de.cismet.cids.custom.featurerenderer.wunda_blau;
 
 import java.awt.BasicStroke;
@@ -30,8 +25,6 @@ import de.cismet.cids.annotations.CidsAttribute;
 
 import de.cismet.cids.featurerenderer.*;
 
-
-//import de.cismet.tools.BrowserLauncher;
 import de.cismet.cismap.commons.Refreshable;
 import de.cismet.cismap.commons.gui.piccolo.CustomFixedWidthStroke;
 
@@ -42,6 +35,11 @@ import de.cismet.cismap.commons.gui.piccolo.CustomFixedWidthStroke;
  * @version  $Revision$, $Date$
  */
 public class Bplan_verfahrenFeatureRenderer extends CustomCidsFeatureRenderer {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
+            Bplan_verfahrenFeatureRenderer.class);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -54,10 +52,7 @@ public class Bplan_verfahrenFeatureRenderer extends CustomCidsFeatureRenderer {
 
     ImageIcon errorimage = new javax.swing.ImageIcon(getClass().getResource(
                 "/de/cismet/cids/tools/metaobjectrenderer/examples/error.png"));
-    /** Creates new form LSAFeatureRenderer. */
     Properties properties = new Properties();
-
-    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
@@ -71,8 +66,8 @@ public class Bplan_verfahrenFeatureRenderer extends CustomCidsFeatureRenderer {
      * Creates a new BebauungsplanVerfahrenfeatureRenderer object.
      */
     public Bplan_verfahrenFeatureRenderer() {
-        if (log.isDebugEnabled()) {
-            log.debug("BebauungsplanVerfahrenfeatureRenderer Verkennis 16.10.2008" + status + " " + nummer + " "
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("BebauungsplanVerfahrenfeatureRenderer Verkennis 16.10.2008" + status + " " + nummer + " "
                         + qualitaet);
         }
         initComponents();
@@ -81,7 +76,7 @@ public class Bplan_verfahrenFeatureRenderer extends CustomCidsFeatureRenderer {
         try {
             properties.load(getClass().getResourceAsStream("/renderer.properties"));
         } catch (Exception e) {
-            log.warn("Fehler beim Laden der Properties", e);
+            LOG.warn("Fehler beim Laden der Properties", e);
         }
     }
 
@@ -95,11 +90,10 @@ public class Bplan_verfahrenFeatureRenderer extends CustomCidsFeatureRenderer {
 
     @Override
     public void assign() {
-        if (log.isDebugEnabled()) {
-            log.debug("ASSIGN");
-            log.debug("Nummer=" + nummer);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("ASSIGN");
+            LOG.debug("Nummer=" + nummer);
         }
-        // prbLoad.setVisible(true);
         final Thread t = new Thread(new Runnable() {
 
                     @Override
@@ -135,7 +129,6 @@ public class Bplan_verfahrenFeatureRenderer extends CustomCidsFeatureRenderer {
                                         Bplan_verfahrenFeatureRenderer.this.setSize(
                                             new Dimension(icon.getIconWidth(), icon.getIconHeight()));
                                         revalidate();
-                                        // prbLoad.setVisible(false);
                                     }
                                 });
                         } catch (Exception e) {
@@ -144,14 +137,12 @@ public class Bplan_verfahrenFeatureRenderer extends CustomCidsFeatureRenderer {
                                     @Override
                                     public void run() {
                                         lblImagePreview.setIcon(errorimage);
-                                        // prbLoad.setVisible(false);
                                     }
                                 });
                         }
                     }
                 });
         t.start();
-//        //((TitledBorder)getBorder()).setTitle(title);
     }
 
     @Override
@@ -161,8 +152,8 @@ public class Bplan_verfahrenFeatureRenderer extends CustomCidsFeatureRenderer {
 
     @Override
     public Paint getFillingStyle() {
-        if (log.isDebugEnabled()) {
-            log.debug("BebauungsplanVerfahrenfeatureRenderer GetFillingStyle " + status);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("BebauungsplanVerfahrenfeatureRenderer GetFillingStyle " + status);
         }
         if (status == null) {
             return new Color(0, 0, 0, 255);
@@ -176,8 +167,8 @@ public class Bplan_verfahrenFeatureRenderer extends CustomCidsFeatureRenderer {
 
     @Override
     public Stroke getLineStyle() {
-        if (log.isDebugEnabled()) {
-            log.debug("BebauungsplanVerfahrenfeatureRenderer GetLineStyle " + qualitaet);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("BebauungsplanVerfahrenfeatureRenderer GetLineStyle " + qualitaet);
         }
         if (qualitaet == null) {
             return new BasicStroke(20.0f);
@@ -191,8 +182,8 @@ public class Bplan_verfahrenFeatureRenderer extends CustomCidsFeatureRenderer {
 
     @Override
     public Paint getLinePaint() {
-        if (log.isDebugEnabled()) {
-            log.debug("BebauungsplanVerfahrenfeatureRenderer GetLinePaint " + status);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("BebauungsplanVerfahrenfeatureRenderer GetLinePaint " + status);
         }
         if (status == null) {
             return new Color(0, 0, 0, 255);
