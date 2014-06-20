@@ -232,25 +232,25 @@ public class Bplan_verfahrenFeatureRenderer extends CustomCidsFeatureRenderer {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblImagePreviewMouseExited(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImagePreviewMouseExited
+    private void lblImagePreviewMouseExited(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblImagePreviewMouseExited
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-    }//GEN-LAST:event_lblImagePreviewMouseExited
+    }                                                                              //GEN-LAST:event_lblImagePreviewMouseExited
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblImagePreviewMouseEntered(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImagePreviewMouseEntered
+    private void lblImagePreviewMouseEntered(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblImagePreviewMouseEntered
         setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-    }//GEN-LAST:event_lblImagePreviewMouseEntered
+    }                                                                               //GEN-LAST:event_lblImagePreviewMouseEntered
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblImagePreviewMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImagePreviewMouseClicked
+    private void lblImagePreviewMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblImagePreviewMouseClicked
         try {
             final String url = properties.getProperty("luftbildschraegaufnahmenservicefull");
             final String newUrl = null;
@@ -264,5 +264,5 @@ public class Bplan_verfahrenFeatureRenderer extends CustomCidsFeatureRenderer {
 //            BrowserLauncher.openURL(newUrl);
         } catch (Exception e) {
         }
-    }//GEN-LAST:event_lblImagePreviewMouseClicked
+    }                                                                               //GEN-LAST:event_lblImagePreviewMouseClicked
 }

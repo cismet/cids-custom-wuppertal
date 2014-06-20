@@ -36,14 +36,15 @@ import java.sql.Timestamp;
 
 import java.text.DateFormat;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.TreeMap;
-import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
-import de.cismet.cids.annotations.CidsAttribute;
+import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.featurerenderer.*;
 
@@ -68,20 +69,15 @@ public class ZaehlungsstandortFeatureRenderer extends CustomCidsFeatureRenderer 
     private static final int MARK6 = 5000;
     private static final int MARK7 = 8000;
 
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
+            ZaehlungsstandortFeatureRenderer.class);
+
     //~ Instance fields --------------------------------------------------------
 
-    @CidsAttribute("Standpunkt")
-    public Integer standpunkt;
-    @CidsAttribute("Zählungen[].Zählung.Datum")
-    public Vector<Timestamp> datum = new Vector();
-
-    @CidsAttribute("Zählungen[].Zählung.Anzahl")
-    public Vector<Integer> anzahl = new Vector();
-    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private final ImageIcon errorimage = new ImageIcon(getClass().getResource(
                 "/de/cismet/cids/tools/metaobjectrenderer/examples/error.png"));
     private DefaultCategoryDataset dataset;
-    private TreeMap<String, int[]> jahresAnzahl = new TreeMap();
+    private final TreeMap<String, int[]> jahresAnzahl = new TreeMap();
     private long avgLast = 0L;
     private String lastYear = null;
     private Refreshable refresh;
@@ -105,69 +101,81 @@ public class ZaehlungsstandortFeatureRenderer extends CustomCidsFeatureRenderer 
 
     @Override
     public void assign() {
-        if ((datum != null) && (anzahl != null) && (datum.size() > 0) && (anzahl.size() > 0)) {
-            final Thread t = new Thread(new Runnable() {
+        cidsBean = metaObject.getBean();
+        if (cidsBean != null) {
+            final List<CidsBean> zaehlungen = cidsBean.getBeanCollectionProperty("zaehlungen");
+            final ArrayList<Timestamp> datum = new ArrayList<Timestamp>(zaehlungen.size());
+            final ArrayList<Integer> anzahl = new ArrayList<Integer>(zaehlungen.size());
+
+            for (final CidsBean zaehlung : zaehlungen) {
+                datum.add((Timestamp)zaehlung.getProperty("datum"));
+                anzahl.add((Integer)zaehlung.getProperty("anzahl"));
+            }
+
+            if ((datum.size() > 0) && (anzahl.size() > 0)) {
+                final Thread t = new Thread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                dataset = new DefaultCategoryDataset();
+                                String max = "1000";
+                                // Daten in HashMaps eintragen
+                                for (int i = 0; i < datum.size(); i++) {
+                                    try {
+                                        String jahr = DateFormat.getDateInstance(DateFormat.YEAR_FIELD, Locale.GERMANY)
+                                                    .format(datum.get(i));
+                                        jahr = jahr.substring(jahr.length() - 4);
+                                        final int wert = anzahl.get(i) * 12;
+                                        if (jahresAnzahl.get(jahr) != null) {
+                                            final int[] tmp = jahresAnzahl.get(jahr);
+                                            tmp[0] += wert;
+                                            tmp[1] += 1;
+                                            jahresAnzahl.put(jahr, tmp);
+                                        } else {
+                                            final int[] newArr = { wert, 1 };
+                                            jahresAnzahl.put(jahr, newArr);
+                                        }
+                                        if (jahr.compareTo(max) > 0) {
+                                            max = new String(jahr);
+                                        }
+                                    } catch (Exception ex) {
+                                        LOG.error("Error beim Erstellen des FeatureRenderers", ex);
+                                    }
+                                }
+
+                                // Daten aus HashMaps in DefaultCategoryDataset eintragen
+                                for (final String key : jahresAnzahl.keySet()) {
+                                    dataset.addValue(
+                                        Math.round(jahresAnzahl.get(key)[0] / jahresAnzahl.get(key)[1]),
+                                        "Daten",
+                                        key);
+                                }
+                                avgLast = Math.round(jahresAnzahl.get(max)[0] / jahresAnzahl.get(max)[1]);
+                                lastYear = max;
+                                final JFreeChart chart = createChart(dataset, avgLast);
+                                chart.setBackgroundPaint(new Color(210, 210, 210));
+                                final BufferedImage icon = chart.createBufferedImage(340, 170);
+                                EventQueue.invokeLater(new Runnable() {
+
+                                        @Override
+                                        public void run() {
+                                            // TODO Refresh des PFeatures veranlassen
+                                            lblChart.setIcon(new ImageIcon(icon));
+                                            refresh.refresh();
+                                        }
+                                    });
+                            }
+                        });
+                t.start();
+            } else {
+                EventQueue.invokeLater(new Runnable() {
 
                         @Override
                         public void run() {
-                            dataset = new DefaultCategoryDataset();
-                            String max = "1000";
-                            // Daten in HashMaps eintragen
-                            for (int i = 0; i < datum.size(); i++) {
-                                try {
-                                    String jahr = DateFormat.getDateInstance(DateFormat.YEAR_FIELD, Locale.GERMANY)
-                                                .format(datum.get(i));
-                                    jahr = jahr.substring(jahr.length() - 4);
-                                    final int wert = anzahl.get(i) * 12;
-                                    if (jahresAnzahl.get(jahr) != null) {
-                                        final int[] tmp = jahresAnzahl.get(jahr);
-                                        tmp[0] += wert;
-                                        tmp[1] += 1;
-                                        jahresAnzahl.put(jahr, tmp);
-                                    } else {
-                                        final int[] newArr = { wert, 1 };
-                                        jahresAnzahl.put(jahr, newArr);
-                                    }
-                                    if (jahr.compareTo(max) > 0) {
-                                        max = new String(jahr);
-                                    }
-                                } catch (Exception ex) {
-                                    log.error("Error beim Erstellen des FeatureRenderers", ex);
-                                }
-                            }
-
-                            // Daten aus HashMaps in DefaultCategoryDataset eintragen
-                            for (final String key : jahresAnzahl.keySet()) {
-                                dataset.addValue(
-                                    Math.round(jahresAnzahl.get(key)[0] / jahresAnzahl.get(key)[1]),
-                                    "Daten",
-                                    key);
-                            }
-                            avgLast = Math.round(jahresAnzahl.get(max)[0] / jahresAnzahl.get(max)[1]);
-                            lastYear = max;
-                            final JFreeChart chart = createChart(dataset, avgLast);
-                            chart.setBackgroundPaint(new Color(210, 210, 210));
-                            final BufferedImage icon = chart.createBufferedImage(340, 170);
-                            EventQueue.invokeLater(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-                                        // TODO Refresh des PFeatures veranlassen
-                                        lblChart.setIcon(new ImageIcon(icon));
-                                        refresh.refresh();
-                                    }
-                                });
+                            lblChart.setIcon(errorimage);
                         }
                     });
-            t.start();
-        } else {
-            EventQueue.invokeLater(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        lblChart.setIcon(errorimage);
-                    }
-                });
+            }
         }
     }
 
@@ -194,6 +202,7 @@ public class ZaehlungsstandortFeatureRenderer extends CustomCidsFeatureRenderer 
     @Override
     public String getAlternativeName() {
         String s = null;
+        final Integer standpunkt = (Integer)cidsBean.getProperty("standort");
         if (standpunkt != null) {
             s = standpunkt.toString();
             switch (s.length()) {
