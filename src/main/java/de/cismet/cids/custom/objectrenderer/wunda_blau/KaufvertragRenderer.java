@@ -9,16 +9,23 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.jdesktop.beansbinding.Converter;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 
+import java.sql.Timestamp;
+
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -44,9 +51,41 @@ public class KaufvertragRenderer extends JPanel implements CidsBeanRenderer {
 
     //~ Instance fields --------------------------------------------------------
 
+    private final Converter<Timestamp, Date> timeStampConverter = new Converter<Timestamp, Date>() {
+
+            @Override
+            public Date convertForward(final Timestamp value) {
+                try {
+                    if (value != null) {
+                        return new java.util.Date(value.getTime());
+                    } else {
+                        return null;
+                    }
+                } catch (Exception ex) {
+                    LOG.error("Problem during Timestamp vonversion. Will return now().", ex);
+                    return new java.util.Date(System.currentTimeMillis());
+                }
+            }
+
+            @Override
+            public Timestamp convertReverse(final Date value) {
+                try {
+                    if (value != null) {
+                        return new Timestamp(value.getTime());
+                    } else {
+                        return null;
+                    }
+                } catch (Exception ex) {
+                    LOG.error("Problem during Timestamp vonversion. Will return now().", ex);
+                    return new Timestamp(System.currentTimeMillis());
+                }
+            }
+        };
+
     private CidsBean cidsBean;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private de.cismet.cids.editors.DefaultBindableDateChooser dpVerkaufsdatum;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -83,7 +122,6 @@ public class KaufvertragRenderer extends JPanel implements CidsBeanRenderer {
     private javax.swing.JLabel lblSachZinssatz;
     private javax.swing.JLabel lblSachwerte;
     private javax.swing.JLabel lblTeilmarkt;
-    private javax.swing.JLabel lblVerkaufsdat;
     private javax.swing.JPanel panFlurstuecke;
     private javax.swing.JPanel panGebaeude;
     private javax.swing.JPanel panMain;
@@ -100,6 +138,7 @@ public class KaufvertragRenderer extends JPanel implements CidsBeanRenderer {
      */
     public KaufvertragRenderer() {
         initComponents();
+        RendererTools.makeReadOnly(dpVerkaufsdatum);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -183,7 +222,6 @@ public class KaufvertragRenderer extends JPanel implements CidsBeanRenderer {
         lblSachwerte = new javax.swing.JLabel();
         lblRegBez = new javax.swing.JLabel();
         lblRegJahr = new javax.swing.JLabel();
-        lblVerkaufsdat = new javax.swing.JLabel();
         lblAdresse = new javax.swing.JLabel();
         lblObjektart = new javax.swing.JLabel();
         lblTeilmarkt = new javax.swing.JLabel();
@@ -209,6 +247,7 @@ public class KaufvertragRenderer extends JPanel implements CidsBeanRenderer {
         panFlurstuecke = new javax.swing.JPanel();
         panGebaeude = new javax.swing.JPanel();
         panTeileigentum = new javax.swing.JPanel();
+        dpVerkaufsdatum = new de.cismet.cids.editors.DefaultBindableDateChooser();
 
         setOpaque(false);
         setLayout(new java.awt.BorderLayout());
@@ -223,44 +262,116 @@ public class KaufvertragRenderer extends JPanel implements CidsBeanRenderer {
         gridBagConstraints.weightx = 0.5;
         jPanel1.add(panPreviewMap, gridBagConstraints);
 
-        panMain.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 20));
         panMain.setOpaque(false);
+        panMain.setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel1.setText("Reg_Bez:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 20);
+        panMain.add(jLabel1, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("Reg_Jahr:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 20);
+        panMain.add(jLabel2, gridBagConstraints);
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setText("Verkaufsdatum:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 20);
+        panMain.add(jLabel3, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel4.setText("Adresse:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 20);
+        panMain.add(jLabel4, gridBagConstraints);
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel5.setText("Objektart:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 20);
+        panMain.add(jLabel5, gridBagConstraints);
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel6.setText("Teilmarkt:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 20);
+        panMain.add(jLabel6, gridBagConstraints);
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel7.setText("Gesamtfläche:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 20);
+        panMain.add(jLabel7, gridBagConstraints);
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel8.setText("Gesamtteilfläche:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 20);
+        panMain.add(jLabel8, gridBagConstraints);
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel9.setText("Kaufpreis pro m²:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 20);
+        panMain.add(jLabel9, gridBagConstraints);
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel11.setText("Zur Auswertung geeignet:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 20);
+        panMain.add(jLabel11, gridBagConstraints);
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel10.setText("Kaufpreis absolut:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 20);
+        panMain.add(jLabel10, gridBagConstraints);
 
         lblSachwerte.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblSachwerte.setText("Sachwerte:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 20);
+        panMain.add(lblSachwerte, gridBagConstraints);
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -270,6 +381,12 @@ public class KaufvertragRenderer extends JPanel implements CidsBeanRenderer {
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        panMain.add(lblRegBez, gridBagConstraints);
+
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
@@ -278,7 +395,11 @@ public class KaufvertragRenderer extends JPanel implements CidsBeanRenderer {
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        lblVerkaufsdat.setText("bla");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        panMain.add(lblRegJahr, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -288,6 +409,12 @@ public class KaufvertragRenderer extends JPanel implements CidsBeanRenderer {
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        panMain.add(lblAdresse, gridBagConstraints);
+
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
@@ -295,6 +422,12 @@ public class KaufvertragRenderer extends JPanel implements CidsBeanRenderer {
                 lblObjektart,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        panMain.add(lblObjektart, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -304,6 +437,12 @@ public class KaufvertragRenderer extends JPanel implements CidsBeanRenderer {
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        panMain.add(lblTeilmarkt, gridBagConstraints);
+
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
@@ -311,6 +450,12 @@ public class KaufvertragRenderer extends JPanel implements CidsBeanRenderer {
                 lblGesamtflaeche,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        panMain.add(lblGesamtflaeche, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -320,6 +465,12 @@ public class KaufvertragRenderer extends JPanel implements CidsBeanRenderer {
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        panMain.add(lblGesamtteilflaeche, gridBagConstraints);
+
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
@@ -327,6 +478,12 @@ public class KaufvertragRenderer extends JPanel implements CidsBeanRenderer {
                 lblKaufpreisQm,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        panMain.add(lblKaufpreisQm, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -336,6 +493,12 @@ public class KaufvertragRenderer extends JPanel implements CidsBeanRenderer {
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        panMain.add(lblKaufpreisAbs, gridBagConstraints);
+
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
@@ -343,6 +506,12 @@ public class KaufvertragRenderer extends JPanel implements CidsBeanRenderer {
                 lblAuswertung,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        panMain.add(lblAuswertung, gridBagConstraints);
 
         panSachwerte.setOpaque(false);
 
@@ -411,7 +580,7 @@ public class KaufvertragRenderer extends JPanel implements CidsBeanRenderer {
                         jLabel17)).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
                     panSachwerteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
                         lblSachKaufpreis).addComponent(lblSachRohertrag).addComponent(lblSachKaufpreisRoh).addComponent(
-                        lblSachMarktanp).addComponent(lblSachZinssatz)).addContainerGap(43, Short.MAX_VALUE)));
+                        lblSachMarktanp).addComponent(lblSachZinssatz)).addContainerGap(105, Short.MAX_VALUE)));
         panSachwerteLayout.setVerticalGroup(
             panSachwerteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
                 panSachwerteLayout.createSequentialGroup().addContainerGap().addGroup(
@@ -432,14 +601,42 @@ public class KaufvertragRenderer extends JPanel implements CidsBeanRenderer {
                     javax.swing.GroupLayout.DEFAULT_SIZE,
                     Short.MAX_VALUE)));
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 31;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 0, 0, 32);
+        panMain.add(panSachwerte, gridBagConstraints);
+
         jLabel18.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel18.setText("Flurstücke:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 20);
+        panMain.add(jLabel18, gridBagConstraints);
 
         jLabel19.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel19.setText("Gebäude:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 20);
+        panMain.add(jLabel19, gridBagConstraints);
 
         jLabel20.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel20.setText("Teileigentum:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 20);
+        panMain.add(jLabel20, gridBagConstraints);
 
         panFlurstuecke.setOpaque(false);
 
@@ -448,13 +645,23 @@ public class KaufvertragRenderer extends JPanel implements CidsBeanRenderer {
         panFlurstueckeLayout.setHorizontalGroup(
             panFlurstueckeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                78,
+                234,
                 Short.MAX_VALUE));
         panFlurstueckeLayout.setVerticalGroup(
             panFlurstueckeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
                 0,
                 Short.MAX_VALUE));
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.ipadx = 78;
+        gridBagConstraints.ipady = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 0, 0, 0);
+        panMain.add(panFlurstuecke, gridBagConstraints);
 
         panGebaeude.setOpaque(false);
 
@@ -463,13 +670,23 @@ public class KaufvertragRenderer extends JPanel implements CidsBeanRenderer {
         panGebaeudeLayout.setHorizontalGroup(
             panGebaeudeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                86,
+                258,
                 Short.MAX_VALUE));
         panGebaeudeLayout.setVerticalGroup(
             panGebaeudeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
                 0,
                 Short.MAX_VALUE));
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.ipadx = 86;
+        gridBagConstraints.ipady = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 0, 0, 0);
+        panMain.add(panGebaeude, gridBagConstraints);
 
         panTeileigentum.setOpaque(false);
 
@@ -478,7 +695,7 @@ public class KaufvertragRenderer extends JPanel implements CidsBeanRenderer {
         panTeileigentumLayout.setHorizontalGroup(
             panTeileigentumLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                97,
+                291,
                 Short.MAX_VALUE));
         panTeileigentumLayout.setVerticalGroup(
             panTeileigentumLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
@@ -486,100 +703,32 @@ public class KaufvertragRenderer extends JPanel implements CidsBeanRenderer {
                 0,
                 Short.MAX_VALUE));
 
-        final javax.swing.GroupLayout panMainLayout = new javax.swing.GroupLayout(panMain);
-        panMain.setLayout(panMainLayout);
-        panMainLayout.setHorizontalGroup(
-            panMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                panMainLayout.createSequentialGroup().addContainerGap().addGroup(
-                    panMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
-                        jLabel1).addComponent(jLabel2).addComponent(jLabel3).addComponent(jLabel4).addComponent(
-                        jLabel5).addComponent(jLabel6).addComponent(jLabel7).addComponent(jLabel8).addComponent(
-                        jLabel9).addComponent(jLabel10).addComponent(jLabel11).addComponent(lblSachwerte).addComponent(
-                        jLabel18).addComponent(jLabel19).addComponent(jLabel20)).addGap(38, 38, 38).addGroup(
-                    panMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
-                        panTeileigentum,
-                        javax.swing.GroupLayout.PREFERRED_SIZE,
-                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                        javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(
-                        panGebaeude,
-                        javax.swing.GroupLayout.PREFERRED_SIZE,
-                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                        javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(
-                        panFlurstuecke,
-                        javax.swing.GroupLayout.PREFERRED_SIZE,
-                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                        javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(lblAuswertung).addComponent(
-                        lblKaufpreisAbs).addComponent(lblKaufpreisQm).addComponent(lblGesamtteilflaeche).addComponent(
-                        lblObjektart).addComponent(
-                        panSachwerte,
-                        javax.swing.GroupLayout.PREFERRED_SIZE,
-                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                        javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(lblRegJahr).addComponent(lblAdresse)
-                                .addComponent(lblRegBez).addComponent(lblGesamtflaeche).addComponent(lblTeilmarkt)
-                                .addComponent(lblVerkaufsdat)).addContainerGap(
-                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                    Short.MAX_VALUE)));
-        panMainLayout.setVerticalGroup(
-            panMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                panMainLayout.createSequentialGroup().addContainerGap().addGroup(
-                    panMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(
-                        jLabel1).addComponent(lblRegBez)).addPreferredGap(
-                    javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
-                    panMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(
-                        jLabel2).addComponent(lblRegJahr)).addPreferredGap(
-                    javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
-                    panMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(
-                        jLabel3).addComponent(lblVerkaufsdat)).addPreferredGap(
-                    javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
-                    panMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(
-                        jLabel4).addComponent(lblAdresse)).addPreferredGap(
-                    javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
-                    panMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(
-                        jLabel5).addComponent(lblObjektart)).addPreferredGap(
-                    javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
-                    panMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(
-                        jLabel6).addComponent(lblTeilmarkt)).addPreferredGap(
-                    javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
-                    panMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(
-                        jLabel7).addComponent(lblGesamtflaeche)).addPreferredGap(
-                    javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
-                    panMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(
-                        jLabel8).addComponent(lblGesamtteilflaeche)).addPreferredGap(
-                    javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
-                    panMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(
-                        jLabel9).addComponent(lblKaufpreisQm)).addPreferredGap(
-                    javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
-                    panMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(
-                        jLabel10).addComponent(lblKaufpreisAbs)).addPreferredGap(
-                    javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
-                    panMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(
-                        jLabel11).addComponent(lblAuswertung)).addPreferredGap(
-                    javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
-                    panMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
-                        lblSachwerte).addComponent(
-                        panSachwerte,
-                        javax.swing.GroupLayout.PREFERRED_SIZE,
-                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                        javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
-                    javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
-                    panMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
-                        jLabel18).addComponent(
-                        panFlurstuecke,
-                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                        Short.MAX_VALUE)).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
-                    panMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
-                        jLabel19).addComponent(
-                        panGebaeude,
-                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                        Short.MAX_VALUE)).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
-                    panMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
-                        jLabel20).addComponent(
-                        panTeileigentum,
-                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                        Short.MAX_VALUE)).addContainerGap()));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.ipadx = 97;
+        gridBagConstraints.ipady = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 0, 17, 0);
+        panMain.add(panTeileigentum, gridBagConstraints);
+
+        dpVerkaufsdatum.setBorder(null);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.verkaufsdatum.fromts}"),
+                dpVerkaufsdatum,
+                org.jdesktop.beansbinding.BeanProperty.create("date"));
+        binding.setConverter(timeStampConverter);
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        panMain.add(dpVerkaufsdatum, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
