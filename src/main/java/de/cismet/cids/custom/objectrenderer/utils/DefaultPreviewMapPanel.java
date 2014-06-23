@@ -161,7 +161,7 @@ public class DefaultPreviewMapPanel extends javax.swing.JPanel {
      * @param  showMap  DOCUMENT ME!
      */
     private void showMap(final boolean showMap) {
-        this.setVisible(showMap);
+        previewMap.setVisible(showMap);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
