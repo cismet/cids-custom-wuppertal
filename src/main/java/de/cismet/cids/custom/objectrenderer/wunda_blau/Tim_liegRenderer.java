@@ -7,6 +7,8 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.ui.RequestsFullSizeComponent;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -34,7 +36,7 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
  * @author   nh
  * @version  $Revision$, $Date$
  */
-public class Tim_liegRenderer extends JPanel implements CidsBeanRenderer, ChangeListener {
+public class Tim_liegRenderer extends JPanel implements CidsBeanRenderer, ChangeListener, RequestsFullSizeComponent {
 
     //~ Static fields/initializers ---------------------------------------------
 
