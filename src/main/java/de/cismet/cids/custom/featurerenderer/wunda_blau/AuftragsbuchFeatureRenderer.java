@@ -13,8 +13,11 @@ import java.awt.Color;
 import java.awt.Paint;
 import java.awt.Stroke;
 
+import javax.swing.JComponent;
+
 import de.cismet.cids.featurerenderer.CustomCidsFeatureRenderer;
 
+import de.cismet.cismap.commons.Refreshable;
 import de.cismet.cismap.commons.gui.piccolo.FeatureAnnotationSymbol;
 
 /**
@@ -52,6 +55,11 @@ public class AuftragsbuchFeatureRenderer extends CustomCidsFeatureRenderer {
 
     @Override
     public Paint getLinePaint() {
+        return null;
+    }
+
+    @Override
+    public JComponent getInfoComponent(final Refreshable refresh) {
         return null;
     }
 
