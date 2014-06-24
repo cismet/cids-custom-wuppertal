@@ -66,8 +66,8 @@ public class AuftragsbuchRenderer extends JPanel implements CidsBeanRenderer {
      */
     public AuftragsbuchRenderer() {
         initComponents();
-        RendererTools.makeReadOnly(dpAutragsdatum);
-        RendererTools.makeReadOnly(dpErledigtAm);
+        RendererTools.jxDatePickerShouldLookLikeLabel(dpAutragsdatum);
+        RendererTools.jxDatePickerShouldLookLikeLabel(dpErledigtAm);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -346,6 +346,8 @@ public class AuftragsbuchRenderer extends JPanel implements CidsBeanRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panMain.add(lblHinweise, gridBagConstraints);
 
+        dpAutragsdatum.setBorder(null);
+
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
@@ -361,6 +363,8 @@ public class AuftragsbuchRenderer extends JPanel implements CidsBeanRenderer {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panMain.add(dpAutragsdatum, gridBagConstraints);
+
+        dpErledigtAm.setBorder(null);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,

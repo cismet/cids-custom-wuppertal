@@ -277,6 +277,11 @@
               </Constraints>
             </Component>
             <Component class="de.cismet.cids.editors.DefaultBindableDateChooser" name="dpAutragsdatum">
+              <Properties>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="null"/>
+                </Property>
+              </Properties>
               <BindingProperties>
                 <BindingProperty name="date" source="Form" sourcePath="${cidsBean.auftragsdatum}" target="dpAutragsdatum" targetPath="date" updateStrategy="0" immediately="false">
                   <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -291,6 +296,11 @@
               </Constraints>
             </Component>
             <Component class="de.cismet.cids.editors.DefaultBindableDateChooser" name="dpErledigtAm">
+              <Properties>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="null"/>
+                </Property>
+              </Properties>
               <BindingProperties>
                 <BindingProperty name="date" source="Form" sourcePath="${cidsBean.erledigungsdatum}" target="dpErledigtAm" targetPath="date" updateStrategy="0" immediately="false">
                   <Property name="converter" type="org.jdesktop.beansbinding.Converter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
