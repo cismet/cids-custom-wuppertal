@@ -5,37 +5,27 @@
 *              ... and it just works.
 *
 ****************************************************/
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.cismet.cids.custom.tostringconverter.wunda_blau;
-
-import de.cismet.cids.annotations.CidsAttribute;
 
 import de.cismet.cids.tools.CustomToStringConverter;
 
 /**
- * de.cismet.cids.toStringConverter.ZaehlungswetterToStringConverter.
+ * DOCUMENT ME!
  *
  * @author   thorsten
  * @version  $Revision$, $Date$
  */
 public class ZaehlungwetterToStringConverter extends CustomToStringConverter {
 
-    //~ Instance fields --------------------------------------------------------
-
-    @CidsAttribute("beschreibung")
-    public String beschreibung = null;
-
     //~ Methods ----------------------------------------------------------------
 
     @Override
     public String createString() {
+        final String beschreibung = (String)cidsBean.getProperty("beschreibung");
         if (beschreibung != null) {
             return beschreibung;
         } else {
-            return "keine Wetterr ausgew\u00E4hlt";
+            return "kein Wetter ausgew\u00E4hlt";
         }
     }
 }

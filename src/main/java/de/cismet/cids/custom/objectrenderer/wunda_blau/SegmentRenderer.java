@@ -7,88 +7,34 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import com.vividsolutions.jts.geom.Geometry;
+import Sirius.navigator.ui.RequestsFullSizeComponent;
 
-import de.cismet.cids.annotations.CidsAttribute;
+import org.apache.commons.lang.StringUtils;
 
-import de.cismet.cids.custom.deprecated.JLoadDots;
+import javax.swing.JPanel;
 
-import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
+import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.tools.gui.RoundedPanel;
 
 /**
- * de.cismet.cids.objectrenderer.CoolSegmentRenderer.
+ * DOCUMENT ME!
  *
- * @author   nh
  * @version  $Revision$, $Date$
  */
-public class SegmentRenderer extends BlurredMapObjectRenderer {
+public class SegmentRenderer extends JPanel implements CidsBeanRenderer, RequestsFullSizeComponent {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final String SEGMENT = "Segment";
 
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(SegmentRenderer.class);
+
     //~ Instance fields --------------------------------------------------------
 
-    @CidsAttribute("NAME")
-    public String name = "";
-
-    @CidsAttribute("OBJEKT_ID")
-    public String objektID = "";
-
-    @CidsAttribute("KMNR")
-    public Integer kilometerNr;
-
-    @CidsAttribute("SEGNR")
-    public Integer segmentNr;
-
-    @CidsAttribute("STRASSENSCHLUESSEL.NAME")
-    public String strasse = "";
-
-    @CidsAttribute("LAENGE")
-    public Integer laenge;
-
-    @CidsAttribute("BREITE")
-    public Integer breite;
-
-    @CidsAttribute("HOEHE_ANFANG")
-    public Float hoeheAnfang;
-
-    @CidsAttribute("HOEHE_ENDE")
-    public Float hoeheEnde;
-
-    @CidsAttribute("NEIGUNG")
-    public Float neigung;
-
-    @CidsAttribute("KLASSE")
-    public Integer klasse;
-
-    @CidsAttribute("LOCATION")
-    public String location = "";
-
-    @CidsAttribute("KNOTEN_ANFANG.NAME")
-    public String knotenAName = "";
-
-    @CidsAttribute("KNOTEN_ENDE.NAME")
-    public String knotenEName = "";
-
-    @CidsAttribute("KNOTEN_ANFANG.HOEHE")
-    public Integer knotenAHoehe;
-
-    @CidsAttribute("KNOTEN_ENDE.HOEHE")
-    public Integer knotenEHoehe;
-
-    @CidsAttribute("SEGMENTSEITE_L.NAME")
-    public String segmentLName = "";
-
-    @CidsAttribute("SEGMENTSEITE_R.NAME")
-    public String segmentRName = "";
-
-    @CidsAttribute("Georeferenz.GEO_STRING")
-    public Geometry geometry = null;
-
-    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
+    private CidsBean cidsBean;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -109,6 +55,7 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblHoeheAn;
     private javax.swing.JLabel lblHoeheEn;
     private javax.swing.JLabel lblKlasse;
@@ -125,14 +72,11 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
     private javax.swing.JLabel lblSegRName;
     private javax.swing.JLabel lblSegnr;
     private javax.swing.JLabel lblStrasse;
-    private javax.swing.JLabel lblTitle;
     private javax.swing.JPanel panInhalt;
-    private javax.swing.JPanel panInter;
     private javax.swing.JPanel panKnotenAn;
     private javax.swing.JPanel panKnotenEn;
-    private javax.swing.JPanel panMap;
-    private javax.swing.JPanel panSpinner;
-    private javax.swing.JPanel panTitle;
+    private de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel panPreviewMap;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -142,158 +86,52 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
      */
     public SegmentRenderer() {
         initComponents();
-        setPanContent(panInhalt);
-        setPanInter(null);
-        setPanMap(panMap);
-        setPanTitle(panTitle);
-        setSpinner(panSpinner);
     }
 
     //~ Methods ----------------------------------------------------------------
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  geometry  DOCUMENT ME!
-     */
     @Override
-    public void setGeometry(final Geometry geometry) {
-        super.setGeometry(geometry);
+    public CidsBean getCidsBean() {
+        return cidsBean;
     }
 
-    /**
-     * DOCUMENT ME!
-     */
     @Override
-    public void assignAggregation() {
-    }
+    public void setCidsBean(final CidsBean cidsBean) {
+        bindingGroup.unbind();
+        if (cidsBean != null) {
+            this.cidsBean = cidsBean;
+            panPreviewMap.initMap(cidsBean, "umschreibendes_rechteck.geo_field");
+            bindingGroup.bind();
 
-    /**
-     * DOCUMENT ME!
-     */
-    @Override
-    public void assignSingle() {
-        if (!name.equals("")) {
-            lblTitle.setText(name);
-        } else {
-            lblTitle.setText(SEGMENT);
-        }
+            final Integer laenge = (Integer)cidsBean.getProperty("laenge");
+            final Integer breite = (Integer)cidsBean.getProperty("breite");
 
-        if (!objektID.equals("")) {
-            lblObjectID.setText(objektID);
-        } else {
-            lblObjectID.setVisible(false);
-            jLabel1.setVisible(false);
-        }
-
-        if (kilometerNr > -1) {
-            lblKmnr.setText(kilometerNr.toString());
-        } else {
-            lblKmnr.setVisible(false);
-            jLabel2.setVisible(false);
-        }
-
-        if (segmentNr > -1) {
-            lblSegnr.setText(segmentNr.toString());
-        } else {
-            lblSegnr.setVisible(false);
-            jLabel3.setVisible(false);
-        }
-
-        if ((strasse != null) && !strasse.equals("")) {
-            lblStrasse.setText(strasse);
-        } else {
-            lblStrasse.setVisible(false);
-            jLabel4.setVisible(false);
-        }
-
-        if ((laenge > -1) && (breite > -1)) {
-            lblLaengeBreite.setText(laenge + " x " + breite);
-        } else {
-            lblLaengeBreite.setVisible(false);
-            jLabel5.setVisible(false);
-        }
-
-        if (hoeheAnfang > -1.0f) {
-            lblHoeheAn.setText(hoeheAnfang.toString());
-            log.info("H\u00F6he Anfang: " + hoeheAnfang.toString());
-        } else {
-            lblHoeheAn.setVisible(false);
-            jLabel6.setVisible(false);
-        }
-
-        if (hoeheEnde > -1.0f) {
-            lblHoeheEn.setText(hoeheEnde.toString());
-            log.info("H\u00F6he Ende: " + hoeheEnde.toString());
-        } else {
-            lblHoeheEn.setVisible(false);
-            jLabel7.setVisible(false);
-        }
-
-        if (neigung > -1.0f) {
-            lblNeigung.setText(neigung.toString());
-        } else {
-            lblNeigung.setVisible(false);
-            jLabel8.setVisible(false);
-        }
-
-        if (klasse > -1) {
-            lblKlasse.setText(klasse.toString());
-        } else {
-            lblKlasse.setVisible(false);
-            jLabel9.setVisible(false);
-        }
-
-        if (!location.equals("")) {
-            lblLocation.setText(location);
-        } else {
-            lblLocation.setVisible(false);
-            jLabel10.setVisible(false);
-        }
-
-        if (!knotenAName.equals("") && (knotenAHoehe > -1)) {
-            lblKnAName.setText(knotenAName);
-            lblKnAHoehe.setText(knotenAHoehe.toString());
-        } else {
-            panKnotenAn.setVisible(false);
-            jLabel11.setVisible(false);
-        }
-
-        if (!knotenEName.equals("") && (knotenEHoehe > -1)) {
-            lblKnEName.setText(knotenEName);
-            lblKnEHoehe.setText(knotenEHoehe.toString());
-        } else {
-            panKnotenEn.setVisible(false);
-            jLabel14.setVisible(false);
-        }
-
-        if (!segmentRName.equals("")) {
-            lblSegRName.setText(segmentRName);
-        } else {
-            lblSegRName.setVisible(false);
-            jLabel17.setVisible(false);
-        }
-
-        if (!segmentLName.equals("")) {
-            lblSegLName.setText(segmentLName);
-        } else {
-            lblSegLName.setVisible(false);
-            jLabel18.setVisible(false);
-        }
-
-        if (geometry != null) {
-            setGeometry(geometry);
+            if ((laenge > -1) && (breite > -1)) {
+                lblLaengeBreite.setText(laenge + " x " + breite);
+            } else {
+                lblLaengeBreite.setVisible(false);
+                jLabel5.setVisible(false);
+            }
         }
     }
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
     @Override
-    public double getWidthRatio() {
-        return 1.0;
+    public void dispose() {
+        bindingGroup.unbind();
+    }
+
+    @Override
+    public String getTitle() {
+        final String name = (String)cidsBean.getProperty("name");
+        if (StringUtils.isBlank(name)) {
+            return SEGMENT;
+        } else {
+            return name;
+        }
+    }
+
+    @Override
+    public void setTitle(final String title) {
     }
 
     /**
@@ -303,12 +141,10 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        panInter = new javax.swing.JPanel();
-        panMap = new javax.swing.JPanel();
-        panSpinner = new JLoadDots();
-        panTitle = new javax.swing.JPanel();
-        lblTitle = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        panPreviewMap = new de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel();
         panInhalt = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -350,80 +186,28 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
         setOpaque(false);
         setLayout(new java.awt.BorderLayout());
 
-        panInter.setOpaque(false);
+        jPanel1.setOpaque(false);
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 5);
+        jPanel1.add(panPreviewMap, gridBagConstraints);
 
-        final javax.swing.GroupLayout panInterLayout = new javax.swing.GroupLayout(panInter);
-        panInter.setLayout(panInterLayout);
-        panInterLayout.setHorizontalGroup(
-            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                497,
-                Short.MAX_VALUE));
-        panInterLayout.setVerticalGroup(
-            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                20,
-                Short.MAX_VALUE));
-
-        add(panInter, java.awt.BorderLayout.SOUTH);
-
-        panMap.setOpaque(false);
-        panMap.setLayout(new java.awt.GridBagLayout());
-
-        panSpinner.setMaximumSize(new java.awt.Dimension(100, 100));
-        panSpinner.setMinimumSize(new java.awt.Dimension(100, 100));
-        panSpinner.setOpaque(false);
-
-        final javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
-        panSpinner.setLayout(panSpinnerLayout);
-        panSpinnerLayout.setHorizontalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                100,
-                Short.MAX_VALUE));
-        panSpinnerLayout.setVerticalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                100,
-                Short.MAX_VALUE));
-
-        panMap.add(panSpinner, new java.awt.GridBagConstraints());
-
-        add(panMap, java.awt.BorderLayout.CENTER);
-
-        panTitle.setOpaque(false);
-
-        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18));
-        lblTitle.setForeground(new java.awt.Color(255, 255, 255));
-        lblTitle.setText("Segment - 7871.4");
-
-        final javax.swing.GroupLayout panTitleLayout = new javax.swing.GroupLayout(panTitle);
-        panTitle.setLayout(panTitleLayout);
-        panTitleLayout.setHorizontalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addContainerGap(
-                    328,
-                    Short.MAX_VALUE)));
-        panTitleLayout.setVerticalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addContainerGap(
-                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                    Short.MAX_VALUE)));
-
-        add(panTitle, java.awt.BorderLayout.NORTH);
-
-        panInhalt.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 15, 5, 20));
         panInhalt.setOpaque(false);
         panInhalt.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel1.setText("Objekt-ID:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panInhalt.add(jLabel1, gridBagConstraints);
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("Kilometerqu.-Nr.:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -432,7 +216,7 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panInhalt.add(jLabel2, gridBagConstraints);
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setText("Segment-Nr.:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -441,7 +225,7 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panInhalt.add(jLabel3, gridBagConstraints);
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel4.setText("Strassenname:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -450,7 +234,7 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panInhalt.add(jLabel4, gridBagConstraints);
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel5.setText("Länge x Breite:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -459,7 +243,7 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panInhalt.add(jLabel5, gridBagConstraints);
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel6.setText("Höhe Anfang:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -468,7 +252,7 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panInhalt.add(jLabel6, gridBagConstraints);
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel7.setText("Höhe Ende:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -477,7 +261,7 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panInhalt.add(jLabel7, gridBagConstraints);
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel8.setText("Neigung:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -486,7 +270,7 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panInhalt.add(jLabel8, gridBagConstraints);
 
-        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel9.setText("Klasse:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -495,7 +279,7 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panInhalt.add(jLabel9, gridBagConstraints);
 
-        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel11.setText("Knoten Anfang:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -504,7 +288,7 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panInhalt.add(jLabel11, gridBagConstraints);
 
-        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel10.setText("Location:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -513,13 +297,27 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panInhalt.add(jLabel10, gridBagConstraints);
 
-        lblObjectID.setText("000BLO");
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.objekt_id}"),
+                lblObjectID,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblObjectID, gridBagConstraints);
 
-        lblKmnr.setText("7871");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kmnr}"),
+                lblKmnr,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -527,7 +325,14 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblKmnr, gridBagConstraints);
 
-        lblSegnr.setText("4");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kmnrsegnr}"),
+                lblSegnr,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -535,7 +340,14 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblSegnr, gridBagConstraints);
 
-        lblStrasse.setText("Wupperstr.");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.strasse.name}"),
+                lblStrasse,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -551,7 +363,14 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblLaengeBreite, gridBagConstraints);
 
-        lblHoeheAn.setText("105.0");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hoehe_anfang}"),
+                lblHoeheAn,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
@@ -559,7 +378,14 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblHoeheAn, gridBagConstraints);
 
-        lblHoeheEn.setText("102.0");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hoehe_ende}"),
+                lblHoeheEn,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
@@ -567,7 +393,14 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblHoeheEn, gridBagConstraints);
 
-        lblNeigung.setText("0.2");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.neigung}"),
+                lblNeigung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 7;
@@ -575,7 +408,14 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblNeigung, gridBagConstraints);
 
-        lblKlasse.setText("0");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.klasse}"),
+                lblKlasse,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 8;
@@ -583,7 +423,14 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblKlasse, gridBagConstraints);
 
-        lblLocation.setText("0196000000018ee2");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.location}"),
+                lblLocation,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 9;
@@ -593,15 +440,27 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
 
         panKnotenAn.setOpaque(false);
 
-        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel12.setText("Name:");
 
-        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel13.setText("Höhe:");
 
-        lblKnAName.setText("Knoten 7871.2");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.knoten_anfang.name}"),
+                lblKnAName,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
 
-        lblKnAHoehe.setText("105");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.knoten_anfang.hoehe}"),
+                lblKnAHoehe,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
 
         final javax.swing.GroupLayout panKnotenAnLayout = new javax.swing.GroupLayout(panKnotenAn);
         panKnotenAn.setLayout(panKnotenAnLayout);
@@ -611,7 +470,7 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
                     panKnotenAnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
                         jLabel13).addComponent(jLabel12)).addGap(35, 35, 35).addGroup(
                     panKnotenAnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
-                        lblKnAName).addComponent(lblKnAHoehe)).addContainerGap(17, Short.MAX_VALUE)));
+                        lblKnAName).addComponent(lblKnAHoehe)).addContainerGap(97, Short.MAX_VALUE)));
         panKnotenAnLayout.setVerticalGroup(
             panKnotenAnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
                 panKnotenAnLayout.createSequentialGroup().addContainerGap().addGroup(
@@ -636,15 +495,27 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
 
         panKnotenEn.setOpaque(false);
 
-        jLabel15.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel15.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel15.setText("Name:");
 
-        jLabel16.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel16.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel16.setText("Höhe:");
 
-        lblKnEHoehe.setText("102");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.knoten_ende.hoehe}"),
+                lblKnEHoehe,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
 
-        lblKnEName.setText("Knoten 7871.36");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.knoten_ende.name}"),
+                lblKnEName,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
 
         final javax.swing.GroupLayout panKnotenEnLayout = new javax.swing.GroupLayout(panKnotenEn);
         panKnotenEn.setLayout(panKnotenEnLayout);
@@ -676,7 +547,7 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(panKnotenEn, gridBagConstraints);
 
-        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel14.setText("Knoten Ende:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -685,7 +556,7 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panInhalt.add(jLabel14, gridBagConstraints);
 
-        jLabel17.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel17.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel17.setText("Segmentseite Rechts:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -694,7 +565,14 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panInhalt.add(jLabel17, gridBagConstraints);
 
-        lblSegRName.setText("Segmentseite 7871.4 Rechts");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.segmentseite_r.name}"),
+                lblSegRName,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 12;
@@ -702,7 +580,7 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblSegRName, gridBagConstraints);
 
-        jLabel18.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel18.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel18.setText("Segmentseite Links:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -711,7 +589,14 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panInhalt.add(jLabel18, gridBagConstraints);
 
-        lblSegLName.setText("Segmentseite 7871.4 Links");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.segmentseite_l.name}"),
+                lblSegLName,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 13;
@@ -719,6 +604,17 @@ public class SegmentRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblSegLName, gridBagConstraints);
 
-        add(panInhalt, java.awt.BorderLayout.WEST);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 10);
+        jPanel1.add(panInhalt, gridBagConstraints);
+
+        add(jPanel1, java.awt.BorderLayout.CENTER);
+
+        bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
 }

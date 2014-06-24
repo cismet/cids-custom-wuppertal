@@ -7,97 +7,29 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import com.vividsolutions.jts.geom.Geometry;
+import Sirius.navigator.ui.RequestsFullSizeComponent;
+
+import org.apache.commons.lang.StringUtils;
 
 import java.sql.Timestamp;
 
-import de.cismet.cids.annotations.CidsAttribute;
+import javax.swing.JPanel;
 
-import de.cismet.cids.custom.deprecated.JLoadDots;
+import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
+import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 /**
- * de.cismet.cids.objectrenderer.CoolStraKoRenderer.
+ * DOCUMENT ME!
  *
  * @author   nh
  * @version  $Revision$, $Date$
  */
-public class StrakoRenderer extends BlurredMapObjectRenderer {
+public class StrakoRenderer extends JPanel implements CidsBeanRenderer, RequestsFullSizeComponent {
 
     //~ Instance fields --------------------------------------------------------
 
-    @CidsAttribute("Strako_ID")
-    public Integer id;
-
-    @CidsAttribute("Betreff")
-    public String betreff = "";
-
-    @CidsAttribute("Schaden")
-    public String schaden = "";
-
-    @CidsAttribute("Menge")
-    public String menge = "";
-
-    @CidsAttribute("Einheit")
-    public String einheit = "";
-
-    @CidsAttribute("Zust\u00E4ndigkeit")
-    public String zust = "";
-
-    @CidsAttribute("Prioritaet")
-    public String prio = "";
-
-    @CidsAttribute("Status")
-    public String status = "";
-
-    @CidsAttribute("Strasse")
-    public String strasse = "";
-
-    @CidsAttribute("Strassenschluessel")
-    public String strassenschl = "";
-
-    @CidsAttribute("von")
-    public String von = "";
-
-    @CidsAttribute("bis")
-    public String bis = "";
-
-    @CidsAttribute("Objekt")
-    public String obj = "";
-
-    @CidsAttribute("bis Hausnummer")
-    public String hausnrVon = "";
-
-    @CidsAttribute("von Hausnummer")
-    public String hausnrBis = "";
-
-    @CidsAttribute("Lokaladverb")
-    public String lokaladv = "";
-
-    @CidsAttribute("Merkmal")
-    public String merkmal = "";
-
-    @CidsAttribute("Bereich")
-    public String bereich = "";
-
-    @CidsAttribute("Seite")
-    public String seite = "";
-
-    @CidsAttribute("Tour")
-    public String tour = "";
-
-    @CidsAttribute("Bemerkung")
-    public String bemerkung = "";
-
-    @CidsAttribute("Kontrolleur")
-    public String kontrolleur = "";
-
-    @CidsAttribute("Datum und Uhrzeit")
-    public Timestamp datum;
-
-    @CidsAttribute("PunktGeometrie.GEO_STRING")
-    public Geometry geom = null;
+    private CidsBean cidsBean;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -118,6 +50,7 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblBemerkung;
     private javax.swing.JLabel lblBereich;
     private javax.swing.JLabel lblBetreff;
@@ -133,15 +66,12 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
     private javax.swing.JLabel lblSeite;
     private javax.swing.JLabel lblStatus;
     private javax.swing.JLabel lblStrasse;
-    private javax.swing.JLabel lblTitle;
     private javax.swing.JLabel lblTour;
     private javax.swing.JLabel lblVonBis;
     private javax.swing.JLabel lblZust;
     private javax.swing.JPanel panInhalt;
-    private javax.swing.JPanel panInter;
-    private javax.swing.JPanel panMap;
-    private javax.swing.JPanel panSpinner;
-    private javax.swing.JPanel panTitle;
+    private de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel panPreviewMap;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -151,46 +81,56 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
      */
     public StrakoRenderer() {
         initComponents();
-        setPanContent(panInhalt);
-        setPanInter(null);
-        setPanMap(panMap);
-        setPanTitle(panTitle);
-        setSpinner(panSpinner);
     }
 
     //~ Methods ----------------------------------------------------------------
 
+    @Override
+    public CidsBean getCidsBean() {
+        return cidsBean;
+    }
+
+    @Override
+    public void setCidsBean(final CidsBean cidsBean) {
+        bindingGroup.unbind();
+        if (cidsBean != null) {
+            this.cidsBean = cidsBean;
+            panPreviewMap.initMap(cidsBean, "punktgeometrie.geo_field");
+            bindingGroup.bind();
+            setTextOfLabels();
+        }
+    }
+
+    @Override
+    public void dispose() {
+        bindingGroup.unbind();
+    }
+
+    @Override
+    public String getTitle() {
+        String title;
+        final Integer strakoId = (Integer)cidsBean.getProperty("strako_id");
+        final String strasse = (String)cidsBean.getProperty("strasse");
+        if (StringUtils.isNotBlank(strasse)) {
+            title = "StraKo - " + strakoId + " (" + strasse + ")";
+        } else {
+            title = "StraKo - (" + strakoId + ")";
+        }
+        return title;
+    }
+
+    @Override
+    public void setTitle(final String title) {
+    }
+
     /**
      * DOCUMENT ME!
      */
-    @Override
-    public void assignSingle() {
-        if (geom != null) {
-            super.setGeometry(geom);
-        }
-
-        if (!strasse.equals("")) {
-            lblTitle.setText("StraKo - " + id + " (" + strasse + ")");
-        } else {
-            lblTitle.setText("StraKo - (" + id + ")");
-        }
-
-        if (!betreff.equals("")) {
-            lblBetreff.setText(betreff);
-        } else {
-            jLabel1.setVisible(false);
-            lblBetreff.setVisible(false);
-        }
-
-        if (!schaden.equals("")) {
-            lblSchaden.setText(schaden);
-        } else {
-            jLabel2.setVisible(false);
-            lblSchaden.setVisible(false);
-        }
-
-        if (!menge.equals("")) {
-            if (!einheit.equals("")) {
+    private void setTextOfLabels() {
+        final String menge = (String)cidsBean.getProperty("menge");
+        if (StringUtils.isNotBlank(menge)) {
+            final String einheit = (String)cidsBean.getProperty("einheit");
+            if (StringUtils.isNotBlank(einheit)) {
                 lblMenge.setText(menge + " " + einheit);
             } else {
                 lblMenge.setText(menge);
@@ -200,116 +140,37 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
             lblMenge.setVisible(false);
         }
 
-        if (!zust.equals("")) {
-            lblZust.setText(zust);
-        } else {
-            jLabel4.setVisible(false);
-            lblZust.setVisible(false);
-        }
-
-        if (!prio.equals("")) {
-            lblPrio.setText(prio);
-        } else {
-            jLabel5.setVisible(false);
-            lblPrio.setVisible(false);
-        }
-
-        if (!status.equals("") && !status.equals("null")) {
-            lblStatus.setText(status);
-        } else {
-            jLabel6.setVisible(false);
-            lblStatus.setVisible(false);
-        }
-
-        if (!strassenschl.equals("")) {
-            lblStrasse.setText(strassenschl);
-        } else {
-            jLabel7.setVisible(false);
-            lblStrasse.setVisible(false);
-        }
-
-        if (!von.equals("") && !von.equals("null")) {
+        final String von = (String)cidsBean.getProperty("von");
+        if (StringUtils.isNotBlank(von)) {
             lblVonBis.setText(von);
         } else {
             jLabel8.setVisible(false);
             lblVonBis.setVisible(false);
         }
 
-        if (!bis.equals("") && !bis.equals("null")) {
+        final String bis = (String)cidsBean.getProperty("bis");
+        if (StringUtils.isNotBlank(bis)) {
             jLabel8.setVisible(true);
             lblVonBis.setVisible(true);
             lblVonBis.setText(lblVonBis.getText() + " - " + bis);
         }
 
-        if (!obj.equals("") && !obj.equals("null")) {
-            lblObjekt.setText(obj);
-        } else {
-            jLabel9.setVisible(false);
-            lblObjekt.setVisible(false);
-        }
-
-        if (!hausnrVon.equals("") && !hausnrVon.equals("null")) {
+        final String hausnrVon = (String)cidsBean.getProperty("hausnr_von");
+        if (StringUtils.isNotBlank(hausnrVon)) {
             lblHausnrVonBis.setText(hausnrVon);
         } else {
             jLabel10.setVisible(false);
             lblHausnrVonBis.setVisible(false);
         }
 
-        if (!hausnrBis.equals("") && !hausnrBis.equals("null")) {
+        final String hausnrBis = (String)cidsBean.getProperty("hausnr_bis");
+        if (StringUtils.isNotBlank(hausnrBis)) {
             jLabel10.setVisible(true);
             lblHausnrVonBis.setVisible(true);
             lblHausnrVonBis.setText(lblHausnrVonBis.getText() + " - " + hausnrBis);
         }
 
-        if (!lokaladv.equals("")) {
-            lblLokaladv.setText(lokaladv);
-        } else {
-            jLabel11.setVisible(false);
-            lblLokaladv.setVisible(false);
-        }
-
-        if (!merkmal.equals("")) {
-            lblMerkmal.setText(merkmal);
-        } else {
-            jLabel12.setVisible(false);
-            lblMerkmal.setVisible(false);
-        }
-
-        if (!bereich.equals("")) {
-            lblBereich.setText(bereich);
-        } else {
-            jLabel13.setVisible(false);
-            lblBereich.setVisible(false);
-        }
-
-        if (!seite.equals("")) {
-            lblSeite.setText(seite);
-        } else {
-            jLabel14.setVisible(false);
-            lblSeite.setVisible(false);
-        }
-
-        if (!tour.equals("")) {
-            lblTour.setText(tour);
-        } else {
-            jLabel15.setVisible(false);
-            lblTour.setVisible(false);
-        }
-
-        if (!bemerkung.equals("")) {
-            lblBemerkung.setText(bemerkung);
-        } else {
-            jLabel16.setVisible(false);
-            lblBemerkung.setVisible(false);
-        }
-
-        if (!kontrolleur.equals("")) {
-            lblKontrolleur.setText(kontrolleur);
-        } else {
-            jLabel17.setVisible(false);
-            lblKontrolleur.setVisible(false);
-        }
-
+        final Timestamp datum = (Timestamp)cidsBean.getProperty("datum_uhrzeit");
         if (datum != null) {
             lblDatum.setText(datum.toString());
         } else {
@@ -325,12 +186,9 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        panTitle = new javax.swing.JPanel();
-        lblTitle = new javax.swing.JLabel();
-        panInter = new javax.swing.JPanel();
-        panMap = new javax.swing.JPanel();
-        panSpinner = new JLoadDots();
+        jPanel1 = new javax.swing.JPanel();
         panInhalt = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -368,85 +226,25 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         lblBemerkung = new javax.swing.JLabel();
         lblKontrolleur = new javax.swing.JLabel();
         lblDatum = new javax.swing.JLabel();
+        panPreviewMap = new de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel();
 
         setOpaque(false);
         setLayout(new java.awt.BorderLayout());
 
-        panTitle.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
-        panTitle.setOpaque(false);
+        jPanel1.setOpaque(false);
+        jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18));
-        lblTitle.setForeground(new java.awt.Color(255, 255, 255));
-        lblTitle.setText("StraKo");
-
-        final javax.swing.GroupLayout panTitleLayout = new javax.swing.GroupLayout(panTitle);
-        panTitle.setLayout(panTitleLayout);
-        panTitleLayout.setHorizontalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addContainerGap(
-                    393,
-                    Short.MAX_VALUE)));
-        panTitleLayout.setVerticalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addContainerGap(
-                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                    Short.MAX_VALUE)));
-
-        add(panTitle, java.awt.BorderLayout.NORTH);
-
-        panInter.setOpaque(false);
-
-        final javax.swing.GroupLayout panInterLayout = new javax.swing.GroupLayout(panInter);
-        panInter.setLayout(panInterLayout);
-        panInterLayout.setHorizontalGroup(
-            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                469,
-                Short.MAX_VALUE));
-        panInterLayout.setVerticalGroup(
-            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                20,
-                Short.MAX_VALUE));
-
-        add(panInter, java.awt.BorderLayout.SOUTH);
-
-        panMap.setOpaque(false);
-        panMap.setLayout(new java.awt.GridBagLayout());
-
-        panSpinner.setMaximumSize(new java.awt.Dimension(100, 100));
-        panSpinner.setMinimumSize(new java.awt.Dimension(100, 100));
-        panSpinner.setOpaque(false);
-
-        final javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
-        panSpinner.setLayout(panSpinnerLayout);
-        panSpinnerLayout.setHorizontalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                100,
-                Short.MAX_VALUE));
-        panSpinnerLayout.setVerticalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                100,
-                Short.MAX_VALUE));
-
-        panMap.add(panSpinner, new java.awt.GridBagConstraints());
-
-        add(panMap, java.awt.BorderLayout.CENTER);
-
-        panInhalt.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 15, 10, 20));
         panInhalt.setOpaque(false);
         panInhalt.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel1.setText("Betreff:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         panInhalt.add(jLabel1, gridBagConstraints);
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("Schaden:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -455,7 +253,7 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         panInhalt.add(jLabel2, gridBagConstraints);
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setText("Menge:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -464,7 +262,7 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         panInhalt.add(jLabel3, gridBagConstraints);
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel4.setText("Zuständigkeit:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -473,7 +271,7 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         panInhalt.add(jLabel4, gridBagConstraints);
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel5.setText("Priorität:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -482,7 +280,7 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         panInhalt.add(jLabel5, gridBagConstraints);
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel6.setText("Status:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -491,7 +289,7 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         panInhalt.add(jLabel6, gridBagConstraints);
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel7.setText("Straßenschlüssel:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -500,7 +298,7 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         panInhalt.add(jLabel7, gridBagConstraints);
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel8.setText("von / bis:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -509,7 +307,7 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         panInhalt.add(jLabel8, gridBagConstraints);
 
-        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel9.setText("Objekt:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -518,7 +316,7 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         panInhalt.add(jLabel9, gridBagConstraints);
 
-        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel10.setText("Hausnummer von / bis:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -527,7 +325,7 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         panInhalt.add(jLabel10, gridBagConstraints);
 
-        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel11.setText("Lokaladverb:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -536,7 +334,7 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         panInhalt.add(jLabel11, gridBagConstraints);
 
-        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel12.setText("Merkmal:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -545,7 +343,7 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         panInhalt.add(jLabel12, gridBagConstraints);
 
-        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel13.setText("Bereich:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -554,7 +352,7 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         panInhalt.add(jLabel13, gridBagConstraints);
 
-        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel14.setText("Seite:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -563,7 +361,7 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         panInhalt.add(jLabel14, gridBagConstraints);
 
-        jLabel15.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel15.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel15.setText("Tour:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -572,7 +370,7 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         panInhalt.add(jLabel15, gridBagConstraints);
 
-        jLabel16.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel16.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel16.setText("Bemerkung:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -581,7 +379,7 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         panInhalt.add(jLabel16, gridBagConstraints);
 
-        jLabel17.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel17.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel17.setText("Kontrolleur:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -590,7 +388,7 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         panInhalt.add(jLabel17, gridBagConstraints);
 
-        jLabel18.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel18.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel18.setText("Datum:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -599,7 +397,14 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         panInhalt.add(jLabel18, gridBagConstraints);
 
-        lblBetreff.setText("Bergstrasse");
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.betreff}"),
+                lblBetreff,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -607,7 +412,14 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblBetreff, gridBagConstraints);
 
-        lblSchaden.setText("18");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.schaden}"),
+                lblSchaden,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -615,7 +427,7 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblSchaden, gridBagConstraints);
 
-        lblMenge.setText("300 Meter");
+        lblMenge.setText("Menge Einheit");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -623,7 +435,14 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblMenge, gridBagConstraints);
 
-        lblZust.setText("123/67");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.zustaendigkeit}"),
+                lblZust,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -631,7 +450,14 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblZust, gridBagConstraints);
 
-        lblPrio.setText("5");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.prioritaet}"),
+                lblPrio,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -639,7 +465,14 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblPrio, gridBagConstraints);
 
-        lblStatus.setText("23");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.status}"),
+                lblStatus,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
@@ -647,7 +480,14 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblStatus, gridBagConstraints);
 
-        lblStrasse.setText("Bergstrasse");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.strassenschluessel}"),
+                lblStrasse,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
@@ -655,7 +495,7 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblStrasse, gridBagConstraints);
 
-        lblVonBis.setText("18");
+        lblVonBis.setText("von - bis");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 7;
@@ -663,7 +503,14 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblVonBis, gridBagConstraints);
 
-        lblObjekt.setText("66123");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.objekt}"),
+                lblObjekt,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 8;
@@ -671,7 +518,7 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblObjekt, gridBagConstraints);
 
-        lblHausnrVonBis.setText("123/67");
+        lblHausnrVonBis.setText("von - bis");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 9;
@@ -679,7 +526,14 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblHausnrVonBis, gridBagConstraints);
 
-        lblLokaladv.setText("5");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.lokaladverb}"),
+                lblLokaladv,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 10;
@@ -687,7 +541,14 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblLokaladv, gridBagConstraints);
 
-        lblMerkmal.setText("23");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.merkmal}"),
+                lblMerkmal,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 11;
@@ -695,7 +556,14 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblMerkmal, gridBagConstraints);
 
-        lblBereich.setText("Bergstrasse");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bereich}"),
+                lblBereich,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 12;
@@ -703,7 +571,14 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblBereich, gridBagConstraints);
 
-        lblSeite.setText("18");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.seite}"),
+                lblSeite,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 13;
@@ -711,7 +586,14 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblSeite, gridBagConstraints);
 
-        lblTour.setText("66123");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.tour}"),
+                lblTour,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 14;
@@ -719,7 +601,14 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblTour, gridBagConstraints);
 
-        lblBemerkung.setText("123/67");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bemerkung}"),
+                lblBemerkung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 15;
@@ -727,7 +616,14 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblBemerkung, gridBagConstraints);
 
-        lblKontrolleur.setText("5");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kontrolleur}"),
+                lblKontrolleur,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 16;
@@ -735,7 +631,7 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblKontrolleur, gridBagConstraints);
 
-        lblDatum.setText("23");
+        lblDatum.setText("23.04.2014");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 17;
@@ -743,6 +639,25 @@ public class StrakoRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panInhalt.add(lblDatum, gridBagConstraints);
 
-        add(panInhalt, java.awt.BorderLayout.WEST);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 10);
+        jPanel1.add(panInhalt, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 5);
+        jPanel1.add(panPreviewMap, gridBagConstraints);
+
+        add(jPanel1, java.awt.BorderLayout.CENTER);
+
+        bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
 }

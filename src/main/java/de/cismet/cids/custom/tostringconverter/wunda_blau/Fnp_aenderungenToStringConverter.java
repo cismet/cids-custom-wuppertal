@@ -12,16 +12,19 @@ import de.cismet.cids.tools.CustomToStringConverter;
 /**
  * DOCUMENT ME!
  *
- * @author   srichter
  * @version  $Revision$, $Date$
  */
-public class Thema_geometriemodellToStringConverter extends CustomToStringConverter {
+public class Fnp_aenderungenToStringConverter extends CustomToStringConverter {
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
     public String createString() {
-        final String string = (String)cidsBean.getProperty("modelltyp");
-        return (string != null) ? string : "-";
+        final String verfahrensnummer = Integer.toString((Integer)cidsBean.getProperty("fnp_aender"));
+        if (verfahrensnummer != null) {
+            return verfahrensnummer;
+        } else {
+            return "";
+        }
     }
 }

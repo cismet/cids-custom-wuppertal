@@ -7,8 +7,6 @@
 ****************************************************/
 package de.cismet.cids.custom.tostringconverter.wunda_blau;
 
-import de.cismet.cids.annotations.CidsAttribute;
-
 import de.cismet.cids.tools.CustomToStringConverter;
 
 /**
@@ -19,15 +17,15 @@ import de.cismet.cids.tools.CustomToStringConverter;
  */
 public class Sb_stadtbildToStringConverter extends CustomToStringConverter {
 
-    //~ Instance fields --------------------------------------------------------
-
-    @CidsAttribute("bildnummer")
-    public String bildnummer = "Bildnummer nicht bekannt";
-
     //~ Methods ----------------------------------------------------------------
 
     @Override
     public String createString() {
-        return bildnummer;
+        final String nummer = (String)cidsBean.getProperty("bildnummer");
+        if (nummer != null) {
+            return nummer;
+        } else {
+            return "Bildnummer nicht bekannt";
+        }
     }
 }

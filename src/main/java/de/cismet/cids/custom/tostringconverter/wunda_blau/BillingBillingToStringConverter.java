@@ -16,8 +16,6 @@ import java.text.SimpleDateFormat;
 
 import java.util.Date;
 
-import de.cismet.cids.annotations.CidsAttribute;
-
 import de.cismet.cids.tools.CustomToStringConverter;
 
 /**
@@ -30,26 +28,29 @@ public class BillingBillingToStringConverter extends CustomToStringConverter {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
-
-    //~ Instance fields --------------------------------------------------------
-
-    @CidsAttribute("geschaeftsbuchnummer")
-    public String geschaeftsbuchnummer = "keine Geschäftsbuchnummer angegeben";
-
-    @CidsAttribute("angelegt_durch.kunde.name")
-    public String kundenname = "";
-
-    @CidsAttribute("username")
-    public String username = "kein Benutzername";
-
-    @CidsAttribute("ts")
-    public Date angelegt;
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
     public String createString() {
+        String geschaeftsbuchnummer = (String)cidsBean.getProperty("geschaeftsbuchnummer");
+        if (geschaeftsbuchnummer == null) {
+            geschaeftsbuchnummer = "keine Geschäftsbuchnummer angegeben";
+        }
+
+        String kundenname = (String)cidsBean.getProperty("angelegt_durch.kunde.name");
+        if (kundenname == null) {
+            kundenname = "";
+        }
+
+        String username = (String)cidsBean.getProperty("username");
+        if (username == null) {
+            username = "kein Benutzername";
+        }
+
+        final Date angelegt = (Date)cidsBean.getProperty("ts");
+
         final StringBuilder name = new StringBuilder();
         if (!kundenname.equals("")) {
             name.append(kundenname);

@@ -7,8 +7,7 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import com.vividsolutions.jts.geom.Geometry;
-
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import org.jdesktop.swingx.graphics.ShadowRenderer;
@@ -23,60 +22,46 @@ import java.awt.image.BufferedImage;
 import java.net.URL;
 
 import javax.swing.ImageIcon;
-
-import de.cismet.cids.annotations.CidsAttribute;
+import javax.swing.JPanel;
 
 import de.cismet.cids.custom.deprecated.JBreakLabel;
-import de.cismet.cids.custom.deprecated.JLoadDots;
 
-import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
+import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 import de.cismet.tools.BrowserLauncher;
 
 /**
- * de.cismet.cids.objectrenderer.CoolWerbetraegerRenderer.
+ * DOCUMENT ME!
  *
  * @author   nh
  * @version  $Revision$, $Date$
  */
-public class WerbetraegerRenderer extends BlurredMapObjectRenderer {
+public class WerbetraegerRenderer extends JPanel implements CidsBeanRenderer {
 
     //~ Static fields/initializers ---------------------------------------------
 
     private static final String TITLE = "Werbeanlagen";
+    private static final Logger LOG = Logger.getLogger(WerbetraegerRenderer.class);
 
     //~ Instance fields --------------------------------------------------------
 
-    @CidsAttribute("Objektname")
-    public String bez = "";
-
-    @CidsAttribute("Werbung zum Aufnahmezeitpunkt")
-    public String werbung = "";
-
-    @CidsAttribute("Art.Bezeichnung")
-    public String art = "";
-
-    @CidsAttribute("Geometrie.GEO_STRING")
-    public Geometry geometry = null;
-    private final Logger log = Logger.getLogger(this.getClass());
-    private final ImageIcon errorimage = new ImageIcon(getClass().getResource(
-                "/de/cismet/cids/tools/metaobjectrenderer/examples/error.png"));
+    private CidsBean cidsBean;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
     private org.jdesktop.swingx.JXHyperlink jhxImage1;
     private org.jdesktop.swingx.JXHyperlink jhxImage2;
     private javax.swing.JLabel lblArt;
     private javax.swing.JLabel lblBez;
-    private javax.swing.JLabel lblTitle;
     private javax.swing.JLabel lblWerbung;
     private javax.swing.JPanel panContent;
-    private javax.swing.JPanel panInter;
-    private javax.swing.JPanel panMap;
-    private javax.swing.JPanel panSpinner;
-    private javax.swing.JPanel panTitle;
+    private de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel panPreviewMap;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -86,57 +71,65 @@ public class WerbetraegerRenderer extends BlurredMapObjectRenderer {
      */
     public WerbetraegerRenderer() {
         initComponents();
-        setPanContent(panContent);
-        setPanInter(null);
-        setPanMap(panMap);
-        setPanTitle(panTitle);
-        setSpinner(panSpinner);
     }
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void assignSingle() {
-        if (geometry != null) {
-            setGeometry(geometry);
-        }
+    public CidsBean getCidsBean() {
+        return cidsBean;
+    }
 
-        if (bez != null) {
-            lblTitle.setText(TITLE + " - " + bez);
-            lblBez.setText(bez);
+    @Override
+    public void setCidsBean(final CidsBean cidsBean) {
+        bindingGroup.unbind();
+        if (cidsBean != null) {
+            this.cidsBean = cidsBean;
+            panPreviewMap.initMap(cidsBean, "geometrie.geo_field");
+            bindingGroup.bind();
+            fetchImages();
+        }
+    }
+
+    @Override
+    public void dispose() {
+        bindingGroup.unbind();
+    }
+
+    @Override
+    public String getTitle() {
+        final String bezeichnung = (String)cidsBean.getProperty("bezeichnung");
+        if (StringUtils.isNotBlank(bezeichnung)) {
+            return TITLE + " - " + bezeichnung;
         } else {
-            lblTitle.setText(TITLE);
-            lblBez.setVisible(false);
-            jLabel1.setVisible(false);
+            return TITLE;
         }
+    }
 
-        if (werbung != null) {
-            lblWerbung.setText(werbung);
-        } else {
-            jLabel2.setVisible(false);
-            lblWerbung.setVisible(false);
-        }
+    @Override
+    public void setTitle(final String title) {
+    }
 
-        if (art != null) {
-            lblArt.setText(art);
-        } else {
-            jLabel3.setVisible(false);
-            lblArt.setVisible(false);
-        }
-
+    /**
+     * DOCUMENT ME!
+     */
+    private void fetchImages() {
         final Thread t = new Thread(new Runnable() {
 
                     @Override
                     public void run() {
-//                    String urlA = "http://kif/web/werbetafeln/200/t_"+bez+"a.JPG";
-//                    String urlB = "http://kif/web/werbetafeln/200/t_"+bez+"b.JPG";
-//                    final String fullUrlA = "http://kif/web/werbetafeln/"+bez+"a.JPG";
-//                    final String fullUrlB = "http://kif/web/werbetafeln/"+bez+"b.JPG";
+                        final String bezeichnung = (String)cidsBean.getProperty("bezeichnung");
+                        if (StringUtils.isBlank(bezeichnung)) {
+                            jhxImage1.setVisible(false);
+                            jhxImage2.setVisible(false);
+                            LOG.error("The Werbetraeger does not have a name. The images can therefore not be loaded.");
+                            return;
+                        }
 
-                        final String urlA = "http://s10221/cismet/res/werbetafeln/200/t_" + bez + "a.JPG";
-                        final String urlB = "http://s10221/cismet/res/werbetafeln/200/t_" + bez + "b.JPG";
-                        final String fullUrlA = "http://s10221/cismet/res/werbetafeln/" + bez + "a.JPG";
-                        final String fullUrlB = "http://s10221/cismet/res/werbetafeln/" + bez + "b.JPG";
+                        final String urlA = "http://s10221/cismet/res/werbetafeln/200/t_" + bezeichnung + "a.JPG";
+                        final String urlB = "http://s10221/cismet/res/werbetafeln/200/t_" + bezeichnung + "b.JPG";
+                        final String fullUrlA = "http://s10221/cismet/res/werbetafeln/" + bezeichnung + "a.JPG";
+                        final String fullUrlB = "http://s10221/cismet/res/werbetafeln/" + bezeichnung + "b.JPG";
                         try {
                             // 1. Bild erzeugen
                             final ImageIcon a = new ImageIcon(new URL(urlA));
@@ -178,7 +171,7 @@ public class WerbetraegerRenderer extends BlurredMapObjectRenderer {
                                                     try {
                                                         BrowserLauncher.openURL(fullUrlA);
                                                     } catch (Exception ex) {
-                                                        log.error(
+                                                        LOG.error(
                                                             "Fehler beim \u00F6ffnen der URL \""
                                                                     + fullUrlA
                                                                     + "\"",
@@ -189,12 +182,11 @@ public class WerbetraegerRenderer extends BlurredMapObjectRenderer {
                                     }
                                 });
                         } catch (Exception e) {
-                            log.error("Konnte Werbetafel-Bild mit URL \"" + urlA + "\" nicht laden.", e);
+                            LOG.error("Konnte Werbetafel-Bild mit URL \"" + urlA + "\" nicht laden.", e);
                             EventQueue.invokeLater(new Runnable() {
 
                                     @Override
                                     public void run() {
-//                                lblImage1.setIcon(errorimage);
                                         jhxImage1.setVisible(false);
                                     }
                                 });
@@ -241,7 +233,7 @@ public class WerbetraegerRenderer extends BlurredMapObjectRenderer {
                                                     try {
                                                         BrowserLauncher.openURL(fullUrlB);
                                                     } catch (Exception ex) {
-                                                        log.error(
+                                                        LOG.error(
                                                             "Fehler beim \u00F6ffnen der URL \""
                                                                     + fullUrlB
                                                                     + "\"",
@@ -252,12 +244,11 @@ public class WerbetraegerRenderer extends BlurredMapObjectRenderer {
                                     }
                                 });
                         } catch (Exception e) {
-                            log.error("Konnte Werbetafel-Bild mit URL \"" + urlB + "\" nicht laden.", e);
+                            LOG.error("Konnte Werbetafel-Bild mit URL \"" + urlB + "\" nicht laden.", e);
                             EventQueue.invokeLater(new Runnable() {
 
                                     @Override
                                     public void run() {
-//                                lblImage2.setIcon(errorimage);
                                         jhxImage2.setVisible(false);
                                     }
                                 });
@@ -274,9 +265,9 @@ public class WerbetraegerRenderer extends BlurredMapObjectRenderer {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        panTitle = new javax.swing.JPanel();
-        lblTitle = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         panContent = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -286,45 +277,24 @@ public class WerbetraegerRenderer extends BlurredMapObjectRenderer {
         lblArt = new javax.swing.JLabel();
         jhxImage1 = new org.jdesktop.swingx.JXHyperlink();
         jhxImage2 = new org.jdesktop.swingx.JXHyperlink();
-        panInter = new javax.swing.JPanel();
-        panMap = new javax.swing.JPanel();
-        panSpinner = new JLoadDots();
+        panPreviewMap = new de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel();
 
         setLayout(new java.awt.BorderLayout());
 
-        panTitle.setOpaque(false);
+        jPanel1.setOpaque(false);
+        jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18));
-        lblTitle.setForeground(new java.awt.Color(255, 255, 255));
-        lblTitle.setText("Werbetafel");
-
-        final javax.swing.GroupLayout panTitleLayout = new javax.swing.GroupLayout(panTitle);
-        panTitle.setLayout(panTitleLayout);
-        panTitleLayout.setHorizontalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addContainerGap(
-                    638,
-                    Short.MAX_VALUE)));
-        panTitleLayout.setVerticalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addContainerGap(
-                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                    Short.MAX_VALUE)));
-
-        add(panTitle, java.awt.BorderLayout.NORTH);
-
-        panContent.setBorder(javax.swing.BorderFactory.createEmptyBorder(30, 15, 10, 20));
         panContent.setOpaque(false);
         panContent.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel1.setText("Bezeichnung:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panContent.add(jLabel1, gridBagConstraints);
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("momentane Werbung:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -333,13 +303,27 @@ public class WerbetraegerRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panContent.add(jLabel2, gridBagConstraints);
 
-        lblBez.setText("Werbetafel");
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.bezeichnung}"),
+                lblBez,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panContent.add(lblBez, gridBagConstraints);
 
-        lblWerbung.setText("McDonalds");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.momentane_werbung}"),
+                lblWerbung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -347,7 +331,7 @@ public class WerbetraegerRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panContent.add(lblWerbung, gridBagConstraints);
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setText("Art:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -356,7 +340,14 @@ public class WerbetraegerRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panContent.add(jLabel3, gridBagConstraints);
 
-        lblArt.setText("Stelltafel");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.art.bezeichnung}"),
+                lblArt,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -377,35 +368,25 @@ public class WerbetraegerRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.gridheight = java.awt.GridBagConstraints.REMAINDER;
         panContent.add(jhxImage2, gridBagConstraints);
 
-        add(panContent, java.awt.BorderLayout.WEST);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 30);
+        jPanel1.add(panContent, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 10, 5);
+        jPanel1.add(panPreviewMap, gridBagConstraints);
 
-        panInter.setOpaque(false);
-        panInter.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 20, 10));
-        add(panInter, java.awt.BorderLayout.SOUTH);
+        add(jPanel1, java.awt.BorderLayout.CENTER);
 
-        panMap.setOpaque(false);
-        panMap.setLayout(new java.awt.GridBagLayout());
-
-        panSpinner.setMaximumSize(new java.awt.Dimension(100, 100));
-        panSpinner.setMinimumSize(new java.awt.Dimension(100, 100));
-        panSpinner.setOpaque(false);
-        panSpinner.setPreferredSize(new java.awt.Dimension(100, 100));
-
-        final javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
-        panSpinner.setLayout(panSpinnerLayout);
-        panSpinnerLayout.setHorizontalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                100,
-                Short.MAX_VALUE));
-        panSpinnerLayout.setVerticalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                100,
-                Short.MAX_VALUE));
-
-        panMap.add(panSpinner, new java.awt.GridBagConstraints());
-
-        add(panMap, java.awt.BorderLayout.CENTER);
+        bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
 }

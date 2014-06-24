@@ -7,21 +7,20 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import com.vividsolutions.jts.geom.Geometry;
+import org.apache.commons.lang.StringUtils;
 
-import de.cismet.cids.annotations.CidsAttribute;
+import javax.swing.JPanel;
 
-import de.cismet.cids.custom.deprecated.JLoadDots;
+import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
+import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
 
 /**
- * de.cismet.cids.objectrenderer.CoolStrassenRenderer.
+ * DOCUMENT ME!
  *
- * @author   cschmidt
  * @version  $Revision$, $Date$
  */
-public class StrasseRenderer extends BlurredMapObjectRenderer {
+public class StrasseRenderer extends JPanel implements CidsBeanRenderer {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -29,26 +28,17 @@ public class StrasseRenderer extends BlurredMapObjectRenderer {
 
     //~ Instance fields --------------------------------------------------------
 
-    @CidsAttribute("STRASSENSCHLUESSEL")
-    public Integer strSchluessel;
-
-    @CidsAttribute("NAME")
-    public String name;
-
-    @CidsAttribute("Georeferenz.GEO_STRING")
-    public Geometry geom;
+    private CidsBean cidsBean;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblStrName;
     private javax.swing.JLabel lblStrSchluessel;
-    private javax.swing.JLabel lblTitle;
     private javax.swing.JPanel panInhalt;
-    private javax.swing.JPanel panInter;
-    private javax.swing.JPanel panMap;
-    private javax.swing.JPanel panSpinner;
-    private javax.swing.JPanel panTitle;
+    private de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel panPreviewMap;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -58,14 +48,43 @@ public class StrasseRenderer extends BlurredMapObjectRenderer {
      */
     public StrasseRenderer() {
         initComponents();
-        setPanContent(panInhalt);
-        setPanInter(null);
-        setPanMap(panMap);
-        setPanTitle(panTitle);
-        setSpinner(panSpinner);
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public CidsBean getCidsBean() {
+        return cidsBean;
+    }
+
+    @Override
+    public void setCidsBean(final CidsBean cidsBean) {
+        bindingGroup.unbind();
+        if (cidsBean != null) {
+            this.cidsBean = cidsBean;
+            panPreviewMap.initMap(cidsBean, "umschreibendes_rechteck.geo_field");
+            bindingGroup.bind();
+        }
+    }
+
+    @Override
+    public void dispose() {
+        bindingGroup.unbind();
+    }
+
+    @Override
+    public String getTitle() {
+        final String name = (String)cidsBean.getProperty("name");
+        if (StringUtils.isNotBlank(name)) {
+            return name;
+        } else {
+            return STRASSE;
+        }
+    }
+
+    @Override
+    public void setTitle(final String title) {
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -74,43 +93,35 @@ public class StrasseRenderer extends BlurredMapObjectRenderer {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        panInter = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        panPreviewMap = new de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel();
         panInhalt = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         lblStrSchluessel = new javax.swing.JLabel();
         lblStrName = new javax.swing.JLabel();
-        panTitle = new javax.swing.JPanel();
-        lblTitle = new javax.swing.JLabel();
-        panMap = new javax.swing.JPanel();
-        panSpinner = new JLoadDots();
 
         setLayout(new java.awt.BorderLayout());
 
-        panInter.setOpaque(false);
-
-        final javax.swing.GroupLayout panInterLayout = new javax.swing.GroupLayout(panInter);
-        panInter.setLayout(panInterLayout);
-        panInterLayout.setHorizontalGroup(
-            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                415,
-                Short.MAX_VALUE));
-        panInterLayout.setVerticalGroup(
-            panInterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                20,
-                Short.MAX_VALUE));
-
-        add(panInter, java.awt.BorderLayout.SOUTH);
+        jPanel1.setOpaque(false);
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 5);
+        jPanel1.add(panPreviewMap, gridBagConstraints);
 
         panInhalt.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 15, 20, 20));
         panInhalt.setMinimumSize(new java.awt.Dimension(200, 150));
         panInhalt.setOpaque(false);
         panInhalt.setLayout(new java.awt.GridBagLayout());
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("Name:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -119,21 +130,35 @@ public class StrasseRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 20);
         panInhalt.add(jLabel2, gridBagConstraints);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel1.setText("Strassenschlüssel:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 20);
         panInhalt.add(jLabel1, gridBagConstraints);
 
-        lblStrSchluessel.setText("562431");
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.strassenschluessel}"),
+                lblStrSchluessel,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 5);
         panInhalt.add(lblStrSchluessel, gridBagConstraints);
 
-        lblStrName.setText("Elsterweg");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.name}"),
+                lblStrName,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -142,93 +167,17 @@ public class StrasseRenderer extends BlurredMapObjectRenderer {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panInhalt.add(lblStrName, gridBagConstraints);
 
-        add(panInhalt, java.awt.BorderLayout.WEST);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 10);
+        jPanel1.add(panInhalt, gridBagConstraints);
 
-        panTitle.setOpaque(false);
+        add(jPanel1, java.awt.BorderLayout.CENTER);
 
-        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18));
-        lblTitle.setForeground(new java.awt.Color(255, 255, 255));
-        lblTitle.setText("Elsterweg");
-
-        final javax.swing.GroupLayout panTitleLayout = new javax.swing.GroupLayout(panTitle);
-        panTitle.setLayout(panTitleLayout);
-        panTitleLayout.setHorizontalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addContainerGap(
-                    316,
-                    Short.MAX_VALUE)));
-        panTitleLayout.setVerticalGroup(
-            panTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                panTitleLayout.createSequentialGroup().addContainerGap().addComponent(lblTitle).addContainerGap(
-                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                    Short.MAX_VALUE)));
-
-        add(panTitle, java.awt.BorderLayout.NORTH);
-
-        panMap.setOpaque(false);
-        panMap.setLayout(new java.awt.GridBagLayout());
-
-        panSpinner.setMinimumSize(new java.awt.Dimension(100, 100));
-        panSpinner.setOpaque(false);
-        panSpinner.setPreferredSize(new java.awt.Dimension(100, 100));
-
-        final javax.swing.GroupLayout panSpinnerLayout = new javax.swing.GroupLayout(panSpinner);
-        panSpinner.setLayout(panSpinnerLayout);
-        panSpinnerLayout.setHorizontalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                100,
-                Short.MAX_VALUE));
-        panSpinnerLayout.setVerticalGroup(
-            panSpinnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                100,
-                Short.MAX_VALUE));
-
-        panMap.add(panSpinner, new java.awt.GridBagConstraints());
-
-        add(panMap, java.awt.BorderLayout.CENTER);
+        bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
-
-    /**
-     * DOCUMENT ME!
-     */
-    @Override
-    public void assignSingle() {
-        if (geom != null) {
-            setGeometry(geom);
-        }
-
-        if (strSchluessel != null) {
-            lblStrSchluessel.setText(strSchluessel.toString());
-        } else {
-            jLabel1.setVisible(false);
-            lblStrSchluessel.setVisible(false);
-        }
-        if ((name != null) && !name.equals("")) {
-            lblStrName.setText(name);
-            lblTitle.setText(name);
-        } else {
-            lblTitle.setText(STRASSE);
-            jLabel2.setVisible(false);
-            lblStrName.setVisible(false);
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     */
-    @Override
-    public void assignAggregation() {
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  geometry  DOCUMENT ME!
-     */
-    @Override
-    public void setGeometry(final Geometry geometry) {
-        super.setGeometry(geometry);
-    }
 }

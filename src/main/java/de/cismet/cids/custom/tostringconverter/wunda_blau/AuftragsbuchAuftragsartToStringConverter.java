@@ -15,13 +15,13 @@ import de.cismet.cids.tools.CustomToStringConverter;
  * @author   thorsten
  * @version  $Revision$, $Date$
  */
-public class AuftragsbuchAuftragsartToStringConverterX extends CustomToStringConverter {
+public class AuftragsbuchAuftragsartToStringConverter extends CustomToStringConverter {
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
     public String createString() {
-        final String auftragsart = String.valueOf(cidsBean.getProperty("auftragsart"));
+        final String auftragsart = (String)cidsBean.getProperty("auftragsart");
         if (auftragsart != null) {
             return auftragsart;
         } else {

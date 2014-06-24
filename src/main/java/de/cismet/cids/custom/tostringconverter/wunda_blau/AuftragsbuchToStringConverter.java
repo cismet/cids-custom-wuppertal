@@ -12,16 +12,20 @@ import de.cismet.cids.tools.CustomToStringConverter;
 /**
  * DOCUMENT ME!
  *
- * @author   srichter
+ * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class Thema_geometriemodellToStringConverter extends CustomToStringConverter {
+public class AuftragsbuchToStringConverter extends CustomToStringConverter {
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
     public String createString() {
-        final String string = (String)cidsBean.getProperty("modelltyp");
-        return (string != null) ? string : "-";
+        final Integer auftragsart = (Integer)cidsBean.getProperty("auftragsnummer");
+        if (auftragsart != null) {
+            return auftragsart.toString();
+        } else {
+            return "keine Auftragsnummer vergeben";
+        }
     }
 }
