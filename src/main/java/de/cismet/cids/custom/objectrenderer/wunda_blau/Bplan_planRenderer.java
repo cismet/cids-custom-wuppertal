@@ -13,20 +13,13 @@
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import java.awt.EventQueue;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 
 import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import de.cismet.cids.annotations.CidsAttribute;
-import de.cismet.cids.annotations.CidsRendererTitle;
-
 import de.cismet.cids.client.tools.DevelopmentTools;
-
-import de.cismet.cids.custom.deprecated.IndentLabel;
 
 import de.cismet.cids.dynamics.CidsBean;
 
