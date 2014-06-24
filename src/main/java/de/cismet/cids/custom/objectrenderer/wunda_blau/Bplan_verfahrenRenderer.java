@@ -53,7 +53,6 @@ public class Bplan_verfahrenRenderer extends JPanel implements CidsBeanRenderer,
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel lblAlkRelevant;
-    private javax.swing.JLabel lblBezeichnung;
     private javax.swing.JLabel lblNummer;
     private javax.swing.JLabel lblStatus;
     private javax.swing.JPanel panAlkis;
@@ -63,6 +62,7 @@ public class Bplan_verfahrenRenderer extends JPanel implements CidsBeanRenderer,
     private javax.swing.JPanel panTabAlkis;
     private javax.swing.JPanel panTabAllgemein;
     private javax.swing.JTabbedPane tabbedPane;
+    private javax.swing.JTextArea txtBezeichnung;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -112,8 +112,8 @@ public class Bplan_verfahrenRenderer extends JPanel implements CidsBeanRenderer,
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         lblNummer = new JBreakLabel();
-        lblBezeichnung = new javax.swing.JLabel();
         lblStatus = new javax.swing.JLabel();
+        txtBezeichnung = new javax.swing.JTextArea();
         panTabAlkis = new CoolTabPanel();
         panAlkis = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
@@ -185,21 +185,6 @@ public class Bplan_verfahrenRenderer extends JPanel implements CidsBeanRenderer,
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.name}"),
-                lblBezeichnung,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-        panAllgemein.add(lblBezeichnung, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.status}"),
                 lblStatus,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -211,6 +196,31 @@ public class Bplan_verfahrenRenderer extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         panAllgemein.add(lblStatus, gridBagConstraints);
+
+        txtBezeichnung.setEditable(false);
+        txtBezeichnung.setColumns(30);
+        txtBezeichnung.setLineWrap(true);
+        txtBezeichnung.setRows(1);
+        txtBezeichnung.setToolTipText("");
+        txtBezeichnung.setWrapStyleWord(true);
+        txtBezeichnung.setBorder(null);
+        txtBezeichnung.setOpaque(false);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.name}"),
+                txtBezeichnung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+        panAllgemein.add(txtBezeichnung, gridBagConstraints);
 
         panTabAllgemein.add(panAllgemein);
 
