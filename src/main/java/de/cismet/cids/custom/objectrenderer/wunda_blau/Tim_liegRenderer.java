@@ -107,7 +107,6 @@ public class Tim_liegRenderer extends JPanel implements CidsBeanRenderer, Change
     private javax.swing.JLabel lblAlkALKUeberAm;
     private javax.swing.JLabel lblAlkALKUeberVon;
     private javax.swing.JLabel lblAlkBach;
-    private javax.swing.JLabel lblAlkBemerk;
     private javax.swing.JLabel lblAlkBoden;
     private javax.swing.JLabel lblAlkDGKAbgelAm;
     private javax.swing.JLabel lblAlkDGKAbgelVon;
@@ -123,28 +122,21 @@ public class Tim_liegRenderer extends JPanel implements CidsBeanRenderer, Change
     private javax.swing.JLabel lblAlkSonstige;
     private javax.swing.JLabel lblAlkSonstiges;
     private javax.swing.JLabel lblAlkTopo;
-    private javax.swing.JLabel lblAlkVermessung;
     private javax.swing.JLabel lblAngelAm;
     private javax.swing.JLabel lblAngelVon;
     private javax.swing.JLabel lblGelAm;
     private javax.swing.JLabel lblGelVon;
-    private javax.swing.JLabel lblGrund;
-    private javax.swing.JLabel lblHinweise;
-    private javax.swing.JLabel lblKartCityBem;
     private javax.swing.JLabel lblKartCityRel;
     private javax.swing.JLabel lblKartCityUeberAm;
     private javax.swing.JLabel lblKartCityUeberVon;
-    private javax.swing.JLabel lblKartFreiBem;
     private javax.swing.JLabel lblKartFreiRel;
     private javax.swing.JLabel lblKartFreiUeberAm;
     private javax.swing.JLabel lblKartFreiUeberVon;
-    private javax.swing.JLabel lblKartStadtBem;
     private javax.swing.JLabel lblKartStadtEntschAm;
     private javax.swing.JLabel lblKartStadtEntschVon;
     private javax.swing.JLabel lblKartStadtRel;
     private javax.swing.JLabel lblKartStadtUeberAm;
     private javax.swing.JLabel lblKartStadtUeberVon;
-    private javax.swing.JLabel lblKartUebersichtBem;
     private javax.swing.JLabel lblKartUebersichtRel;
     private javax.swing.JLabel lblKartUebersichtUeberAm;
     private javax.swing.JLabel lblKartUebersichtUeberVon;
@@ -157,6 +149,14 @@ public class Tim_liegRenderer extends JPanel implements CidsBeanRenderer, Change
     private javax.swing.JPanel panTabAllgemein;
     private javax.swing.JPanel panTabKarto;
     private javax.swing.JTabbedPane tabbedPane;
+    private javax.swing.JTextArea txtAlkBemerkung;
+    private javax.swing.JTextArea txtAlkVermessung;
+    private javax.swing.JTextArea txtGrund;
+    private javax.swing.JTextArea txtHinweise;
+    private javax.swing.JTextArea txtKartCityBem;
+    private javax.swing.JTextArea txtKartFreiBem;
+    private javax.swing.JTextArea txtKartStadtBem;
+    private javax.swing.JTextArea txtKartUebersichtBem;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -356,12 +356,12 @@ public class Tim_liegRenderer extends JPanel implements CidsBeanRenderer, Change
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        lblHinweise = new javax.swing.JLabel();
         lblAngelVon = new javax.swing.JLabel();
         lblAngelAm = new javax.swing.JLabel();
         lblGelVon = new javax.swing.JLabel();
         lblGelAm = new javax.swing.JLabel();
-        lblGrund = new javax.swing.JLabel();
+        txtHinweise = new javax.swing.JTextArea();
+        txtGrund = new javax.swing.JTextArea();
         panTabAlkis = new CoolTabPanel();
         panAlkis = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
@@ -392,13 +392,11 @@ public class Tim_liegRenderer extends JPanel implements CidsBeanRenderer, Change
         lblAlkEntschiedenVon = new javax.swing.JLabel();
         lblAlkEntschiedenAm = new javax.swing.JLabel();
         lblAlkPrio = new javax.swing.JLabel();
-        lblAlkBemerk = new javax.swing.JLabel();
         lblAlkTopo = new javax.swing.JLabel();
         lblAlkGeb = new javax.swing.JLabel();
         lblAlkNutz = new javax.swing.JLabel();
         lblAlkBoden = new javax.swing.JLabel();
         lblAlkSonstiges = new javax.swing.JLabel();
-        lblAlkVermessung = new javax.swing.JLabel();
         lblAlkFeldvergleich = new javax.swing.JLabel();
         lblAlkLuftbild = new javax.swing.JLabel();
         lblAlkBach = new javax.swing.JLabel();
@@ -412,6 +410,8 @@ public class Tim_liegRenderer extends JPanel implements CidsBeanRenderer, Change
         lblAlkDGKRel = new javax.swing.JLabel();
         lblAlkDGKAbgelVon = new javax.swing.JLabel();
         lblAlkDGKAbgelAm = new javax.swing.JLabel();
+        txtAlkBemerkung = new javax.swing.JTextArea();
+        txtAlkVermessung = new javax.swing.JTextArea();
         panTabKarto = new CoolTabPanel();
         panKarto = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
@@ -435,21 +435,21 @@ public class Tim_liegRenderer extends JPanel implements CidsBeanRenderer, Change
         lblKartStadtRel = new javax.swing.JLabel();
         lblKartStadtEntschVon = new javax.swing.JLabel();
         lblKartStadtEntschAm = new javax.swing.JLabel();
-        lblKartStadtBem = new javax.swing.JLabel();
         lblKartStadtUeberVon = new javax.swing.JLabel();
         lblKartStadtUeberAm = new javax.swing.JLabel();
         lblKartCityRel = new javax.swing.JLabel();
-        lblKartCityBem = new javax.swing.JLabel();
         lblKartCityUeberVon = new javax.swing.JLabel();
         lblKartCityUeberAm = new javax.swing.JLabel();
         lblKartUebersichtRel = new javax.swing.JLabel();
-        lblKartUebersichtBem = new javax.swing.JLabel();
         lblKartUebersichtUeberVon = new javax.swing.JLabel();
         lblKartUebersichtUeberAm = new javax.swing.JLabel();
         lblKartFreiRel = new javax.swing.JLabel();
-        lblKartFreiBem = new javax.swing.JLabel();
         lblKartFreiUeberVon = new javax.swing.JLabel();
         lblKartFreiUeberAm = new javax.swing.JLabel();
+        txtKartStadtBem = new javax.swing.JTextArea();
+        txtKartCityBem = new javax.swing.JTextArea();
+        txtKartUebersichtBem = new javax.swing.JTextArea();
+        txtKartFreiBem = new javax.swing.JTextArea();
         panPreviewMap = new de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel();
 
         setMinimumSize(new java.awt.Dimension(400, 300));
@@ -527,19 +527,6 @@ public class Tim_liegRenderer extends JPanel implements CidsBeanRenderer, Change
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hinweis}"),
-                lblHinweise,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-        panAllgemein.add(lblHinweise, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.ein_beab}"),
                 lblAngelVon,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -583,20 +570,53 @@ public class Tim_liegRenderer extends JPanel implements CidsBeanRenderer, Change
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         panAllgemein.add(lblGelAm, gridBagConstraints);
 
+        txtHinweise.setEditable(false);
+        txtHinweise.setColumns(35);
+        txtHinweise.setLineWrap(true);
+        txtHinweise.setRows(1);
+        txtHinweise.setToolTipText("");
+        txtHinweise.setWrapStyleWord(true);
+        txtHinweise.setBorder(null);
+        txtHinweise.setOpaque(false);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.hinweis}"),
+                txtHinweise,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+        panAllgemein.add(txtHinweise, gridBagConstraints);
+
+        txtGrund.setEditable(false);
+        txtGrund.setColumns(35);
+        txtGrund.setLineWrap(true);
+        txtGrund.setRows(1);
+        txtGrund.setToolTipText("");
+        txtGrund.setWrapStyleWord(true);
+        txtGrund.setBorder(null);
+        txtGrund.setOpaque(false);
+
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.loe_grund}"),
-                lblGrund,
+                txtGrund,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-        panAllgemein.add(lblGrund, gridBagConstraints);
+        panAllgemein.add(txtGrund, gridBagConstraints);
 
         panTabAllgemein.add(panAllgemein);
 
@@ -877,21 +897,6 @@ public class Tim_liegRenderer extends JPanel implements CidsBeanRenderer, Change
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_bem}"),
-                lblAlkBemerk,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        panAlkis.add(lblAlkBemerk, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_top}"),
                 lblAlkTopo,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -967,21 +972,6 @@ public class Tim_liegRenderer extends JPanel implements CidsBeanRenderer, Change
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_ver}"),
-                lblAlkVermessung,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        panAlkis.add(lblAlkVermessung, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_feld}"),
                 lblAlkFeldvergleich,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -1008,8 +998,6 @@ public class Tim_liegRenderer extends JPanel implements CidsBeanRenderer, Change
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panAlkis.add(lblAlkLuftbild, gridBagConstraints);
-
-        lblAlkBach.setText("???");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 13;
@@ -1139,6 +1127,56 @@ public class Tim_liegRenderer extends JPanel implements CidsBeanRenderer, Change
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panAlkis.add(lblAlkDGKAbgelAm, gridBagConstraints);
+
+        txtAlkBemerkung.setEditable(false);
+        txtAlkBemerkung.setColumns(35);
+        txtAlkBemerkung.setLineWrap(true);
+        txtAlkBemerkung.setRows(1);
+        txtAlkBemerkung.setToolTipText("");
+        txtAlkBemerkung.setWrapStyleWord(true);
+        txtAlkBemerkung.setBorder(null);
+        txtAlkBemerkung.setOpaque(false);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_bem}"),
+                txtAlkBemerkung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        panAlkis.add(txtAlkBemerkung, gridBagConstraints);
+
+        txtAlkVermessung.setEditable(false);
+        txtAlkVermessung.setColumns(35);
+        txtAlkVermessung.setLineWrap(true);
+        txtAlkVermessung.setRows(1);
+        txtAlkVermessung.setToolTipText("");
+        txtAlkVermessung.setWrapStyleWord(true);
+        txtAlkVermessung.setBorder(null);
+        txtAlkVermessung.setOpaque(false);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.alkis.alk_ver}"),
+                txtAlkVermessung,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        panAlkis.add(txtAlkVermessung, gridBagConstraints);
 
         panTabAlkis.add(panAlkis);
 
@@ -1350,21 +1388,6 @@ public class Tim_liegRenderer extends JPanel implements CidsBeanRenderer, Change
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.stadt_bem}"),
-                lblKartStadtBem,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        panKarto.add(lblKartStadtBem, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.stadt_ueb_beab}"),
                 lblKartStadtUeberVon,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -1399,21 +1422,6 @@ public class Tim_liegRenderer extends JPanel implements CidsBeanRenderer, Change
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panKarto.add(lblKartCityRel, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.city_bem}"),
-                lblKartCityBem,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        panKarto.add(lblKartCityBem, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -1456,21 +1464,6 @@ public class Tim_liegRenderer extends JPanel implements CidsBeanRenderer, Change
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.ueber_bem}"),
-                lblKartUebersichtBem,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 11;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        panKarto.add(lblKartUebersichtBem, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.ueber_ueb_beab}"),
                 lblKartUebersichtUeberVon,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -1509,21 +1502,6 @@ public class Tim_liegRenderer extends JPanel implements CidsBeanRenderer, Change
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.freizeit_bem}"),
-                lblKartFreiBem,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 15;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        panKarto.add(lblKartFreiBem, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.freizeit_ueb_von}"),
                 lblKartFreiUeberVon,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -1551,6 +1529,106 @@ public class Tim_liegRenderer extends JPanel implements CidsBeanRenderer, Change
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panKarto.add(lblKartFreiUeberAm, gridBagConstraints);
 
+        txtKartStadtBem.setEditable(false);
+        txtKartStadtBem.setColumns(35);
+        txtKartStadtBem.setLineWrap(true);
+        txtKartStadtBem.setRows(1);
+        txtKartStadtBem.setToolTipText("");
+        txtKartStadtBem.setWrapStyleWord(true);
+        txtKartStadtBem.setBorder(null);
+        txtKartStadtBem.setOpaque(false);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.stadt_bem}"),
+                txtKartStadtBem,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        panKarto.add(txtKartStadtBem, gridBagConstraints);
+
+        txtKartCityBem.setEditable(false);
+        txtKartCityBem.setColumns(35);
+        txtKartCityBem.setLineWrap(true);
+        txtKartCityBem.setRows(1);
+        txtKartCityBem.setToolTipText("");
+        txtKartCityBem.setWrapStyleWord(true);
+        txtKartCityBem.setBorder(null);
+        txtKartCityBem.setOpaque(false);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.city_bem}"),
+                txtKartCityBem,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        panKarto.add(txtKartCityBem, gridBagConstraints);
+
+        txtKartUebersichtBem.setEditable(false);
+        txtKartUebersichtBem.setColumns(35);
+        txtKartUebersichtBem.setLineWrap(true);
+        txtKartUebersichtBem.setRows(1);
+        txtKartUebersichtBem.setToolTipText("");
+        txtKartUebersichtBem.setWrapStyleWord(true);
+        txtKartUebersichtBem.setBorder(null);
+        txtKartUebersichtBem.setOpaque(false);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.ueber_bem}"),
+                txtKartUebersichtBem,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        panKarto.add(txtKartUebersichtBem, gridBagConstraints);
+
+        txtKartFreiBem.setEditable(false);
+        txtKartFreiBem.setColumns(35);
+        txtKartFreiBem.setLineWrap(true);
+        txtKartFreiBem.setRows(1);
+        txtKartFreiBem.setToolTipText("");
+        txtKartFreiBem.setWrapStyleWord(true);
+        txtKartFreiBem.setBorder(null);
+        txtKartFreiBem.setOpaque(false);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.kart.freizeit_bem}"),
+                txtKartFreiBem,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        panKarto.add(txtKartFreiBem, gridBagConstraints);
+
         panTabKarto.add(panKarto);
 
         tabbedPane.addTab("Kartographie", panTabKarto);
@@ -1571,7 +1649,7 @@ public class Tim_liegRenderer extends JPanel implements CidsBeanRenderer, Change
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 5);
+        gridBagConstraints.insets = new java.awt.Insets(12, 5, 17, 5);
         jPanel1.add(panPreviewMap, gridBagConstraints);
 
         add(jPanel1, java.awt.BorderLayout.CENTER);
