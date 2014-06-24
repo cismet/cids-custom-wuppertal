@@ -260,6 +260,7 @@ public class KaufvertragRenderer extends JPanel implements CidsBeanRenderer {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 5);
         jPanel1.add(panPreviewMap, gridBagConstraints);
 
         panMain.setOpaque(false);
@@ -735,6 +736,7 @@ public class KaufvertragRenderer extends JPanel implements CidsBeanRenderer {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 10);
         jPanel1.add(panMain, gridBagConstraints);
 
         add(jPanel1, java.awt.BorderLayout.CENTER);
