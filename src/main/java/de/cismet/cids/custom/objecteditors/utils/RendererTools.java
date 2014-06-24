@@ -11,6 +11,8 @@
  */
 package de.cismet.cids.custom.objecteditors.utils;
 
+import org.jdesktop.swingx.JXDatePicker;
+
 import java.awt.Color;
 import java.awt.Component;
 
@@ -22,7 +24,6 @@ import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
-import javax.swing.plaf.metal.MetalComboBoxButton;
 import javax.swing.text.JTextComponent;
 
 import de.cismet.cids.editors.DefaultBindableDateChooser;
@@ -81,6 +82,20 @@ public class RendererTools {
         if (editorComponent instanceof JTextComponent) {
             ((JTextComponent)editorComponent).setDisabledTextColor(Color.black);
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  datePicker  DOCUMENT ME!
+     */
+    public static void jxDatePickerShouldLookLikeLabel(final JXDatePicker datePicker) {
+        datePicker.setEnabled(false);
+        datePicker.getEditor().setDisabledTextColor(Color.BLACK);
+        datePicker.getEditor().setOpaque(false);
+        datePicker.getEditor().setBorder(null);
+        // make the button invisible
+        datePicker.getComponent(1).setVisible(false);
     }
 
     /**
