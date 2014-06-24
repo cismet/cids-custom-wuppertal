@@ -138,7 +138,7 @@ public class KaufvertragRenderer extends JPanel implements CidsBeanRenderer {
      */
     public KaufvertragRenderer() {
         initComponents();
-        RendererTools.makeReadOnly(dpVerkaufsdatum);
+        RendererTools.jxDatePickerShouldLookLikeLabel(dpVerkaufsdatum);
     }
 
     //~ Methods ----------------------------------------------------------------
