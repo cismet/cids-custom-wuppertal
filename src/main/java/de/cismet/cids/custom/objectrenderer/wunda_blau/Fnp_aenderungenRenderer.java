@@ -36,8 +36,8 @@ public class Fnp_aenderungenRenderer extends JPanel implements CidsBeanRenderer 
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel lblNummer1;
-    private javax.swing.JLabel lblRechtswirksam1;
+    private javax.swing.JLabel lblNummer;
+    private javax.swing.JLabel lblRechtswirksam;
     private javax.swing.JPanel panDescription;
     private javax.swing.JPanel panMainInfo;
     private de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel panPreviewMap;
@@ -71,8 +71,8 @@ public class Fnp_aenderungenRenderer extends JPanel implements CidsBeanRenderer 
         jLabel6 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        lblNummer1 = new javax.swing.JLabel();
-        lblRechtswirksam1 = new javax.swing.JLabel();
+        lblNummer = new javax.swing.JLabel();
+        lblRechtswirksam = new javax.swing.JLabel();
         panPreviewMap = new de.cismet.cids.custom.objectrenderer.utils.DefaultPreviewMapPanel();
 
         setLayout(new java.awt.BorderLayout());
@@ -121,7 +121,7 @@ public class Fnp_aenderungenRenderer extends JPanel implements CidsBeanRenderer 
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.fnp_aender}"),
-                lblNummer1,
+                lblNummer,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
@@ -130,13 +130,13 @@ public class Fnp_aenderungenRenderer extends JPanel implements CidsBeanRenderer 
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 10, 10);
-        panMainInfo.add(lblNummer1, gridBagConstraints);
+        panMainInfo.add(lblNummer, gridBagConstraints);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
                 org.jdesktop.beansbinding.ELProperty.create("${cidsBean.rechtswirk}"),
-                lblRechtswirksam1,
+                lblRechtswirksam,
                 org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
@@ -145,7 +145,7 @@ public class Fnp_aenderungenRenderer extends JPanel implements CidsBeanRenderer 
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 10);
-        panMainInfo.add(lblRechtswirksam1, gridBagConstraints);
+        panMainInfo.add(lblRechtswirksam, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;

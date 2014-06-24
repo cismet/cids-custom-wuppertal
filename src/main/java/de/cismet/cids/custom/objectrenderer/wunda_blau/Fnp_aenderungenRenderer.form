@@ -97,9 +97,9 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblNummer1">
+            <Component class="javax.swing.JLabel" name="lblNummer">
               <BindingProperties>
-                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.fnp_aender}" target="lblNummer1" targetPath="text" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.fnp_aender}" target="lblNummer" targetPath="text" updateStrategy="0" immediately="false"/>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -107,9 +107,9 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblRechtswirksam1">
+            <Component class="javax.swing.JLabel" name="lblRechtswirksam">
               <BindingProperties>
-                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.rechtswirk}" target="lblRechtswirksam1" targetPath="text" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="text" source="Form" sourcePath="${cidsBean.rechtswirk}" target="lblRechtswirksam" targetPath="text" updateStrategy="0" immediately="false"/>
               </BindingProperties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
