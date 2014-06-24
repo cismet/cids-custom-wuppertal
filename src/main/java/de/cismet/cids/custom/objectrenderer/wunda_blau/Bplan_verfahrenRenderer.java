@@ -7,6 +7,8 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.ui.RequestsFullSizeComponent;
+
 import org.apache.log4j.Logger;
 
 import java.util.Date;
@@ -28,7 +30,9 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
  *
  * @version  $Revision$, $Date$
  */
-public class Bplan_verfahrenRenderer extends JPanel implements CidsBeanRenderer, ChangeListener {
+public class Bplan_verfahrenRenderer extends JPanel implements CidsBeanRenderer,
+    ChangeListener,
+    RequestsFullSizeComponent {
 
     //~ Static fields/initializers ---------------------------------------------
 

@@ -7,6 +7,8 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.ui.RequestsFullSizeComponent;
+
 import org.apache.commons.lang.StringUtils;
 
 import java.sql.Timestamp;
@@ -23,7 +25,7 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
  * @author   nh
  * @version  $Revision$, $Date$
  */
-public class StrakoRenderer extends JPanel implements CidsBeanRenderer {
+public class StrakoRenderer extends JPanel implements CidsBeanRenderer, RequestsFullSizeComponent {
 
     //~ Instance fields --------------------------------------------------------
 

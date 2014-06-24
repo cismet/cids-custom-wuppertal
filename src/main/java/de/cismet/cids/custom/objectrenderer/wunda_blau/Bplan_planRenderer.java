@@ -12,6 +12,8 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.ui.RequestsFullSizeComponent;
+
 import java.awt.EventQueue;
 
 import java.net.URL;
@@ -30,7 +32,7 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
  *
  * @version  $Revision$, $Date$
  */
-public class Bplan_planRenderer extends JPanel implements CidsBeanRenderer {
+public class Bplan_planRenderer extends JPanel implements CidsBeanRenderer, RequestsFullSizeComponent {
 
     //~ Static fields/initializers ---------------------------------------------
 

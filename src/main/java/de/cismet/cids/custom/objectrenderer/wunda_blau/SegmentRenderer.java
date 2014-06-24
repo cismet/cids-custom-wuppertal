@@ -7,6 +7,8 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.ui.RequestsFullSizeComponent;
+
 import org.apache.commons.lang.StringUtils;
 
 import javax.swing.JPanel;
@@ -22,7 +24,7 @@ import de.cismet.tools.gui.RoundedPanel;
  *
  * @version  $Revision$, $Date$
  */
-public class SegmentRenderer extends JPanel implements CidsBeanRenderer {
+public class SegmentRenderer extends JPanel implements CidsBeanRenderer, RequestsFullSizeComponent {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -611,7 +613,7 @@ public class SegmentRenderer extends JPanel implements CidsBeanRenderer {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 10);
         jPanel1.add(panInhalt, gridBagConstraints);
 
-        add(jPanel1, java.awt.BorderLayout.PAGE_START);
+        add(jPanel1, java.awt.BorderLayout.CENTER);
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents

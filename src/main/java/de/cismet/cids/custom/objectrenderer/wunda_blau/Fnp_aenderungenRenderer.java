@@ -7,6 +7,8 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.ui.RequestsFullSizeComponent;
+
 import javax.swing.JPanel;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
@@ -22,7 +24,7 @@ import de.cismet.tools.gui.RoundedPanel;
  *
  * @version  $Revision$, $Date$
  */
-public class Fnp_aenderungenRenderer extends JPanel implements CidsBeanRenderer {
+public class Fnp_aenderungenRenderer extends JPanel implements CidsBeanRenderer, RequestsFullSizeComponent {
 
     //~ Static fields/initializers ---------------------------------------------
 

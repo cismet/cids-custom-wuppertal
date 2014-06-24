@@ -7,6 +7,8 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.ui.RequestsFullSizeComponent;
+
 import org.apache.commons.lang.StringUtils;
 
 import org.jdesktop.beansbinding.Converter;
@@ -41,7 +43,7 @@ import de.cismet.tools.gui.RoundedPanel;
  * @author   nhaffke
  * @version  $Revision$, $Date$
  */
-public class KaufvertragRenderer extends JPanel implements CidsBeanRenderer {
+public class KaufvertragRenderer extends JPanel implements CidsBeanRenderer, RequestsFullSizeComponent {
 
     //~ Static fields/initializers ---------------------------------------------
 

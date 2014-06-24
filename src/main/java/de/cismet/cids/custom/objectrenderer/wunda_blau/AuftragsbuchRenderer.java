@@ -7,6 +7,8 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.ui.RequestsFullSizeComponent;
+
 import javax.swing.JPanel;
 
 import de.cismet.cids.custom.objecteditors.utils.RendererTools;
@@ -20,7 +22,7 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanRenderer;
  *
  * @version  $Revision$, $Date$
  */
-public class AuftragsbuchRenderer extends JPanel implements CidsBeanRenderer {
+public class AuftragsbuchRenderer extends JPanel implements CidsBeanRenderer, RequestsFullSizeComponent {
 
     //~ Static fields/initializers ---------------------------------------------
 
