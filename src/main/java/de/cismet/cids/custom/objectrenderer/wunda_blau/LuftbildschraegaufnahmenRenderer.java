@@ -60,7 +60,6 @@ import de.cismet.cids.annotations.CidsAttributeVector;
 import de.cismet.cids.custom.deprecated.JBreakLabel;
 import de.cismet.cids.custom.deprecated.JLoadDots;
 import de.cismet.cids.custom.objectrenderer.utils.PrintingWaitDialog;
-import de.cismet.cids.custom.utils.TifferDownload;
 
 import de.cismet.cids.tools.metaobjectrenderer.BlurredMapObjectRenderer;
 
@@ -68,16 +67,15 @@ import de.cismet.tools.BrowserLauncher;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
-import de.cismet.tools.gui.downloadmanager.DownloadManager;
-import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 
 /**
- * de.cismet.cids.objectrenderer.CoolLuftBildRenderer.
+ * The Luftbildschraegaufnahmen are deprecated. Take a look for example at {@link Sb_stadtbildserieRenderer}
  *
  * <p>Renderer speziell fuer Luftbildschraegaufnahmen.</p>
  *
- * @author   nhaffke
- * @version  $Revision$, $Date$
+ * @author      nhaffke
+ * @version     $Revision$, $Date$
+ * @deprecated  DOCUMENT ME!
  */
 @AggregationRenderer
 public class LuftbildschraegaufnahmenRenderer extends BlurredMapObjectRenderer {
