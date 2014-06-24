@@ -5,14 +5,10 @@
 *              ... and it just works.
 *
 ****************************************************/
-/*
- * LSAFeatureRenderer.java
- *
- * Created on 1. Juni 2007, 10:15
- */
 package de.cismet.cids.custom.featurerenderer.wunda_blau;
 
-import java.awt.BorderLayout;
+import org.apache.commons.lang.StringUtils;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -25,24 +21,25 @@ import java.util.Properties;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import de.cismet.cids.annotations.CidsAttribute;
-
 import de.cismet.cids.featurerenderer.CustomCidsFeatureRenderer;
 
 import de.cismet.tools.BrowserLauncher;
 
 /**
- * de.cismet.cids.featurerenderer.WerbetraegerFeatureRenderer.
+ * DOCUMENT ME!
  *
  * @author   hell
  * @version  $Revision$, $Date$
  */
 public class WerbetraegerFeatureRenderer extends CustomCidsFeatureRenderer {
 
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
+            WerbetraegerFeatureRenderer.class);
+
     //~ Instance fields --------------------------------------------------------
 
-    @CidsAttribute("Objektname")
-    public String bezeichnung;
     String fullUrlA = null;
     String fullUrlB = null;
     ImageIcon errorimage = new javax.swing.ImageIcon(getClass().getResource(
@@ -50,7 +47,6 @@ public class WerbetraegerFeatureRenderer extends CustomCidsFeatureRenderer {
 
     /** Creates new form LSAFeatureRenderer. */
     Properties properties = new Properties();
-    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -86,14 +82,21 @@ public class WerbetraegerFeatureRenderer extends CustomCidsFeatureRenderer {
                     @Override
                     public void run() {
                         try {
+                            final String bezeichnung = (String)cidsBean.getProperty("bezeichnung");
+                            if (StringUtils.isBlank(bezeichnung)) {
+                                lblImagePreviewA.setIcon(errorimage);
+                                prbLoad.setVisible(false);
+                                lblImagePreviewB.setVisible(false);
+                                LOG.error(
+                                    "The Werbetraeger does not have a name. The images can therefore not be loaded.");
+                                return;
+                            }
+
                             final String urlA = "http://s10221/cismet/res/werbetafeln/200/t_" + bezeichnung + "a.JPG";
                             final String urlB = "http://s10221/cismet/res/werbetafeln/200/t_" + bezeichnung + "b.JPG";
                             fullUrlA = "http://s10221/cismet/res/werbetafeln/" + bezeichnung + "a.JPG";
                             fullUrlB = "http://s10221/cismet/res/werbetafeln/" + bezeichnung + "b.JPG";
-//                    String urlA = "http://kif/web/werbetafeln/200/t_"+bezeichnung+"a.JPG";
-//                    String urlB = "http://kif/web/werbetafeln/200/t_"+bezeichnung+"b.JPG";
-//                    fullUrlA = "http://kif/web/werbetafeln/"+bezeichnung+"a.JPG";
-//                    fullUrlB = "http://kif/web/werbetafeln/"+bezeichnung+"b.JPG";
+
                             final ImageIcon a = new ImageIcon(new URL(urlA));
                             final ImageIcon b = new ImageIcon(new URL(urlB));
                             final JPanel p = new JPanel();
@@ -111,9 +114,6 @@ public class WerbetraegerFeatureRenderer extends CustomCidsFeatureRenderer {
                                                         + 6,
                                                 Math.max(a.getIconHeight(), b.getIconHeight())
                                                         + 12));
-                                        // WerbetraegerFeatureRenderer.this.setSize(new
-                                        // Dimension(a.getIconWidth()+b.getIconWidth()+6,Math.max(a.getIconHeight(),b.getIconHeight())+6));
-                                        // revalidate();
                                         prbLoad.setVisible(false);
                                     }
                                 });
