@@ -929,7 +929,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             stadtbildSerieSearchStatement.setOrtID(ort.getPrimaryKeyValue().toString());
         }
 
-        final String hausnummer = txtHausnummer.getText();
+        final String hausnummer = txtHausnummer.getText().trim();
         stadtbildSerieSearchStatement.setHausnummer(hausnummer);
 
         // Geometry
@@ -977,8 +977,8 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
      */
     private void setBildnummerInSearch(final MetaObjectNodesStadtbildSerieSearchStatement stadtbildSerieSearchStatement)
             throws NotAValidIntervalException {
-        final String imageNrFrom = txtImageNrFrom.getText();
-        final String imageNrTo = txtImageNrTo.getText();
+        final String imageNrFrom = txtImageNrFrom.getText().trim();
+        final String imageNrTo = txtImageNrTo.getText().trim();
 
         if (StringUtils.isNotBlank(imageNrFrom) && StringUtils.isNotBlank(imageNrTo)) {
             final Object[] resultArray = setFancyIntervalInSearch(imageNrFrom, imageNrTo);
