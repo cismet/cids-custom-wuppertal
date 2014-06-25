@@ -44,6 +44,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 import javax.swing.Box;
 import javax.swing.DefaultListModel;
@@ -100,6 +101,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             Sb_StadtbildWindowSearch.class);
     private static final String ACTION_TAG = "custom.stadtbilder.search@WUNDA_BLAU";
+    private static final Pattern SIMPLE_INTERVAL_PATTERN = Pattern.compile("(^\\d+$)|(^[A-Z]\\d+$)");
 
     //~ Instance fields --------------------------------------------------------
 
@@ -1004,7 +1006,26 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     Object[] getIntervalForSearch(
             String imageNrFrom,
             String imageNrTo) throws NotAValidIntervalException {
-        boolean exactMatch = true;
+        boolean simpleInterval = false;
+        final ArrayList<String> listWithNumbers = new ArrayList<String>();
+        if (SIMPLE_INTERVAL_PATTERN.matcher(imageNrFrom).matches()
+                    && SIMPLE_INTERVAL_PATTERN.matcher(imageNrTo).matches()) {
+            simpleInterval = true;
+            if (imageNrFrom.length() != imageNrTo.length()) {
+                // the two numbers must have the same length
+                throw new NotAValidIntervalException();
+            }
+            final String prefix = greatestCommonPrefix(imageNrFrom, imageNrTo);
+            if (StringUtils.isBlank(prefix)) {
+                // if the two numbers do not have a common prefix, than they are too different
+                throw new NotAValidIntervalException();
+            }
+
+            listWithNumbers.add(imageNrFrom);
+            listWithNumbers.add(imageNrTo);
+            return new Object[] { simpleInterval, listWithNumbers };
+        }
+
         char lastCharacter = imageNrFrom.charAt(imageNrFrom.length() - 1);
         char letterOfNrFrom;
         if (Character.isLetter(lastCharacter)) {
@@ -1030,7 +1051,6 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             throw new NotAValidIntervalException();
         }
 
-        final ArrayList<String> listWithNumbers = new ArrayList<String>();
         final String prefix = greatestCommonPrefix(imageNrFrom, imageNrTo);
         final int prefix_length = prefix.length();
 
@@ -1071,7 +1091,6 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
 
             final String intToStringFormat = "%0" + end_str.length() + "d";
             final boolean bothNull = (letterOfNrFrom == '\0') && (letterOfNrTo == '\0');
-            exactMatch = !bothNull;
 
             for (int i = begin; i <= end; i++) {
                 if (bothNull) {
