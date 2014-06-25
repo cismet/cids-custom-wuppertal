@@ -981,9 +981,9 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         final String imageNrTo = txtImageNrTo.getText().trim();
 
         if (StringUtils.isNotBlank(imageNrFrom) && StringUtils.isNotBlank(imageNrTo)) {
-            final Object[] resultArray = setFancyIntervalInSearch(imageNrFrom, imageNrTo);
-            stadtbildSerieSearchStatement.setFancyIntervalExactMatch((Boolean)resultArray[0]);
-            stadtbildSerieSearchStatement.setFancyInterval((ArrayList<String>)resultArray[1]);
+            final Object[] resultArray = getIntervalForSearch(imageNrFrom, imageNrTo);
+            stadtbildSerieSearchStatement.setSimpleInterval((Boolean)resultArray[0]);
+            stadtbildSerieSearchStatement.setInterval((ArrayList<String>)resultArray[1]);
         } else if (StringUtils.isNotBlank(imageNrFrom)) {
             stadtbildSerieSearchStatement.setSingleImageNumber(imageNrFrom);
         }
@@ -1001,7 +1001,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
      *
      * @throws  NotAValidIntervalException  DOCUMENT ME!
      */
-    Object[] setFancyIntervalInSearch(
+    Object[] getIntervalForSearch(
             String imageNrFrom,
             String imageNrTo) throws NotAValidIntervalException {
         boolean exactMatch = true;
@@ -1111,7 +1111,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 }
             }
         }
-        return new Object[] { exactMatch, listWithNumbers };
+        return new Object[] { simpleInterval, listWithNumbers };
     }
 
     /**
