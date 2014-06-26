@@ -676,16 +676,16 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cbMapSearchActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbMapSearchActionPerformed
+    private void cbMapSearchActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbMapSearchActionPerformed
         // TODO add your handling code here:
-    } //GEN-LAST:event_cbMapSearchActionPerformed
+    }//GEN-LAST:event_cbMapSearchActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnAddSuchwortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddSuchwortActionPerformed
+    private void btnAddSuchwortActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSuchwortActionPerformed
         final Sb_stadtbildserieEditorAddSuchwortDialog dialog = new Sb_stadtbildserieEditorAddSuchwortDialog((Frame)
                 SwingUtilities.getWindowAncestor(this),
                 true);
@@ -694,14 +694,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             final DefaultListModel dlm = (DefaultListModel)lstSuchworte.getModel();
             dlm.addElement(newSuchwort);
         }
-    }                                                                                  //GEN-LAST:event_btnAddSuchwortActionPerformed
+    }//GEN-LAST:event_btnAddSuchwortActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnRemoveSuchwortActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveSuchwortActionPerformed
+    private void btnRemoveSuchwortActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveSuchwortActionPerformed
         final DefaultListModel dlm = (DefaultListModel)lstSuchworte.getModel();
 
         if (this.lstSuchworte.getSelectedIndices().length > 0) {
@@ -720,14 +720,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 }
             }
         }
-    } //GEN-LAST:event_btnRemoveSuchwortActionPerformed
+    }//GEN-LAST:event_btnRemoveSuchwortActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboOrtItemStateChanged(final java.awt.event.ItemEvent evt) { //GEN-FIRST:event_cboOrtItemStateChanged
+    private void cboOrtItemStateChanged(final java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboOrtItemStateChanged
         Object selectedItem = cboOrt.getSelectedItem();
         if (selectedItem instanceof LightweightMetaObject) {
             selectedItem = ((LightweightMetaObject)selectedItem).getBean();
@@ -743,14 +743,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             checkIfPlaceInsideWuppertal(null);
             RendererTools.showErrorState(cboOrt);
         }
-    }                                                                         //GEN-LAST:event_cboOrtItemStateChanged
+    }//GEN-LAST:event_cboOrtItemStateChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnNewSearchActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnNewSearchActionPerformed
+    private void btnNewSearchActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewSearchActionPerformed
         chboBodennaheAufnahme.setSelected(true);
         chboLuftbildschraegaufnahme.setSelected(true);
         chboLuftbildsenkrechtaufnahme.setSelected(true);
@@ -763,21 +763,21 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         cboOrt.setSelectedItem(Sb_stadtbildUtils.getWUPPERTAL());
         txtHausnummer.setText("");
         cbMapSearch.setSelected(false);
-    }                                                                                //GEN-LAST:event_btnNewSearchActionPerformed
+    }//GEN-LAST:event_btnNewSearchActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cboStreetItemStateChanged(final java.awt.event.ItemEvent evt) { //GEN-FIRST:event_cboStreetItemStateChanged
+    private void cboStreetItemStateChanged(final java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboStreetItemStateChanged
         final Object selectedItem = cboStreet.getSelectedItem();
         if ((selectedItem == null) || (selectedItem instanceof CidsBean) || (selectedItem instanceof MetaObject)) {
             RendererTools.showNormalState(cboStreet);
         } else {
             RendererTools.showErrorState(cboStreet);
         }
-    }                                                                            //GEN-LAST:event_cboStreetItemStateChanged
+    }//GEN-LAST:event_cboStreetItemStateChanged
 
     /**
      * DOCUMENT ME!
@@ -1013,11 +1013,10 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             imageNrTo = swap;
         }
 
-        boolean simpleInterval = false;
+        // this is the case 004711-004713 or N04711-N04713
         final ArrayList<String> listWithNumbers = new ArrayList<String>();
         if (SIMPLE_INTERVAL_PATTERN.matcher(imageNrFrom).matches()
                     && SIMPLE_INTERVAL_PATTERN.matcher(imageNrTo).matches()) {
-            simpleInterval = true;
             if (imageNrFrom.length() != imageNrTo.length()) {
                 // the two numbers must have the same length
                 throw new NotAValidIntervalException();
@@ -1058,6 +1057,8 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
 
         final String prefix = greatestCommonPrefix(imageNrFrom, imageNrTo);
         final int prefix_length = prefix.length();
+        String simpleIntervalStart = null;
+        String simpleIntervalEnd = null;
 
         if (StringUtils.isBlank(prefix)) {
             // if the two numbers do not have a common prefix, than they are too different
@@ -1065,6 +1066,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         } else if (prefix.equals(imageNrFrom)) {
             // both numbers have the same digits, only the last character was different
             // If the letters are not set yet, they have to be set artificially, thus an iteration is possible
+            // this is the case e.g. 4711c-4711f
             char startLetter;
             char targetLetter;
             if (letterOfNrFrom == '\0') {
@@ -1074,6 +1076,8 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 startLetter = letterOfNrFrom;
             }
             if (letterOfNrTo == '\0') {
+                LOG.error(
+                    "The second entry has no last letter and the digits are the same e.g.: 004711c-004711. This should not happen, because of the alphanumerical sort in the beginning.");
                 listWithNumbers.add(prefix);
                 targetLetter = 'z';
             } else {
@@ -1084,58 +1088,52 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             }
         } else {
             // both numbers have different digits and the last character was different
+            // e.g.: 004711a - 004713c
             final String begin_str = imageNrFrom.substring(prefix_length);
             final String end_str = imageNrTo.substring(prefix_length);
             final int begin = Integer.parseInt(begin_str);
             final int end = Integer.parseInt(end_str);
 
             if (begin > end) {
-                // the last number was bigger than the first number
+                LOG.error(
+                    "The last number was bigger than the first number. This should not happen, because of the alphanumerical sort in the beginning.");
                 throw new NotAValidIntervalException();
             }
 
+            // the string format is needed to fill it with zeros
             final String intToStringFormat = "%0" + end_str.length() + "d";
-            final boolean bothNull = (letterOfNrFrom == '\0') && (letterOfNrTo == '\0');
 
-            for (int i = begin; i <= end; i++) {
-                if (bothNull) {
-                    // the numbers do not have a last letter, simply add the number
-                    listWithNumbers.add(prefix + String.format(intToStringFormat, i));
-                } else {
-                    // the numbers do have a last letter, also iterate over the letters
-                    char startLetter;
-                    char targetLetter;
-                    if (letterOfNrFrom == '\0') {
-                        // the first number does not have a letter. Add it to the list and set the letter to 'a'
-                        // Thus an iteration over letters is possible
-                        listWithNumbers.add(prefix + String.format(intToStringFormat, i));
-                        startLetter = 'a';
-                    } else {
-                        startLetter = letterOfNrFrom;
-                    }
-                    if (letterOfNrTo == '\0') {
-                        // the second number does not have a letter.
-                        // Therefor the first number should only appear WITH its letters in the results.
-                        // The second number should only appear WITHOUT its letter in the results.
-                        final String numberToAdd = prefix + String.format(intToStringFormat, i);
-                        if (!numberToAdd.equals(imageNrFrom)) {
-                            listWithNumbers.add(numberToAdd);
-                        }
-                        if (numberToAdd.equals(imageNrTo)) {
-                            break;
-                        }
-                        // Set the letter to 'z', thus an iteration over letters is possible
-                        targetLetter = 'z';
-                    } else {
-                        targetLetter = letterOfNrTo;
-                    }
-                    for (int j = startLetter; j <= targetLetter; j++) {
-                        listWithNumbers.add(prefix + String.format(intToStringFormat, i) + (char)j);
-                    }
+            char startLetter;
+            if (letterOfNrFrom == '\0') {
+                // the first number does not have a letter. Add it to the list and set the letter to 'a'
+                // Thus an iteration over letters is possible
+                listWithNumbers.add(prefix + String.format(intToStringFormat, begin));
+                startLetter = 'a';
+            } else {
+                startLetter = letterOfNrFrom;
+            }
+            for (int j = startLetter; j <= 'z'; j++) {
+                listWithNumbers.add(prefix + String.format(intToStringFormat, begin) + (char)j);
+            }
+
+            final int secondNumber = begin + 1;
+            if (secondNumber < end) {
+                simpleIntervalStart = prefix + String.format(intToStringFormat, secondNumber);
+            }
+
+            final int secondLastNumber = end - 1;
+            if (secondLastNumber > begin) {
+                simpleIntervalEnd = prefix + String.format(intToStringFormat, secondLastNumber);
+            }
+
+            listWithNumbers.add(prefix + String.format(intToStringFormat, end));
+            if (letterOfNrTo != '\0') {
+                for (int j = 'a'; j <= letterOfNrTo; j++) {
+                    listWithNumbers.add(prefix + String.format(intToStringFormat, end) + (char)j);
                 }
             }
         }
-        return new Interval(null, null, listWithNumbers);
+        return new Interval(simpleIntervalStart, simpleIntervalEnd, listWithNumbers);
     }
 
     /**
