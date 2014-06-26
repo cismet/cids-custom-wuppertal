@@ -1021,15 +1021,20 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             throw new NotAValidIntervalException();
         }
 
+        final ArrayList<String> listWithNumbers = new ArrayList<String>();
         final int comparedTo = imageNrFrom.compareTo(imageNrTo);
         if (comparedTo > 0) {
             final String swap = imageNrFrom;
             imageNrFrom = imageNrTo;
             imageNrTo = swap;
+        } else if (comparedTo == 0) {
+            // both numers are the same
+            listWithNumbers.add(imageNrTo);
+            return new Interval(null, null, listWithNumbers);
         }
 
         // this are the cases e.g. 004711-004713 or N04711-N04713
-        final ArrayList<String> listWithNumbers = new ArrayList<String>();
+
         if (SIMPLE_INTERVAL_PATTERN.matcher(imageNrFrom).matches()
                     && SIMPLE_INTERVAL_PATTERN.matcher(imageNrTo).matches()) {
             if (imageNrFrom.length() != imageNrTo.length()) {

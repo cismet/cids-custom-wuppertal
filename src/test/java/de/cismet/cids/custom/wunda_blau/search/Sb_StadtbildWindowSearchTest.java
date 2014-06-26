@@ -285,6 +285,34 @@ public class Sb_StadtbildWindowSearchTest {
         }
     }
 
+    @Test
+    public void testFancyIntervall_valid_same_input_simple() {
+        try {
+            Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
+            final Interval interval = instance.getIntervalForSearch("500000", "500000");
+            ArrayList<String> expectedNumbers = new ArrayList<String>();
+            expectedNumbers.add("500000");
+            assertEquals(interval, new Interval(null, null, expectedNumbers));
+        } catch (Sb_StadtbildWindowSearch.NotAValidIntervalException ex) {
+            Exceptions.printStackTrace(ex);
+            fail("Should not throw an exception.");
+        }
+    }
+
+    @Test
+    public void testFancyIntervall_valid_same_input_complex() {
+        try {
+            Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
+            final Interval interval = instance.getIntervalForSearch("500000a", "500000a");
+            ArrayList<String> expectedNumbers = new ArrayList<String>();
+            expectedNumbers.add("500000a");
+            assertEquals(interval, new Interval(null, null, expectedNumbers));
+        } catch (Sb_StadtbildWindowSearch.NotAValidIntervalException ex) {
+            Exceptions.printStackTrace(ex);
+            fail("Should not throw an exception.");
+        }
+    }
+
     @Test(expected = Sb_StadtbildWindowSearch.NotAValidIntervalException.class)
     public void testFancyIntervall_invalid_different_length() throws Sb_StadtbildWindowSearch.NotAValidIntervalException {
         Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
@@ -305,7 +333,7 @@ public class Sb_StadtbildWindowSearchTest {
         final Interval interval = instance.getIntervalForSearch("_", "_");
         fail("Should throw an exception.");
     }
-    
+
     @Test(expected = Sb_StadtbildWindowSearch.NotAValidIntervalException.class)
     public void testFancyIntervall_invalid_not_expected_input() throws Sb_StadtbildWindowSearch.NotAValidIntervalException {
         Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
