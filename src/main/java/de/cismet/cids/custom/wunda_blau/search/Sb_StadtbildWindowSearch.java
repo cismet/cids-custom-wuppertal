@@ -372,11 +372,11 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         txtImageNrTo.setToolTipText(org.openide.util.NbBundle.getMessage(
                 Sb_StadtbildWindowSearch.class,
                 "Sb_StadtbildWindowSearch.txtImageNrTo.toolTipText")); // NOI18N
+        txtImageNrTo.setMinimumSize(new java.awt.Dimension(120, 19));
+        txtImageNrTo.setPreferredSize(new java.awt.Dimension(120, 19));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 20);
         pnlImageNumber.add(txtImageNrTo, gridBagConstraints);
 
@@ -386,11 +386,10 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         txtImageNrFrom.setToolTipText(org.openide.util.NbBundle.getMessage(
                 Sb_StadtbildWindowSearch.class,
                 "Sb_StadtbildWindowSearch.txtImageNrFrom.toolTipText")); // NOI18N
+        txtImageNrFrom.setPreferredSize(new java.awt.Dimension(120, 19));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 20);
         pnlImageNumber.add(txtImageNrFrom, gridBagConstraints);
 
@@ -408,6 +407,9 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                     "Sb_StadtbildWindowSearch.pnlSearchWords.border.title"))); // NOI18N
         pnlSearchWords.setLayout(new java.awt.GridBagLayout());
 
+        jScrollPane2.setMinimumSize(new java.awt.Dimension(259, 131));
+        jScrollPane2.setPreferredSize(new java.awt.Dimension(259, 132));
+
         lstSuchworte.setModel(new DefaultListModel());
         jScrollPane2.setViewportView(lstSuchworte);
         ((JXList)lstSuchworte).setAutoCreateRowSorter(true);
@@ -416,9 +418,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 20);
         pnlSearchWords.add(jScrollPane2, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
