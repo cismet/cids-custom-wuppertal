@@ -45,6 +45,7 @@ public class Sb_StadtbildWindowSearchTest {
             assertEquals(new Interval("004711", "004713"), interval);
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
+            fail("Should not throw an exception.");
         }
     }
     
@@ -70,6 +71,7 @@ public class Sb_StadtbildWindowSearchTest {
             assertArrayEquals(expectedInterval.getAdditionalExactMatches().toArray(), interval.getAdditionalExactMatches().toArray());
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
+            fail("Should not throw an exception.");
         }
     }
     
@@ -90,6 +92,7 @@ public class Sb_StadtbildWindowSearchTest {
             assertArrayEquals(expectedInterval.getAdditionalExactMatches().toArray(), interval.getAdditionalExactMatches().toArray());
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
+            fail("Should not throw an exception.");
         }
     }
     
@@ -114,6 +117,7 @@ public class Sb_StadtbildWindowSearchTest {
             assertArrayEquals(expectedInterval.getAdditionalExactMatches().toArray(), interval.getAdditionalExactMatches().toArray());
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
+            fail("Should not throw an exception.");
         }
     }
 
@@ -125,6 +129,7 @@ public class Sb_StadtbildWindowSearchTest {
             assertEquals(new Interval("N04711", "N04713"), interval);
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
+            fail("Should not throw an exception.");
         }
     }
 
@@ -150,6 +155,7 @@ public class Sb_StadtbildWindowSearchTest {
             assertArrayEquals(expectedInterval.getAdditionalExactMatches().toArray(), interval.getAdditionalExactMatches().toArray());
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
+            fail("Should not throw an exception.");
         }
     }
 
@@ -170,6 +176,7 @@ public class Sb_StadtbildWindowSearchTest {
             assertArrayEquals(expectedInterval.getAdditionalExactMatches().toArray(), interval.getAdditionalExactMatches().toArray());
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
+            fail("Should not throw an exception.");
         }
     }    
     
@@ -194,6 +201,7 @@ public class Sb_StadtbildWindowSearchTest {
             assertArrayEquals(expectedInterval.getAdditionalExactMatches().toArray(), interval.getAdditionalExactMatches().toArray());
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
+            fail("Should not throw an exception.");
         }
     }
 
@@ -206,24 +214,38 @@ public class Sb_StadtbildWindowSearchTest {
             // check if alphanumerical in the beginning works
             final Interval interval1 = instance.getIntervalForSearch("N04713y", "N04713");
             final Interval interval2 = instance.getIntervalForSearch("N04713", "N04713y");
+                      
+            ArrayList<String> expectedNumbers = new ArrayList<String>();
+            expectedNumbers.add("N04713");
+            for(char ch = 'a' ; ch <= 'y' ; ch++ ){
+                expectedNumbers.add("N04713"+ch);
+            }
             
+            assertEquals(interval1, new Interval(null, null, expectedNumbers));
             assertEquals(interval1, interval2);
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
+            fail("Should not throw an exception.");
         }
     }
     
     @Test
-    public void testFancyIntervall_prefixLetter_BothNumbersHaveSuffixLetter_firstBigger() {
+    public void testFancyIntervall_prefixLetter_BothNumbersHaveSuffixLetter_sameNumberBase_firstBigger() {
         Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
         try {
             // check if alphanumerical in the beginning works
             final Interval interval1 = instance.getIntervalForSearch("N02308c", "N02308b");
             final Interval interval2 = instance.getIntervalForSearch("N02308b", "N02308c");
+            
+                        ArrayList<String> expectedNumbers = new ArrayList<String>();
+            expectedNumbers.add("N02308b");
+            expectedNumbers.add("N02308c");
 
+                        assertEquals(interval1, new Interval(null, null, expectedNumbers));
             assertEquals(interval1, interval2);
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
+            fail("Should not throw an exception.");
         }
     }
     
@@ -243,6 +265,7 @@ public class Sb_StadtbildWindowSearchTest {
             assertEquals(interval1, interval2);
                     } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
+            fail("Should not throw an exception.");
         }
     }
     
@@ -251,6 +274,18 @@ public class Sb_StadtbildWindowSearchTest {
         Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
         final Interval interval = instance.getIntervalForSearch("F04713", "N04714");
         fail("Should throw an exception.");
+    }
+    
+    @Test
+    public void testFancyIntervall_valid_no_prefix() {
+        try {
+            Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
+            final Interval interval = instance.getIntervalForSearch("500000", "600000");
+            assertEquals(interval, new Interval("500000", "600000"));
+        } catch (Exception ex) {
+            Exceptions.printStackTrace(ex);
+            fail("Should not throw an exception.");
+        }
     }
     
     @Test(expected = Exception.class)
@@ -277,6 +312,7 @@ public class Sb_StadtbildWindowSearchTest {
             assertArrayEquals(expectedInterval.getAdditionalExactMatches().toArray(), interval.getAdditionalExactMatches().toArray());
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
+            fail("Should not throw an exception.");
         }
     }
         
@@ -301,6 +337,7 @@ public class Sb_StadtbildWindowSearchTest {
             assertArrayEquals(expectedInterval.getAdditionalExactMatches().toArray(), interval.getAdditionalExactMatches().toArray());
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
+            fail("Should not throw an exception.");
         }
     }
     
