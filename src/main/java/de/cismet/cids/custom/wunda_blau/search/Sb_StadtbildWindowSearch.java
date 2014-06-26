@@ -66,6 +66,7 @@ import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 import de.cismet.cids.custom.wunda_blau.search.server.MetaObjectNodesStadtbildSerieSearchStatement;
+import de.cismet.cids.custom.wunda_blau.search.server.MetaObjectNodesStadtbildSerieSearchStatement.Interval;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -983,9 +984,8 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         final String imageNrTo = txtImageNrTo.getText().trim();
 
         if (StringUtils.isNotBlank(imageNrFrom) && StringUtils.isNotBlank(imageNrTo)) {
-            final Object[] resultArray = getIntervalForSearch(imageNrFrom, imageNrTo);
-            stadtbildSerieSearchStatement.setSimpleInterval((Boolean)resultArray[0]);
-            stadtbildSerieSearchStatement.setInterval((ArrayList<String>)resultArray[1]);
+            final Interval interval = getIntervalForSearch(imageNrFrom, imageNrTo);
+            stadtbildSerieSearchStatement.setInterval(interval);
         } else if (StringUtils.isNotBlank(imageNrFrom)) {
             stadtbildSerieSearchStatement.setSingleImageNumber(imageNrFrom);
         }
@@ -1003,7 +1003,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
      *
      * @throws  NotAValidIntervalException  DOCUMENT ME!
      */
-    Object[] getIntervalForSearch(
+    Interval getIntervalForSearch(
             String imageNrFrom,
             String imageNrTo) throws NotAValidIntervalException {
         final int comparedTo = imageNrFrom.compareTo(imageNrTo);
@@ -1028,9 +1028,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 throw new NotAValidIntervalException();
             }
 
-            listWithNumbers.add(imageNrFrom);
-            listWithNumbers.add(imageNrTo);
-            return new Object[] { simpleInterval, listWithNumbers };
+            return new Interval(imageNrFrom, imageNrTo);
         }
 
         char lastCharacter = imageNrFrom.charAt(imageNrFrom.length() - 1);
@@ -1137,7 +1135,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 }
             }
         }
-        return new Object[] { simpleInterval, listWithNumbers };
+        return new Interval(null, null, listWithNumbers);
     }
 
     /**
