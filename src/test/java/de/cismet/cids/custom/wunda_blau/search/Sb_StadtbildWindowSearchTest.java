@@ -42,7 +42,7 @@ public class Sb_StadtbildWindowSearchTest {
         try {
             final Interval interval = instance.getIntervalForSearch("004711", "004713");
             assertEquals(new Interval("004711", "004713"), interval);
-        } catch (Exception ex) {
+        } catch (Sb_StadtbildWindowSearch.NotAValidIntervalException ex) {
             Exceptions.printStackTrace(ex);
             fail("Should not throw an exception.");
         }
@@ -68,7 +68,7 @@ public class Sb_StadtbildWindowSearchTest {
             assertEquals(expectedInterval.getIntervalStart(), interval.getIntervalStart());
             assertEquals(expectedInterval.getIntervalEnd(), interval.getIntervalEnd());
             assertArrayEquals(expectedInterval.getAdditionalExactMatches().toArray(), interval.getAdditionalExactMatches().toArray());
-        } catch (Exception ex) {
+        } catch (Sb_StadtbildWindowSearch.NotAValidIntervalException ex) {
             Exceptions.printStackTrace(ex);
             fail("Should not throw an exception.");
         }
@@ -89,7 +89,7 @@ public class Sb_StadtbildWindowSearchTest {
             assertEquals(expectedInterval.getIntervalStart(), interval.getIntervalStart());
             assertEquals(expectedInterval.getIntervalEnd(), interval.getIntervalEnd());
             assertArrayEquals(expectedInterval.getAdditionalExactMatches().toArray(), interval.getAdditionalExactMatches().toArray());
-        } catch (Exception ex) {
+        } catch (Sb_StadtbildWindowSearch.NotAValidIntervalException ex) {
             Exceptions.printStackTrace(ex);
             fail("Should not throw an exception.");
         }
@@ -114,7 +114,7 @@ public class Sb_StadtbildWindowSearchTest {
             assertEquals(expectedInterval.getIntervalStart(), interval.getIntervalStart());
             assertEquals(expectedInterval.getIntervalEnd(), interval.getIntervalEnd());
             assertArrayEquals(expectedInterval.getAdditionalExactMatches().toArray(), interval.getAdditionalExactMatches().toArray());
-        } catch (Exception ex) {
+        } catch (Sb_StadtbildWindowSearch.NotAValidIntervalException ex) {
             Exceptions.printStackTrace(ex);
             fail("Should not throw an exception.");
         }
@@ -126,7 +126,7 @@ public class Sb_StadtbildWindowSearchTest {
         try {
             final Interval interval = instance.getIntervalForSearch("N04711", "N04713");
             assertEquals(new Interval("N04711", "N04713"), interval);
-        } catch (Exception ex) {
+        } catch (Sb_StadtbildWindowSearch.NotAValidIntervalException ex) {
             Exceptions.printStackTrace(ex);
             fail("Should not throw an exception.");
         }
@@ -152,7 +152,7 @@ public class Sb_StadtbildWindowSearchTest {
             assertEquals(expectedInterval.getIntervalStart(), interval.getIntervalStart());
             assertEquals(expectedInterval.getIntervalEnd(), interval.getIntervalEnd());
             assertArrayEquals(expectedInterval.getAdditionalExactMatches().toArray(), interval.getAdditionalExactMatches().toArray());
-        } catch (Exception ex) {
+        } catch (Sb_StadtbildWindowSearch.NotAValidIntervalException ex) {
             Exceptions.printStackTrace(ex);
             fail("Should not throw an exception.");
         }
@@ -173,7 +173,7 @@ public class Sb_StadtbildWindowSearchTest {
             assertEquals(expectedInterval.getIntervalStart(), interval.getIntervalStart());
             assertEquals(expectedInterval.getIntervalEnd(), interval.getIntervalEnd());
             assertArrayEquals(expectedInterval.getAdditionalExactMatches().toArray(), interval.getAdditionalExactMatches().toArray());
-        } catch (Exception ex) {
+        } catch (Sb_StadtbildWindowSearch.NotAValidIntervalException ex) {
             Exceptions.printStackTrace(ex);
             fail("Should not throw an exception.");
         }
@@ -198,7 +198,7 @@ public class Sb_StadtbildWindowSearchTest {
             assertEquals(expectedInterval.getIntervalStart(), interval.getIntervalStart());
             assertEquals(expectedInterval.getIntervalEnd(), interval.getIntervalEnd());
             assertArrayEquals(expectedInterval.getAdditionalExactMatches().toArray(), interval.getAdditionalExactMatches().toArray());
-        } catch (Exception ex) {
+        } catch (Sb_StadtbildWindowSearch.NotAValidIntervalException ex) {
             Exceptions.printStackTrace(ex);
             fail("Should not throw an exception.");
         }
@@ -221,7 +221,7 @@ public class Sb_StadtbildWindowSearchTest {
 
             assertEquals(interval1, new Interval(null, null, expectedNumbers));
             assertEquals(interval1, interval2);
-        } catch (Exception ex) {
+        } catch (Sb_StadtbildWindowSearch.NotAValidIntervalException ex) {
             Exceptions.printStackTrace(ex);
             fail("Should not throw an exception.");
         }
@@ -241,7 +241,7 @@ public class Sb_StadtbildWindowSearchTest {
 
             assertEquals(interval1, new Interval(null, null, expectedNumbers));
             assertEquals(interval1, interval2);
-        } catch (Exception ex) {
+        } catch (Sb_StadtbildWindowSearch.NotAValidIntervalException ex) {
             Exceptions.printStackTrace(ex);
             fail("Should not throw an exception.");
         }
@@ -260,14 +260,14 @@ public class Sb_StadtbildWindowSearchTest {
             expectedNumbers.add("N04715");
 
             assertEquals(interval1, interval2);
-        } catch (Exception ex) {
+        } catch (Sb_StadtbildWindowSearch.NotAValidIntervalException ex) {
             Exceptions.printStackTrace(ex);
             fail("Should not throw an exception.");
         }
     }
 
-    @Test(expected = Exception.class)
-    public void testFancyIntervall_invalid_no_prefix() throws Exception {
+    @Test(expected = Sb_StadtbildWindowSearch.NotAValidIntervalException.class)
+    public void testFancyIntervall_invalid_no_prefix() throws Sb_StadtbildWindowSearch.NotAValidIntervalException {
         Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
         final Interval interval = instance.getIntervalForSearch("F04713", "N04714");
         fail("Should throw an exception.");
@@ -279,30 +279,37 @@ public class Sb_StadtbildWindowSearchTest {
             Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
             final Interval interval = instance.getIntervalForSearch("500000", "600000");
             assertEquals(interval, new Interval("500000", "600000"));
-        } catch (Exception ex) {
+        } catch (Sb_StadtbildWindowSearch.NotAValidIntervalException ex) {
             Exceptions.printStackTrace(ex);
             fail("Should not throw an exception.");
         }
     }
 
-    @Test(expected = Exception.class)
-    public void testFancyIntervall_invalid_different_length() throws Exception {
+    @Test(expected = Sb_StadtbildWindowSearch.NotAValidIntervalException.class)
+    public void testFancyIntervall_invalid_different_length() throws Sb_StadtbildWindowSearch.NotAValidIntervalException {
         Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
         final Interval interval = instance.getIntervalForSearch("04713c", "047134");
         fail("Should throw an exception.");
     }
 
-    @Test(expected = Exception.class)
-    public void testFancyIntervall_invalid_wildcard_percent() throws Exception {
+    @Test(expected = Sb_StadtbildWindowSearch.NotAValidIntervalException.class)
+    public void testFancyIntervall_invalid_wildcard_percent() throws Sb_StadtbildWindowSearch.NotAValidIntervalException {
         Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
         final Interval interval = instance.getIntervalForSearch("%", "%");
         fail("Should throw an exception.");
     }
 
-    @Test(expected = Exception.class)
-    public void testFancyIntervall_invalid_wildcard_underscore() throws Exception {
+    @Test(expected = Sb_StadtbildWindowSearch.NotAValidIntervalException.class)
+    public void testFancyIntervall_invalid_wildcard_underscore() throws Sb_StadtbildWindowSearch.NotAValidIntervalException {
         Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
         final Interval interval = instance.getIntervalForSearch("_", "_");
+        fail("Should throw an exception.");
+    }
+    
+    @Test(expected = Sb_StadtbildWindowSearch.NotAValidIntervalException.class)
+    public void testFancyIntervall_invalid_not_expected_input() throws Sb_StadtbildWindowSearch.NotAValidIntervalException {
+        Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
+        final Interval interval = instance.getIntervalForSearch("N02308af", "N02309af");
         fail("Should throw an exception.");
     }
 
@@ -321,7 +328,7 @@ public class Sb_StadtbildWindowSearchTest {
             assertEquals(expectedInterval.getIntervalStart(), interval.getIntervalStart());
             assertEquals(expectedInterval.getIntervalEnd(), interval.getIntervalEnd());
             assertArrayEquals(expectedInterval.getAdditionalExactMatches().toArray(), interval.getAdditionalExactMatches().toArray());
-        } catch (Exception ex) {
+        } catch (Sb_StadtbildWindowSearch.NotAValidIntervalException ex) {
             Exceptions.printStackTrace(ex);
             fail("Should not throw an exception.");
         }
@@ -346,7 +353,7 @@ public class Sb_StadtbildWindowSearchTest {
             assertEquals(expectedInterval.getIntervalStart(), interval.getIntervalStart());
             assertEquals(expectedInterval.getIntervalEnd(), interval.getIntervalEnd());
             assertArrayEquals(expectedInterval.getAdditionalExactMatches().toArray(), interval.getAdditionalExactMatches().toArray());
-        } catch (Exception ex) {
+        } catch (Sb_StadtbildWindowSearch.NotAValidIntervalException ex) {
             Exceptions.printStackTrace(ex);
             fail("Should not throw an exception.");
         }
