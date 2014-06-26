@@ -103,6 +103,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             Sb_StadtbildWindowSearch.class);
     private static final String ACTION_TAG = "custom.stadtbilder.search@WUNDA_BLAU";
     private static final Pattern SIMPLE_INTERVAL_PATTERN = Pattern.compile("(^\\d+$)|(^[A-Z]\\d+$)");
+    private static final Pattern BILDNUMMER_PATTERN = Pattern.compile("^[A-Z]?\\d+[a-z]?$");
 
     //~ Instance fields --------------------------------------------------------
 
@@ -1012,6 +1013,11 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         if (imageNrFrom.contains("%") || imageNrFrom.contains("_") || imageNrTo.contains("%")
                     || imageNrTo.contains("_")) {
             // the numbers should not contain any wildcards
+            throw new NotAValidIntervalException();
+        }
+
+        if (!BILDNUMMER_PATTERN.matcher(imageNrFrom).matches() && !BILDNUMMER_PATTERN.matcher(imageNrTo).matches()) {
+            // the numbers do not have the right format
             throw new NotAValidIntervalException();
         }
 
