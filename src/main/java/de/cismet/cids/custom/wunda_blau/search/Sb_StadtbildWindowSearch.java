@@ -989,6 +989,9 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             stadtbildSerieSearchStatement.setInterval(interval);
         } else if (StringUtils.isNotBlank(imageNrFrom)) {
             stadtbildSerieSearchStatement.setSingleImageNumber(imageNrFrom);
+        } else {
+            // imageNrFrom and imageNrTo are blank
+            throw new NotAValidIntervalException();
         }
     }
 
