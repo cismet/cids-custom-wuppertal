@@ -29,8 +29,12 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
@@ -58,6 +62,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.WindowConstants;
 import javax.swing.border.Border;
@@ -69,6 +74,7 @@ import javax.swing.text.DocumentFilter;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
+import de.cismet.cids.custom.objecteditors.utils.VermessungRissUmleitungPanel;
 import de.cismet.cids.custom.objecteditors.utils.VermessungRissUtils;
 import de.cismet.cids.custom.objectrenderer.utils.AlphanumComparator;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
@@ -110,6 +116,7 @@ import de.cismet.tools.gui.TitleComponentProvider;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import de.cismet.tools.gui.downloadmanager.HttpDownload;
+import de.cismet.tools.gui.panels.AlertPanel;
 import de.cismet.tools.gui.panels.LayeredAlertPanel;
 
 /**
@@ -158,6 +165,13 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             }
         };
 
+    private static final JLabel alertWarnMessage = new JLabel(
+            "<html> <b>Warnung! </b> Es wurde kein Dokument gefunden. Klicken Sie auf diese Meldung um eine Weiterleitung einzurichten.</html>");
+    private static final AlertPanel alert = new AlertPanel(
+            AlertPanel.TYPE.DANGER,
+            alertWarnMessage,
+            true);
+
     protected static XBoundingBox INITIAL_BOUNDINGBOX = new XBoundingBox(
             2583621.251964098d,
             5682507.032498134d,
@@ -198,11 +212,19 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     protected JToggleButton[] documentButtons;
     protected JToggleButton currentSelectedButton;
     protected PictureSelectWorker currentPictureSelectWorker = null;
+    protected PictureReaderWorker pictureReaderWorker = null;
     protected MultiPagePictureReader pictureReader;
     protected VermessungFlurstueckSelectionDialog flurstueckDialog;
     protected volatile int currentDocument = NO_SELECTION;
     protected volatile int currentPage = NO_SELECTION;
     private MeasuringComponent measuringComponent = new MeasuringComponent(INITIAL_BOUNDINGBOX, CRS);
+    private VermessungRissUmleitungPanel umleitungsPanel = new VermessungRissUmleitungPanel(
+            VermessungRissUmleitungPanel.MODE.VERMESSUNGSRISS,
+            this);
+    private boolean umleitungChangedFlag = false;
+    private boolean showUmleitung = true;
+    private boolean isErrorMessageVisible = true;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgrControls;
     private javax.swing.ButtonGroup bgrDocument;
@@ -236,6 +258,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private javax.swing.JLabel lblJahr;
     private javax.swing.JLabel lblLetzteAenderungDatum;
     private javax.swing.JLabel lblLetzteAenderungName;
+    private javax.swing.JLabel lblReducedSize;
     private javax.swing.JLabel lblSchluessel;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JLabel lblUmleitung;
@@ -262,6 +285,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private javax.swing.JPanel pnlMeasureComponentWrapper;
     private de.cismet.tools.gui.RoundedPanel pnlPages;
     private javax.swing.JPanel pnlTitle;
+    private javax.swing.JPanel pnlUmleitungLink;
     private javax.swing.JPopupMenu popChangeVeraenderungsart;
     private javax.swing.JScrollPane scpLandparcels;
     private javax.swing.JScrollPane scpPages;
@@ -300,6 +324,50 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         documentButtons[VERMESSUNGSRISS] = togBild;
         documentButtons[GRENZNIEDERSCHRIFT] = togGrenzniederschrift;
 
+        alert.setPreferredSize(new Dimension(500, 50));
+        alert.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); // To change body of generated methods,
+        // choose Tools | Templates.
+        pnlAlert.add(alert, BorderLayout.CENTER);
+        pnlAlert.setBackground(new Color(1f, 1f, 1f, 0.8f));
+        alert.setVisible(false);
+        alert.addMouseListener(new MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final MouseEvent e) {
+                    handleAlertClick();
+                }
+            });
+        alert.addCloseButtonActionListener(new ActionListener() {
+
+                private boolean showUmleitung;
+
+                @Override
+                public void actionPerformed(final ActionEvent e) {
+                    showUmleitung = true;
+                    cancelPictureWorkers();
+                    final String editedLink = umleitungsPanel.getLinkDocument();
+                    if ((jxlUmleitung.getText() == null) || jxlUmleitung.getText().isEmpty()) {
+                        lstPages.setModel(new DefaultListModel());
+                        SwingUtilities.invokeLater(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    showAlert(true);
+                                    pnlMeasureComponentWrapper.invalidate();
+                                    pnlMeasureComponentWrapper.revalidate();
+                                    pnlMeasureComponentWrapper.repaint();
+                                }
+                            });
+                    } else {
+                        if (!(jxlUmleitung.getText().isEmpty() || jxlUmleitung.getText().contains(editedLink))) {
+                            showMeasureIsLoading();
+                            lstPages.setModel(new DefaultListModel());
+                            final RefreshDocumentWorker worker = new RefreshDocumentWorker();
+                            worker.execute();
+                        }
+                    }
+                }
+            });
         pnlMeasureComp.add(measuringComponent, BorderLayout.CENTER);
         if (readOnly) {
             lblSchluessel.setVisible(false);
@@ -443,6 +511,8 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         pnlDocument = new de.cismet.tools.gui.RoundedPanel();
         pnlHeaderDocument = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeaderDocument = new javax.swing.JLabel();
+        pnlUmleitungLink = new javax.swing.JPanel();
+        lblReducedSize = new javax.swing.JLabel();
         measureComponentPanel = new LayeredAlertPanel(pnlMeasureComponentWrapper, pnlAlert);
         gluGapControls = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
@@ -1275,6 +1345,22 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlHeaderDocument.add(lblHeaderDocument, gridBagConstraints);
 
+        pnlUmleitungLink.setOpaque(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        pnlHeaderDocument.add(pnlUmleitungLink, gridBagConstraints);
+
+        lblReducedSize.setForeground(new java.awt.Color(254, 254, 254));
+        lblReducedSize.setText(org.openide.util.NbBundle.getMessage(
+                VermessungRissEditor.class,
+                "VermessungRissEditor.lblReducedSize.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        pnlHeaderDocument.add(lblReducedSize, gridBagConstraints);
+
         pnlDocument.add(pnlHeaderDocument, java.awt.BorderLayout.NORTH);
 
         measureComponentPanel.setPreferredSize(new java.awt.Dimension(200, 200));
@@ -1434,9 +1520,10 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      * @param  evt  DOCUMENT ME!
      */
     private void togBildActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togBildActionPerformed
-        currentDocument = VERMESSUNGSRISS;
-        currentSelectedButton = togBild;
+        umleitungsPanel = new VermessungRissUmleitungPanel(VermessungRissUmleitungPanel.MODE.VERMESSUNGSRISS, this);
+        showUmleitung = true;
         loadVermessungsriss();
+        checkLinkInTitle();
     }                                                                           //GEN-LAST:event_togBildActionPerformed
 
     /**
@@ -1445,9 +1532,10 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      * @param  evt  DOCUMENT ME!
      */
     private void togGrenzniederschriftActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togGrenzniederschriftActionPerformed
-        currentDocument = GRENZNIEDERSCHRIFT;
-        currentSelectedButton = togGrenzniederschrift;
+        umleitungsPanel = new VermessungRissUmleitungPanel(VermessungRissUmleitungPanel.MODE.GRENZNIEDERSCHRIFT, this);
+        showUmleitung = true;
         loadGrenzniederschrift();
+        checkLinkInTitle();
     }                                                                                         //GEN-LAST:event_togGrenzniederschriftActionPerformed
 
     /**
@@ -1625,25 +1713,37 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      * @param  evt  DOCUMENT ME!
      */
     private void jxlUmleitungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlUmleitungActionPerformed
-//        umleitungsPanel.reset();
-//        alert.setType(AlertPanel.TYPE.SUCCESS);
-//        umleitungsPanel.setTextColor(AlertPanel.successMessageColor);
-//        final String s = jxlUmleitung.getText();
-//        // we need to remove the last character..
-//        umleitungsPanel.setLinkDocumentText(s.substring(0, s.length() - 1));
-//        final Alb_baulastUmleitungPanel.MODE mode;
-//        if (currentDocument == Alb_picturePanel.LAGEPLAN_DOCUMENT) {
-//            mode = Alb_baulastUmleitungPanel.MODE.LAGEPLAN;
-//        } else {
-//            mode = Alb_baulastUmleitungPanel.MODE.TEXTBLATT;
-//        }
-//        umleitungsPanel.setMode(mode);
-//        alert.setContent(umleitungsPanel);
-//        alert.setVisible(true);
-//        this.invalidate();
-//        this.validate();
-//        this.repaint();
+        umleitungsPanel.reset();
+        alert.setType(AlertPanel.TYPE.SUCCESS);
+        umleitungsPanel.setTextColor(AlertPanel.successMessageColor);
+        final String s = jxlUmleitung.getText();
+        // we need to remove the last character..
+        umleitungsPanel.setLinkDocumentText(s);
+        final VermessungRissUmleitungPanel.MODE mode;
+        if (currentDocument == VERMESSUNGSRISS) {
+            mode = VermessungRissUmleitungPanel.MODE.VERMESSUNGSRISS;
+        } else {
+            mode = VermessungRissUmleitungPanel.MODE.GRENZNIEDERSCHRIFT;
+        }
+        umleitungsPanel.setMode(mode);
+        alert.setContent(umleitungsPanel);
+        alert.setVisible(true);
+        pnlMeasureComponentWrapper.invalidate();
+        pnlMeasureComponentWrapper.validate();
+        pnlMeasureComponentWrapper.repaint();
     } //GEN-LAST:event_jxlUmleitungActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void cancelPictureWorkers() {
+        if (pictureReaderWorker != null) {
+            pictureReaderWorker.cancel(true);
+        }
+        if (currentPictureSelectWorker != null) {
+            currentPictureSelectWorker.cancel(true);
+        }
+    }
 
     /**
      * DOCUMENT ME!
@@ -1665,11 +1765,241 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
     /**
      * DOCUMENT ME!
+     *
+     * @param  show  DOCUMENT ME!
      */
-    private void showError() {
-        measuringComponent.reset();
-        showMeasurePanel();
-        lstPages.setModel(FEHLER_MODEL);
+    private void showAlert(final boolean show) {
+        // this means it is editable
+        if (!readOnly) {
+            alert.setType(AlertPanel.TYPE.DANGER);
+            alert.setContent(alertWarnMessage);
+            alert.setVisible(show);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  flag  DOCUMENT ME!
+     */
+    private void showLinkInTitle(final boolean flag) {
+        pnlUmleitungLink.removeAll();
+        // !selfPersisting means editing
+        if (flag && !readOnly) {
+            pnlUmleitungLink.add(pnlLink);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void handleAlertClick() {
+        if (isErrorMessageVisible) {
+            /*
+             *  in this case it is possible that already a umleitungssfile exists so we need to check if we have to set
+             * a succes or a danger alert
+             */
+            if (showUmleitung && (currentDocument != NO_SELECTION)) {
+                showUmleitung = false;
+                final VermessungRissUmleitungPanel.MODE mode;
+                final URL fileUrl = documentURLs[currentDocument];
+                final String filename = getDocumentFilename();
+                if (!((fileUrl != null) && !fileUrl.toString().contains(filename))) {
+                    umleitungsPanel.reset();
+                    if (currentDocument == VERMESSUNGSRISS) {
+                        mode = VermessungRissUmleitungPanel.MODE.VERMESSUNGSRISS;
+                    } else {
+                        mode = VermessungRissUmleitungPanel.MODE.GRENZNIEDERSCHRIFT;
+                    }
+                    umleitungsPanel.setMode(mode);
+                    umleitungsPanel.setTextColor(AlertPanel.dangerMessageColor);
+                    alert.setContent(umleitungsPanel);
+                }
+            }
+        } else {
+            isErrorMessageVisible = true;
+            showUmleitung = true;
+            alert.setContent(alertWarnMessage);
+        }
+        this.invalidate();
+        this.validate();
+        this.repaint();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private String getDocumentFilename() {
+        final Integer gemarkung = getGemarkungOfCurrentCidsBean();
+        final String flur = getSimplePropertyOfCurrentCidsBean("flur");
+        final String schluessel = getSimplePropertyOfCurrentCidsBean("schluessel");
+        final String blatt = getSimplePropertyOfCurrentCidsBean("blatt");
+        if (currentDocument == VERMESSUNGSRISS) {
+            return VermessungsrissPictureFinder.getVermessungsrissPictureFilename(schluessel, gemarkung, flur, blatt);
+        } else {
+            return VermessungsrissPictureFinder.getVermessungsrissPictureFilename(schluessel, gemarkung, flur, blatt);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void checkLinkInTitle() {
+        final URL fileUrl = documentURLs[currentDocument];
+        checkLinkInTitle(fileUrl);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  url  DOCUMENT ME!
+     */
+    private void checkLinkInTitle(final URL url) {
+        showLinkInTitle(false);
+        lblReducedSize.setVisible(false);
+        jxlUmleitung.setText("");
+        final String filename = getDocumentFilename();
+        boolean isUmleitung = false;
+        if ((url != null) && !url.toString().contains(filename)) {
+            isUmleitung = true;
+            if (documentURLs[currentDocument].toString().contains("_rs")) {
+                lblReducedSize.setVisible(true);
+            }
+            jxlUmleitung.setText(extractFilenameofUrl(url));
+            showLinkInTitle(true);
+            pnlHeaderDocument.repaint();
+        }
+
+        if (isUmleitung) {
+            lblHeaderDocument.setText(NbBundle.getMessage(
+                    VermessungRissEditor.class,
+                    "VermessungRissEditor.lblHeaderDocument.text.vermessungsriss_umleitung"));
+        } else {
+            if (currentDocument == VERMESSUNGSRISS) {
+                lblHeaderDocument.setText(NbBundle.getMessage(
+                        VermessungRissEditor.class,
+                        "VermessungRissEditor.lblHeaderDocument.text.vermessungsriss"));
+            } else {
+                lblHeaderDocument.setText(NbBundle.getMessage(
+                        VermessungRissEditor.class,
+                        "VermessungRissEditor.lblHeaderDocument.text.ergaenzendeDokumente"));
+            }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   url  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private String extractFilenameofUrl(final URL url) {
+        final String[] splittedUrl = url.toString().split("/");
+        String s = splittedUrl[splittedUrl.length - 1];
+        s = s.substring(0, s.indexOf("."));
+        s = s.substring(s.indexOf("_") + 1, s.lastIndexOf("_"));
+        return s;
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void successAlert() {
+        setCurrentPageNull();
+        alert.setType(AlertPanel.TYPE.SUCCESS);
+        umleitungsPanel.setTextColor(AlertPanel.successMessageColor);
+        this.invalidate();
+        this.validate();
+        this.repaint();
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void handleNoDocumentFound() {
+        cancelPictureWorkers();
+        alert.setType(AlertPanel.TYPE.DANGER);
+        umleitungsPanel.setTextColor(AlertPanel.dangerMessageColor);
+        measuringComponent.removeAllFeatures();
+        this.invalidate();
+        this.validate();
+        this.repaint();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  url  DOCUMENT ME!
+     */
+    public void reloadPictureFromUrl(final URL url) {
+        cancelPictureWorkers();
+        showMeasureIsLoading();
+        pictureReaderWorker = new PictureReaderWorker(url);
+        pictureReaderWorker.execute();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  flag  DOCUMENT ME!
+     */
+    public void reloadDocuments(final boolean flag) {
+        final RefreshDocumentWorker worker = new RefreshDocumentWorker();
+        worker.execute();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  aFlag  DOCUMENT ME!
+     */
+    void setUmleitungChangedFlag(final boolean aFlag) {
+        this.umleitungChangedFlag = aFlag;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    boolean isUmleitungChangedFlag() {
+        return umleitungChangedFlag;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  url  DOCUMENT ME!
+     */
+    public void handleUmleitungCreated(final URL url) {
+        showAlert(false);
+        umleitungChangedFlag = true;
+        checkLinkInTitle(url);
+        reloadDocuments(false);
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void handleUmleitungDeleted() {
+        showAlert(true);
+        documentURLs[currentDocument] = null;
+        measuringComponent.removeAllFeatures();
+        umleitungChangedFlag = true;
+        this.jxlUmleitung.setText("");
+        this.showLinkInTitle(false);
+        this.repaint();
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void handleEscapePressed() {
+        cancelPictureWorkers();
+        measuringComponent.removeAllFeatures();
     }
 
     /**
@@ -2105,24 +2435,23 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      */
     protected void loadVermessungsriss() {
         showMeasureIsLoading();
+        cancelPictureWorkers();
+        currentSelectedButton = togBild;
+        currentDocument = VERMESSUNGSRISS;
+        checkLinkInTitle();
+        lstPages.setEnabled(true);
+        measuringComponent.removeAllFeatures();
+        showAlert(false);
+        lstPages.setModel(new DefaultListModel());
         final URL url = documentURLs[currentDocument];
-        lblHeaderDocument.setText(NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.lblHeaderDocument.text.vermessungsriss"));
         if (url == null) {
-            showError();
+            showAlert(true);
+            showMeasurePanel();
             return;
+        } else {
+            pictureReaderWorker = new PictureReaderWorker(url);
+            pictureReaderWorker.execute();
         }
-        if (url.toString().contains("_rs")) {
-            lblHeaderDocument.setText(NbBundle.getMessage(
-                    VermessungRissEditor.class,
-                    "VermessungRissEditor.lblHeaderDocument.text.vermessungsriss") + " "
-                        + NbBundle.getMessage(
-                            VermessungRissEditor.class,
-                            "VermessungRissEditor.lblHeaderDocument.text.suffixWarningReducedSize"));
-        }
-
-        new PictureReaderWorker(url).execute();
     }
 
     /**
@@ -2130,25 +2459,24 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      */
     protected void loadGrenzniederschrift() {
         showMeasureIsLoading();
-
-        lblHeaderDocument.setText(NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.lblHeaderDocument.text.ergaenzendeDokumente"));
+        cancelPictureWorkers();
+        currentSelectedButton = togGrenzniederschrift;
+        currentDocument = GRENZNIEDERSCHRIFT;
+        checkLinkInTitle();
+        lstPages.setEnabled(true);
+        measuringComponent.removeAllFeatures();
+        showAlert(false);
+        lstPages.setModel(new DefaultListModel());
         final URL url = documentURLs[currentDocument];
-        if (url == null) {
-            showError();
-            return;
-        }
-        if (url.toString().contains("_rs")) {
-            lblHeaderDocument.setText(NbBundle.getMessage(
-                    VermessungRissEditor.class,
-                    "VermessungRissEditor.lblHeaderDocument.text.ergaenzendeDokumente") + " "
-                        + NbBundle.getMessage(
-                            VermessungRissEditor.class,
-                            "VermessungRissEditor.lblHeaderDocument.text.suffixWarningReducedSize"));
-        }
 
-        new PictureReaderWorker(url).execute();
+        if (url == null) {
+            showAlert(true);
+            showMeasurePanel();
+            return;
+        } else {
+            pictureReaderWorker = new PictureReaderWorker(url);
+            pictureReaderWorker.execute();
+        }
     }
 
     /**
@@ -2300,7 +2628,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 LOG.error("Could not read found pictures.", ex);
             } finally {
             }
-            showMeasurePanel();
         }
     }
 
@@ -2323,7 +2650,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         public PictureSelectWorker(final int pageNumber) {
             this.pageNumber = pageNumber;
             setCurrentPageNull();
-//            setDocumentControlsEnabled(false);
             measuringComponent.reset();
         }
 
@@ -2374,9 +2700,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
          * Creates a new RefreshDocumentWorker object.
          */
         public RefreshDocumentWorker() {
-//            lblMissingDocuments.setVisible(false);
-//            lblErrorWhileLoadingBild.setVisible(false);
-//            lblErrorWhileLoadingGrenzniederschrift.setVisible(false);
             lstPages.setModel(MODEL_LOAD);
             setCurrentDocumentNull();
 
@@ -2452,8 +2775,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             } finally {
 
                 if ((documentURLs[VERMESSUNGSRISS] == null) && (documentURLs[GRENZNIEDERSCHRIFT] == null)) {
-//                    measuringComponent.setVisible(false);
-//                lblMissingDocuments.setVisible(true);
                     lstPages.setModel(new DefaultListModel());
 
                 } else {
