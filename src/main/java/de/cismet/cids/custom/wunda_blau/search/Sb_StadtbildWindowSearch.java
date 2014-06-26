@@ -1006,6 +1006,13 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     Object[] getIntervalForSearch(
             String imageNrFrom,
             String imageNrTo) throws NotAValidIntervalException {
+        final int comparedTo = imageNrFrom.compareTo(imageNrTo);
+        if (comparedTo > 0) {
+            final String swap = imageNrFrom;
+            imageNrFrom = imageNrTo;
+            imageNrTo = swap;
+        }
+
         boolean simpleInterval = false;
         final ArrayList<String> listWithNumbers = new ArrayList<String>();
         if (SIMPLE_INTERVAL_PATTERN.matcher(imageNrFrom).matches()
