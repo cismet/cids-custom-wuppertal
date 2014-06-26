@@ -295,6 +295,20 @@ public class Sb_StadtbildWindowSearchTest {
         fail("Should throw an exception.");
     }  
     
+     @Test(expected = Exception.class)
+    public void testFancyIntervall_invalid_wildcard_percent() throws Exception {
+        Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
+        final Interval interval = instance.getIntervalForSearch("%", "%");
+        fail("Should throw an exception.");
+    }  
+    
+         @Test(expected = Exception.class)
+    public void testFancyIntervall_invalid_wildcard_underscore() throws Exception {
+        Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
+        final Interval interval = instance.getIntervalForSearch("_", "_");
+        fail("Should throw an exception.");
+    }  
+    
     @Test
         public void testFancyIntervall_normalInterval_FirstNumberHasSuffixLetter_biggerInterval() {
         Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
