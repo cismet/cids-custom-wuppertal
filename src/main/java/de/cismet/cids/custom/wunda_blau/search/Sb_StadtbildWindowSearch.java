@@ -1006,6 +1006,12 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     Interval getIntervalForSearch(
             String imageNrFrom,
             String imageNrTo) throws NotAValidIntervalException {
+
+            if (Character.isLetter(imageNrFrom.charAt(0)) && imageNrFrom.charAt(0) != imageNrTo.charAt(0)) {
+                // the first letter of the two numbers is different. e.g. N4711 - A4711
+                throw new NotAValidIntervalException();
+            }
+        
         final int comparedTo = imageNrFrom.compareTo(imageNrTo);
         if (comparedTo > 0) {
             final String swap = imageNrFrom;
@@ -1013,7 +1019,8 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             imageNrTo = swap;
         }
 
-        // this is the case 004711-004713 or N04711-N04713
+
+        // this are the cases e.g. 004711-004713 or N04711-N04713
         final ArrayList<String> listWithNumbers = new ArrayList<String>();
         if (SIMPLE_INTERVAL_PATTERN.matcher(imageNrFrom).matches()
                     && SIMPLE_INTERVAL_PATTERN.matcher(imageNrTo).matches()) {
@@ -1021,12 +1028,6 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 // the two numbers must have the same length
                 throw new NotAValidIntervalException();
             }
-            final String prefix = greatestCommonPrefix(imageNrFrom, imageNrTo);
-            if (StringUtils.isBlank(prefix)) {
-                // if the two numbers do not have a common prefix, than they are too different
-                throw new NotAValidIntervalException();
-            }
-
             return new Interval(imageNrFrom, imageNrTo);
         }
 
@@ -1060,10 +1061,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         String simpleIntervalStart = null;
         String simpleIntervalEnd = null;
 
-        if (StringUtils.isBlank(prefix)) {
-            // if the two numbers do not have a common prefix, than they are too different
-            throw new NotAValidIntervalException();
-        } else if (prefix.equals(imageNrFrom)) {
+        if (prefix.equals(imageNrFrom)) {
             // both numbers have the same digits, only the last character was different
             // If the letters are not set yet, they have to be set artificially, thus an iteration is possible
             // this is the case e.g. 4711c-4711f
