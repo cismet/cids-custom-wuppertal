@@ -16,6 +16,8 @@ import org.openide.util.Exceptions;
  */
 public class Sb_StadtbildWindowSearchTest {
 
+    Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
+
     public Sb_StadtbildWindowSearchTest() {
     }
 
@@ -38,7 +40,6 @@ public class Sb_StadtbildWindowSearchTest {
     //############### eight basic tests
     @Test
     public void testFancyIntervall_normalInterval() {
-        Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
         try {
             final Interval interval = instance.getIntervalForSearch("004711", "004713");
             assertEquals(new Interval("004711", "004713"), interval);
@@ -50,7 +51,6 @@ public class Sb_StadtbildWindowSearchTest {
 
     @Test
     public void testFancyIntervall_normalInterval_lastNumberHasSuffixLetter() {
-        Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
         try {
             final Interval interval = instance.getIntervalForSearch("004711", "004713c");
 
@@ -76,7 +76,6 @@ public class Sb_StadtbildWindowSearchTest {
 
     @Test
     public void testFancyIntervall_normalInterval_FirstNumberHasSuffixLetter() {
-        Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
         try {
             final Interval interval = instance.getIntervalForSearch("004711y", "004713");
 
@@ -97,7 +96,6 @@ public class Sb_StadtbildWindowSearchTest {
 
     @Test
     public void testFancyIntervall_normalInterval_BothNumbersHaveSuffixLetter() {
-        Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
         try {
             final Interval interval = instance.getIntervalForSearch("004711a", "004713c");
 
@@ -122,7 +120,6 @@ public class Sb_StadtbildWindowSearchTest {
 
     @Test
     public void testFancyIntervall_prefixLetter() {
-        Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
         try {
             final Interval interval = instance.getIntervalForSearch("N04711", "N04713");
             assertEquals(new Interval("N04711", "N04713"), interval);
@@ -134,7 +131,6 @@ public class Sb_StadtbildWindowSearchTest {
 
     @Test
     public void testFancyIntervall_prefixLetter_lastNumberHasSuffixLetter() {
-        Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
         try {
             final Interval interval = instance.getIntervalForSearch("N04711", "N04713c");
 
@@ -160,7 +156,6 @@ public class Sb_StadtbildWindowSearchTest {
 
     @Test
     public void testFancyIntervall_prefixLetter_FirstNumberHasSuffixLetter() {
-        Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
         try {
             final Interval interval = instance.getIntervalForSearch("N04711y", "N04713");
 
@@ -181,7 +176,6 @@ public class Sb_StadtbildWindowSearchTest {
 
     @Test
     public void testFancyIntervall_prefixLetter_BothNumbersHaveSuffixLetter() {
-        Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
         try {
             final Interval interval = instance.getIntervalForSearch("N04711a", "N04713c");
 
@@ -207,7 +201,6 @@ public class Sb_StadtbildWindowSearchTest {
     //############### advanced tests
     @Test
     public void testFancyIntervall_prefixLetter_sameNumberBase_FirstNumberHasSuffixLetter() {
-        Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
         try {
             // check if alphanumerical in the beginning works
             final Interval interval1 = instance.getIntervalForSearch("N04713y", "N04713");
@@ -229,7 +222,6 @@ public class Sb_StadtbildWindowSearchTest {
 
     @Test
     public void testFancyIntervall_prefixLetter_BothNumbersHaveSuffixLetter_sameNumberBase_firstBigger() {
-        Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
         try {
             // check if alphanumerical in the beginning works
             final Interval interval1 = instance.getIntervalForSearch("N02308c", "N02308b");
@@ -249,7 +241,6 @@ public class Sb_StadtbildWindowSearchTest {
 
     @Test
     public void testFancyIntervall_second_bigger_than_first_number() {
-        Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
         try {
             // check if alphanumerical in the beginning works
             final Interval interval1 = instance.getIntervalForSearch("N04715", "N04713");
@@ -268,7 +259,6 @@ public class Sb_StadtbildWindowSearchTest {
 
     @Test(expected = Sb_StadtbildWindowSearch.NotAValidIntervalException.class)
     public void testFancyIntervall_invalid_no_prefix() throws Sb_StadtbildWindowSearch.NotAValidIntervalException {
-        Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
         final Interval interval = instance.getIntervalForSearch("F04713", "N04714");
         fail("Should throw an exception.");
     }
@@ -276,7 +266,6 @@ public class Sb_StadtbildWindowSearchTest {
     @Test
     public void testFancyIntervall_valid_no_prefix() {
         try {
-            Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
             final Interval interval = instance.getIntervalForSearch("500000", "600000");
             assertEquals(interval, new Interval("500000", "600000"));
         } catch (Sb_StadtbildWindowSearch.NotAValidIntervalException ex) {
@@ -288,7 +277,6 @@ public class Sb_StadtbildWindowSearchTest {
     @Test
     public void testFancyIntervall_valid_same_input_simple() {
         try {
-            Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
             final Interval interval = instance.getIntervalForSearch("500000", "500000");
             ArrayList<String> expectedNumbers = new ArrayList<String>();
             expectedNumbers.add("500000");
@@ -302,7 +290,6 @@ public class Sb_StadtbildWindowSearchTest {
     @Test
     public void testFancyIntervall_valid_same_input_complex() {
         try {
-            Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
             final Interval interval = instance.getIntervalForSearch("500000a", "500000a");
             ArrayList<String> expectedNumbers = new ArrayList<String>();
             expectedNumbers.add("500000a");
@@ -315,35 +302,30 @@ public class Sb_StadtbildWindowSearchTest {
 
     @Test(expected = Sb_StadtbildWindowSearch.NotAValidIntervalException.class)
     public void testFancyIntervall_invalid_different_length() throws Sb_StadtbildWindowSearch.NotAValidIntervalException {
-        Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
         final Interval interval = instance.getIntervalForSearch("04713c", "047134");
         fail("Should throw an exception.");
     }
 
     @Test(expected = Sb_StadtbildWindowSearch.NotAValidIntervalException.class)
     public void testFancyIntervall_invalid_wildcard_percent() throws Sb_StadtbildWindowSearch.NotAValidIntervalException {
-        Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
         final Interval interval = instance.getIntervalForSearch("%", "%");
         fail("Should throw an exception.");
     }
 
     @Test(expected = Sb_StadtbildWindowSearch.NotAValidIntervalException.class)
     public void testFancyIntervall_invalid_wildcard_underscore() throws Sb_StadtbildWindowSearch.NotAValidIntervalException {
-        Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
         final Interval interval = instance.getIntervalForSearch("_", "_");
         fail("Should throw an exception.");
     }
 
     @Test(expected = Sb_StadtbildWindowSearch.NotAValidIntervalException.class)
     public void testFancyIntervall_invalid_not_expected_input() throws Sb_StadtbildWindowSearch.NotAValidIntervalException {
-        Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
         final Interval interval = instance.getIntervalForSearch("N02308af", "N02309af");
         fail("Should throw an exception.");
     }
 
     @Test
     public void testFancyIntervall_normalInterval_FirstNumberHasSuffixLetter_biggerInterval() {
-        Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
         try {
             final Interval interval = instance.getIntervalForSearch("004711y", "005000");
 
@@ -364,7 +346,6 @@ public class Sb_StadtbildWindowSearchTest {
 
     @Test
     public void testFancyIntervall_prefixLetter_BothNumbersHaveSuffixLetter_biggerInterval() {
-        Sb_StadtbildWindowSearch instance = new Sb_StadtbildWindowSearch();
         try {
             final Interval interval = instance.getIntervalForSearch("N04711a", "N05000c");
 
