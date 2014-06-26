@@ -21,6 +21,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+
 /**
  * DOCUMENT ME!
  *
@@ -47,17 +49,10 @@ public class VermessungsrissPictureFinder {
         };
     private static final String SUFFIX_REDUCED_SIZE = "_rs";
     private static final String LINKEXTENSION = ".txt";
-    public static String PATH_VERMESSUNG;         // = AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER; //
-                                                  // "http://s102x003/Vermessungsrisse/";
-    public static String PATH_GRENZNIEDERSCHRIFT; // = AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN;
-                                                  // // "http://s102x003/Vermessungsrisse/";
+    public static String PATH_VERMESSUNG = AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER; //
+    public static String PATH_GRENZNIEDERSCHRIFT = AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN;
     private static final String GRENZNIEDERSCHRIFT_PREFIX = "GN";
     private static final String VERMESSUNGSRISS_PREFIX = "VR";
-
-    static {
-        PATH_VERMESSUNG = "http://localhost:8000/Vermessungsrisse/";
-        PATH_GRENZNIEDERSCHRIFT = "http://localhost:8000/Grenzniederschriften/";
-    }
 
     //~ Methods ----------------------------------------------------------------
 
@@ -161,42 +156,12 @@ public class VermessungsrissPictureFinder {
     /**
      * DOCUMENT ME!
      *
-     * @param   blattnummer     DOCUMENT ME!
-     * @param   laufendeNummer  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public static String getObjectFilenameWithoutFolder(final String blattnummer, final String laufendeNummer) {
-        if (laufendeNummer == null) {
-            return null;
-        } else {
-            final int lfdNr = new Integer(laufendeNummer);
-            String trenner = "-";
-            int number = 0;
-            if (blattnummer.length() == 6) {
-                number = new Integer(blattnummer);
-            } else {
-                // length==7
-                number = new Integer(blattnummer.substring(0, 6));
-                trenner = blattnummer.substring(6, 7);
-            }
-
-            return new StringBuffer().append(String.format("%06d", number))
-                        .append(trenner)
-                        .append(String.format("%02d", lfdNr))
-                        .toString();
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
      * @param   isGrenzNiederschrift  DOCUMENT ME!
      * @param   filename              DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    private static String getObjectPath(final boolean isGrenzNiederschrift, final String filename) {
+    public static String getObjectPath(final boolean isGrenzNiederschrift, final String filename) {
         final Integer gemarkung;
         final String[] splittedFilename = filename.split("-");
         gemarkung = Integer.parseInt(splittedFilename[1]);
@@ -339,78 +304,5 @@ public class VermessungsrissPictureFinder {
             buf = new StringBuffer(PATH_VERMESSUNG);
         }
         return buf.append(String.format("%04d", gemarkung)).toString();
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  riss       DOCUMENT ME!
-     * @param  gemarkung  DOCUMENT ME!
-     * @param  flur       DOCUMENT ME!
-     * @param  blatt      DOCUMENT ME!
-     */
-    public static void testVermessungsrissPicture(final String riss,
-            final Integer gemarkung,
-            final String flur,
-            final String blatt) {
-        final List<URL> url;
-        System.out.println("Search Picture for " + riss + "-" + gemarkung + "-" + flur + "-" + blatt);
-        url = VermessungsrissPictureFinder.findVermessungsrissPicture(riss, gemarkung, flur, blatt);
-        if (url.isEmpty()) {
-            System.out.println("Could not find a URL");
-            return;
-        }
-        System.out.println("Found the following valid URL" + url.get(0).toString());
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  riss       DOCUMENT ME!
-     * @param  gemarkung  DOCUMENT ME!
-     * @param  flur       DOCUMENT ME!
-     * @param  blatt      DOCUMENT ME!
-     */
-    public static void testGrenzniderschriftPicture(final String riss,
-            final Integer gemarkung,
-            final String flur,
-            final String blatt) {
-        final List<URL> url;
-        System.out.println("Search Picture for " + riss + "-" + gemarkung + "-" + flur + "-" + blatt);
-        url = VermessungsrissPictureFinder.findGrenzniederschriftPicture(riss, gemarkung, flur, blatt);
-        if (url.isEmpty()) {
-            System.out.println("Could not find a URL");
-            return;
-        }
-        System.out.println("Found the following valid URL" + url.get(0).toString());
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  args  DOCUMENT ME!
-     */
-    public static void main(final String[] args) {
-        System.out.println("Tests Vermessungsriss Picture");
-        System.out.println("#########################################\n");
-        // normal file..
-        VermessungsrissPictureFinder.testVermessungsrissPicture("505", 3001, "001", "1");
-        // reduced size
-        VermessungsrissPictureFinder.testVermessungsrissPicture("505", 0, "0", "878681");
-        // link in same folder
-        VermessungsrissPictureFinder.testVermessungsrissPicture("504", 3301, "000", "1");
-        // link in other folder
-        VermessungsrissPictureFinder.testVermessungsrissPicture("504", 3301, "000", "3");
-
-        System.out.println("#########################################\n\n");
-        System.out.println("Tests Grenzniederschrift Picture");
-        System.out.println("#########################################\n");
-
-        //normal file..
-        VermessungsrissPictureFinder.testGrenzniderschriftPicture("505", 3001, "004", "17");
-        //link in same folder
-        VermessungsrissPictureFinder.testGrenzniderschriftPicture("505", 3001, "111", "1");
-        //link in other folder
-        VermessungsrissPictureFinder.testGrenzniderschriftPicture("505", 3135, "002", "25");
     }
 }
