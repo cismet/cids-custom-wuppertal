@@ -12,6 +12,7 @@
  */
 package de.cismet.cids.custom.objecteditors.utils;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import org.jdesktop.swingx.JXBusyLabel;
@@ -226,6 +227,13 @@ public class VermessungRissUmleitungPanel extends javax.swing.JPanel implements 
                         jXBusyLabel1.setBusy(false);
                         if (file != null) {
                             editor.successAlert();
+                            tfName.getDocument().removeDocumentListener(VermessungRissUmleitungPanel.this);
+                            final String rawUrl = file.toString();
+                            final int startPos = rawUrl.indexOf("_") + 1;
+                            final int endPos = (rawUrl.lastIndexOf("_") != (startPos - 1)) ? rawUrl.lastIndexOf("_")
+                                                                                           : rawUrl.lastIndexOf(".");
+                            tfName.setText(rawUrl.substring(startPos, endPos));
+                            tfName.getDocument().addDocumentListener(VermessungRissUmleitungPanel.this);
                             editor.reloadPictureFromUrl(file);
                             lastCheckedURL = file;
                             final CardLayout cl = (CardLayout)pnlControls.getLayout();
@@ -255,8 +263,9 @@ public class VermessungRissUmleitungPanel extends javax.swing.JPanel implements 
                     }
                     final String schluessel = splittedInput[0];
                     final Integer gemarkung = Integer.parseInt(splittedInput[1]);
-                    final String flur = splittedInput[2];
-                    final String blatt = splittedInput[3];
+                    final String flur = StringUtils.leftPad(splittedInput[2], 3, '0');
+                    final String blatt = StringUtils.leftPad(splittedInput[3], 8, '0');
+                    // check if we need to format the flur and the blatt
                     if (mode == MODE.VERMESSUNGSRISS) {
                         res = VermessungsrissPictureFinder.findVermessungsrissPicture(
                                 schluessel,
@@ -282,12 +291,12 @@ public class VermessungRissUmleitungPanel extends javax.swing.JPanel implements 
     /**
      * DOCUMENT ME!
      *
-     * @param   baulastnr  DOCUMENT ME!
+     * @param   vermessungrissNummer  baulastnr DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    private boolean isNummerConsistent(final String baulastnr) {
-        return true;
+    private boolean isNummerConsistent(final String vermessungrissNummer) {
+        return vermessungrissNummer.matches("(\\d{3})-(\\d{4})-(\\d{1,3})-(\\d{1,8})");
     }
 
     /**
@@ -371,9 +380,7 @@ public class VermessungRissUmleitungPanel extends javax.swing.JPanel implements 
                     final File f = File.createTempFile(filename, ".txt");
                     final FileWriter fw = new FileWriter(f);
                     final BufferedWriter bfw = new BufferedWriter(fw);
-                    final String linkDocument = getLinkDocument()
-                                + ((mode == mode.VERMESSUNGSRISS) ? VERMESSUNG_PREFIX : GRENZNIEDERSCHRIFT_PREFIX);
-                    bfw.write(linkDocument, 0, linkDocument.length());
+                    bfw.write(getLinkDocument(), 0, getLinkDocument().length());
                     bfw.flush();
                     bfw.close();
                     webDavHelper.uploadFileToWebDAV(
@@ -421,7 +428,13 @@ public class VermessungRissUmleitungPanel extends javax.swing.JPanel implements 
      * @return  DOCUMENT ME!
      */
     private String createDirName() {
-        return VermessungsrissPictureFinder.getObjectPath(mode == MODE.GRENZNIEDERSCHRIFT, createFilename());
+        final CidsBean vermessungBean = editor.getCidsBean();
+        final CidsBean gemarkungBean = (CidsBean)vermessungBean.getProperty("gemarkung");
+        Integer gemarkung = 0;
+        if (gemarkungBean != null) {
+            gemarkung = (Integer)gemarkungBean.getProperty("id");
+        }
+        return VermessungsrissPictureFinder.getFolder(mode == MODE.GRENZNIEDERSCHRIFT, gemarkung) + "/";
     }
 
     /**
@@ -440,7 +453,10 @@ public class VermessungRissUmleitungPanel extends javax.swing.JPanel implements 
         final String flur = vermessungBean.getProperty("flur").toString();
         final String blatt = vermessungBean.getProperty("blatt").toString();
 
-        return VermessungsrissPictureFinder.getObjectFilename(mode == MODE.GRENZNIEDERSCHRIFT,
+        return VermessungsrissPictureFinder.getObjectFilename(
+                false,
+                mode
+                        == MODE.GRENZNIEDERSCHRIFT,
                 schluessel,
                 gemarkung,
                 flur,
@@ -453,7 +469,7 @@ public class VermessungRissUmleitungPanel extends javax.swing.JPanel implements 
      * @return  DOCUMENT ME!
      */
     public String getLinkDocument() {
-        return tfName.getText().trim().toLowerCase();
+        return tfName.getText().trim();
     }
 
     /**
@@ -560,8 +576,8 @@ public class VermessungRissUmleitungPanel extends javax.swing.JPanel implements 
         tfName.setText(org.openide.util.NbBundle.getMessage(
                 VermessungRissUmleitungPanel.class,
                 "VermessungRissUmleitungPanel.tfName.text")); // NOI18N
-        tfName.setMinimumSize(new java.awt.Dimension(110, 27));
-        tfName.setPreferredSize(new java.awt.Dimension(110, 27));
+        tfName.setMinimumSize(new java.awt.Dimension(180, 27));
+        tfName.setPreferredSize(new java.awt.Dimension(180, 27));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;

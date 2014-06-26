@@ -113,7 +113,7 @@ public class VermessungsrissPictureFinder {
             final Integer gemarkung,
             final String flur,
             final String blatt) {
-        final String ret = getObjectFilename(true, riss, gemarkung, flur, blatt);
+        final String ret = getObjectFilename(true, true, riss, gemarkung, flur, blatt);
 
         return (ret != null) ? ret : null;
     }
@@ -121,6 +121,7 @@ public class VermessungsrissPictureFinder {
     /**
      * DOCUMENT ME!
      *
+     * @param   withPath              DOCUMENT ME!
      * @param   isGrenzniederschrift  blattnummer DOCUMENT ME!
      * @param   riss                  laufendeNummer DOCUMENT ME!
      * @param   gemarkung             DOCUMENT ME!
@@ -129,7 +130,8 @@ public class VermessungsrissPictureFinder {
      *
      * @return  DOCUMENT ME!
      */
-    public static String getObjectFilename(final boolean isGrenzniederschrift,
+    public static String getObjectFilename(final boolean withPath,
+            final boolean isGrenzniederschrift,
             final String riss,
             final Integer gemarkung,
             final String flur,
@@ -148,9 +150,13 @@ public class VermessungsrissPictureFinder {
         buf.append(StringUtils.leftPad(flur, 3, '0'));
         buf.append("-");
         buf.append(StringUtils.leftPad(blatt, 8, '0'));
-        return new StringBuffer(getFolder(isGrenzniederschrift, gemarkung)).append(SEP)
-                    .append(buf.toString())
-                    .toString();
+        final StringBuffer b = new StringBuffer();
+        if (withPath) {
+            b.append(getFolder(isGrenzniederschrift, gemarkung));
+            b.append(SEP);
+        }
+        b.append(buf.toString());
+        return b.toString();
     }
 
     /**
@@ -186,7 +192,7 @@ public class VermessungsrissPictureFinder {
             final Integer gemarkung,
             final String flur,
             final String blatt) {
-        final String ret = getObjectFilename(false, riss, gemarkung, flur, blatt);
+        final String ret = getObjectFilename(true, false, riss, gemarkung, flur, blatt);
 
         return (ret != null) ? ret : null;
     }
@@ -296,7 +302,7 @@ public class VermessungsrissPictureFinder {
      *
      * @return  DOCUMENT ME!
      */
-    private static String getFolder(final boolean isGrenzniederschrift, final Integer gemarkung) {
+    public static String getFolder(final boolean isGrenzniederschrift, final Integer gemarkung) {
         final StringBuffer buf;
         if (isGrenzniederschrift) {
             buf = new StringBuffer(PATH_GRENZNIEDERSCHRIFT);

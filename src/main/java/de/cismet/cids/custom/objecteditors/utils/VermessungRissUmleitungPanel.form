@@ -49,10 +49,10 @@
           <ResourceString bundle="de/cismet/cids/custom/objecteditors/utils/Bundle.properties" key="VermessungRissUmleitungPanel.tfName.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[110, 27]"/>
+          <Dimension value="[180, 27]"/>
         </Property>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[110, 27]"/>
+          <Dimension value="[180, 27]"/>
         </Property>
       </Properties>
       <Constraints>
