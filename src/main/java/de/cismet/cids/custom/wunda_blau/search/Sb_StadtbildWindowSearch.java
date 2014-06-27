@@ -128,23 +128,28 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
+    private javax.swing.Box.Filler filler6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblHausnummer;
     private javax.swing.JLabel lblOrtsname;
     private javax.swing.JLabel lblStrasse;
     private javax.swing.JList lstSuchworte;
+    private javax.swing.JPanel pnlBildnummer;
     private javax.swing.JPanel pnlButtons;
     private javax.swing.JPanel pnlCtrlButtons1;
     private javax.swing.JPanel pnlFooter;
-    private javax.swing.JPanel pnlImageNumber;
+    private javax.swing.JPanel pnlIntervall;
     private javax.swing.JPanel pnlKindOfImage;
     private javax.swing.JPanel pnlScrollPane;
     private javax.swing.JPanel pnlSearchWords;
     private javax.swing.JPanel pnlStrassenzuordnung;
     private de.cismet.cids.custom.wunda_blau.search.Sb_StadtbildTimeTabs sb_StadtbilderTimeTabs;
+    private javax.swing.JTabbedPane tabBildnummern;
+    private javax.swing.JTextField txtBildnummer;
     private javax.swing.JTextField txtHausnummer;
     private javax.swing.JTextField txtImageNrFrom;
     private javax.swing.JTextField txtImageNrTo;
@@ -250,7 +255,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         chboLuftbildschraegaufnahme = new javax.swing.JCheckBox();
         chboLuftbildsenkrechtaufnahme = new javax.swing.JCheckBox();
         chboBodennaheAufnahme = new javax.swing.JCheckBox();
-        pnlImageNumber = new javax.swing.JPanel();
+        tabBildnummern = new javax.swing.JTabbedPane();
+        pnlBildnummer = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        txtBildnummer = new javax.swing.JTextField();
+        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
+        pnlIntervall = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
@@ -334,11 +346,48 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlScrollPane.add(pnlKindOfImage, gridBagConstraints);
 
-        pnlImageNumber.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                org.openide.util.NbBundle.getMessage(
-                    Sb_StadtbildWindowSearch.class,
-                    "Sb_StadtbildWindowSearch.pnlImageNumber.border.title"))); // NOI18N
-        pnlImageNumber.setLayout(new java.awt.GridBagLayout());
+        pnlBildnummer.setPreferredSize(new java.awt.Dimension(238, 40));
+        pnlBildnummer.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel3,
+            org.openide.util.NbBundle.getMessage(
+                Sb_StadtbildWindowSearch.class,
+                "Sb_StadtbildWindowSearch.jLabel3.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(7, 5, 7, 5);
+        pnlBildnummer.add(jLabel3, gridBagConstraints);
+
+        txtBildnummer.setText(org.openide.util.NbBundle.getMessage(
+                Sb_StadtbildWindowSearch.class,
+                "Sb_StadtbildWindowSearch.txtBildnummer.text"));        // NOI18N
+        txtBildnummer.setToolTipText(org.openide.util.NbBundle.getMessage(
+                Sb_StadtbildWindowSearch.class,
+                "Sb_StadtbildWindowSearch.txtBildnummer.toolTipText")); // NOI18N
+        txtBildnummer.setMinimumSize(new java.awt.Dimension(4, 23));
+        txtBildnummer.setPreferredSize(new java.awt.Dimension(120, 23));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(7, 0, 5, 20);
+        pnlBildnummer.add(txtBildnummer, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        pnlBildnummer.add(filler6, gridBagConstraints);
+
+        tabBildnummern.addTab(org.openide.util.NbBundle.getMessage(
+                Sb_StadtbildWindowSearch.class,
+                "Sb_StadtbildWindowSearch.pnlBildnummer.TabConstraints.tabTitle"),
+            pnlBildnummer); // NOI18N
+
+        pnlIntervall.setPreferredSize(new java.awt.Dimension(351, 40));
+        pnlIntervall.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel1,
@@ -346,8 +395,9 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 Sb_StadtbildWindowSearch.class,
                 "Sb_StadtbildWindowSearch.jLabel1.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlImageNumber.add(jLabel1, gridBagConstraints);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(7, 5, 7, 5);
+        pnlIntervall.add(jLabel1, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jLabel2,
@@ -357,49 +407,48 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
-        pnlImageNumber.add(jLabel2, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(7, 0, 7, 5);
+        pnlIntervall.add(jLabel2, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        pnlImageNumber.add(filler2, gridBagConstraints);
+        pnlIntervall.add(filler2, gridBagConstraints);
 
         txtImageNrTo.setText(org.openide.util.NbBundle.getMessage(
                 Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.txtImageNrTo.text"));        // NOI18N
-        txtImageNrTo.setToolTipText(org.openide.util.NbBundle.getMessage(
-                Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.txtImageNrTo.toolTipText")); // NOI18N
+                "Sb_StadtbildWindowSearch.txtImageNrTo.text")); // NOI18N
         txtImageNrTo.setMinimumSize(new java.awt.Dimension(120, 19));
-        txtImageNrTo.setPreferredSize(new java.awt.Dimension(120, 19));
+        txtImageNrTo.setPreferredSize(new java.awt.Dimension(120, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 20);
-        pnlImageNumber.add(txtImageNrTo, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(7, 0, 5, 20);
+        pnlIntervall.add(txtImageNrTo, gridBagConstraints);
 
         txtImageNrFrom.setText(org.openide.util.NbBundle.getMessage(
                 Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.txtImageNrFrom.text"));        // NOI18N
-        txtImageNrFrom.setToolTipText(org.openide.util.NbBundle.getMessage(
-                Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.txtImageNrFrom.toolTipText")); // NOI18N
-        txtImageNrFrom.setPreferredSize(new java.awt.Dimension(120, 19));
+                "Sb_StadtbildWindowSearch.txtImageNrFrom.text")); // NOI18N
+        txtImageNrFrom.setPreferredSize(new java.awt.Dimension(120, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 20);
-        pnlImageNumber.add(txtImageNrFrom, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(7, 0, 5, 20);
+        pnlIntervall.add(txtImageNrFrom, gridBagConstraints);
+
+        tabBildnummern.addTab(org.openide.util.NbBundle.getMessage(
+                Sb_StadtbildWindowSearch.class,
+                "Sb_StadtbildWindowSearch.pnlIntervall.TabConstraints.tabTitle"),
+            pnlIntervall); // NOI18N
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
-        pnlScrollPane.add(pnlImageNumber, gridBagConstraints);
+        pnlScrollPane.add(tabBildnummern, gridBagConstraints);
 
         pnlSearchWords.setBorder(javax.swing.BorderFactory.createTitledBorder(
                 org.openide.util.NbBundle.getMessage(
@@ -480,14 +529,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlScrollPane.add(pnlSearchWords, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 17, 5, 22);
@@ -582,7 +631,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
@@ -655,14 +704,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
         pnlScrollPane.add(pnlFooter, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 1.0;
         pnlScrollPane.add(filler1, gridBagConstraints);
@@ -981,17 +1030,23 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
      */
     private void setBildnummerInSearch(final MetaObjectNodesStadtbildSerieSearchStatement stadtbildSerieSearchStatement)
             throws NotAValidIntervalException {
-        final String imageNrFrom = txtImageNrFrom.getText().trim();
-        final String imageNrTo = txtImageNrTo.getText().trim();
-
-        if (StringUtils.isNotBlank(imageNrFrom) && StringUtils.isNotBlank(imageNrTo)) {
-            final Interval interval = getIntervalForSearch(imageNrFrom, imageNrTo);
-            stadtbildSerieSearchStatement.setInterval(interval);
-        } else if (StringUtils.isNotBlank(imageNrFrom)) {
-            stadtbildSerieSearchStatement.setSingleImageNumber(imageNrFrom);
+        if (tabBildnummern.getSelectedComponent().equals(pnlBildnummer)) {
+            final String imageNr = txtBildnummer.getText().trim();
+            if (StringUtils.isNotBlank(imageNr)) {
+                stadtbildSerieSearchStatement.setSingleImageNumber(imageNr);
+            } else {
+                throw new NotAValidIntervalException();
+            }
         } else {
-            // imageNrFrom and imageNrTo are blank
-            throw new NotAValidIntervalException();
+            final String imageNrFrom = txtImageNrFrom.getText().trim();
+            final String imageNrTo = txtImageNrTo.getText().trim();
+            if (StringUtils.isNotBlank(imageNrFrom) && StringUtils.isNotBlank(imageNrTo)) {
+                final Interval interval = getIntervalForSearch(imageNrFrom, imageNrTo);
+                stadtbildSerieSearchStatement.setInterval(interval);
+            } else {
+                // imageNrFrom and imageNrTo are blank
+                throw new NotAValidIntervalException();
+            }
         }
     }
 
