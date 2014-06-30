@@ -94,6 +94,10 @@ import de.cismet.cids.custom.wunda_blau.search.actions.Sb_stadtbildserieUpdatePr
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.editors.BeanInitializer;
+import de.cismet.cids.editors.BeanInitializerForcePaste;
+import de.cismet.cids.editors.BeanInitializerProvider;
+import de.cismet.cids.editors.DefaultBeanInitializer;
 import de.cismet.cids.editors.DefaultBindableJCheckBox;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
@@ -135,7 +139,8 @@ import static de.cismet.cids.custom.objecteditors.wunda_blau.MauerEditor.adjustS
  */
 public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     TitleComponentProvider,
-    FooterComponentProvider {
+    FooterComponentProvider,
+    BeanInitializerProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -2722,6 +2727,11 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         if (dbcBildtyp.getItemCount() > 0) {
             dbcBildtyp.setSelectedIndex(0);
         }
+    }
+
+    @Override
+    public BeanInitializer getBeanInitializer() {
+        return new Sb_stadtbildserieInitializer(cidsBean);
     }
 
     //~ Inner Classes ----------------------------------------------------------
