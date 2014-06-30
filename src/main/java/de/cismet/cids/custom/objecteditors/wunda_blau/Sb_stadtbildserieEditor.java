@@ -94,6 +94,10 @@ import de.cismet.cids.custom.wunda_blau.search.actions.Sb_stadtbildserieUpdatePr
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cids.editors.BeanInitializer;
+import de.cismet.cids.editors.BeanInitializerForcePaste;
+import de.cismet.cids.editors.BeanInitializerProvider;
+import de.cismet.cids.editors.DefaultBeanInitializer;
 import de.cismet.cids.editors.DefaultBindableJCheckBox;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
@@ -135,7 +139,8 @@ import static de.cismet.cids.custom.objecteditors.wunda_blau.MauerEditor.adjustS
  */
 public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     TitleComponentProvider,
-    FooterComponentProvider {
+    FooterComponentProvider,
+    BeanInitializerProvider {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -2724,6 +2729,11 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         }
     }
 
+    @Override
+    public BeanInitializer getBeanInitializer() {
+        return new Sb_stadtbildserieInitializer(cidsBean);
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -2826,6 +2836,76 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             params.put("suchwoerter", StringUtils.join(suchwoerter, ", "));
 
             return params;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class Sb_stadtbildserieInitializer extends DefaultBeanInitializer implements BeanInitializerForcePaste {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new Sb_stadtbildserieInitializer object.
+         *
+         * @param  template  DOCUMENT ME!
+         */
+        public Sb_stadtbildserieInitializer(final CidsBean template) {
+            super(template);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        protected void processSimpleProperty(final CidsBean beanToInit,
+                final String propertyName,
+                final Object simpleValueToProcess) throws Exception {
+            if (propertyName.equalsIgnoreCase("pruefen") || propertyName.equalsIgnoreCase("pruefen_kommentar")
+                        || propertyName.equalsIgnoreCase("pruefhinweis_von")) {
+                return;
+            }
+            super.processSimpleProperty(beanToInit, propertyName, simpleValueToProcess);
+        }
+
+        @Override
+        protected void processArrayProperty(final CidsBean beanToInit,
+                final String propertyName,
+                final Collection<CidsBean> arrayValueToProcess) throws Exception {
+            if (propertyName.equals("stadtbilder_arr")) {
+                return;
+            }
+
+            final List<CidsBean> beans = CidsBeanSupport.getBeanCollectionFromProperty(
+                    beanToInit,
+                    propertyName);
+            beans.clear();
+
+            for (final CidsBean tmp : arrayValueToProcess) {
+                beans.add(tmp);
+            }
+        }
+
+        @Override
+        protected void processComplexProperty(final CidsBean beanToInit,
+                final String propertyName,
+                final CidsBean complexValueToProcess) throws Exception {
+            if (propertyName.equals("vorschaubild")) {
+                return;
+            } else if (complexValueToProcess.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase(
+                            GEOM_TABLE_NAME)) {
+                final CidsBean geomBean = complexValueToProcess.getMetaObject()
+                            .getMetaClass()
+                            .getEmptyInstance()
+                            .getBean();
+                geomBean.setProperty(GEOM_FIELD_NAME, complexValueToProcess.getProperty(GEOM_FIELD_NAME));
+                beanToInit.setProperty(propertyName, geomBean);
+            } else {
+                // flat copy
+                beanToInit.setProperty(propertyName, complexValueToProcess);
+            }
         }
     }
 
