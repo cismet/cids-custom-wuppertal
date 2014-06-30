@@ -2844,6 +2844,76 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
      *
      * @version  $Revision$, $Date$
      */
+    private class Sb_stadtbildserieInitializer extends DefaultBeanInitializer implements BeanInitializerForcePaste {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new Sb_stadtbildserieInitializer object.
+         *
+         * @param  template  DOCUMENT ME!
+         */
+        public Sb_stadtbildserieInitializer(final CidsBean template) {
+            super(template);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        protected void processSimpleProperty(final CidsBean beanToInit,
+                final String propertyName,
+                final Object simpleValueToProcess) throws Exception {
+            if (propertyName.equalsIgnoreCase("pruefen") || propertyName.equalsIgnoreCase("pruefen_kommentar")
+                        || propertyName.equalsIgnoreCase("pruefhinweis_von")) {
+                return;
+            }
+            super.processSimpleProperty(beanToInit, propertyName, simpleValueToProcess);
+        }
+
+        @Override
+        protected void processArrayProperty(final CidsBean beanToInit,
+                final String propertyName,
+                final Collection<CidsBean> arrayValueToProcess) throws Exception {
+            if (propertyName.equals("stadtbilder_arr")) {
+                return;
+            }
+
+            final List<CidsBean> beans = CidsBeanSupport.getBeanCollectionFromProperty(
+                    beanToInit,
+                    propertyName);
+            beans.clear();
+
+            for (final CidsBean tmp : arrayValueToProcess) {
+                beans.add(tmp);
+            }
+        }
+
+        @Override
+        protected void processComplexProperty(final CidsBean beanToInit,
+                final String propertyName,
+                final CidsBean complexValueToProcess) throws Exception {
+            if (propertyName.equals("vorschaubild")) {
+                return;
+            } else if (complexValueToProcess.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase(
+                            GEOM_TABLE_NAME)) {
+                final CidsBean geomBean = complexValueToProcess.getMetaObject()
+                            .getMetaClass()
+                            .getEmptyInstance()
+                            .getBean();
+                geomBean.setProperty(GEOM_FIELD_NAME, complexValueToProcess.getProperty(GEOM_FIELD_NAME));
+                beanToInit.setProperty(propertyName, geomBean);
+            } else {
+                // flat copy
+                beanToInit.setProperty(propertyName, complexValueToProcess);
+            }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     final class ImageResizeWorker extends SwingWorker<ImageIcon, Void> {
 
         //~ Methods ------------------------------------------------------------
