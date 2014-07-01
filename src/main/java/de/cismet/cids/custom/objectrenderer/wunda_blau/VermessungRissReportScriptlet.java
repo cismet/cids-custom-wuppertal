@@ -1,12 +1,10 @@
-/**
- * *************************************************
- *
- * cismet GmbH, Saarbruecken, Germany
- * 
-* ... and it just works.
- * 
-***************************************************
- */
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import net.sf.jasperreports.engine.JRDefaultScriptlet;
@@ -18,6 +16,7 @@ import java.awt.image.BufferedImage;
 
 import java.net.URL;
 
+import java.util.List;
 
 import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissPictureFinder;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
@@ -25,30 +24,31 @@ import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.security.WebAccessManager;
 
 import de.cismet.tools.gui.Static2DTools;
-import java.util.List;
 
 /**
  * DOCUMENT ME!
  *
- * @author jweintraut
- * @version $Revision$, $Date$
+ * @author   jweintraut
+ * @version  $Revision$, $Date$
  */
 public class VermessungRissReportScriptlet extends JRDefaultScriptlet {
 
     //~ Static fields/initializers ---------------------------------------------
+
     protected static final Logger LOG = Logger.getLogger(VermessungRissReportScriptlet.class);
 
     //~ Methods ----------------------------------------------------------------
+
     /**
      * DOCUMENT ME!
      *
-     * @param host DOCUMENT ME!
-     * @param schluessel DOCUMENT ME!
-     * @param gemarkung DOCUMENT ME!
-     * @param flur DOCUMENT ME!
-     * @param blatt DOCUMENT ME!
+     * @param   host        DOCUMENT ME!
+     * @param   schluessel  DOCUMENT ME!
+     * @param   gemarkung   DOCUMENT ME!
+     * @param   flur        DOCUMENT ME!
+     * @param   blatt       DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     public static Boolean isImageAvailable(final String host,
             final String schluessel,
@@ -76,9 +76,9 @@ public class VermessungRissReportScriptlet extends JRDefaultScriptlet {
     /**
      * DOCUMENT ME!
      *
-     * @param imageToRotate DOCUMENT ME!
+     * @param   imageToRotate  DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
+     * @return  DOCUMENT ME!
      */
     public static BufferedImage rotate(final BufferedImage imageToRotate) {
         BufferedImage result = imageToRotate;

@@ -362,17 +362,17 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblRisseFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblRisseFocusLost
+    private void tblRisseFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblRisseFocusLost
         tblRisse.clearSelection();
         animateToOverview();
-    }//GEN-LAST:event_tblRisseFocusLost
+    }                                                                     //GEN-LAST:event_tblRisseFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnGenerateReportActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateReportActionPerformed
+    private void btnGenerateReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnGenerateReportActionPerformed
         final Collection<CidsBean> selectedVermessungsrisse = getSelectedVermessungsrisse();
 
         if (selectedVermessungsrisse.isEmpty()) {
@@ -459,14 +459,16 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                     return null;
                 }
             }.execute();
-    }//GEN-LAST:event_btnGenerateReportActionPerformed
+    } //GEN-LAST:event_btnGenerateReportActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param  selectedVermessungsrisse  DOCUMENT ME!
-     * @param  type                      DOCUMENT ME!
-     * @param  host                      DOCUMENT ME!
+     * @param   selectedVermessungsrisse  DOCUMENT ME!
+     * @param   type                      DOCUMENT ME!
+     * @param   host                      DOCUMENT ME!
+     *
+     * @throws  IllegalStateException  DOCUMENT ME!
      */
     private void downloadProducts(final Collection<CidsBean> selectedVermessungsrisse,
             final String type,
@@ -541,24 +543,32 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                             description.append(" - Seite ");
 
                             final List<URL> urlList;
-                            if(host.equals(AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN)){
-                                urlList = VermessungsrissPictureFinder.findGrenzniederschriftPicture(schluessel, gemarkung, flur, blatt);
-                                        }else{
-                                urlList= VermessungsrissPictureFinder.findVermessungsrissPicture(schluessel, gemarkung, flur, blatt);
+                            if (host.equals(AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN)) {
+                                urlList = VermessungsrissPictureFinder.findGrenzniederschriftPicture(
+                                        schluessel,
+                                        gemarkung,
+                                        flur,
+                                        blatt);
+                            } else {
+                                urlList = VermessungsrissPictureFinder.findVermessungsrissPicture(
+                                        schluessel,
+                                        gemarkung,
+                                        flur,
+                                        blatt);
                             }
 
-                            if(urlList == null || urlList.isEmpty() || urlList.size()>1){
+                            if ((urlList == null) || urlList.isEmpty() || (urlList.size() > 1)) {
                                 LOG.error("Something is wrong with the downlaod urls");
-                                throw  new IllegalStateException("FF");
+                                throw new IllegalStateException("FF");
                             }
-                            boolean isOfReducedSize=false;
+                            boolean isOfReducedSize = false;
                             MultiPagePictureReader reader = null;
                             int pageCount = 0;
                             final StringBuilder fileReference = new StringBuilder();
                             for (final URL urls : urlList) {
                                 try {
-                                    if(urls.toString().contains("_rs")){
-                                        isOfReducedSize=true;
+                                    if (urls.toString().contains("_rs")) {
+                                        isOfReducedSize = true;
                                     }
                                     reader = new MultiPagePictureReader(urls, false, false);
                                     pageCount = reader.getNumberOfPages();
@@ -662,7 +672,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_formAncestorAdded
+    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) { //GEN-FIRST:event_formAncestorAdded
         CismetThreadPool.execute(new Runnable() {
 
                 @Override
@@ -681,7 +691,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         });
                 }
             });
-    }//GEN-LAST:event_formAncestorAdded
+    } //GEN-LAST:event_formAncestorAdded
 
     /**
      * DOCUMENT ME!
