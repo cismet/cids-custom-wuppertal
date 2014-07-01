@@ -53,6 +53,7 @@ public class VermessungsrissPictureFinder {
     public static String PATH_GRENZNIEDERSCHRIFT = AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN;
     private static final String GRENZNIEDERSCHRIFT_PREFIX = "GN";
     private static final String VERMESSUNGSRISS_PREFIX = "VR";
+    private static final String PATH_PLATZHALTER = "platzhalter";
 
     //~ Methods ----------------------------------------------------------------
 
@@ -169,6 +170,9 @@ public class VermessungsrissPictureFinder {
      */
     public static String getObjectPath(final boolean isGrenzNiederschrift, final String filename) {
         final Integer gemarkung;
+        if (filename.startsWith(PATH_PLATZHALTER)) {
+            return (isGrenzNiederschrift ? PATH_GRENZNIEDERSCHRIFT : PATH_VERMESSUNG) + filename;
+        }
         final String[] splittedFilename = filename.split("-");
         gemarkung = Integer.parseInt(splittedFilename[1]);
         String filenameWithPrefix = isGrenzNiederschrift ? GRENZNIEDERSCHRIFT_PREFIX : VERMESSUNGSRISS_PREFIX;
