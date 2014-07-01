@@ -172,7 +172,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             AlertPanel.TYPE.DANGER,
             alertWarnMessage,
             true);
-
+   
     protected static XBoundingBox INITIAL_BOUNDINGBOX = new XBoundingBox(
             2583621.251964098d,
             5682507.032498134d,
@@ -2324,17 +2324,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      *
      * @return DOCUMENT ME!
      */
-    public static Map<URL, URL> getCorrespondingURLs(final String host,
-            final Integer gemarkung,
-            final String flur,
-            final String schluessel,
-            final String blatt) {
-        final Map<URL, URL> validURLs = new HashMap<URL, URL>();
-
-        // TODO: we need to use the PictureFinder here...
-        return validURLs;
-    }
-
     /**
      * DOCUMENT ME!
      *
