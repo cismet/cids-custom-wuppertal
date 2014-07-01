@@ -51,9 +51,9 @@ import javax.swing.table.TableRowSorter;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
-import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungRissEditor;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.PrintingWaitDialog;
+import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissPictureFinder;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
@@ -362,17 +362,17 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tblRisseFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_tblRisseFocusLost
+    private void tblRisseFocusLost(final java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblRisseFocusLost
         tblRisse.clearSelection();
         animateToOverview();
-    }                                                                     //GEN-LAST:event_tblRisseFocusLost
+    }//GEN-LAST:event_tblRisseFocusLost
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnGenerateReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnGenerateReportActionPerformed
+    private void btnGenerateReportActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateReportActionPerformed
         final Collection<CidsBean> selectedVermessungsrisse = getSelectedVermessungsrisse();
 
         if (selectedVermessungsrisse.isEmpty()) {
@@ -459,7 +459,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                     return null;
                 }
             }.execute();
-    } //GEN-LAST:event_btnGenerateReportActionPerformed
+    }//GEN-LAST:event_btnGenerateReportActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -540,50 +540,40 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                             description.append(vermessungsriss.getProperty("blatt"));
                             description.append(" - Seite ");
 
-                            final Map<URL, URL> validURLs = VermessungRissEditor.getCorrespondingURLs(
-                                    host,
-                                    gemarkung,
-                                    flur,
-                                    schluessel,
-                                    blatt);
+                            final List<URL> urlList;
+                            if(host.equals(AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN)){
+                                urlList = VermessungsrissPictureFinder.findGrenzniederschriftPicture(schluessel, gemarkung, flur, blatt);
+                                        }else{
+                                urlList= VermessungsrissPictureFinder.findVermessungsrissPicture(schluessel, gemarkung, flur, blatt);
+                            }
 
+                            if(urlList == null || urlList.isEmpty() || urlList.size()>1){
+                                LOG.error("Something is wrong with the downlaod urls");
+                                throw  new IllegalStateException("FF");
+                            }
+                            boolean isOfReducedSize=false;
                             MultiPagePictureReader reader = null;
                             int pageCount = 0;
                             final StringBuilder fileReference = new StringBuilder();
-                            for (final Map.Entry<URL, URL> urls : validURLs.entrySet()) {
+                            for (final URL urls : urlList) {
                                 try {
-                                    reader = new MultiPagePictureReader(urls.getValue(), false, false);
+                                    if(urls.toString().contains("_rs")){
+                                        isOfReducedSize=true;
+                                    }
+                                    reader = new MultiPagePictureReader(urls, false, false);
                                     pageCount = reader.getNumberOfPages();
-                                    additionalFilesToDownload.add(urls.getKey());
+                                    additionalFilesToDownload.add(urls);
 
-                                    String path = urls.getKey().getPath();
+                                    String path = urls.getPath();
                                     path = path.substring(path.lastIndexOf('/') + 1);
                                     fileReference.append(" (");
                                     fileReference.append(path);
                                     fileReference.append(')');
                                     break;
                                 } catch (final Exception ex) {
-                                    LOG.warn("Could not read document from URL '" + urls.getValue().toExternalForm()
+                                    LOG.warn("Could not read document from URL '" + urls.toExternalForm()
                                                 + "'. Skipping this url.",
                                         ex);
-                                }
-                            }
-
-                            boolean isOfReducedSize = true;
-                            if (reader == null) {
-                                // Didn't find an image of reduced size
-                                for (final Map.Entry<URL, URL> urls : validURLs.entrySet()) {
-                                    try {
-                                        reader = new MultiPagePictureReader(urls.getKey(), false, false);
-                                        pageCount = reader.getNumberOfPages();
-                                        isOfReducedSize = false;
-                                        break;
-                                    } catch (final Exception ex) {
-                                        LOG.warn("Could not read document from URL '" + urls.getValue()
-                                                    .toExternalForm()
-                                                    + "'. Skipping this url.",
-                                            ex);
-                                    }
                                 }
                             }
 
@@ -672,7 +662,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) { //GEN-FIRST:event_formAncestorAdded
+    private void formAncestorAdded(final javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_formAncestorAdded
         CismetThreadPool.execute(new Runnable() {
 
                 @Override
@@ -691,7 +681,7 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                         });
                 }
             });
-    } //GEN-LAST:event_formAncestorAdded
+    }//GEN-LAST:event_formAncestorAdded
 
     /**
      * DOCUMENT ME!
