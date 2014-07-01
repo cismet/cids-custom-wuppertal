@@ -1034,8 +1034,6 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             final String imageNr = txtBildnummer.getText().trim();
             if (StringUtils.isNotBlank(imageNr)) {
                 stadtbildSerieSearchStatement.setSingleImageNumber(imageNr);
-            } else {
-                throw new NotAValidIntervalException();
             }
         } else {
             final String imageNrFrom = txtImageNrFrom.getText().trim();
@@ -1043,9 +1041,6 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             if (StringUtils.isNotBlank(imageNrFrom) && StringUtils.isNotBlank(imageNrTo)) {
                 final Interval interval = getIntervalForSearch(imageNrFrom, imageNrTo);
                 stadtbildSerieSearchStatement.setInterval(interval);
-            } else {
-                // imageNrFrom and imageNrTo are blank
-                throw new NotAValidIntervalException();
             }
         }
     }
