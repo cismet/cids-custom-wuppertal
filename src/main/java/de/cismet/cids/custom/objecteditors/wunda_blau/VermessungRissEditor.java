@@ -305,7 +305,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      */
     public VermessungRissEditor(final boolean readOnly) {
         this.readOnly = readOnly;
-
         documentURLs = new URL[2];
         documentButtons = new JToggleButton[documentURLs.length];
         initComponents();
@@ -1876,7 +1875,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         if (currentDocument == VERMESSUNGSRISS) {
             return VermessungsrissPictureFinder.getVermessungsrissPictureFilename(schluessel, gemarkung, flur, blatt);
         } else {
-            return VermessungsrissPictureFinder.getVermessungsrissPictureFilename(schluessel, gemarkung, flur, blatt);
+            return VermessungsrissPictureFinder.getGrenzniederschriftFilename(schluessel, gemarkung, flur, blatt);
         }
     }
 
@@ -1895,7 +1894,11 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      */
     private void checkLinkInTitle(final URL url) {
         showLinkInTitle(false);
-        lblReducedSize.setVisible(false);
+        if (url.toString().contains("_rs")) {
+            lblReducedSize.setVisible(true);
+        } else {
+            lblReducedSize.setVisible(false);
+        }
         jxlUmleitung.setText("");
         final String filename = getDocumentFilename();
         boolean isUmleitung = false;
@@ -2093,6 +2096,9 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             }
 
             schluessel = cidsBean.getProperty("schluessel");
+            if (schluessel.equals("600") || schluessel.equals("504")) {
+                togGrenzniederschrift.setVisible(false);
+            }
             gemarkung = (cidsBean.getProperty("gemarkung") != null) ? cidsBean.getProperty("gemarkung.id") : null;
             flur = cidsBean.getProperty("flur");
             blatt = cidsBean.getProperty("blatt");
@@ -2815,30 +2821,10 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 LOG.warn("There was an exception while refreshing document.", ex);
             } finally {
                 if (refreshMeasuringComponent) {
-                    if ((documentURLs[VERMESSUNGSRISS] == null) && (documentURLs[GRENZNIEDERSCHRIFT] == null)) {
-                        lstPages.setModel(new DefaultListModel());
-                        showAlert(true);
-                        showMeasurePanel();
-                    } else {
-                        if (documentURLs[VERMESSUNGSRISS] != null) {
-                            togBild.setSelected(true);
-                            currentSelectedButton = togBild;
-                            currentDocument = VERMESSUNGSRISS;
-                        }
-
-                        if (documentURLs[GRENZNIEDERSCHRIFT] != null) {
-                            if (currentDocument == NO_SELECTION) {
-                                togGrenzniederschrift.setSelected(true);
-                                currentSelectedButton = togGrenzniederschrift;
-                                currentDocument = GRENZNIEDERSCHRIFT;
-                            }
-                        }
-
-                        if (currentDocument == VERMESSUNGSRISS) {
-                            loadVermessungsriss();
-                        } else if (currentDocument == GRENZNIEDERSCHRIFT) {
-                            loadGrenzniederschrift();
-                        }
+                    if (currentSelectedButton == togBild) {
+                        loadVermessungsriss();
+                    } else if (currentDocument == GRENZNIEDERSCHRIFT) {
+                        loadGrenzniederschrift();
                     }
                 }
             }
