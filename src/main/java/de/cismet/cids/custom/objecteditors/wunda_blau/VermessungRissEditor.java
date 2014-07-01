@@ -273,7 +273,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private javax.swing.JPanel pnlMeasureComponentWrapper;
     private de.cismet.tools.gui.RoundedPanel pnlPages;
     private javax.swing.JPanel pnlTitle;
-    private javax.swing.JPanel pnlUmleitungLink;
     private javax.swing.JPopupMenu popChangeVeraenderungsart;
     private javax.swing.JScrollPane scpLandparcels;
     private javax.swing.JScrollPane scpPages;
@@ -456,7 +455,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         pnlDocument = new de.cismet.tools.gui.RoundedPanel();
         pnlHeaderDocument = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeaderDocument = new javax.swing.JLabel();
-        pnlUmleitungLink = new javax.swing.JPanel();
         lblReducedSize = new javax.swing.JLabel();
         measureComponentPanel = new LayeredAlertPanel(pnlMeasureComponentWrapper, pnlGrenzniederschriftAlert);
         gluGapControls = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
@@ -1290,13 +1288,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlHeaderDocument.add(lblHeaderDocument, gridBagConstraints);
 
-        pnlUmleitungLink.setOpaque(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
-        pnlHeaderDocument.add(pnlUmleitungLink, gridBagConstraints);
-
         lblReducedSize.setForeground(new java.awt.Color(254, 254, 254));
         lblReducedSize.setText(org.openide.util.NbBundle.getMessage(
                 VermessungRissEditor.class,
@@ -1791,11 +1782,11 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      * @param  flag  DOCUMENT ME!
      */
     private void showLinkInTitle(final boolean flag) {
-        pnlUmleitungLink.removeAll();
-        // !selfPersisting means editing
-        if (flag && !readOnly) {
-            pnlUmleitungLink.add(pnlLink);
-        }
+//        pnlUmleitungLink.removeAll();
+//        // !selfPersisting means editing
+//        if (flag && !readOnly) {
+//            pnlUmleitungLink.add(pnlLink);
+//        }
     }
 
     /**
@@ -1894,22 +1885,24 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      */
     private void checkLinkInTitle(final URL url) {
         showLinkInTitle(false);
-        if (url.toString().contains("_rs")) {
-            lblReducedSize.setVisible(true);
-        } else {
-            lblReducedSize.setVisible(false);
-        }
-        jxlUmleitung.setText("");
-        final String filename = getDocumentFilename();
         boolean isUmleitung = false;
-        if ((url != null) && !url.toString().contains(filename)) {
-            isUmleitung = true;
+        lblReducedSize.setVisible(false);
+        if (url != null) {
             if (url.toString().contains("_rs")) {
                 lblReducedSize.setVisible(true);
             }
-            jxlUmleitung.setText(extractFilenameofUrl(url));
-            showLinkInTitle(true);
-            pnlHeaderDocument.repaint();
+            jxlUmleitung.setText("");
+            final String filename = getDocumentFilename();
+
+            if ((url != null) && !url.toString().contains(filename)) {
+                isUmleitung = true;
+                if (url.toString().contains("_rs")) {
+                    lblReducedSize.setVisible(true);
+                }
+                jxlUmleitung.setText(extractFilenameofUrl(url));
+                showLinkInTitle(true);
+                pnlHeaderDocument.repaint();
+            }
         }
 
         if (isUmleitung) {
