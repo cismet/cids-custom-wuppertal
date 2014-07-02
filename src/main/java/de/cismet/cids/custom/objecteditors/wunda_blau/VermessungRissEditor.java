@@ -156,10 +156,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             "<html> <b>Warnung! </b> Es wurde kein Dokument gefunden. Klicken Sie auf diese Meldung um eine Weiterleitung einzurichten.</html>");
     private static final JLabel rissWarnMessage = new JLabel(
             "<html> <b>Warnung! </b> Es wurde kein Dokument gefunden. Klicken Sie auf diese Meldung um einen Platzhalter einzurichten.</html>");
-    private static final AlertPanel alertPanel = new AlertPanel(
-            AlertPanel.TYPE.DANGER,
-            grenzNiederschriftWarnMessage,
-            true);
 
     protected static XBoundingBox INITIAL_BOUNDINGBOX = new XBoundingBox(
             2583621.251964098d,
@@ -206,6 +202,10 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     protected VermessungFlurstueckSelectionDialog flurstueckDialog;
     protected volatile int currentDocument = NO_SELECTION;
     protected volatile int currentPage = NO_SELECTION;
+    private final AlertPanel alertPanel = new AlertPanel(
+            AlertPanel.TYPE.DANGER,
+            grenzNiederschriftWarnMessage,
+            true);
     private VermessungUmleitungPanel umleitungsPanel = new VermessungUmleitungPanel(
             VermessungUmleitungPanel.MODE.VERMESSUNGSRISS,
             this);
@@ -229,6 +229,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private javax.swing.JFormattedTextField ftxFlur;
     private javax.swing.Box.Filler gluGapControls;
     private javax.swing.Box.Filler gluGeneralInformationGap;
+    private javax.swing.JLabel jLabel1;
     private org.jdesktop.swingx.JXBusyLabel jxLBusyMeasure;
     private org.jdesktop.swingx.JXHyperlink jxlUmleitung;
     private javax.swing.JLabel lblBlatt;
@@ -249,8 +250,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private javax.swing.JLabel lblReducedSize;
     private javax.swing.JLabel lblSchluessel;
     private javax.swing.JLabel lblTitle;
-    private javax.swing.JLabel lblUmleitung;
-    private javax.swing.JLabel lblUmleitung2;
     private javax.swing.JList lstLandparcels;
     private javax.swing.JList lstPages;
     private de.cismet.tools.gui.panels.LayeredAlertPanel measureComponentPanel;
@@ -268,11 +267,11 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private de.cismet.tools.gui.SemiRoundedPanel pnlHeaderLandparcels;
     private de.cismet.tools.gui.SemiRoundedPanel pnlHeaderPages;
     private de.cismet.tools.gui.RoundedPanel pnlLandparcels;
-    private javax.swing.JPanel pnlLink;
     private javax.swing.JPanel pnlMeasureComp;
     private javax.swing.JPanel pnlMeasureComponentWrapper;
     private de.cismet.tools.gui.RoundedPanel pnlPages;
     private javax.swing.JPanel pnlTitle;
+    private javax.swing.JPanel pnlUmleitungHeader;
     private javax.swing.JPopupMenu popChangeVeraenderungsart;
     private javax.swing.JScrollPane scpLandparcels;
     private javax.swing.JScrollPane scpPages;
@@ -313,6 +312,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         initAlertPanel();
         measuringComponent = new MeasuringComponent(INITIAL_BOUNDINGBOX, CRS);
         pnlMeasureComp.add(measuringComponent, BorderLayout.CENTER);
+        lblReducedSize.setVisible(false);
         if (readOnly) {
             lblSchluessel.setVisible(false);
             cmbSchluessel.setVisible(false);
@@ -394,10 +394,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         jxLBusyMeasure = new JXBusyLabel(new Dimension(64, 64));
         pnlMeasureComp = new javax.swing.JPanel();
         pnlGrenzniederschriftAlert = new javax.swing.JPanel();
-        pnlLink = new javax.swing.JPanel();
-        lblUmleitung = new javax.swing.JLabel();
-        jxlUmleitung = new org.jdesktop.swingx.JXHyperlink();
-        lblUmleitung2 = new javax.swing.JLabel();
         pnlContainer = new javax.swing.JPanel();
         pnlGeneralInformation = new de.cismet.tools.gui.RoundedPanel();
         pnlHeaderGeneralInformation = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -447,6 +443,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         lblHeaderDocuments = new javax.swing.JLabel();
         togBild = new javax.swing.JToggleButton();
         togGrenzniederschrift = new javax.swing.JToggleButton();
+        jLabel1 = new javax.swing.JLabel();
         pnlPages = new de.cismet.tools.gui.RoundedPanel();
         pnlHeaderPages = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeaderPages = new javax.swing.JLabel();
@@ -454,8 +451,10 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         lstPages = new javax.swing.JList();
         pnlDocument = new de.cismet.tools.gui.RoundedPanel();
         pnlHeaderDocument = new de.cismet.tools.gui.SemiRoundedPanel();
-        lblHeaderDocument = new javax.swing.JLabel();
         lblReducedSize = new javax.swing.JLabel();
+        pnlUmleitungHeader = new javax.swing.JPanel();
+        lblHeaderDocument = new javax.swing.JLabel();
+        jxlUmleitung = new org.jdesktop.swingx.JXHyperlink();
         measureComponentPanel = new LayeredAlertPanel(pnlMeasureComponentWrapper, pnlGrenzniederschriftAlert);
         gluGapControls = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
@@ -494,46 +493,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         pnlGrenzniederschriftAlert.setBackground(new java.awt.Color(254, 254, 254));
         pnlGrenzniederschriftAlert.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
         pnlGrenzniederschriftAlert.setLayout(new java.awt.BorderLayout());
-
-        pnlLink.setOpaque(false);
-        pnlLink.setLayout(new java.awt.GridBagLayout());
-
-        lblUmleitung.setForeground(new java.awt.Color(254, 254, 254));
-        lblUmleitung.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.lblUmleitung.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        pnlLink.add(lblUmleitung, gridBagConstraints);
-
-        jxlUmleitung.setForeground(new java.awt.Color(204, 204, 204));
-        jxlUmleitung.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.jxlUmleitung.text"));        // NOI18N
-        jxlUmleitung.setToolTipText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.jxlUmleitung.toolTipText")); // NOI18N
-        jxlUmleitung.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jxlUmleitungActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        pnlLink.add(jxlUmleitung, gridBagConstraints);
-
-        lblUmleitung2.setForeground(new java.awt.Color(254, 254, 254));
-        lblUmleitung2.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.lblUmleitung2.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        pnlLink.add(lblUmleitung2, gridBagConstraints);
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -1194,7 +1153,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         togBild.setFocusPainted(false);
         togBild.setMaximumSize(new java.awt.Dimension(49, 32));
         togBild.setMinimumSize(new java.awt.Dimension(49, 32));
-        togBild.setPreferredSize(new java.awt.Dimension(49, 32));
+        togBild.setPreferredSize(new java.awt.Dimension(152, 32));
         togBild.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -1216,7 +1175,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         togGrenzniederschrift.setFocusPainted(false);
         togGrenzniederschrift.setMaximumSize(new java.awt.Dimension(150, 32));
         togGrenzniederschrift.setMinimumSize(new java.awt.Dimension(150, 32));
-        togGrenzniederschrift.setPreferredSize(new java.awt.Dimension(150, 32));
+        togGrenzniederschrift.setPreferredSize(new java.awt.Dimension(152, 32));
         togGrenzniederschrift.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -1228,8 +1187,17 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(2, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(2, 10, 0, 10);
         pnlDocuments.add(togGrenzniederschrift, gridBagConstraints);
+
+        jLabel1.setText(org.openide.util.NbBundle.getMessage(
+                VermessungRissEditor.class,
+                "VermessungRissEditor.jLabel1.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+        pnlDocuments.add(jLabel1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1279,15 +1247,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         pnlHeaderDocument.setBackground(java.awt.Color.darkGray);
         pnlHeaderDocument.setLayout(new java.awt.GridBagLayout());
 
-        lblHeaderDocument.setForeground(java.awt.Color.white);
-        lblHeaderDocument.setText(org.openide.util.NbBundle.getMessage(
-                VermessungRissEditor.class,
-                "VermessungRissEditor.lblHeaderDocument.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlHeaderDocument.add(lblHeaderDocument, gridBagConstraints);
-
         lblReducedSize.setForeground(new java.awt.Color(254, 254, 254));
         lblReducedSize.setText(org.openide.util.NbBundle.getMessage(
                 VermessungRissEditor.class,
@@ -1296,6 +1255,42 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         pnlHeaderDocument.add(lblReducedSize, gridBagConstraints);
+
+        pnlUmleitungHeader.setOpaque(false);
+        pnlUmleitungHeader.setLayout(new java.awt.GridBagLayout());
+
+        lblHeaderDocument.setForeground(java.awt.Color.white);
+        lblHeaderDocument.setText(org.openide.util.NbBundle.getMessage(
+                VermessungRissEditor.class,
+                "VermessungRissEditor.lblHeaderDocument.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlUmleitungHeader.add(lblHeaderDocument, gridBagConstraints);
+
+        jxlUmleitung.setForeground(new java.awt.Color(204, 204, 204));
+        jxlUmleitung.setText(org.openide.util.NbBundle.getMessage(
+                VermessungRissEditor.class,
+                "VermessungRissEditor.jxlUmleitung.text"));        // NOI18N
+        jxlUmleitung.setToolTipText(org.openide.util.NbBundle.getMessage(
+                VermessungRissEditor.class,
+                "VermessungRissEditor.jxlUmleitung.toolTipText")); // NOI18N
+        jxlUmleitung.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jxlUmleitungActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        pnlUmleitungHeader.add(jxlUmleitung, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        pnlHeaderDocument.add(pnlUmleitungHeader, gridBagConstraints);
 
         pnlDocument.add(pnlHeaderDocument, java.awt.BorderLayout.NORTH);
 
@@ -1458,6 +1453,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private void togBildActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togBildActionPerformed
         umleitungsPanel = new VermessungUmleitungPanel(VermessungUmleitungPanel.MODE.VERMESSUNGSRISS, this);
         showUmleitung = true;
+        currentSelectedButton = togBild;
         alertPanel.setContent(rissWarnMessage);
         alertPanel.repaint();
         loadVermessungsriss();
@@ -1472,6 +1468,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private void togGrenzniederschriftActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togGrenzniederschriftActionPerformed
         umleitungsPanel = new VermessungUmleitungPanel(VermessungUmleitungPanel.MODE.GRENZNIEDERSCHRIFT, this);
         showUmleitung = true;
+        currentSelectedButton = togGrenzniederschrift;
         alertPanel.setContent(grenzNiederschriftWarnMessage);
         alertPanel.repaint();
         loadGrenzniederschrift();
@@ -1782,11 +1779,11 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      * @param  flag  DOCUMENT ME!
      */
     private void showLinkInTitle(final boolean flag) {
-//        pnlUmleitungLink.removeAll();
-//        // !selfPersisting means editing
-//        if (flag && !readOnly) {
-//            pnlUmleitungLink.add(pnlLink);
-//        }
+        jxlUmleitung.setVisible(false);
+        // !selfPersisting means editing
+        if (flag && !readOnly) {
+            jxlUmleitung.setVisible(true);
+        }
     }
 
     /**
@@ -1905,7 +1902,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             }
         }
 
-        if (isUmleitung) {
+        if (!readOnly && isUmleitung) {
             lblHeaderDocument.setText(NbBundle.getMessage(
                     VermessungRissEditor.class,
                     "VermessungRissEditor.lblHeaderDocument.text.vermessungsriss_umleitung"));
@@ -1934,7 +1931,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         if (urlString.contains(VermessungUmleitungPanel.PLATZHALTER_PREFIX)) {
             return urlString.substring(urlString.indexOf(VermessungUmleitungPanel.PLATZHALTER_PREFIX),
                     urlString.length()
-                            - 3);
+                            - 4);
         }
         final String[] splittedUrl = url.toString().split("/");
         String s = splittedUrl[splittedUrl.length - 1];
@@ -3029,6 +3026,11 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  e  DOCUMENT ME!
+         */
         @Override
         public void actionPerformed(final ActionEvent e) {
             for (final Object flurstuecksvermessung : lstLandparcels.getSelectedValues()) {
@@ -3110,6 +3112,11 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  beans  DOCUMENT ME!
+         */
         @Override
         public void beansDropped(final ArrayList<CidsBean> beans) {
             MetaObject veraenderungsartMO = null;

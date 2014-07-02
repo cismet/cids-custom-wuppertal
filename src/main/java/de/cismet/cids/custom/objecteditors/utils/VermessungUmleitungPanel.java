@@ -120,7 +120,7 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                     cl.show(pnlControls, "card2");
                     jXBusyLabel1.setBusy(true);
                     if ((getLinkDocument() != null) && !getLinkDocument().isEmpty()) {
-                        checkIfLinkDocumentExists(mode == MODE.VERMESSUNGSRISS);
+                        checkIfLinkDocumentExists(false);
                     } else {
                         cl.show(pnlControls, "card3");
                     }
@@ -250,13 +250,16 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                         jXBusyLabel1.setBusy(false);
                         if (file != null) {
                             editor.successAlert();
-                            tfName.getDocument().removeDocumentListener(VermessungUmleitungPanel.this);
                             final String rawUrl = file.toString();
-                            final int startPos = rawUrl.indexOf("_") + 1;
-                            final int endPos = (rawUrl.lastIndexOf("_") != (startPos - 1)) ? rawUrl.lastIndexOf("_")
-                                                                                           : rawUrl.lastIndexOf(".");
-                            tfName.setText(rawUrl.substring(startPos, endPos));
-                            tfName.getDocument().addDocumentListener(VermessungUmleitungPanel.this);
+                            if (!rawUrl.contains(PLATZHALTER_PREFIX)) {
+                                tfName.getDocument().removeDocumentListener(VermessungUmleitungPanel.this);
+
+                                final int startPos = rawUrl.indexOf("_") + 1;
+                                final int endPos = (rawUrl.lastIndexOf("_") != (startPos - 1))
+                                    ? rawUrl.lastIndexOf("_") : rawUrl.lastIndexOf(".");
+                                tfName.setText(rawUrl.substring(startPos, endPos));
+                                tfName.getDocument().addDocumentListener(VermessungUmleitungPanel.this);
+                            }
                             editor.reloadPictureFromUrl(file);
 
                             final CardLayout cl = (CardLayout)pnlControls.getLayout();
@@ -280,7 +283,10 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                         return null;
                     }
                     if (input.toLowerCase().startsWith(PLATZHALTER_PREFIX)) {
-                        return new URL(GRENZNIEDERSCHRIFT_DIRECTORY + input + ".jpg");
+                        return new URL(VermessungsrissPictureFinder.getObjectPath(
+                                    mode
+                                            == MODE.GRENZNIEDERSCHRIFT,
+                                    input) + ".jpg");
                     } else {
                         final List<URL> res;
                         final String[] splittedInput = input.split("-");
@@ -779,6 +785,6 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
         final String url = PLATZHALTER_PREFIX + SEP + StringUtils.leftPad(schluessel, 3, '0');
         tfName.setText(url);
         tfName.getDocument().addDocumentListener(this);
-        checkIfLinkDocumentExists(true);
+        checkIfLinkDocumentExists(false);
     }                                                                                  //GEN-LAST:event_btnPlatzhalterActionPerformed
 }
