@@ -464,11 +464,9 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
     /**
      * DOCUMENT ME!
      *
-     * @param   selectedVermessungsrisse  DOCUMENT ME!
-     * @param   type                      DOCUMENT ME!
-     * @param   host                      DOCUMENT ME!
-     *
-     * @throws  IllegalStateException  DOCUMENT ME!
+     * @param  selectedVermessungsrisse  DOCUMENT ME!
+     * @param  type                      DOCUMENT ME!
+     * @param  host                      DOCUMENT ME!
      */
     private void downloadProducts(final Collection<CidsBean> selectedVermessungsrisse,
             final String type,
@@ -557,33 +555,34 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                         blatt);
                             }
 
-                            if ((urlList == null) || urlList.isEmpty() || (urlList.size() > 1)) {
-                                LOG.error("Something is wrong with the downlaod urls");
-                                throw new IllegalStateException("FF");
+                            if ((urlList == null) || urlList.isEmpty()) {
+                                LOG.info("No document URLS found for the Vermessungsriss report");
                             }
                             boolean isOfReducedSize = false;
                             MultiPagePictureReader reader = null;
                             int pageCount = 0;
                             final StringBuilder fileReference = new StringBuilder();
-                            for (final URL urls : urlList) {
-                                try {
-                                    if (urls.toString().contains("_rs")) {
-                                        isOfReducedSize = true;
-                                    }
-                                    reader = new MultiPagePictureReader(urls, false, false);
-                                    pageCount = reader.getNumberOfPages();
-                                    additionalFilesToDownload.add(urls);
+                            if (urlList != null) {
+                                for (final URL urls : urlList) {
+                                    try {
+                                        if (urls.toString().contains("_rs")) {
+                                            isOfReducedSize = true;
+                                        }
+                                        reader = new MultiPagePictureReader(urls, false, false);
+                                        pageCount = reader.getNumberOfPages();
+                                        additionalFilesToDownload.add(urls);
 
-                                    String path = urls.getPath();
-                                    path = path.substring(path.lastIndexOf('/') + 1);
-                                    fileReference.append(" (");
-                                    fileReference.append(path);
-                                    fileReference.append(')');
-                                    break;
-                                } catch (final Exception ex) {
-                                    LOG.warn("Could not read document from URL '" + urls.toExternalForm()
-                                                + "'. Skipping this url.",
-                                        ex);
+                                        String path = urls.getPath();
+                                        path = path.substring(path.lastIndexOf('/') + 1);
+                                        fileReference.append(" (");
+                                        fileReference.append(path);
+                                        fileReference.append(')');
+                                        break;
+                                    } catch (final Exception ex) {
+                                        LOG.warn("Could not read document from URL '" + urls.toExternalForm()
+                                                    + "'. Skipping this url.",
+                                            ex);
+                                    }
                                 }
                             }
 
