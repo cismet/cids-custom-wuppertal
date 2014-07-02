@@ -1706,6 +1706,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
                                 @Override
                                 public void run() {
+                                    measuringComponent.reset();
                                     showAlert(true);
                                     pnlMeasureComponentWrapper.invalidate();
                                     pnlMeasureComponentWrapper.revalidate();
@@ -1716,7 +1717,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                         if (!(jxlUmleitung.getText().isEmpty() || jxlUmleitung.getText().contains(editedLink))) {
                             showMeasureIsLoading();
                             lstPages.setModel(new DefaultListModel());
-                            final RefreshDocumentWorker worker = new RefreshDocumentWorker();
+                            final RefreshDocumentWorker worker = new RefreshDocumentWorker(true);
                             worker.execute();
                         }
                     }
@@ -2813,7 +2814,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 if (refreshMeasuringComponent) {
                     if (currentSelectedButton == togBild) {
                         loadVermessungsriss();
-                    } else if (currentDocument == GRENZNIEDERSCHRIFT) {
+                    } else if (currentSelectedButton == togGrenzniederschrift) {
                         loadGrenzniederschrift();
                     }
                 }
