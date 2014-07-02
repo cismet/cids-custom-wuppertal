@@ -1693,8 +1693,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             });
         alertPanel.addCloseButtonActionListener(new ActionListener() {
 
-                private boolean showUmleitung;
-
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     showUmleitung = true;
@@ -2645,16 +2643,14 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                     lstPages.setModel(new DefaultListModel());
                 }
             } catch (InterruptedException ex) {
-                setCurrentDocumentNull();
-                lstPages.setModel(FEHLER_MODEL);
-                closeReader();
-                LOG.warn("Reading found pictures was interrupted.", ex);
-            } catch (ExecutionException ex) {
-                setCurrentDocumentNull();
-                lstPages.setModel(FEHLER_MODEL);
-                closeReader();
-                LOG.error("Could not read found pictures.", ex);
+            } catch (Exception ex) {
+               LOG.error("Could not read found pictures.", ex);
             } finally {
+//                 setCurrentDocumentNull();
+                 showMeasurePanel();
+                lstPages.setModel(new DefaultListModel());
+                closeReader();
+
             }
         }
     }
@@ -2737,7 +2733,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             this.refreshMeasuringComponent = refreshMeasuringComponent;
             if (this.refreshMeasuringComponent) {
                 lstPages.setModel(MODEL_LOAD);
-                setCurrentDocumentNull();
+//                setCurrentDocumentNull();
 
                 showMeasureIsLoading();
             }
@@ -2808,7 +2804,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 }
             } catch (InterruptedException ex) {
                 LOG.warn("Was interrupted while refreshing document.", ex);
-            } catch (ExecutionException ex) {
+            } catch (Exception ex) {
                 LOG.warn("There was an exception while refreshing document.", ex);
             } finally {
                 if (refreshMeasuringComponent) {
