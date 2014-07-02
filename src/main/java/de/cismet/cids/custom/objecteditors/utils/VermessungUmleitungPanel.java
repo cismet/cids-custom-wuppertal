@@ -19,8 +19,6 @@ import org.jdesktop.swingx.JXBusyLabel;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
-import org.openide.util.Exceptions;
-
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -30,21 +28,20 @@ import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.InputStream;
 
 import java.net.URL;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 
+import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 import javax.swing.Timer;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
-import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.custom.objecteditors.utils.VermessungUmleitungPanel.MODE;
 import de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastUmleitungPanel;
@@ -52,6 +49,9 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungRissEditor;
 import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissPictureFinder;
 
 import de.cismet.cids.dynamics.CidsBean;
+
+import de.cismet.cids.navigator.utils.CidsBeanDropListener;
+import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
 
 import de.cismet.netutil.Proxy;
 
@@ -65,7 +65,7 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   daniel
  * @version  $Revision$, $Date$
  */
-public class VermessungUmleitungPanel extends javax.swing.JPanel implements DocumentListener {
+public class VermessungUmleitungPanel extends javax.swing.JPanel implements DocumentListener, CidsBeanDropListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -173,6 +173,8 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
         jXBusyLabel1.setSize(16, 16);
         tfName.getDocument().addDocumentListener(this);
         webDavHelper = new WebDavHelper(Proxy.fromPreferences(), WEB_DAV_USER, WEB_DAV_PASSWORD, true);
+        new CidsBeanDropTarget(this);
+        new CidsBeanDropTarget(tfName);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -282,7 +284,11 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                     if (!isNummerConsistent(input)) {
                         return null;
                     }
-                    if (input.toLowerCase().startsWith(PLATZHALTER_PREFIX)) {
+                    final boolean isPlatzhalter = input.toLowerCase().startsWith(PLATZHALTER_PREFIX);
+                    if ((mode == MODE.VERMESSUNGSRISS) && !isPlatzhalter) {
+                        return null;
+                    }
+                    if (isPlatzhalter) {
                         return new URL(VermessungsrissPictureFinder.getObjectPath(
                                     mode
                                             == MODE.GRENZNIEDERSCHRIFT,
@@ -568,6 +574,40 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
         lblMode.setForeground(c);
     }
 
+    @Override
+    public void beansDropped(final ArrayList<CidsBean> droppedBeans) {
+        try {
+            if (droppedBeans.size() > 1) {
+                LOG.info(
+                    "There were more than one bean dropped on the vermessungs riss umleitungs text field. Just regarding the first one");
+            }
+            final CidsBean bean = droppedBeans.get(0);
+            if (bean != null) {
+                if (bean.getMetaObject().getMetaClass().getTableName().equalsIgnoreCase("vermessung_riss")) {
+                    final String schluessel = bean.getProperty("schluessel").toString();
+                    final CidsBean gemarkungBean = (CidsBean)bean.getProperty("gemarkung");
+                    Integer gemarkung = 0;
+                    if (gemarkungBean != null) {
+                        gemarkung = (Integer)gemarkungBean.getProperty("id");
+                    }
+                    final String flur = bean.getProperty("flur").toString();
+                    final String blatt = bean.getProperty("blatt").toString();
+                    final StringBuffer buf = new StringBuffer();
+                    buf.append(StringUtils.leftPad(schluessel, 3, '0'));
+                    buf.append("-");
+                    buf.append(String.format("%04d", gemarkung));
+                    buf.append("-");
+                    buf.append(StringUtils.leftPad(flur, 3, '0'));
+                    buf.append("-");
+                    buf.append(StringUtils.leftPad(blatt, 8, '0'));
+                    tfName.setText(buf.toString());
+                }
+            }
+        } catch (Exception ex) {
+            LOG.error("Problem when adding the DroppedBeans", ex);
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
      * content of this method is always regenerated by the Form Editor.
@@ -588,7 +628,7 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
         jLabel1 = new javax.swing.JLabel();
         pnlMode = new javax.swing.JPanel();
         pnlGrenzUmleitung = new javax.swing.JPanel();
-        tfName = new javax.swing.JTextField();
+        tfName = new DropAwareTextField();
         lblMessage = new javax.swing.JLabel();
         lblMode = new javax.swing.JLabel();
         pnlRissUml = new javax.swing.JPanel();
@@ -787,4 +827,21 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
         tfName.getDocument().addDocumentListener(this);
         checkIfLinkDocumentExists(false);
     }                                                                                  //GEN-LAST:event_btnPlatzhalterActionPerformed
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private final class DropAwareTextField extends JTextField implements CidsBeanDropListener {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void beansDropped(final ArrayList<CidsBean> beans) {
+            VermessungUmleitungPanel.this.beansDropped(beans);
+        }
+    }
 }
