@@ -136,18 +136,15 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
     private javax.swing.JButton btnCreateDocument;
     private javax.swing.JButton btnPlatzhalter;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
     private org.jdesktop.swingx.JXBusyLabel jXBusyLabel1;
     private javax.swing.JLabel lblMessage;
     private javax.swing.JLabel lblMode;
-    private javax.swing.JLabel lblRissMessage;
     private javax.swing.JPanel pnlBusyLabel;
     private javax.swing.JPanel pnlControls;
     private javax.swing.JPanel pnlEmpty;
     private javax.swing.JPanel pnlError;
-    private javax.swing.JPanel pnlGrenzUmleitung;
-    private javax.swing.JPanel pnlMode;
     private javax.swing.JPanel pnlOkButton;
-    private javax.swing.JPanel pnlRissUml;
     private javax.swing.JTextField tfName;
     // End of variables declaration//GEN-END:variables
 
@@ -617,52 +614,54 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        btnPlatzhalter = new javax.swing.JButton();
+        lblMessage = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        tfName = new DropAwareTextField();
+        lblMode = new javax.swing.JLabel();
         pnlControls = new javax.swing.JPanel();
         pnlEmpty = new javax.swing.JPanel();
         pnlOkButton = new javax.swing.JPanel();
         btnCreateDocument = new javax.swing.JButton();
         pnlBusyLabel = new javax.swing.JPanel();
-        jXBusyLabel1 = new JXBusyLabel(new Dimension(16, 16));
+        jXBusyLabel1 = new JXBusyLabel(new Dimension(16,16))
+        ;
         pnlError = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        pnlMode = new javax.swing.JPanel();
-        pnlGrenzUmleitung = new javax.swing.JPanel();
-        tfName = new DropAwareTextField();
-        lblMessage = new javax.swing.JLabel();
-        lblMode = new javax.swing.JLabel();
-        pnlRissUml = new javax.swing.JPanel();
-        lblRissMessage = new javax.swing.JLabel();
+        btnPlatzhalter = new javax.swing.JButton();
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
 
-        btnPlatzhalter.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/icon-file.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(
-            btnPlatzhalter,
-            org.openide.util.NbBundle.getMessage(
-                VermessungUmleitungPanel.class,
-                "VermessungUmleitungPanel.btnPlatzhalter.text"));                                // NOI18N
-        btnPlatzhalter.setToolTipText(org.openide.util.NbBundle.getMessage(
-                VermessungUmleitungPanel.class,
-                "VermessungUmleitungPanel.btnPlatzhalter.toolTipText"));                         // NOI18N
-        btnPlatzhalter.setBorderPainted(false);
-        btnPlatzhalter.setContentAreaFilled(false);
-        btnPlatzhalter.setFocusPainted(false);
-        btnPlatzhalter.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnPlatzhalterActionPerformed(evt);
-                }
-            });
+        lblMessage.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        org.openide.awt.Mnemonics.setLocalizedText(lblMessage, org.openide.util.NbBundle.getMessage(VermessungUmleitungPanel.class, "VermessungUmleitungPanel.lblMessage.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
-        add(btnPlatzhalter, gridBagConstraints);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        add(lblMessage, gridBagConstraints);
+
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        tfName.setText(org.openide.util.NbBundle.getMessage(VermessungUmleitungPanel.class, "VermessungUmleitungPanel.tfName.text")); // NOI18N
+        tfName.setMinimumSize(new java.awt.Dimension(180, 27));
+        tfName.setPreferredSize(new java.awt.Dimension(180, 27));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        jPanel1.add(tfName, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(lblMode, org.openide.util.NbBundle.getMessage(VermessungUmleitungPanel.class, "VermessungUmleitungPanel.lblMode.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+        jPanel1.add(lblMode, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.weightx = 0.5;
+        add(jPanel1, gridBagConstraints);
 
         pnlControls.setOpaque(false);
         pnlControls.setLayout(new java.awt.CardLayout());
@@ -674,26 +673,17 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
         pnlOkButton.setPreferredSize(new java.awt.Dimension(32, 32));
         pnlOkButton.setLayout(new java.awt.GridBagLayout());
 
-        btnCreateDocument.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/glyphicons_206_ok_2.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(
-            btnCreateDocument,
-            org.openide.util.NbBundle.getMessage(
-                VermessungUmleitungPanel.class,
-                "VermessungUmleitungPanel.btnCreateDocument.text"));                                       // NOI18N
-        btnCreateDocument.setToolTipText(org.openide.util.NbBundle.getMessage(
-                VermessungUmleitungPanel.class,
-                "VermessungUmleitungPanel.btnCreateDocument.toolTipText"));                                // NOI18N
+        btnCreateDocument.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/glyphicons_206_ok_2.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnCreateDocument, org.openide.util.NbBundle.getMessage(VermessungUmleitungPanel.class, "VermessungUmleitungPanel.btnCreateDocument.text")); // NOI18N
+        btnCreateDocument.setToolTipText(org.openide.util.NbBundle.getMessage(VermessungUmleitungPanel.class, "VermessungUmleitungPanel.btnCreateDocument.toolTipText")); // NOI18N
         btnCreateDocument.setBorderPainted(false);
         btnCreateDocument.setContentAreaFilled(false);
         btnCreateDocument.setFocusPainted(false);
         btnCreateDocument.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnCreateDocumentActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateDocumentActionPerformed(evt);
+            }
+        });
         pnlOkButton.add(btnCreateDocument, new java.awt.GridBagConstraints());
 
         pnlControls.add(pnlOkButton, "card3");
@@ -701,11 +691,7 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
         pnlBusyLabel.setOpaque(false);
         pnlBusyLabel.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jXBusyLabel1,
-            org.openide.util.NbBundle.getMessage(
-                VermessungUmleitungPanel.class,
-                "VermessungUmleitungPanel.jXBusyLabel1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jXBusyLabel1, org.openide.util.NbBundle.getMessage(VermessungUmleitungPanel.class, "VermessungUmleitungPanel.jXBusyLabel1.text")); // NOI18N
         jXBusyLabel1.setFocusable(false);
         jXBusyLabel1.setMaximumSize(new java.awt.Dimension(16, 16));
         jXBusyLabel1.setMinimumSize(new java.awt.Dimension(16, 16));
@@ -717,16 +703,9 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
         pnlError.setOpaque(false);
         pnlError.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/icon-warning-sign.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel1,
-            org.openide.util.NbBundle.getMessage(
-                VermessungUmleitungPanel.class,
-                "VermessungUmleitungPanel.jLabel1.text"));                                               // NOI18N
-        jLabel1.setToolTipText(org.openide.util.NbBundle.getMessage(
-                VermessungUmleitungPanel.class,
-                "VermessungUmleitungPanel.jLabel1.toolTipText"));                                        // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/icon-warning-sign.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(VermessungUmleitungPanel.class, "VermessungUmleitungPanel.jLabel1.text")); // NOI18N
+        jLabel1.setToolTipText(org.openide.util.NbBundle.getMessage(VermessungUmleitungPanel.class, "VermessungUmleitungPanel.jLabel1.toolTipText")); // NOI18N
         jLabel1.setFocusable(false);
         pnlError.add(jLabel1, new java.awt.GridBagConstraints());
 
@@ -737,85 +716,43 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
         gridBagConstraints.gridy = 0;
         add(pnlControls, gridBagConstraints);
 
-        pnlMode.setOpaque(false);
-        pnlMode.setLayout(new java.awt.CardLayout());
-
-        pnlGrenzUmleitung.setOpaque(false);
-        pnlGrenzUmleitung.setLayout(new java.awt.GridBagLayout());
-
-        tfName.setText(org.openide.util.NbBundle.getMessage(
-                VermessungUmleitungPanel.class,
-                "VermessungUmleitungPanel.tfName.text")); // NOI18N
-        tfName.setMinimumSize(new java.awt.Dimension(180, 27));
-        tfName.setPreferredSize(new java.awt.Dimension(180, 27));
+        btnPlatzhalter.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/wunda_blau/res/icon-file.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnPlatzhalter, org.openide.util.NbBundle.getMessage(VermessungUmleitungPanel.class, "VermessungUmleitungPanel.btnPlatzhalter.text")); // NOI18N
+        btnPlatzhalter.setToolTipText(org.openide.util.NbBundle.getMessage(VermessungUmleitungPanel.class, "VermessungUmleitungPanel.btnPlatzhalter.toolTipText")); // NOI18N
+        btnPlatzhalter.setBorderPainted(false);
+        btnPlatzhalter.setContentAreaFilled(false);
+        btnPlatzhalter.setFocusPainted(false);
+        btnPlatzhalter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPlatzhalterActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
-        pnlGrenzUmleitung.add(tfName, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblMessage,
-            org.openide.util.NbBundle.getMessage(
-                VermessungUmleitungPanel.class,
-                "VermessungUmleitungPanel.lblMessage.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-        pnlGrenzUmleitung.add(lblMessage, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblMode,
-            org.openide.util.NbBundle.getMessage(
-                VermessungUmleitungPanel.class,
-                "VermessungUmleitungPanel.lblMode.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
-        pnlGrenzUmleitung.add(lblMode, gridBagConstraints);
-
-        pnlMode.add(pnlGrenzUmleitung, "grenzUml");
-
-        pnlRissUml.setOpaque(false);
-        pnlRissUml.setLayout(new java.awt.GridBagLayout());
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblRissMessage,
-            org.openide.util.NbBundle.getMessage(
-                VermessungUmleitungPanel.class,
-                "VermessungUmleitungPanel.lblRissMessage.text")); // NOI18N
-        pnlRissUml.add(lblRissMessage, new java.awt.GridBagConstraints());
-
-        pnlMode.add(pnlRissUml, "rissUml");
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        add(pnlMode, gridBagConstraints);
-    } // </editor-fold>//GEN-END:initComponents
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        add(btnPlatzhalter, gridBagConstraints);
+    }// </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCreateDocumentActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCreateDocumentActionPerformed
+    private void btnCreateDocumentActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateDocumentActionPerformed
         if ((getLinkDocument() == null) || getLinkDocument().isEmpty()) {
             deleteFile();
         } else {
             createLinkFile();
         }
-    }                                                                                     //GEN-LAST:event_btnCreateDocumentActionPerformed
+    }//GEN-LAST:event_btnCreateDocumentActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnPlatzhalterActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnPlatzhalterActionPerformed
+    private void btnPlatzhalterActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlatzhalterActionPerformed
         tfName.getDocument().removeDocumentListener(this);
         final String schluessel = (String)editor.getCidsBean().getProperty("schluessel");
         if (schluessel == null) {
@@ -826,7 +763,7 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
         tfName.setText(url);
         tfName.getDocument().addDocumentListener(this);
         checkIfLinkDocumentExists(false);
-    }                                                                                  //GEN-LAST:event_btnPlatzhalterActionPerformed
+    }//GEN-LAST:event_btnPlatzhalterActionPerformed
 
     //~ Inner Classes ----------------------------------------------------------
 
