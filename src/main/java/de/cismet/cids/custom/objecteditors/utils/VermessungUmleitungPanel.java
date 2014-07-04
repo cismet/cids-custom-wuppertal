@@ -12,12 +12,20 @@
  */
 package de.cismet.cids.custom.objecteditors.utils;
 
+import Sirius.navigator.connection.SessionManager;
+import Sirius.navigator.exception.ConnectionException;
+
+import Sirius.server.middleware.types.MetaClass;
+import Sirius.server.middleware.types.MetaObject;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import org.jdesktop.swingx.JXBusyLabel;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
+
+import org.openide.util.Exceptions;
 
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -52,6 +60,7 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.CidsBeanDropListener;
 import de.cismet.cids.navigator.utils.CidsBeanDropTarget;
+import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.netutil.Proxy;
 
@@ -119,8 +128,27 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                     final CardLayout cl = (CardLayout)pnlControls.getLayout();
                     cl.show(pnlControls, "card2");
                     jXBusyLabel1.setBusy(true);
-                    if ((getLinkDocument() != null) && !getLinkDocument().isEmpty()) {
-                        checkIfLinkDocumentExists(false);
+                    final String input = getLinkDocument();
+                    if ((input != null) && !input.isEmpty()) {
+                        if (isNummerConsistent(input)) {
+                            if (!input.contains(PLATZHALTER_PREFIX)) {
+                                tfName.getDocument().removeDocumentListener(VermessungUmleitungPanel.this);
+                                final String[] props = parsePropertiesFromLink(input);
+                                final String correctFormattedNumber = props[0] + "-" + props[1] + "-" + props[2] + "-"
+                                            + props[3];
+                                tfName.setText(correctFormattedNumber);
+                                tfName.getDocument().addDocumentListener(VermessungUmleitungPanel.this);
+                            }
+                            if (!checkIfRissExists(input)) {
+                                // the riss we would like to link to does not exist.
+                                cl.show(pnlControls, "card4");
+                                editor.handleRissDoesNotExists();
+                            } else {
+                                checkIfLinkDocumentExists(false);
+                            }
+                        } else {
+                            showError();
+                        }
                     } else {
                         cl.show(pnlControls, "card3");
                     }
@@ -233,6 +261,41 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
     /**
      * DOCUMENT ME!
      *
+     * @param   rissNummer  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private boolean checkIfRissExists(final String rissNummer) {
+        try {
+            if (rissNummer.startsWith(PLATZHALTER_PREFIX)) {
+                return true;
+            }
+            final String[] props = parsePropertiesFromLink(rissNummer);
+            final MetaClass MB_MC = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "vermessung_riss");
+            String query = "SELECT " + MB_MC.getID() + ", " + MB_MC.getPrimaryKey() + " ";
+            query += "FROM " + MB_MC.getTableName();
+            query += " WHERE schluessel ilike '" + props[0]
+                        + "' and gemarkung=" + props[1]
+                        + " and flur ilike '" + props[2]
+                        + "' and blatt ilike '" + StringUtils.stripStart(props[3], "0") + "'";
+            final MetaObject[] metaObjects = SessionManager.getProxy().getMetaObjectByQuery(query, 0);
+            return (metaObjects != null) && (metaObjects.length == 1) && (metaObjects[0] != null);
+        } catch (ConnectionException ex) {
+            LOG.error("Error while checkig if riss exists", ex);
+            return false;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void checkState() {
+        checkIfLinkDocumentExists(false);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param  createUmleitung  DOCUMENT ME!
      */
     private void checkIfLinkDocumentExists(final boolean createUmleitung) {
@@ -242,35 +305,28 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                 protected void done() {
                     try {
                         final URL file = get();
-                        lastCheckedURL = file;
                         if (createUmleitung) {
                             VermessungUmleitungPanel.this.createLinkFile();
                             return;
                         }
                         jXBusyLabel1.setBusy(false);
+                        final CardLayout cl = (CardLayout)pnlControls.getLayout();
+                        cl.show(pnlControls, "card3");
                         if (file != null) {
+                            lastCheckedURL = file;
                             editor.successAlert();
-                            final String rawUrl = file.toString();
-                            if (!rawUrl.contains(PLATZHALTER_PREFIX)) {
-                                tfName.getDocument().removeDocumentListener(VermessungUmleitungPanel.this);
-
-                                final int startPos = rawUrl.indexOf("_") + 1;
-                                final int endPos = (rawUrl.lastIndexOf("_") != (startPos - 1))
-                                    ? rawUrl.lastIndexOf("_") : rawUrl.lastIndexOf(".");
-                                tfName.setText(rawUrl.substring(startPos, endPos));
-                                tfName.getDocument().addDocumentListener(VermessungUmleitungPanel.this);
-                            }
                             editor.reloadPictureFromUrl(file);
-
-                            final CardLayout cl = (CardLayout)pnlControls.getLayout();
-                            cl.show(pnlControls, "card3");
                         } else {
-                            showError();
+                            // no file exists we need to show a warning...
+                            lastCheckedURL = new URL(VermessungsrissPictureFinder.getObjectPath(
+                                        true,
+                                        getLinkDocument()));
+                            editor.warnAlert();
                         }
                     } catch (InterruptedException ex) {
                         LOG.error("Worker Thread interrupter", ex);
                         showError();
-                    } catch (ExecutionException ex) {
+                    } catch (Exception ex) {
                         LOG.error("Execution error", ex);
                         showError();
                     }
@@ -279,9 +335,9 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                 @Override
                 protected URL doInBackground() throws Exception {
                     final String input = getLinkDocument();
-                    if (!isNummerConsistent(input)) {
-                        return null;
-                    }
+//                if (!isNummerConsistent(input)) {
+//                    return null;
+//                }
                     final boolean isPlatzhalter = input.toLowerCase().startsWith(PLATZHALTER_PREFIX);
                     if ((mode == MODE.VERMESSUNGSRISS) && !isPlatzhalter) {
                         return null;
@@ -293,28 +349,21 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                                     input) + ".jpg");
                     } else {
                         final List<URL> res;
-                        final String[] splittedInput = input.split("-");
-                        if (splittedInput.length != 4) {
-                            return null;
-                        }
+                        final String[] props = parsePropertiesFromLink(input);
 
-                        final String schluessel = splittedInput[0];
-                        final Integer gemarkung = Integer.parseInt(splittedInput[1]);
-                        final String flur = StringUtils.leftPad(splittedInput[2], 3, '0');
-                        final String blatt = StringUtils.leftPad(splittedInput[3], 8, '0');
                         // check if we need to format the flur and the blatt
                         if (mode == MODE.VERMESSUNGSRISS) {
                             res = VermessungsrissPictureFinder.findVermessungsrissPicture(
-                                    schluessel,
-                                    gemarkung,
-                                    flur,
-                                    blatt);
+                                    props[0],
+                                    Integer.parseInt(props[1]),
+                                    props[2],
+                                    props[3]);
                         } else {
                             res = VermessungsrissPictureFinder.findGrenzniederschriftPicture(
-                                    schluessel,
-                                    gemarkung,
-                                    flur,
-                                    blatt);
+                                    props[0],
+                                    Integer.parseInt(props[1]),
+                                    props[2],
+                                    props[3]);
                         }
                         if ((res == null) || res.isEmpty()) {
                             return null;
@@ -324,6 +373,27 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                 }
             };
         worker.execute();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   link  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private String[] parsePropertiesFromLink(final String link) {
+        final String[] splittedInput = link.split("-");
+        if (splittedInput.length != 4) {
+            return null;
+        }
+        final String[] res = new String[4];
+        res[0] = splittedInput[0];
+        res[1] = splittedInput[1];
+        res[2] = StringUtils.leftPad(splittedInput[2], 3, '0');
+        res[3] = StringUtils.leftPad(splittedInput[3], 8, '0');
+
+        return res;
     }
 
     /**

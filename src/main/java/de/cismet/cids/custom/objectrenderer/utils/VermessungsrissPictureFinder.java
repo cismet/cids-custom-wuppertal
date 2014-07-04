@@ -15,6 +15,10 @@ package de.cismet.cids.custom.objectrenderer.utils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
+import org.openide.util.Exceptions;
+
+import java.io.IOException;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -180,6 +184,36 @@ public class VermessungsrissPictureFinder {
         return new StringBuffer(getFolder(isGrenzNiederschrift, gemarkung)).append(SEP)
                     .append(filenameWithPrefix)
                     .toString();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   isGrenzNiederschrift  DOCUMENT ME!
+     * @param   documentFileName      DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String getLinkFromLinkDocument(final boolean isGrenzNiederschrift, final String documentFileName) {
+        HttpURLConnection huc = null;
+        try {
+            final URL objectURL = new URL(documentFileName + LINKEXTENSION);
+            huc = (HttpURLConnection)objectURL.openConnection();
+            huc.setRequestMethod("GET");
+            huc.connect();
+            final int reponse = huc.getResponseCode();
+            if (reponse == 200) {
+                final String link = IOUtils.toString(huc.getInputStream());
+                return link;
+            }
+        } catch (Exception ex) {
+            log.error("Exception while checking link docuemtn", ex);
+        } finally {
+            if (huc != null) {
+                huc.disconnect();
+            }
+        }
+        return null;
     }
 
     /**
