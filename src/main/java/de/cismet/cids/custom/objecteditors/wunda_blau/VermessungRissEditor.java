@@ -1653,7 +1653,14 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private void jxlUmleitungActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlUmleitungActionPerformed
         umleitungsPanel.reset();
         final String s = jxlUmleitung.getText();
-        umleitungsPanel.checkState();
+//        umleitungsPanel.checkState();
+        if ((documentURLs[currentDocument] == null) && !s.startsWith(umleitungsPanel.PLATZHALTER_PREFIX)) {
+            alertPanel.setType(AlertPanel.TYPE.WARNING);
+            umleitungsPanel.setTextColor(AlertPanel.warningMessageColor);
+        } else {
+            alertPanel.setType(AlertPanel.TYPE.SUCCESS);
+            umleitungsPanel.setTextColor(AlertPanel.successMessageColor);
+        }
         umleitungsPanel.setLinkDocumentText(s);
         final VermessungUmleitungPanel.MODE mode;
         if (currentDocument == VERMESSUNGSRISS) {
