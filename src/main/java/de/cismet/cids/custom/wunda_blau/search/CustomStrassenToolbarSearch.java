@@ -46,7 +46,7 @@ public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             CustomStrassenToolbarSearch.class);
 
     //~ Instance fields --------------------------------------------------------
@@ -54,7 +54,7 @@ public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
     private String searchString;
     private final MetaClass mc;
     private final ImageIcon icon;
-    private Collection<MetaClass> classCol;
+    private final Collection<MetaClass> classCol;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -63,9 +63,14 @@ public class CustomStrassenToolbarSearch implements CidsToolbarSearch {
      */
     public CustomStrassenToolbarSearch() {
         mc = ClassCacheMultiple.getMetaClass(CidsBeanSupport.DOMAIN_NAME, "STRASSE");
-        icon = new ImageIcon(mc.getIconData());
         classCol = new ArrayList<MetaClass>(1);
-        classCol.add(mc);
+        if (mc != null) {
+            icon = new ImageIcon(mc.getIconData());
+            classCol.add(mc);
+        } else {
+            icon = null;
+            LOG.info("MetaClass Strasse is null, the permissions are probably missing.");
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
