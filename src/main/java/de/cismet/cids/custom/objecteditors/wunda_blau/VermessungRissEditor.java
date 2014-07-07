@@ -2643,7 +2643,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
             lstPages.setModel(MODEL_LOAD);
             measuringComponent.removeAllFeatures();
-//            setDocumentControlsEnabled(false);
             showMeasureIsLoading();
         }
 
@@ -2672,26 +2671,20 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
 
         @Override
         protected void done() {
-            boolean enableControls = true;
             try {
                 final ListModel model = get();
                 lstPages.setModel(model);
 
-                if (model.getSize() > 0) {
-                    lstPages.setSelectedIndex(0);
-                    enableControls = false;
-                } else {
-                    lstPages.setModel(new DefaultListModel());
+                if (!isCancelled()) {
+                    if (model.getSize() > 0) {
+                        lstPages.setSelectedIndex(0);
+                    } else {
+                        lstPages.setModel(new DefaultListModel());
+                    }
                 }
-            } catch (InterruptedException ex) {
             } catch (Exception ex) {
                 LOG.error("Could not read found pictures.", ex);
-            } finally {
-//                 setCurrentDocumentNull();
-                showMeasurePanel();
                 lstPages.setModel(new DefaultListModel());
-                closeReader();
-
             }
         }
     }
@@ -2739,13 +2732,18 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 }
             } catch (final InterruptedException ex) {
                 setCurrentPageNull();
-                lstPages.setModel(FEHLER_MODEL);
+                measuringComponent.reset();
+                lstPages.setModel(new DefaultListModel());
                 LOG.warn("Was interrupted while setting new image.", ex);
             } catch (final Exception ex) {
                 setCurrentPageNull();
+                measuringComponent.reset();
                 lstPages.setModel(FEHLER_MODEL);
                 LOG.error("Could not set new image.", ex);
             } finally {
+                if (isCancelled()) {
+                    measuringComponent.reset();
+                }
                 showMeasurePanel();
                 currentPictureSelectWorker = null;
 
