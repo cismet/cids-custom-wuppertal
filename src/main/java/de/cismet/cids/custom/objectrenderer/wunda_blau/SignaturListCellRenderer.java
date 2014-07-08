@@ -74,14 +74,13 @@ public class SignaturListCellRenderer implements ListCellRenderer {
                 index,
                 isSelected,
                 cellHasFocus);
-
         if (value instanceof CidsBean) {
             final CidsBean bean = (CidsBean)value;
             final String filename = String.valueOf(bean.getProperty("filename"));
-            theIcon = createIconFromFileName(filename);
+            theIcon = PoiTools.createPoiIconFromFileName(filename);
         } else if (value instanceof LightweightMetaObject) {
             final String filename = String.valueOf(((LightweightMetaObject)value).getLWAttribute("filename"));
-            theIcon = createIconFromFileName(filename);
+            theIcon = PoiTools.createPoiIconFromFileName(filename);
         }
         theFont = list.getFont();
         theForeground = list.getForeground();
@@ -99,32 +98,5 @@ public class SignaturListCellRenderer implements ListCellRenderer {
         renderer.setText(theText);
         renderer.setFont(theFont);
         return renderer;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   in  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public Icon createIconFromFileName(String in) {
-        if ((in != null) && (in.length() > 0)) {
-            in = StaticProperties.POI_SIGNATUR_URL_PREFIX + in + StaticProperties.POI_SIGNATUR_URL_SUFFIX;
-            try {
-                // first try to load from jar
-                URL symbolURL = Object.class.getResource(in);
-                if (symbolURL == null) {
-                    // otherwise try to resolve directly
-                    symbolURL = new URL(in);
-                }
-                if (symbolURL != null) {
-                    return new ImageIcon(symbolURL);
-                }
-            } catch (Exception ex) {
-                log.warn(ex, ex);
-            }
-        }
-        return null;
     }
 }

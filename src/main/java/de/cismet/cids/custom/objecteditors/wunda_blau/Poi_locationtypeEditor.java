@@ -72,9 +72,7 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
     private javax.swing.JLabel lblHeader1;
     private javax.swing.JLabel lblHeader2;
     private javax.swing.JLabel lblIcon;
-    private javax.swing.JLabel lblIconImg;
     private javax.swing.JLabel lblLocationTypes;
-    private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblSignatur;
     private javax.swing.JLabel lblToPublish;
     private javax.swing.JList lstLocationTypes;
@@ -88,7 +86,6 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
     private javax.swing.JPanel panSpacing2;
     private javax.swing.JScrollPane scpLocationtypeList;
     private javax.swing.JTextField txtDefinition;
-    private javax.swing.JTextField txtIcon;
     private javax.swing.JTextField txtName;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
@@ -114,7 +111,6 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
     @Override
     public synchronized void setCidsBean(final CidsBean cidsBean) {
         super.setCidsBean(cidsBean);
-        txtIconFocusLost(null);
     }
 
     /**
@@ -139,9 +135,10 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         dlgAddLocationType = new javax.swing.JDialog();
         panNewSuchwort = new javax.swing.JPanel();
         lblAuswaehlen = new javax.swing.JLabel();
-        final MetaObject[] lebenslagen = ObjectRendererUtils.getLightweightMetaObjectsForTable(
-                "poi_spatialreferencesystemusinggeographicidentifiers",
-                new String[] { "theme" });
+        final MetaObject[] lebenslagen = de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils
+                    .getLightweightMetaObjectsForTable(
+                        "poi_spatialreferencesystemusinggeographicidentifiers",
+                        new String[] { "theme" });
         if (lebenslagen != null) {
             Arrays.sort(lebenslagen);
             cbTypes = new javax.swing.JComboBox(lebenslagen);
@@ -150,15 +147,12 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
             btnMenOk = new javax.swing.JButton();
             panCenter = new javax.swing.JPanel();
             panContent1 = new RoundedPanel();
-            lblName = new javax.swing.JLabel();
             panSpacing1 = new javax.swing.JPanel();
             txtName = new javax.swing.JTextField();
             lblDefinition = new javax.swing.JLabel();
             txtDefinition = new javax.swing.JTextField();
             lblHeader1 = new javax.swing.JLabel();
             lblIcon = new javax.swing.JLabel();
-            txtIcon = new javax.swing.JTextField();
-            lblIconImg = new javax.swing.JLabel();
             jLabel1 = new javax.swing.JLabel();
             panContent2 = new RoundedPanel();
             lblSignatur = new javax.swing.JLabel();
@@ -244,15 +238,6 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         panContent1.setOpaque(false);
         panContent1.setLayout(new java.awt.GridBagLayout());
 
-        lblName.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblName.setText("Symbol:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent1.add(lblName, gridBagConstraints);
-
         panSpacing1.setOpaque(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -280,7 +265,7 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent1.add(txtName, gridBagConstraints);
 
-        lblDefinition.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblDefinition.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblDefinition.setText("Definition:        ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -322,51 +307,6 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent1.add(lblIcon, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.icon}"),
-                txtIcon,
-                org.jdesktop.beansbinding.BeanProperty.create("text_ON_ACTION_OR_FOCUS_LOST"));
-        binding.setSourceNullValue("");
-        binding.setSourceUnreadableValue("<Error>");
-        bindingGroup.addBinding(binding);
-
-        txtIcon.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    txtIconActionPerformed(evt);
-                }
-            });
-        txtIcon.addFocusListener(new java.awt.event.FocusAdapter() {
-
-                @Override
-                public void focusLost(final java.awt.event.FocusEvent evt) {
-                    txtIconFocusLost(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent1.add(txtIcon, gridBagConstraints);
-
-        lblIconImg.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                javax.swing.BorderFactory.createTitledBorder("Vorschau"),
-                javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-        lblIconImg.setMaximumSize(new java.awt.Dimension(84, 84));
-        lblIconImg.setMinimumSize(new java.awt.Dimension(84, 84));
-        lblIconImg.setPreferredSize(new java.awt.Dimension(84, 84));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        panContent1.add(lblIconImg, gridBagConstraints);
-
         jLabel1.setText("                  ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -384,7 +324,7 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         panContent2.setOpaque(false);
         panContent2.setLayout(new java.awt.GridBagLayout());
 
-        lblSignatur.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblSignatur.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblSignatur.setText("Signatur:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -393,7 +333,7 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(lblSignatur, gridBagConstraints);
 
-        lblLocationTypes.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblLocationTypes.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblLocationTypes.setText("Lebenslagen:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -501,7 +441,7 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(lblHeader2, gridBagConstraints);
 
-        lblToPublish.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblToPublish.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblToPublish.setText("Veröffentlicht:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -509,8 +449,6 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panContent2.add(lblToPublish, gridBagConstraints);
-
-        chkToPublish.setOpaque(false);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
@@ -619,38 +557,6 @@ public class Poi_locationtypeEditor extends DefaultCustomObjectEditor implements
             dlgAddLocationType.setVisible(false);
         }
     }                                                                            //GEN-LAST:event_btnMenOkActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void txtIconFocusLost(final java.awt.event.FocusEvent evt) { //GEN-FIRST:event_txtIconFocusLost
-        final String iconUrlString = StaticProperties.POI_LOCATIONTYPE_URL_PREFIX + txtIcon.getText()
-                    + StaticProperties.POI_LOCATIONTYPE_URL_SUFFIX;
-        if ((latestIconUrl == null) || !latestIconUrl.equals(iconUrlString)) {
-            latestIconUrl = iconUrlString;
-            final URL iconUrl = Poi_locationtypeEditor.class.getResource(iconUrlString);
-            if (iconUrl != null) {
-                final ImageIcon ic = new ImageIcon(iconUrl);
-                lblIconImg.setIcon(ic);
-                lblIconImg.setText("");
-            } else {
-                lblIconImg.setIcon(null);
-                lblIconImg.setText("<Kein Icon>");
-                log.warn("Can not find icon " + iconUrlString + " !");
-            }
-        }
-    }                                                                    //GEN-LAST:event_txtIconFocusLost
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void txtIconActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtIconActionPerformed
-        txtIconFocusLost(null);
-    }                                                                           //GEN-LAST:event_txtIconActionPerformed
 
     /**
      * DOCUMENT ME!

@@ -11,18 +11,21 @@
  */
 package de.cismet.cids.custom.featurerenderer.wunda_blau;
 
-import java.net.URL;
+import java.awt.Color;
+import java.awt.Paint;
 
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
+import de.cismet.cids.custom.objectrenderer.wunda_blau.PoiTools;
 import de.cismet.cids.custom.wunda_blau.res.StaticProperties;
-
-import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.featurerenderer.CustomCidsFeatureRenderer;
 
 import de.cismet.cismap.commons.Refreshable;
 import de.cismet.cismap.commons.gui.piccolo.FeatureAnnotationSymbol;
+
+import de.cismet.cismap.navigatorplugin.CidsFeature;
 
 /**
  * DOCUMENT ME!
@@ -61,29 +64,25 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
      * @return  DOCUMENT ME!
      */
     private static FeatureAnnotationSymbol getSymbolFromResourceString(final String in) {
-        if ((in != null) && (in.length() > 0)) {
-            try {
-                // first try to load from jar
-                URL symbolURL = Object.class.getResource(in);
-
-                if (symbolURL == null) {
-                    // otherwise try to resolve directly
-                    symbolURL = new URL(in);
-                }
-                if (symbolURL != null) {
-                    final FeatureAnnotationSymbol ret = new FeatureAnnotationSymbol(symbolURL);
-                    if (ret == null) {
-                        log.error("konnte kein FAS aus:" + symbolURL + "erzeugen");
-                    }
-                    return ret;
-                } else {
-                    log.error("FAS: konnte URL nicht erzeugen:" + symbolURL);
-                }
-            } catch (Exception ex) {
-                log.warn("Fehler in getSymbolFromResourceString(" + in + ")", ex);
+        final ImageIcon icon = PoiTools.getIconFromResourceString(in);
+        if (icon != null) {
+            final FeatureAnnotationSymbol ret = new FeatureAnnotationSymbol(icon.getImage());
+            if (ret == null) {
+                log.error("konnte kein FAS aus:" + in + "erzeugen");
             }
+            return ret;
         }
         return null;
+    }
+
+    @Override
+    public Paint getFillingStyle(final CidsFeature subFeature) {
+        return new Color(0.5f, 0.5f, 0.5f, 0.1f);
+    }
+
+    @Override
+    public Paint getLinePaint() {
+        return new Color(0f, 0f, 0f, 0.5f);
     }
 
     @Override
@@ -91,38 +90,10 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
         if (metaObject != null) {
             cidsBean = metaObject.getBean();
             if (cidsBean != null) {
-                assigned = true;
-                String iconUrl;
-                symbol = null;
-                Object o = cidsBean.getProperty("signatur");
-                if (o instanceof CidsBean) {
-                    iconUrl = getUrlStringFromSignature(o);
-                    if (iconUrl != null) {
-                        symbol = getSymbolFromResourceString(iconUrl);
-                    }
-                }
-                if (symbol == null) {
-                    o = cidsBean.getProperty("mainlocationtype");
-                    if (o instanceof CidsBean) {
-                        iconUrl = getUrlStringFromSignature(((CidsBean)o).getProperty("signatur"));
-                        if (iconUrl != null) {
-                            symbol = getSymbolFromResourceString(iconUrl);
-                        }
-                    }
-                    if (symbol == null) {
-                        o = cidsBean.getProperty("mainlocationtype");
-                        if (o instanceof CidsBean) {
-                            final CidsBean mainLocationType = (CidsBean)o;
-                            o = mainLocationType.getProperty("signatur");
-                            iconUrl = getUrlStringFromSignature(o);
-                            if (iconUrl != null) {
-                                symbol = getSymbolFromResourceString(iconUrl);
-                            }
-                        }
-                    }
-                    if (symbol == null) {
-                        symbol = DEFAULT_SYMBOL;
-                    }
+                final ImageIcon ii = PoiTools.getPoiSignatureIcon(cidsBean);
+
+                if (ii != null) {
+                    symbol = new FeatureAnnotationSymbol(ii.getImage());
                 }
                 if (symbol == null) {
                     symbol = DEFAULT_SYMBOL;
@@ -132,31 +103,6 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
                 }
             }
         }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   signature  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private String getUrlStringFromSignature(final Object signature) {
-        if (signature instanceof CidsBean) {
-            final CidsBean signatur = (CidsBean)signature;
-            try {
-                final Object fileName = signatur.getProperty("filename");
-                if (fileName != null) {
-                    final String ret = StaticProperties.POI_SIGNATUR_URL_PREFIX + fileName
-                                + StaticProperties.POI_SIGNATUR_URL_SUFFIX;
-                    log.info("Signatur Url: " + ret);
-                    return ret;
-                }
-            } catch (Exception ex) {
-                log.error(ex, ex);
-            }
-        }
-        return null;
     }
 
     @Override
@@ -177,7 +123,7 @@ public class Poi_locationinstanceFeatureRenderer extends CustomCidsFeatureRender
 
     @Override
     public float getTransparency() {
-        return 1.0f;
+        return 0.95f;
     }
 
     @Override

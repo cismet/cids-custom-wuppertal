@@ -2168,7 +2168,7 @@
         
       </GUIKartenProdukt>
 	  <!-- ########################################-->
-       <GUIKartenProdukt defaultProduct="true" productDefaultScale="1000" Antragsart="KS04" ID="LK.NRW.K.BSW" Name="mit kommunalen Erg., grau" Logo="logo-aaa-wappen-wup-sw" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte mit kom. Erg. (sw)" ProduktnameAuswertung="Stadtgrundkarte m. kom. Erg., schwarz-weiß" ProduktnameGUI="mit kommunalen Erg., grau" Zusatzlegende="false">
+       <GUIKartenProdukt defaultProduct="true"  Antragsart="KS04" ID="LK.NRW.K.BSW" Name="mit kommunalen Erg., grau" Logo="logo-aaa-wappen-wup-sw" SelektionsKriterium="Flurstückskennzeichen" Praesentationsschema="Stadtgrundkarte mit kom. Erg. (sw)" ProduktnameAuswertung="Stadtgrundkarte m. kom. Erg., schwarz-weiß" ProduktnameGUI="mit kommunalen Erg., grau" Zusatzlegende="false">
         <KartenProdukt ID="LK.NRW.K.BSW.1" Kartenname="KarteNameSGK" Layout="SGKA4H" Praesentationshinweis1="Stadtgrundkarte 1:500" Praesentationshinweis3="- mit kommunalen Ergänzungen -">
            <PreisfaktorenKarte DINFormat="DINA4 Hochformat" Dateiformat="PDF" Massstab="500"/>
         </KartenProdukt>
