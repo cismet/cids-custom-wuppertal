@@ -51,9 +51,9 @@ import javax.swing.table.TableRowSorter;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
-import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungRissEditor;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 import de.cismet.cids.custom.objectrenderer.utils.PrintingWaitDialog;
+import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissPictureFinder;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
@@ -540,47 +540,46 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                             description.append(vermessungsriss.getProperty("blatt"));
                             description.append(" - Seite ");
 
-                            final Map<URL, URL> validURLs = VermessungRissEditor.getCorrespondingURLs(
-                                    host,
-                                    gemarkung,
-                                    flur,
-                                    schluessel,
-                                    blatt);
+                            final List<URL> urlList;
+                            if (host.equals(AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN)) {
+                                urlList = VermessungsrissPictureFinder.findGrenzniederschriftPicture(
+                                        schluessel,
+                                        gemarkung,
+                                        flur,
+                                        blatt);
+                            } else {
+                                urlList = VermessungsrissPictureFinder.findVermessungsrissPicture(
+                                        schluessel,
+                                        gemarkung,
+                                        flur,
+                                        blatt);
+                            }
 
+                            if ((urlList == null) || urlList.isEmpty()) {
+                                LOG.info("No document URLS found for the Vermessungsriss report");
+                            }
+                            boolean isOfReducedSize = false;
                             MultiPagePictureReader reader = null;
                             int pageCount = 0;
                             final StringBuilder fileReference = new StringBuilder();
-                            for (final Map.Entry<URL, URL> urls : validURLs.entrySet()) {
-                                try {
-                                    reader = new MultiPagePictureReader(urls.getValue(), false, false);
-                                    pageCount = reader.getNumberOfPages();
-                                    additionalFilesToDownload.add(urls.getKey());
-
-                                    String path = urls.getKey().getPath();
-                                    path = path.substring(path.lastIndexOf('/') + 1);
-                                    fileReference.append(" (");
-                                    fileReference.append(path);
-                                    fileReference.append(')');
-                                    break;
-                                } catch (final Exception ex) {
-                                    LOG.warn("Could not read document from URL '" + urls.getValue().toExternalForm()
-                                                + "'. Skipping this url.",
-                                        ex);
-                                }
-                            }
-
-                            boolean isOfReducedSize = true;
-                            if (reader == null) {
-                                // Didn't find an image of reduced size
-                                for (final Map.Entry<URL, URL> urls : validURLs.entrySet()) {
+                            if (urlList != null) {
+                                for (final URL urls : urlList) {
                                     try {
-                                        reader = new MultiPagePictureReader(urls.getKey(), false, false);
+                                        if (urls.toString().contains("_rs")) {
+                                            isOfReducedSize = true;
+                                        }
+                                        reader = new MultiPagePictureReader(urls, false, false);
                                         pageCount = reader.getNumberOfPages();
-                                        isOfReducedSize = false;
+                                        additionalFilesToDownload.add(urls);
+
+                                        String path = urls.getPath();
+                                        path = path.substring(path.lastIndexOf('/') + 1);
+                                        fileReference.append(" (");
+                                        fileReference.append(path);
+                                        fileReference.append(')');
                                         break;
                                     } catch (final Exception ex) {
-                                        LOG.warn("Could not read document from URL '" + urls.getValue()
-                                                    .toExternalForm()
+                                        LOG.warn("Could not read document from URL '" + urls.toExternalForm()
                                                     + "'. Skipping this url.",
                                             ex);
                                     }

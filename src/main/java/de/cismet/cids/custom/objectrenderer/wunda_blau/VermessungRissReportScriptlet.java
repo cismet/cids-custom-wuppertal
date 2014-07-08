@@ -16,9 +16,10 @@ import java.awt.image.BufferedImage;
 
 import java.net.URL;
 
-import java.util.Map;
+import java.util.List;
 
-import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungRissEditor;
+import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissPictureFinder;
+import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 
 import de.cismet.security.WebAccessManager;
 
@@ -54,16 +55,16 @@ public class VermessungRissReportScriptlet extends JRDefaultScriptlet {
             final Integer gemarkung,
             final String flur,
             final String blatt) {
-        final Map<URL, URL> validURLs = VermessungRissEditor.getCorrespondingURLs(
-                host,
-                gemarkung,
-                flur,
-                schluessel,
-                blatt);
+        final List<URL> validURLs;
+        if (host.equals(AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN)) {
+            validURLs = VermessungsrissPictureFinder.findGrenzniederschriftPicture(schluessel, gemarkung, flur, blatt);
+        } else {
+            validURLs = VermessungsrissPictureFinder.findVermessungsrissPicture(schluessel, gemarkung, flur, blatt);
+        }
 
         boolean imageAvailable = false;
-        for (final Map.Entry<URL, URL> urls : validURLs.entrySet()) {
-            final URL url = urls.getKey();
+        for (final URL urls : validURLs) {
+            final URL url = urls;
             if (WebAccessManager.getInstance().checkIfURLaccessible(url)) {
                 imageAvailable = true;
                 break;
