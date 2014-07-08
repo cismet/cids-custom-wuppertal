@@ -76,12 +76,13 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
     private javax.swing.JLabel lblInfo;
     private javax.swing.JLabel lblInfoDesc;
     private javax.swing.JLabel lblMail;
+    private javax.swing.JLabel lblSignatur;
+    private javax.swing.JLabel lblSignaturIcon;
     private javax.swing.JLabel lblSonst;
     private javax.swing.JLabel lblSonstigeTypenDesc;
     private javax.swing.JLabel lblTel;
     private javax.swing.JLabel lblTelefonDesc;
     private javax.swing.JLabel lblTitle;
-    private javax.swing.JLabel lblTypeIcons;
     private javax.swing.JLabel lblUrl;
     private javax.swing.JPanel panContent;
     private javax.swing.JPanel panFooter;
@@ -122,7 +123,6 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
 
         panTitle = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
-        lblTypeIcons = new javax.swing.JLabel();
         panFooter = new javax.swing.JPanel();
         panSpacing1 = new javax.swing.JPanel();
         lblMail = new javax.swing.JLabel();
@@ -143,12 +143,14 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
         lblAlternativ = new javax.swing.JLabel();
         lblHaupttyp = new javax.swing.JLabel();
         lblSonst = new javax.swing.JLabel();
+        lblSignatur = new javax.swing.JLabel();
+        lblSignaturIcon = new javax.swing.JLabel();
 
         panTitle.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
         panTitle.setOpaque(false);
         panTitle.setLayout(new java.awt.GridBagLayout());
 
-        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18));
+        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblTitle.setText("TITLE");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -157,9 +159,6 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
         panTitle.add(lblTitle, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
-        panTitle.add(lblTypeIcons, gridBagConstraints);
 
         panFooter.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 15, 10));
         panFooter.setMinimumSize(new java.awt.Dimension(404, 0));
@@ -232,14 +231,14 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
         panContent.setOpaque(false);
         panContent.setLayout(new java.awt.GridBagLayout());
 
-        lblAdresseDesc.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblAdresseDesc.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblAdresseDesc.setText("Adresse:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panContent.add(lblAdresseDesc, gridBagConstraints);
 
-        lblTelefonDesc.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblTelefonDesc.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblTelefonDesc.setText("Telefon:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -257,8 +256,18 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
         panContent.add(lblFaxDesc, gridBagConstraints);
 
-        lblInfoDesc.setFont(new java.awt.Font("Tahoma", 1, 11));
-        lblInfoDesc.setText("Info:");
+        lblInfoDesc.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+                this,
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.info_art.name}:"),
+                lblInfoDesc,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("Info:");
+        binding.setSourceUnreadableValue("Info:");
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -423,6 +432,25 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panContent.add(lblSonst, gridBagConstraints);
 
+        lblSignatur.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblSignatur.setText("Signatur:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
+        panContent.add(lblSignatur, gridBagConstraints);
+
+        lblSignaturIcon.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblSignaturIcon.setText("---");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 30);
+        panContent.add(lblSignaturIcon, gridBagConstraints);
+
         add(panContent, java.awt.BorderLayout.CENTER);
 
         bindingGroup.bind();
@@ -462,37 +490,6 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
 
     /**
      * DOCUMENT ME!
-     */
-    private void initLocationTypeImages() {
-        final Collection<CidsBean> allTypes = (Collection<CidsBean>)cidsBean.getProperty("locationtypes");
-        final List<ImageIcon> images = TypeSafeCollections.newArrayList(allTypes.size());
-        if (allTypes.size() > 0) {
-            for (final CidsBean type : allTypes) {
-                try {
-                    final String filename = String.valueOf(type.getProperty("icon"));
-                    final URL iconURL = getClass().getResource(StaticProperties.POI_LOCATIONTYPE_URL_PREFIX + filename
-                                    + StaticProperties.POI_LOCATIONTYPE_URL_SUFFIX);
-                    if (iconURL != null) {
-                        images.add(new javax.swing.ImageIcon(iconURL));
-                    }
-                } catch (Exception e) {
-                    log.error("Fehler beim Laden eines LocationtypeImages, wird übersprungen!", e);
-                }
-            }
-        }
-        if (images.size() > 0) {
-            final Icon joinedIcons = Static2DTools.joinIcons(images.toArray(new ImageIcon[0]),
-                    10,
-                    Static2DTools.HORIZONTAL,
-                    Static2DTools.CENTER);
-            lblTypeIcons.setIcon(joinedIcons);
-        } else {
-            lblTypeIcons.setIcon(null);
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
@@ -512,12 +509,17 @@ public class Poi_locationinstanceRenderer extends javax.swing.JPanel implements 
         if (cidsBean != null) {
             this.cidsBean = cidsBean;
             bindingGroup.bind();
-            initLocationTypeImages();
+
             if (lblMail.getText().length() < 3) {
                 lblMail.setVisible(false);
             }
             if (lblUrl.getText().length() < 3) {
                 lblUrl.setVisible(false);
+            }
+            final Icon sig = PoiTools.getPoiSignatureIcon(cidsBean);
+            if (sig != null) {
+                lblSignaturIcon.setIcon(sig);
+                lblSignaturIcon.setText("");
             }
         }
     }
