@@ -52,7 +52,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import de.cismet.cids.custom.objecteditors.utils.VermessungUmleitungPanel.MODE;
-import de.cismet.cids.custom.objecteditors.wunda_blau.Alb_baulastUmleitungPanel;
 import de.cismet.cids.custom.objecteditors.wunda_blau.VermessungRissEditor;
 import de.cismet.cids.custom.objectrenderer.utils.VermessungsrissPictureFinder;
 
@@ -81,25 +80,37 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
     private static final Logger LOG = Logger.getLogger(VermessungUmleitungPanel.class);
     public static final String PLATZHALTER_PREFIX = "platzhalter";
     private static final String SEP = "/";
-    private static final String VERMESSUNG_DIRECTORY;
-    private static final String GRENZNIEDERSCHRIFT_DIRECTORY;
-    private static final String WEB_DAV_USER;
-    private static final String WEB_DAV_PASSWORD;
+    private static String VERMESSUNG_DIRECTORY;
+    private static String GRENZNIEDERSCHRIFT_DIRECTORY;
+    private static String WEB_DAV_USER;
+    private static String WEB_DAV_PASSWORD;
+    private static boolean initError = false;
 //    private static final String VERMESSUNG_PREFIX = "VR_";
-    private static final String GRENZNIEDERSCHRIFT_PREFIX = "GN_";
+    private static String GRENZNIEDERSCHRIFT_PREFIX = "GN_";
 
     static {
-        final ResourceBundle bundle = ResourceBundle.getBundle("WebDav");
-        String pass = bundle.getString("password");
+        try {
+            final ResourceBundle bundle = ResourceBundle.getBundle("WebDav");
+            String pass = bundle.getString("password");
 
-        if ((pass != null) && pass.startsWith(PasswordEncrypter.CRYPT_PREFIX)) {
-            pass = PasswordEncrypter.decryptString(pass);
+            if ((pass != null) && pass.startsWith(PasswordEncrypter.CRYPT_PREFIX)) {
+                pass = PasswordEncrypter.decryptString(pass);
+            }
+
+            WEB_DAV_PASSWORD = pass;
+            WEB_DAV_USER = bundle.getString("user");
+            VERMESSUNG_DIRECTORY = bundle.getString("url_vermessungsrisse");
+            GRENZNIEDERSCHRIFT_DIRECTORY = bundle.getString("url_grenzniederschriften");
+        } catch (Exception ex) {
+            LOG.error(
+                "Could not read WebDav properties from property file. The umleitungsmechanism for Vermessungrisse will not work",
+                ex);
+            WEB_DAV_PASSWORD = "";
+            WEB_DAV_USER = "";
+            VERMESSUNG_DIRECTORY = "";
+            GRENZNIEDERSCHRIFT_DIRECTORY = "";
+            initError = true;
         }
-
-        WEB_DAV_PASSWORD = pass;
-        WEB_DAV_USER = bundle.getString("user");
-        VERMESSUNG_DIRECTORY = bundle.getString("url_vermessungsrisse");
-        GRENZNIEDERSCHRIFT_DIRECTORY = bundle.getString("url_grenzniederschriften");
     }
 
     //~ Enums ------------------------------------------------------------------
@@ -198,7 +209,9 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
         initComponents();
         jXBusyLabel1.setSize(16, 16);
         tfName.getDocument().addDocumentListener(this);
-        webDavHelper = new WebDavHelper(Proxy.fromPreferences(), WEB_DAV_USER, WEB_DAV_PASSWORD, true);
+        if (!initError) {
+            webDavHelper = new WebDavHelper(Proxy.fromPreferences(), WEB_DAV_USER, WEB_DAV_PASSWORD, true);
+        }
         new CidsBeanDropTarget(this);
         new CidsBeanDropTarget(tfName);
     }
@@ -416,6 +429,9 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
 
                 @Override
                 protected Boolean doInBackground() throws Exception {
+                    if (initError) {
+                        return false;
+                    }
                     final String filename = createFilename();
                     final File f = File.createTempFile(filename, ".txt");
                     return webDavHelper.deleteFileFromWebDAV(
@@ -430,11 +446,11 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                         if (!get()) {
                             final org.jdesktop.swingx.error.ErrorInfo ei = new ErrorInfo(
                                     org.openide.util.NbBundle.getMessage(
-                                        Alb_baulastUmleitungPanel.class,
-                                        "Alb_baulastUmleitungPanel.errorDialog.title"),
+                                        VermessungUmleitungPanel.class,
+                                        "VermessungUmleitungPanel.errorDialog.title"),
                                     org.openide.util.NbBundle.getMessage(
-                                        Alb_baulastUmleitungPanel.class,
-                                        "Alb_baulastUmleitungPanel.errorDialog.delete.message"),
+                                        VermessungUmleitungPanel.class,
+                                        "VermessungUmleitungPanel.errorDialog.delete.message"),
                                     null,
                                     null,
                                     null,
@@ -458,11 +474,11 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                         LOG.error("Error in deleting link file worker", ex);
                         final org.jdesktop.swingx.error.ErrorInfo ei = new ErrorInfo(
                                 org.openide.util.NbBundle.getMessage(
-                                    Alb_baulastUmleitungPanel.class,
-                                    "Alb_baulastUmleitungPanel.errorDialog.title"),
+                                    VermessungUmleitungPanel.class,
+                                    "VermessungUmleitungPanell.errorDialog.title"),
                                 org.openide.util.NbBundle.getMessage(
-                                    Alb_baulastUmleitungPanel.class,
-                                    "Alb_baulastUmleitungPanel.errorDialog.delete.message"),
+                                    VermessungUmleitungPanel.class,
+                                    "VermessungUmleitungPanel.errorDialog.delete.message"),
                                 ex.getMessage(),
                                 null,
                                 ex,
@@ -481,10 +497,13 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
      * DOCUMENT ME!
      */
     private void createLinkFile() {
-        final SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+        final SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
 
                 @Override
-                protected Void doInBackground() throws Exception {
+                protected Boolean doInBackground() throws Exception {
+                    if (initError) {
+                        return false;
+                    }
                     final String filename = createFilename();
                     final File f = File.createTempFile(filename, ".txt");
                     final FileWriter fw = new FileWriter(f);
@@ -498,25 +517,43 @@ public class VermessungUmleitungPanel extends javax.swing.JPanel implements Docu
                         f,
                         createDirName(),
                         editor);
-                    return null;
+                    return true;
                 }
 
                 @Override
                 protected void done() {
                     try {
-                        get();
+                        if (!get()) {
+                            final org.jdesktop.swingx.error.ErrorInfo ei = new ErrorInfo(
+                                    org.openide.util.NbBundle.getMessage(
+                                        VermessungUmleitungPanel.class,
+                                        "VermessungUmleitungPanel.errorDialog.title"),
+                                    org.openide.util.NbBundle.getMessage(
+                                        VermessungUmleitungPanel.class,
+                                        "VermessungUmleitungPanel.errorDialog.create.message"),
+                                    null,
+                                    null,
+                                    null,
+                                    Level.ALL,
+                                    null);
+                            JXErrorPane.showDialog(StaticSwingTools.getParentFrameIfNotNull(
+                                    VermessungUmleitungPanel.this),
+                                ei);
+                            showError();
+                            return;
+                        }
                         editor.handleUmleitungCreated(lastCheckedURL);
                     } catch (InterruptedException ex) {
                         LOG.error("Create Link File Worker was interrupted.", ex);
-                    } catch (ExecutionException ex) {
+                    } catch (Exception ex) {
                         LOG.error("Error in Create Link File worker", ex);
                         final org.jdesktop.swingx.error.ErrorInfo ei = new ErrorInfo(
                                 org.openide.util.NbBundle.getMessage(
-                                    Alb_baulastUmleitungPanel.class,
-                                    "Alb_baulastUmleitungPanel.errorDialog.title"),
+                                    VermessungUmleitungPanel.class,
+                                    "VermessungUmleitungPanel.errorDialog.title"),
                                 org.openide.util.NbBundle.getMessage(
-                                    Alb_baulastUmleitungPanel.class,
-                                    "Alb_baulastUmleitungPanel.errorDialog.create.message"),
+                                    VermessungUmleitungPanel.class,
+                                    "VermessungUmleitungPanel.errorDialog.create.message"),
                                 ex.getMessage(),
                                 null,
                                 ex,
