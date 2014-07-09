@@ -152,11 +152,6 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             }
         };
 
-    private static final JLabel grenzNiederschriftWarnMessage = new JLabel(
-            "<html> <b>Warnung! </b> Es wurde kein Dokument gefunden. Klicken Sie auf diese Meldung um eine Weiterleitung einzurichten.</html>");
-    private static final JLabel rissWarnMessage = new JLabel(
-            "<html> <b>Warnung! </b> Es wurde kein Dokument gefunden. Klicken Sie auf diese Meldung um einen Platzhalter einzurichten.</html>");
-
     protected static XBoundingBox INITIAL_BOUNDINGBOX = new XBoundingBox(
             2583621.251964098d,
             5682507.032498134d,
@@ -202,13 +197,8 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     protected VermessungFlurstueckSelectionDialog flurstueckDialog;
     protected volatile int currentDocument = NO_SELECTION;
     protected volatile int currentPage = NO_SELECTION;
-    private final AlertPanel alertPanel = new AlertPanel(
-            AlertPanel.TYPE.DANGER,
-            grenzNiederschriftWarnMessage,
-            true);
-    private VermessungUmleitungPanel umleitungsPanel = new VermessungUmleitungPanel(
-            VermessungUmleitungPanel.MODE.VERMESSUNGSRISS,
-            this);
+    private final AlertPanel alertPanel;
+    private VermessungUmleitungPanel umleitungsPanel;
     private boolean umleitungChangedFlag = false;
     private boolean showUmleitung = true;
     private boolean isErrorMessageVisible = true;
@@ -229,6 +219,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private javax.swing.JFormattedTextField ftxFlur;
     private javax.swing.Box.Filler gluGapControls;
     private javax.swing.Box.Filler gluGeneralInformationGap;
+    private javax.swing.JLabel grenzNiederschriftWarnMessage;
     private javax.swing.JLabel jLabel1;
     private org.jdesktop.swingx.JXBusyLabel jxLBusyMeasure;
     private org.jdesktop.swingx.JXHyperlink jxlUmleitung;
@@ -273,6 +264,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
     private javax.swing.JPanel pnlTitle;
     private javax.swing.JPanel pnlUmleitungHeader;
     private javax.swing.JPopupMenu popChangeVeraenderungsart;
+    private javax.swing.JLabel rissWarnMessage;
     private javax.swing.JScrollPane scpLandparcels;
     private javax.swing.JScrollPane scpPages;
     private javax.swing.Box.Filler strFooter;
@@ -306,6 +298,13 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         documentURLs = new URL[2];
         documentButtons = new JToggleButton[documentURLs.length];
         initComponents();
+        alertPanel = new AlertPanel(
+                AlertPanel.TYPE.DANGER,
+                grenzNiederschriftWarnMessage,
+                true);
+        umleitungsPanel = new VermessungUmleitungPanel(
+                VermessungUmleitungPanel.MODE.VERMESSUNGSRISS,
+                this);
         documentButtons[VERMESSUNGSRISS] = togBild;
         documentButtons[GRENZNIEDERSCHRIFT] = togGrenzniederschrift;
         currentSelectedButton = togBild;
@@ -395,6 +394,8 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         jxLBusyMeasure = new JXBusyLabel(new Dimension(64, 64));
         pnlMeasureComp = new javax.swing.JPanel();
         pnlGrenzniederschriftAlert = new javax.swing.JPanel();
+        grenzNiederschriftWarnMessage = new javax.swing.JLabel();
+        rissWarnMessage = new javax.swing.JLabel();
         pnlContainer = new javax.swing.JPanel();
         pnlGeneralInformation = new de.cismet.tools.gui.RoundedPanel();
         pnlHeaderGeneralInformation = new de.cismet.tools.gui.SemiRoundedPanel();
@@ -494,6 +495,14 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
         pnlGrenzniederschriftAlert.setBackground(new java.awt.Color(254, 254, 254));
         pnlGrenzniederschriftAlert.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
         pnlGrenzniederschriftAlert.setLayout(new java.awt.BorderLayout());
+
+        grenzNiederschriftWarnMessage.setText(org.openide.util.NbBundle.getMessage(
+                VermessungRissEditor.class,
+                "VermessungRissEditor.grenzNiederschriftWarnMessage.text")); // NOI18N
+
+        rissWarnMessage.setText(org.openide.util.NbBundle.getMessage(
+                VermessungRissEditor.class,
+                "VermessungRissEditor.rissWarnMessage.text")); // NOI18N
 
         setLayout(new java.awt.GridBagLayout());
 
