@@ -2096,7 +2096,7 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
             }
 
             schluessel = cidsBean.getProperty("schluessel");
-            if (schluessel.equals("600") || schluessel.equals("504")) {
+            if ((schluessel != null) && (schluessel.equals("600") || schluessel.equals("504"))) {
                 togGrenzniederschrift.setVisible(false);
             }
             gemarkung = (cidsBean.getProperty("gemarkung") != null) ? cidsBean.getProperty("gemarkung.id") : null;
