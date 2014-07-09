@@ -15,17 +15,16 @@ package de.cismet.cids.custom.objectrenderer.utils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
-import org.openide.util.Exceptions;
+import java.io.InputStream;
 
-import java.io.IOException;
-
-import java.net.HttpURLConnection;
 import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
+
+import de.cismet.security.WebAccessManager;
 
 /**
  * DOCUMENT ME!
@@ -195,22 +194,25 @@ public class VermessungsrissPictureFinder {
      * @return  DOCUMENT ME!
      */
     public static String getLinkFromLinkDocument(final boolean isGrenzNiederschrift, final String documentFileName) {
-        HttpURLConnection huc = null;
+        InputStream urlStream = null;
         try {
             final URL objectURL = new URL(documentFileName + LINKEXTENSION);
-            huc = (HttpURLConnection)objectURL.openConnection();
-            huc.setRequestMethod("GET");
-            huc.connect();
-            final int reponse = huc.getResponseCode();
-            if (reponse == 200) {
-                final String link = IOUtils.toString(huc.getInputStream());
-                return link;
+            if (WebAccessManager.getInstance().checkIfURLaccessible(objectURL)) {
+                urlStream = WebAccessManager.getInstance().doRequest(objectURL);
+                if (urlStream != null) {
+                    final String link = IOUtils.toString(urlStream);
+                    return link;
+                }
             }
         } catch (Exception ex) {
             log.error("Exception while checking link docuemtn", ex);
         } finally {
-            if (huc != null) {
-                huc.disconnect();
+            if (urlStream != null) {
+                try {
+                    urlStream.close();
+                } catch (Exception e) {
+                    log.warn("Error during closing InputStream.", e);
+                }
             }
         }
         return null;
@@ -270,11 +272,7 @@ public class VermessungsrissPictureFinder {
             try {
                 final URL objectURL = new URL(searchName + suffix);
 
-                final HttpURLConnection huc = (HttpURLConnection)objectURL.openConnection();
-                huc.setRequestMethod("GET");
-                huc.connect();
-                final int reponse = huc.getResponseCode();
-                if (reponse == 200) {
+                if (WebAccessManager.getInstance().checkIfURLaccessible(objectURL)) {
                     results.add(objectURL);
                 }
             } catch (Exception ex) {
@@ -287,11 +285,7 @@ public class VermessungsrissPictureFinder {
                 try {
                     final URL objectURL = new URL(fileWithoutSuffix + suffix);
 
-                    final HttpURLConnection huc = (HttpURLConnection)objectURL.openConnection();
-                    huc.setRequestMethod("GET");
-                    huc.connect();
-                    final int reponse = huc.getResponseCode();
-                    if (reponse == 200) {
+                    if (WebAccessManager.getInstance().checkIfURLaccessible(objectURL)) {
                         results.add(objectURL);
                     }
                 } catch (Exception ex) {
@@ -305,23 +299,31 @@ public class VermessungsrissPictureFinder {
                 log.debug("No picture file found. Check for Links");
             }
             if (recursionDepth < 3) {
+                InputStream urlStream = null;
                 try {
                     final URL objectURL = new URL(fileWithoutSuffix + LINKEXTENSION);
-                    final HttpURLConnection huc = (HttpURLConnection)objectURL.openConnection();
-                    huc.setRequestMethod("GET");
-                    huc.connect();
-                    final int reponse = huc.getResponseCode();
-                    if (reponse == 200) {
-                        final String link = IOUtils.toString(huc.getInputStream());
-                        final boolean isGrenzNiederschrift = fileWithoutSuffix.contains(GRENZNIEDERSCHRIFT_PREFIX);
-                        return probeWebserverForRightSuffix(
-                                checkReducedSize,
-                                getObjectPath(isGrenzNiederschrift, link.trim()),
-                                recursionDepth
-                                        + 1);
+                    if (WebAccessManager.getInstance().checkIfURLaccessible(objectURL)) {
+                        urlStream = WebAccessManager.getInstance().doRequest(objectURL);
+                        if (urlStream != null) {
+                            final String link = IOUtils.toString(urlStream);
+                            final boolean isGrenzNiederschrift = fileWithoutSuffix.contains(GRENZNIEDERSCHRIFT_PREFIX);
+                            return probeWebserverForRightSuffix(
+                                    checkReducedSize,
+                                    getObjectPath(isGrenzNiederschrift, link.trim()),
+                                    recursionDepth
+                                            + 1);
+                        }
                     }
                 } catch (Exception ex) {
                     log.error(ex, ex);
+                } finally {
+                    if (urlStream != null) {
+                        try {
+                            urlStream.close();
+                        } catch (Exception ex) {
+                            log.warn("Error during closing InputStream.", ex);
+                        }
+                    }
                 }
             } else {
                 log.error(
