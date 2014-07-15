@@ -144,9 +144,6 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private static final ImageIcon FOLDER_ICON = new ImageIcon(Sb_stadtbildserieEditor.class.getResource(
                 "/de/cismet/cids/custom/objecteditors/wunda_blau/inode-directory.png"));
 
-    private static final ImageIcon ERROR_ICON = new ImageIcon(Sb_stadtbildserieEditor.class.getResource(
-                "/de/cismet/cids/custom/objecteditors/wunda_blau/file-broken.png"));
-
     private static final ImageIcon TICK = new javax.swing.ImageIcon(Sb_stadtbildserieEditor.class.getResource(
                 "/de/cismet/cids/custom/wunda_blau/res/tick_32.png"));
     private static final ImageIcon TICK_BW = new javax.swing.ImageIcon(Sb_stadtbildserieEditor.class.getResource(
@@ -2541,7 +2538,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
      * @param  tooltip  DOCUMENT ME!
      */
     private void indicateError(final String tooltip) {
-        lblPicture.setIcon(ERROR_ICON);
+        lblPicture.setIcon(new ImageIcon(Sb_stadtbildUtils.ERROR_IMAGE));
         lblPicture.setText("Fehler beim Übertragen des Bildes!");
         lblPicture.setToolTipText(tooltip);
         showWait(false);
@@ -2553,7 +2550,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
      * @param  tooltip  DOCUMENT ME!
      */
     private void indicateNotAvailable(final String tooltip) {
-        lblPicture.setIcon(ERROR_ICON);
+        lblPicture.setIcon(new ImageIcon(Sb_stadtbildUtils.ERROR_IMAGE));
         lblPicture.setText("Kein Vorschaubild vorhanden.");
         lblPicture.setToolTipText(tooltip);
         showWait(false);
@@ -2563,7 +2560,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
      * DOCUMENT ME!
      */
     private void indicateInternalUsage() {
-        lblPicture.setIcon(ERROR_ICON);
+        lblPicture.setIcon(new ImageIcon(Sb_stadtbildUtils.ERROR_IMAGE));
         lblPicture.setText("Bild ist nicht zur Publikation freigegeben!");
         lblPicture.setToolTipText("");
         showWait(false);
@@ -2800,7 +2797,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                             if (icon instanceof ImageIcon) {
                                 params.put("image", ((ImageIcon)icon).getImage());
                             } else {
-                                params.put("image", ERROR_ICON.getImage());
+                                params.put("image", Sb_stadtbildUtils.ERROR_IMAGE);
                             }
 
                             params.put("bildnummer", lstBildnummern.getSelectedValue());
@@ -2819,7 +2816,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 LOG.error(ex, ex);
             }
 
-            Image vorschaubild = ERROR_ICON.getImage();
+            Image vorschaubild = Sb_stadtbildUtils.ERROR_IMAGE;
             try {
                 vorschaubild = Sb_stadtbildUtils.downloadImageForBildnummer((String)cidsBean.getProperty(
                             "vorschaubild.bildnummer"));

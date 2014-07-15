@@ -56,6 +56,9 @@ public class Sb_stadtbildUtils {
 
     private static final String[] IMAGE_FILE_FORMATS = { "jpg", "tiff" };
 
+    public static BufferedImage ERROR_IMAGE;
+    public static BufferedImage PLACEHOLDER_IMAGE;
+
     private static final CidsBean WUPPERTAL;
     private static final CidsBean R102;
 
@@ -73,6 +76,20 @@ public class Sb_stadtbildUtils {
     static {
         WUPPERTAL = getOrtWupertal();
         R102 = getLagerR102();
+
+        try {
+            ERROR_IMAGE = ImageIO.read(Sb_stadtbildUtils.class.getResource(
+                        "/de/cismet/cids/custom/objecteditors/wunda_blau/file-broken.png"));
+        } catch (IOException ex) {
+            LOG.error("Could not fetch ERROR_IMAGE", ex);
+        }
+
+        try {
+            PLACEHOLDER_IMAGE = ImageIO.read(Sb_stadtbildUtils.class.getResource(
+                        "/de/cismet/cids/custom/objecteditors/wunda_blau/image.png"));
+        } catch (IOException ex) {
+            LOG.error("Could not fetch ERROR_IMAGE", ex);
+        }
     }
 
     //~ Methods ----------------------------------------------------------------

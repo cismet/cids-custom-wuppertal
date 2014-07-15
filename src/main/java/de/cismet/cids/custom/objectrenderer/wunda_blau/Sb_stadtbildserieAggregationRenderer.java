@@ -35,6 +35,11 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel implements RequestsFullSizeComponent,
     CidsBeanAggregationRenderer {
 
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
+            Sb_stadtbildserieGridRenderer.class);
+
     //~ Instance fields --------------------------------------------------------
 
     private Collection<CidsBean> cidsBeans = null;
@@ -61,8 +66,11 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                         if (o instanceof Sb_stadtbildserieGridObject) {
                             final Rectangle r = grdStadtbildserien.getCellBounds(lastIndex);
                             if ((r != null) && !r.contains(e.getPoint())) {
-                                ((Sb_stadtbildserieGridObject)o).setMarker(false);
-                                grdStadtbildserien.repaint(r);
+                                // remove the marker once
+                                if (((Sb_stadtbildserieGridObject)o).isMarker()) {
+                                    ((Sb_stadtbildserieGridObject)o).setMarker(false);
+                                    grdStadtbildserien.repaint(r);
+                                }
                             }
                         }
                     }
@@ -114,10 +122,11 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     @Override
     public void setCidsBeans(final Collection<CidsBean> beans) {
         this.cidsBeans = beans;
+        final DefaultListModel model = (DefaultListModel)grdStadtbildserien.getModel();
         for (final CidsBean bean : beans) {
-            final Sb_stadtbildserieGridObject gridObject = new Sb_stadtbildserieGridObject();
+            final Sb_stadtbildserieGridObject gridObject = new Sb_stadtbildserieGridObject(model);
             gridObject.setCidsBean(bean);
-            ((DefaultListModel)grdStadtbildserien.getModel()).addElement(gridObject);
+            model.addElement(gridObject);
         }
     }
 

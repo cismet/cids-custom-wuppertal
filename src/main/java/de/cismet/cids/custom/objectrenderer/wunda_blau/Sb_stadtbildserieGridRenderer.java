@@ -18,7 +18,16 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
+
+import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 
 /**
  * DOCUMENT ME!
@@ -27,6 +36,11 @@ import javax.swing.ImageIcon;
  * @version  $Revision$, $Date$
  */
 public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements GridCellRenderer {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
+            Sb_stadtbildserieGridRenderer.class);
 
     //~ Instance fields --------------------------------------------------------
 
