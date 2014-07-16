@@ -46,28 +46,6 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final ExecutorService unboundUEHThreadPoolExecutor;
-
-    static {
-        final SecurityManager s = System.getSecurityManager();
-        final ThreadGroup parent = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
-
-        final ThreadGroup threadGroup = new ThreadGroup(parent, "stadtbilderAggregationRendererDownload");
-        final ThreadFactory factory = new CismetConcurrency.CismetThreadFactory(
-                threadGroup,
-                "stadtbilderAggregationRendererDownload",
-                null);
-
-        unboundUEHThreadPoolExecutor = new CismetExecutors.UEHThreadPoolExecutor(
-                10,
-                10,
-                180, // shrink in size after 3 minutes again
-                TimeUnit.SECONDS,
-                new LinkedBlockingQueue<Runnable>(),
-                factory,
-                new ThreadPoolExecutor.AbortPolicy());
-    }
-
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             Sb_stadtbildserieGridObject.class);
 
@@ -131,40 +109,39 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
             bildnummer = (String)stadtbildserie.getProperty("vorschaubild.bildnummer");
         }
 
-        LOG.fatal(bildnummer);
-        if ((imageForBildnummer == null) || !imageForBildnummer.bildnummer.equals(bildnummer)) {
-            LOG.fatal("fetch image");
-            final Future<Image> futureImage = unboundUEHThreadPoolExecutor.submit(new Callable<Image>() {
-
-                        @Override
-                        public Image call() throws Exception {
-                            try {
-                                final BufferedImage image = Sb_stadtbildUtils.downloadImageForBildnummer(bildnummer);
-                                return (Image)adjustScale(image, componentToShowImage, 0, 0);
-                            } catch (Exception ex) {
-                                return (Image)adjustScale(Sb_stadtbildUtils.ERROR_IMAGE, componentToShowImage, 0, 0);
-                            }
-                        }
-                    });
-
-            if (futureImage.isDone()) {
-                LOG.fatal("future is done");
-                try {
-                    return futureImage.get();
-                } catch (InterruptedException ex) {
-                    return Sb_stadtbildUtils.ERROR_IMAGE;
-                } catch (ExecutionException ex) {
-                    return Sb_stadtbildUtils.ERROR_IMAGE;
-                }
-            } else {
-                retrieveFutureImage(futureImage, bildnummer);
-                LOG.fatal("return Placeholder");
-                return Sb_stadtbildUtils.PLACEHOLDER_IMAGE;
-            }
+        final Object mightBeAnImage = Sb_stadtbildUtils.fetchImageForBildnummer(bildnummer);
+        if (mightBeAnImage instanceof Image) {
+            return (Image)mightBeAnImage;
         } else {
-            LOG.fatal("already got image");
-            return imageForBildnummer.image;
+            // mightBeAnImage must be a Future<Image>
+            retrieveFutureImage((Future<Image>)mightBeAnImage, bildnummer);
+            return Sb_stadtbildUtils.PLACEHOLDER_IMAGE;
         }
+
+//
+//        LOG.fatal(bildnummer);
+//        if ((imageForBildnummer == null) || !imageForBildnummer.bildnummer.equals(bildnummer)) {
+//            LOG.fatal("fetch image");
+//
+//
+//            if (futureImage.isDone()) {
+//                LOG.fatal("future is done");
+//                try {
+//                    return futureImage.get();
+//                } catch (InterruptedException ex) {
+//                    return Sb_stadtbildUtils.ERROR_IMAGE;
+//                } catch (ExecutionException ex) {
+//                    return Sb_stadtbildUtils.ERROR_IMAGE;
+//                }
+//            } else {
+//                retrieveFutureImage(futureImage, bildnummer);
+//                LOG.fatal("return Placeholder");
+//                return Sb_stadtbildUtils.PLACEHOLDER_IMAGE;
+//            }
+//        } else {
+//            LOG.fatal("already got image");
+//            return imageForBildnummer.image;
+//        }
     }
 
     /**
@@ -212,6 +189,9 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
      * @param  marker  DOCUMENT ME!
      */
     public void setMarker(final boolean marker) {
+        if (marker) {
+            Sb_stadtbildUtils.cacheImagesForStadtbilder(stadtbildserie.getBeanCollectionProperty("stadtbilder_arr"));
+        }
         this.marker = marker;
     }
 

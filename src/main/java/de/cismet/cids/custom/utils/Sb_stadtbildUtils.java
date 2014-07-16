@@ -13,6 +13,7 @@ import Sirius.navigator.exception.ConnectionException;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 import java.io.IOException;
@@ -24,7 +25,15 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 
@@ -36,6 +45,9 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
+
+import de.cismet.commons.concurrency.CismetConcurrency;
+import de.cismet.commons.concurrency.CismetExecutors;
 
 import de.cismet.security.WebAccessManager;
 
@@ -73,6 +85,8 @@ public class Sb_stadtbildUtils {
             }
         };
 
+    private static final ExecutorService unboundUEHThreadPoolExecutor;
+
     static {
         WUPPERTAL = getOrtWupertal();
         R102 = getLagerR102();
@@ -90,6 +104,23 @@ public class Sb_stadtbildUtils {
         } catch (IOException ex) {
             LOG.error("Could not fetch ERROR_IMAGE", ex);
         }
+
+        final SecurityManager s = System.getSecurityManager();
+        final ThreadGroup parent = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
+
+        final ThreadGroup threadGroup = new ThreadGroup(parent, "stadtbilderAggregationRendererDownload");
+        final ThreadFactory factory = new CismetConcurrency.CismetThreadFactory(
+                threadGroup,
+                "stadtbilderAggregationRendererDownload",
+                null);
+        unboundUEHThreadPoolExecutor = new CismetExecutors.UEHThreadPoolExecutor(
+                10,
+                10,
+                180, // shrink in size after 3 minutes again
+                TimeUnit.SECONDS,
+                new LinkedBlockingQueue<Runnable>(),
+                factory,
+                new ThreadPoolExecutor.AbortPolicy());
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -301,6 +332,68 @@ public class Sb_stadtbildUtils {
             }
         }
         return null;
+    }
+
+    /**
+     * Fetches an image of a bildnummer. Receives an image number as argument and checks if its image is already in the
+     * cache. If this is the case the cached image is returned. If not the image corresponding to the number is
+     * downloaded. In that case a Future&lt;Image&gt; is returned.
+     *
+     * @param   bildnummer  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static Object fetchImageForBildnummer(final String bildnummer) {
+        final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
+        if (cachedImageRef != null) {
+            return cachedImageRef.get();
+        }
+
+        final Future<Image> futureImage = unboundUEHThreadPoolExecutor.submit(new Callable<Image>() {
+
+                    @Override
+                    public Image call() throws Exception {
+                        final URL urlLowResImage = Sb_stadtbildUtils.getURLOfLowResPicture(bildnummer);
+                        if (urlLowResImage != null) {
+                            InputStream is = null;
+                            try {
+                                is = WebAccessManager.getInstance().doRequest(urlLowResImage);
+                                final BufferedImage img = ImageIO.read(is);
+                                if (img != null) {
+                                    IMAGE_CACHE.put(bildnummer, new SoftReference<BufferedImage>(img));
+                                }
+                                return img;
+                            } finally {
+                                if (is != null) {
+                                    try {
+                                        is.close();
+                                    } catch (IOException ex) {
+                                        LOG.warn("Error during closing InputStream.", ex);
+                                    }
+                                }
+                            }
+                        }
+                        return null;
+                    }
+                });
+
+        return futureImage;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  statdbilder  DOCUMENT ME!
+     */
+    public static void cacheImagesForStadtbilder(final List<CidsBean> statdbilder) {
+        for (int i = 0; (i < CACHE_SIZE) && (i < statdbilder.size()); i++) {
+            final String bildnummer = (String)statdbilder.get(i).getProperty("bildnummer");
+            try {
+                fetchImageForBildnummer(bildnummer);
+            } catch (Exception ex) {
+                LOG.error("Problem while loading image " + bildnummer);
+            }
+        }
     }
 
     /**
