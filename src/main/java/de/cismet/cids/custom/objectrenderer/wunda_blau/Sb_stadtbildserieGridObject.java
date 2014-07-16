@@ -49,6 +49,7 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
 
     private SwingWorker<Image, Void> worker;
     private final DefaultListModel model;
+    private LastShownImage lastShowImage;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -95,6 +96,10 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
             bildnummer = (String)stadtbildserie.getProperty("vorschaubild.bildnummer");
         }
 
+        if ((lastShowImage != null) && lastShowImage.bildnummer.equals(bildnummer)) {
+            return lastShowImage.image;
+        }
+
         int priority;
         if (marker) {
             priority = Sb_stadtbildUtils.HIGH_PRIORITY;
@@ -106,6 +111,7 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
                 bildnummer,
                 priority);
         if (mightBeAnImage instanceof Image) {
+            lastShowImage = new LastShownImage(bildnummer, (Image)mightBeAnImage);
             return (Image)mightBeAnImage;
         } else {
             // mightBeAnImage must be a Future<Image>
@@ -136,6 +142,7 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
                 protected void done() {
                     try {
                         final Image image = get();
+                        lastShowImage = new LastShownImage(bildnummer, image);
                         // adds itself to the model at the same position. to update the model
                         model.setElementAt(
                             Sb_stadtbildserieGridObject.this,
@@ -207,5 +214,33 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
      */
     public int getAmountImages() {
         return amountImages;
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class LastShownImage {
+
+        //~ Instance fields ----------------------------------------------------
+
+        String bildnummer;
+        Image image;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new LastShownImage object.
+         *
+         * @param  bildnummer  DOCUMENT ME!
+         * @param  image       DOCUMENT ME!
+         */
+        public LastShownImage(final String bildnummer, final Image image) {
+            this.bildnummer = bildnummer;
+            this.image = image;
+        }
     }
 }
