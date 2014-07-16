@@ -27,10 +27,14 @@ import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.RunnableFuture;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -47,7 +51,6 @@ import de.cismet.cids.editors.FastBindableReferenceCombo;
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
 
 import de.cismet.commons.concurrency.CismetConcurrency;
-import de.cismet.commons.concurrency.CismetExecutors;
 
 import de.cismet.security.WebAccessManager;
 
@@ -74,7 +77,7 @@ public class Sb_stadtbildUtils {
     private static final CidsBean WUPPERTAL;
     private static final CidsBean R102;
 
-    private static final int CACHE_SIZE = 20;
+    private static final int CACHE_SIZE = 100;
 
     private static final Map<String, SoftReference<BufferedImage>> IMAGE_CACHE =
         new LinkedHashMap<String, SoftReference<BufferedImage>>(CACHE_SIZE) {
@@ -85,7 +88,10 @@ public class Sb_stadtbildUtils {
             }
         };
 
-    private static final ExecutorService unboundUEHThreadPoolExecutor;
+    private static final PriorityExecutor unboundUEHThreadPoolExecutor;
+    public static final int HIGH_PRIORITY = 1;
+    public static final int NORMAL_PRIORITY = 0;
+    public static final int LOW_PRIORITY = -1;
 
     static {
         WUPPERTAL = getOrtWupertal();
@@ -113,12 +119,15 @@ public class Sb_stadtbildUtils {
                 threadGroup,
                 "stadtbilderAggregationRendererDownload",
                 null);
-        unboundUEHThreadPoolExecutor = new CismetExecutors.UEHThreadPoolExecutor(
+
+        final BlockingQueue<Runnable> queue = new PriorityBlockingQueue<Runnable>();
+
+        unboundUEHThreadPoolExecutor = new PriorityExecutor(
                 10,
                 10,
                 180, // shrink in size after 3 minutes again
                 TimeUnit.SECONDS,
-                new LinkedBlockingQueue<Runnable>(),
+                queue,
                 factory,
                 new ThreadPoolExecutor.AbortPolicy());
     }
@@ -133,6 +142,7 @@ public class Sb_stadtbildUtils {
     public static CidsBean getWUPPERTAL() {
         return WUPPERTAL;
     }
+
     /**
      * Get the CidsBean of the Sb_Lager with the name 'R102'. Might be null.
      *
@@ -141,6 +151,7 @@ public class Sb_stadtbildUtils {
     public static CidsBean getR102() {
         return R102;
     }
+
     /**
      * DOCUMENT ME!
      *
@@ -340,43 +351,17 @@ public class Sb_stadtbildUtils {
      * downloaded. In that case a Future&lt;Image&gt; is returned.
      *
      * @param   bildnummer  DOCUMENT ME!
+     * @param   priority    DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static Object fetchImageForBildnummer(final String bildnummer) {
+    public static Object fetchImageForBildnummer(final String bildnummer, final int priority) {
         final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
         if (cachedImageRef != null) {
             return cachedImageRef.get();
         }
-
-        final Future<Image> futureImage = unboundUEHThreadPoolExecutor.submit(new Callable<Image>() {
-
-                    @Override
-                    public Image call() throws Exception {
-                        final URL urlLowResImage = Sb_stadtbildUtils.getURLOfLowResPicture(bildnummer);
-                        if (urlLowResImage != null) {
-                            InputStream is = null;
-                            try {
-                                is = WebAccessManager.getInstance().doRequest(urlLowResImage);
-                                final BufferedImage img = ImageIO.read(is);
-                                if (img != null) {
-                                    IMAGE_CACHE.put(bildnummer, new SoftReference<BufferedImage>(img));
-                                }
-                                return img;
-                            } finally {
-                                if (is != null) {
-                                    try {
-                                        is.close();
-                                    } catch (IOException ex) {
-                                        LOG.warn("Error during closing InputStream.", ex);
-                                    }
-                                }
-                            }
-                        }
-                        return null;
-                    }
-                });
-
+        final Future futureImage = unboundUEHThreadPoolExecutor.submit(new FetchImagePriorityCallable(bildnummer),
+                priority);
         return futureImage;
     }
 
@@ -389,7 +374,7 @@ public class Sb_stadtbildUtils {
         for (int i = 0; (i < CACHE_SIZE) && (i < statdbilder.size()); i++) {
             final String bildnummer = (String)statdbilder.get(i).getProperty("bildnummer");
             try {
-                fetchImageForBildnummer(bildnummer);
+                fetchImageForBildnummer(bildnummer, NORMAL_PRIORITY);
             } catch (Exception ex) {
                 LOG.error("Problem while loading image " + bildnummer);
             }
@@ -403,5 +388,243 @@ public class Sb_stadtbildUtils {
      */
     public static void removeFromImageCache(final CidsBean cidsBean) {
         IMAGE_CACHE.remove(cidsBean.toString());
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    static class ComparableFutureTask<T> extends FutureTask<T> implements Comparable<ComparableFutureTask<T>> {
+
+        //~ Instance fields ----------------------------------------------------
+
+        volatile int priority = 0;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new ComparableFutureTask object.
+         *
+         * @param  callable  DOCUMENT ME!
+         * @param  priority  DOCUMENT ME!
+         */
+        public ComparableFutureTask(final Callable<T> callable, final int priority) {
+            super(callable);
+            this.priority = priority;
+        }
+
+        /**
+         * Creates a new ComparableFutureTask object.
+         *
+         * @param  runnable  DOCUMENT ME!
+         * @param  result    DOCUMENT ME!
+         * @param  priority  DOCUMENT ME!
+         */
+        public ComparableFutureTask(final Runnable runnable, final T result, final int priority) {
+            super(runnable, result);
+            this.priority = priority;
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public int compareTo(final ComparableFutureTask<T> o) {
+            return Integer.valueOf(priority).compareTo(o.priority);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private static class FetchImagePriorityCallable implements Callable<Image> {
+
+        //~ Instance fields ----------------------------------------------------
+
+        String bildnummer;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new PriorityCallable object.
+         *
+         * @param  bildnummer  DOCUMENT ME!
+         */
+        public FetchImagePriorityCallable(final String bildnummer) {
+            this.bildnummer = bildnummer;
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Image call() throws Exception {
+            // the image might have already been fetched by a previous thread
+            final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
+            if (cachedImageRef != null) {
+                return cachedImageRef.get();
+            }
+
+            final URL urlLowResImage = Sb_stadtbildUtils.getURLOfLowResPicture(bildnummer);
+            if (urlLowResImage != null) {
+                InputStream is = null;
+                try {
+                    is = WebAccessManager.getInstance().doRequest(urlLowResImage);
+                    final BufferedImage img = ImageIO.read(is);
+                    if (img != null) {
+                        IMAGE_CACHE.put(bildnummer, new SoftReference<BufferedImage>(img));
+                    }
+                    return img;
+                } finally {
+                    if (is != null) {
+                        try {
+                            is.close();
+                        } catch (IOException ex) {
+                            LOG.warn("Error during closing InputStream.", ex);
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private static class PriorityExecutor extends ThreadPoolExecutor {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new PriorityExecutor object.
+         *
+         * @param  corePoolSize     DOCUMENT ME!
+         * @param  maximumPoolSize  DOCUMENT ME!
+         * @param  keepAliveTime    DOCUMENT ME!
+         * @param  unit             DOCUMENT ME!
+         * @param  workQueue        DOCUMENT ME!
+         * @param  threadFactory    DOCUMENT ME!
+         */
+        public PriorityExecutor(final int corePoolSize,
+                final int maximumPoolSize,
+                final long keepAliveTime,
+                final TimeUnit unit,
+                final BlockingQueue<Runnable> workQueue,
+                final ThreadFactory threadFactory) {
+            this(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory, new AbortPolicy());
+        }
+
+        /**
+         * @see  ThreadPoolExecutor#ThreadPoolExecutor(int, int, long, java.util.concurrent.TimeUnit,
+         *       java.util.concurrent.BlockingQueue, java.util.concurrent.ThreadFactory,
+         *       java.util.concurrent.RejectedExecutionHandler)
+         */
+        public PriorityExecutor(final int corePoolSize,
+                final int maximumPoolSize,
+                final long keepAliveTime,
+                final TimeUnit unit,
+                final BlockingQueue<Runnable> workQueue,
+                final ThreadFactory threadFactory,
+                final RejectedExecutionHandler rejectHandler) {
+            super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory, rejectHandler);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * Submit with New comparable task.
+         *
+         * @param   task      DOCUMENT ME!
+         * @param   priority  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public Future<?> submit(final Runnable task, final int priority) {
+            return super.submit(new ComparableFutureTask(task, null, priority));
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   <T>       DOCUMENT ME!
+         * @param   task      DOCUMENT ME!
+         * @param   priority  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  NullPointerException  DOCUMENT ME!
+         */
+        public <T> Future<T> submit(final Callable<T> task, final int priority) {
+            if (task == null) {
+                throw new NullPointerException();
+            }
+            final RunnableFuture<T> ftask = new ComparableFutureTask(task, priority);
+            execute(ftask);
+            return ftask;
+        }
+
+        /**
+         * execute with New comparable task.
+         *
+         * @param  command   DOCUMENT ME!
+         * @param  priority  DOCUMENT ME!
+         */
+        public void execute(final Runnable command, final int priority) {
+            super.execute(new ComparableFutureTask(command, null, priority));
+        }
+
+        @Override
+        protected <T> RunnableFuture<T> newTaskFor(final Callable<T> callable) {
+            return (RunnableFuture<T>)callable;
+        }
+
+        @Override
+        protected <T> RunnableFuture<T> newTaskFor(final Runnable runnable, final T value) {
+            return (RunnableFuture<T>)runnable;
+        }
+
+        @Override
+        protected void afterExecute(final Runnable r, final Throwable t) {
+            if ((t == null) && (r instanceof Future)) {
+                Throwable thrown = null;
+                try {
+                    if (!((Future)r).isCancelled()) {
+                        ((Future)r).get();
+                    }
+                } catch (final InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                } catch (final ExecutionException ex) {
+                    thrown = ex.getCause();
+                } catch (final Throwable tw) {
+                    thrown = tw;
+                }
+
+                if (thrown != null) {
+                    // the current thread is actually the one that executes the task
+                    final Thread thread = Thread.currentThread();
+                    final Thread.UncaughtExceptionHandler handler = thread.getUncaughtExceptionHandler();
+                    if (handler == null) {
+                        final Thread.UncaughtExceptionHandler groupHandler = thread.getThreadGroup();
+                        if (groupHandler == null) {
+                            final Thread.UncaughtExceptionHandler defHandler = Thread
+                                        .getDefaultUncaughtExceptionHandler();
+                            if (defHandler != null) {
+                                defHandler.uncaughtException(thread, thrown);
+                            }
+                        } else {
+                            groupHandler.uncaughtException(thread, thrown);
+                        }
+                    } else {
+                        handler.uncaughtException(thread, thrown);
+                    }
+                }
+            }
+        }
     }
 }

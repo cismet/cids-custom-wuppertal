@@ -156,7 +156,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                     "admin",
                     "kif",
                     "sb_stadtbildserie",
-                    " id = 5 or id = 6 or id = 285195 ",
+                    " id = 5 or id = 6 or id = 285195 or id = 8 or id = 9 or id = 10 or id = 11 or  id = 285198",
                     10);
 
             DevelopmentTools.createAggregationRendererInFrameFromRMIConnectionOnLocalhost(Arrays.asList(beans),
