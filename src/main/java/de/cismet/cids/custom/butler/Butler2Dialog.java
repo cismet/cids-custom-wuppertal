@@ -1331,6 +1331,9 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                             cbPointGeom.setEnabled(false);
                             tfLowerE.setEnabled(false);
                             tfLowerN.setEnabled((false));
+                            lblLowerPosition.setEnabled(false);
+                            lblPointGeoms.setEnabled(false);
+                            lblSize.setEnabled(false);
                         } else {
                             tfRahmenkartenNr.setEnabled(false);
                             cbRahmenkartenScale.setEnabled(false);
@@ -1338,6 +1341,9 @@ public class Butler2Dialog extends javax.swing.JDialog implements DocumentListen
                             cbPointGeom.setEnabled(true);
                             tfLowerE.setEnabled(true);
                             tfLowerN.setEnabled((true));
+                            lblLowerPosition.setEnabled(true);
+                            lblPointGeoms.setEnabled(true);
+                            lblSize.setEnabled(true);
                         }
                     } catch (InterruptedException ex) {
                         LOG.error(ex);
