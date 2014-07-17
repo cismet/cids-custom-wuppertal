@@ -50,7 +50,7 @@ public class VermessungsrissPictureFinder {
             ".TIFF",
             ".JPEG"
         };
-    private static final String SUFFIX_REDUCED_SIZE = "_rs";
+    public static final String SUFFIX_REDUCED_SIZE = "_rs";
     private static final String LINKEXTENSION = ".txt";
     public static String PATH_VERMESSUNG = AlkisConstants.COMMONS.VERMESSUNG_HOST_BILDER; //
     public static String PATH_GRENZNIEDERSCHRIFT = AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN;
@@ -74,12 +74,31 @@ public class VermessungsrissPictureFinder {
             final Integer gemarkung,
             final String flur,
             final String blatt) {
+        return findVermessungsrissPicture(true, riss, gemarkung, flur, blatt);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   checkReducedSize  DOCUMENT ME!
+     * @param   riss              DOCUMENT ME!
+     * @param   gemarkung         DOCUMENT ME!
+     * @param   flur              DOCUMENT ME!
+     * @param   blatt             DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static List<URL> findVermessungsrissPicture(final boolean checkReducedSize,
+            final String riss,
+            final Integer gemarkung,
+            final String flur,
+            final String blatt) {
         final String picturePath = getVermessungsrissPictureFilename(riss, gemarkung, flur, blatt);
         if (log.isDebugEnabled()) {
             log.debug("findVermessungrissPicture: " + picturePath);
         }
 
-        return probeWebserverForRightSuffix(true, picturePath);
+        return probeWebserverForRightSuffix(checkReducedSize, picturePath);
     }
 
     /**
@@ -96,11 +115,30 @@ public class VermessungsrissPictureFinder {
             final Integer gemarkung,
             final String flur,
             final String blatt) {
+        return findGrenzniederschriftPicture(false, riss, gemarkung, flur, blatt);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   checkReducedSize  DOCUMENT ME!
+     * @param   riss              DOCUMENT ME!
+     * @param   gemarkung         DOCUMENT ME!
+     * @param   flur              DOCUMENT ME!
+     * @param   blatt             DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static List<URL> findGrenzniederschriftPicture(final boolean checkReducedSize,
+            final String riss,
+            final Integer gemarkung,
+            final String flur,
+            final String blatt) {
         final String picturePath = getGrenzniederschriftFilename(riss, gemarkung, flur, blatt);
         if (log.isDebugEnabled()) {
             log.debug("findGrenzniederschriftPicture: " + picturePath);
         }
-        return probeWebserverForRightSuffix(false, picturePath);
+        return probeWebserverForRightSuffix(checkReducedSize, picturePath);
     }
 
     /**

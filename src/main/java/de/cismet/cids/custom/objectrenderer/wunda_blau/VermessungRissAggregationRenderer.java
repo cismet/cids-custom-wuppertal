@@ -543,12 +543,14 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                             final List<URL> urlList;
                             if (host.equals(AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN)) {
                                 urlList = VermessungsrissPictureFinder.findGrenzniederschriftPicture(
+                                        false,
                                         schluessel,
                                         gemarkung,
                                         flur,
                                         blatt);
                             } else {
                                 urlList = VermessungsrissPictureFinder.findVermessungsrissPicture(
+                                        false,
                                         schluessel,
                                         gemarkung,
                                         flur,
