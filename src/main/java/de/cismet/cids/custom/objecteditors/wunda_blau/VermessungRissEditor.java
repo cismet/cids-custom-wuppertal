@@ -1360,9 +1360,17 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      */
     private void btnOpenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenActionPerformed
         if ((currentDocument != NO_SELECTION) && (documentURLs[currentDocument] != null)) {
-            final String url = documentURLs[currentDocument].toExternalForm();
-
             try {
+                final URL downloadURL;
+                if (documentURLs[currentDocument].toExternalForm().contains(
+                                VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE)) {
+                    final String url = documentURLs[currentDocument].toExternalForm()
+                                .replaceAll(VermessungsrissPictureFinder.SUFFIX_REDUCED_SIZE,
+                                    "");
+                    downloadURL = new URL(url);
+                } else {
+                    downloadURL = documentURLs[currentDocument];
+                }
                 String priceGroup = "eadoc_a3";
                 final CidsBean format = (CidsBean)cidsBean.getProperty("format");
                 if ((format != null) && format.getProperty("name").equals("2")) {
@@ -1370,16 +1378,20 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
                 }
 
                 if (currentDocument == VERMESSUNGSRISS) {
-                    if (BillingPopup.doBilling("vrpdf", url, (Geometry)null, new ProductGroupAmount(priceGroup, 1))) {
-                        downloadProduct(url, true);
+                    if (BillingPopup.doBilling(
+                                    "vrpdf",
+                                    downloadURL.toExternalForm(),
+                                    (Geometry)null,
+                                    new ProductGroupAmount(priceGroup, 1))) {
+                        downloadProduct(downloadURL, true);
                     }
                 } else {
                     if (BillingPopup.doBilling(
                                     "doklapdf",
-                                    url,
+                                    downloadURL.toExternalForm(),
                                     (Geometry)null,
                                     new ProductGroupAmount(priceGroup, 1))) {
-                        downloadProduct(url, false);
+                        downloadProduct(downloadURL, false);
                     }
                 }
             } catch (Exception e) {
@@ -1395,18 +1407,19 @@ public class VermessungRissEditor extends javax.swing.JPanel implements Disposab
      * @param  url                DOCUMENT ME!
      * @param  isVermessungsriss  DOCUMENT ME!
      */
-    private void downloadProduct(final String url, final boolean isVermessungsriss) {
+    private void downloadProduct(final URL url, final boolean isVermessungsriss) {
         CismetThreadPool.execute(new Runnable() {
 
                 @Override
                 public void run() {
                     if (DownloadManagerDialog.showAskingForUserTitle(VermessungRissEditor.this)) {
-                        final String filename = url.substring(url.lastIndexOf("/") + 1);
+                        final String urlString = url.toExternalForm();
+                        final String filename = urlString.substring(urlString.lastIndexOf("/") + 1);
 
                         DownloadManager.instance()
                                 .add(
                                     new HttpDownload(
-                                        documentURLs[currentDocument],
+                                        url,
                                         "",
                                         DownloadManagerDialog.getJobname(),
                                         (currentDocument == VERMESSUNGSRISS) ? "Vermessungsriss"
