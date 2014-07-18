@@ -266,15 +266,23 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
             model.indexOf(Sb_stadtbildserieGridObject.this));
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public DefaultListModel getModel() {
         return model;
     }
 
-    public void setModel(DefaultListModel model) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  model  DOCUMENT ME!
+     */
+    public void setModel(final DefaultListModel model) {
         this.model = model;
     }
-    
-    
 
     //~ Inner Classes ----------------------------------------------------------
 
