@@ -9,11 +9,9 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import java.awt.Image;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -232,7 +230,7 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
      *
      * @return  DOCUMENT ME!
      */
-    public Collection getSelectedBildnummernOfSerie() {
+    public Set<CidsBean> getSelectedBildnummernOfSerie() {
         return selectedBildnummernOfSerie;
     }
 

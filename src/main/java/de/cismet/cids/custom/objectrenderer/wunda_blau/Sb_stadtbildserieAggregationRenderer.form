@@ -206,6 +206,7 @@
                 <Property name="opaque" type="boolean" value="false"/>
               </Properties>
               <AuxValues>
+                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="grdStadtbildserien.getModel().addListDataListener(this);"/>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PictureSelectionJGrid()"/>
               </AuxValues>
               <Constraints>

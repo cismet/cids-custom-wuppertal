@@ -30,13 +30,18 @@ import java.awt.image.Kernel;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -58,7 +63,8 @@ import de.cismet.tools.gui.FooterComponentProvider;
  */
 public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel implements RequestsFullSizeComponent,
     CidsBeanAggregationRenderer,
-    FooterComponentProvider {
+    FooterComponentProvider,
+    ListDataListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -272,6 +278,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
         grdStadtbildserien.setOpaque(false);
         pnlLeuchtkasten.add(grdStadtbildserien, "SERIEN");
+        grdStadtbildserien.getModel().addListDataListener(this);
 
         grdBin.setOpaque(false);
         pnlLeuchtkasten.add(grdBin, "BIN");
@@ -392,6 +399,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                 Sb_stadtbildUtils.cacheImagesForStadtbilder(bean.getBeanCollectionProperty("stadtbilder_arr"));
             }
             updateFooterLabels();
+            updateAmountsLabel();
         }
     }
 
@@ -489,6 +497,67 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
             btnBin.setIcon(BIN_FULL);
         }
         lblSwitchToBin.setText(bin);
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void updateAmountsLabel() {
+        final int selectedStadtbilderAmount = getSelectedStadtbilderAmount();
+        final int amountSerien = ((DefaultListModel)grdStadtbildserien.getModel()).getSize();
+
+        lblAmounts.setText(selectedStadtbilderAmount + " aus " + amountSerien + " ausgewählt");
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private int getSelectedStadtbilderAmount() {
+        int selectedStadtbilderAmount = 0;
+
+        final Enumeration<Sb_stadtbildserieGridObject> e = ((DefaultListModel)grdStadtbildserien.getModel()).elements();
+        while (e.hasMoreElements()) {
+            final Sb_stadtbildserieGridObject gridObject = (Sb_stadtbildserieGridObject)e.nextElement();
+
+            final Set set = gridObject.getSelectedBildnummernOfSerie();
+            selectedStadtbilderAmount += set.size();
+        }
+        return selectedStadtbilderAmount;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private Collection<CidsBean> getSelectedStadtbilder() {
+        final Set<CidsBean> selectedStadtbilder = new HashSet<CidsBean>();
+
+        final Enumeration<Sb_stadtbildserieGridObject> e = ((DefaultListModel)grdStadtbildserien.getModel()).elements();
+        while (e.hasMoreElements()) {
+            final Sb_stadtbildserieGridObject gridObject = (Sb_stadtbildserieGridObject)e.nextElement();
+
+            final Set set = gridObject.getSelectedBildnummernOfSerie();
+            selectedStadtbilder.addAll(set);
+        }
+        return selectedStadtbilder;
+    }
+
+    @Override
+    public void intervalAdded(final ListDataEvent e) {
+// do nothing
+    }
+
+    @Override
+    public void intervalRemoved(final ListDataEvent e) {
+        // do nothing
+    }
+
+    @Override
+    public void contentsChanged(final ListDataEvent e) {
+        updateAmountsLabel();
     }
 
     //~ Inner Classes ----------------------------------------------------------
