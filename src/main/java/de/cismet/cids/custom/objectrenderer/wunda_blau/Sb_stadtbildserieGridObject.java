@@ -52,7 +52,7 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
     private boolean marker;
 
     private SwingWorker<Image, Void> worker;
-    private final DefaultListModel model;
+    private DefaultListModel model;
     private LastShownImage lastShowImage;
 
     private final HashSet<CidsBean> selectedBildnummernOfSerie = new HashSet<CidsBean>();
@@ -265,6 +265,16 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
             Sb_stadtbildserieGridObject.this,
             model.indexOf(Sb_stadtbildserieGridObject.this));
     }
+
+    public DefaultListModel getModel() {
+        return model;
+    }
+
+    public void setModel(DefaultListModel model) {
+        this.model = model;
+    }
+    
+    
 
     //~ Inner Classes ----------------------------------------------------------
 

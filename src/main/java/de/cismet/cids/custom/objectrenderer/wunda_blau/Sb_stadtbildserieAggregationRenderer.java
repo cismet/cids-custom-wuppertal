@@ -272,23 +272,24 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBinActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBinActionPerformed
+    private void btnBinActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBinActionPerformed
         final List<Sb_stadtbildserieGridObject> gridObjectsToRemove = grdStadtbildserien.getSelectedValuesList();
 
         for (final Sb_stadtbildserieGridObject gridObject : gridObjectsToRemove) {
             ((DefaultListModel)grdStadtbildserien.getModel()).removeElement(gridObject);
             ((DefaultListModel)grdBin.getModel()).addElement(gridObject);
+            gridObject.setModel((DefaultListModel)grdBin.getModel());
         }
         grdStadtbildserien.getSelectionModel().clearSelection();
         updateFooterLabels();
-    } //GEN-LAST:event_btnBinActionPerformed
+    }//GEN-LAST:event_btnBinActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnSwitchToSerieActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnSwitchToSerieActionPerformed
+    private void btnSwitchToSerieActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSwitchToSerieActionPerformed
         final CardLayout cardLayout = (CardLayout)pnlLeuchtkasten.getLayout();
         cardLayout.show(pnlLeuchtkasten, "SERIEN");
         btnSwitchToBin.setEnabled(true);
@@ -296,14 +297,14 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         lblSwitchToBin.setEnabled(true);
         lblSwitchToSerie.setEnabled(false);
         ((PictureSelectionJGrid)grdStadtbildserien).updateInfoPanel();
-    }                                                                                    //GEN-LAST:event_btnSwitchToSerieActionPerformed
+    }//GEN-LAST:event_btnSwitchToSerieActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnSwitchToBinActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnSwitchToBinActionPerformed
+    private void btnSwitchToBinActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSwitchToBinActionPerformed
         final CardLayout cardLayout = (CardLayout)pnlLeuchtkasten.getLayout();
         cardLayout.show(pnlLeuchtkasten, "BIN");
         btnSwitchToBin.setEnabled(false);
@@ -311,7 +312,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         lblSwitchToBin.setEnabled(false);
         lblSwitchToSerie.setEnabled(true);
         ((PictureSelectionJGrid)grdBin).updateInfoPanel();
-    }                                                                                  //GEN-LAST:event_btnSwitchToBinActionPerformed
+    }//GEN-LAST:event_btnSwitchToBinActionPerformed
 
     @Override
     public Collection<CidsBean> getCidsBeans() {
