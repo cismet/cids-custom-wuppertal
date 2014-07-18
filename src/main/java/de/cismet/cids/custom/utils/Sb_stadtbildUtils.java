@@ -377,13 +377,13 @@ public class Sb_stadtbildUtils {
     }
 
     /**
-     * DOCUMENT ME!
+     * Checks if the Stadtbilder are in the cache. If not they will be downloaded. Returns immediately.
      *
-     * @param  statdbilder  DOCUMENT ME!
+     * @param  stadtbilder  DOCUMENT ME!
      */
-    public static void cacheImagesForStadtbilder(final List<CidsBean> statdbilder) {
-        for (int i = 0; (i < CACHE_SIZE) && (i < statdbilder.size()); i++) {
-            final String bildnummer = (String)statdbilder.get(i).getProperty("bildnummer");
+    public static void cacheImagesForStadtbilder(final List<CidsBean> stadtbilder) {
+        for (int i = 0; (i < CACHE_SIZE) && (i < stadtbilder.size()); i++) {
+            final String bildnummer = (String)stadtbilder.get(i).getProperty("bildnummer");
             try {
                 fetchImageForBildnummer(bildnummer, NORMAL_PRIORITY);
             } catch (Exception ex) {

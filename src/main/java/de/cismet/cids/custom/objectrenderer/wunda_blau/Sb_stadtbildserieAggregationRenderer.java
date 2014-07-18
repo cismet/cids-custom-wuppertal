@@ -42,6 +42,8 @@ import javax.swing.event.ListSelectionListener;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
+import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
+
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
@@ -386,6 +388,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                 final Sb_stadtbildserieGridObject gridObject = new Sb_stadtbildserieGridObject(model);
                 gridObject.setCidsBean(bean);
                 model.addElement(gridObject);
+
+                Sb_stadtbildUtils.cacheImagesForStadtbilder(bean.getBeanCollectionProperty("stadtbilder_arr"));
             }
             updateFooterLabels();
         }
