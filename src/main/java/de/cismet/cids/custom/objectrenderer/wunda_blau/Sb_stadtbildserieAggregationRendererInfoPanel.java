@@ -306,16 +306,18 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
 
     @Override
     public void valueChanged(final ListSelectionEvent e) {
-        final int row = tblStadtbilder.getSelectedRow();
-        if (row >= 0) {
-            final CidsBean stadtbild = (CidsBean)tblStadtbilder.getModel().getValueAt(row, 1);
-            final String bildnummer = (String)stadtbild.getProperty(
-                    "bildnummer");
-            previewImage.setBildnummer(bildnummer);
+        if (!e.getValueIsAdjusting()) {
+            final int row = tblStadtbilder.getSelectedRow();
+            if (row >= 0) {
+                final CidsBean stadtbild = (CidsBean)tblStadtbilder.getModel().getValueAt(row, 1);
+                final String bildnummer = (String)stadtbild.getProperty(
+                        "bildnummer");
+                previewImage.setBildnummer(bildnummer);
 
 //                lstBildnummern.ensureIndexIsVisible(lstBildnummern.getSelectedIndex());
-        } else {
-            previewImage.removeImage();
+            } else {
+                previewImage.removeImage();
+            }
         }
     }
 

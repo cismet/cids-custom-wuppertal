@@ -518,7 +518,6 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
      */
     public void removeImage() {
         image = null;
-        lblPicture.setIcon(FOLDER_ICON);
     }
 
     /**
