@@ -19,7 +19,6 @@ import javax.swing.table.DefaultTableModel;
 import de.cismet.cids.custom.objecteditors.utils.Sb_StadtbildserieProvider;
 
 import de.cismet.cids.dynamics.CidsBean;
-import de.cismet.cids.dynamics.CidsBeanStore;
 
 /**
  * DOCUMENT ME!
@@ -329,6 +328,11 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         } else {
             gridObject.removeSelectedBildnummerOfSerie(bild);
         }
+    }
+
+    @Override
+    public void previewImageChanged() {
+        // do nothing
     }
 
     //~ Inner Classes ----------------------------------------------------------

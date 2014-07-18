@@ -16,6 +16,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.Icon;
@@ -60,9 +63,13 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
     private String bildnummer;
     private BufferedImage image;
     private CidsBean fotoCidsBean;
-    // TODO private final PropertyChangeListener listRepaintListener = new PropertyChangeListener() {
-    //
-    // @Override public void propertyChange(final PropertyChangeEvent evt) { lstBildnummern.repaint(); } };
+    private final PropertyChangeListener listRepaintListener = new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(final PropertyChangeEvent evt) {
+                stadtbildserieProvider.previewImageChanged();
+            }
+        };
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDownloadHighResImage;
@@ -426,18 +433,17 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
         if (stadtbildserieProvider.isInternalUsageAndRenderer()) {
             indicateInternalUsage();
         } else {
-//            final Object stadtbild = stadtbildserieProvider.getStadtbildserie();
-//            if (fotoCidsBean != null) {
-//                fotoCidsBean.removePropertyChangeListener(listRepaintListener);
-//            }
-//            if (stadtbild instanceof CidsBean) {
-            // TODO ????
-//                fotoCidsBean = (CidsBean)stadtbild;
-//                fotoCidsBean.addPropertyChangeListener(listRepaintListener);
-//                final String bildnummer = (String)fotoCidsBean.getProperty("bildnummer");
-            if (bildnummer != null) {
-                new Sb_StadtbildPreviewImage.LoadSelectedImageWorker(bildnummer).execute();
-//                }
+            final Object stadtbild = stadtbildserieProvider.getSelectedStadtbild();
+            if (fotoCidsBean != null) {
+                fotoCidsBean.removePropertyChangeListener(listRepaintListener);
+            }
+            if (stadtbild instanceof CidsBean) {
+                fotoCidsBean = (CidsBean)stadtbild;
+                fotoCidsBean.addPropertyChangeListener(listRepaintListener);
+                final String bildnummer = (String)fotoCidsBean.getProperty("bildnummer");
+                if (bildnummer != null) {
+                    new Sb_StadtbildPreviewImage.LoadSelectedImageWorker(bildnummer).execute();
+                }
             } else {
                 image = null;
                 lblPicture.setIcon(FOLDER_ICON);

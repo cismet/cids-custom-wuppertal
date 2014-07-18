@@ -2371,6 +2371,11 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         return editable;
     }
 
+    @Override
+    public void previewImageChanged() {
+        lstBildnummern.repaint();
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**

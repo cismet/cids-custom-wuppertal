@@ -75,4 +75,9 @@ public interface Sb_StadtbildserieProvider {
      * @return  DOCUMENT ME!
      */
     boolean isEditable();
+
+    /**
+     * DOCUMENT ME!
+     */
+    void previewImageChanged();
 }
