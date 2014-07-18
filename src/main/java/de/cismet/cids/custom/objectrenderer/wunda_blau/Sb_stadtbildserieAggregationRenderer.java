@@ -48,9 +48,6 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
     //~ Instance fields --------------------------------------------------------
 
-    private final HashMap<CidsBean, HashSet<CidsBean>> selectedBildnummernOfSerie =
-        new HashMap<CidsBean, HashSet<CidsBean>>();
-
     private Collection<CidsBean> cidsBeans = null;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -128,10 +125,9 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                             indexes = rv;
                         }
                         if (indexes.length == 1) {
-                            final CidsBean selectedSerie = (CidsBean)
-                                ((Sb_stadtbildserieGridObject)grdStadtbildserien.getModel().getElementAt(indexes[0]))
-                                        .getCidsBean();
-                            infoPanel.setCidsBean(selectedSerie);
+                            final Sb_stadtbildserieGridObject gridObject = (Sb_stadtbildserieGridObject)
+                                grdStadtbildserien.getModel().getElementAt(indexes[0]);
+                            infoPanel.setGridObject(gridObject);
                         }
                     }
                 }
@@ -139,51 +135,6 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     }
 
     //~ Methods ----------------------------------------------------------------
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   stadtbildserie  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public Collection getSelectedBildnummernOfSerie(final CidsBean stadtbildserie) {
-        if (selectedBildnummernOfSerie.containsKey(stadtbildserie)) {
-            return selectedBildnummernOfSerie.get(stadtbildserie);
-        } else {
-            return Collections.EMPTY_SET;
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  stadtbildserie  DOCUMENT ME!
-     * @param  bildnummer      DOCUMENT ME!
-     */
-    public void putSelectedBildnummerOfSerie(final CidsBean stadtbildserie, final CidsBean bildnummer) {
-        final HashSet<CidsBean> set;
-        if (!selectedBildnummernOfSerie.containsKey(stadtbildserie)) {
-            set = new HashSet<CidsBean>();
-            set.add(bildnummer);
-            selectedBildnummernOfSerie.put(stadtbildserie, set);
-        } else {
-            selectedBildnummernOfSerie.get(stadtbildserie).add(bildnummer);
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  stadtbildserie  DOCUMENT ME!
-     * @param  bildnummer      DOCUMENT ME!
-     */
-    public void removeSelectedBildnummerOfSerie(final CidsBean stadtbildserie, final CidsBean bildnummer) {
-        if (selectedBildnummernOfSerie.containsKey(stadtbildserie)) {
-            final HashSet<CidsBean> set = selectedBildnummernOfSerie.get(stadtbildserie);
-            set.remove(bildnummer);
-        }
-    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The

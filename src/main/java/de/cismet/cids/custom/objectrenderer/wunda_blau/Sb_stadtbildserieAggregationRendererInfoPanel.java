@@ -27,8 +27,7 @@ import de.cismet.cids.dynamics.CidsBeanStore;
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.JPanel implements CidsBeanStore,
-    ListSelectionListener,
+public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.JPanel implements ListSelectionListener,
     TableModelListener,
     Sb_StadtbildserieProvider {
 
@@ -44,6 +43,7 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
     private CidsBean stadtbildserie;
     private Sb_stadtbildserieAggregationRenderer aggregationRenderer;
     private boolean rendererAndInternalUsage = true;
+    private Sb_stadtbildserieGridObject gridObject;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -186,13 +186,12 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         add(roundedPanel2, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
 
-    @Override
-    public CidsBean getCidsBean() {
-        return stadtbildserie;
-    }
-
-    @Override
-    public void setCidsBean(final CidsBean cidsBean) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cidsBean  DOCUMENT ME!
+     */
+    private void setCidsBean(final CidsBean cidsBean) {
         if (cidsBean != null) {
             stadtbildserie = cidsBean;
             final boolean internalUsage = Boolean.TRUE.equals((Boolean)cidsBean.getProperty("interner_gebrauch"));
@@ -205,10 +204,20 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
 
     /**
      * DOCUMENT ME!
+     *
+     * @param  gridObject  DOCUMENT ME!
+     */
+    public void setGridObject(final Sb_stadtbildserieGridObject gridObject) {
+        this.gridObject = gridObject;
+        setCidsBean(this.gridObject.getCidsBean());
+    }
+
+    /**
+     * DOCUMENT ME!
      */
     private void refillTable() {
         final List<CidsBean> bilder = stadtbildserie.getBeanCollectionProperty("stadtbilder_arr");
-        final Collection<CidsBean> selectedBilder = aggregationRenderer.getSelectedBildnummernOfSerie(stadtbildserie);
+        final Collection<CidsBean> selectedBilder = gridObject.getSelectedBildnummernOfSerie();
         final Object[][] data = new Object[bilder.size()][];
 
         for (int i = 0; i < data.length; i++) {
@@ -316,9 +325,9 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         final Boolean isSelected = (Boolean)model.getValueAt(row, 0);
         final CidsBean bild = (CidsBean)model.getValueAt(row, 1);
         if (isSelected) {
-            aggregationRenderer.putSelectedBildnummerOfSerie(stadtbildserie, bild);
+            gridObject.addSelectedBildnummerOfSerie(bild);
         } else {
-            aggregationRenderer.removeSelectedBildnummerOfSerie(stadtbildserie, bild);
+            gridObject.removeSelectedBildnummerOfSerie(bild);
         }
     }
 

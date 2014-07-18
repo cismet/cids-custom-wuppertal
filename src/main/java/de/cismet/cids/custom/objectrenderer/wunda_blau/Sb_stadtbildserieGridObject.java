@@ -9,6 +9,10 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import java.awt.Image;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -50,6 +54,8 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
     private SwingWorker<Image, Void> worker;
     private final DefaultListModel model;
     private LastShownImage lastShowImage;
+
+    private final HashSet<CidsBean> selectedBildnummernOfSerie = new HashSet<CidsBean>();
 
     //~ Constructors -----------------------------------------------------------
 
@@ -143,10 +149,7 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
                     try {
                         final Image image = get();
                         lastShowImage = new LastShownImage(bildnummer, image);
-                        // adds itself to the model at the same position. to update the model
-                        model.setElementAt(
-                            Sb_stadtbildserieGridObject.this,
-                            model.indexOf(Sb_stadtbildserieGridObject.this));
+                        notifyModel();
                     } catch (InterruptedException ex) {
                         // do nothing
                     } catch (ExecutionException ex) {
@@ -214,6 +217,53 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
      */
     public int getAmountImages() {
         return amountImages;
+    }
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getAmountSelectedImages() {
+        return selectedBildnummernOfSerie.size();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public Collection getSelectedBildnummernOfSerie() {
+        return selectedBildnummernOfSerie;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  bildnummer  DOCUMENT ME!
+     */
+    public void addSelectedBildnummerOfSerie(final CidsBean bildnummer) {
+        selectedBildnummernOfSerie.add(bildnummer);
+        notifyModel();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  bildnummer  DOCUMENT ME!
+     */
+    public void removeSelectedBildnummerOfSerie(final CidsBean bildnummer) {
+        selectedBildnummernOfSerie.remove(bildnummer);
+        notifyModel();
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void notifyModel() {
+        // adds itself to the model at the same position. to update the model
+        model.setElementAt(
+            Sb_stadtbildserieGridObject.this,
+            model.indexOf(Sb_stadtbildserieGridObject.this));
     }
 
     //~ Inner Classes ----------------------------------------------------------

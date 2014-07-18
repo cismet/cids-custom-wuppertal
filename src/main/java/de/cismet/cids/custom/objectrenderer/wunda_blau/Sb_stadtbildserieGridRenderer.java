@@ -107,7 +107,8 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
             markerFraction = ((Sb_stadtbildserieGridObject)value).getFraction();
             paintMarker = ((Sb_stadtbildserieGridObject)value).isMarker();
             final int amountImages = ((Sb_stadtbildserieGridObject)value).getAmountImages();
-            lblAmount.setText("0 von " + amountImages);
+            final int amountSelectedImages = ((Sb_stadtbildserieGridObject)value).getAmountSelectedImages();
+            lblAmount.setText(amountSelectedImages + " von " + amountImages);
         }
 
         if (image != null) {
