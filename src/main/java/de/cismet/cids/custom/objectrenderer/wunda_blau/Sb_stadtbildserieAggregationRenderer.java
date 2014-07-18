@@ -132,8 +132,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                             lockableUIInfoPanel.setLocked(false);
                             lockableUIInfoPanel.setEnabled(false);
                         } else {
-                            lockableUIInfoPanel.setEnabled(true);
-                            lockableUIInfoPanel.setLocked(true);
+                            // a new lockable UI has to be created every time, as otherwise rendering errors will occur
+                            createNewLockableUI();
                         }
                     }
                 }
@@ -230,12 +230,19 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     private void configureLockableInfoPanel() {
         final GridBagConstraints gbc = ((GridBagLayout)this.getLayout()).getConstraints(infoPanel);
         remove(infoPanel);
-        lockableUIInfoPanel = new LockableUI();
-        layer = new JXLayer(infoPanel, lockableUIInfoPanel);
+        layer = new JXLayer(infoPanel);
         layer.setOpaque(false);
+        add(layer, gbc);
+        infoPanel.setOpaque(false);
 
-        // Java2D grayScale BufferedImageOp
-        final ColorConvertOp grayScale = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
+        createNewLockableUI();
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void createNewLockableUI() {
+        lockableUIInfoPanel = new LockableUI();
 
         final float[] blurKernel = { 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f };
         final BufferedImageOp blur = new ConvolveOp(new Kernel(3, 3, blurKernel));
@@ -250,8 +257,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         // lock the layer
         lockableUIInfoPanel.setEnabled(true);
         lockableUIInfoPanel.setLocked(true);
-        add(layer, gbc);
-        infoPanel.setOpaque(false);
+
+        layer.setUI(lockableUIInfoPanel);
     }
 
     /**
