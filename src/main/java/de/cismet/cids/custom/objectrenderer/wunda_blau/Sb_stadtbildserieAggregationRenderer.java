@@ -9,17 +9,26 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
+import org.jdesktop.jxlayer.JXLayer;
+import org.jdesktop.jxlayer.plaf.effect.BufferedImageOpEffect;
+import org.jdesktop.jxlayer.plaf.ext.LockableUI;
+
 import org.openide.util.Exceptions;
 
+import java.awt.Cursor;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Rectangle;
+import java.awt.color.ColorSpace;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImageOp;
+import java.awt.image.ColorConvertOp;
+import java.awt.image.ConvolveOp;
+import java.awt.image.Kernel;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ListSelectionModel;
@@ -49,6 +58,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     //~ Instance fields --------------------------------------------------------
 
     private Collection<CidsBean> cidsBeans = null;
+    private JXLayer layer;
+    private LockableUI lockableUIInfoPanel;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.guigarage.jgrid.JGrid grdStadtbildserien;
@@ -118,10 +129,16 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                             final Sb_stadtbildserieGridObject gridObject = (Sb_stadtbildserieGridObject)
                                 grdStadtbildserien.getModel().getElementAt(indexes[0]);
                             infoPanel.setGridObject(gridObject);
+                            lockableUIInfoPanel.setLocked(false);
+                            lockableUIInfoPanel.setEnabled(false);
+                        } else {
+                            lockableUIInfoPanel.setEnabled(true);
+                            lockableUIInfoPanel.setLocked(true);
                         }
                     }
                 }
             });
+        configureLockableInfoPanel();
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -204,6 +221,37 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
     @Override
     public void setTitle(final String title) {
+    }
+
+    /**
+     * removes the info panel from this panel, wraps it in a lockable JXLayer and adds that layer again to the same
+     * location on this panel.
+     */
+    private void configureLockableInfoPanel() {
+        final GridBagConstraints gbc = ((GridBagLayout)this.getLayout()).getConstraints(infoPanel);
+        remove(infoPanel);
+        lockableUIInfoPanel = new LockableUI();
+        layer = new JXLayer(infoPanel, lockableUIInfoPanel);
+        layer.setOpaque(false);
+
+        // Java2D grayScale BufferedImageOp
+        final ColorConvertOp grayScale = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
+
+        final float[] blurKernel = { 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f };
+        final BufferedImageOp blur = new ConvolveOp(new Kernel(3, 3, blurKernel));
+
+        // wrap it with the jxlayer's BufferedImageOpEffect
+        final BufferedImageOpEffect effect = new BufferedImageOpEffect(blur);
+        // set it as the locked effect
+        lockableUIInfoPanel.setLockedEffects(effect);
+
+        lockableUIInfoPanel.setLockedCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+
+        // lock the layer
+        lockableUIInfoPanel.setEnabled(true);
+        lockableUIInfoPanel.setLocked(true);
+        add(layer, gbc);
+        infoPanel.setOpaque(false);
     }
 
     /**
