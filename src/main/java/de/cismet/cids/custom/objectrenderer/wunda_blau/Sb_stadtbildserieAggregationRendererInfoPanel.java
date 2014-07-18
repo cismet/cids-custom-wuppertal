@@ -15,6 +15,7 @@ import de.cismet.cids.custom.objecteditors.utils.Sb_StadtbildserieProvider;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
+import java.util.List;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
@@ -202,15 +203,17 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
      * DOCUMENT ME!
      */
     private void refillTable() {
-        final Collection<CidsBean> bilder = stadtbildserie.getBeanCollectionProperty("stadtbilder_arr");
+        final List<CidsBean> bilder = stadtbildserie.getBeanCollectionProperty("stadtbilder_arr");
         final Collection<CidsBean> selectedBilder = aggregationRenderer.getSelectedBildnummernOfSerie(stadtbildserie);
-        final DefaultTableModel newModel = new DefaultTableModel(COLUMN_NAMES, WIDTH);
-
-        for (final CidsBean bild : bilder) {
+        Object[][] data = new Object[bilder.size()][];
+        
+        for(int i = 0; i < data.length; i++){
+            CidsBean bild = bilder.get(i);
             final boolean isSelected = selectedBilder.contains(bild);
-            newModel.addRow(new Object[] { isSelected, bild });
+            data[i] = new Object[] { isSelected, bild };
         }
-
+        
+        final DefaultTableModel newModel = new CustomTableModel(data,COLUMN_NAMES);
         tblStadtbilder.setModel(newModel);
     }
 
@@ -313,4 +316,28 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
             aggregationRenderer.removeSelectedBildnummerOfSerie(stadtbildserie, bild);
         }
     }
+    
+    private class CustomTableModel extends DefaultTableModel{
+
+        public CustomTableModel(Object[][] data, Object[] columnNames) {
+            super(data, columnNames);
+        }        
+        
+
+            Class[] types = new Class [] {
+                java.lang.Boolean.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                true, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        }
+    
 }
