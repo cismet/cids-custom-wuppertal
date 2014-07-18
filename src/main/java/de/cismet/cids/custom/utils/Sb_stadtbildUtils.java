@@ -368,6 +368,17 @@ public class Sb_stadtbildUtils {
     /**
      * DOCUMENT ME!
      *
+     * @param   bildnummer  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static boolean isBildnummerInCache(final String bildnummer) {
+        return IMAGE_CACHE.containsKey(bildnummer);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param  statdbilder  DOCUMENT ME!
      */
     public static void cacheImagesForStadtbilder(final List<CidsBean> statdbilder) {
