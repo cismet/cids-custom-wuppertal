@@ -625,7 +625,6 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
                     lblPicture.setIcon(null);
                     lblPicture.setText("Fehler beim Skalieren!");
                 } finally {
-                    showWait(false);
                     if (currentResizeWorker == this) {
                         currentResizeWorker = null;
                     }
@@ -657,7 +656,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
             this.bildnummer = toLoad;
             lblPicture.setText("");
             lblPicture.setToolTipText(null);
-            showWait(true);
+            showWait(!Sb_stadtbildUtils.isBildnummerInCache(bildnummer));
         }
 
         //~ Methods ------------------------------------------------------------
@@ -686,6 +685,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
                 image = get();
                 if (image != null) {
                     resizeListenerEnabled = true;
+                    timer.setInitialDelay(0);
                     timer.restart();
                 } else {
                     indicateNotAvailable("");
@@ -701,6 +701,8 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
                 } else {
                     indicateError(ex.getMessage());
                 }
+            } finally {
+                showWait(false);
             }
         }
     }
