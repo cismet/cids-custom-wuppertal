@@ -239,6 +239,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         roundedPanel1.add(btnBin, gridBagConstraints);
 
         btnBinRecycle.setIcon(new javax.swing.ImageIcon(
@@ -271,6 +272,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         roundedPanel1.add(lblAmounts, gridBagConstraints);
 
         pnlLeuchtkasten.setOpaque(false);
@@ -297,6 +299,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(roundedPanel1, gridBagConstraints);
 
         infoPanel.setMinimumSize(new java.awt.Dimension(100, 0));
@@ -305,6 +308,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(infoPanel, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
 
