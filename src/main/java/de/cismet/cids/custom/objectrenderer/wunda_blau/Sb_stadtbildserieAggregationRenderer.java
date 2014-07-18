@@ -17,8 +17,14 @@ import java.awt.event.MouseEvent;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import javax.swing.DefaultListModel;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
@@ -42,10 +48,15 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
     //~ Instance fields --------------------------------------------------------
 
+    private final HashMap<CidsBean, HashSet<CidsBean>> selectedBildnummernOfSerie =
+        new HashMap<CidsBean, HashSet<CidsBean>>();
+
     private Collection<CidsBean> cidsBeans = null;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.guigarage.jgrid.JGrid grdStadtbildserien;
+    private de.cismet.cids.custom.objectrenderer.wunda_blau.Sb_stadtbildserieAggregationRendererInfoPanel infoPanel;
+    private de.cismet.tools.gui.RoundedPanel roundedPanel1;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -92,9 +103,87 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                     }
                 }
             });
+        grdStadtbildserien.addListSelectionListener(new ListSelectionListener() {
+
+                @Override
+                public void valueChanged(final ListSelectionEvent e) {
+                    if (!e.getValueIsAdjusting()) {
+                        int[] indexes;
+                        final ListSelectionModel sm = grdStadtbildserien.getSelectionModel();
+                        final int iMin = sm.getMinSelectionIndex();
+                        final int iMax = sm.getMaxSelectionIndex();
+
+                        if ((iMin < 0) || (iMax < 0)) {
+                            indexes = new int[0];
+                        } else {
+                            final int[] rvTmp = new int[1 + (iMax - iMin)];
+                            int n = 0;
+                            for (int i = iMin; i <= iMax; i++) {
+                                if (sm.isSelectedIndex(i)) {
+                                    rvTmp[n++] = i;
+                                }
+                            }
+                            final int[] rv = new int[n];
+                            System.arraycopy(rvTmp, 0, rv, 0, n);
+                            indexes = rv;
+                        }
+                        if (indexes.length == 1) {
+                            final CidsBean selectedSerie = (CidsBean)
+                                ((Sb_stadtbildserieGridObject)grdStadtbildserien.getModel().getElementAt(indexes[0]))
+                                        .getCidsBean();
+                            infoPanel.setCidsBean(selectedSerie);
+                        }
+                    }
+                }
+            });
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   stadtbildserie  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public Collection getSelectedBildnummernOfSerie(final CidsBean stadtbildserie) {
+        if (selectedBildnummernOfSerie.containsKey(stadtbildserie)) {
+            return selectedBildnummernOfSerie.get(stadtbildserie);
+        } else {
+            return Collections.EMPTY_SET;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  stadtbildserie  DOCUMENT ME!
+     * @param  bildnummer      DOCUMENT ME!
+     */
+    public void putSelectedBildnummerOfSerie(final CidsBean stadtbildserie, final CidsBean bildnummer) {
+        final HashSet<CidsBean> set;
+        if (!selectedBildnummernOfSerie.containsKey(stadtbildserie)) {
+            set = new HashSet<CidsBean>();
+            set.add(bildnummer);
+            selectedBildnummernOfSerie.put(stadtbildserie, set);
+        } else {
+            selectedBildnummernOfSerie.get(stadtbildserie).add(bildnummer);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  stadtbildserie  DOCUMENT ME!
+     * @param  bildnummer      DOCUMENT ME!
+     */
+    public void removeSelectedBildnummerOfSerie(final CidsBean stadtbildserie, final CidsBean bildnummer) {
+        if (selectedBildnummernOfSerie.containsKey(stadtbildserie)) {
+            final HashSet<CidsBean> set = selectedBildnummernOfSerie.remove(bildnummer);
+            set.remove(bildnummer);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -103,15 +192,45 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        grdStadtbildserien = new com.guigarage.jgrid.JGrid();
+        java.awt.GridBagConstraints gridBagConstraints;
 
-        setLayout(new java.awt.BorderLayout());
-        add(grdStadtbildserien, java.awt.BorderLayout.CENTER);
+        roundedPanel1 = new de.cismet.tools.gui.RoundedPanel();
+        grdStadtbildserien = new com.guigarage.jgrid.JGrid();
+        infoPanel = new de.cismet.cids.custom.objectrenderer.wunda_blau.Sb_stadtbildserieAggregationRendererInfoPanel();
+
+        setOpaque(false);
+        setLayout(new java.awt.GridBagLayout());
+
+        roundedPanel1.setMinimumSize(new java.awt.Dimension(300, 200));
+        roundedPanel1.setPreferredSize(new java.awt.Dimension(300, 200));
+        roundedPanel1.setLayout(new java.awt.GridBagLayout());
+
+        grdStadtbildserien.setOpaque(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        roundedPanel1.add(grdStadtbildserien, gridBagConstraints);
         final DefaultListModel<Sb_stadtbildserieGridObject> gridModel =
             new DefaultListModel<Sb_stadtbildserieGridObject>();
         grdStadtbildserien.setModel(gridModel);
         grdStadtbildserien.getCellRendererManager()
                 .setDefaultRenderer(new de.cismet.cids.custom.objectrenderer.wunda_blau.Sb_stadtbildserieGridRenderer());
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        add(roundedPanel1, gridBagConstraints);
+
+        infoPanel.setMinimumSize(new java.awt.Dimension(100, 0));
+        infoPanel.setPreferredSize(new java.awt.Dimension(100, 0));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        add(infoPanel, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
 
     @Override
@@ -122,11 +241,14 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     @Override
     public void setCidsBeans(final Collection<CidsBean> beans) {
         this.cidsBeans = beans;
-        final DefaultListModel model = (DefaultListModel)grdStadtbildserien.getModel();
-        for (final CidsBean bean : beans) {
-            final Sb_stadtbildserieGridObject gridObject = new Sb_stadtbildserieGridObject(model);
-            gridObject.setCidsBean(bean);
-            model.addElement(gridObject);
+        if (beans != null) {
+            infoPanel.setAggregationRenderer(this);
+            final DefaultListModel model = (DefaultListModel)grdStadtbildserien.getModel();
+            for (final CidsBean bean : beans) {
+                final Sb_stadtbildserieGridObject gridObject = new Sb_stadtbildserieGridObject(model);
+                gridObject.setCidsBean(bean);
+                model.addElement(gridObject);
+            }
         }
     }
 

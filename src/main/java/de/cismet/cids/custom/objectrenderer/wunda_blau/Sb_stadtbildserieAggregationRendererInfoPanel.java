@@ -7,8 +7,18 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import java.util.Collection;
+
+import javax.swing.table.DefaultTableModel;
+
+import de.cismet.cids.custom.objecteditors.utils.Sb_StadtbildserieProvider;
+
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
 /**
  * DOCUMENT ME!
@@ -16,11 +26,33 @@ import de.cismet.cids.dynamics.CidsBeanStore;
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.JPanel implements CidsBeanStore {
+public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.JPanel implements CidsBeanStore,
+    ListSelectionListener, TableModelListener,
+    Sb_StadtbildserieProvider {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
+            Sb_stadtbildserieAggregationRendererInfoPanel.class);
+    private static final String[] COLUMN_NAMES = new String[] { "Ausgewählt", "Serie" };
+    private static final boolean EDITABLE = false;
 
     //~ Instance fields --------------------------------------------------------
 
-    CidsBean stadtbildserie;
+    private CidsBean stadtbildserie;
+    private Sb_stadtbildserieAggregationRenderer aggregationRenderer;
+    private boolean rendererAndInternalUsage = true;
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JScrollPane jScrollPane2;
+    private de.cismet.cids.custom.objecteditors.utils.Sb_StadtbildPreviewImage previewImage;
+    private de.cismet.tools.gui.RoundedPanel roundedPanel2;
+    private de.cismet.tools.gui.RoundedPanel roundedPanel3;
+    private de.cismet.tools.gui.SemiRoundedPanel semiRoundedPanel1;
+    private javax.swing.JTable tblStadtbilder;
+    // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
 
@@ -40,16 +72,114 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        final javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 400, Short.MAX_VALUE));
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 300, Short.MAX_VALUE));
-    } // </editor-fold>//GEN-END:initComponents
+        java.awt.GridBagConstraints gridBagConstraints;
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    // End of variables declaration//GEN-END:variables
+        roundedPanel2 = new de.cismet.tools.gui.RoundedPanel();
+        previewImage = new de.cismet.cids.custom.objecteditors.utils.Sb_StadtbildPreviewImage();
+        roundedPanel3 = new de.cismet.tools.gui.RoundedPanel();
+        semiRoundedPanel1 = new de.cismet.tools.gui.SemiRoundedPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblStadtbilder = new javax.swing.JTable();
+
+        setOpaque(false);
+        setLayout(new java.awt.GridBagLayout());
+
+        roundedPanel2.setLayout(new java.awt.GridBagLayout());
+
+        previewImage.setMinimumSize(new java.awt.Dimension(140, 300));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        roundedPanel2.add(previewImage, gridBagConstraints);
+
+        roundedPanel3.setLayout(new java.awt.GridBagLayout());
+
+        semiRoundedPanel1.setBackground(new java.awt.Color(51, 51, 51));
+        semiRoundedPanel1.setLayout(new java.awt.FlowLayout());
+
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(Sb_stadtbildserieAggregationRendererInfoPanel.class, "Sb_stadtbildserieAggregationRendererInfoPanel.jLabel1.text")); // NOI18N
+        semiRoundedPanel1.add(jLabel1);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        roundedPanel3.add(semiRoundedPanel1, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(Sb_stadtbildserieAggregationRendererInfoPanel.class, "Sb_stadtbildserieAggregationRendererInfoPanel.jLabel2.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        roundedPanel3.add(jLabel2, gridBagConstraints);
+
+        tblStadtbilder.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Ausgewählt", "Serie"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Boolean.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                true, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblStadtbilder.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane2.setViewportView(tblStadtbilder);
+        tblStadtbilder.getSelectionModel().addListSelectionListener(this);
+        tblStadtbilder.getModel().addTableModelListener(this);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        roundedPanel3.add(jScrollPane2, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        roundedPanel2.add(roundedPanel3, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        add(roundedPanel2, gridBagConstraints);
+    }// </editor-fold>//GEN-END:initComponents
 
     @Override
     public CidsBean getCidsBean() {
@@ -58,6 +188,129 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
 
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
-        stadtbildserie = cidsBean;
+        if (cidsBean != null) {
+            stadtbildserie = cidsBean;
+            final boolean internalUsage = Boolean.TRUE.equals((Boolean)cidsBean.getProperty("interner_gebrauch"));
+            rendererAndInternalUsage = !EDITABLE
+                        && internalUsage;
+            previewImage.setStadtbildserieProvider(this);
+            refillTable();
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void refillTable() {
+        final Collection<CidsBean> bilder = stadtbildserie.getBeanCollectionProperty("stadtbilder_arr");
+        final Collection<CidsBean> selectedBilder = aggregationRenderer.getSelectedBildnummernOfSerie(stadtbildserie);
+        final DefaultTableModel newModel = new DefaultTableModel(COLUMN_NAMES, WIDTH);
+
+        for (final CidsBean bild : bilder) {
+            final boolean isSelected = selectedBilder.contains(bild);
+            newModel.addRow(new Object[] { isSelected, bild });
+        }
+
+        tblStadtbilder.setModel(newModel);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public Sb_stadtbildserieAggregationRenderer getAggregationRenderer() {
+        return aggregationRenderer;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  aggregationRenderer  DOCUMENT ME!
+     */
+    public void setAggregationRenderer(final Sb_stadtbildserieAggregationRenderer aggregationRenderer) {
+        this.aggregationRenderer = aggregationRenderer;
+    }
+
+    @Override
+    public CidsBean getStadtbildserie() {
+        return stadtbildserie;
+    }
+
+    @Override
+    public CidsBean getSelectedStadtbild() {
+        final int selectedRow = tblStadtbilder.getSelectedRow();
+        final CidsBean selectedBild = (CidsBean)tblStadtbilder.getModel().getValueAt(selectedRow, 1);
+        return selectedBild;
+    }
+
+    @Override
+    public void previousImageSelected() {
+        final int selectedRow = tblStadtbilder.getSelectedRow();
+        tblStadtbilder.setRowSelectionInterval(selectedRow - 1, selectedRow - 1);
+    }
+
+    @Override
+    public void nextImageSelected() {
+        final int selectedRow = tblStadtbilder.getSelectedRow();
+        tblStadtbilder.setRowSelectionInterval(selectedRow + 1, selectedRow + 1);
+    }
+
+    @Override
+    public void newPreviewImageSelected() {
+        // should not be called, as it is not needed
+        LOG.fatal(
+            "Sb_stadtbildserieAggregationRendererInfoPanel.newPreviewImageSelected: Not supported yet.",
+            new Exception()); // NOI18N
+    }
+
+    @Override
+    public boolean isFirstSelected() {
+        final int selectedRow = tblStadtbilder.getSelectedRow();
+        return selectedRow == 1;
+    }
+
+    @Override
+    public boolean isLastSelected() {
+        final int selectedRow = tblStadtbilder.getSelectedRow();
+        return selectedRow == (tblStadtbilder.getRowCount() - 1);
+    }
+
+    @Override
+    public boolean isInternalUsageAndRenderer() {
+        return rendererAndInternalUsage;
+    }
+
+    @Override
+    public boolean isEditable() {
+        return EDITABLE;
+    }
+
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
+            int row = tblStadtbilder.getSelectedRow();
+        if (row >= 0) {
+            CidsBean stadtbild = (CidsBean) tblStadtbilder.getModel().getValueAt(row, 1);
+                            final String bildnummer = (String)stadtbild.getProperty(
+                        "bildnummer");
+                            previewImage.setBildnummer(bildnummer);
+
+//                lstBildnummern.ensureIndexIsVisible(lstBildnummern.getSelectedIndex());
+            } else {
+                previewImage.removeImage();
+            }
+    }
+
+    @Override
+    public void tableChanged(TableModelEvent e) {
+               final DefaultTableModel model = (DefaultTableModel)tblStadtbilder.getModel();
+        final int row = e.getFirstRow();
+        final Boolean isSelected = (Boolean)model.getValueAt(row, 0);
+        final CidsBean bild = (CidsBean)model.getValueAt(row, 1);
+        if (isSelected) {
+            aggregationRenderer.putSelectedBildnummerOfSerie(stadtbildserie, bild);
+        } else {
+            aggregationRenderer.removeSelectedBildnummerOfSerie(stadtbildserie, bild);
+        }
     }
 }
