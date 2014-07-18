@@ -33,6 +33,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
+import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
@@ -62,6 +63,13 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             Sb_stadtbildserieGridRenderer.class);
 
+    private static final Icon BIN_EMPTY = new javax.swing.ImageIcon(Sb_stadtbildserieAggregationRenderer.class
+                    .getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/bin_empty.png"));
+    private static final Icon BIN_FULL = new javax.swing.ImageIcon(Sb_stadtbildserieAggregationRenderer.class
+                    .getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/bin.png"));
+    private static final Icon BIN_RECYCLE = new javax.swing.ImageIcon(Sb_stadtbildserieAggregationRenderer.class
+                    .getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/bin_recycle.png"));
+
     //~ Instance fields --------------------------------------------------------
 
     private Collection<CidsBean> cidsBeans = null;
@@ -70,6 +78,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBin;
+    private javax.swing.JButton btnBinRecycle;
     private javax.swing.JButton btnSwitchToBin;
     private javax.swing.JButton btnSwitchToSerie;
     private com.guigarage.jgrid.JGrid grdBin;
@@ -115,6 +124,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         lblSwitchToBin = new javax.swing.JLabel();
         roundedPanel1 = new de.cismet.tools.gui.RoundedPanel();
         btnBin = new javax.swing.JButton();
+        btnBinRecycle = new javax.swing.JButton();
         lblAmounts = new javax.swing.JLabel();
         pnlLeuchtkasten = new javax.swing.JPanel();
         grdStadtbildserien = new PictureSelectionJGrid();
@@ -223,6 +233,28 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         gridBagConstraints.gridy = 1;
         roundedPanel1.add(btnBin, gridBagConstraints);
 
+        btnBinRecycle.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/bin_recycle.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnBinRecycle,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.btnBinRecycle.text"));                                  // NOI18N
+        btnBinRecycle.setToolTipText(org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.btnBinRecycle.toolTipText"));                           // NOI18N
+        btnBinRecycle.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnBinRecycleActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        roundedPanel1.add(btnBinRecycle, gridBagConstraints);
+
         org.openide.awt.Mnemonics.setLocalizedText(
             lblAmounts,
             org.openide.util.NbBundle.getMessage(
@@ -273,16 +305,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
      * @param  evt  DOCUMENT ME!
      */
     private void btnBinActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBinActionPerformed
-        final List<Sb_stadtbildserieGridObject> gridObjectsToRemove = grdStadtbildserien.getSelectedValuesList();
-
-        for (final Sb_stadtbildserieGridObject gridObject : gridObjectsToRemove) {
-            ((DefaultListModel)grdStadtbildserien.getModel()).removeElement(gridObject);
-            ((DefaultListModel)grdBin.getModel()).addElement(gridObject);
-            gridObject.setModel((DefaultListModel)grdBin.getModel());
-        }
-        grdStadtbildserien.getSelectionModel().clearSelection();
-        updateFooterLabels();
-    } //GEN-LAST:event_btnBinActionPerformed
+        moveSelectedStadtbildserienToOtherGrid(grdStadtbildserien, grdBin);
+    }                                                                          //GEN-LAST:event_btnBinActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -297,7 +321,10 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         lblSwitchToBin.setEnabled(true);
         lblSwitchToSerie.setEnabled(false);
         ((PictureSelectionJGrid)grdStadtbildserien).updateInfoPanel();
-    }                                                                                    //GEN-LAST:event_btnSwitchToSerieActionPerformed
+
+        btnBin.setVisible(true);
+        btnBinRecycle.setVisible(false);
+    } //GEN-LAST:event_btnSwitchToSerieActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -312,7 +339,37 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         lblSwitchToBin.setEnabled(false);
         lblSwitchToSerie.setEnabled(true);
         ((PictureSelectionJGrid)grdBin).updateInfoPanel();
-    }                                                                                  //GEN-LAST:event_btnSwitchToBinActionPerformed
+
+        btnBin.setVisible(false);
+        btnBinRecycle.setVisible(true);
+    } //GEN-LAST:event_btnSwitchToBinActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnBinRecycleActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBinRecycleActionPerformed
+        moveSelectedStadtbildserienToOtherGrid(grdBin, grdStadtbildserien);
+    }                                                                                 //GEN-LAST:event_btnBinRecycleActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  from  DOCUMENT ME!
+     * @param  to    DOCUMENT ME!
+     */
+    private void moveSelectedStadtbildserienToOtherGrid(final JGrid from, final JGrid to) {
+        final List<Sb_stadtbildserieGridObject> gridObjectsToRemove = from.getSelectedValuesList();
+
+        for (final Sb_stadtbildserieGridObject gridObject : gridObjectsToRemove) {
+            ((DefaultListModel)from.getModel()).removeElement(gridObject);
+            ((DefaultListModel)to.getModel()).addElement(gridObject);
+            gridObject.setModel((DefaultListModel)to.getModel());
+        }
+        from.getSelectionModel().clearSelection();
+        updateFooterLabels();
+    }
 
     @Override
     public Collection<CidsBean> getCidsBeans() {
@@ -420,7 +477,13 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     private void updateFooterLabels() {
         final String stadtbildserien = "Stadtbildserien (" + grdStadtbildserien.getModel().getSize() + ")";
         lblSwitchToSerie.setText(stadtbildserien);
-        final String bin = "Papierkorb (" + grdBin.getModel().getSize() + ")";
+        final int amountSerienInBin = grdBin.getModel().getSize();
+        final String bin = "Papierkorb (" + amountSerienInBin + ")";
+        if (amountSerienInBin == 0) {
+            btnBin.setIcon(BIN_EMPTY);
+        } else {
+            btnBin.setIcon(BIN_FULL);
+        }
         lblSwitchToBin.setText(bin);
     }
 
