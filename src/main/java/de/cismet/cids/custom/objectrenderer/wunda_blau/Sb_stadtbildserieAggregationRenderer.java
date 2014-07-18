@@ -105,24 +105,14 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                 @Override
                 public void valueChanged(final ListSelectionEvent e) {
                     if (!e.getValueIsAdjusting()) {
-                        int[] indexes;
+                        int[] indexes = new int[0];
                         final ListSelectionModel sm = grdStadtbildserien.getSelectionModel();
                         final int iMin = sm.getMinSelectionIndex();
                         final int iMax = sm.getMaxSelectionIndex();
 
-                        if ((iMin < 0) || (iMax < 0)) {
-                            indexes = new int[0];
-                        } else {
-                            final int[] rvTmp = new int[1 + (iMax - iMin)];
-                            int n = 0;
-                            for (int i = iMin; i <= iMax; i++) {
-                                if (sm.isSelectedIndex(i)) {
-                                    rvTmp[n++] = i;
-                                }
-                            }
-                            final int[] rv = new int[n];
-                            System.arraycopy(rvTmp, 0, rv, 0, n);
-                            indexes = rv;
+                        if ((iMin >= 0) && (iMin == iMax)) {
+                            indexes = new int[1];
+                            indexes[0] = iMin;
                         }
                         if (indexes.length == 1) {
                             final Sb_stadtbildserieGridObject gridObject = (Sb_stadtbildserieGridObject)
