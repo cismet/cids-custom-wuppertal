@@ -180,7 +180,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
      */
     public void removeSelectedBildnummerOfSerie(final CidsBean stadtbildserie, final CidsBean bildnummer) {
         if (selectedBildnummernOfSerie.containsKey(stadtbildserie)) {
-            final HashSet<CidsBean> set = selectedBildnummernOfSerie.remove(bildnummer);
+            final HashSet<CidsBean> set = selectedBildnummernOfSerie.get(stadtbildserie);
             set.remove(bildnummer);
         }
     }

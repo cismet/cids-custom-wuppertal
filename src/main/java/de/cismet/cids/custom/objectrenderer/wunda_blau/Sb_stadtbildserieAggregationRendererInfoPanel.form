@@ -112,7 +112,7 @@
                     </Property>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="tblStadtbilder.getSelectionModel().addListSelectionListener(this);&#xa;tblStadtbilder.getModel().addTableModelListener(this);"/>
+                    <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="tblStadtbilder.getSelectionModel().addListSelectionListener(this);"/>
                   </AuxValues>
                 </Component>
               </SubComponents>

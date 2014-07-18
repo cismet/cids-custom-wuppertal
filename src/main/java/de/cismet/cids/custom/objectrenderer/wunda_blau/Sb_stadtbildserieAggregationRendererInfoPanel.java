@@ -8,18 +8,18 @@
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import java.util.Collection;
+import java.util.List;
 
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 import de.cismet.cids.custom.objecteditors.utils.Sb_StadtbildserieProvider;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
-import java.util.List;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 
 /**
  * DOCUMENT ME!
@@ -28,7 +28,8 @@ import javax.swing.event.TableModelListener;
  * @version  $Revision$, $Date$
  */
 public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.JPanel implements CidsBeanStore,
-    ListSelectionListener, TableModelListener,
+    ListSelectionListener,
+    TableModelListener,
     Sb_StadtbildserieProvider {
 
     //~ Static fields/initializers ---------------------------------------------
@@ -104,7 +105,11 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         semiRoundedPanel1.setLayout(new java.awt.FlowLayout());
 
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(Sb_stadtbildserieAggregationRendererInfoPanel.class, "Sb_stadtbildserieAggregationRendererInfoPanel.jLabel1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel1,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRendererInfoPanel.class,
+                "Sb_stadtbildserieAggregationRendererInfoPanel.jLabel1.text")); // NOI18N
         semiRoundedPanel1.add(jLabel1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -115,7 +120,11 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         gridBagConstraints.weightx = 1.0;
         roundedPanel3.add(semiRoundedPanel1, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(Sb_stadtbildserieAggregationRendererInfoPanel.class, "Sb_stadtbildserieAggregationRendererInfoPanel.jLabel2.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel2,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRendererInfoPanel.class,
+                "Sb_stadtbildserieAggregationRendererInfoPanel.jLabel2.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -124,35 +133,30 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         roundedPanel3.add(jLabel2, gridBagConstraints);
 
         tblStadtbilder.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
-            },
-            new String [] {
-                "Ausgewählt", "Serie"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.Object.class
-            };
-            boolean[] canEdit = new boolean [] {
-                true, false
-            };
+                new Object[][] {
+                    { null, null },
+                    { null, null },
+                    { null, null },
+                    { null, null }
+                },
+                new String[] { "Ausgewählt", "Serie" }) {
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
+                Class[] types = new Class[] { java.lang.Boolean.class, java.lang.Object.class };
+                boolean[] canEdit = new boolean[] { true, false };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+                @Override
+                public Class getColumnClass(final int columnIndex) {
+                    return types[columnIndex];
+                }
+
+                @Override
+                public boolean isCellEditable(final int rowIndex, final int columnIndex) {
+                    return canEdit[columnIndex];
+                }
+            });
         tblStadtbilder.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(tblStadtbilder);
         tblStadtbilder.getSelectionModel().addListSelectionListener(this);
-        tblStadtbilder.getModel().addTableModelListener(this);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -180,7 +184,7 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         add(roundedPanel2, gridBagConstraints);
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     @Override
     public CidsBean getCidsBean() {
@@ -205,15 +209,15 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
     private void refillTable() {
         final List<CidsBean> bilder = stadtbildserie.getBeanCollectionProperty("stadtbilder_arr");
         final Collection<CidsBean> selectedBilder = aggregationRenderer.getSelectedBildnummernOfSerie(stadtbildserie);
-        Object[][] data = new Object[bilder.size()][];
-        
-        for(int i = 0; i < data.length; i++){
-            CidsBean bild = bilder.get(i);
+        final Object[][] data = new Object[bilder.size()][];
+
+        for (int i = 0; i < data.length; i++) {
+            final CidsBean bild = bilder.get(i);
             final boolean isSelected = selectedBilder.contains(bild);
             data[i] = new Object[] { isSelected, bild };
         }
-        
-        final DefaultTableModel newModel = new CustomTableModel(data,COLUMN_NAMES);
+
+        final DefaultTableModel newModel = new CustomTableModel(data, COLUMN_NAMES);
         tblStadtbilder.setModel(newModel);
         tblStadtbilder.setRowSelectionInterval(0, 0);
     }
@@ -291,23 +295,23 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
     }
 
     @Override
-    public void valueChanged(ListSelectionEvent e) {
-            int row = tblStadtbilder.getSelectedRow();
+    public void valueChanged(final ListSelectionEvent e) {
+        final int row = tblStadtbilder.getSelectedRow();
         if (row >= 0) {
-            CidsBean stadtbild = (CidsBean) tblStadtbilder.getModel().getValueAt(row, 1);
-                            final String bildnummer = (String)stadtbild.getProperty(
-                        "bildnummer");
-                            previewImage.setBildnummer(bildnummer);
+            final CidsBean stadtbild = (CidsBean)tblStadtbilder.getModel().getValueAt(row, 1);
+            final String bildnummer = (String)stadtbild.getProperty(
+                    "bildnummer");
+            previewImage.setBildnummer(bildnummer);
 
 //                lstBildnummern.ensureIndexIsVisible(lstBildnummern.getSelectedIndex());
-            } else {
-                previewImage.removeImage();
-            }
+        } else {
+            previewImage.removeImage();
+        }
     }
 
     @Override
-    public void tableChanged(TableModelEvent e) {
-               final DefaultTableModel model = (DefaultTableModel)tblStadtbilder.getModel();
+    public void tableChanged(final TableModelEvent e) {
+        final DefaultTableModel model = (DefaultTableModel)tblStadtbilder.getModel();
         final int row = e.getFirstRow();
         final Boolean isSelected = (Boolean)model.getValueAt(row, 0);
         final CidsBean bild = (CidsBean)model.getValueAt(row, 1);
@@ -317,28 +321,44 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
             aggregationRenderer.removeSelectedBildnummerOfSerie(stadtbildserie, bild);
         }
     }
-    
-    private class CustomTableModel extends DefaultTableModel{
 
-        public CustomTableModel(Object[][] data, Object[] columnNames) {
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class CustomTableModel extends DefaultTableModel {
+
+        //~ Instance fields ----------------------------------------------------
+
+        Class[] types = new Class[] { java.lang.Boolean.class, java.lang.Object.class };
+        boolean[] canEdit = new boolean[] { true, false };
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new CustomTableModel object.
+         *
+         * @param  data         DOCUMENT ME!
+         * @param  columnNames  DOCUMENT ME!
+         */
+        public CustomTableModel(final Object[][] data, final Object[] columnNames) {
             super(data, columnNames);
-        }        
-        
-
-            Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.Object.class
-            };
-            boolean[] canEdit = new boolean [] {
-                true, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
+            this.addTableModelListener(Sb_stadtbildserieAggregationRendererInfoPanel.this);
         }
-    
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Class getColumnClass(final int columnIndex) {
+            return types[columnIndex];
+        }
+
+        @Override
+        public boolean isCellEditable(final int rowIndex, final int columnIndex) {
+            return canEdit[columnIndex];
+        }
+    }
 }
