@@ -215,6 +215,7 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         
         final DefaultTableModel newModel = new CustomTableModel(data,COLUMN_NAMES);
         tblStadtbilder.setModel(newModel);
+        tblStadtbilder.setRowSelectionInterval(0, 0);
     }
 
     /**
@@ -270,7 +271,7 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
     @Override
     public boolean isFirstSelected() {
         final int selectedRow = tblStadtbilder.getSelectedRow();
-        return selectedRow == 1;
+        return selectedRow == 0;
     }
 
     @Override
