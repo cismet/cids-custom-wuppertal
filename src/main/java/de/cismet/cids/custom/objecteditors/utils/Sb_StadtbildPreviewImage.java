@@ -544,6 +544,24 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  visible  DOCUMENT ME!
+     */
+    public void setBtnDownloadHighResImageVisible(final boolean visible) {
+        btnDownloadHighResImage.setVisible(visible);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  visible  DOCUMENT ME!
+     */
+    public void setTbtnIsPreviewImageVisible(final boolean visible) {
+        tbtnIsPreviewImage.setVisible(visible);
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
