@@ -2709,9 +2709,13 @@ public class AlkisPointRenderer extends javax.swing.JPanel implements CidsBeanRe
             InputStream streamToReadFrom = null;
             for (final URL url : validURLs) {
                 try {
-                    streamToReadFrom = WebAccessManager.getInstance().doRequest(url);
-                    urlOfAPMap = url.toExternalForm();
-                    break;
+                    if (WebAccessManager.getInstance().checkIfURLaccessible(url)) {
+                        streamToReadFrom = WebAccessManager.getInstance().doRequest(url);
+                        urlOfAPMap = url.toExternalForm();
+                        if (streamToReadFrom != null) {
+                            break;
+                        }
+                    }
                 } catch (MissingArgumentException ex) {
                     log.warn("Could not read AP map from URL '" + url.toExternalForm() + "'. Skipping this url.", ex);
                 } catch (AccessMethodIsNotSupportedException ex) {
