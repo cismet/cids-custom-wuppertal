@@ -15,6 +15,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 import de.cismet.cids.custom.objecteditors.utils.Sb_StadtbildserieProvider;
 
@@ -34,7 +35,7 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             Sb_stadtbildserieAggregationRendererInfoPanel.class);
-    private static final String[] COLUMN_NAMES = new String[] { "Ausgewählt", "Serie" };
+    private static final String[] COLUMN_NAMES = new String[] { "Ausgewählt", "Bildnummer" };
     private static final boolean EDITABLE = false;
 
     //~ Instance fields --------------------------------------------------------
@@ -45,6 +46,9 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
     private Sb_stadtbildserieGridObject gridObject;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnInvertSelection;
+    private javax.swing.JButton btnSelectAll;
+    private javax.swing.JButton btnSelectNone;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane2;
@@ -83,6 +87,9 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblStadtbilder = new javax.swing.JTable();
+        btnSelectAll = new javax.swing.JButton();
+        btnSelectNone = new javax.swing.JButton();
+        btnInvertSelection = new javax.swing.JButton();
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
@@ -137,7 +144,7 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
                 new Object[][] {
                     { null, null }
                 },
-                new String[] { "Ausgewählt", "Serie" }) {
+                new String[] { "Ausgewählt", "Bildnummer" }) {
 
                 Class[] types = new Class[] { java.lang.Boolean.class, java.lang.Object.class };
                 boolean[] canEdit = new boolean[] { true, false };
@@ -159,11 +166,69 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridheight = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         roundedPanel3.add(jScrollPane2, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnSelectAll,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRendererInfoPanel.class,
+                "Sb_stadtbildserieAggregationRendererInfoPanel.btnSelectAll.text")); // NOI18N
+        btnSelectAll.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnSelectAllActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(15, 5, 5, 5);
+        roundedPanel3.add(btnSelectAll, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnSelectNone,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRendererInfoPanel.class,
+                "Sb_stadtbildserieAggregationRendererInfoPanel.btnSelectNone.text")); // NOI18N
+        btnSelectNone.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnSelectNoneActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        roundedPanel3.add(btnSelectNone, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnInvertSelection,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRendererInfoPanel.class,
+                "Sb_stadtbildserieAggregationRendererInfoPanel.btnInvertSelection.text")); // NOI18N
+        btnInvertSelection.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnInvertSelectionActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        roundedPanel3.add(btnInvertSelection, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -183,6 +248,43 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         gridBagConstraints.weighty = 1.0;
         add(roundedPanel2, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnSelectAllActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnSelectAllActionPerformed
+        final TableModel model = tblStadtbilder.getModel();
+        for (int i = 0; i < tblStadtbilder.getModel().getRowCount(); i++) {
+            model.setValueAt(true, i, 0);
+        }
+    }                                                                                //GEN-LAST:event_btnSelectAllActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnSelectNoneActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnSelectNoneActionPerformed
+        final TableModel model = tblStadtbilder.getModel();
+        for (int i = 0; i < tblStadtbilder.getModel().getRowCount(); i++) {
+            model.setValueAt(false, i, 0);
+        }
+    }                                                                                 //GEN-LAST:event_btnSelectNoneActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnInvertSelectionActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnInvertSelectionActionPerformed
+        final TableModel model = tblStadtbilder.getModel();
+        for (int i = 0; i < tblStadtbilder.getModel().getRowCount(); i++) {
+            final Boolean selected = (Boolean)model.getValueAt(i, 0);
+            model.setValueAt(!selected, i, 0);
+        }
+    }                                                                                      //GEN-LAST:event_btnInvertSelectionActionPerformed
 
     /**
      * DOCUMENT ME!
