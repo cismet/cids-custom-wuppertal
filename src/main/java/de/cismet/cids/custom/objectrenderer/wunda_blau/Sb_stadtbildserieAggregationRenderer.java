@@ -92,6 +92,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     private de.cismet.cids.custom.objectrenderer.wunda_blau.Sb_stadtbildserieAggregationRendererInfoPanel
         infoNotAvailable;
     private de.cismet.cids.custom.objectrenderer.wunda_blau.Sb_stadtbildserieAggregationRendererInfoPanel infoPanel;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblAmounts;
     private javax.swing.JLabel lblSwitchToBin;
     private javax.swing.JLabel lblSwitchToSerie;
@@ -147,7 +149,9 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         btnBinRecycle = new javax.swing.JButton();
         lblAmounts = new javax.swing.JLabel();
         pnlLeuchtkasten = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
         grdStadtbildserien = new PictureSelectionJGrid();
+        jScrollPane2 = new javax.swing.JScrollPane();
         grdBin = new PictureSelectionJGrid();
         pnlInfoPanels = new javax.swing.JPanel();
         infoPanel = new de.cismet.cids.custom.objectrenderer.wunda_blau.Sb_stadtbildserieAggregationRendererInfoPanel();
@@ -352,12 +356,26 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         pnlLeuchtkasten.setOpaque(false);
         pnlLeuchtkasten.setLayout(new java.awt.CardLayout());
 
+        jScrollPane1.setBorder(null);
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane1.setOpaque(false);
+
         grdStadtbildserien.setOpaque(false);
-        pnlLeuchtkasten.add(grdStadtbildserien, "SERIEN");
+        jScrollPane1.setViewportView(grdStadtbildserien);
         grdStadtbildserien.getModel().addListDataListener(this);
 
+        pnlLeuchtkasten.add(jScrollPane1, "SERIEN");
+        jScrollPane1.getViewport().setOpaque(false);
+
+        jScrollPane2.setBorder(null);
+        jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane2.setOpaque(false);
+
         grdBin.setOpaque(false);
-        pnlLeuchtkasten.add(grdBin, "BIN");
+        jScrollPane2.setViewportView(grdBin);
+
+        pnlLeuchtkasten.add(jScrollPane2, "BIN");
+        jScrollPane2.getViewport().setOpaque(false);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -392,6 +410,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(pnlInfoPanels, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
 
