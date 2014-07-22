@@ -190,6 +190,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
     public NivellementPunktEditor() {
         this(false);
     }
+
     /**
      * Creates new form NivellementPunktEditor.
      *
@@ -1344,7 +1345,7 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
             "sb",
             "nivellement_punkt",
             6818,
-//            6833,
+            // 6833,
             1024,
             768);
 
@@ -1386,9 +1387,13 @@ public class NivellementPunktEditor extends javax.swing.JPanel implements Dispos
             InputStream streamToReadFrom = null;
             for (final URL url : validURLs) {
                 try {
-                    streamToReadFrom = WebAccessManager.getInstance().doRequest(url);
-                    urlOfDocument = url.toExternalForm();
-                    break;
+                    if (WebAccessManager.getInstance().checkIfURLaccessible(url)) {
+                        streamToReadFrom = WebAccessManager.getInstance().doRequest(url);
+                        urlOfDocument = url.toExternalForm();
+                        if (streamToReadFrom != null) {
+                            break;
+                        }
+                    }
                 } catch (MissingArgumentException ex) {
                     LOG.warn("Could not read document from URL '" + url.toExternalForm() + "'. Skipping this url.", ex);
                 } catch (AccessMethodIsNotSupportedException ex) {

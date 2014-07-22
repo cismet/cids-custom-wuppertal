@@ -57,30 +57,13 @@ public class NivellementPunktReportScriptlet extends JRDefaultScriptlet {
     public Boolean isImageAvailable(final String dgkBlattnummer, final String laufendeNummer) {
         final Collection<URL> validURLs = NivellementPunktEditor.getCorrespondingURLs(dgkBlattnummer, laufendeNummer);
 
-        InputStream streamToReadFrom = null;
         for (final URL url : validURLs) {
-            try {
-                streamToReadFrom = WebAccessManager.getInstance().doRequest(url);
-                break;
-            } catch (MissingArgumentException ex) {
-                LOG.warn("Could not read document from URL '" + url.toExternalForm() + "'. Skipping this url.", ex);
-            } catch (AccessMethodIsNotSupportedException ex) {
-                LOG.warn("Can't access document URL '" + url.toExternalForm()
-                            + "' with default access method. Skipping this url.",
-                    ex);
-            } catch (RequestFailedException ex) {
-                LOG.warn("Requesting document from URL '" + url.toExternalForm() + "' failed. Skipping this url.",
-                    ex);
-            } catch (NoHandlerForURLException ex) {
-                LOG.warn("Can't handle URL '" + url.toExternalForm() + "'. Skipping this url.", ex);
-            } catch (Exception ex) {
-                LOG.warn("An exception occurred while opening URL '" + url.toExternalForm()
-                            + "'. Skipping this url.",
-                    ex);
+            if (WebAccessManager.getInstance().checkIfURLaccessible(url)) {
+                return true;
             }
         }
 
-        return streamToReadFrom != null;
+        return Boolean.FALSE;
     }
 
     /**
@@ -97,8 +80,12 @@ public class NivellementPunktReportScriptlet extends JRDefaultScriptlet {
         InputStream streamToReadFrom = null;
         for (final URL url : validURLs) {
             try {
-                streamToReadFrom = WebAccessManager.getInstance().doRequest(url);
-                break;
+                if (WebAccessManager.getInstance().checkIfURLaccessible(url)) {
+                    streamToReadFrom = WebAccessManager.getInstance().doRequest(url);
+                    if (streamToReadFrom != null) {
+                        break;
+                    }
+                }
             } catch (MissingArgumentException ex) {
                 LOG.warn("Could not read document from URL '" + url.toExternalForm() + "'. Skipping this url.", ex);
             } catch (AccessMethodIsNotSupportedException ex) {
