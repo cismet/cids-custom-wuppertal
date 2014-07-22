@@ -84,7 +84,6 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBin;
     private javax.swing.JButton btnBinRecycle;
-    private javax.swing.JButton btnReport;
     private javax.swing.JButton btnSwitchToBin;
     private javax.swing.JButton btnSwitchToSerie;
     private com.guigarage.jgrid.JGrid grdBin;
@@ -102,8 +101,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     private javax.swing.JLabel lblTitle;
     private javax.swing.JPanel panFooter;
     private javax.swing.JPanel panLeft;
-    private javax.swing.JPanel panPrintButton;
     private javax.swing.JPanel panRight;
+    private javax.swing.JPanel panSlideButton;
     private javax.swing.JPanel panTitle;
     private javax.swing.JPanel panTitleString;
     private javax.swing.JPanel pnlInfoPanels;
@@ -111,6 +110,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     private javax.swing.JPanel pnlSlider;
     private de.cismet.tools.gui.RoundedPanel roundedPanel1;
     private javax.swing.JSlider sldSize;
+    private javax.swing.JToggleButton tbtnSlide;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -148,8 +148,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         panTitle = new javax.swing.JPanel();
         panTitleString = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
-        panPrintButton = new javax.swing.JPanel();
-        btnReport = new javax.swing.JButton();
+        panSlideButton = new javax.swing.JPanel();
+        tbtnSlide = new javax.swing.JToggleButton();
         roundedPanel1 = new de.cismet.tools.gui.RoundedPanel();
         btnBin = new javax.swing.JButton();
         btnBinRecycle = new javax.swing.JButton();
@@ -263,36 +263,31 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
         panTitle.add(panTitleString, java.awt.BorderLayout.CENTER);
 
-        panPrintButton.setOpaque(false);
-        panPrintButton.setLayout(new java.awt.GridBagLayout());
+        panSlideButton.setOpaque(false);
+        panSlideButton.setLayout(new java.awt.GridBagLayout());
 
-        btnReport.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/icons/printer.png"))); // NOI18N
+        tbtnSlide.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/arrow.png")));     // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
-            btnReport,
+            tbtnSlide,
             org.openide.util.NbBundle.getMessage(
                 Sb_stadtbildserieAggregationRenderer.class,
-                "Sb_stadtbildserieAggregationRenderer.btnReport.text"));              // NOI18N
-        btnReport.setToolTipText(org.openide.util.NbBundle.getMessage(
-                Sb_stadtbildserieAggregationRenderer.class,
-                "Sb_stadtbildserieAggregationRenderer.btnReport.toolTipText"));       // NOI18N
-        btnReport.setBorderPainted(false);
-        btnReport.setContentAreaFilled(false);
-        btnReport.setFocusPainted(false);
-        btnReport.addActionListener(new java.awt.event.ActionListener() {
+                "Sb_stadtbildserieAggregationRenderer.tbtnSlide.text"));                                    // NOI18N
+        tbtnSlide.setBorderPainted(false);
+        tbtnSlide.setContentAreaFilled(false);
+        tbtnSlide.setFocusPainted(false);
+        tbtnSlide.setSelectedIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/arrow-180.png"))); // NOI18N
+        tbtnSlide.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnReportActionPerformed(evt);
+                    tbtnSlideActionPerformed(evt);
                 }
             });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        panPrintButton.add(btnReport, gridBagConstraints);
+        panSlideButton.add(tbtnSlide, new java.awt.GridBagConstraints());
 
-        panTitle.add(panPrintButton, java.awt.BorderLayout.EAST);
+        panTitle.add(panSlideButton, java.awt.BorderLayout.EAST);
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
@@ -326,6 +321,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         roundedPanel1.add(btnBin, gridBagConstraints);
+        btnBinRecycle.setVisible(false);
 
         btnBinRecycle.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/bin_recycle.png"))); // NOI18N
@@ -532,7 +528,17 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
+    private void sldSizeStateChanged(final javax.swing.event.ChangeEvent evt) { //GEN-FIRST:event_sldSizeStateChanged
+        grdStadtbildserien.setFixedCellDimension(sldSize.getValue());
+        grdBin.setFixedCellDimension(sldSize.getValue());
+    }                                                                           //GEN-LAST:event_sldSizeStateChanged
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void tbtnSlideActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnSlideActionPerformed
 
         pnlInfoPanels.setVisible(!pnlInfoPanels.isVisible());
         pnlLeuchtkasten.validate();
@@ -571,17 +577,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 //
 //        final Animate animate = new Animate(infoPanel, from, to);
 //        animate.start();
-    } //GEN-LAST:event_btnReportActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void sldSizeStateChanged(final javax.swing.event.ChangeEvent evt) { //GEN-FIRST:event_sldSizeStateChanged
-        grdStadtbildserien.setFixedCellDimension(sldSize.getValue());
-        grdBin.setFixedCellDimension(sldSize.getValue());
-    }                                                                           //GEN-LAST:event_sldSizeStateChanged
+    } //GEN-LAST:event_tbtnSlideActionPerformed
 
     @Override
     public void paint(final Graphics g) {

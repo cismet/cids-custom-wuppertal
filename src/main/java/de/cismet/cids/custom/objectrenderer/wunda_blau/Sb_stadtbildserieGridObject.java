@@ -140,9 +140,9 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
         Image toReturn = toScale;
         if (toReturn instanceof BufferedImage) {
             if ((toScale.getHeight(null) > toScale.getWidth(null)) ^ invert) {
-                toReturn = ((BufferedImage)toReturn).getScaledInstance(dimension, -1, Image.SCALE_REPLICATE);
+                toReturn = ((BufferedImage)toReturn).getScaledInstance(dimension, -1, Image.SCALE_SMOOTH);
             } else {
-                toReturn = ((BufferedImage)toReturn).getScaledInstance(-1, dimension, Image.SCALE_REPLICATE);
+                toReturn = ((BufferedImage)toReturn).getScaledInstance(-1, dimension, Image.SCALE_SMOOTH);
             }
         }
         return toReturn;
