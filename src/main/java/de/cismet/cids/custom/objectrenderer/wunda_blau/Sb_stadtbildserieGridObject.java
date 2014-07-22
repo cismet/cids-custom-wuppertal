@@ -8,6 +8,7 @@
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 
 import java.util.HashSet;
 import java.util.List;
@@ -87,11 +88,12 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
     /**
      * DOCUMENT ME!
      *
-     * @param   componentToShowImage  DOCUMENT ME!
+     * @param   cellDimension  componentToShowImage DOCUMENT ME!
+     * @param   invert         DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public Image getImage(final JComponent componentToShowImage) {
+    public Image getImage(final int cellDimension, final boolean invert) {
         final String bildnummer;
         final List<CidsBean> images = stadtbildserie.getBeanCollectionProperty("stadtbilder_arr");
         if (!images.isEmpty() && (index < images.size())) {
@@ -101,7 +103,7 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
         }
 
         if ((lastShowImage != null) && lastShowImage.bildnummer.equals(bildnummer)) {
-            return lastShowImage.image;
+            return scaleImage(lastShowImage.image, cellDimension, invert);
         }
 
         int priority;
@@ -116,12 +118,34 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
                 priority);
         if (mightBeAnImage instanceof Image) {
             lastShowImage = new LastShownImage(bildnummer, (Image)mightBeAnImage);
-            return (Image)mightBeAnImage;
+            final Image toReturn = (Image)mightBeAnImage;
+            return scaleImage(toReturn, cellDimension, invert);
         } else {
             // mightBeAnImage must be a Future<Image>
             retrieveFutureImage((Future<Image>)mightBeAnImage, bildnummer);
             return Sb_stadtbildUtils.PLACEHOLDER_IMAGE;
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   toScale    DOCUMENT ME!
+     * @param   dimension  DOCUMENT ME!
+     * @param   invert     DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private Image scaleImage(final Image toScale, final int dimension, final boolean invert) {
+        Image toReturn = toScale;
+        if (toReturn instanceof BufferedImage) {
+            if ((toScale.getHeight(null) > toScale.getWidth(null)) ^ invert) {
+                toReturn = ((BufferedImage)toReturn).getScaledInstance(dimension, -1, Image.SCALE_REPLICATE);
+            } else {
+                toReturn = ((BufferedImage)toReturn).getScaledInstance(-1, dimension, Image.SCALE_REPLICATE);
+            }
+        }
+        return toReturn;
     }
 
     /**

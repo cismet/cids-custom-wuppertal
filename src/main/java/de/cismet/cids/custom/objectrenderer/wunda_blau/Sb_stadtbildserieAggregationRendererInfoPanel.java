@@ -179,6 +179,7 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         roundedPanel3.add(jScrollPane2, gridBagConstraints);
 
+        jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         btnSelectNone.setIcon(new javax.swing.ImageIcon(

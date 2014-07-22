@@ -72,6 +72,7 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
         setPreferredSize(new java.awt.Dimension(64, 64));
         setLayout(new java.awt.GridBagLayout());
 
+        lblAmount.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         org.openide.awt.Mnemonics.setLocalizedText(
             lblAmount,
             org.openide.util.NbBundle.getMessage(
@@ -83,6 +84,7 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
         gridBagConstraints.insets = new java.awt.Insets(1, 3, 3, 3);
         add(lblAmount, gridBagConstraints);
 
+        lblIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         org.openide.awt.Mnemonics.setLocalizedText(
             lblIcon,
             org.openide.util.NbBundle.getMessage(
@@ -104,7 +106,7 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
         image = null;
         paintMarker = false;
         if (value instanceof Sb_stadtbildserieGridObject) {
-            image = ((Sb_stadtbildserieGridObject)value).getImage(lblIcon);
+            image = ((Sb_stadtbildserieGridObject)value).getImage(grid.getFixedCellDimension(), false);
             markerFraction = ((Sb_stadtbildserieGridObject)value).getFraction();
             paintMarker = ((Sb_stadtbildserieGridObject)value).isMarker();
             final int amountImages = ((Sb_stadtbildserieGridObject)value).getAmountImages();
