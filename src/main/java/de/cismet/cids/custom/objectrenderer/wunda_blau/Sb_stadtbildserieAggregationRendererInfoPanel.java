@@ -49,8 +49,10 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
     private javax.swing.JButton btnInvertSelection;
     private javax.swing.JButton btnSelectAll;
     private javax.swing.JButton btnSelectNone;
+    private javax.swing.Box.Filler filler1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private de.cismet.cids.custom.objecteditors.utils.Sb_StadtbildPreviewImage previewImage;
     private de.cismet.tools.gui.RoundedPanel roundedPanel2;
@@ -87,9 +89,13 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblStadtbilder = new javax.swing.JTable();
-        btnSelectAll = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
         btnSelectNone = new javax.swing.JButton();
+        btnSelectAll = new javax.swing.JButton();
         btnInvertSelection = new javax.swing.JButton();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
@@ -173,11 +179,53 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         roundedPanel3.add(jScrollPane2, gridBagConstraints);
 
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        btnSelectNone.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/table.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnSelectNone,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRendererInfoPanel.class,
+                "Sb_stadtbildserieAggregationRendererInfoPanel.btnSelectNone.text"));                   // NOI18N
+        btnSelectNone.setToolTipText(org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRendererInfoPanel.class,
+                "Sb_stadtbildserieAggregationRendererInfoPanel.btnSelectNone.toolTipText"));            // NOI18N
+        btnSelectNone.setBorderPainted(false);
+        btnSelectNone.setContentAreaFilled(false);
+        btnSelectNone.setFocusPainted(false);
+        btnSelectNone.setMaximumSize(new java.awt.Dimension(26, 26));
+        btnSelectNone.setMinimumSize(new java.awt.Dimension(26, 26));
+        btnSelectNone.setPreferredSize(new java.awt.Dimension(26, 26));
+        btnSelectNone.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnSelectNoneActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel1.add(btnSelectNone, gridBagConstraints);
+
+        btnSelectAll.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/table-select-all.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             btnSelectAll,
             org.openide.util.NbBundle.getMessage(
                 Sb_stadtbildserieAggregationRendererInfoPanel.class,
-                "Sb_stadtbildserieAggregationRendererInfoPanel.btnSelectAll.text")); // NOI18N
+                "Sb_stadtbildserieAggregationRendererInfoPanel.btnSelectAll.text"));                               // NOI18N
+        btnSelectAll.setToolTipText(org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRendererInfoPanel.class,
+                "Sb_stadtbildserieAggregationRendererInfoPanel.btnSelectAll.toolTipText"));                        // NOI18N
+        btnSelectAll.setBorderPainted(false);
+        btnSelectAll.setContentAreaFilled(false);
+        btnSelectAll.setFocusPainted(false);
+        btnSelectAll.setMaximumSize(new java.awt.Dimension(26, 26));
+        btnSelectAll.setMinimumSize(new java.awt.Dimension(26, 26));
+        btnSelectAll.setPreferredSize(new java.awt.Dimension(26, 26));
         btnSelectAll.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -187,35 +235,26 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(15, 5, 5, 5);
-        roundedPanel3.add(btnSelectAll, gridBagConstraints);
+        jPanel1.add(btnSelectAll, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            btnSelectNone,
-            org.openide.util.NbBundle.getMessage(
-                Sb_stadtbildserieAggregationRendererInfoPanel.class,
-                "Sb_stadtbildserieAggregationRendererInfoPanel.btnSelectNone.text")); // NOI18N
-        btnSelectNone.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnSelectNoneActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        roundedPanel3.add(btnSelectNone, gridBagConstraints);
-
+        btnInvertSelection.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/table_invert.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             btnInvertSelection,
             org.openide.util.NbBundle.getMessage(
                 Sb_stadtbildserieAggregationRendererInfoPanel.class,
-                "Sb_stadtbildserieAggregationRendererInfoPanel.btnInvertSelection.text")); // NOI18N
+                "Sb_stadtbildserieAggregationRendererInfoPanel.btnInvertSelection.text"));                     // NOI18N
+        btnInvertSelection.setToolTipText(org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRendererInfoPanel.class,
+                "Sb_stadtbildserieAggregationRendererInfoPanel.btnInvertSelection.toolTipText"));              // NOI18N
+        btnInvertSelection.setBorderPainted(false);
+        btnInvertSelection.setContentAreaFilled(false);
+        btnInvertSelection.setFocusPainted(false);
+        btnInvertSelection.setMaximumSize(new java.awt.Dimension(26, 26));
+        btnInvertSelection.setMinimumSize(new java.awt.Dimension(26, 26));
+        btnInvertSelection.setPreferredSize(new java.awt.Dimension(26, 26));
         btnInvertSelection.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -224,11 +263,23 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel1.add(btnInvertSelection, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel1.add(filler1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        roundedPanel3.add(btnInvertSelection, gridBagConstraints);
+        roundedPanel3.add(jPanel1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -452,6 +503,9 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
      */
     public void setEnableTable(final boolean enable) {
         tblStadtbilder.setEnabled(enable);
+        btnInvertSelection.setEnabled(enable);
+        btnSelectAll.setEnabled(enable);
+        btnSelectNone.setEnabled(enable);
     }
 
     //~ Inner Classes ----------------------------------------------------------
