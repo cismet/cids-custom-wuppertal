@@ -475,8 +475,13 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
      * DOCUMENT ME!
      */
     public void defineButtonStatus() {
-        btnPrevImg.setEnabled(!stadtbildserieProvider.isFirstSelected());
-        btnNextImg.setEnabled(!stadtbildserieProvider.isLastSelected());
+        if (stadtbildserieProvider != null) {
+            btnPrevImg.setEnabled(!stadtbildserieProvider.isFirstSelected());
+            btnNextImg.setEnabled(!stadtbildserieProvider.isLastSelected());
+        } else {
+            btnPrevImg.setEnabled(false);
+            btnNextImg.setEnabled(false);
+        }
     }
 
     /**
@@ -496,8 +501,18 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
      *
      * @param  tooltip  DOCUMENT ME!
      */
-    private void indicateNotAvailable(final String tooltip) {
-        lblPicture.setIcon(new ImageIcon(Sb_stadtbildUtils.ERROR_IMAGE));
+    public void indicateNotAvailable(final String tooltip) {
+        indicateNotAvailable(tooltip, new ImageIcon(Sb_stadtbildUtils.ERROR_IMAGE));
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  tooltip  DOCUMENT ME!
+     * @param  icon     DOCUMENT ME!
+     */
+    public void indicateNotAvailable(final String tooltip, final Icon icon) {
+        lblPicture.setIcon(icon);
         lblPicture.setText("Kein Vorschaubild vorhanden.");
         lblPicture.setToolTipText(tooltip);
         showWait(false);

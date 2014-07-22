@@ -135,9 +135,6 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
 
         tblStadtbilder.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][] {
-                    { null, null },
-                    { null, null },
-                    { null, null },
                     { null, null }
                 },
                 new String[] { "Ausgewählt", "Serie" }) {
@@ -337,6 +334,22 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
     @Override
     public void previewImageChanged() {
         // do nothing
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void previewImageNotAvailable() {
+        previewImage.indicateNotAvailable("", null);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  enable  DOCUMENT ME!
+     */
+    public void setEnableTable(final boolean enable) {
+        tblStadtbilder.setEnabled(enable);
     }
 
     //~ Inner Classes ----------------------------------------------------------

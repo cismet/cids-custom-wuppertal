@@ -14,7 +14,6 @@ import com.guigarage.jgrid.JGrid;
 import org.openide.util.Exceptions;
 
 import java.awt.CardLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -53,8 +52,6 @@ import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 
 /**
  * DOCUMENT ME!
@@ -92,6 +89,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     private javax.swing.JButton btnSwitchToSerie;
     private com.guigarage.jgrid.JGrid grdBin;
     private com.guigarage.jgrid.JGrid grdStadtbildserien;
+    private de.cismet.cids.custom.objectrenderer.wunda_blau.Sb_stadtbildserieAggregationRendererInfoPanel
+        infoNotAvailable;
     private de.cismet.cids.custom.objectrenderer.wunda_blau.Sb_stadtbildserieAggregationRendererInfoPanel infoPanel;
     private javax.swing.JLabel lblAmounts;
     private javax.swing.JLabel lblSwitchToBin;
@@ -103,6 +102,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     private javax.swing.JPanel panRight;
     private javax.swing.JPanel panTitle;
     private javax.swing.JPanel panTitleString;
+    private javax.swing.JPanel pnlInfoPanels;
     private javax.swing.JPanel pnlLeuchtkasten;
     private de.cismet.tools.gui.RoundedPanel roundedPanel1;
     // End of variables declaration//GEN-END:variables
@@ -114,6 +114,9 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
      */
     public Sb_stadtbildserieAggregationRenderer() {
         initComponents();
+        infoNotAvailable.previewImageNotAvailable();
+        infoNotAvailable.setEnableTable(false);
+        ((PictureSelectionJGrid)grdStadtbildserien).updateInfoPanel();
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -146,30 +149,43 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         pnlLeuchtkasten = new javax.swing.JPanel();
         grdStadtbildserien = new PictureSelectionJGrid();
         grdBin = new PictureSelectionJGrid();
+        pnlInfoPanels = new javax.swing.JPanel();
         infoPanel = new de.cismet.cids.custom.objectrenderer.wunda_blau.Sb_stadtbildserieAggregationRendererInfoPanel();
+        infoNotAvailable =
+            new de.cismet.cids.custom.objectrenderer.wunda_blau.Sb_stadtbildserieAggregationRendererInfoPanel();
 
         panFooter.setOpaque(false);
         panFooter.setLayout(new java.awt.GridBagLayout());
 
         panLeft.setOpaque(false);
 
-        lblSwitchToSerie.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
+        lblSwitchToSerie.setFont(new java.awt.Font("DejaVu Sans", 1, 14));      // NOI18N
         lblSwitchToSerie.setForeground(new java.awt.Color(255, 255, 255));
-        org.openide.awt.Mnemonics.setLocalizedText(lblSwitchToSerie, org.openide.util.NbBundle.getMessage(Sb_stadtbildserieAggregationRenderer.class, "Sb_stadtbildserieAggregationRenderer.lblSwitchToSerie.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblSwitchToSerie,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.lblSwitchToSerie.text")); // NOI18N
         lblSwitchToSerie.setEnabled(false);
         panLeft.add(lblSwitchToSerie);
 
         btnSwitchToSerie.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/arrow-left.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(btnSwitchToSerie, org.openide.util.NbBundle.getMessage(Sb_stadtbildserieAggregationRenderer.class, "Sb_stadtbildserieAggregationRenderer.btnSwitchToSerie.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnSwitchToSerie,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.btnSwitchToSerie.text"));                             // NOI18N
         btnSwitchToSerie.setBorderPainted(false);
         btnSwitchToSerie.setContentAreaFilled(false);
         btnSwitchToSerie.setEnabled(false);
         btnSwitchToSerie.setFocusPainted(false);
         btnSwitchToSerie.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSwitchToSerieActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnSwitchToSerieActionPerformed(evt);
+                }
+            });
         panLeft.add(btnSwitchToSerie);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -180,20 +196,30 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         panRight.setOpaque(false);
 
         btnSwitchToBin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/arrow-right.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(btnSwitchToBin, org.openide.util.NbBundle.getMessage(Sb_stadtbildserieAggregationRenderer.class, "Sb_stadtbildserieAggregationRenderer.btnSwitchToBin.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnSwitchToBin,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.btnSwitchToBin.text"));                              // NOI18N
         btnSwitchToBin.setBorderPainted(false);
         btnSwitchToBin.setContentAreaFilled(false);
         btnSwitchToBin.setFocusPainted(false);
         btnSwitchToBin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSwitchToBinActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnSwitchToBinActionPerformed(evt);
+                }
+            });
         panRight.add(btnSwitchToBin);
 
-        lblSwitchToBin.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
+        lblSwitchToBin.setFont(new java.awt.Font("DejaVu Sans", 1, 14));      // NOI18N
         lblSwitchToBin.setForeground(new java.awt.Color(255, 255, 255));
-        org.openide.awt.Mnemonics.setLocalizedText(lblSwitchToBin, org.openide.util.NbBundle.getMessage(Sb_stadtbildserieAggregationRenderer.class, "Sb_stadtbildserieAggregationRenderer.lblSwitchToBin.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblSwitchToBin,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.lblSwitchToBin.text")); // NOI18N
         panRight.add(lblSwitchToBin);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -207,9 +233,13 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         panTitleString.setOpaque(false);
         panTitleString.setLayout(new java.awt.GridBagLayout());
 
-        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18));           // NOI18N
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
-        org.openide.awt.Mnemonics.setLocalizedText(lblTitle, org.openide.util.NbBundle.getMessage(Sb_stadtbildserieAggregationRenderer.class, "Sb_stadtbildserieAggregationRenderer.lblTitle.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblTitle,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.lblTitle.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -222,17 +252,26 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         panPrintButton.setOpaque(false);
         panPrintButton.setLayout(new java.awt.GridBagLayout());
 
-        btnReport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/icons/printer.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(btnReport, org.openide.util.NbBundle.getMessage(Sb_stadtbildserieAggregationRenderer.class, "Sb_stadtbildserieAggregationRenderer.btnReport.text")); // NOI18N
-        btnReport.setToolTipText(org.openide.util.NbBundle.getMessage(Sb_stadtbildserieAggregationRenderer.class, "Sb_stadtbildserieAggregationRenderer.btnReport.toolTipText")); // NOI18N
+        btnReport.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/icons/printer.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnReport,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.btnReport.text"));              // NOI18N
+        btnReport.setToolTipText(org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.btnReport.toolTipText"));       // NOI18N
         btnReport.setBorderPainted(false);
         btnReport.setContentAreaFilled(false);
         btnReport.setFocusPainted(false);
         btnReport.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnReportActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnReportActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -248,40 +287,62 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         roundedPanel1.setPreferredSize(new java.awt.Dimension(300, 200));
         roundedPanel1.setLayout(new java.awt.GridBagLayout());
 
-        btnBin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/bin_empty.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(btnBin, org.openide.util.NbBundle.getMessage(Sb_stadtbildserieAggregationRenderer.class, "Sb_stadtbildserieAggregationRenderer.btnBin.text")); // NOI18N
-        btnBin.setToolTipText(org.openide.util.NbBundle.getMessage(Sb_stadtbildserieAggregationRenderer.class, "Sb_stadtbildserieAggregationRenderer.btnBin.toolTipText")); // NOI18N
+        btnBin.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/bin_empty.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnBin,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.btnBin.text"));                                       // NOI18N
+        btnBin.setToolTipText(org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.btnBin.toolTipText"));                                // NOI18N
         btnBin.setBorderPainted(false);
         btnBin.setContentAreaFilled(false);
         btnBin.setFocusPainted(false);
         btnBin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBinActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnBinActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         roundedPanel1.add(btnBin, gridBagConstraints);
 
-        btnBinRecycle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/bin_recycle.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(btnBinRecycle, org.openide.util.NbBundle.getMessage(Sb_stadtbildserieAggregationRenderer.class, "Sb_stadtbildserieAggregationRenderer.btnBinRecycle.text")); // NOI18N
-        btnBinRecycle.setToolTipText(org.openide.util.NbBundle.getMessage(Sb_stadtbildserieAggregationRenderer.class, "Sb_stadtbildserieAggregationRenderer.btnBinRecycle.toolTipText")); // NOI18N
+        btnBinRecycle.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/bin_recycle.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnBinRecycle,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.btnBinRecycle.text"));                                  // NOI18N
+        btnBinRecycle.setToolTipText(org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.btnBinRecycle.toolTipText"));                           // NOI18N
         btnBinRecycle.setBorderPainted(false);
         btnBinRecycle.setContentAreaFilled(false);
         btnBinRecycle.setFocusPainted(false);
         btnBinRecycle.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBinRecycleActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnBinRecycleActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         roundedPanel1.add(btnBinRecycle, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblAmounts, org.openide.util.NbBundle.getMessage(Sb_stadtbildserieAggregationRenderer.class, "Sb_stadtbildserieAggregationRenderer.lblAmounts.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblAmounts,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.lblAmounts.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -315,30 +376,40 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(roundedPanel1, gridBagConstraints);
 
+        pnlInfoPanels.setOpaque(false);
+        pnlInfoPanels.setLayout(new java.awt.CardLayout());
+
         infoPanel.setMinimumSize(new java.awt.Dimension(350, 0));
         infoPanel.setPreferredSize(new java.awt.Dimension(350, 0));
+        pnlInfoPanels.add(infoPanel, "INFO");
+
+        infoNotAvailable.setMinimumSize(new java.awt.Dimension(350, 0));
+        infoNotAvailable.setPreferredSize(new java.awt.Dimension(350, 0));
+        pnlInfoPanels.add(infoNotAvailable, "NO_INFO");
+
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        add(infoPanel, gridBagConstraints);
-    }// </editor-fold>//GEN-END:initComponents
+        add(pnlInfoPanels, gridBagConstraints);
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBinActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBinActionPerformed
+    private void btnBinActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBinActionPerformed
         moveSelectedStadtbildserienToOtherGrid(grdStadtbildserien, grdBin);
-    }//GEN-LAST:event_btnBinActionPerformed
+    }                                                                          //GEN-LAST:event_btnBinActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnSwitchToSerieActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSwitchToSerieActionPerformed
+    private void btnSwitchToSerieActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnSwitchToSerieActionPerformed
         final CardLayout cardLayout = (CardLayout)pnlLeuchtkasten.getLayout();
         cardLayout.show(pnlLeuchtkasten, "SERIEN");
         btnSwitchToBin.setEnabled(true);
@@ -349,14 +420,14 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
         btnBin.setVisible(true);
         btnBinRecycle.setVisible(false);
-    }//GEN-LAST:event_btnSwitchToSerieActionPerformed
+    } //GEN-LAST:event_btnSwitchToSerieActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnSwitchToBinActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSwitchToBinActionPerformed
+    private void btnSwitchToBinActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnSwitchToBinActionPerformed
         final CardLayout cardLayout = (CardLayout)pnlLeuchtkasten.getLayout();
         cardLayout.show(pnlLeuchtkasten, "BIN");
         btnSwitchToBin.setEnabled(false);
@@ -367,28 +438,28 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
         btnBin.setVisible(false);
         btnBinRecycle.setVisible(true);
-    }//GEN-LAST:event_btnSwitchToBinActionPerformed
+    } //GEN-LAST:event_btnSwitchToBinActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBinRecycleActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBinRecycleActionPerformed
+    private void btnBinRecycleActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBinRecycleActionPerformed
         moveSelectedStadtbildserienToOtherGrid(grdBin, grdStadtbildserien);
-    }//GEN-LAST:event_btnBinRecycleActionPerformed
+    }                                                                                 //GEN-LAST:event_btnBinRecycleActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
-        
-        infoPanel.setVisible(!infoPanel.isVisible());
+    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
+
+        pnlInfoPanels.setVisible(!pnlInfoPanels.isVisible());
         pnlLeuchtkasten.validate();
 //        this.revalidate();
-        
+
 //        GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
 //        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
 //                gridBagConstraints.gridx = 0;
@@ -396,18 +467,18 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 //        gridBagConstraints.weightx = 0.0;
 //        gridBagConstraints.weighty = 1.0;
 //        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-//        
+//
 //        roundedPanel1.setMinimumSize(new Dimension(Math.round(this.getSize().width), 0));
 //        roundedPanel1.setPreferredSize(new Dimension(Math.round(this.getSize().width), 0));
-//        
+//
 //        remove(roundedPanel1);
 //        add(roundedPanel1, gridBagConstraints);
 //        gridBagConstraints = ((GridBagLayout)this.getLayout()).getConstraints(infoPanel);
 //        remove(infoPanel);
 //        add(infoPanel,gridBagConstraints);
 //        this.revalidate();
-        
-//        
+
+//
 //        final Dimension size = infoPanel.getSize();
 //
 //        final Point location = infoPanel.getLocation();
@@ -422,7 +493,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 //
 //        final Animate animate = new Animate(infoPanel, from, to);
 //        animate.start();
-    }//GEN-LAST:event_btnReportActionPerformed
+    } //GEN-LAST:event_btnReportActionPerformed
 
     @Override
     public void paint(final Graphics g) {
@@ -481,6 +552,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
     @Override
     public void setTitle(final String title) {
+        lblTitle.setText("Leuchtkasten");
     }
 
     /**
@@ -701,12 +773,14 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                 indexes = new int[1];
                 indexes[0] = iMin;
             }
+            final CardLayout cardLayout = (CardLayout)pnlInfoPanels.getLayout();
             if (indexes.length == 1) {
+                cardLayout.show(pnlInfoPanels, "INFO");
                 final Sb_stadtbildserieGridObject gridObject = (Sb_stadtbildserieGridObject)PictureSelectionJGrid.this
                             .getModel().getElementAt(indexes[0]);
                 infoPanel.setGridObject(gridObject);
             } else {
-                // TODO
+                cardLayout.show(pnlInfoPanels, "NO_INFO");
             }
         }
     }
