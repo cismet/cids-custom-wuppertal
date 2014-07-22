@@ -11,28 +11,18 @@ import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import com.guigarage.jgrid.JGrid;
 
-import org.jdesktop.jxlayer.JXLayer;
-import org.jdesktop.jxlayer.plaf.effect.BufferedImageOpEffect;
-import org.jdesktop.jxlayer.plaf.ext.LockableUI;
-
 import org.openide.util.Exceptions;
 
 import java.awt.CardLayout;
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImageOp;
-import java.awt.image.ConvolveOp;
-import java.awt.image.Kernel;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -47,7 +37,6 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
@@ -92,8 +81,6 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     //~ Instance fields --------------------------------------------------------
 
     private Collection<CidsBean> cidsBeans = null;
-    private JXLayer layer;
-    private LockableUI lockableUIInfoPanel;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBin;
@@ -125,7 +112,6 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
      */
     public Sb_stadtbildserieAggregationRenderer() {
         initComponents();
-        configureLockableInfoPanel();
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -530,43 +516,6 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     }
 
     /**
-     * removes the info panel from this panel, wraps it in a lockable JXLayer and adds that layer again to the same
-     * location on this panel.
-     */
-    private void configureLockableInfoPanel() {
-        final GridBagConstraints gbc = ((GridBagLayout)this.getLayout()).getConstraints(infoPanel);
-        remove(infoPanel);
-        layer = new JXLayer(infoPanel);
-        layer.setOpaque(false);
-        add(layer, gbc);
-
-        createNewLockableUI();
-    }
-
-    /**
-     * DOCUMENT ME!
-     */
-    private void createNewLockableUI() {
-        lockableUIInfoPanel = new LockableUI();
-
-        final float[] blurKernel = { 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f, 1 / 9f };
-        final BufferedImageOp blur = new ConvolveOp(new Kernel(3, 3, blurKernel));
-
-        // wrap it with the jxlayer's BufferedImageOpEffect
-        final BufferedImageOpEffect effect = new BufferedImageOpEffect(blur);
-        // set it as the locked effect
-        lockableUIInfoPanel.setLockedEffects(effect);
-
-        lockableUIInfoPanel.setLockedCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-
-        // lock the layer
-        lockableUIInfoPanel.setEnabled(true);
-        lockableUIInfoPanel.setLocked(true);
-
-        layer.setUI(lockableUIInfoPanel);
-    }
-
-    /**
      * DOCUMENT ME!
      *
      * @param  args  DOCUMENT ME!
@@ -788,12 +737,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                 final Sb_stadtbildserieGridObject gridObject = (Sb_stadtbildserieGridObject)PictureSelectionJGrid.this
                             .getModel().getElementAt(indexes[0]);
                 infoPanel.setGridObject(gridObject);
-                lockableUIInfoPanel.setLocked(false);
-                lockableUIInfoPanel.setEnabled(false);
             } else {
-                // a new lockable UI has to be created every time, as otherwise rendering errors will
-                // occur
-                createNewLockableUI();
+                // TODO
             }
         }
     }
