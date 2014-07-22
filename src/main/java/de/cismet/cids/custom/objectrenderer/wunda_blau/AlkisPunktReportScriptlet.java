@@ -61,30 +61,13 @@ public class AlkisPunktReportScriptlet extends JRDefaultScriptlet {
     public Boolean isImageAvailable(final String pointcode) {
         final Collection<URL> validURLs = AlkisPointRenderer.getCorrespondingURLs(pointcode);
 
-        InputStream streamToReadFrom = null;
         for (final URL url : validURLs) {
-            try {
-                streamToReadFrom = WebAccessManager.getInstance().doRequest(url);
-                break;
-            } catch (MissingArgumentException ex) {
-                LOG.warn("Could not read ap map from URL '" + url.toExternalForm() + "'. Skipping this url.", ex);
-            } catch (AccessMethodIsNotSupportedException ex) {
-                LOG.warn("Can't access ap map URL '" + url.toExternalForm()
-                            + "' with default access method. Skipping this url.",
-                    ex);
-            } catch (RequestFailedException ex) {
-                LOG.warn("Requesting ap map from URL '" + url.toExternalForm() + "' failed. Skipping this url.",
-                    ex);
-            } catch (NoHandlerForURLException ex) {
-                LOG.warn("Can't handle URL '" + url.toExternalForm() + "'. Skipping this url.", ex);
-            } catch (Exception ex) {
-                LOG.warn("An exception occurred while opening URL '" + url.toExternalForm()
-                            + "'. Skipping this url.",
-                    ex);
+            if (WebAccessManager.getInstance().checkIfURLaccessible(url)) {
+                return true;
             }
         }
 
-        return streamToReadFrom != null;
+        return Boolean.FALSE;
     }
 
     /**
@@ -101,9 +84,13 @@ public class AlkisPunktReportScriptlet extends JRDefaultScriptlet {
         InputStream streamToReadFrom = null;
         for (final URL url : validURLs) {
             try {
-                streamToReadFrom = WebAccessManager.getInstance().doRequest(url);
-                suffix = url.toExternalForm().substring(url.toExternalForm().lastIndexOf('.'));
-                break;
+                if (WebAccessManager.getInstance().checkIfURLaccessible(url)) {
+                    streamToReadFrom = WebAccessManager.getInstance().doRequest(url);
+                    suffix = url.toExternalForm().substring(url.toExternalForm().lastIndexOf('.'));
+                    if (streamToReadFrom != null) {
+                        break;
+                    }
+                }
             } catch (MissingArgumentException ex) {
                 LOG.warn("Could not read ap map from URL '" + url.toExternalForm() + "'. Skipping this url.", ex);
             } catch (AccessMethodIsNotSupportedException ex) {
