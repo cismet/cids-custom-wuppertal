@@ -784,7 +784,12 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                             g = createUnionGeom(selectedGeomWrappers, false);
                         }
                     } else {
-                        g = totalMapWrapper.getGeometry();
+                        int buffer = 0;
+                        try {
+                            buffer = Integer.parseInt(tfGeomBuffer.getText());
+                        } catch (Exception e) {
+                        }
+                        g = totalMapWrapper.getGeometry().buffer(buffer);
                     }
                     final XBoundingBox boxToGoto = new XBoundingBox(g.getEnvelope(),
                             AlkisConstants.COMMONS.SRS_SERVICE,
