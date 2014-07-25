@@ -350,7 +350,7 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
             rendererAndInternalUsage = !EDITABLE
                         && internalUsage;
             previewImage.setStadtbildserieProvider(this);
-            refillTable();
+            refillTable(gridObject.getStadtbildUnderMarker());
         }
     }
 
@@ -360,27 +360,58 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
      * @param  gridObject  DOCUMENT ME!
      */
     public void setGridObject(final Sb_stadtbildserieGridObject gridObject) {
-        this.gridObject = gridObject;
-        setCidsBean(this.gridObject.getCidsBean());
+        if (this.gridObject == gridObject) {
+            selectStadtbildInTable(gridObject.getStadtbildUnderMarker());
+        } else {
+            this.gridObject = gridObject;
+            setCidsBean(this.gridObject.getCidsBean());
+        }
     }
 
     /**
      * DOCUMENT ME!
+     *
+     * @param  stadtbildToSelect  DOCUMENT ME!
      */
-    private void refillTable() {
+    private void refillTable(final CidsBean stadtbildToSelect) {
         final List<CidsBean> bilder = stadtbildserie.getBeanCollectionProperty("stadtbilder_arr");
         final Collection<CidsBean> selectedBilder = gridObject.getSelectedBildnummernOfSerie();
         final Object[][] data = new Object[bilder.size()][];
 
+        int stadtbildToSelectIndex = 0;
+
         for (int i = 0; i < data.length; i++) {
             final CidsBean bild = bilder.get(i);
+            if (stadtbildToSelect.equals(bild)) {
+                stadtbildToSelectIndex = i;
+            }
+
             final boolean isSelected = selectedBilder.contains(bild);
             data[i] = new Object[] { isSelected, bild };
         }
 
         final DefaultTableModel newModel = new CustomTableModel(data, COLUMN_NAMES);
         tblStadtbilder.setModel(newModel);
-        tblStadtbilder.setRowSelectionInterval(0, 0);
+        tblStadtbilder.setRowSelectionInterval(stadtbildToSelectIndex, stadtbildToSelectIndex);
+    }
+
+    /**
+     * Selects the stadtbild in table. Due to the change in the selection, the stadtbild will be shown in the preview
+     * image panel.
+     *
+     * @param  stadtbildToSelect  DOCUMENT ME!
+     */
+    private void selectStadtbildInTable(final CidsBean stadtbildToSelect) {
+        int stadtbildToSelectIndex = 0;
+        final List data = ((DefaultTableModel)tblStadtbilder.getModel()).getDataVector();
+        for (int i = 0; i < data.size(); i++) {
+            final CidsBean bild = (CidsBean)((List)data.get(i)).get(1);
+            if (stadtbildToSelect.equals(bild)) {
+                stadtbildToSelectIndex = i;
+                break;
+            }
+        }
+        tblStadtbilder.setRowSelectionInterval(stadtbildToSelectIndex, stadtbildToSelectIndex);
     }
 
     /**

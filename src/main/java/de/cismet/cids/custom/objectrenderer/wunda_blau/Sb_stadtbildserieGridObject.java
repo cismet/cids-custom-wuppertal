@@ -128,7 +128,21 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
     }
 
     /**
-     * DOCUMENT ME!
+     * Returns the statdbild under the marker, if such an image does not exist the vorschaubild will be returned.
+     *
+     * @return  DOCUMENT ME!
+     */
+    public CidsBean getStadtbildUnderMarker() {
+        CidsBean stadtbild;
+        final List<CidsBean> images = stadtbildserie.getBeanCollectionProperty("stadtbilder_arr");
+        if (!images.isEmpty() && (index < images.size())) {
+            stadtbild = images.get(index);
+        } else {
+            stadtbild = (CidsBean)stadtbildserie.getProperty("vorschaubild");
+        }
+        return stadtbild;
+    }
+
      *
      * @param   toScale    DOCUMENT ME!
      * @param   dimension  DOCUMENT ME!
