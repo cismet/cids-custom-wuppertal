@@ -10,6 +10,7 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 import com.guigarage.jgrid.JGrid;
 import com.guigarage.jgrid.renderer.GridCellRenderer;
 
+import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
@@ -19,6 +20,7 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 /**
  * DOCUMENT ME!
@@ -42,6 +44,8 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
     private float markerFraction;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.Box.Filler filler1;
+    private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JLabel lblAmount;
     private javax.swing.JLabel lblIcon;
     // End of variables declaration//GEN-END:variables
@@ -66,23 +70,32 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        lblAmount = new javax.swing.JLabel();
+        jLayeredPane1 = new javax.swing.JLayeredPane();
         lblIcon = new javax.swing.JLabel();
+        lblAmount = new JLabel() {
+
+                @Override
+                protected void paintComponent(final Graphics g) {
+                    final Graphics2D g2d = (Graphics2D)g.create();
+                    g2d.setRenderingHint(
+                        RenderingHints.KEY_ANTIALIASING,
+                        RenderingHints.VALUE_ANTIALIAS_ON);
+                    g2d.setComposite(AlphaComposite.getInstance(
+                            AlphaComposite.SRC_OVER,
+                            0.75f));
+                    g2d.setColor(getBackground());
+                    g2d.fillRect(0, 0, getWidth(), getHeight());
+                    super.paintComponent(g);
+                }
+            };
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
 
         setPreferredSize(new java.awt.Dimension(64, 64));
         setLayout(new java.awt.GridBagLayout());
 
-        lblAmount.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblAmount,
-            org.openide.util.NbBundle.getMessage(
-                Sb_stadtbildserieGridRenderer.class,
-                "Sb_stadtbildserieGridRenderer.lblAmount.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(1, 3, 3, 3);
-        add(lblAmount, gridBagConstraints);
+        jLayeredPane1.setLayout(new java.awt.GridBagLayout());
 
         lblIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -91,11 +104,46 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
                 Sb_stadtbildserieGridRenderer.class,
                 "Sb_stadtbildserieGridRenderer.lblIcon.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jLayeredPane1.add(lblIcon, gridBagConstraints);
+        jLayeredPane1.setLayer(lblIcon, 0);
+
+        lblAmount.setBackground(new java.awt.Color(190, 187, 182));
+        lblAmount.setForeground(new java.awt.Color(0, 0, 0));
+        lblAmount.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblAmount,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieGridRenderer.class,
+                "Sb_stadtbildserieGridRenderer.lblAmount.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 3;
+        gridBagConstraints.ipady = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
+        jLayeredPane1.add(lblAmount, gridBagConstraints);
+        jLayeredPane1.setLayer(lblAmount, 1);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.weighty = 1.0;
+        jLayeredPane1.add(filler1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        add(lblIcon, gridBagConstraints);
-    }                                                           // </editor-fold>//GEN-END:initComponents
+        add(jLayeredPane1, gridBagConstraints);
+    } // </editor-fold>//GEN-END:initComponents
 
     @Override
     public Component getGridCellRendererComponent(final JGrid grid,
