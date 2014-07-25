@@ -531,7 +531,9 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
      */
     private void sldSizeStateChanged(final javax.swing.event.ChangeEvent evt) { //GEN-FIRST:event_sldSizeStateChanged
         grdStadtbildserien.setFixedCellDimension(sldSize.getValue());
+        grdStadtbildserien.ensureIndexIsVisible(grdStadtbildserien.getSelectedIndex());
         grdBin.setFixedCellDimension(sldSize.getValue());
+        grdBin.ensureIndexIsVisible(grdBin.getSelectedIndex());
     }                                                                           //GEN-LAST:event_sldSizeStateChanged
 
     /**
@@ -542,8 +544,6 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     private void tbtnSlideActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnSlideActionPerformed
 
         pnlInfoPanels.setVisible(!pnlInfoPanels.isVisible());
-        pnlLeuchtkasten.validate();
-//        this.revalidate();
 
 //        GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
 //        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
