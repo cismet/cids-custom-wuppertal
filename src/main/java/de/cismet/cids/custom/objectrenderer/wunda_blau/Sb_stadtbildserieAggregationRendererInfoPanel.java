@@ -496,7 +496,7 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
                         "bildnummer");
                 previewImage.setBildnummer(bildnummer);
 
-//                lstBildnummern.ensureIndexIsVisible(lstBildnummern.getSelectedIndex());
+                tblStadtbilder.scrollRectToVisible(tblStadtbilder.getCellRect(row, 1, true));
             } else {
                 previewImage.removeImage();
             }
