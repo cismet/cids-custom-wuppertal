@@ -474,16 +474,16 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBinActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBinActionPerformed
+    private void btnBinActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBinActionPerformed
         moveSelectedStadtbildserienToOtherGrid(grdStadtbildserien, grdBin);
-    }                                                                          //GEN-LAST:event_btnBinActionPerformed
+    }//GEN-LAST:event_btnBinActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnSwitchToSerieActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnSwitchToSerieActionPerformed
+    private void btnSwitchToSerieActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSwitchToSerieActionPerformed
         final CardLayout cardLayout = (CardLayout)pnlLeuchtkasten.getLayout();
         cardLayout.show(pnlLeuchtkasten, "SERIEN");
         btnSwitchToBin.setEnabled(true);
@@ -494,14 +494,14 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
         btnBin.setVisible(true);
         btnBinRecycle.setVisible(false);
-    } //GEN-LAST:event_btnSwitchToSerieActionPerformed
+    }//GEN-LAST:event_btnSwitchToSerieActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnSwitchToBinActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnSwitchToBinActionPerformed
+    private void btnSwitchToBinActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSwitchToBinActionPerformed
         final CardLayout cardLayout = (CardLayout)pnlLeuchtkasten.getLayout();
         cardLayout.show(pnlLeuchtkasten, "BIN");
         btnSwitchToBin.setEnabled(false);
@@ -512,33 +512,33 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
         btnBin.setVisible(false);
         btnBinRecycle.setVisible(true);
-    } //GEN-LAST:event_btnSwitchToBinActionPerformed
+    }//GEN-LAST:event_btnSwitchToBinActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBinRecycleActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBinRecycleActionPerformed
+    private void btnBinRecycleActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBinRecycleActionPerformed
         moveSelectedStadtbildserienToOtherGrid(grdBin, grdStadtbildserien);
-    }                                                                                 //GEN-LAST:event_btnBinRecycleActionPerformed
+    }//GEN-LAST:event_btnBinRecycleActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void sldSizeStateChanged(final javax.swing.event.ChangeEvent evt) { //GEN-FIRST:event_sldSizeStateChanged
+    private void sldSizeStateChanged(final javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sldSizeStateChanged
         grdStadtbildserien.setFixedCellDimension(sldSize.getValue());
         grdBin.setFixedCellDimension(sldSize.getValue());
-    }                                                                           //GEN-LAST:event_sldSizeStateChanged
+    }//GEN-LAST:event_sldSizeStateChanged
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void tbtnSlideActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnSlideActionPerformed
+    private void tbtnSlideActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnSlideActionPerformed
 
         pnlInfoPanels.setVisible(!pnlInfoPanels.isVisible());
         pnlLeuchtkasten.validate();
@@ -577,7 +577,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 //
 //        final Animate animate = new Animate(infoPanel, from, to);
 //        animate.start();
-    } //GEN-LAST:event_tbtnSlideActionPerformed
+    }//GEN-LAST:event_tbtnSlideActionPerformed
 
     @Override
     public void paint(final Graphics g) {
@@ -622,6 +622,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
             }
             updateFooterLabels();
             updateAmountsLabel();
+            setTitle("");
         }
     }
 
@@ -635,8 +636,17 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     }
 
     @Override
-    public void setTitle(final String title) {
-        lblTitle.setText("Leuchtkasten");
+    public void setTitle(String title) {
+        title = "Leuchtkasten";
+        if ((cidsBeans != null) && !cidsBeans.isEmpty()) {
+            final int amountSerien = cidsBeans.size();
+            int amountBilder = 0;
+            for (final CidsBean stadtbildserie : cidsBeans) {
+                amountBilder += stadtbildserie.getBeanCollectionProperty("stadtbilder_arr").size();
+            }
+            title += ": " + amountBilder + " Stadtbilder in " + amountSerien + " Stadtbildserien gefunden";
+        }
+        lblTitle.setText(title);
     }
 
     /**
