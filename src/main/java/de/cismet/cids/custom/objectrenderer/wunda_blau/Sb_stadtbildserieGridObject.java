@@ -102,7 +102,11 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
         }
 
         if ((lastShowImage != null) && lastShowImage.bildnummer.equals(bildnummer)) {
-            return scaleImage(lastShowImage.image, cellDimension, invert);
+            final Image imageToReturn = lastShowImage.image;
+            if (lastShowImage.image == Sb_stadtbildUtils.ERROR_IMAGE) {
+                lastShowImage.image = null;
+            }
+            return scaleImage(imageToReturn, cellDimension, invert);
         }
 
         int priority;
@@ -122,7 +126,7 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
         } else {
             // mightBeAnImage must be a Future<Image>
             retrieveFutureImage((Future<Image>)mightBeAnImage, bildnummer);
-            return Sb_stadtbildUtils.PLACEHOLDER_IMAGE;
+            return scaleImage(Sb_stadtbildUtils.PLACEHOLDER_IMAGE, cellDimension, invert);
         }
     }
 
@@ -191,9 +195,11 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
                         lastShowImage = new LastShownImage(bildnummer, image);
                         notifyModel();
                     } catch (InterruptedException ex) {
-                        // do nothing
+                        lastShowImage = new LastShownImage(bildnummer, Sb_stadtbildUtils.ERROR_IMAGE);
                     } catch (ExecutionException ex) {
+                        lastShowImage = new LastShownImage(bildnummer, Sb_stadtbildUtils.ERROR_IMAGE);
                     } catch (CancellationException ex) {
+                        lastShowImage = new LastShownImage(bildnummer, Sb_stadtbildUtils.ERROR_IMAGE);
                     }
                 }
             };
