@@ -540,6 +540,17 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         btnSelectNone.setEnabled(enable);
     }
 
+    /**
+     * Check if the currently selected image in the table is also selected in its gridObject. Change the table model
+     * accordingly.
+     */
+    public void updateTableModel() {
+        final int row = tblStadtbilder.getSelectedRow();
+        final TableModel model = tblStadtbilder.getModel();
+        final boolean isSelected = gridObject.isStadtbildSelected((CidsBean)model.getValueAt(row, 1));
+        tblStadtbilder.getModel().setValueAt(isSelected, row, 0);
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**

@@ -18,7 +18,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import javax.swing.DefaultListModel;
-import javax.swing.JComponent;
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
@@ -51,7 +50,7 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
     private boolean marker;
 
     private SwingWorker<Image, Void> worker;
-    private DefaultListModel model;
+    private DefaultListModel gridModel;
     private LastShownImage lastShowImage;
 
     private final HashSet<CidsBean> selectedBildnummernOfSerie = new HashSet<CidsBean>();
@@ -64,7 +63,7 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
      * @param  model  DOCUMENT ME!
      */
     public Sb_stadtbildserieGridObject(final DefaultListModel model) {
-        this.model = model;
+        this.gridModel = model;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -299,12 +298,36 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
 
     /**
      * DOCUMENT ME!
+     *
+     * @param   bildnummer  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean isStadtbildSelected(final CidsBean bildnummer) {
+        return selectedBildnummernOfSerie.contains(bildnummer);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  bildnummer  DOCUMENT ME!
+     */
+    public void addOrRemoveSelectedBildnummerOfSerie(final CidsBean bildnummer) {
+        if (selectedBildnummernOfSerie.contains(bildnummer)) {
+            removeSelectedBildnummerOfSerie(bildnummer);
+        } else {
+            addSelectedBildnummerOfSerie(bildnummer);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
      */
     private void notifyModel() {
-        // adds itself to the model at the same position. to update the model
-        model.setElementAt(
-            Sb_stadtbildserieGridObject.this,
-            model.indexOf(Sb_stadtbildserieGridObject.this));
+        // adds itself to the gridModel at the same position. to update the gridModel
+        gridModel.setElementAt(
+            this,
+            gridModel.indexOf(this));
     }
 
     /**
@@ -313,7 +336,7 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
      * @return  DOCUMENT ME!
      */
     public DefaultListModel getModel() {
-        return model;
+        return gridModel;
     }
 
     /**
@@ -322,7 +345,7 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
      * @param  model  DOCUMENT ME!
      */
     public void setModel(final DefaultListModel model) {
-        this.model = model;
+        this.gridModel = model;
     }
 
     //~ Inner Classes ----------------------------------------------------------

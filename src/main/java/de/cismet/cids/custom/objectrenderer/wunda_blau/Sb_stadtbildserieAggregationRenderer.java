@@ -41,6 +41,7 @@ import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
@@ -802,6 +803,22 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
             this.getCellRendererManager()
                     .setDefaultRenderer(
                         new de.cismet.cids.custom.objectrenderer.wunda_blau.Sb_stadtbildserieGridRenderer());
+
+            this.addMouseListener(new MouseAdapter() {
+
+                    @Override
+                    public void mouseClicked(final MouseEvent e) {
+                        if (e.getClickCount() >= 2) {
+                            final List<Sb_stadtbildserieGridObject> selectedSerien = PictureSelectionJGrid.this
+                                        .getSelectedValuesList();
+                            if (selectedSerien.size() == 1) {
+                                final Sb_stadtbildserieGridObject gridObject = selectedSerien.get(0);
+                                gridObject.addOrRemoveSelectedBildnummerOfSerie(gridObject.getStadtbildUnderMarker());
+                                infoPanel.updateTableModel();
+                            }
+                        }
+                    }
+                });
 
             this.addMouseMotionListener(new MouseAdapter() {
 
