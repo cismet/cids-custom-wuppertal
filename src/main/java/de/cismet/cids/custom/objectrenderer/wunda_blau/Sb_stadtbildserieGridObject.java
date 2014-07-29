@@ -198,7 +198,6 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
                     } catch (ExecutionException ex) {
                         lastShowImage = new LastShownImage(bildnummer, Sb_stadtbildUtils.ERROR_IMAGE);
                     } catch (CancellationException ex) {
-                        lastShowImage = new LastShownImage(bildnummer, Sb_stadtbildUtils.ERROR_IMAGE);
                     } finally {
                         notifyModel();
                     }

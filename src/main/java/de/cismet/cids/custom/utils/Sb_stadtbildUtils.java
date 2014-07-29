@@ -499,7 +499,7 @@ public class Sb_stadtbildUtils {
                     }
                 }
             }
-            return null;
+            throw new Exception("Image could not be fetched");
         }
     }
 
