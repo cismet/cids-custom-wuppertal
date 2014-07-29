@@ -107,7 +107,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.guigarage</groupId>
+            <groupId>de.cismet</groupId>
             <artifactId>jgrid</artifactId>
             <version>0.4-SNAPSHOT</version>
         </dependency>
