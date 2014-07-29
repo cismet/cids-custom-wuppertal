@@ -83,7 +83,7 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelec
     public Butler2ProductPanel() {
         loadPrductDescriptions();
         initComponents();
-        pnlFeePreview = new NasFeePreviewPanel(NasProductTemplate.OHNE_EIGENTUEMER);
+        pnlFeePreview = new NasFeePreviewPanel();
         lstProdukt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lstProdukt.addListSelectionListener(this);
         rbDxf.addActionListener(this);
@@ -421,7 +421,7 @@ public class Butler2ProductPanel extends javax.swing.JPanel implements ListSelec
      */
     private void calculateFee() {
         pnlFee.removeAll();
-        pnlFeePreview = new NasFeePreviewPanel(NasProductTemplate.OHNE_EIGENTUEMER);
+        pnlFeePreview = new NasFeePreviewPanel();
         setDiscountInFeePreview();
         pnlFeePreview.setGeom(geom);
         pnlFeePreview.refresh();
