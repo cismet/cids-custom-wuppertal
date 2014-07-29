@@ -31,6 +31,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import de.cismet.cids.custom.utils.nas.NasProduct;
 import de.cismet.cids.custom.utils.nas.NasProductTemplate;
 import de.cismet.cids.custom.wunda_blau.search.actions.NasDataQueryAction;
 
@@ -77,7 +78,7 @@ public class NASDownload extends AbstractCancellableDownload {
 
     protected String filename = null;
     private Future<ByteArrayWrapper> pollingFuture;
-    private NasProductTemplate template;
+    private NasProduct product;
     private GeometryCollection geometries;
     private String orderId;
     private transient byte[] content;
@@ -96,7 +97,7 @@ public class NASDownload extends AbstractCancellableDownload {
     public NASDownload(final String orderId, final boolean isSplitted, final String requestId) {
         omitSendingRequest = true;
         this.orderId = orderId;
-        template = null;
+        product = null;
         geometries = null;
         this.title = BASE_TITLE;
         status = State.WAITING;
@@ -123,7 +124,7 @@ public class NASDownload extends AbstractCancellableDownload {
      * @param  filename   DOCUMENT ME!
      * @param  directory  DOCUMENT ME!
      * @param  requestId  DOCUMENT ME!
-     * @param  template   DOCUMENT ME!
+     * @param  product    template DOCUMENT ME!
      * @param  g          DOCUMENT ME!
      */
 // public NASDownload(final String title,
@@ -145,16 +146,16 @@ public class NASDownload extends AbstractCancellableDownload {
      * @param  filename   DOCUMENT ME!
      * @param  directory  DOCUMENT ME!
      * @param  requestId  DOCUMENT ME!
-     * @param  template   DOCUMENT ME!
+     * @param  product    template DOCUMENT ME!
      * @param  g          DOCUMENT ME!
      */
     public NASDownload(final String title,
             final String filename,
             final String directory,
             final String requestId,
-            final NasProductTemplate template,
+            final NasProduct product,
             final GeometryCollection g) {
-        this.template = template;
+        this.product = product;
         geometries = g;
         this.title = title;
         this.directory = directory;
@@ -419,7 +420,7 @@ public class NASDownload extends AbstractCancellableDownload {
     private String sendNasRequest() {
         final ServerActionParameter paramTemplate = new ServerActionParameter(NasDataQueryAction.PARAMETER_TYPE.TEMPLATE
                         .toString(),
-                template);
+                product);
         final ServerActionParameter paramGeom = new ServerActionParameter(
                 NasDataQueryAction.PARAMETER_TYPE.GEOMETRY_COLLECTION.toString(),
                 geometries);
