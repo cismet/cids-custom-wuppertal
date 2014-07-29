@@ -502,7 +502,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
      * @param  tooltip  DOCUMENT ME!
      */
     public void indicateNotAvailable(final String tooltip) {
-        indicateNotAvailable(tooltip, new ImageIcon(Sb_stadtbildUtils.ERROR_IMAGE));
+        indicateNotAvailable(tooltip, new ImageIcon(Sb_stadtbildUtils.ERROR_IMAGE), "Kein Vorschaubild vorhanden.");
     }
 
     /**
@@ -510,10 +510,11 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
      *
      * @param  tooltip  DOCUMENT ME!
      * @param  icon     DOCUMENT ME!
+     * @param  text     DOCUMENT ME!
      */
-    public void indicateNotAvailable(final String tooltip, final Icon icon) {
+    public void indicateNotAvailable(final String tooltip, final Icon icon, final String text) {
         lblPicture.setIcon(icon);
-        lblPicture.setText("Kein Vorschaubild vorhanden.");
+        lblPicture.setText(text);
         lblPicture.setToolTipText(tooltip);
         showWait(false);
     }

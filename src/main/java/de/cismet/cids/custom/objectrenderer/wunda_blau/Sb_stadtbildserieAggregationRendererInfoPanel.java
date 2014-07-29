@@ -525,7 +525,7 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
      * DOCUMENT ME!
      */
     public void previewImageNotAvailable() {
-        previewImage.indicateNotAvailable("", null);
+        previewImage.indicateNotAvailable("", null, "keine Stadtbildserie ausgewählt");
     }
 
     /**
