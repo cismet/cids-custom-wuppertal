@@ -9,7 +9,6 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import com.guigarage.jgrid.JGrid;
 import com.guigarage.jgrid.renderer.GridCellRenderer;
-import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
@@ -22,6 +21,8 @@ import java.awt.RenderingHints;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+
+import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 
 /**
  * DOCUMENT ME!
@@ -177,11 +178,10 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
         super.paintComponent(g);
         final Graphics2D g2 = (Graphics2D)g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setComposite(AlphaComposite.getInstance(
+                AlphaComposite.SRC_OVER));
 
         if (image != null) {
-            final int width = image.getWidth(null);
-            final int height = image.getHeight(null);
-
             if (paintMarker) {
                 final int x = (int)(getWidth() * markerFraction);
                 g2.setStroke(new BasicStroke(3.5f));
@@ -201,11 +201,9 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
         super.paint(g);
         final Graphics2D g2 = (Graphics2D)g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
+        g2.setComposite(AlphaComposite.getInstance(
+                AlphaComposite.SRC_OVER));
         if (image != null) {
-            final int width = image.getWidth(null);
-            final int height = image.getHeight(null);
-
             if (paintMarker) {
                 final int x = (int)(getWidth() * markerFraction);
                 g2.setStroke(new BasicStroke(3.5f));
