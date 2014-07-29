@@ -9,6 +9,7 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import com.guigarage.jgrid.JGrid;
 import com.guigarage.jgrid.renderer.GridCellRenderer;
+import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
@@ -164,6 +165,8 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
 
         if (image != null) {
             lblIcon.setIcon(new ImageIcon(image));
+        } else {
+            lblIcon.setIcon(new ImageIcon(Sb_stadtbildUtils.ERROR_IMAGE));
         }
 
         return this;
