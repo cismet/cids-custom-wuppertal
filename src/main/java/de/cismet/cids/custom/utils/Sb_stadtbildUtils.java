@@ -99,14 +99,14 @@ public class Sb_stadtbildUtils {
 
         try {
             ERROR_IMAGE = ImageIO.read(Sb_stadtbildUtils.class.getResource(
-                        "/de/cismet/cids/custom/objecteditors/wunda_blau/file-broken.png"));
+                        "/de/cismet/cids/custom/objecteditors/wunda_blau/no_image.png"));
         } catch (IOException ex) {
             LOG.error("Could not fetch ERROR_IMAGE", ex);
         }
 
         try {
             PLACEHOLDER_IMAGE = ImageIO.read(Sb_stadtbildUtils.class.getResource(
-                        "/de/cismet/cids/custom/objecteditors/wunda_blau/image.png"));
+                        "/de/cismet/cids/custom/objecteditors/wunda_blau/wait_image.png"));
         } catch (IOException ex) {
             LOG.error("Could not fetch ERROR_IMAGE", ex);
         }
@@ -499,7 +499,7 @@ public class Sb_stadtbildUtils {
                     }
                 }
             }
-            throw new Exception("Image could not be fetched");
+            return null;
         }
     }
 
