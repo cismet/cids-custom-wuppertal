@@ -193,13 +193,14 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
                     try {
                         final Image image = get();
                         lastShowImage = new LastShownImage(bildnummer, image);
-                        notifyModel();
                     } catch (InterruptedException ex) {
                         lastShowImage = new LastShownImage(bildnummer, Sb_stadtbildUtils.ERROR_IMAGE);
                     } catch (ExecutionException ex) {
                         lastShowImage = new LastShownImage(bildnummer, Sb_stadtbildUtils.ERROR_IMAGE);
                     } catch (CancellationException ex) {
                         lastShowImage = new LastShownImage(bildnummer, Sb_stadtbildUtils.ERROR_IMAGE);
+                    } finally {
+                        notifyModel();
                     }
                 }
             };
