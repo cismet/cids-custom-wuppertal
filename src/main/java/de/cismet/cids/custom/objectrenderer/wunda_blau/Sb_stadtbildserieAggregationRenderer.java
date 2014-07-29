@@ -638,7 +638,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                     "admin",
                     "kif",
                     "sb_stadtbildserie",
-                    " id = 5 or id = 6 or id = 285195 or id = 8 or id = 9 or id = 10 or id = 11 or  id = 285198",
+                    " id = 5 or id = 6 or id = 285195 or id = 8 or id = 9 or id = 10 or id = 11 or  id = 285198 or id = 151489 ",
                     10);
 
             DevelopmentTools.createAggregationRendererInFrameFromRMIConnectionOnLocalhost(Arrays.asList(beans),
@@ -691,7 +691,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         final int selectedStadtbilderAmount = getSelectedStadtbilderAmount();
         final int amountSerien = ((DefaultListModel)grdStadtbildserien.getModel()).getSize();
 
-        lblAmounts.setText(selectedStadtbilderAmount + " aus " + amountSerien + " ausgewählt");
+        lblAmounts.setText(selectedStadtbilderAmount + " Bilder aus " + amountSerien + " Serien ausgewählt");
     }
 
     /**
