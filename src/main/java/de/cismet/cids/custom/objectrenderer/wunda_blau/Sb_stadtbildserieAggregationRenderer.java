@@ -7,21 +7,28 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import com.guigarage.jgrid.JGrid;
+
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.openide.util.Exceptions;
 
 import java.awt.CardLayout;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,6 +36,7 @@ import java.util.Set;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
@@ -45,8 +53,12 @@ import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.tools.metaobjectrenderer.CidsBeanAggregationRenderer;
 
+import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
+
 import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.TitleComponentProvider;
+import de.cismet.tools.gui.downloadmanager.DownloadManager;
+import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 
 /**
  * DOCUMENT ME!
@@ -72,6 +84,9 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     private static final Icon BIN_RECYCLE = new javax.swing.ImageIcon(Sb_stadtbildserieAggregationRenderer.class
                     .getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/bin_recycle.png"));
 
+    private static final String REPORT_STADTBILDSERIE_URL =
+        "/de/cismet/cids/custom/reports/wunda_blau/Stadtbildbericht.jasper";
+
     //~ Instance fields --------------------------------------------------------
 
     private Collection<CidsBean> cidsBeans = null;
@@ -79,6 +94,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBin;
     private javax.swing.JButton btnBinRecycle;
+    private javax.swing.JButton btnReport;
     private javax.swing.JButton btnSwitchToBin;
     private javax.swing.JButton btnSwitchToSerie;
     private com.guigarage.jgrid.JGrid grdBin;
@@ -88,6 +104,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     private de.cismet.cids.custom.objectrenderer.wunda_blau.Sb_stadtbildserieAggregationRendererInfoPanel infoPanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblAmounts;
@@ -96,6 +113,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     private javax.swing.JLabel lblTitle;
     private javax.swing.JPanel panFooter;
     private javax.swing.JPanel panLeft;
+    private javax.swing.JPanel panPrintButton;
     private javax.swing.JPanel panRight;
     private javax.swing.JPanel panSlideButton;
     private javax.swing.JPanel panTitle;
@@ -143,8 +161,11 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         panTitle = new javax.swing.JPanel();
         panTitleString = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         panSlideButton = new javax.swing.JPanel();
         tbtnSlide = new javax.swing.JToggleButton();
+        panPrintButton = new javax.swing.JPanel();
+        btnReport = new javax.swing.JButton();
         roundedPanel1 = new de.cismet.tools.gui.RoundedPanel();
         btnBin = new javax.swing.JButton();
         btnBinRecycle = new javax.swing.JButton();
@@ -258,6 +279,9 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
         panTitle.add(panTitleString, java.awt.BorderLayout.CENTER);
 
+        jPanel1.setOpaque(false);
+        jPanel1.setLayout(new java.awt.BorderLayout());
+
         panSlideButton.setOpaque(false);
         panSlideButton.setLayout(new java.awt.GridBagLayout());
 
@@ -282,7 +306,40 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
             });
         panSlideButton.add(tbtnSlide, new java.awt.GridBagConstraints());
 
-        panTitle.add(panSlideButton, java.awt.BorderLayout.EAST);
+        jPanel1.add(panSlideButton, java.awt.BorderLayout.EAST);
+
+        panPrintButton.setOpaque(false);
+        panPrintButton.setLayout(new java.awt.GridBagLayout());
+
+        btnReport.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/icons/printer.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnReport,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.btnReport.text"));              // NOI18N
+        btnReport.setToolTipText(org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.btnReport.toolTipText"));       // NOI18N
+        btnReport.setBorderPainted(false);
+        btnReport.setContentAreaFilled(false);
+        btnReport.setFocusPainted(false);
+        btnReport.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnReportActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        panPrintButton.add(btnReport, gridBagConstraints);
+
+        jPanel1.add(panPrintButton, java.awt.BorderLayout.WEST);
+
+        panTitle.add(jPanel1, java.awt.BorderLayout.EAST);
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
@@ -554,6 +611,70 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                 }
             });
     } //GEN-LAST:event_tbtnSlideActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnReportActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnReportActionPerformed
+        if (this.getSelectedStadtbilderAmount() <= 0) {
+            JOptionPane.showMessageDialog(
+                this,
+                "<html>Der Bericht kann nicht erstellt werden, wenn keine Stadtbilder ausgewählt wurden.</html>",
+                "Keine Stadtbilder ausgewählt",
+                JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        final JasperReportDownload.JasperReportDataSourceGenerator dataSourceGenerator =
+            new JasperReportDownload.JasperReportDataSourceGenerator() {
+
+                @Override
+                public JRDataSource generateDataSource() {
+                    final ArrayList<StadtbildReportBean> stadtbilderReportBeans = new ArrayList<StadtbildReportBean>();
+
+                    final Enumeration<Sb_stadtbildserieGridObject> e = ((DefaultListModel)grdStadtbildserien.getModel())
+                                .elements();
+                    while (e.hasMoreElements()) {
+                        final Sb_stadtbildserieGridObject gridObject = (Sb_stadtbildserieGridObject)e.nextElement();
+
+                        final CidsBean stadtbildserie = gridObject.getCidsBean();
+                        final Set<CidsBean> stadtbilder = gridObject.getSelectedBildnummernOfSerie();
+                        for (final CidsBean stadtbild : stadtbilder) {
+                            final String bildnummer = (String)stadtbild.getProperty("bildnummer");
+                            Image image;
+                            try {
+                                image = Sb_stadtbildUtils.downloadImageForBildnummer(bildnummer);
+                            } catch (Exception ex) {
+                                LOG.error("Image could not be fetched.", ex);
+                                image = Sb_stadtbildUtils.ERROR_IMAGE;
+                            }
+
+                            stadtbilderReportBeans.add(new StadtbildReportBean(stadtbildserie, stadtbild, image));
+                        }
+                    }
+
+                    final JRBeanCollectionDataSource beanArray = new JRBeanCollectionDataSource(stadtbilderReportBeans);
+                    return beanArray;
+                }
+            };
+
+        if (DownloadManagerDialog.showAskingForUserTitle(ComponentRegistry.getRegistry().getMainWindow())) {
+            final String jobname = DownloadManagerDialog.getJobname();
+            final String filename = "leuchtkasten";
+            final String downloadTitle = "Leuchtkasten";
+            final String resourceName = REPORT_STADTBILDSERIE_URL;
+            final JasperReportDownload download = new JasperReportDownload(
+                    resourceName,
+                    new HashMap(),
+                    dataSourceGenerator,
+                    jobname,
+                    downloadTitle,
+                    filename);
+            DownloadManager.instance().add(download);
+        }
+    } //GEN-LAST:event_btnReportActionPerformed
 
     @Override
     public void paint(final Graphics g) {
@@ -867,6 +988,97 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
             } else {
                 cardLayout.show(pnlInfoPanels, "NO_INFO");
             }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public static class StadtbildReportBean {
+
+        //~ Instance fields ----------------------------------------------------
+
+        CidsBean stadtbildserie;
+        CidsBean stadtbild;
+        Image image;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new StadtbildReportBean object.
+         */
+        public StadtbildReportBean() {
+        }
+
+        /**
+         * Creates a new StadtbildReportBean object.
+         *
+         * @param  stadtbildserie  DOCUMENT ME!
+         * @param  stadtbild       DOCUMENT ME!
+         * @param  image           DOCUMENT ME!
+         */
+        public StadtbildReportBean(final CidsBean stadtbildserie, final CidsBean stadtbild, final Image image) {
+            this.stadtbildserie = stadtbildserie;
+            this.stadtbild = stadtbild;
+            this.image = image;
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public CidsBean getStadtbildserie() {
+            return stadtbildserie;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  stadtbildserie  DOCUMENT ME!
+         */
+        public void setStadtbildserie(final CidsBean stadtbildserie) {
+            this.stadtbildserie = stadtbildserie;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public CidsBean getStadtbild() {
+            return stadtbild;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  stadtbild  DOCUMENT ME!
+         */
+        public void setStadtbild(final CidsBean stadtbild) {
+            this.stadtbild = stadtbild;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public Image getImage() {
+            return image;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  image  DOCUMENT ME!
+         */
+        public void setImage(final Image image) {
+            this.image = image;
         }
     }
 }
