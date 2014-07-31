@@ -32,7 +32,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import de.cismet.cids.custom.utils.nas.NasProduct;
-import de.cismet.cids.custom.utils.nas.NasProductTemplate;
 import de.cismet.cids.custom.wunda_blau.search.actions.NasDataQueryAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
@@ -52,6 +51,7 @@ public class NASDownload extends AbstractCancellableDownload {
     private static String SEVER_ACTION = "nasDataQuery";
     private static String XML_EXTENSION = ".xml";
     private static String ZIP_EXTENSION = ".zip";
+    private static String DXF_EXTENSION = ".dxf";
     private static final String BASE_TITLE;
 
     static {
@@ -92,12 +92,14 @@ public class NASDownload extends AbstractCancellableDownload {
      *
      * @param  orderId     DOCUMENT ME!
      * @param  isSplitted  DOCUMENT ME!
+     * @param  isDxf       DOCUMENT ME!
      * @param  requestId   DOCUMENT ME!
      */
-    public NASDownload(final String orderId, final boolean isSplitted, final String requestId) {
+    public NASDownload(final String orderId, final boolean isSplitted, final boolean isDxf, final String requestId) {
         omitSendingRequest = true;
         this.orderId = orderId;
-        product = null;
+        product = new NasProduct();
+        product.setFormat(isDxf ? NasProduct.Format.DXF.toString() : NasProduct.Format.NAS.toString());
         geometries = null;
         this.title = BASE_TITLE;
         status = State.WAITING;
@@ -109,7 +111,12 @@ public class NASDownload extends AbstractCancellableDownload {
         } else {
             fileToSaveTo = new File("" + orderId);
         }
-        final String extension = isSplitted ? ZIP_EXTENSION : XML_EXTENSION;
+        String extension = XML_EXTENSION;
+        if (product.getFormat().equals(NasProduct.Format.DXF.toString())) {
+            extension = DXF_EXTENSION;
+        } else if (isSplitted) {
+            extension = ZIP_EXTENSION;
+        }
         if ((filename != null) && !filename.equals("")) {
             determineDestinationFile(filename, extension);
         } else {
@@ -167,7 +174,12 @@ public class NASDownload extends AbstractCancellableDownload {
             fileToSaveTo = new File("" + System.currentTimeMillis());
         }
         this.filename = filename;
-        final String extension = isOrderSplitted(g) ? ZIP_EXTENSION : XML_EXTENSION;
+        String extension;
+        if (product.getFormat().equals(NasProduct.Format.DXF.toString())) {
+            extension = DXF_EXTENSION;
+        } else {
+            extension = isOrderSplitted(g) ? ZIP_EXTENSION : XML_EXTENSION;
+        }
         if ((filename != null) && !filename.equals("")) {
             determineDestinationFile(filename, extension);
         } else {
