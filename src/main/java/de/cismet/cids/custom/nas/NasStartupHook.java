@@ -94,6 +94,7 @@ public class NasStartupHook implements StartupHook {
                             final NASDownload download = new NASDownload(
                                     orderId,
                                     pInfo.isIsSplittet(),
+                                    pInfo.isDxf(),
                                     pInfo.getRequestName());
                             DownloadManager.instance().add(download);
                         }
