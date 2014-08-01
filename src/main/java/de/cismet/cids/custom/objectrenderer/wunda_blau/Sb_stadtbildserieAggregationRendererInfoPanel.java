@@ -7,9 +7,14 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import java.sql.Timestamp;
+
+import java.text.DateFormat;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.RowSorter;
 import javax.swing.event.ListSelectionEvent;
@@ -57,8 +62,10 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
     private javax.swing.Box.Filler filler1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblAufnahmedatum;
     private de.cismet.cids.custom.objecteditors.utils.Sb_StadtbildPreviewImage previewImage;
     private de.cismet.tools.gui.RoundedPanel roundedPanel2;
     private de.cismet.tools.gui.RoundedPanel roundedPanel3;
@@ -92,6 +99,8 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         semiRoundedPanel1 = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        lblAufnahmedatum = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblStadtbilder = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
@@ -150,6 +159,31 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         roundedPanel3.add(jLabel2, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel3,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRendererInfoPanel.class,
+                "Sb_stadtbildserieAggregationRendererInfoPanel.jLabel3.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        roundedPanel3.add(jLabel3, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblAufnahmedatum,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRendererInfoPanel.class,
+                "Sb_stadtbildserieAggregationRendererInfoPanel.lblAufnahmedatum.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        roundedPanel3.add(lblAufnahmedatum, gridBagConstraints);
+        lblAufnahmedatum.setVisible(false);
 
         tblStadtbilder.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][] {
@@ -358,6 +392,12 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
                         && internalUsage;
             previewImage.setStadtbildserieProvider(this);
             refillTable(gridObject.getStadtbildUnderMarker());
+
+            final Timestamp aufnahmedatum = (Timestamp)cidsBean.getProperty("aufnahmedatum");
+            final DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+            final String formattedDate = df.format(aufnahmedatum);
+            lblAufnahmedatum.setText(formattedDate);
+            lblAufnahmedatum.setVisible(true);
         }
     }
 
