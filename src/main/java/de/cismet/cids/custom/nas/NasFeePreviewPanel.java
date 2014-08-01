@@ -224,14 +224,14 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
                     }
                     // do the search
                     double totalFee = 0;
-                    if ((nasProduct != null) && nasProduct.getKey().equalsIgnoreCase("points")) {
+                    if ((nasProduct != null) && nasProduct.getKey().equalsIgnoreCase("punkte")) {
                         final ArrayList<String> values = new ArrayList<String>();
                         pointAmount = NasFeeCalculator.getPointAmount(geom);
                         values.add("" + pointAmount);
                         final double pointFee = NasFeeCalculator.getFeeForPoints(pointAmount) * discount;
                         totalFee += pointFee;
                         values.add(formatter.format(pointFee));
-                        result.put("points", values);
+                        result.put("punkte", values);
                     } else {
                         final ArrayList<String> flurstueckValues = new ArrayList<String>();
                         final ArrayList<String> gebaeudeValues = new ArrayList<String>();
@@ -281,7 +281,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
                                 setTotalLabel(values.get(0));
                             }
                             if (nasProduct.getKey().equalsIgnoreCase("punkte")) {
-                                if (key.equals("points")) {
+                                if (key.equals("punkte")) {
                                     setPointLabels(values.get(0), values.get(1));
                                     break;
                                 }
