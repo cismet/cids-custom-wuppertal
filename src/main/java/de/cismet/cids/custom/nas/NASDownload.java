@@ -52,12 +52,16 @@ public class NASDownload extends AbstractCancellableDownload {
     private static String XML_EXTENSION = ".xml";
     private static String ZIP_EXTENSION = ".zip";
     private static String DXF_EXTENSION = ".dxf";
-    private static final String BASE_TITLE;
+    private static final String BASE_TITLE_NAS;
+    private static final String BASE_TITLE_DXF;
 
     static {
-        BASE_TITLE = NbBundle.getMessage(
+        BASE_TITLE_NAS = NbBundle.getMessage(
                 NASDownload.class,
-                "NASDownload.basetitle.text");
+                "NASDownload.basetitle.nas.text");
+        BASE_TITLE_DXF = NbBundle.getMessage(
+                NASDownload.class,
+                "NASDownload.basetitle.dxf.text");
     }
 
     //~ Enums ------------------------------------------------------------------
@@ -101,7 +105,7 @@ public class NASDownload extends AbstractCancellableDownload {
         product = new NasProduct();
         product.setFormat(isDxf ? NasProduct.Format.DXF.toString() : NasProduct.Format.NAS.toString());
         geometries = null;
-        this.title = BASE_TITLE;
+        this.title = isDxf ? BASE_TITLE_DXF : BASE_TITLE_NAS;
         status = State.WAITING;
         this.requestId = requestId;
         this.directory = "";
@@ -254,10 +258,12 @@ public class NASDownload extends AbstractCancellableDownload {
             titleChanged();
             status = State.RUNNING;
             stateChanged();
+            final String format = product.getFormat().equalsIgnoreCase(NasProduct.Format.DXF.toString()) ? "DXF"
+                                                                                                         : "NAS";
             if (!omitSendingRequest) {
                 if (!downloadFuture.isCancelled()) {
                     if (log.isDebugEnabled()) {
-                        log.debug("NAS Download: sending request to server");
+                        log.debug(format + " Download: sending request to server");
                     }
                     orderId = sendNasRequest();
                 } else {
@@ -413,7 +419,8 @@ public class NASDownload extends AbstractCancellableDownload {
         } else if (p == Phase.DOWNLOAD) {
             appendix = NbBundle.getMessage(NASDownload.class, "NASDownload.downloadTitle.text");
         }
-        title = BASE_TITLE;
+        title = product.getFormat().equalsIgnoreCase(NasProduct.Format.DXF.toString()) ? BASE_TITLE_DXF
+                                                                                       : BASE_TITLE_NAS;
         if ((appendix != null) && !appendix.equals("")) {
             title += " - " + appendix;
         }
