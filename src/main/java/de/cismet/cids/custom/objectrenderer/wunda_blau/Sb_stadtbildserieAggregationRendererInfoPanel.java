@@ -7,19 +7,19 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import org.jdesktop.swingx.JXTable;
-
 import java.util.Collection;
 import java.util.List;
 
-import javax.swing.SortOrder;
+import javax.swing.RowSorter;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.RowSorterEvent;
+import javax.swing.event.RowSorterListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import de.cismet.cids.custom.objecteditors.utils.Sb_StadtbildserieProvider;
 
@@ -92,7 +92,7 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tblStadtbilder = new JXTable();
+        tblStadtbilder = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         btnSelectNone = new javax.swing.JButton();
         btnSelectAll = new javax.swing.JButton();
@@ -172,7 +172,8 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         tblStadtbilder.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(tblStadtbilder);
         tblStadtbilder.getSelectionModel().addListSelectionListener(this);
-        ((JXTable)tblStadtbilder).setSortable(true);
+        final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tblStadtbilder.getModel());
+        tblStadtbilder.setRowSorter(sorter);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -395,21 +396,34 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
             data[i] = new Object[] { isSelected, bild };
         }
 
-        final TableColumn sortedColumn = ((JXTable)tblStadtbilder).getSortedColumn();
-        SortOrder sortOrder = SortOrder.UNSORTED;
-        if (sortedColumn != null) {
-            sortOrder = ((JXTable)tblStadtbilder).getSortOrder(sortedColumn.getModelIndex());
-        }
+        final List<? extends RowSorter.SortKey> sortedColumns = tblStadtbilder.getRowSorter().getSortKeys();
 
         final DefaultTableModel newModel = new CustomTableModel(data, COLUMN_NAMES);
         tblStadtbilder.setModel(newModel);
 
-        if (sortedColumn != null) {
-            ((JXTable)tblStadtbilder).setSortOrder(sortedColumn, sortOrder);
-        }
+        createNewTableSorter(sortedColumns);
 
         final int stadtbildToSelectRowIndex = tblStadtbilder.convertRowIndexToView(stadtbildToSelectModelIndex);
         tblStadtbilder.setRowSelectionInterval(stadtbildToSelectRowIndex, stadtbildToSelectRowIndex);
+    }
+
+    /**
+     * After the model of the table was replaced, its RowSorted has to be created again.
+     *
+     * @param  sortedColumns  DOCUMENT ME!
+     */
+    private void createNewTableSorter(final List<? extends RowSorter.SortKey> sortedColumns) {
+        final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tblStadtbilder.getModel());
+        tblStadtbilder.setRowSorter(sorter);
+        sorter.addRowSorterListener(
+            new RowSorterListener() {
+
+                @Override
+                public void sorterChanged(final RowSorterEvent e) {
+                    LOG.fatal("table sorted");
+                }
+            });
+        tblStadtbilder.getRowSorter().setSortKeys(sortedColumns);
     }
 
     /**
