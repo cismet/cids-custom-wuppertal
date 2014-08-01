@@ -10,6 +10,7 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -52,6 +53,7 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
     private SwingWorker<Image, Void> worker;
     private DefaultListModel gridModel;
     private LastShownImage lastShowImage;
+    private List<Sb_StadtbildChosenListener> stadtbildChosenListeners = new ArrayList<Sb_StadtbildChosenListener>();
 
     private final HashSet<CidsBean> selectedBildnummernOfSerie = new HashSet<CidsBean>();
 
@@ -292,8 +294,11 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
      * @param  bildnummer  DOCUMENT ME!
      */
     public void addSelectedBildnummerOfSerie(final CidsBean bildnummer) {
-        selectedBildnummernOfSerie.add(bildnummer);
-        notifyModel();
+        final boolean wasAdded = selectedBildnummernOfSerie.add(bildnummer);
+        if (wasAdded) {
+            fireStadtbildChosen(bildnummer);
+            notifyModel();
+        }
     }
 
     /**
@@ -302,8 +307,11 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
      * @param  bildnummer  DOCUMENT ME!
      */
     public void removeSelectedBildnummerOfSerie(final CidsBean bildnummer) {
-        selectedBildnummernOfSerie.remove(bildnummer);
-        notifyModel();
+        final boolean wasRemoved = selectedBildnummernOfSerie.remove(bildnummer);
+        if (wasRemoved) {
+            fireStadtbildUnchosen(bildnummer);
+            notifyModel();
+        }
     }
 
     /**
@@ -369,6 +377,37 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
         } else {
             LOG.info("Sb_stadtbildserieGridObject.sortImagesToShow() got an empty list.");
             imagesToShow = imagesToShow = stadtbildserie.getBeanCollectionProperty("stadtbilder_arr");
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  listener  DOCUMENT ME!
+     */
+    public void addStadtbildChosenListener(final Sb_StadtbildChosenListener listener) {
+        this.stadtbildChosenListeners.add(listener);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  stadtbild  DOCUMENT ME!
+     */
+    public void fireStadtbildChosen(final CidsBean stadtbild) {
+        for (final Sb_StadtbildChosenListener listener : this.stadtbildChosenListeners) {
+            listener.stadtbildChosen(this, stadtbild);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  stadtbild  DOCUMENT ME!
+     */
+    public void fireStadtbildUnchosen(final CidsBean stadtbild) {
+        for (final Sb_StadtbildChosenListener listener : this.stadtbildChosenListeners) {
+            listener.stadtbildUnchosen(this, stadtbild);
         }
     }
 

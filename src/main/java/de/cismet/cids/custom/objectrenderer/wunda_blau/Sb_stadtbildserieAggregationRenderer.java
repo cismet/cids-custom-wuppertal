@@ -96,10 +96,12 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     private javax.swing.JButton btnBin;
     private javax.swing.JButton btnBinRecycle;
     private javax.swing.JButton btnForward;
+    private javax.swing.JButton btnRemoveWarenkorb;
     private javax.swing.JButton btnReport;
     private javax.swing.Box.Filler filler1;
     private com.guigarage.jgrid.JGrid grdBin;
     private com.guigarage.jgrid.JGrid grdStadtbildserien;
+    private com.guigarage.jgrid.JGrid grdWarenkorb;
     private de.cismet.cids.custom.objectrenderer.wunda_blau.Sb_stadtbildserieAggregationRendererInfoPanel
         infoNotAvailable;
     private de.cismet.cids.custom.objectrenderer.wunda_blau.Sb_stadtbildserieAggregationRendererInfoPanel infoPanel;
@@ -173,12 +175,14 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         btnReport = new javax.swing.JButton();
         roundedPanel1 = new de.cismet.tools.gui.RoundedPanel();
         btnBin = new javax.swing.JButton();
+        btnRemoveWarenkorb = new javax.swing.JButton();
         btnBinRecycle = new javax.swing.JButton();
         lblAmounts = new javax.swing.JLabel();
         pnlLeuchtkasten = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         grdStadtbildserien = new PictureSelectionJGrid();
         jScrollPane3 = new javax.swing.JScrollPane();
+        grdWarenkorb = new Sb_SelectedStadtbilderJGrid();
         jScrollPane2 = new javax.swing.JScrollPane();
         grdBin = new PictureSelectionJGrid();
         pnlSlider = new javax.swing.JPanel();
@@ -244,11 +248,13 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         lblMiddle.setFont(new java.awt.Font("Tahoma", 1, 14));
         lblMiddle.setForeground(new java.awt.Color(255, 255, 255));
         lblMiddle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblMiddle.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/basket_shopping.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             lblMiddle,
             org.openide.util.NbBundle.getMessage(
                 Sb_stadtbildserieAggregationRenderer.class,
-                "Sb_stadtbildserieAggregationRenderer.lblMiddle.text")); // NOI18N
+                "Sb_stadtbildserieAggregationRenderer.lblMiddle.text"));                                          // NOI18N
         lblMiddle.addMouseListener(new java.awt.event.MouseAdapter() {
 
                 @Override
@@ -282,13 +288,15 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         panButtons.add(btnForward, gridBagConstraints);
 
-        lblSwitchToBin.setFont(new java.awt.Font("Tahoma", 1, 14));           // NOI18N
+        lblSwitchToBin.setFont(new java.awt.Font("Tahoma", 1, 14));                                         // NOI18N
         lblSwitchToBin.setForeground(new java.awt.Color(255, 255, 255));
+        lblSwitchToBin.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/bin_empty.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             lblSwitchToBin,
             org.openide.util.NbBundle.getMessage(
                 Sb_stadtbildserieAggregationRenderer.class,
-                "Sb_stadtbildserieAggregationRenderer.lblSwitchToBin.text")); // NOI18N
+                "Sb_stadtbildserieAggregationRenderer.lblSwitchToBin.text"));                               // NOI18N
         lblSwitchToBin.addMouseListener(new java.awt.event.MouseAdapter() {
 
                 @Override
@@ -425,6 +433,33 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         roundedPanel1.add(btnBin, gridBagConstraints);
         btnBinRecycle.setVisible(false);
 
+        btnRemoveWarenkorb.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/basket_shopping-minus.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnRemoveWarenkorb,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.btnRemoveWarenkorb.text"));                                       // NOI18N
+        btnRemoveWarenkorb.setToolTipText(org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.btnRemoveWarenkorb.toolTipText"));                                // NOI18N
+        btnRemoveWarenkorb.setBorderPainted(false);
+        btnRemoveWarenkorb.setContentAreaFilled(false);
+        btnRemoveWarenkorb.setFocusPainted(false);
+        btnRemoveWarenkorb.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnRemoveWarenkorbActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        roundedPanel1.add(btnRemoveWarenkorb, gridBagConstraints);
+        btnBinRecycle.setVisible(false);
+
         btnBinRecycle.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/bin_recycle.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -475,7 +510,14 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         pnlLeuchtkasten.add(jScrollPane1, "SERIEN");
         jScrollPane1.getViewport().setOpaque(false);
 
+        jScrollPane3.setBorder(null);
+        jScrollPane3.setOpaque(false);
+
+        grdWarenkorb.setOpaque(false);
+        jScrollPane3.setViewportView(grdWarenkorb);
+
         pnlLeuchtkasten.add(jScrollPane3, "WARENKORB");
+        jScrollPane3.getViewport().setOpaque(false);
 
         jScrollPane2.setBorder(null);
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -601,6 +643,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         grdStadtbildserien.ensureIndexIsVisible(grdStadtbildserien.getSelectedIndex());
         grdBin.setFixedCellDimension(sldSize.getValue());
         grdBin.ensureIndexIsVisible(grdBin.getSelectedIndex());
+        grdWarenkorb.setFixedCellDimension(sldSize.getValue());
+        grdWarenkorb.ensureIndexIsVisible(grdWarenkorb.getSelectedIndex());
     }                                                                           //GEN-LAST:event_sldSizeStateChanged
 
     /**
@@ -612,6 +656,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         // hack to properly resize the grids
         grdStadtbildserien.setVisible(false);
         grdBin.setVisible(false);
+        grdWarenkorb.setVisible(false);
         pnlInfoPanels.setVisible(!pnlInfoPanels.isVisible());
 
         SwingUtilities.invokeLater(
@@ -621,6 +666,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                 public void run() {
                     grdStadtbildserien.setVisible(true);
                     grdBin.setVisible(true);
+                    grdWarenkorb.setVisible(true);
 
                     grdStadtbildserien.ensureIndexIsVisible(grdStadtbildserien.getSelectedIndex());
                     grdBin.ensureIndexIsVisible(grdBin.getSelectedIndex());
@@ -747,6 +793,15 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
     /**
      * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnRemoveWarenkorbActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveWarenkorbActionPerformed
+        ((Sb_SelectedStadtbilderJGrid)grdWarenkorb).unchoseStadtbilderSelectedInTheGrid();
+    }                                                                                      //GEN-LAST:event_btnRemoveWarenkorbActionPerformed
+
+    /**
+     * DOCUMENT ME!
      */
     private void switchToSerie() {
         final CardLayout cardLayout = (CardLayout)pnlLeuchtkasten.getLayout();
@@ -760,6 +815,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
         btnBin.setVisible(true);
         btnBinRecycle.setVisible(false);
+        btnRemoveWarenkorb.setVisible(false);
     }
 
     /**
@@ -777,6 +833,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
         btnBin.setVisible(false);
         btnBinRecycle.setVisible(true);
+        btnRemoveWarenkorb.setVisible(false);
     }
 
     /**
@@ -793,7 +850,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         ((PictureSelectionJGrid)grdBin).updateInfoPanel();
 
         btnBin.setVisible(false);
-        btnBinRecycle.setVisible(true);
+        btnBinRecycle.setVisible(false);
+        btnRemoveWarenkorb.setVisible(true);
     }
 
     @Override
@@ -833,6 +891,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
             for (final CidsBean bean : beans) {
                 final Sb_stadtbildserieGridObject gridObject = new Sb_stadtbildserieGridObject(model);
                 gridObject.setCidsBean(bean);
+                gridObject.addStadtbildChosenListener((Sb_StadtbildChosenListener)grdWarenkorb);
+                gridObject.addStadtbildChosenListener(infoPanel);
                 model.addElement(gridObject);
 
                 Sb_stadtbildUtils.cacheImagesForStadtbilder(bean.getBeanCollectionProperty("stadtbilder_arr"));
@@ -1023,6 +1083,9 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
             this.addMouseListener(new MouseAdapter() {
 
                     @Override
+                    /**
+                     * Select or unselect the Stadtbild under the marker
+                     */
                     public void mouseClicked(final MouseEvent e) {
                         if (e.getClickCount() >= 2) {
                             final List<Sb_stadtbildserieGridObject> selectedSerien = PictureSelectionJGrid.this
@@ -1030,7 +1093,6 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                             if (selectedSerien.size() == 1) {
                                 final Sb_stadtbildserieGridObject gridObject = selectedSerien.get(0);
                                 gridObject.addOrRemoveSelectedBildnummerOfSerie(gridObject.getStadtbildUnderMarker());
-                                infoPanel.updateTableModel();
                             }
                         }
                     }
@@ -1041,6 +1103,9 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                     int lastIndex = -1;
 
                     @Override
+                    /**
+                     * draw the marker
+                     */
                     public void mouseMoved(final MouseEvent e) {
                         if ((lastIndex >= 0) && (lastIndex < PictureSelectionJGrid.this.getModel().getSize())) {
                             final Object o = PictureSelectionJGrid.this.getModel().getElementAt(lastIndex);

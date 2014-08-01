@@ -45,7 +45,8 @@ import de.cismet.cids.dynamics.CidsBean;
  */
 public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.JPanel implements ListSelectionListener,
     TableModelListener,
-    Sb_StadtbildserieProvider {
+    Sb_StadtbildserieProvider,
+    Sb_StadtbildChosenListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -575,6 +576,9 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
     }
 
     @Override
+    /**
+     * Another image was selected in table.
+     */
     public void valueChanged(final ListSelectionEvent e) {
         if (!e.getValueIsAdjusting()) {
             final int rowView = tblStadtbilder.getSelectedRow();
@@ -593,6 +597,9 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
     }
 
     @Override
+    /**
+     * A cell in the table was edited.
+     */
     public void tableChanged(final TableModelEvent e) {
         final DefaultTableModel model = (DefaultTableModel)tblStadtbilder.getModel();
         final int rowView = e.getFirstRow();
@@ -633,6 +640,8 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
     /**
      * Check if the currently selected image in the table is also selected in its gridObject. Change the table model
      * accordingly.
+     *
+     * @deprecated  DOCUMENT ME!
      */
     public void updateTableModel() {
         final int rowView = tblStadtbilder.getSelectedRow();
@@ -640,6 +649,28 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         final TableModel model = tblStadtbilder.getModel();
         final boolean isSelected = gridObject.isStadtbildSelected((CidsBean)model.getValueAt(rowModel, 1));
         tblStadtbilder.getModel().setValueAt(isSelected, rowModel, 0);
+    }
+
+    @Override
+    public void stadtbildChosen(final Sb_stadtbildserieGridObject source, final CidsBean stadtbild) {
+        final TableModel model = tblStadtbilder.getModel();
+        for (int i = 0; i < model.getRowCount(); i++) {
+            final CidsBean stadtbildInTable = (CidsBean)model.getValueAt(i, 1);
+            if (stadtbildInTable.equals(stadtbild)) {
+                model.setValueAt(true, i, 0);
+            }
+        }
+    }
+
+    @Override
+    public void stadtbildUnchosen(final Sb_stadtbildserieGridObject source, final CidsBean stadtbild) {
+        final TableModel model = tblStadtbilder.getModel();
+        for (int i = 0; i < model.getRowCount(); i++) {
+            final CidsBean stadtbildInTable = (CidsBean)model.getValueAt(i, 1);
+            if (stadtbildInTable.equals(stadtbild)) {
+                model.setValueAt(false, i, 0);
+            }
+        }
     }
 
     //~ Inner Classes ----------------------------------------------------------
