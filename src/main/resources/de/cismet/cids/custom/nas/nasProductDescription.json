@@ -1,0 +1,33 @@
+[
+    {
+        "key": "punkte",
+        "displayName": "NAS (nur Punkte)",
+        "billingKey": "naspkt",
+        "format": "NAS",
+        "template": "/de/cismet/cids/custom/utils/nas/A_points.xml"
+    }, 
+    {
+        "key": "ohne_eigentuemer",
+        "displayName": "NAS (ohne Eigentümer)",
+        "billingKey": "nasoeig",
+        "format": "NAS",
+        "template": "/de/cismet/cids/custom/utils/nas/A_o_eigentuemer.xml"
+    }, 
+    {
+        "key": "komplett",
+        "displayName": "NAS (komplett)",
+        "billingKey": "naskom",
+        "format": "NAS",
+        "template": "/de/cismet/cids/custom/utils/nas/A_komplett.xml"
+    },
+    {
+        "key": "dxf",
+        "displayName": "DXF ohne Sachdaten",
+        "billingKey": "skmekomdxf",
+        "format": "DXF",
+        "template": "/de/cismet/cids/custom/utils/nas/A_o_eigentuemer.xml",
+        "params":{
+           
+        }
+    }
+]
