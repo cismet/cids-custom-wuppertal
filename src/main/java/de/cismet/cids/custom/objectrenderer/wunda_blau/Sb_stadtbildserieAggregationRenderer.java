@@ -89,6 +89,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
     //~ Instance fields --------------------------------------------------------
 
+    private boolean wasInfoPanelVisibleBeforeSwitch = true;
+
     private Collection<CidsBean> cidsBeans = null;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -653,11 +655,25 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
      * @param  evt  DOCUMENT ME!
      */
     private void tbtnSlideActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtnSlideActionPerformed
+        showInfoPanel(!pnlInfoPanels.isVisible());
+        wasInfoPanelVisibleBeforeSwitch = pnlInfoPanels.isVisible();
+    }                                                                             //GEN-LAST:event_tbtnSlideActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  show  DOCUMENT ME!
+     */
+    private void showInfoPanel(final boolean show) {
+        if (show == pnlInfoPanels.isVisible()) {
+            return;
+        }
+
         // hack to properly resize the grids
         grdStadtbildserien.setVisible(false);
         grdBin.setVisible(false);
         grdWarenkorb.setVisible(false);
-        pnlInfoPanels.setVisible(!pnlInfoPanels.isVisible());
+        pnlInfoPanels.setVisible(show);
 
         SwingUtilities.invokeLater(
             new Runnable() {
@@ -672,7 +688,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                     grdBin.ensureIndexIsVisible(grdBin.getSelectedIndex());
                 }
             });
-    } //GEN-LAST:event_tbtnSlideActionPerformed
+    }
 
     /**
      * DOCUMENT ME!
@@ -816,6 +832,9 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         btnBin.setVisible(true);
         btnBinRecycle.setVisible(false);
         btnRemoveWarenkorb.setVisible(false);
+
+        tbtnSlide.setEnabled(true);
+        showInfoPanel(wasInfoPanelVisibleBeforeSwitch);
     }
 
     /**
@@ -834,6 +853,9 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         btnBin.setVisible(false);
         btnBinRecycle.setVisible(true);
         btnRemoveWarenkorb.setVisible(false);
+
+        tbtnSlide.setEnabled(true);
+        showInfoPanel(wasInfoPanelVisibleBeforeSwitch);
     }
 
     /**
@@ -852,6 +874,10 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         btnBin.setVisible(false);
         btnBinRecycle.setVisible(false);
         btnRemoveWarenkorb.setVisible(true);
+
+        tbtnSlide.setEnabled(false);
+        wasInfoPanelVisibleBeforeSwitch = pnlInfoPanels.isVisible();
+        showInfoPanel(false);
     }
 
     @Override
