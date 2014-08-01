@@ -7,14 +7,18 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import org.jdesktop.swingx.JXTable;
+
 import java.util.Collection;
 import java.util.List;
 
+import javax.swing.SortOrder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
 import de.cismet.cids.custom.objecteditors.utils.Sb_StadtbildserieProvider;
@@ -88,7 +92,7 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tblStadtbilder = new javax.swing.JTable();
+        tblStadtbilder = new JXTable();
         jPanel1 = new javax.swing.JPanel();
         btnSelectNone = new javax.swing.JButton();
         btnSelectAll = new javax.swing.JButton();
@@ -168,6 +172,7 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         tblStadtbilder.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(tblStadtbilder);
         tblStadtbilder.getSelectionModel().addListSelectionListener(this);
+        ((JXTable)tblStadtbilder).setSortable(true);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -378,21 +383,33 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         final Collection<CidsBean> selectedBilder = gridObject.getSelectedBildnummernOfSerie();
         final Object[][] data = new Object[bilder.size()][];
 
-        int stadtbildToSelectIndex = 0;
+        int stadtbildToSelectModelIndex = 0;
 
         for (int i = 0; i < data.length; i++) {
             final CidsBean bild = bilder.get(i);
             if (stadtbildToSelect.equals(bild)) {
-                stadtbildToSelectIndex = i;
+                stadtbildToSelectModelIndex = i;
             }
 
             final boolean isSelected = selectedBilder.contains(bild);
             data[i] = new Object[] { isSelected, bild };
         }
 
+        final TableColumn sortedColumn = ((JXTable)tblStadtbilder).getSortedColumn();
+        SortOrder sortOrder = SortOrder.UNSORTED;
+        if (sortedColumn != null) {
+            sortOrder = ((JXTable)tblStadtbilder).getSortOrder(sortedColumn.getModelIndex());
+        }
+
         final DefaultTableModel newModel = new CustomTableModel(data, COLUMN_NAMES);
         tblStadtbilder.setModel(newModel);
-        tblStadtbilder.setRowSelectionInterval(stadtbildToSelectIndex, stadtbildToSelectIndex);
+
+        if (sortedColumn != null) {
+            ((JXTable)tblStadtbilder).setSortOrder(sortedColumn, sortOrder);
+        }
+
+        final int stadtbildToSelectRowIndex = tblStadtbilder.convertRowIndexToView(stadtbildToSelectModelIndex);
+        tblStadtbilder.setRowSelectionInterval(stadtbildToSelectRowIndex, stadtbildToSelectRowIndex);
     }
 
     /**
@@ -402,16 +419,17 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
      * @param  stadtbildToSelect  DOCUMENT ME!
      */
     private void selectStadtbildInTable(final CidsBean stadtbildToSelect) {
-        int stadtbildToSelectIndex = 0;
+        int stadtbildToSelectModelIndex = 0;
         final List data = ((DefaultTableModel)tblStadtbilder.getModel()).getDataVector();
         for (int i = 0; i < data.size(); i++) {
             final CidsBean bild = (CidsBean)((List)data.get(i)).get(1);
             if (stadtbildToSelect.equals(bild)) {
-                stadtbildToSelectIndex = i;
+                stadtbildToSelectModelIndex = i;
                 break;
             }
         }
-        tblStadtbilder.setRowSelectionInterval(stadtbildToSelectIndex, stadtbildToSelectIndex);
+        final int stadtbildToSelectRowIndex = tblStadtbilder.convertRowIndexToView(stadtbildToSelectModelIndex);
+        tblStadtbilder.setRowSelectionInterval(stadtbildToSelectRowIndex, stadtbildToSelectRowIndex);
     }
 
     /**
@@ -439,8 +457,9 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
 
     @Override
     public CidsBean getSelectedStadtbild() {
-        final int selectedRow = tblStadtbilder.getSelectedRow();
-        final CidsBean selectedBild = (CidsBean)tblStadtbilder.getModel().getValueAt(selectedRow, 1);
+        final int selectedRowView = tblStadtbilder.getSelectedRow();
+        final int selectedRowModel = tblStadtbilder.convertRowIndexToModel(selectedRowView);
+        final CidsBean selectedBild = (CidsBean)tblStadtbilder.getModel().getValueAt(selectedRowModel, 1);
         return selectedBild;
     }
 
@@ -489,14 +508,15 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
     @Override
     public void valueChanged(final ListSelectionEvent e) {
         if (!e.getValueIsAdjusting()) {
-            final int row = tblStadtbilder.getSelectedRow();
-            if (row >= 0) {
-                final CidsBean stadtbild = (CidsBean)tblStadtbilder.getModel().getValueAt(row, 1);
+            final int rowView = tblStadtbilder.getSelectedRow();
+            if (rowView >= 0) {
+                final int rowModel = tblStadtbilder.convertRowIndexToModel(rowView);
+                final CidsBean stadtbild = (CidsBean)tblStadtbilder.getModel().getValueAt(rowModel, 1);
                 final String bildnummer = (String)stadtbild.getProperty(
                         "bildnummer");
                 previewImage.setBildnummer(bildnummer);
 
-                tblStadtbilder.scrollRectToVisible(tblStadtbilder.getCellRect(row, 1, true));
+                tblStadtbilder.scrollRectToVisible(tblStadtbilder.getCellRect(rowModel, 1, true));
             } else {
                 previewImage.removeImage();
             }
@@ -506,9 +526,10 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
     @Override
     public void tableChanged(final TableModelEvent e) {
         final DefaultTableModel model = (DefaultTableModel)tblStadtbilder.getModel();
-        final int row = e.getFirstRow();
-        final Boolean isSelected = (Boolean)model.getValueAt(row, 0);
-        final CidsBean bild = (CidsBean)model.getValueAt(row, 1);
+        final int rowView = e.getFirstRow();
+        final int rowModel = tblStadtbilder.convertRowIndexToModel(rowView);
+        final Boolean isSelected = (Boolean)model.getValueAt(rowModel, 0);
+        final CidsBean bild = (CidsBean)model.getValueAt(rowModel, 1);
         if (isSelected) {
             gridObject.addSelectedBildnummerOfSerie(bild);
         } else {
@@ -545,10 +566,11 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
      * accordingly.
      */
     public void updateTableModel() {
-        final int row = tblStadtbilder.getSelectedRow();
+        final int rowView = tblStadtbilder.getSelectedRow();
+        final int rowModel = tblStadtbilder.convertRowIndexToModel(rowView);
         final TableModel model = tblStadtbilder.getModel();
-        final boolean isSelected = gridObject.isStadtbildSelected((CidsBean)model.getValueAt(row, 1));
-        tblStadtbilder.getModel().setValueAt(isSelected, row, 0);
+        final boolean isSelected = gridObject.isStadtbildSelected((CidsBean)model.getValueAt(rowModel, 1));
+        tblStadtbilder.getModel().setValueAt(isSelected, rowModel, 0);
     }
 
     //~ Inner Classes ----------------------------------------------------------

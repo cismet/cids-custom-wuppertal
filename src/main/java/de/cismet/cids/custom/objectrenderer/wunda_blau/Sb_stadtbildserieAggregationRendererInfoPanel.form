@@ -115,7 +115,8 @@
                     </Property>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="tblStadtbilder.getSelectionModel().addListSelectionListener(this);"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new JXTable()&#xa;"/>
+                    <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="tblStadtbilder.getSelectionModel().addListSelectionListener(this);&#xa;((JXTable)tblStadtbilder).setSortable(true);"/>
                   </AuxValues>
                 </Component>
               </SubComponents>
