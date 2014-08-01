@@ -91,7 +91,7 @@ public class Sb_SelectedStadtbilderJGrid extends JGrid implements Sb_StadtbildCh
      *
      * @version  $Revision$, $Date$
      */
-    private class GridObject {
+    private class GridObject extends Sb_AbstractPictureGridObject {
 
         //~ Instance fields ----------------------------------------------------
 
@@ -112,6 +112,25 @@ public class Sb_SelectedStadtbilderJGrid extends JGrid implements Sb_StadtbildCh
         }
 
         //~ Methods ------------------------------------------------------------
+
+        @Override
+        protected String getBildnummer() {
+            return (String)stadtbild.getProperty("bildnummer");
+        }
+
+        @Override
+        protected int getDownloadPrority() {
+            return Sb_stadtbildUtils.NORMAL_PRIORITY;
+        }
+
+        @Override
+        protected void notifyModel() {
+            final DefaultListModel gridModel = (DefaultListModel)Sb_SelectedStadtbilderJGrid.this.getModel();
+            // adds itself to the gridModel at the same position. to update the gridModel
+            gridModel.setElementAt(
+                this,
+                gridModel.indexOf(this));
+        }
 
         @Override
         public int hashCode() {
@@ -164,12 +183,7 @@ public class Sb_SelectedStadtbilderJGrid extends JGrid implements Sb_StadtbildCh
                 final boolean cellHasFocus) {
             image = null;
             if (value instanceof GridObject) {
-                final String bildnummer = (String)((GridObject)value).stadtbild.getProperty("bildnummer");
-                try {
-                    image = Sb_stadtbildUtils.downloadImageForBildnummer(bildnummer);
-                } catch (Exception ex) {
-//                            Exceptions.printStackTrace(ex);
-                }
+                image = ((GridObject)value).getImage(grid.getFixedCellDimension(), false);
             }
 
             if (image != null) {
