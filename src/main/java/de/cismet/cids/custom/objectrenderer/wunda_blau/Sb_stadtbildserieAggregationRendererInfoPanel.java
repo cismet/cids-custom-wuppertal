@@ -21,6 +21,7 @@ import java.util.Locale;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -479,7 +480,13 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
                     }
                 }
             });
-        tblStadtbilder.getRowSorter().setSortKeys(sortedColumns);
+        if (sortedColumns.isEmpty()) {
+            final ArrayList<RowSorter.SortKey> list = new ArrayList<RowSorter.SortKey>();
+            list.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
+            tblStadtbilder.getRowSorter().setSortKeys(list);
+        } else {
+            tblStadtbilder.getRowSorter().setSortKeys(sortedColumns);
+        }
     }
 
     /**
@@ -634,20 +641,6 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         btnInvertSelection.setEnabled(enable);
         btnSelectAll.setEnabled(enable);
         btnSelectNone.setEnabled(enable);
-    }
-
-    /**
-     * Check if the currently selected image in the table is also selected in its gridObject. Change the table model
-     * accordingly.
-     *
-     * @deprecated  DOCUMENT ME!
-     */
-    public void updateTableModel() {
-        final int rowView = tblStadtbilder.getSelectedRow();
-        final int rowModel = tblStadtbilder.convertRowIndexToModel(rowView);
-        final TableModel model = tblStadtbilder.getModel();
-        final boolean isSelected = gridObject.isStadtbildSelected((CidsBean)model.getValueAt(rowModel, 1));
-        tblStadtbilder.getModel().setValueAt(isSelected, rowModel, 0);
     }
 
     @Override
