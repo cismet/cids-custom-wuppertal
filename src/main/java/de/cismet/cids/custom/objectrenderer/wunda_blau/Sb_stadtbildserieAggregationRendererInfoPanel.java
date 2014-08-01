@@ -602,8 +602,7 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
      */
     public void tableChanged(final TableModelEvent e) {
         final DefaultTableModel model = (DefaultTableModel)tblStadtbilder.getModel();
-        final int rowView = e.getFirstRow();
-        final int rowModel = tblStadtbilder.convertRowIndexToModel(rowView);
+        final int rowModel = e.getFirstRow();
         final Boolean isSelected = (Boolean)model.getValueAt(rowModel, 0);
         final CidsBean bild = (CidsBean)model.getValueAt(rowModel, 1);
         if (isSelected) {
