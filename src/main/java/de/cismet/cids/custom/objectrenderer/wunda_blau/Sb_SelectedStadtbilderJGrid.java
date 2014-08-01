@@ -58,16 +58,9 @@ public class Sb_SelectedStadtbilderJGrid extends JGrid implements Sb_StadtbildCh
 
     @Override
     public void stadtbildUnchosen(final Sb_stadtbildserieGridObject source, final CidsBean stadtbild) {
-        GridObject objectToRemove = null;
+        final GridObject objectToRemove = new GridObject(stadtbild, source);
         final DefaultListModel model = (DefaultListModel)this.getModel();
-        for (int i = 0; i < model.getSize(); i++) {
-            final GridObject object = (GridObject)model.elementAt(i);
-            if (object.stadtbild.equals(stadtbild)) {
-                objectToRemove = object;
-                break;
-            }
-        }
-        if (objectToRemove != null) {
+        if (modelProxy.contains(objectToRemove)) {
             model.removeElement(objectToRemove);
             modelProxy.remove(objectToRemove);
         }
