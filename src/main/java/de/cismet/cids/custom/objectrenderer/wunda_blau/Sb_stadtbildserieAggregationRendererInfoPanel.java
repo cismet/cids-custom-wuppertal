@@ -7,6 +7,8 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import java.awt.Component;
+
 import java.sql.Timestamp;
 
 import java.text.DateFormat;
@@ -16,13 +18,17 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
+import javax.swing.JLabel;
+import javax.swing.JTable;
 import javax.swing.RowSorter;
+import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.RowSorterEvent;
 import javax.swing.event.RowSorterListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -209,6 +215,7 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         tblStadtbilder.getSelectionModel().addListSelectionListener(this);
         final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tblStadtbilder.getModel());
         tblStadtbilder.setRowSorter(sorter);
+        tblStadtbilder.setDefaultRenderer(Object.class, new CustomTableCellRenderer());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -672,6 +679,36 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         @Override
         public boolean isCellEditable(final int rowIndex, final int columnIndex) {
             return canEdit[columnIndex];
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class CustomTableCellRenderer extends DefaultTableCellRenderer {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Component getTableCellRendererComponent(final JTable table,
+                final Object value,
+                final boolean isSelected,
+                final boolean hasFocus,
+                final int row,
+                final int column) {
+            final JLabel renderedLabel = (JLabel)super.getTableCellRendererComponent(
+                    table,
+                    value,
+                    isSelected,
+                    hasFocus,
+                    row,
+                    column);
+            if (column == 1) {
+                renderedLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            }
+            return renderedLabel;
         }
     }
 }

@@ -142,7 +142,7 @@
                     </Property>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="tblStadtbilder.getSelectionModel().addListSelectionListener(this);&#xa;final TableRowSorter&lt;TableModel&gt; sorter = new TableRowSorter&lt;TableModel&gt;(tblStadtbilder.getModel());&#xa;tblStadtbilder.setRowSorter(sorter);"/>
+                    <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="tblStadtbilder.getSelectionModel().addListSelectionListener(this);&#xa;final TableRowSorter&lt;TableModel&gt; sorter = new TableRowSorter&lt;TableModel&gt;(tblStadtbilder.getModel());&#xa;tblStadtbilder.setRowSorter(sorter);&#xa;tblStadtbilder.setDefaultRenderer(Object.class, new CustomTableCellRenderer());"/>
                   </AuxValues>
                 </Component>
               </SubComponents>
