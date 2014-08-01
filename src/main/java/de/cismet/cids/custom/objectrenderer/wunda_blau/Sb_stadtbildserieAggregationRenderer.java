@@ -433,7 +433,6 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         roundedPanel1.add(btnBin, gridBagConstraints);
-        btnBinRecycle.setVisible(false);
 
         btnRemoveWarenkorb.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/basket_shopping-minus.png"))); // NOI18N
@@ -460,7 +459,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         roundedPanel1.add(btnRemoveWarenkorb, gridBagConstraints);
-        btnBinRecycle.setVisible(false);
+        btnRemoveWarenkorb.setVisible(false);
 
         btnBinRecycle.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/bin_recycle.png"))); // NOI18N
@@ -486,6 +485,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         roundedPanel1.add(btnBinRecycle, gridBagConstraints);
+        btnBinRecycle.setVisible(false);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblAmounts,
@@ -814,6 +814,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
      */
     private void btnRemoveWarenkorbActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnRemoveWarenkorbActionPerformed
         ((Sb_SelectedStadtbilderJGrid)grdWarenkorb).unchoseStadtbilderSelectedInTheGrid();
+        grdWarenkorb.getSelectionModel().clearSelection();
     }                                                                                      //GEN-LAST:event_btnRemoveWarenkorbActionPerformed
 
     /**
