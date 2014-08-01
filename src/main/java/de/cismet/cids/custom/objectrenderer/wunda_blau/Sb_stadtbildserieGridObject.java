@@ -55,6 +55,12 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
 
     private final HashSet<CidsBean> selectedBildnummernOfSerie = new HashSet<CidsBean>();
 
+    /**
+     * imagesToShow contains the same Stadtbild-CidsBean as stadtbildserie.getBeanCollectionProperty("stadtbilder_arr"),
+     * but might be ordered.
+     */
+    private List<CidsBean> imagesToShow;
+
     //~ Constructors -----------------------------------------------------------
 
     /**
@@ -76,9 +82,9 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
     @Override
     public void setCidsBean(final CidsBean cidsBean) {
         stadtbildserie = cidsBean;
-        final List images = stadtbildserie.getBeanCollectionProperty("stadtbilder_arr");
-        if (!images.isEmpty()) {
-            amountImages = images.size();
+        imagesToShow = stadtbildserie.getBeanCollectionProperty("stadtbilder_arr");
+        if (!imagesToShow.isEmpty()) {
+            amountImages = imagesToShow.size();
         } else {
             amountImages = 1;
         }
@@ -94,9 +100,8 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
      */
     public Image getImage(final int cellDimension, final boolean invert) {
         final String bildnummer;
-        final List<CidsBean> images = stadtbildserie.getBeanCollectionProperty("stadtbilder_arr");
-        if (!images.isEmpty() && (index < images.size())) {
-            bildnummer = (String)images.get(index).getProperty("bildnummer");
+        if (!imagesToShow.isEmpty() && (index < imagesToShow.size())) {
+            bildnummer = (String)imagesToShow.get(index).getProperty("bildnummer");
         } else {
             bildnummer = (String)stadtbildserie.getProperty("vorschaubild.bildnummer");
         }
@@ -137,9 +142,8 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
      */
     public CidsBean getStadtbildUnderMarker() {
         CidsBean stadtbild;
-        final List<CidsBean> images = stadtbildserie.getBeanCollectionProperty("stadtbilder_arr");
-        if (!images.isEmpty() && (index < images.size())) {
-            stadtbild = images.get(index);
+        if (!imagesToShow.isEmpty() && (index < imagesToShow.size())) {
+            stadtbild = imagesToShow.get(index);
         } else {
             stadtbild = (CidsBean)stadtbildserie.getProperty("vorschaubild");
         }
@@ -214,7 +218,7 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
      */
     public void setMarker(final boolean marker) {
         if (marker) {
-            Sb_stadtbildUtils.cacheImagesForStadtbilder(stadtbildserie.getBeanCollectionProperty("stadtbilder_arr"));
+            Sb_stadtbildUtils.cacheImagesForStadtbilder(imagesToShow);
         }
         this.marker = marker;
     }
@@ -352,6 +356,20 @@ public class Sb_stadtbildserieGridObject implements CidsBeanStore {
      */
     public void setModel(final DefaultListModel model) {
         this.gridModel = model;
+    }
+
+    /**
+     * Modifies the order of the shown images.
+     *
+     * @param  sortedStatdbilder  DOCUMENT ME!
+     */
+    public void sortImagesToShow(final List<CidsBean> sortedStatdbilder) {
+        if ((sortedStatdbilder != null) && !sortedStatdbilder.isEmpty()) {
+            imagesToShow = sortedStatdbilder;
+        } else {
+            LOG.info("Sb_stadtbildserieGridObject.sortImagesToShow() got an empty list.");
+            imagesToShow = imagesToShow = stadtbildserie.getBeanCollectionProperty("stadtbilder_arr");
+        }
     }
 
     //~ Inner Classes ----------------------------------------------------------

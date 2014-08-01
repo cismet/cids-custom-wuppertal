@@ -7,6 +7,7 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -420,7 +421,14 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
 
                 @Override
                 public void sorterChanged(final RowSorterEvent e) {
-                    LOG.fatal("table sorted");
+                    if (e.getType() == RowSorterEvent.Type.SORTED) {
+                        final ArrayList<CidsBean> sortedStadtbilder = new ArrayList<CidsBean>(
+                                tblStadtbilder.getRowCount());
+                        for (int i = 0; i < tblStadtbilder.getRowCount(); i++) {
+                            sortedStadtbilder.add((CidsBean)tblStadtbilder.getValueAt(i, 1));
+                        }
+                        gridObject.sortImagesToShow(sortedStadtbilder);
+                    }
                 }
             });
         tblStadtbilder.getRowSorter().setSortKeys(sortedColumns);
