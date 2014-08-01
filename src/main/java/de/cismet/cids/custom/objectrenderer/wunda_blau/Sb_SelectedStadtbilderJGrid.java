@@ -73,6 +73,26 @@ public class Sb_SelectedStadtbilderJGrid extends JGrid implements Sb_StadtbildCh
         }
     }
 
+    @Override
+    public void sb_stadtbildserieGridObjectMoveToBin(final Sb_stadtbildserieGridObject source) {
+        final DefaultListModel model = (DefaultListModel)this.getModel();
+        for (final CidsBean chosenStadtbilder : source.getSelectedBildnummernOfSerie()) {
+            final GridObject objectToRemove = new GridObject(chosenStadtbilder, source);
+            model.removeElement(objectToRemove);
+            modelProxy.remove(objectToRemove);
+        }
+    }
+
+    @Override
+    public void sb_stadtbildserieGridObjectRemovedFromBin(final Sb_stadtbildserieGridObject source) {
+        final DefaultListModel model = (DefaultListModel)this.getModel();
+        for (final CidsBean chosenStadtbilder : source.getSelectedBildnummernOfSerie()) {
+            final GridObject objectToRemove = new GridObject(chosenStadtbilder, source);
+            model.addElement(objectToRemove);
+            modelProxy.add(objectToRemove);
+        }
+    }
+
     /**
      * DOCUMENT ME!
      */

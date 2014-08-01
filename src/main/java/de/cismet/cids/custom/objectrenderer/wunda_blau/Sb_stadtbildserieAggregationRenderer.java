@@ -894,10 +894,13 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     private void moveSelectedStadtbildserienToOtherGrid(final JGrid from, final JGrid to) {
         final List<Sb_stadtbildserieGridObject> gridObjectsToRemove = from.getSelectedValuesList();
 
+        final boolean movedToBin = to == grdBin;
+
         for (final Sb_stadtbildserieGridObject gridObject : gridObjectsToRemove) {
             ((DefaultListModel)from.getModel()).removeElement(gridObject);
             ((DefaultListModel)to.getModel()).addElement(gridObject);
             gridObject.setModel((DefaultListModel)to.getModel());
+            gridObject.setIsInBin(movedToBin);
         }
         from.getSelectionModel().clearSelection();
         updateLabels();

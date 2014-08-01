@@ -672,6 +672,16 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         }
     }
 
+    @Override
+    public void sb_stadtbildserieGridObjectMoveToBin(final Sb_stadtbildserieGridObject source) {
+        // do nothing
+    }
+
+    @Override
+    public void sb_stadtbildserieGridObjectRemovedFromBin(final Sb_stadtbildserieGridObject source) {
+        // do nothing
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**

@@ -33,4 +33,17 @@ public interface Sb_StadtbildChosenListener {
      * @param  stadtbild  DOCUMENT ME!
      */
     void stadtbildUnchosen(Sb_stadtbildserieGridObject source, CidsBean stadtbild);
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  source  DOCUMENT ME!
+     */
+    void sb_stadtbildserieGridObjectMoveToBin(Sb_stadtbildserieGridObject source);
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  source  DOCUMENT ME!
+     */
+    void sb_stadtbildserieGridObjectRemovedFromBin(Sb_stadtbildserieGridObject source);
 }

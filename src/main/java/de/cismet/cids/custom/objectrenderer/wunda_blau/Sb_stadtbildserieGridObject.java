@@ -48,6 +48,8 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
 
     private final HashSet<CidsBean> selectedBildnummernOfSerie = new HashSet<CidsBean>();
 
+    private boolean isInBin = false;
+
     /**
      * imagesToShow contains the same Stadtbild-CidsBean as stadtbildserie.getBeanCollectionProperty("stadtbilder_arr"),
      * but might be ordered.
@@ -117,6 +119,29 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
      */
     public boolean isMarker() {
         return marker;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean isIsInBin() {
+        return isInBin;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  isInBin  DOCUMENT ME!
+     */
+    public void setIsInBin(final boolean isInBin) {
+        this.isInBin = isInBin;
+        if (isInBin) {
+            fireMovedToBin();
+        } else {
+            fireRemovedFromBin();
+        }
     }
 
     /**
@@ -316,6 +341,22 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
     public void fireStadtbildUnchosen(final CidsBean stadtbild) {
         for (final Sb_StadtbildChosenListener listener : this.stadtbildChosenListeners) {
             listener.stadtbildUnchosen(this, stadtbild);
+        }
+    }
+    /**
+     * DOCUMENT ME!
+     */
+    public void fireMovedToBin() {
+        for (final Sb_StadtbildChosenListener listener : this.stadtbildChosenListeners) {
+            listener.sb_stadtbildserieGridObjectMoveToBin(this);
+        }
+    }
+    /**
+     * DOCUMENT ME!
+     */
+    public void fireRemovedFromBin() {
+        for (final Sb_StadtbildChosenListener listener : this.stadtbildChosenListeners) {
+            listener.sb_stadtbildserieGridObjectRemovedFromBin(this);
         }
     }
 }
