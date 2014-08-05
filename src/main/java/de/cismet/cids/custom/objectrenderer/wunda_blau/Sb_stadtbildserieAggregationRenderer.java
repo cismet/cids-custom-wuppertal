@@ -94,10 +94,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     private Collection<CidsBean> cidsBeans = null;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBack;
     private javax.swing.JButton btnBin;
     private javax.swing.JButton btnBinRecycle;
-    private javax.swing.JButton btnForward;
     private javax.swing.JButton btnRemoveWarenkorb;
     private javax.swing.JButton btnReport;
     private javax.swing.Box.Filler filler1;
@@ -160,13 +158,11 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         panFooter = new javax.swing.JPanel();
         panButtons = new javax.swing.JPanel();
         lblSwitchToSerie = new javax.swing.JLabel();
-        btnBack = new javax.swing.JButton();
         lblMiddle = new javax.swing.JLabel();
-        btnForward = new javax.swing.JButton();
         lblSwitchToBin = new javax.swing.JLabel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(25, 0),
-                new java.awt.Dimension(25, 0),
-                new java.awt.Dimension(25, 32767));
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(50, 0),
+                new java.awt.Dimension(50, 0),
+                new java.awt.Dimension(50, 32767));
         panTitle = new javax.swing.JPanel();
         panTitleString = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
@@ -203,14 +199,16 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         panButtons.setOpaque(false);
         panButtons.setLayout(new java.awt.GridBagLayout());
 
-        lblSwitchToSerie.setFont(new java.awt.Font("Tahoma", 1, 14));           // NOI18N
+        lblSwitchToSerie.setFont(new java.awt.Font("Tahoma", 1, 14));                                       // NOI18N
         lblSwitchToSerie.setForeground(new java.awt.Color(255, 255, 255));
         lblSwitchToSerie.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        lblSwitchToSerie.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/magnifier.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             lblSwitchToSerie,
             org.openide.util.NbBundle.getMessage(
                 Sb_stadtbildserieAggregationRenderer.class,
-                "Sb_stadtbildserieAggregationRenderer.lblSwitchToSerie.text")); // NOI18N
+                "Sb_stadtbildserieAggregationRenderer.lblSwitchToSerie.text"));                             // NOI18N
         lblSwitchToSerie.setEnabled(false);
         lblSwitchToSerie.setPreferredSize(new java.awt.Dimension(186, 17));
         lblSwitchToSerie.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -223,29 +221,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         panButtons.add(lblSwitchToSerie, gridBagConstraints);
-
-        btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/arrow-left.png"))); // NOI18N
-        btnBack.setBorder(null);
-        btnBack.setBorderPainted(false);
-        btnBack.setContentAreaFilled(false);
-        btnBack.setEnabled(false);
-        btnBack.setFocusPainted(false);
-        btnBack.setMaximumSize(new java.awt.Dimension(30, 30));
-        btnBack.setMinimumSize(new java.awt.Dimension(30, 30));
-        btnBack.setPreferredSize(new java.awt.Dimension(30, 30));
-        btnBack.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnBackActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
-        panButtons.add(btnBack, gridBagConstraints);
 
         lblMiddle.setFont(new java.awt.Font("Tahoma", 1, 14));
         lblMiddle.setForeground(new java.awt.Color(255, 255, 255));
@@ -267,28 +244,9 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         panButtons.add(lblMiddle, gridBagConstraints);
-
-        btnForward.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/arrow-right.png"))); // NOI18N
-        btnForward.setBorder(null);
-        btnForward.setBorderPainted(false);
-        btnForward.setContentAreaFilled(false);
-        btnForward.setFocusPainted(false);
-        btnForward.setMaximumSize(new java.awt.Dimension(30, 30));
-        btnForward.setMinimumSize(new java.awt.Dimension(30, 30));
-        btnForward.setPreferredSize(new java.awt.Dimension(30, 30));
-        btnForward.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnForwardActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
-        panButtons.add(btnForward, gridBagConstraints);
 
         lblSwitchToBin.setFont(new java.awt.Font("Tahoma", 1, 14));                                         // NOI18N
         lblSwitchToBin.setForeground(new java.awt.Color(255, 255, 255));
@@ -309,6 +267,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         panButtons.add(lblSwitchToBin, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
@@ -768,32 +727,6 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnBackActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnBackActionPerformed
-        if (btnBack.isEnabled() && btnForward.isEnabled()) {
-            switchToSerie();
-        } else {
-            switchToWarenkorb();
-        }
-    }                                                                           //GEN-LAST:event_btnBackActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void btnForwardActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnForwardActionPerformed
-        if (btnBack.isEnabled() && btnForward.isEnabled()) {
-            switchToBin();
-        } else {
-            switchToWarenkorb();
-        }
-    }                                                                              //GEN-LAST:event_btnForwardActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
     private void lblSwitchToBinMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblSwitchToBinMouseClicked
         switchToBin();
     }                                                                              //GEN-LAST:event_lblSwitchToBinMouseClicked
@@ -823,8 +756,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     private void switchToSerie() {
         final CardLayout cardLayout = (CardLayout)pnlLeuchtkasten.getLayout();
         cardLayout.show(pnlLeuchtkasten, "SERIEN");
-        btnBack.setEnabled(false);
-        btnForward.setEnabled(true);
+
         lblSwitchToSerie.setEnabled(false);
         lblSwitchToBin.setEnabled(true);
         lblMiddle.setEnabled(true);
@@ -844,8 +776,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     private void switchToBin() {
         final CardLayout cardLayout = (CardLayout)pnlLeuchtkasten.getLayout();
         cardLayout.show(pnlLeuchtkasten, "BIN");
-        btnBack.setEnabled(true);
-        btnForward.setEnabled(false);
+
         lblSwitchToSerie.setEnabled(true);
         lblSwitchToBin.setEnabled(false);
         lblMiddle.setEnabled(true);
@@ -865,8 +796,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     private void switchToWarenkorb() {
         final CardLayout cardLayout = (CardLayout)pnlLeuchtkasten.getLayout();
         cardLayout.show(pnlLeuchtkasten, "WARENKORB");
-        btnBack.setEnabled(true);
-        btnForward.setEnabled(true);
+
         lblSwitchToSerie.setEnabled(true);
         lblSwitchToBin.setEnabled(true);
         lblMiddle.setEnabled(false);
@@ -1003,7 +933,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
      * DOCUMENT ME!
      */
     private void updateFooterLabels() {
-        final String stadtbildserien = "Stadtbildserien (" + grdStadtbildserien.getModel().getSize() + ")";
+        final String stadtbildserien = "Vorauswahl (" + grdStadtbildserien.getModel().getSize() + ")";
         lblSwitchToSerie.setText(stadtbildserien);
         final int amountSerienInBin = grdBin.getModel().getSize();
         final String bin = "Papierkorb (" + amountSerienInBin + ")";
