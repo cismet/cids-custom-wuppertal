@@ -124,7 +124,7 @@ public class Sb_stadtbildserieIconFactory implements CidsTreeObjectIconFactory {
      */
     private Icon generateIconAccordingToPosition(final ObjectTreeNode node) {
         if (node != null) {
-            if (iconMap.containsKey(node)) {
+            if (iconMap.containsKey(node) && !node.isChanged()) {
                 final Icon icon = iconMap.get(node);
                 if (icon != null) {
                     return icon;
@@ -151,7 +151,9 @@ public class Sb_stadtbildserieIconFactory implements CidsTreeObjectIconFactory {
                                         try {
                                             final Icon result = get();
                                             setIconToNode(node, result);
+                                            final boolean wasChangedBefore = node.isChanged();
                                             node.setMetaObject(null);
+                                            node.setChanged(wasChangedBefore);
                                         } catch (Exception e) {
                                             LOG.error("Fehler beim Laden des MetaObjects", e);
                                         } finally {
