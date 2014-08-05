@@ -16,7 +16,7 @@ import Sirius.navigator.ui.tree.CidsTreeObjectIconFactory;
 import Sirius.server.middleware.types.MetaNode;
 import Sirius.server.middleware.types.MetaObject;
 
-import java.util.HashSet;
+import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -45,8 +45,9 @@ public class Sb_stadtbildserieIconFactory implements CidsTreeObjectIconFactory {
 
     //~ Instance fields --------------------------------------------------------
 
-    volatile javax.swing.SwingWorker<Void, Void> objectRetrievingWorker = null;
-    final HashSet<ObjectTreeNode> listOfRetrievingObjectWorkers = new HashSet<ObjectTreeNode>();
+    final WeakHashMap<ObjectTreeNode, ExecutorService> listOfRetrievingObjectWorkers =
+        new WeakHashMap<ObjectTreeNode, ExecutorService>();
+    final WeakHashMap<ObjectTreeNode, Icon> iconMap = new WeakHashMap<ObjectTreeNode, Icon>();
 
     private final ImageIcon WARNING_ICON;
     private final ImageIcon BODENNAH_ICON;
@@ -122,17 +123,84 @@ public class Sb_stadtbildserieIconFactory implements CidsTreeObjectIconFactory {
      * @return  DOCUMENT ME!
      */
     private Icon generateIconAccordingToPosition(final ObjectTreeNode node) {
-        Icon result = PREVIEW_ICON;
         if (node != null) {
+            if (iconMap.containsKey(node)) {
+                final Icon icon = iconMap.get(node);
+                if (icon != null) {
+                    return icon;
+                }
+            } else {
+                final MetaObject mo = node.getMetaObject(false);
+                if (mo != null) {
+                    final Icon icon = createIconForNode(node);
+                    setIconToNode(node, icon);
+                    return icon;
+                } else if (!listOfRetrievingObjectWorkers.containsKey(node)) {
+                    if (!listOfRetrievingObjectWorkers.containsKey(node)) {
+                        listOfRetrievingObjectWorkers.put(node, objectRetrievalExecutor);
+                        synchronized (listOfRetrievingObjectWorkers) {
+                            objectRetrievalExecutor.execute(new javax.swing.SwingWorker<Icon, Void>() {
+
+                                    @Override
+                                    protected Icon doInBackground() throws Exception {
+                                        return createIconForNode(node);
+                                    }
+
+                                    @Override
+                                    protected void done() {
+                                        try {
+                                            final Icon result = get();
+                                            setIconToNode(node, result);
+                                        } catch (Exception e) {
+                                            LOG.error("Fehler beim Laden des MetaObjects", e);
+                                        } finally {
+                                            synchronized (listOfRetrievingObjectWorkers) {
+                                                listOfRetrievingObjectWorkers.remove(node);
+                                            }
+                                        }
+                                    }
+                                });
+                        }
+                    }
+                } else {
+                    // evtl log meldungen
+                }
+            }
+        }
+        return PREVIEW_ICON;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   node  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private Icon createIconForNode(final ObjectTreeNode node) {
+        Icon result = PREVIEW_ICON;
+        if (listOfRetrievingObjectWorkers.containsKey(node)) {
+            MetaObject stadtbildserieMO = null;
+            if ((node != null) && (node.getParent() != null)) {
+                if (node.getPath()[0].equals(
+                                ComponentRegistry.getRegistry().getSearchResultsTree().getModel().getRoot())) {
+                    // Searchtree
+                    if (ComponentRegistry.getRegistry().getSearchResultsTree().containsNode(
+                                    node.getNode())) {
+                        stadtbildserieMO = node.getMetaObject(true);
+                    }
+                } else {
+                    // normaler Baum
+                    stadtbildserieMO = node.getMetaObject(true);
+                }
+            }
             final TreeNode[] nodePath = node.getPath();
             boolean inSubTreePruefen = false;
             // ignore root
             for (int i = 1; i < nodePath.length; i++) {
-//                if (node == nodePath[i]) {
-//                    // The end of the path has been reached, this happens e.g. if the tree is not the catalog.
-//                    // The tree migt be the search result tree
-//                    return null;
-//                }
+                // if (node == nodePath[i]) { // The end of the path has been reached,
+                // this happens e.g. if the tree is not the catalog. // The tree migt be
+                // the search result tree return null; }
                 if (nodePath[i] instanceof DefaultMutableTreeNode) {
                     final Object userObject = ((DefaultMutableTreeNode)nodePath[i]).getUserObject();
                     if (userObject instanceof MetaNode) {
@@ -147,10 +215,10 @@ public class Sb_stadtbildserieIconFactory implements CidsTreeObjectIconFactory {
                 }
             }
 
-            final MetaObject stadtbildserieMO = node.getMetaObject(false);
             if (stadtbildserieMO != null) {
                 final CidsBean stadtbildserieBean = stadtbildserieMO.getBean();
-                final CidsBean bildtypBean = (CidsBean)stadtbildserieBean.getProperty("bildtyp");
+                final CidsBean bildtypBean = (CidsBean)stadtbildserieBean.getProperty(
+                        "bildtyp");
                 if (bildtypBean != null) {
                     if (bildtypBean.getPrimaryKeyValue() == 0) {
                         result = SCHRAEG_ICON;
@@ -162,7 +230,8 @@ public class Sb_stadtbildserieIconFactory implements CidsTreeObjectIconFactory {
                 }
 
                 // True if true, False if false or null
-                final Boolean pruefen = Boolean.TRUE.equals(stadtbildserieBean.getProperty(
+                final Boolean pruefen = Boolean.TRUE.equals(
+                        stadtbildserieBean.getProperty(
                             "pruefen"));
                 if (!pruefen.equals(inSubTreePruefen)) {
                     final Icon overlay = Static2DTools.createOverlayIcon(
@@ -171,62 +240,31 @@ public class Sb_stadtbildserieIconFactory implements CidsTreeObjectIconFactory {
                             result.getIconHeight());
                     result = Static2DTools.mergeIcons(result, overlay);
                 }
+            }
+
+            return result;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  node  DOCUMENT ME!
+     * @param  icon  DOCUMENT ME!
+     */
+    private void setIconToNode(final ObjectTreeNode node, final Icon icon) {
+        if (icon != null) {
+            iconMap.put(node, icon);
+            if (node.getPath()[0].equals(
+                            ComponentRegistry.getRegistry().getSearchResultsTree().getModel().getRoot())) {
+                // Searchtree
+                ((DefaultTreeModel)ComponentRegistry.getRegistry().getSearchResultsTree().getModel()).nodeChanged(node);
             } else {
-                if (!listOfRetrievingObjectWorkers.contains(node)) {
-                    synchronized (listOfRetrievingObjectWorkers) {
-                        if (!listOfRetrievingObjectWorkers.contains(node)) {
-                            listOfRetrievingObjectWorkers.add(node);
-                            objectRetrievalExecutor.execute(new javax.swing.SwingWorker<Void, Void>() {
-
-                                    @Override
-                                    protected Void doInBackground() throws Exception {
-                                        if (!(node == null)) {
-                                            if (node.getPath()[0].equals(
-                                                            ComponentRegistry.getRegistry().getSearchResultsTree()
-                                                                .getModel().getRoot())) {
-                                                // Searchtree
-                                                if (ComponentRegistry.getRegistry().getSearchResultsTree().containsNode(
-                                                                node.getNode())) {
-                                                    node.getMetaObject(true);
-                                                }
-                                            } else {
-                                                // normaler Baum
-                                                node.getMetaObject(true);
-                                            }
-                                        }
-                                        return null;
-                                    }
-
-                                    @Override
-                                    protected void done() {
-                                        try {
-                                            synchronized (listOfRetrievingObjectWorkers) {
-                                                listOfRetrievingObjectWorkers.remove(node);
-                                            }
-                                            final Void result = get();
-                                            if (node.getPath()[0].equals(
-                                                            ComponentRegistry.getRegistry().getSearchResultsTree()
-                                                                .getModel().getRoot())) {
-                                                // Searchtree
-                                                ((DefaultTreeModel)ComponentRegistry.getRegistry()
-                                                            .getSearchResultsTree().getModel()).nodeChanged(node);
-                                            } else {
-                                                // normaler Baum
-                                                ((DefaultTreeModel)ComponentRegistry.getRegistry().getCatalogueTree()
-                                                            .getModel()).nodeChanged(node);
-                                            }
-                                        } catch (Exception e) {
-                                            LOG.error("Fehler beim Laden des MetaObjects", e);
-                                        }
-                                    }
-                                });
-                        }
-                    }
-                } else {
-                    // evtl log meldungen
-                }
+                // normaler Baum
+                ((DefaultTreeModel)ComponentRegistry.getRegistry().getCatalogueTree().getModel()).nodeChanged(node);
             }
         }
-        return result;
     }
 }
