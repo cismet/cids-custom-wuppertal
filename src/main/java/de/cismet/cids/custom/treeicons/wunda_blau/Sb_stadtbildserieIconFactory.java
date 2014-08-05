@@ -151,6 +151,7 @@ public class Sb_stadtbildserieIconFactory implements CidsTreeObjectIconFactory {
                                         try {
                                             final Icon result = get();
                                             setIconToNode(node, result);
+                                            node.setMetaObject(null);
                                         } catch (Exception e) {
                                             LOG.error("Fehler beim Laden des MetaObjects", e);
                                         } finally {
