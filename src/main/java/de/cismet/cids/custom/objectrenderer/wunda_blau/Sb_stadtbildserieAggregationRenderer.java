@@ -160,9 +160,9 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         lblSwitchToSerie = new javax.swing.JLabel();
         lblMiddle = new javax.swing.JLabel();
         lblSwitchToBin = new javax.swing.JLabel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(50, 0),
-                new java.awt.Dimension(50, 0),
-                new java.awt.Dimension(50, 32767));
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(55, 0),
+                new java.awt.Dimension(55, 0),
+                new java.awt.Dimension(55, 32767));
         panTitle = new javax.swing.JPanel();
         panTitleString = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
@@ -245,7 +245,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 20);
         panButtons.add(lblMiddle, gridBagConstraints);
 
         lblSwitchToBin.setFont(new java.awt.Font("Tahoma", 1, 14));                                         // NOI18N

@@ -31,6 +31,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -110,7 +111,17 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         jLabel3 = new javax.swing.JLabel();
         lblAufnahmedatum = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tblStadtbilder = new javax.swing.JTable();
+        tblStadtbilder = new JTable() {
+
+                @Override
+                public Component prepareRenderer(final TableCellRenderer renderer, final int row, final int col) {
+                    final Component c = super.prepareRenderer(renderer, row, col);
+                    if (gridObject != null) {
+                        c.setEnabled(!gridObject.isIsInBin());
+                    }
+                    return c;
+                }
+            };
         jPanel1 = new javax.swing.JPanel();
         btnSelectNone = new javax.swing.JButton();
         btnSelectAll = new javax.swing.JButton();
@@ -422,6 +433,7 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
             this.gridObject = gridObject;
             setCidsBean(this.gridObject.getCidsBean());
         }
+        tblStadtbilder.setEnabled(!gridObject.isIsInBin());
     }
 
     /**

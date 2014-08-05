@@ -142,6 +142,7 @@
                     </Property>
                   </Properties>
                   <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new JTable(){&#xa;&#xa;    @Override&#xa;    public Component prepareRenderer(TableCellRenderer renderer, int row, int col) {&#xa;        Component c = super.prepareRenderer(renderer, row, col);&#xa;        if(gridObject != null){&#xa;c.setEnabled(!gridObject.isIsInBin());&#xa;}&#xa;        return c;&#xa;    }&#xa;};"/>
                     <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="tblStadtbilder.getSelectionModel().addListSelectionListener(this);&#xa;final TableRowSorter&lt;TableModel&gt; sorter = new TableRowSorter&lt;TableModel&gt;(tblStadtbilder.getModel());&#xa;tblStadtbilder.setRowSorter(sorter);&#xa;tblStadtbilder.setDefaultRenderer(Object.class, new CustomTableCellRenderer());"/>
                   </AuxValues>
                 </Component>
