@@ -21,6 +21,7 @@ import Sirius.server.middleware.types.MetaObject;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -50,7 +51,8 @@ public class Alb_baulastblattIconFactory implements CidsTreeObjectIconFactory {
     //~ Instance fields --------------------------------------------------------
 
     volatile javax.swing.SwingWorker<Void, Void> objectRetrievingWorker = null;
-    final HashSet<ObjectTreeNode> listOfRetrievingObjectWorkers = new HashSet<ObjectTreeNode>();
+    final WeakHashMap<ObjectTreeNode, ExecutorService> listOfRetrievingObjectWorkers =
+        new WeakHashMap<ObjectTreeNode, ExecutorService>();
     private final ExecutorService objectRetrievalExecutor = Executors.newFixedThreadPool(15);
     private final ImageIcon DELETED_ICON;
     private final ImageIcon WARNING_ICON;
@@ -143,10 +145,10 @@ public class Alb_baulastblattIconFactory implements CidsTreeObjectIconFactory {
                 }
                 return result;
             } else {
-                if (!listOfRetrievingObjectWorkers.contains(node)) {
-                    synchronized (listOfRetrievingObjectWorkers) {
-                        if (!listOfRetrievingObjectWorkers.contains(node)) {
-                            listOfRetrievingObjectWorkers.add(node);
+                if (!listOfRetrievingObjectWorkers.containsKey(node)) {
+                    if (!listOfRetrievingObjectWorkers.containsKey(node)) {
+                        listOfRetrievingObjectWorkers.put(node, objectRetrievalExecutor);
+                        synchronized (listOfRetrievingObjectWorkers) {
                             objectRetrievalExecutor.execute(new javax.swing.SwingWorker<Void, Void>() {
 
                                     @Override
@@ -171,9 +173,6 @@ public class Alb_baulastblattIconFactory implements CidsTreeObjectIconFactory {
                                     @Override
                                     protected void done() {
                                         try {
-                                            synchronized (listOfRetrievingObjectWorkers) {
-                                                listOfRetrievingObjectWorkers.remove(node);
-                                            }
                                             final Void result = get();
                                             if (node.getPath()[0].equals(
                                                             ComponentRegistry.getRegistry().getSearchResultsTree()
@@ -188,6 +187,10 @@ public class Alb_baulastblattIconFactory implements CidsTreeObjectIconFactory {
                                             }
                                         } catch (Exception e) {
                                             log.error("Fehler beim Laden des MetaObjects", e);
+                                        } finally {
+                                            synchronized (listOfRetrievingObjectWorkers) {
+                                                listOfRetrievingObjectWorkers.remove(node);
+                                            }
                                         }
                                     }
                                 });
