@@ -48,7 +48,7 @@ import de.cismet.cids.dynamics.CidsBean;
 public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.JPanel implements ListSelectionListener,
     TableModelListener,
     Sb_StadtbildserieProvider,
-    Sb_StadtbildChosenListener {
+    Sb_stadtbildserieGridObjectListener {
 
     //~ Static fields/initializers ---------------------------------------------
 

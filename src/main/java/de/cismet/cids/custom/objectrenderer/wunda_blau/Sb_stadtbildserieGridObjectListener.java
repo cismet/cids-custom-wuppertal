@@ -10,12 +10,13 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 import de.cismet.cids.dynamics.CidsBean;
 
 /**
- * DOCUMENT ME!
+ * A listener which gets notified if a Sb_stadtbildserieGridObject was moved to another grid or if a Stadtbild of that
+ * GridObject was selected or deselected.
  *
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public interface Sb_StadtbildChosenListener {
+public interface Sb_stadtbildserieGridObjectListener {
 
     //~ Methods ----------------------------------------------------------------
 

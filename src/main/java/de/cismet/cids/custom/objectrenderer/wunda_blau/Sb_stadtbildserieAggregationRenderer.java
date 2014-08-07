@@ -77,7 +77,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     FooterComponentProvider,
     TitleComponentProvider,
     ListDataListener,
-    Sb_StadtbildChosenListener {
+    Sb_stadtbildserieGridObjectListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -904,7 +904,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
             for (final CidsBean bean : beans) {
                 final Sb_stadtbildserieGridObject gridObject = new Sb_stadtbildserieGridObject(model);
                 gridObject.setCidsBean(bean);
-                gridObject.addStadtbildChosenListener((Sb_StadtbildChosenListener)grdWarenkorb);
+                gridObject.addStadtbildChosenListener((Sb_stadtbildserieGridObjectListener)grdWarenkorb);
                 gridObject.addStadtbildChosenListener(infoPanel);
                 gridObject.addStadtbildChosenListener(this);
                 model.addElement(gridObject);
@@ -1057,7 +1057,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     }
 
     /**
-     * DOCUMENT ME!
+     * Only enable the HighResDownload button if at least one image is accessible. This means that a high-res picture
+     * must exist and the image must not be intended for the internal usage.
      */
     private void setEnableHighResDownload() {
         // create an array with Sb_stadtbildserieGridObject of the current vorschau.

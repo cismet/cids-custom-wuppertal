@@ -44,7 +44,8 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
     private boolean marker;
 
     private DefaultListModel gridModel;
-    private List<Sb_StadtbildChosenListener> stadtbildChosenListeners = new ArrayList<Sb_StadtbildChosenListener>();
+    private List<Sb_stadtbildserieGridObjectListener> stadtbildChosenListeners =
+        new ArrayList<Sb_stadtbildserieGridObjectListener>();
 
     private final HashSet<CidsBean> selectedBildnummernOfSerie = new HashSet<CidsBean>();
 
@@ -325,7 +326,7 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
      *
      * @param  listener  DOCUMENT ME!
      */
-    public void addStadtbildChosenListener(final Sb_StadtbildChosenListener listener) {
+    public void addStadtbildChosenListener(final Sb_stadtbildserieGridObjectListener listener) {
         this.stadtbildChosenListeners.add(listener);
     }
 
@@ -335,7 +336,7 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
      * @param  stadtbild  DOCUMENT ME!
      */
     public void fireStadtbildChosen(final CidsBean stadtbild) {
-        for (final Sb_StadtbildChosenListener listener : this.stadtbildChosenListeners) {
+        for (final Sb_stadtbildserieGridObjectListener listener : this.stadtbildChosenListeners) {
             listener.stadtbildChosen(this, stadtbild);
         }
     }
@@ -346,7 +347,7 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
      * @param  stadtbild  DOCUMENT ME!
      */
     public void fireStadtbildUnchosen(final CidsBean stadtbild) {
-        for (final Sb_StadtbildChosenListener listener : this.stadtbildChosenListeners) {
+        for (final Sb_stadtbildserieGridObjectListener listener : this.stadtbildChosenListeners) {
             listener.stadtbildUnchosen(this, stadtbild);
         }
     }
@@ -354,7 +355,7 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
      * DOCUMENT ME!
      */
     public void fireMovedToBin() {
-        for (final Sb_StadtbildChosenListener listener : this.stadtbildChosenListeners) {
+        for (final Sb_stadtbildserieGridObjectListener listener : this.stadtbildChosenListeners) {
             listener.sb_stadtbildserieGridObjectMoveToBin(this);
         }
     }
@@ -362,7 +363,7 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
      * DOCUMENT ME!
      */
     public void fireRemovedFromBin() {
-        for (final Sb_StadtbildChosenListener listener : this.stadtbildChosenListeners) {
+        for (final Sb_stadtbildserieGridObjectListener listener : this.stadtbildChosenListeners) {
             listener.sb_stadtbildserieGridObjectRemovedFromBin(this);
         }
     }

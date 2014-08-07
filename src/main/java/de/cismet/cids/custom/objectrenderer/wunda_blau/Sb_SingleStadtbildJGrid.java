@@ -29,7 +29,7 @@ import de.cismet.cids.dynamics.CidsBean;
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
  */
-public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_StadtbildChosenListener {
+public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieGridObjectListener {
 
     //~ Instance fields --------------------------------------------------------
 
