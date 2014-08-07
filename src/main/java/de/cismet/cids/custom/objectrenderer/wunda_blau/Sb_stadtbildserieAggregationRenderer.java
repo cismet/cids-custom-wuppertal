@@ -174,7 +174,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         jScrollPane1 = new javax.swing.JScrollPane();
         grdStadtbildserien = new PictureSelectionJGrid();
         jScrollPane3 = new javax.swing.JScrollPane();
-        grdWarenkorb = new Sb_SelectedStadtbilderJGrid();
+        grdWarenkorb = new Sb_SingleStadtbildJGrid();
         jScrollPane2 = new javax.swing.JScrollPane();
         grdBin = new PictureSelectionJGrid();
         pnlSlider = new javax.swing.JPanel();
