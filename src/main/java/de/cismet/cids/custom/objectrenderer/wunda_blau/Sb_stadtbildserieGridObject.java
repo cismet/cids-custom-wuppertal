@@ -204,10 +204,12 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
      * @param  bildnummer  DOCUMENT ME!
      */
     public void addSelectedBildnummerOfSerie(final CidsBean bildnummer) {
-        final boolean wasAdded = selectedBildnummernOfSerie.add(bildnummer);
-        if (wasAdded) {
-            fireStadtbildChosen(bildnummer);
-            notifyModel();
+        if (!this.isInBin) {
+            final boolean wasAdded = selectedBildnummernOfSerie.add(bildnummer);
+            if (wasAdded) {
+                fireStadtbildChosen(bildnummer);
+                notifyModel();
+            }
         }
     }
 
@@ -217,10 +219,12 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
      * @param  bildnummer  DOCUMENT ME!
      */
     public void removeSelectedBildnummerOfSerie(final CidsBean bildnummer) {
-        final boolean wasRemoved = selectedBildnummernOfSerie.remove(bildnummer);
-        if (wasRemoved) {
-            fireStadtbildUnchosen(bildnummer);
-            notifyModel();
+        if (!this.isInBin) {
+            final boolean wasRemoved = selectedBildnummernOfSerie.remove(bildnummer);
+            if (wasRemoved) {
+                fireStadtbildUnchosen(bildnummer);
+                notifyModel();
+            }
         }
     }
 
