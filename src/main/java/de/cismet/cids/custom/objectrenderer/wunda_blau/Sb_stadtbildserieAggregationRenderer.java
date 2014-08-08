@@ -313,6 +313,9 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
             org.openide.util.NbBundle.getMessage(
                 Sb_stadtbildserieAggregationRenderer.class,
                 "Sb_stadtbildserieAggregationRenderer.btnDownloadHighResImage.text"));                     // NOI18N
+        btnDownloadHighResImage.setToolTipText(org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.btnDownloadHighResImage.toolTipText"));              // NOI18N
         btnDownloadHighResImage.setBorder(null);
         btnDownloadHighResImage.setBorderPainted(false);
         btnDownloadHighResImage.setContentAreaFilled(false);

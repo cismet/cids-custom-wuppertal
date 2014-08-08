@@ -206,6 +206,9 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
             org.openide.util.NbBundle.getMessage(
                 Sb_StadtbildPreviewImage.class,
                 "Sb_StadtbildPreviewImage.btnDownloadHighResImage.text"));                         // NOI18N
+        btnDownloadHighResImage.setToolTipText(org.openide.util.NbBundle.getMessage(
+                Sb_StadtbildPreviewImage.class,
+                "Sb_StadtbildPreviewImage.btnDownloadHighResImage.toolTipText"));                  // NOI18N
         btnDownloadHighResImage.setBorder(null);
         btnDownloadHighResImage.setBorderPainted(false);
         btnDownloadHighResImage.setContentAreaFilled(false);
