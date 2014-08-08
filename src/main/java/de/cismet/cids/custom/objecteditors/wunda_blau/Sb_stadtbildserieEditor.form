@@ -685,8 +685,8 @@
                             <BindingProperty name="selectedItem" source="Form" sourcePath="${cidsBean.auftraggeber}" target="dbcAuftraggeber" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
                           </BindingProperties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new FastBindableReferenceCombo()"/>
-                            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((FastBindableReferenceCombo)dbcAuftraggeber).setSorted(true);"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new DefaultBindableReferenceCombo()"/>
+                            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((DefaultBindableReferenceCombo)dbcAuftraggeber).setSortingColumn(&quot;name&quot;);"/>
                           </AuxValues>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
