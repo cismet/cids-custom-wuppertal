@@ -32,9 +32,6 @@ import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.JXList;
 import org.jdesktop.swingx.error.ErrorInfo;
 
-import org.openide.util.Exceptions;
-import org.openide.util.NbBundle;
-
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -99,6 +96,7 @@ import de.cismet.cids.editors.BeanInitializerForcePaste;
 import de.cismet.cids.editors.BeanInitializerProvider;
 import de.cismet.cids.editors.DefaultBeanInitializer;
 import de.cismet.cids.editors.DefaultBindableJCheckBox;
+import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
 
@@ -119,7 +117,6 @@ import de.cismet.cismap.commons.features.StyledFeature;
 import de.cismet.cismap.commons.gui.MappingComponent;
 import de.cismet.cismap.commons.gui.layerwidget.ActiveLayerModel;
 import de.cismet.cismap.commons.gui.printing.JasperReportDownload;
-import de.cismet.cismap.commons.interaction.CismapBroker;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWMS;
 import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
@@ -565,7 +562,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         lblDescFilmart = new javax.swing.JLabel();
         lblDescFotograf = new javax.swing.JLabel();
         lblDescAuftraggeber = new javax.swing.JLabel();
-        dbcAuftraggeber = new FastBindableReferenceCombo();
+        dbcAuftraggeber = new DefaultBindableReferenceCombo();
         dbcFotograf = new FastBindableReferenceCombo();
         dbcFilmart = new FastBindableReferenceCombo();
         roundedPanel4 = new de.cismet.tools.gui.RoundedPanel();
@@ -1139,7 +1136,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         panDetails.add(lblDescAuftraggeber, gridBagConstraints);
 
-        ((FastBindableReferenceCombo)dbcAuftraggeber).setSorted(true);
+        ((DefaultBindableReferenceCombo)dbcAuftraggeber).setSortingColumn("name");
         dbcAuftraggeber.setEditable(true);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
