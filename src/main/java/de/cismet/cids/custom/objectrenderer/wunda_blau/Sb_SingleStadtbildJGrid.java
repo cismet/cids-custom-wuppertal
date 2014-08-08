@@ -230,6 +230,13 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
             }
             return true;
         }
+
+        @Override
+        protected boolean isInternalUsage() {
+            final CidsBean stadtbildserie = locationOfStadtbild.getCidsBean();
+            final Boolean internalUsage = (Boolean)stadtbildserie.getProperty("interner_gebrauch");
+            return Boolean.TRUE.equals(internalUsage);
+        }
     }
 
     /**

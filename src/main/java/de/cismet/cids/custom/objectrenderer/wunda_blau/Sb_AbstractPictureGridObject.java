@@ -45,6 +45,14 @@ public abstract class Sb_AbstractPictureGridObject {
      * @return  DOCUMENT ME!
      */
     protected abstract int getDownloadPrority();
+
+    /**
+     * Returns a boolean, if true the image is only for the internal usage.
+     *
+     * @return  DOCUMENT ME!
+     */
+    protected abstract boolean isInternalUsage();
+
     /**
      * DOCUMENT ME!
      */
@@ -61,6 +69,10 @@ public abstract class Sb_AbstractPictureGridObject {
      * @return  DOCUMENT ME!
      */
     public Image getImage(final int cellDimension, final boolean invert) {
+        if (isInternalUsage()) {
+            return null;
+        }
+
         final String bildnummer = getBildnummer();
 
         if ((lastShowImage != null) && lastShowImage.bildnummer.equals(bildnummer)) {

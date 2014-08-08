@@ -367,4 +367,10 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
             listener.sb_stadtbildserieGridObjectRemovedFromBin(this);
         }
     }
+
+    @Override
+    protected boolean isInternalUsage() {
+        final Boolean internalUsage = (Boolean)stadtbildserie.getProperty("interner_gebrauch");
+        return Boolean.TRUE.equals(internalUsage);
+    }
 }
