@@ -177,6 +177,8 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
         /**
          * Gets the scaled image from the super implementation and draws overlay, eventually. If no high resolution
          * image of the current stadtbild is available then image will be shown, but gets an overlay.
+         * 
+         * <p>Never returns null. Adds an error image on its own.</p>
          *
          * @param   cellDimension  DOCUMENT ME!
          * @param   invert         DOCUMENT ME!
@@ -189,14 +191,18 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
             if (imageAvailableInHighRes.get() || (image == Sb_stadtbildUtils.PLACEHOLDER_IMAGE)) {
                 return image;
             } else if (image == null) {
-                final BufferedImage scaledErrorImage = new BufferedImage(
+                final BufferedImage imageToShow = new BufferedImage(
                         cellDimension,
                         cellDimension,
                         BufferedImage.TYPE_INT_ARGB);
-                final Graphics2D g = (Graphics2D)scaledErrorImage.getGraphics();
+                final Graphics2D g = (Graphics2D)imageToShow.getGraphics();
+                final Image scaledErrorImage = Sb_stadtbildUtils.scaleImage(
+                        Sb_stadtbildUtils.ERROR_IMAGE,
+                        cellDimension,
+                        invert);
                 // heuristic to center the error image
-                g.drawImage(Sb_stadtbildUtils.ERROR_IMAGE, 0, cellDimension / 12, null);
-                return scaledErrorImage;
+                g.drawImage(scaledErrorImage, 0, cellDimension / 12, null);
+                return imageToShow;
             } else {
                 final Image overlay = Sb_stadtbildUtils.scaleImage(
                         Sb_stadtbildUtils.ERROR_IMAGE,
