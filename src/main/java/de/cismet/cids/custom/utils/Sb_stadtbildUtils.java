@@ -401,6 +401,30 @@ public class Sb_stadtbildUtils {
         IMAGE_CACHE.remove(cidsBean.toString());
     }
 
+    /**
+     * Scales the image such that it fits in an element of the jGrid. If showWholePicture is true, then the image will
+     * be scaled such that it will be shown completely in the element, thus a border may be there. If showWholePicture
+     * is false the element of the grid will be filled up completely with the image, but the image may be cut off. This
+     * is due to that the ratio of the image is preserved.
+     *
+     * @param   toScale           DOCUMENT ME!
+     * @param   dimension         DOCUMENT ME!
+     * @param   showWholePicture  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static Image scaleImage(final Image toScale, final int dimension, final boolean showWholePicture) {
+        Image toReturn = toScale;
+        if (toReturn instanceof BufferedImage) {
+            if ((toScale.getHeight(null) > toScale.getWidth(null)) ^ showWholePicture) {
+                toReturn = ((BufferedImage)toReturn).getScaledInstance(dimension, -1, Image.SCALE_SMOOTH);
+            } else {
+                toReturn = ((BufferedImage)toReturn).getScaledInstance(-1, dimension, Image.SCALE_SMOOTH);
+            }
+        }
+        return toReturn;
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**

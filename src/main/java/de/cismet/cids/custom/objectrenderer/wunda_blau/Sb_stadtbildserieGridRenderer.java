@@ -167,7 +167,11 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
         if (image != null) {
             lblIcon.setIcon(new ImageIcon(image));
         } else {
-            lblIcon.setIcon(new ImageIcon(Sb_stadtbildUtils.ERROR_IMAGE));
+            final Image scaledErrorImage = Sb_stadtbildUtils.scaleImage(
+                    Sb_stadtbildUtils.ERROR_IMAGE,
+                    grid.getFixedCellDimension(),
+                    false);
+            lblIcon.setIcon(new ImageIcon(scaledErrorImage));
         }
 
         return this;

@@ -61,7 +61,7 @@ public abstract class Sb_AbstractPictureGridObject {
     /**
      * Get a scaled image for a Stadtbild. The exact stadtbild is provided by the method <code>getBildnummer()</code>.
      * If the image has to be loaded first a Placeholder image will be returned. If something went wrong, e.g. while
-     * loading the image. An error image will be returned.
+     * loading the image, null will be returned.
      *
      * @param   cellDimension  DOCUMENT ME!
      * @param   invert         DOCUMENT ME!
@@ -77,10 +77,11 @@ public abstract class Sb_AbstractPictureGridObject {
 
         if ((lastShowImage != null) && lastShowImage.bildnummer.equals(bildnummer)) {
             final Image imageToReturn = lastShowImage.image;
-            if (lastShowImage.image == Sb_stadtbildUtils.ERROR_IMAGE) {
-                lastShowImage.image = null;
+            if (lastShowImage.image == null) {
+                return null;
+            } else {
+                return Sb_stadtbildUtils.scaleImage(imageToReturn, cellDimension, invert);
             }
-            return scaleImage(imageToReturn, cellDimension, invert);
         }
 
         final int priority = getDownloadPrority();
@@ -91,36 +92,12 @@ public abstract class Sb_AbstractPictureGridObject {
         if (mightBeAnImage instanceof Image) {
             lastShowImage = new LastShownImage(bildnummer, (Image)mightBeAnImage);
             final Image toReturn = (Image)mightBeAnImage;
-            return scaleImage(toReturn, cellDimension, invert);
+            return Sb_stadtbildUtils.scaleImage(toReturn, cellDimension, invert);
         } else {
             // mightBeAnImage must be a Future<Image>
             retrieveFutureImage((Future<Image>)mightBeAnImage, bildnummer);
-            return scaleImage(Sb_stadtbildUtils.PLACEHOLDER_IMAGE, cellDimension, invert);
+            return Sb_stadtbildUtils.scaleImage(Sb_stadtbildUtils.PLACEHOLDER_IMAGE, cellDimension, invert);
         }
-    }
-
-    /**
-     * Scales the image such that it fits in an element of the jGrid. If showWholePicture is true, then the image will
-     * be scaled such that it will be shown completely in the element, thus a border may be there. If showWholePicture
-     * is false the element of the grid will be filled up completely with the image, but the image may be cut off. This
-     * is due to that the ratio of the image is preserved.
-     *
-     * @param   toScale           DOCUMENT ME!
-     * @param   dimension         DOCUMENT ME!
-     * @param   showWholePicture  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    protected Image scaleImage(final Image toScale, final int dimension, final boolean showWholePicture) {
-        Image toReturn = toScale;
-        if (toReturn instanceof BufferedImage) {
-            if ((toScale.getHeight(null) > toScale.getWidth(null)) ^ showWholePicture) {
-                toReturn = ((BufferedImage)toReturn).getScaledInstance(dimension, -1, Image.SCALE_SMOOTH);
-            } else {
-                toReturn = ((BufferedImage)toReturn).getScaledInstance(-1, dimension, Image.SCALE_SMOOTH);
-            }
-        }
-        return toReturn;
     }
 
     /**
