@@ -70,10 +70,12 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
 
     //~ Methods ----------------------------------------------------------------
 
-    @Override
     /**
      * Returns the Stadtbildserie.
+     *
+     * @return  DOCUMENT ME!
      */
+    @Override
     public CidsBean getCidsBean() {
         return stadtbildserie;
     }

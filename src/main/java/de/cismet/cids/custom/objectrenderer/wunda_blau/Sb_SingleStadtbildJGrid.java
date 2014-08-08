@@ -174,19 +174,34 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
                 gridModel.indexOf(this));
         }
 
-        @Override
         /**
-         * Gets the scaled image from the super implementation and draws overlay, eventually.
-         * If no high resolution image of the current stadtbild is available then image will be shown, but gets an overlay.
+         * Gets the scaled image from the super implementation and draws overlay, eventually. If no high resolution
+         * image of the current stadtbild is available then image will be shown, but gets an overlay.
          *
+         * @param   cellDimension  DOCUMENT ME!
+         * @param   invert         DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
          */
+        @Override
         public Image getImage(final int cellDimension, final boolean invert) {
             final Image image = super.getImage(cellDimension, invert);
-            if (imageAvailableInHighRes.get() || (image == null) || (image == Sb_stadtbildUtils.ERROR_IMAGE)
-                        || (image == Sb_stadtbildUtils.ERROR_IMAGE)) {
+            if (imageAvailableInHighRes.get() || (image == Sb_stadtbildUtils.PLACEHOLDER_IMAGE)) {
                 return image;
+            } else if (image == null) {
+                final BufferedImage scaledErrorImage = new BufferedImage(
+                        cellDimension,
+                        cellDimension,
+                        BufferedImage.TYPE_INT_ARGB);
+                final Graphics2D g = (Graphics2D)scaledErrorImage.getGraphics();
+                // heuristic to center the error image
+                g.drawImage(Sb_stadtbildUtils.ERROR_IMAGE, 0, cellDimension / 12, null);
+                return scaledErrorImage;
             } else {
-                final Image overlay = scaleImage(Sb_stadtbildUtils.ERROR_IMAGE, cellDimension, invert);
+                final Image overlay = Sb_stadtbildUtils.scaleImage(
+                        Sb_stadtbildUtils.ERROR_IMAGE,
+                        cellDimension,
+                        invert);
 
                 // create the new image, canvas size is the max. of both image sizes
                 final int w = Math.max(image.getWidth(null), overlay.getWidth(null));
@@ -266,7 +281,11 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
             if (image != null) {
                 this.setIcon(new ImageIcon(image));
             } else {
-                this.setIcon(new ImageIcon(Sb_stadtbildUtils.ERROR_IMAGE));
+                final Image scaledErrorImage = Sb_stadtbildUtils.scaleImage(
+                        Sb_stadtbildUtils.ERROR_IMAGE,
+                        grid.getFixedCellDimension(),
+                        false);
+                this.setIcon(new ImageIcon(scaledErrorImage));
             }
 
             return this;

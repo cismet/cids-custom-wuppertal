@@ -122,11 +122,15 @@ public abstract class Sb_AbstractPictureGridObject {
                 protected void done() {
                     try {
                         final Image image = get();
-                        lastShowImage = new LastShownImage(bildnummer, image);
+                        if (image != null) {
+                            lastShowImage = new LastShownImage(bildnummer, image);
+                        } else {
+                            lastShowImage = new LastShownImage(bildnummer, null);
+                        }
                     } catch (InterruptedException ex) {
-                        lastShowImage = new LastShownImage(bildnummer, Sb_stadtbildUtils.ERROR_IMAGE);
+                        lastShowImage = new LastShownImage(bildnummer, null);
                     } catch (ExecutionException ex) {
-                        lastShowImage = new LastShownImage(bildnummer, Sb_stadtbildUtils.ERROR_IMAGE);
+                        lastShowImage = new LastShownImage(bildnummer, null);
                     } catch (CancellationException ex) {
                     } finally {
                         notifyModel();
