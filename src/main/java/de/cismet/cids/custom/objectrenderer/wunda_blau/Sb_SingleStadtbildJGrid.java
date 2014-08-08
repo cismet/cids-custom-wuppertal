@@ -10,11 +10,15 @@ package de.cismet.cids.custom.objectrenderer.wunda_blau;
 import com.guigarage.jgrid.JGrid;
 import com.guigarage.jgrid.renderer.GridCellRenderer;
 
+import java.awt.AlphaComposite;
 import java.awt.Component;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -52,6 +56,7 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
     public void stadtbildChosen(final Sb_stadtbildserieGridObject source, final CidsBean stadtbild) {
         final SingleStadtbildGridObject gridObject = new SingleStadtbildGridObject(stadtbild, source);
         if (!modelProxy.contains(gridObject)) {
+            gridObject.startThreadToDetermineIfHighResImageAvailable();
             ((DefaultListModel)this.getModel()).addElement(gridObject);
             modelProxy.add(gridObject);
         }
@@ -81,9 +86,10 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
     public void sb_stadtbildserieGridObjectRemovedFromBin(final Sb_stadtbildserieGridObject source) {
         final DefaultListModel model = (DefaultListModel)this.getModel();
         for (final CidsBean chosenStadtbilder : source.getSelectedBildnummernOfSerie()) {
-            final SingleStadtbildGridObject objectToRemove = new SingleStadtbildGridObject(chosenStadtbilder, source);
-            model.addElement(objectToRemove);
-            modelProxy.add(objectToRemove);
+            final SingleStadtbildGridObject objectToAdd = new SingleStadtbildGridObject(chosenStadtbilder, source);
+            objectToAdd.startThreadToDetermineIfHighResImageAvailable();
+            model.addElement(objectToAdd);
+            modelProxy.add(objectToAdd);
         }
     }
 
@@ -112,6 +118,7 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
 
         CidsBean stadtbild;
         Sb_stadtbildserieGridObject locationOfStadtbild;
+        AtomicBoolean imageAvailableInHighRes;
 
         //~ Constructors -------------------------------------------------------
 
@@ -125,9 +132,28 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
                 final Sb_stadtbildserieGridObject locationOfStadtbild) {
             this.stadtbild = stadtbild;
             this.locationOfStadtbild = locationOfStadtbild;
+
+            imageAvailableInHighRes = new AtomicBoolean(true);
         }
 
         //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         */
+        void startThreadToDetermineIfHighResImageAvailable() {
+            final String imageNumber = (String)stadtbild.getProperty("bildnummer");
+            (new Thread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            imageAvailableInHighRes.set(
+                                Sb_stadtbildUtils.getFormatOfHighResPicture(imageNumber)
+                                        != null);
+                            SingleStadtbildGridObject.this.notifyModel();
+                        }
+                    })).start();
+        }
 
         @Override
         protected String getBildnummer() {
@@ -146,6 +172,34 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
             gridModel.setElementAt(
                 this,
                 gridModel.indexOf(this));
+        }
+
+        @Override
+        /**
+         * Gets the scaled image from the super implementation and draws overlay, eventually.
+         * If no high resolution image of the current stadtbild is available then image will be shown, but gets an overlay.
+         *
+         */
+        public Image getImage(final int cellDimension, final boolean invert) {
+            final Image image = super.getImage(cellDimension, invert);
+            if (imageAvailableInHighRes.get() || (image == null) || (image == Sb_stadtbildUtils.ERROR_IMAGE)
+                        || (image == Sb_stadtbildUtils.ERROR_IMAGE)) {
+                return image;
+            } else {
+                final Image overlay = scaleImage(Sb_stadtbildUtils.ERROR_IMAGE, cellDimension, invert);
+
+                // create the new image, canvas size is the max. of both image sizes
+                final int w = Math.max(image.getWidth(null), overlay.getWidth(null));
+                final int h = Math.max(image.getHeight(null), overlay.getHeight(null));
+                final BufferedImage combined = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+
+                final Graphics2D g = (Graphics2D)combined.getGraphics().create();
+                g.drawImage(image, 0, 0, null);
+                g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.75f));
+                // heuristic to center the overlay
+                g.drawImage(overlay, 0, cellDimension / 12, null);
+                return combined;
+            }
         }
 
         @Override

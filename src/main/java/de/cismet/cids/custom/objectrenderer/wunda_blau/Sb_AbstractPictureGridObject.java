@@ -51,7 +51,9 @@ public abstract class Sb_AbstractPictureGridObject {
     protected abstract void notifyModel();
 
     /**
-     * DOCUMENT ME!
+     * Get a scaled image for a Stadtbild. The exact stadtbild is provided by the method <code>getBildnummer()</code>.
+     * If the image has to be loaded first a Placeholder image will be returned. If something went wrong, e.g. while
+     * loading the image. An error image will be returned.
      *
      * @param   cellDimension  DOCUMENT ME!
      * @param   invert         DOCUMENT ME!
@@ -97,7 +99,7 @@ public abstract class Sb_AbstractPictureGridObject {
      *
      * @return  DOCUMENT ME!
      */
-    private Image scaleImage(final Image toScale, final int dimension, final boolean showWholePicture) {
+    protected Image scaleImage(final Image toScale, final int dimension, final boolean showWholePicture) {
         Image toReturn = toScale;
         if (toReturn instanceof BufferedImage) {
             if ((toScale.getHeight(null) > toScale.getWidth(null)) ^ showWholePicture) {
