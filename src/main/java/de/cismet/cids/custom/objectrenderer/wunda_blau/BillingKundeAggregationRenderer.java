@@ -110,6 +110,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
     private javax.swing.JButton btnShowResults;
     private javax.swing.JComboBox cboAbrechnungsturnus;
     private javax.swing.JCheckBox cboBillDownloads;
+    private javax.swing.JCheckBox cboHideAbgerechneteBuchungen;
     private javax.swing.JCheckBox cboHideFreeDownloads;
     private javax.swing.JCheckBox cboHideFreeDownloadsBuchungsbeleg;
     private javax.swing.JCheckBox cboHideFreeDownloadsRechnungsanlage;
@@ -156,6 +157,8 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
             cboBillDownloads.setEnabled(false);
 
             btnGeschaeftsstatistik.setEnabled(false);
+
+            cboHideAbgerechneteBuchungen.setVisible(false);
         }
     }
 
@@ -191,6 +194,7 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
         jLabel4 = new javax.swing.JLabel();
         cboAbrechnungsturnus = new javax.swing.JComboBox();
         cboHideFreeDownloads = new javax.swing.JCheckBox();
+        cboHideAbgerechneteBuchungen = new javax.swing.JCheckBox();
         pnlVerwendungszweck = new de.cismet.cids.custom.objectrenderer.utils.billing.VerwendungszweckPanel();
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
@@ -419,11 +423,32 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(10, 7, 10, 0);
         jPanel3.add(cboHideFreeDownloads, gridBagConstraints);
+
+        cboHideAbgerechneteBuchungen.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            cboHideAbgerechneteBuchungen,
+            org.openide.util.NbBundle.getMessage(
+                BillingKundeAggregationRenderer.class,
+                "BillingKundeAggregationRenderer.cboHideAbgerechneteBuchungen.text")); // NOI18N
+        cboHideAbgerechneteBuchungen.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cboHideAbgerechneteBuchungenActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 7, 0, 0);
+        jPanel3.add(cboHideAbgerechneteBuchungen, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -742,6 +767,15 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
 
     /**
      * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cboHideAbgerechneteBuchungenActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cboHideAbgerechneteBuchungenActionPerformed
+        filterSettingsChanged();
+    }                                                                                                //GEN-LAST:event_cboHideAbgerechneteBuchungenActionPerformed
+
+    /**
+     * DOCUMENT ME!
      */
     private void setFilterActionInExternalPanels() {
         final Action filterAction = new AbstractAction() {
@@ -813,6 +847,14 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
             cidsBillingSearchStatement.setKostentyp(Kostentyp.KOSTENPFLICHTIG);
         } else {
             cidsBillingSearchStatement.setKostentyp(Kostentyp.IGNORIEREN);
+        }
+
+        if (cboHideAbgerechneteBuchungen.isSelected()) {
+            // hide the abgerechnete Buchungen
+            cidsBillingSearchStatement.setShowAbgerechneteBillings(false);
+        } else {
+            // show both abgerechnete and not abgerechnete Buchungen
+            cidsBillingSearchStatement.setShowAbgerechneteBillings(null);
         }
 
         if (LOG.isDebugEnabled()) {
@@ -914,9 +956,16 @@ public class BillingKundeAggregationRenderer extends javax.swing.JPanel implemen
                 text.append(".");
             }
         }
-        text.append(NbBundle.getMessage(
-                BillingKundeAggregationRenderer.class,
-                "BillingKundeAggregationRenderer.generateFilterResultText().suffix"));
+        if (cboHideAbgerechneteBuchungen.isSelected()) {
+            text.append(NbBundle.getMessage(
+                    BillingKundeAggregationRenderer.class,
+                    "BillingKundeAggregationRenderer.generateFilterResultText().suffix.hideAbgerechnteAndStornierte"));
+        } else {
+            text.append(NbBundle.getMessage(
+                    BillingKundeAggregationRenderer.class,
+                    "BillingKundeAggregationRenderer.generateFilterResultText().suffix.hideStornierte"));
+        }
+
         return text.toString();
     }
 
