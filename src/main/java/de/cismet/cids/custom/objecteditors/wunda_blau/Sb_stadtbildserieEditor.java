@@ -494,7 +494,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
      */
     private void decorateComboBoxes() {
         StaticSwingTools.decorateWithFixedAutoCompleteDecorator(bcbStrasse);
-        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(dbcAuftraggeber);
+        // dbcAuftraggeber with AutoCompleteDecorator does not work
+// StaticSwingTools.decorateWithFixedAutoCompleteDecorator(dbcAuftraggeber);
         StaticSwingTools.decorateWithFixedAutoCompleteDecorator(dbcBildtyp);
         StaticSwingTools.decorateWithFixedAutoCompleteDecorator(dbcFilmart);
         StaticSwingTools.decorateWithFixedAutoCompleteDecorator(dbcFotograf);
