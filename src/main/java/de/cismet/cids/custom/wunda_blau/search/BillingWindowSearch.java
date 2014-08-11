@@ -621,7 +621,7 @@ public class BillingWindowSearch extends javax.swing.JPanel implements CidsWindo
 
         metaObjectNodesBillingSearchStatement.setKostentyp(chooseKostentyp());
 
-        metaObjectNodesBillingSearchStatement.setShowOnlyAbgerechneteBillings(cboAbgerechnet.isSelected());
+        metaObjectNodesBillingSearchStatement.setShowAbgerechneteBillings(cboAbgerechnet.isSelected());
         metaObjectNodesBillingSearchStatement.setShowOnlyStornierteBillings(cboStorniert.isSelected());
 
         return metaObjectNodesBillingSearchStatement;
