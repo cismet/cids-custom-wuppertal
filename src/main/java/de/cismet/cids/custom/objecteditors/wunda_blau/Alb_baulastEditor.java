@@ -559,6 +559,7 @@ public class Alb_baulastEditor extends JPanel implements DisposableCidsBeanStore
      */
     @Override
     public void dispose() {
+        bindingGroup.unbind();
         panMain.dispose();
         alb_picturePanel.dispose();
     }
