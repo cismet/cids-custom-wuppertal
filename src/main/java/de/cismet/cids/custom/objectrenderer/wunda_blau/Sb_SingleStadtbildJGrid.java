@@ -177,7 +177,7 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
         /**
          * Gets the scaled image from the super implementation and draws overlay, eventually. If no high resolution
          * image of the current stadtbild is available then image will be shown, but gets an overlay.
-         * 
+         *
          * <p>Never returns null. Adds an error image on its own.</p>
          *
          * @param   cellDimension  DOCUMENT ME!
