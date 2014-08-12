@@ -692,16 +692,20 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
                         final CidsBean stadtbildserie = gridObject.getCidsBean();
                         final Set<CidsBean> stadtbilder = gridObject.getSelectedBildnummernOfSerie();
+                        final Boolean internalUsage = (Boolean)stadtbildserie.getProperty("interner_gebrauch");
                         for (final CidsBean stadtbild : stadtbilder) {
                             final String bildnummer = (String)stadtbild.getProperty("bildnummer");
                             Image image;
-                            try {
-                                image = Sb_stadtbildUtils.downloadImageForBildnummer(bildnummer);
-                            } catch (Exception ex) {
-                                LOG.error("Image could not be fetched.", ex);
+                            if (Boolean.TRUE.equals(internalUsage)) {
                                 image = Sb_stadtbildUtils.ERROR_IMAGE;
+                            } else {
+                                try {
+                                    image = Sb_stadtbildUtils.downloadImageForBildnummer(bildnummer);
+                                } catch (Exception ex) {
+                                    LOG.error("Image could not be fetched.", ex);
+                                    image = Sb_stadtbildUtils.ERROR_IMAGE;
+                                }
                             }
-
                             stadtbilderReportBeans.add(new StadtbildReportBean(stadtbildserie, stadtbild, image));
                         }
                     }
