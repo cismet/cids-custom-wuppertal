@@ -74,12 +74,16 @@ public class Sb_StadtbildTimeTabs extends javax.swing.JPanel {
      * DOCUMENT ME!
      */
     private void setTimeRelatedModels() {
-        // put the last 100 year numbers into the comboboxes
+        // put the current year to the year 0 into the combobox
         final int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        final Integer[] years = new Integer[100];
+        final Integer[] years = new Integer[currentYear + 2];
         years[0] = null;
-        for (int i = 1; i < 100; i++) {
-            years[i] = currentYear - i + 1;
+        int year = currentYear;
+        int i = 1;
+        while (year >= 0) {
+            years[i] = year;
+            year--;
+            i++;
         }
         cboYear.setModel(new javax.swing.DefaultComboBoxModel<Integer>(years));
     }
