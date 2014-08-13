@@ -11,10 +11,19 @@
  */
 package de.cismet.cids.custom.wunda_blau.search;
 
+import Sirius.navigator.connection.SessionManager;
+
 import java.awt.Component;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
+
+import javax.swing.SwingWorker;
+
+import de.cismet.cids.custom.wunda_blau.search.server.Sb_minAufnahmedatumYearFetcherServerSearch;
 
 /**
  * DOCUMENT ME!
@@ -23,6 +32,11 @@ import java.util.Date;
  * @version  $Revision$, $Date$
  */
 public class Sb_StadtbildTimeTabs extends javax.swing.JPanel {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
+            Sb_StadtbildTimeTabs.class);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cboYear;
@@ -57,7 +71,7 @@ public class Sb_StadtbildTimeTabs extends javax.swing.JPanel {
      */
     public Sb_StadtbildTimeTabs() {
         initComponents();
-        setTimeRelatedModels();
+        new MinYearFetcherWorker().execute();
 
         // set Zoomable has to be set to activate the SpinningCalendarHeaderHandler. for more information see
         // JXDatePickerHeaderTakeoff or http://stackoverflow.com/questions/16111943/java-swing-jxdatepicker
@@ -72,14 +86,20 @@ public class Sb_StadtbildTimeTabs extends javax.swing.JPanel {
 
     /**
      * DOCUMENT ME!
+     *
+     * @param  minYear  DOCUMENT ME!
      */
-    private void setTimeRelatedModels() {
-        // put the last 100 year numbers into the comboboxes
+    private void setTimeRelatedModels(final int minYear) {
+        // put the current year to the minimum year into the combobox
         final int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        final Integer[] years = new Integer[100];
+        final Integer[] years = new Integer[currentYear - minYear + 2];
         years[0] = null;
-        for (int i = 1; i < 100; i++) {
-            years[i] = currentYear - i + 1;
+        int year = currentYear;
+        int i = 1;
+        while (year >= minYear) {
+            years[i] = year;
+            year--;
+            i++;
         }
         cboYear.setModel(new javax.swing.DefaultComboBoxModel<Integer>(years));
     }
@@ -316,5 +336,59 @@ public class Sb_StadtbildTimeTabs extends javax.swing.JPanel {
         dpTo.setDate(null);
         dpFTFrom.setDate(null);
         dpFTTill.setDate(null);
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class MinYearFetcherWorker extends SwingWorker<Integer, Void> {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new MinYearFetcherWorker object.
+         */
+        public MinYearFetcherWorker() {
+            cboYear.setEnabled(false);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        protected Integer doInBackground() throws Exception {
+            final Sb_minAufnahmedatumYearFetcherServerSearch minYearFetcher =
+                new Sb_minAufnahmedatumYearFetcherServerSearch();
+            final Collection minYearCollection = SessionManager.getConnection()
+                        .customServerSearch(SessionManager.getSession().getUser(), minYearFetcher);
+            if ((minYearCollection != null) && !minYearCollection.isEmpty()) {
+                final ArrayList firstColumnObject = (ArrayList)minYearCollection.toArray(new Object[1])[0];
+                final Object firstRowObject = firstColumnObject.get(0);
+                return (Integer)firstRowObject;
+            }
+            return null;
+        }
+
+        @Override
+        protected void done() {
+            Integer minYear = null;
+            try {
+                minYear = get();
+            } catch (InterruptedException ex) {
+                LOG.warn(ex, ex);
+            } catch (ExecutionException ex) {
+                LOG.warn(ex, ex);
+            }
+
+            if (minYear == null) {
+                minYear = 0;
+            }
+
+            setTimeRelatedModels(minYear);
+            cboYear.setEnabled(true);
+        }
     }
 }
