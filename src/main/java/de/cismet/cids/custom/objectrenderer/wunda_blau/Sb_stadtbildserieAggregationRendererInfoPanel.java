@@ -594,10 +594,12 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         return EDITABLE;
     }
 
-    @Override
     /**
      * Another image was selected in table.
+     *
+     * @param  e  DOCUMENT ME!
      */
+    @Override
     public void valueChanged(final ListSelectionEvent e) {
         if (!e.getValueIsAdjusting()) {
             final int rowView = tblStadtbilder.getSelectedRow();
@@ -615,10 +617,12 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         }
     }
 
-    @Override
     /**
      * A cell in the table was edited.
+     *
+     * @param  e  DOCUMENT ME!
      */
+    @Override
     public void tableChanged(final TableModelEvent e) {
         final DefaultTableModel model = (DefaultTableModel)tblStadtbilder.getModel();
         final int rowModel = e.getFirstRow();

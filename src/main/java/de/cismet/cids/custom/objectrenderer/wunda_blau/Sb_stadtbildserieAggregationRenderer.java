@@ -105,8 +105,10 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     private javax.swing.JButton btnBin;
     private javax.swing.JButton btnBinRecycle;
     private javax.swing.JButton btnDownloadHighResImage;
+    private javax.swing.JButton btnMoveSerienToWarenkorb;
     private javax.swing.JButton btnRemoveWarenkorb;
     private javax.swing.JButton btnReport;
+    private javax.swing.Box.Filler filler1;
     private com.guigarage.jgrid.JGrid grdBin;
     private com.guigarage.jgrid.JGrid grdStadtbildserien;
     private com.guigarage.jgrid.JGrid grdWarenkorb;
@@ -187,6 +189,10 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         jLabel1 = new javax.swing.JLabel();
         sldSize = new javax.swing.JSlider();
         jLabel2 = new javax.swing.JLabel();
+        btnMoveSerienToWarenkorb = new javax.swing.JButton();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
         pnlInfoPanels = new javax.swing.JPanel();
         infoPanel = new de.cismet.cids.custom.objectrenderer.wunda_blau.Sb_stadtbildserieAggregationRendererInfoPanel();
         infoNotAvailable =
@@ -415,7 +421,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 0);
         roundedPanel1.add(btnBin, gridBagConstraints);
 
         btnRemoveWarenkorb.setIcon(new javax.swing.ImageIcon(
@@ -441,7 +447,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 0);
         roundedPanel1.add(btnRemoveWarenkorb, gridBagConstraints);
         btnRemoveWarenkorb.setVisible(false);
 
@@ -468,6 +474,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 0);
         roundedPanel1.add(btnBinRecycle, gridBagConstraints);
         btnBinRecycle.setVisible(false);
 
@@ -562,6 +569,38 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         roundedPanel1.add(pnlSlider, gridBagConstraints);
+
+        btnMoveSerienToWarenkorb.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/basket_shopping.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnMoveSerienToWarenkorb,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.btnMoveSerienToWarenkorb.text"));                           // NOI18N
+        btnMoveSerienToWarenkorb.setToolTipText(org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.btnMoveSerienToWarenkorb.toolTipText"));                    // NOI18N
+        btnMoveSerienToWarenkorb.setBorderPainted(false);
+        btnMoveSerienToWarenkorb.setContentAreaFilled(false);
+        btnMoveSerienToWarenkorb.setFocusPainted(false);
+        btnMoveSerienToWarenkorb.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnMoveSerienToWarenkorbActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
+        roundedPanel1.add(btnMoveSerienToWarenkorb, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        roundedPanel1.add(filler1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -812,6 +851,19 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
     /**
      * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnMoveSerienToWarenkorbActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnMoveSerienToWarenkorbActionPerformed
+        // select every Stadtbild of the selected Stadtbildserien
+        final List<Sb_stadtbildserieGridObject> selectedStadtbildserien = grdStadtbildserien.getSelectedValuesList();
+        for (final Sb_stadtbildserieGridObject stadtbildserie : selectedStadtbildserien) {
+            stadtbildserie.selectAllStadtbilder();
+        }
+    } //GEN-LAST:event_btnMoveSerienToWarenkorbActionPerformed
+
+    /**
+     * DOCUMENT ME!
      */
     private void switchToSerie() {
         final CardLayout cardLayout = (CardLayout)pnlLeuchtkasten.getLayout();
@@ -828,6 +880,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
         tbtnSlide.setEnabled(true);
         showInfoPanel(wasInfoPanelVisibleBeforeSwitch);
+
+        btnMoveSerienToWarenkorb.setVisible(true);
     }
 
     /**
@@ -848,6 +902,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
         tbtnSlide.setEnabled(true);
         showInfoPanel(wasInfoPanelVisibleBeforeSwitch);
+
+        btnMoveSerienToWarenkorb.setVisible(false);
     }
 
     /**
@@ -869,6 +925,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         tbtnSlide.setEnabled(false);
         wasInfoPanelVisibleBeforeSwitch = pnlInfoPanels.isVisible();
         showInfoPanel(false);
+
+        btnMoveSerienToWarenkorb.setVisible(false);
     }
 
     @Override
