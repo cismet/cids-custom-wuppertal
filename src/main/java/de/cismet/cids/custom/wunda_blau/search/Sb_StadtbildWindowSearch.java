@@ -129,6 +129,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler6;
+    private javax.swing.Box.Filler filler7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -147,6 +148,9 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     private javax.swing.JPanel pnlScrollPane;
     private javax.swing.JPanel pnlSearchWords;
     private javax.swing.JPanel pnlStrassenzuordnung;
+    private javax.swing.JRadioButton rbtnAllKeywords;
+    private javax.swing.JRadioButton rbtnOneKeyword;
+    private javax.swing.ButtonGroup rbtngKeywords;
     private de.cismet.cids.custom.wunda_blau.search.Sb_StadtbildTimeTabs sb_StadtbilderTimeTabs;
     private javax.swing.JTabbedPane tabBildnummern;
     private javax.swing.JTextField txtBildnummer;
@@ -249,6 +253,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        rbtngKeywords = new javax.swing.ButtonGroup();
         jScrollPane1 = new javax.swing.JScrollPane();
         pnlScrollPane = new javax.swing.JPanel();
         pnlKindOfImage = new javax.swing.JPanel();
@@ -279,6 +284,11 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         pnlCtrlButtons1 = new javax.swing.JPanel();
         btnAddSuchwort = new javax.swing.JButton();
         btnRemoveSuchwort = new javax.swing.JButton();
+        rbtnAllKeywords = new javax.swing.JRadioButton();
+        rbtnOneKeyword = new javax.swing.JRadioButton();
+        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
         sb_StadtbilderTimeTabs = new de.cismet.cids.custom.wunda_blau.search.Sb_StadtbildTimeTabs();
         pnlStrassenzuordnung = new javax.swing.JPanel();
         lblStrasse = new javax.swing.JLabel();
@@ -497,6 +507,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
         pnlCtrlButtons1.add(btnAddSuchwort, gridBagConstraints);
 
@@ -517,8 +528,41 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 5, 10);
         pnlCtrlButtons1.add(btnRemoveSuchwort, gridBagConstraints);
+
+        rbtngKeywords.add(rbtnAllKeywords);
+        rbtnAllKeywords.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            rbtnAllKeywords,
+            org.openide.util.NbBundle.getMessage(
+                Sb_StadtbildWindowSearch.class,
+                "Sb_StadtbildWindowSearch.rbtnAllKeywords.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        pnlCtrlButtons1.add(rbtnAllKeywords, gridBagConstraints);
+
+        rbtngKeywords.add(rbtnOneKeyword);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            rbtnOneKeyword,
+            org.openide.util.NbBundle.getMessage(
+                Sb_StadtbildWindowSearch.class,
+                "Sb_StadtbildWindowSearch.rbtnOneKeyword.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        pnlCtrlButtons1.add(rbtnOneKeyword, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.weighty = 1.0;
+        pnlCtrlButtons1.add(filler7, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -936,6 +980,12 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             suchwortIDs.add(id);
         }
         stadtbildSerieSearchStatement.setSuchwoerterIDs(suchwortIDs);
+
+        if (rbtnAllKeywords.isSelected()) {
+            stadtbildSerieSearchStatement.setHasAllSuchworte(true);
+        } else {
+            stadtbildSerieSearchStatement.setHasAllSuchworte(false);
+        }
 
         final Date[] fromDate_tillDate = sb_StadtbilderTimeTabs.chooseDates();
         stadtbildSerieSearchStatement.setFrom(fromDate_tillDate[0]);
