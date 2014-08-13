@@ -1232,7 +1232,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                                         .getSelectedValuesList();
                             if (selectedSerien.size() == 1) {
                                 final Sb_stadtbildserieGridObject gridObject = selectedSerien.get(0);
-                                gridObject.addOrRemoveSelectedBildnummerOfSerie(gridObject.getStadtbildUnderMarker());
+                                gridObject.selectOrDeselectStadtbild(gridObject.getStadtbildUnderMarker());
                             }
                         }
                     }

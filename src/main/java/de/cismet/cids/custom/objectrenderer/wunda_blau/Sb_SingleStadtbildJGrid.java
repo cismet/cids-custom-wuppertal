@@ -100,7 +100,7 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
         final List<SingleStadtbildGridObject> selectedObjects = this.getSelectedValuesList();
         for (final SingleStadtbildGridObject object : selectedObjects) {
             final Sb_stadtbildserieGridObject sb_stadtbildserieGridObject = object.locationOfStadtbild;
-            sb_stadtbildserieGridObject.removeSelectedBildnummerOfSerie(object.stadtbild);
+            sb_stadtbildserieGridObject.deselectStadtbildOfSerie(object.stadtbild);
         }
     }
 
@@ -168,10 +168,13 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
         @Override
         protected void notifyModel() {
             final DefaultListModel gridModel = (DefaultListModel)Sb_SingleStadtbildJGrid.this.getModel();
-            // adds itself to the gridModel at the same position. to update the gridModel
-            gridModel.setElementAt(
-                this,
-                gridModel.indexOf(this));
+            final int position = gridModel.indexOf(this);
+            if ((position >= 0) && (position < gridModel.getSize())) {
+                // adds itself to the gridModel at the same position. to update the gridModel
+                gridModel.setElementAt(
+                    this,
+                    position);
+            }
         }
 
         /**

@@ -209,7 +209,7 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
      */
     public void selectAllStadtbilder() {
         for (final CidsBean stadtbild : imagesToShow) {
-            addSelectedBildnummerOfSerie(stadtbild);
+            selectStadtbildOfSerie(stadtbild);
         }
     }
 
@@ -218,7 +218,7 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
      */
     public void deselectAllStadtbilder() {
         for (final CidsBean stadtbild : imagesToShow) {
-            removeSelectedBildnummerOfSerie(stadtbild);
+            deselectStadtbildOfSerie(stadtbild);
         }
     }
 
@@ -227,7 +227,7 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
      *
      * @param  bildnummer  DOCUMENT ME!
      */
-    public void addSelectedBildnummerOfSerie(final CidsBean bildnummer) {
+    public void selectStadtbildOfSerie(final CidsBean bildnummer) {
         if (!this.isInBin && imagesToShow.contains(bildnummer)) {
             final boolean wasAdded = selectedBildnummernOfSerie.add(bildnummer);
             if (wasAdded) {
@@ -242,7 +242,7 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
      *
      * @param  bildnummer  DOCUMENT ME!
      */
-    public void removeSelectedBildnummerOfSerie(final CidsBean bildnummer) {
+    public void deselectStadtbildOfSerie(final CidsBean bildnummer) {
         if (!this.isInBin) {
             final boolean wasRemoved = selectedBildnummernOfSerie.remove(bildnummer);
             if (wasRemoved) {
@@ -268,11 +268,11 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
      *
      * @param  bildnummer  DOCUMENT ME!
      */
-    public void addOrRemoveSelectedBildnummerOfSerie(final CidsBean bildnummer) {
+    public void selectOrDeselectStadtbild(final CidsBean bildnummer) {
         if (selectedBildnummernOfSerie.contains(bildnummer)) {
-            removeSelectedBildnummerOfSerie(bildnummer);
+            deselectStadtbildOfSerie(bildnummer);
         } else {
-            addSelectedBildnummerOfSerie(bildnummer);
+            selectStadtbildOfSerie(bildnummer);
         }
     }
 
@@ -296,6 +296,24 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
             priority = Sb_stadtbildUtils.LOW_PRIORITY;
         }
         return priority;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public List<CidsBean> getImagesToShow() {
+        return imagesToShow;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  imagesToShow  DOCUMENT ME!
+     */
+    public void setImagesToShow(final List<CidsBean> imagesToShow) {
+        this.imagesToShow = imagesToShow;
     }
 
     /**
