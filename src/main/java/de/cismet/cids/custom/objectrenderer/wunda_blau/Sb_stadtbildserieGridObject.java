@@ -52,8 +52,8 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
     private boolean isInBin = false;
 
     /**
-     * imagesToShow contains the same Stadtbild-CidsBean as stadtbildserie.getBeanCollectionProperty("stadtbilder_arr"),
-     * but might be ordered.
+     * imagesToShow contains the same Stadtbild-CidsBeans as
+     * stadtbildserie.getBeanCollectionProperty("stadtbilder_arr"), but might be ordered.
      */
     private List<CidsBean> imagesToShow;
 
@@ -206,11 +206,29 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
 
     /**
      * DOCUMENT ME!
+     */
+    public void selectAllStadtbilder() {
+        for (final CidsBean stadtbild : imagesToShow) {
+            addSelectedBildnummerOfSerie(stadtbild);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void deselectAllStadtbilder() {
+        for (final CidsBean stadtbild : imagesToShow) {
+            removeSelectedBildnummerOfSerie(stadtbild);
+        }
+    }
+
+    /**
+     * Select a stadtbild if the the stadtbildserie is not in the bin and the serie actually contains the stadtbild.
      *
      * @param  bildnummer  DOCUMENT ME!
      */
     public void addSelectedBildnummerOfSerie(final CidsBean bildnummer) {
-        if (!this.isInBin) {
+        if (!this.isInBin && imagesToShow.contains(bildnummer)) {
             final boolean wasAdded = selectedBildnummernOfSerie.add(bildnummer);
             if (wasAdded) {
                 fireStadtbildChosen(bildnummer);
@@ -220,7 +238,7 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
     }
 
     /**
-     * DOCUMENT ME!
+     * Deselect a Stadtbild if the stadtbildserie is not in the bin.
      *
      * @param  bildnummer  DOCUMENT ME!
      */
