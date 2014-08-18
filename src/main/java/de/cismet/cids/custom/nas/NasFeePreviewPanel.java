@@ -41,6 +41,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
     //~ Static fields/initializers ---------------------------------------------
 
     private static final Logger log = Logger.getLogger(NasFeePreviewPanel.class);
+    private static final String PK_NASOEIG = "nasoeig";
 
     //~ Instance fields --------------------------------------------------------
 
@@ -85,6 +86,7 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
      */
     public NasFeePreviewPanel() {
         this(new NasProduct("ohne_eigentuemer"));
+        this.nasProduct.setBillingKey(PK_NASOEIG);
     }
 
     /**
@@ -224,11 +226,12 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
                     }
                     // do the search
                     double totalFee = 0;
+                    final String nasBillingKey = nasProduct.getBillingKey();
                     if ((nasProduct != null) && nasProduct.getKey().equalsIgnoreCase("punkte")) {
                         final ArrayList<String> values = new ArrayList<String>();
                         pointAmount = NasFeeCalculator.getPointAmount(geom);
                         values.add("" + pointAmount);
-                        final double pointFee = NasFeeCalculator.getFeeForPoints(pointAmount) * discount;
+                        final double pointFee = NasFeeCalculator.getFeeForPoints(pointAmount, nasBillingKey) * discount;
                         totalFee += pointFee;
                         values.add(formatter.format(pointFee));
                         result.put("punkte", values);
@@ -237,12 +240,15 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
                         final ArrayList<String> gebaeudeValues = new ArrayList<String>();
                         flurstueckAmount = NasFeeCalculator.getFlurstueckAmount(geom);
                         flurstueckValues.add("" + flurstueckAmount);
-                        final double flurstueckFee = NasFeeCalculator.getFeeForFlurstuecke(flurstueckAmount)
+                        final double flurstueckFee =
+                            NasFeeCalculator.getFeeForFlurstuecke(flurstueckAmount, nasBillingKey)
                                     * discount;
                         totalFee += flurstueckFee;
                         // ToDo this is a quick and dirty way to calculate the fee for type KOMPLETT
                         if ((nasProduct != null) && nasProduct.getKey().equalsIgnoreCase("komplett")) {
-                            final double eigentuemerFee = NasFeeCalculator.getFeeForEigentuemer(flurstueckAmount)
+                            final double eigentuemerFee = NasFeeCalculator.getFeeForEigentuemer(
+                                    flurstueckAmount,
+                                    nasBillingKey)
                                         * discount;
                             totalFee += eigentuemerFee;
                             final ArrayList<String> eigentuemerValues = new ArrayList<String>();
@@ -254,7 +260,8 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
                         result.put("flurstuecke", flurstueckValues);
                         gebaeudeAmount = NasFeeCalculator.getGebaeudeAmount(geom);
                         gebaeudeValues.add("" + gebaeudeAmount);
-                        final double gebaeudeFee = NasFeeCalculator.getFeeForGebaeude(gebaeudeAmount) * discount;
+                        final double gebaeudeFee = NasFeeCalculator.getFeeForGebaeude(gebaeudeAmount, nasBillingKey)
+                                    * discount;
                         totalFee += gebaeudeFee;
                         gebaeudeValues.add(formatter.format(gebaeudeFee));
                         result.put("gebaeude", gebaeudeValues);
@@ -375,22 +382,26 @@ public class NasFeePreviewPanel extends javax.swing.JPanel {
     private ArrayList<ProductGroupAmount> getProductGroupAmountForObject(final String objectBaseKey, int amount) {
         final ArrayList<ProductGroupAmount> result = new ArrayList<ProductGroupAmount>();
         if (amount > 1000000) {
-            final int tmpPoints = amount - 1000000;
+            final int tmpPoints = amount
+                        - 1000000;
             result.add(new ProductGroupAmount(objectBaseKey + "_1000001", tmpPoints));
             amount = 1000000;
         }
         if (amount > 100000) {
-            final int tmpPoints = amount - 100000;
+            final int tmpPoints = amount
+                        - 100000;
             result.add(new ProductGroupAmount(objectBaseKey + "_100001-1000000", tmpPoints));
             amount = 100000;
         }
         if (amount > 10000) {
-            final int tmpPoints = amount - 10000;
+            final int tmpPoints = amount
+                        - 10000;
             result.add(new ProductGroupAmount(objectBaseKey + "_10001-100000", tmpPoints));
             amount = 10000;
         }
         if (amount > 1000) {
-            final int tmpPoints = amount - 1000;
+            final int tmpPoints = amount
+                        - 1000;
             result.add(new ProductGroupAmount(objectBaseKey + "_1001-10000", tmpPoints));
             amount = 1000;
         }
