@@ -22,7 +22,7 @@
     },
     {
         "key": "dxf",
-        "displayName": "DXF ohne Sachdaten",
+        "displayName": "DXF (Farbe)",
         "billingKey": "skmekomdxf",
         "format": "DXF",
         "template": "/de/cismet/cids/custom/utils/nas/A_o_eigentuemer.xml",
