@@ -357,6 +357,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                 "Sb_stadtbildserieAggregationRenderer.btnReport.toolTipText"));       // NOI18N
         btnReport.setBorderPainted(false);
         btnReport.setContentAreaFilled(false);
+        btnReport.setEnabled(false);
         btnReport.setFocusPainted(false);
         btnReport.addActionListener(new java.awt.event.ActionListener() {
 
@@ -1121,21 +1122,25 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     @Override
     public void stadtbildChosen(final Sb_stadtbildserieGridObject source, final CidsBean stadtbild) {
         setEnableHighResDownload();
+        btnReport.setEnabled(this.getSelectedStadtbilderAmount() > 0);
     }
 
     @Override
     public void stadtbildUnchosen(final Sb_stadtbildserieGridObject source, final CidsBean stadtbild) {
         setEnableHighResDownload();
+        btnReport.setEnabled(this.getSelectedStadtbilderAmount() > 0);
     }
 
     @Override
     public void sb_stadtbildserieGridObjectMoveToBin(final Sb_stadtbildserieGridObject source) {
         setEnableHighResDownload();
+        btnReport.setEnabled(this.getSelectedStadtbilderAmount() > 0);
     }
 
     @Override
     public void sb_stadtbildserieGridObjectRemovedFromBin(final Sb_stadtbildserieGridObject source) {
         setEnableHighResDownload();
+        btnReport.setEnabled(this.getSelectedStadtbilderAmount() > 0);
     }
 
     /**
