@@ -573,7 +573,11 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                         }
                                         reader = new MultiPagePictureReader(urls, false, false);
                                         pageCount = reader.getNumberOfPages();
-                                        additionalFilesToDownload.add(urls);
+                                        // when a reduced size image was found we download the original file as jpg also
+                                        if (isOfReducedSize) {
+                                            additionalFilesToDownload.add(new URL(
+                                                    urls.toString().replaceAll("_rs", "")));
+                                        }
 
                                         String path = urls.getPath();
                                         path = path.substring(path.lastIndexOf('/') + 1);
