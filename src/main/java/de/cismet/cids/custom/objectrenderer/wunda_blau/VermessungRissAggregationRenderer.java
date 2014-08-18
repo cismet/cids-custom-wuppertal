@@ -541,16 +541,17 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                             description.append(" - Seite ");
 
                             final List<URL> urlList;
+                            // we search for reduced size images, since we need the reduced size image for the report
                             if (host.equals(AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN)) {
                                 urlList = VermessungsrissPictureFinder.findGrenzniederschriftPicture(
-                                        false,
+                                        true,
                                         schluessel,
                                         gemarkung,
                                         flur,
                                         blatt);
                             } else {
                                 urlList = VermessungsrissPictureFinder.findVermessungsrissPicture(
-                                        false,
+                                        true,
                                         schluessel,
                                         gemarkung,
                                         flur,
