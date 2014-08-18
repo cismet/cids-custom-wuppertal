@@ -541,16 +541,17 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                             description.append(" - Seite ");
 
                             final List<URL> urlList;
+                            // we search for reduced size images, since we need the reduced size image for the report
                             if (host.equals(AlkisConstants.COMMONS.VERMESSUNG_HOST_GRENZNIEDERSCHRIFTEN)) {
                                 urlList = VermessungsrissPictureFinder.findGrenzniederschriftPicture(
-                                        false,
+                                        true,
                                         schluessel,
                                         gemarkung,
                                         flur,
                                         blatt);
                             } else {
                                 urlList = VermessungsrissPictureFinder.findVermessungsrissPicture(
-                                        false,
+                                        true,
                                         schluessel,
                                         gemarkung,
                                         flur,
@@ -572,7 +573,11 @@ public class VermessungRissAggregationRenderer extends javax.swing.JPanel implem
                                         }
                                         reader = new MultiPagePictureReader(urls, false, false);
                                         pageCount = reader.getNumberOfPages();
-                                        additionalFilesToDownload.add(urls);
+                                        // when a reduced size image was found we download the original file as jpg also
+                                        if (isOfReducedSize) {
+                                            additionalFilesToDownload.add(new URL(
+                                                    urls.toString().replaceAll("_rs", "")));
+                                        }
 
                                         String path = urls.getPath();
                                         path = path.substring(path.lastIndexOf('/') + 1);
