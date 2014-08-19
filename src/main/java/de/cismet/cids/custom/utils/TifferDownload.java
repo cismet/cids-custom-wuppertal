@@ -19,17 +19,12 @@ import java.awt.image.RenderedImage;
 
 import java.io.ByteArrayInputStream;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import javax.imageio.ImageIO;
 
 import de.cismet.cids.custom.wunda_blau.search.actions.ImageAnnotator;
 import de.cismet.cids.custom.wunda_blau.search.actions.TifferAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
-
-import de.cismet.security.WebAccessManager;
 
 import de.cismet.tools.gui.downloadmanager.AbstractDownload;
 
@@ -128,7 +123,7 @@ public class TifferDownload extends AbstractDownload {
             if (result != null) {
                 final RenderedImage image = ImageIO.read(
                         new ByteArrayInputStream(result));
-                ImageIO.write(image, format, fileToSaveTo);
+                TifferAction.writeImage(image, format, fileToSaveTo);
             } else {
                 log.error(
                     "Nothing returned by TifferAction. Check its log to see what went wrong.");
