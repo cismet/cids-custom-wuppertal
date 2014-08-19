@@ -95,6 +95,17 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
 //    private static final Color FEATURE_COLOR_SELECTED = new Color(1f, 0f, 0f, 0.4f);
     private static final Color FEATURE_COLOR_SELECTED = new Color(1f, 0f, 0f, 0.7f);
     private static final Color FEATURE_COLOR = new Color(0.5f, 0.5f, 0.5f, 0.1f);
+    private static final String BASE_TITLE_NAS;
+    private static final String BASE_TITLE_DXF;
+
+    static {
+        BASE_TITLE_NAS = NbBundle.getMessage(
+                NasDialog.class,
+                "NASDownload.basetitle.nas.text");
+        BASE_TITLE_DXF = NbBundle.getMessage(
+                NasDialog.class,
+                "NASDownload.basetitle.dxf.text");
+    }
 
     //~ Instance fields --------------------------------------------------------
 
@@ -245,11 +256,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
         initMap();
         pnlMap.setLayout(new BorderLayout());
         pnlMap.add(map, BorderLayout.CENTER);
-        for (final NasProduct p : nasProducts) {
-            if (p.getDisplayName().equals("ohne Eigentümer")) {
-                cbType.setSelectedItem(p);
-            }
-        }
+        cbType.setSelectedIndex(1);
         calculateFee();
         isInitialized = true;
         map.addMouseListener(new MouseAdapter() {
@@ -620,6 +627,19 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
                     try {
                         final NasProduct product = (NasProduct)cbType.getSelectedItem();
                         final String requestId = tfAuftragsnummer.getText().trim();
+                        if (requestId.isEmpty()) {
+                            JOptionPane.showMessageDialog(
+                                StaticSwingTools.getParentFrame(NasDialog.this),
+                                org.openide.util.NbBundle.getMessage(
+                                    NasDialog.class,
+                                    "NasDialog.OrderIdCheck.JOptionPane.emptyRequestIdMessage"),
+                                org.openide.util.NbBundle.getMessage(
+                                    NasDialog.class,
+                                    "NasDialog.OrderIdCheck.JOptionPane.title"),
+                                JOptionPane.ERROR_MESSAGE);
+                            tfAuftragsnummer.requestFocus();
+                            return;
+                        }
                         if ((requestId != null)) {
                             boolean containsWrongChar = false;
                             String wrongChar = "";
@@ -680,7 +700,7 @@ public class NasDialog extends javax.swing.JDialog implements ChangeListener, Do
             final String jobname = (!DownloadManagerDialog.getJobname().equals("")) ? DownloadManagerDialog
                             .getJobname() : null;
             final String title = product.getFormat().equalsIgnoreCase(NasProduct.Format.DXF.toString())
-                ? "DXF-Download" : "NAS-Download";
+                ? BASE_TITLE_DXF : BASE_TITLE_NAS;
             DownloadManager.instance()
                     .add(
                         new NASDownload(
