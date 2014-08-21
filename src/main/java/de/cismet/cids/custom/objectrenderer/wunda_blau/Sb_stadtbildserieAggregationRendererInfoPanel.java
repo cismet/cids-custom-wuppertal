@@ -479,6 +479,10 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
             lblAufnahmedatum.setText(formattedDate);
             lblAufnahmedatum.setVisible(true);
 
+            final List<CidsBean> suchworte = stadtbildserie.getBeanCollectionProperty("suchwort_arr");
+            lblSuchworte.setText("<html><p>" + StringUtils.join(suchworte, ", ") + "</p></html>");
+            lblSuchworte.setVisible(true);
+
             final String hausnummer = (String)stadtbildserie.getProperty("hausnummer");
             final String strassenname = (String)stadtbildserie.getProperty("strasse.name");
             if (StringUtils.isNotBlank(strassenname)) {
