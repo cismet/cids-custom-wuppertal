@@ -72,9 +72,13 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblAufnahmedatum;
+    private javax.swing.JLabel lblStrasse;
+    private javax.swing.JLabel lblSuchworte;
     private de.cismet.cids.custom.objecteditors.utils.Sb_StadtbildPreviewImage previewImage;
     private de.cismet.tools.gui.RoundedPanel roundedPanel2;
     private de.cismet.tools.gui.RoundedPanel roundedPanel3;
@@ -129,6 +133,10 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
+        jLabel4 = new javax.swing.JLabel();
+        lblSuchworte = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        lblStrasse = new javax.swing.JLabel();
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
@@ -342,6 +350,58 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         roundedPanel3.add(jPanel1, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel4,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRendererInfoPanel.class,
+                "Sb_stadtbildserieAggregationRendererInfoPanel.jLabel4.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        roundedPanel3.add(jLabel4, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblSuchworte,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRendererInfoPanel.class,
+                "Sb_stadtbildserieAggregationRendererInfoPanel.lblSuchworte.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        roundedPanel3.add(lblSuchworte, gridBagConstraints);
+        lblSuchworte.setVisible(false);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel6,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRendererInfoPanel.class,
+                "Sb_stadtbildserieAggregationRendererInfoPanel.jLabel6.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        roundedPanel3.add(jLabel6, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblStrasse,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRendererInfoPanel.class,
+                "Sb_stadtbildserieAggregationRendererInfoPanel.lblStrasse.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        roundedPanel3.add(lblStrasse, gridBagConstraints);
+        lblStrasse.setVisible(false);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
