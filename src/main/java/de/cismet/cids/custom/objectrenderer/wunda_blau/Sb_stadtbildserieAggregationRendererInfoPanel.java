@@ -7,6 +7,8 @@
 ****************************************************/
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.awt.Component;
 
 import java.sql.Timestamp;
@@ -460,18 +462,18 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
     /**
      * DOCUMENT ME!
      *
-     * @param  cidsBean  DOCUMENT ME!
+     * @param  stadtbildserie  DOCUMENT ME!
      */
-    private void setCidsBean(final CidsBean cidsBean) {
-        if (cidsBean != null) {
-            stadtbildserie = cidsBean;
-            final boolean internalUsage = Boolean.TRUE.equals((Boolean)cidsBean.getProperty("interner_gebrauch"));
+    private void setStadtbildserie(final CidsBean stadtbildserie) {
+        if (stadtbildserie != null) {
+            this.stadtbildserie = stadtbildserie;
+            final boolean internalUsage = Boolean.TRUE.equals((Boolean)stadtbildserie.getProperty("interner_gebrauch"));
             rendererAndInternalUsage = !EDITABLE
                         && internalUsage;
             previewImage.setStadtbildserieProvider(this);
             refillTable(gridObject.getStadtbildUnderMarker());
 
-            final Timestamp aufnahmedatum = (Timestamp)cidsBean.getProperty("aufnahmedatum");
+            final Timestamp aufnahmedatum = (Timestamp)stadtbildserie.getProperty("aufnahmedatum");
             final DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
             final String formattedDate = df.format(aufnahmedatum);
             lblAufnahmedatum.setText(formattedDate);
@@ -489,7 +491,7 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
             selectStadtbildInTable(gridObject.getStadtbildUnderMarker());
         } else {
             this.gridObject = gridObject;
-            setCidsBean(this.gridObject.getCidsBean());
+            setStadtbildserie(this.gridObject.getCidsBean());
         }
         tblStadtbilder.setEnabled(!gridObject.isIsInBin());
     }
