@@ -478,6 +478,17 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
             final String formattedDate = df.format(aufnahmedatum);
             lblAufnahmedatum.setText(formattedDate);
             lblAufnahmedatum.setVisible(true);
+
+            final String hausnummer = (String)stadtbildserie.getProperty("hausnummer");
+            final String strassenname = (String)stadtbildserie.getProperty("strasse.name");
+            if (StringUtils.isNotBlank(strassenname)) {
+                String text = strassenname;
+                if (StringUtils.isNotBlank(hausnummer)) {
+                    text += ", " + hausnummer;
+                }
+                lblStrasse.setText(text);
+                lblStrasse.setVisible(true);
+            }
         }
     }
 
