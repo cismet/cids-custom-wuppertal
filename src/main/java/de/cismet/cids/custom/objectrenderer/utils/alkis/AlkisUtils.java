@@ -67,7 +67,7 @@ import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.server.actions.HttpTunnelAction;
 import de.cismet.cids.server.actions.ServerActionParameter;
 
-import de.cismet.security.AccessHandler;
+import de.cismet.commons.security.AccessHandler;
 
 /**
  * DOCUMENT ME!

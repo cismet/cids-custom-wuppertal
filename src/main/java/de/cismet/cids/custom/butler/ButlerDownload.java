@@ -41,9 +41,9 @@ import de.cismet.cids.custom.wunda_blau.search.actions.ButlerQueryAction;
 
 import de.cismet.cids.server.actions.ServerActionParameter;
 
-import de.cismet.security.WebAccessManager;
+import de.cismet.commons.security.exceptions.BadHttpStatusCodeException;
 
-import de.cismet.security.exceptions.BadHttpStatusCodeException;
+import de.cismet.security.WebAccessManager;
 
 import de.cismet.tools.gui.downloadmanager.HttpDownload;
 
