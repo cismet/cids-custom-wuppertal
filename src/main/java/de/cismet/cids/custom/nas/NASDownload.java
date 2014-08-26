@@ -283,7 +283,7 @@ public class NASDownload extends AbstractCancellableDownload {
             }
             try {
                 if (!downloadFuture.isCancelled() && (pollingFuture != null)) {
-                    content = pollingFuture.get(1, TimeUnit.SECONDS).getByteArray();
+                    content = pollingFuture.get().getByteArray();
                     if (log.isDebugEnabled()) {
                         log.debug("NAS Download: Polling is finished.");
                     }
@@ -299,14 +299,16 @@ public class NASDownload extends AbstractCancellableDownload {
             } catch (ExecutionException ex) {
                 log.warn("could not execute nas download", ex);
                 error(ex);
-            } catch (TimeoutException ex) {
-                log.error("the maximum timeout for butler download is exceeded", ex);
-                title = BASE_TITLE + " - "
-                            + org.openide.util.NbBundle.getMessage(NASDownload.class,
-                                "NASDownload.timeoutErrorTitle");
-                error(new TimeoutException(
-                        org.openide.util.NbBundle.getMessage(NASDownload.class, "NASDownload.timeoutErrorMessage")));
-            } catch (Exception ex) {
+            }
+//            catch (TimeoutException ex) {
+            // log.error("the maximum timeout for butler download is exceeded", ex);
+            // title = BASE_TITLE + " - "
+            // + org.openide.util.NbBundle.getMessage(NASDownload.class,
+            // "NASDownload.timeoutErrorTitle");
+            // error(new TimeoutException(
+            // org.openide.util.NbBundle.getMessage(NASDownload.class, "NASDownload.timeoutErrorMessage")));
+            // }
+            catch (Exception ex) {
                 log.error("Exception during waiting / polling on NAS Result", ex);
                 error(ex);
             }
