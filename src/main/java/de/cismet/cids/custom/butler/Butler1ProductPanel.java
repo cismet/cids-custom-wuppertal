@@ -59,6 +59,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
     ArrayList<ButlerProductGroup> productGroups;
     ArrayList<ButlerProduct> products;
     ArrayList<ButlerResolution> resolutions;
+    ArrayList<ButlerResolution> defaultGroupResolutions;
     ArrayList<ButlerFormat> formats;
     private Geometry geom;
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -385,6 +386,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
             final Binding resolutionBinding = bindingGroup.getBinding("resolutionBinding");
             final Property resolutionProp = resolutionBinding.getSourceProperty();
             resolutionProp.setValue(this, productGroup.getButlerResolutions());
+            defaultGroupResolutions = productGroup.getButlerResolutions();
             productGroup.getButlerFormats();
             updateFormatButtons(productGroup.getButlerFormats());
         }
@@ -403,7 +405,7 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
             products = productGroups.get(0).getButlerProducts();
             resolutions = productGroups.get(0).getButlerResolutions();
         } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
+            LOG.error(ex.getMessage(), ex);
         }
     }
 
@@ -534,6 +536,16 @@ public class Butler1ProductPanel extends javax.swing.JPanel implements ListSelec
                                                                                : selectedProduct.getVolumeParamText();
             lblVolumeParamKey.setText(text);
             calculateVolumePram();
+            // the product can ovverride the resolutions...
+            if ((selectedProduct.getButlerResolutions() != null) && !selectedProduct.getButlerResolutions().isEmpty()) {
+                final Binding resolutionBinding = bindingGroup.getBinding("resolutionBinding");
+                final Property resolutionProp = resolutionBinding.getSourceProperty();
+                resolutionProp.setValue(this, selectedProduct.getButlerResolutions());
+            } else {
+                final Binding resolutionBinding = bindingGroup.getBinding("resolutionBinding");
+                final Property resolutionProp = resolutionBinding.getSourceProperty();
+                resolutionProp.setValue(this, defaultGroupResolutions);
+            }
         }
     }
 
