@@ -537,20 +537,22 @@ public class Sb_stadtbildUtils {
      * @return  DOCUMENT ME!
      */
     public static RestrictionLevel determineRestrictionLevelForStadtbildserie(final CidsBean stadtbildserie) {
-        final CidsBean nutzungseinschraenkung = (CidsBean)stadtbildserie.getProperty("nutzungseinschraenkung");
         RestrictionLevel level = RestrictionLevel.NoneAllowed;
-        if (nutzungseinschraenkung != null) {
-            final String key = (String)nutzungseinschraenkung.getProperty("key");
-            if (StringUtils.isNotBlank(key)) {
-                final String actionTagPreview = "custom.stadtbilder." + key + ".preview";
-                final String actionTagDownload = "custom.stadtbilder." + key + ".download";
-                final boolean previewAllowed = ObjectRendererUtils.checkActionTag(actionTagPreview);
-                final boolean downloadAllowed = ObjectRendererUtils.checkActionTag(actionTagDownload);
-                if (previewAllowed) {
-                    if (downloadAllowed) {
-                        level = RestrictionLevel.AllAllowed;
-                    } else {
-                        level = RestrictionLevel.OnlyPreview;
+        if (stadtbildserie != null) {
+            final CidsBean nutzungseinschraenkung = (CidsBean)stadtbildserie.getProperty("nutzungseinschraenkung");
+            if (nutzungseinschraenkung != null) {
+                final String key = (String)nutzungseinschraenkung.getProperty("key");
+                if (StringUtils.isNotBlank(key)) {
+                    final String actionTagPreview = "custom.stadtbilder." + key + ".preview";
+                    final String actionTagDownload = "custom.stadtbilder." + key + ".download";
+                    final boolean previewAllowed = ObjectRendererUtils.checkActionTag(actionTagPreview);
+                    final boolean downloadAllowed = ObjectRendererUtils.checkActionTag(actionTagDownload);
+                    if (previewAllowed) {
+                        if (downloadAllowed) {
+                            level = RestrictionLevel.AllAllowed;
+                        } else {
+                            level = RestrictionLevel.OnlyPreview;
+                        }
                     }
                 }
             }

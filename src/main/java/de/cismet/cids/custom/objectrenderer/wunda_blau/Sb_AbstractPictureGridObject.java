@@ -47,11 +47,11 @@ public abstract class Sb_AbstractPictureGridObject {
     protected abstract int getDownloadPrority();
 
     /**
-     * Returns a boolean, if true the image is only for the internal usage.
+     * Returns a boolean, if true the preview images can be shown.
      *
      * @return  DOCUMENT ME!
      */
-    protected abstract boolean isInternalUsage();
+    protected abstract boolean isPreviewAllowed();
 
     /**
      * DOCUMENT ME!
@@ -60,8 +60,8 @@ public abstract class Sb_AbstractPictureGridObject {
 
     /**
      * Get a scaled image for a Stadtbild. The exact stadtbild is provided by the method <code>getBildnummer()</code>.
-     * If the image has to be loaded first a Placeholder image will be returned. If something went wrong, e.g. while
-     * loading the image, null will be returned.
+     * If the image has to be loaded, a Placeholder image will be returned. If something went wrong, e.g. while loading
+     * the image, null will be returned.
      *
      * @param   cellDimension  DOCUMENT ME!
      * @param   invert         DOCUMENT ME!
@@ -69,7 +69,7 @@ public abstract class Sb_AbstractPictureGridObject {
      * @return  DOCUMENT ME!
      */
     public Image getImage(final int cellDimension, final boolean invert) {
-        if (isInternalUsage()) {
+        if (!isPreviewAllowed()) {
             return null;
         }
 

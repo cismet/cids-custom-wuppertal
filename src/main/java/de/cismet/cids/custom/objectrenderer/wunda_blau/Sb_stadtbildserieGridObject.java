@@ -407,7 +407,7 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
     }
 
     @Override
-    protected boolean isInternalUsage() {
+    protected boolean isPreviewAllowed() {
         final Boolean internalUsage = (Boolean)stadtbildserie.getProperty("interner_gebrauch");
         return Boolean.TRUE.equals(internalUsage);
     }

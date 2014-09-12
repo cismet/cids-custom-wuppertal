@@ -178,10 +178,10 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
         }
 
         /**
-         * Gets the scaled image from the super implementation and draws overlay, eventually. If no high resolution
-         * image of the current stadtbild is available then image will be shown, but gets an overlay.
+         * Gets the scaled image from the super implementation and adds an overlay, if needed. The overlay indicates
+         * that no high resolution image of the current stadtbild is available.
          *
-         * <p>Never returns null. Adds an error image on its own.</p>
+         * <p>Never returns null. If an error occurs, an error image is returned.</p>
          *
          * @param   cellDimension  DOCUMENT ME!
          * @param   invert         DOCUMENT ME!
@@ -256,10 +256,9 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
         }
 
         @Override
-        protected boolean isInternalUsage() {
+        protected boolean isPreviewAllowed() {
             final CidsBean stadtbildserie = locationOfStadtbild.getCidsBean();
-            final Boolean internalUsage = (Boolean)stadtbildserie.getProperty("interner_gebrauch");
-            return Boolean.TRUE.equals(internalUsage);
+            return Sb_stadtbildUtils.determineRestrictionLevelForStadtbildserie(stadtbildserie).isPreviewAllowed();
         }
     }
 
