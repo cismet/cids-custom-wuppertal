@@ -118,6 +118,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     private javax.swing.JButton btnNewSearch;
     private javax.swing.JButton btnRemoveSuchwort;
     private javax.swing.JCheckBox cbMapSearch;
+    private javax.swing.JComboBox cboNutzungseinschraenkung;
     private javax.swing.JComboBox cboOrt;
     private javax.swing.JComboBox cboStreet;
     private javax.swing.JCheckBox chboBodennaheAufnahme;
@@ -130,9 +131,12 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler6;
     private javax.swing.Box.Filler filler7;
+    private javax.swing.Box.Filler filler8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblHausnummer;
@@ -310,6 +314,12 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        cboNutzungseinschraenkung = new javax.swing.JComboBox();
+        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
 
         setPreferredSize(new java.awt.Dimension(70, 20));
         setLayout(new java.awt.BorderLayout());
@@ -760,6 +770,34 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         gridBagConstraints.weighty = 1.0;
         pnlScrollPane.add(filler1, gridBagConstraints);
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                org.openide.util.NbBundle.getMessage(
+                    Sb_StadtbildWindowSearch.class,
+                    "Sb_StadtbildWindowSearch.jPanel1.border.title"))); // NOI18N
+        jPanel1.setLayout(new java.awt.GridLayout());
+
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
+        cboNutzungseinschraenkung.setEditable(true);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel2.add(cboNutzungseinschraenkung, gridBagConstraints);
+
+        jPanel1.add(jPanel2);
+        jPanel1.add(filler8);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
+        pnlScrollPane.add(jPanel1, gridBagConstraints);
+
         jScrollPane1.setViewportView(pnlScrollPane);
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -854,6 +892,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         dlm.clear();
         sb_StadtbilderTimeTabs.clear();
         cboStreet.setSelectedItem(null);
+        cboNutzungseinschraenkung.setSelectedItem(null);
         cboOrt.setSelectedItem(Sb_stadtbildUtils.getWUPPERTAL());
         txtHausnummer.setText("");
         cbMapSearch.setSelected(false);
@@ -920,6 +959,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     private void setModelForComboBoxes() {
         Sb_stadtbildUtils.setModelForComboBoxesAndDecorateIt(cboStreet, "STRASSE");
         Sb_stadtbildUtils.setModelForComboBoxesAndDecorateIt(cboOrt, "SB_ORT");
+        Sb_stadtbildUtils.setModelForComboBoxesAndDecorateIt(cboNutzungseinschraenkung, "SB_NUTZUNGSEINSCHRAENKUNG");
     }
 
     /**
@@ -959,6 +999,27 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                     Sb_StadtbildWindowSearch.class,
                     "Sb_StadtbildWindowSearch.getServerSearch().dialog.bildnummer.message"));
             return null;
+        }
+
+        CidsBean nutzungseinschraenkung = null;
+        final Object selectedEinschraenkung = cboNutzungseinschraenkung.getSelectedItem();
+        // the nutzungseinschraenkung must be a CidsBean, LightweightMetaObject or null
+        if (selectedEinschraenkung instanceof CidsBean) {
+            nutzungseinschraenkung = (CidsBean)selectedEinschraenkung;
+        } else if (selectedEinschraenkung instanceof MetaObject) {
+            nutzungseinschraenkung = ((MetaObject)selectedEinschraenkung).getBean();
+        } else if (selectedEinschraenkung != null) {
+            showErrorDialog(NbBundle.getMessage(
+                    Sb_StadtbildWindowSearch.class,
+                    "Sb_StadtbildWindowSearch.getServerSearch().dialog.nutzungseinschraenkung.title"),
+                NbBundle.getMessage(
+                    Sb_StadtbildWindowSearch.class,
+                    "Sb_StadtbildWindowSearch.getServerSearch().dialog.nutzungseinschraenkung.message"));
+            return null;
+        }
+        if (nutzungseinschraenkung != null) {
+            stadtbildSerieSearchStatement.setNutzungseinschraenkungID(nutzungseinschraenkung.getPrimaryKeyValue()
+                        .toString());
         }
 
         final ArrayList<MetaObjectNodesStadtbildSerieSearchStatement.Bildtyp> bildtyp =
