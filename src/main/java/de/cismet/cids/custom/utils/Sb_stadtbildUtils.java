@@ -13,6 +13,8 @@ import Sirius.navigator.exception.ConnectionException;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
@@ -43,6 +45,8 @@ import javax.imageio.ImageIO;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+
+import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -132,6 +136,58 @@ public class Sb_stadtbildUtils {
                 queue,
                 factory,
                 new ThreadPoolExecutor.AbortPolicy());
+    }
+
+    //~ Enums ------------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public enum RestrictionLevel {
+
+        //~ Enum constants -----------------------------------------------------
+
+        AllAllowed(true, true), OnlyPreview(true, false), NoneAllowed(false, false);
+
+        //~ Instance fields ----------------------------------------------------
+
+        private boolean previewAllowed;
+        private boolean downloadAllowed;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new RestrictionLevel object.
+         *
+         * @param  previewAllowed   DOCUMENT ME!
+         * @param  downloadAllowed  DOCUMENT ME!
+         */
+        private RestrictionLevel(final boolean previewAllowed, final boolean downloadAllowed) {
+            this.previewAllowed = previewAllowed;
+            this.downloadAllowed = downloadAllowed;
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public boolean isPreviewAllowed() {
+            return previewAllowed;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public boolean isDownloadAllowed() {
+            return downloadAllowed;
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -470,6 +526,36 @@ public class Sb_stadtbildUtils {
             }
         }
         return toReturn;
+    }
+
+    /**
+     * Determine the restriction level for a stadtbildserie. The restriction level depends on the action tags which the
+     * user possesses. It allows the user to download or preview stadtbilder of the serie.
+     *
+     * @param   stadtbildserie  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static RestrictionLevel determineRestrictionLevelForStadtbildserie(final CidsBean stadtbildserie) {
+        final CidsBean nutzungseinschraenkung = (CidsBean)stadtbildserie.getProperty("nutzungseinschraenkung");
+        RestrictionLevel level = RestrictionLevel.NoneAllowed;
+        if (nutzungseinschraenkung != null) {
+            final String key = (String)nutzungseinschraenkung.getProperty("key");
+            if (StringUtils.isNotBlank(key)) {
+                final String actionTagPreview = "custom.stadtbilder." + key + ".preview";
+                final String actionTagDownload = "custom.stadtbilder." + key + ".download";
+                final boolean previewAllowed = ObjectRendererUtils.checkActionTag(actionTagPreview);
+                final boolean downloadAllowed = ObjectRendererUtils.checkActionTag(actionTagDownload);
+                if (previewAllowed) {
+                    if (downloadAllowed) {
+                        level = RestrictionLevel.AllAllowed;
+                    } else {
+                        level = RestrictionLevel.OnlyPreview;
+                    }
+                }
+            }
+        }
+        return level;
     }
 
     //~ Inner Classes ----------------------------------------------------------
