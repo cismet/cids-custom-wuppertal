@@ -76,6 +76,7 @@ public class Sb_stadtbildUtils {
 
     private static final CidsBean WUPPERTAL;
     private static final CidsBean R102;
+    private static final CidsBean NO_RESTRICTION;
 
     private static final int CACHE_SIZE = 100;
 
@@ -96,6 +97,7 @@ public class Sb_stadtbildUtils {
     static {
         WUPPERTAL = getOrtWupertal();
         R102 = getLagerR102();
+        NO_RESTRICTION = getNutzungseinschraenkungNoRestriction();
 
         try {
             ERROR_IMAGE = ImageIO.read(Sb_stadtbildUtils.class.getResource(
@@ -153,6 +155,15 @@ public class Sb_stadtbildUtils {
     }
 
     /**
+     * Get the CidsBean of the table SB_nutzungseinschraenkung with the key 'noRestriction'. Might be null.
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static CidsBean getNoRestriction() {
+        return NO_RESTRICTION;
+    }
+
+    /**
      * DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
@@ -177,6 +188,42 @@ public class Sb_stadtbildUtils {
                     wuppertal = SessionManager.getProxy().getMetaObjectByQuery(wuppertalQuery.toString(), 0);
                     if (wuppertal.length > 0) {
                         return wuppertal[0].getBean();
+                    }
+                } catch (ConnectionException ex) {
+                    LOG.error(ex, ex);
+                }
+            }
+        } catch (Exception ex) {
+            LOG.error("The Location Wuppertal could not be loaded.", ex);
+        }
+        return null;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static CidsBean getNutzungseinschraenkungNoRestriction() {
+        try {
+            final MetaClass nutzungsClass = ClassCacheMultiple.getMetaClass(
+                    "WUNDA_BLAU",
+                    "sb_nutzungseinschraenkung");
+            if (nutzungsClass != null) {
+                final StringBuffer noRestrictionQuery = new StringBuffer("select ").append(nutzungsClass.getId())
+                            .append(", ")
+                            .append(nutzungsClass.getPrimaryKey())
+                            .append(" from ")
+                            .append(nutzungsClass.getTableName())
+                            .append(" where key ilike 'noRestriction'");
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("SQL: wuppertalQuery:" + noRestrictionQuery.toString());
+                }
+                final MetaObject[] noRestriction;
+                try {
+                    noRestriction = SessionManager.getProxy().getMetaObjectByQuery(noRestrictionQuery.toString(), 0);
+                    if (noRestriction.length > 0) {
+                        return noRestriction[0].getBean();
                     }
                 } catch (ConnectionException ex) {
                     LOG.error(ex, ex);

@@ -989,8 +989,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         panContent.add(jLabel9, gridBagConstraints);
 
-        ((FastBindableReferenceCombo)dbcLager).setSorted(true);
-        ((FastBindableReferenceCombo)dbcLager).setNullable(false);
+        ((FastBindableReferenceCombo)dbcNutzungseinschraenkung).setSorted(true);
+        ((FastBindableReferenceCombo)dbcNutzungseinschraenkung).setNullable(false);
         dbcNutzungseinschraenkung.setEditable(true);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
@@ -2314,6 +2314,11 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         }
         try {
             cidsBean.setProperty("lager", Sb_stadtbildUtils.getR102());
+        } catch (Exception ex) {
+            LOG.error(ex, ex);
+        }
+        try {
+            cidsBean.setProperty("nutzungseinschraenkung", Sb_stadtbildUtils.getNoRestriction());
         } catch (Exception ex) {
             LOG.error(ex, ex);
         }
