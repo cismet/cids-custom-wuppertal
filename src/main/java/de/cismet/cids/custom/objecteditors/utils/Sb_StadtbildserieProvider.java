@@ -68,7 +68,7 @@ public interface Sb_StadtbildserieProvider {
      *
      * @return  DOCUMENT ME!
      */
-    boolean isInternalUsageAndRenderer();
+    boolean isRestricted();
 
     /**
      * DOCUMENT ME!
