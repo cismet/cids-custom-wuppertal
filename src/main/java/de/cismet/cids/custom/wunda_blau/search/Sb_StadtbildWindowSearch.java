@@ -774,7 +774,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 org.openide.util.NbBundle.getMessage(
                     Sb_StadtbildWindowSearch.class,
                     "Sb_StadtbildWindowSearch.jPanel1.border.title"))); // NOI18N
-        jPanel1.setLayout(new java.awt.GridLayout());
+        jPanel1.setLayout(new java.awt.GridLayout(1, 0));
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
 

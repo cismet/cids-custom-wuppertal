@@ -10,7 +10,8 @@ package de.cismet.cids.custom.objecteditors.utils;
 import de.cismet.cids.dynamics.CidsBean;
 
 /**
- * DOCUMENT ME!
+ * This interface is needed to make the {@link Sb_StadtbildPreviewImage} reuseable, as it permits a possibility to
+ * transfer information between the two classes.
  *
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$

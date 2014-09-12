@@ -430,10 +430,11 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
     }
 
     /**
-     * DOCUMENT ME!
+     * Loads the photo of the currently selected stadtbild. The photo is not loaded if the stadtbildserie is restricted,
+     * but the photo is always loaded if the {@code stadtbildserieProvider} is an Editor.
      */
     private void loadFoto() {
-        if (stadtbildserieProvider.isInternalUsageAndRenderer()) {
+        if (stadtbildserieProvider.isInternalUsageAndRenderer() && !stadtbildserieProvider.isEditable()) {
             indicateInternalUsage();
         } else {
             final Object stadtbild = stadtbildserieProvider.getSelectedStadtbild();
@@ -594,7 +595,8 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
 
         @Override
         public void setEnabled(final boolean enable) {
-            super.setEnabled(enable && !stadtbildserieProvider.isInternalUsageAndRenderer());
+            super.setEnabled(enable && !stadtbildserieProvider.isInternalUsageAndRenderer()
+                        && stadtbildserieProvider.isEditable());
         }
     }
 
@@ -759,7 +761,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
          */
         @Override
         protected Boolean doInBackground() throws Exception {
-            if (stadtbildserieProvider.isInternalUsageAndRenderer()) {
+            if (stadtbildserieProvider.isInternalUsageAndRenderer() && !stadtbildserieProvider.isEditable()) {
                 return false;
             } else {
                 return Sb_stadtbildUtils.getFormatOfHighResPicture(imageNumber)
