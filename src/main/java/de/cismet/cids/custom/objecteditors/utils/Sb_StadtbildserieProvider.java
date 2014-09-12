@@ -7,6 +7,8 @@
 ****************************************************/
 package de.cismet.cids.custom.objecteditors.utils;
 
+import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
+
 import de.cismet.cids.dynamics.CidsBean;
 
 /**
@@ -68,7 +70,7 @@ public interface Sb_StadtbildserieProvider {
      *
      * @return  DOCUMENT ME!
      */
-    boolean isRestricted();
+    Sb_stadtbildUtils.RestrictionLevel getRestrictionLevel();
 
     /**
      * DOCUMENT ME!

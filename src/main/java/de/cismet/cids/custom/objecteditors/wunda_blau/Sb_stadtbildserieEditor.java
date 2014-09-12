@@ -166,7 +166,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     Geometry lastRefreshedGeometry = null;
     XBoundingBox lastRefreshedBoundingBox = null;
     private CidsBean cidsBean;
-    private boolean restricted = true;
+    private Sb_stadtbildUtils.RestrictionLevel restrictedLevel = Sb_stadtbildUtils.RestrictionLevel.NoneAllowed;
     private String title;
     private final Converter<Timestamp, Date> timeStampConverter = new Converter<Timestamp, Date>() {
 
@@ -2002,9 +2002,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 this.cidsBean);
             initMap();
 
-            final boolean internalUsage = Boolean.TRUE.equals((Boolean)cidsBean.getProperty("interner_gebrauch"));
-            restricted = !editable
-                        && internalUsage;
+            restrictedLevel = Sb_stadtbildUtils.determineRestrictionLevelForStadtbildserie(cidsBean);
 
             bindingGroup.bind();
             if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW) {
@@ -2377,8 +2375,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     }
 
     @Override
-    public boolean isRestricted() {
-        return restricted;
+    public Sb_stadtbildUtils.RestrictionLevel getRestrictionLevel() {
+        return restrictedLevel;
     }
 
     @Override

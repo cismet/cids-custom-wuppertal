@@ -407,7 +407,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
         this.bildnummer = bildnummer;
         if (bildnummer != null) {
             new CheckAccessibilityOfHighResImage(bildnummer).execute();
-            loadFoto();
+            loadPhoto();
             final String oldPreviewImage = (String)stadtbildserieProvider.getStadtbildserie()
                         .getProperty("vorschaubild.bildnummer");
             final boolean isPreviewImage = (oldPreviewImage != null)
@@ -433,8 +433,8 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
      * Loads the photo of the currently selected stadtbild. The photo is not loaded if the stadtbildserie is restricted,
      * but the photo is always loaded if the {@code stadtbildserieProvider} is an Editor.
      */
-    private void loadFoto() {
-        if (stadtbildserieProvider.isRestricted() && !stadtbildserieProvider.isEditable()) {
+    private void loadPhoto() {
+        if (!stadtbildserieProvider.getRestrictionLevel().isPreviewAllowed() && !stadtbildserieProvider.isEditable()) {
             indicateInternalUsage();
         } else {
             final Object stadtbild = stadtbildserieProvider.getSelectedStadtbild();
@@ -595,7 +595,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
 
         @Override
         public void setEnabled(final boolean enable) {
-            super.setEnabled(enable && !stadtbildserieProvider.isRestricted()
+            super.setEnabled(enable && stadtbildserieProvider.getRestrictionLevel().isDownloadAllowed()
                         && stadtbildserieProvider.isEditable());
         }
     }
@@ -761,7 +761,8 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
          */
         @Override
         protected Boolean doInBackground() throws Exception {
-            if (stadtbildserieProvider.isRestricted() && !stadtbildserieProvider.isEditable()) {
+            if (stadtbildserieProvider.getRestrictionLevel().isDownloadAllowed()
+                        && !stadtbildserieProvider.isEditable()) {
                 return false;
             } else {
                 return Sb_stadtbildUtils.getFormatOfHighResPicture(imageNumber)

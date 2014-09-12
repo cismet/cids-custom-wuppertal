@@ -38,6 +38,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import de.cismet.cids.custom.objecteditors.utils.Sb_StadtbildserieProvider;
+import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -63,7 +64,7 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
 
     private CidsBean stadtbildserie;
     private Sb_stadtbildserieAggregationRenderer aggregationRenderer;
-    private boolean restricted = true;
+    private Sb_stadtbildUtils.RestrictionLevel restrictedLevel = Sb_stadtbildUtils.RestrictionLevel.NoneAllowed;
     private Sb_stadtbildserieGridObject gridObject;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -467,9 +468,7 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
     private void setStadtbildserie(final CidsBean stadtbildserie) {
         if (stadtbildserie != null) {
             this.stadtbildserie = stadtbildserie;
-            final boolean internalUsage = Boolean.TRUE.equals((Boolean)stadtbildserie.getProperty("interner_gebrauch"));
-            restricted = !EDITABLE
-                        && internalUsage;
+            restrictedLevel = Sb_stadtbildUtils.determineRestrictionLevelForStadtbildserie(stadtbildserie);
             previewImage.setStadtbildserieProvider(this);
             refillTable(gridObject.getStadtbildUnderMarker());
 
@@ -660,8 +659,8 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
     }
 
     @Override
-    public boolean isRestricted() {
-        return restricted;
+    public Sb_stadtbildUtils.RestrictionLevel getRestrictionLevel() {
+        return restrictedLevel;
     }
 
     @Override
