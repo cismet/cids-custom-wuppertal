@@ -232,7 +232,6 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private javax.swing.JButton btnRemoveSuchwort;
     private javax.swing.JButton btnReport;
     private javax.swing.JButton btnSavePruefhinweis;
-    private javax.swing.JCheckBox chbIntern;
     private javax.swing.JCheckBox chbPruefen;
     private javax.swing.JComboBox dbcAuftraggeber;
     private javax.swing.JComboBox dbcBildtyp;
@@ -240,6 +239,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private javax.swing.JComboBox dbcFotograf;
     private de.cismet.cismap.cids.geometryeditor.DefaultCismapGeometryComboBoxEditor dbcGeom;
     private javax.swing.JComboBox dbcLager;
+    private javax.swing.JComboBox dbcNutzungseinschraenkung;
     private javax.swing.JComboBox dbcOrt;
     private org.jdesktop.swingx.JXDatePicker dpAufnahmedatum;
     private javax.swing.Box.Filler filler3;
@@ -252,6 +252,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -410,6 +411,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             RendererTools.makeTextBlackOfDisabledComboBox(dbcBildtyp);
             RendererTools.makeReadOnly(dbcLager);
             RendererTools.makeTextBlackOfDisabledComboBox(dbcLager);
+            RendererTools.makeReadOnly(dbcNutzungseinschraenkung);
+            RendererTools.makeTextBlackOfDisabledComboBox(dbcNutzungseinschraenkung);
             RendererTools.makeReadOnly(txtaComment);
             RendererTools.makeReadOnly(bcbStrasse);
             RendererTools.makeTextBlackOfDisabledComboBox(bcbStrasse);
@@ -422,7 +425,6 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             RendererTools.makeTextBlackOfDisabledComboBox(dbcFotograf);
             RendererTools.makeReadOnly(dbcFilmart);
             RendererTools.makeTextBlackOfDisabledComboBox(dbcFilmart);
-            RendererTools.makeReadOnly(chbIntern);
         }
         previewImage.makeEditable();
     }
@@ -438,6 +440,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         StaticSwingTools.decorateWithFixedAutoCompleteDecorator(dbcFilmart);
         StaticSwingTools.decorateWithFixedAutoCompleteDecorator(dbcFotograf);
         StaticSwingTools.decorateWithFixedAutoCompleteDecorator(dbcLager);
+        StaticSwingTools.decorateWithFixedAutoCompleteDecorator(dbcNutzungseinschraenkung);
         StaticSwingTools.decorateWithFixedAutoCompleteDecorator(dbcOrt);
     }
 
@@ -493,7 +496,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         jScrollPane3 = new javax.swing.JScrollPane();
         txtaComment = new javax.swing.JTextArea();
         dpAufnahmedatum = new org.jdesktop.swingx.JXDatePicker();
-        chbIntern = new DefaultBindableJCheckBox();
+        jLabel9 = new javax.swing.JLabel();
+        dbcNutzungseinschraenkung = new FastBindableReferenceCombo();
         roundedPanel3 = new de.cismet.tools.gui.RoundedPanel();
         semiRoundedPanel4 = new de.cismet.tools.gui.SemiRoundedPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -784,7 +788,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         panContent.add(lblDescLagerort, gridBagConstraints);
 
@@ -792,14 +796,14 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         panContent.add(lblDescAufnahmedatum, gridBagConstraints);
 
         lblDescInfo.setText("Kommentar:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 10, 10);
         panContent.add(lblDescInfo, gridBagConstraints);
@@ -808,7 +812,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         panContent.add(lblDescBildtyp, gridBagConstraints);
 
@@ -952,7 +956,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
@@ -977,26 +981,32 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         panContent.add(dpAufnahmedatum, gridBagConstraints);
 
-        chbIntern.setText("nicht zur Publikation freigegeben");
+        jLabel9.setText("Nutzungseinschränkung:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
+        panContent.add(jLabel9, gridBagConstraints);
+
+        ((FastBindableReferenceCombo)dbcLager).setSorted(true);
+        ((FastBindableReferenceCombo)dbcLager).setNullable(false);
+        dbcNutzungseinschraenkung.setEditable(true);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 this,
-                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.interner_gebrauch}"),
-                chbIntern,
-                org.jdesktop.beansbinding.BeanProperty.create("selected"));
-        binding.setSourceNullValue(false);
-        binding.setSourceUnreadableValue(false);
-        binding.setConverter(((DefaultBindableJCheckBox)chbIntern).getConverter());
+                org.jdesktop.beansbinding.ELProperty.create("${cidsBean.nutzungseinschraenkung}"),
+                dbcNutzungseinschraenkung,
+                org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
-        panContent.add(chbIntern, gridBagConstraints);
+        panContent.add(dbcNutzungseinschraenkung, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
