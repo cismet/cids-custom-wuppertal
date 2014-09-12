@@ -24,6 +24,8 @@ import javax.swing.JLabel;
 
 import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 
+import de.cismet.cids.dynamics.CidsBean;
+
 /**
  * DOCUMENT ME!
  *
@@ -47,8 +49,11 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler2;
     private javax.swing.JLayeredPane jLayeredPane1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblAmount;
+    private javax.swing.JLabel lblColor;
     private javax.swing.JLabel lblIcon;
     // End of variables declaration//GEN-END:variables
 
@@ -90,6 +95,11 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
                     super.paintComponent(g);
                 }
             };
+        jPanel1 = new javax.swing.JPanel();
+        lblColor = new javax.swing.JLabel();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
@@ -105,6 +115,7 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
             org.openide.util.NbBundle.getMessage(
                 Sb_stadtbildserieGridRenderer.class,
                 "Sb_stadtbildserieGridRenderer.lblIcon.text")); // NOI18N
+        lblIcon.setFocusable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -124,6 +135,9 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
             org.openide.util.NbBundle.getMessage(
                 Sb_stadtbildserieGridRenderer.class,
                 "Sb_stadtbildserieGridRenderer.lblAmount.text")); // NOI18N
+        lblAmount.setMaximumSize(new java.awt.Dimension(51, 16));
+        lblAmount.setMinimumSize(new java.awt.Dimension(51, 16));
+        lblAmount.setPreferredSize(new java.awt.Dimension(51, 16));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -133,6 +147,41 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
         jLayeredPane1.add(lblAmount, gridBagConstraints);
         jLayeredPane1.setLayer(lblAmount, 1);
+
+        jPanel1.setMaximumSize(new java.awt.Dimension(51, 16));
+        jPanel1.setMinimumSize(new java.awt.Dimension(51, 16));
+        jPanel1.setOpaque(false);
+        jPanel1.setPreferredSize(new java.awt.Dimension(51, 16));
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        lblColor.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_red.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblColor,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieGridRenderer.class,
+                "Sb_stadtbildserieGridRenderer.lblColor.text"));                                             // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        jPanel1.add(lblColor, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel1.add(filler2, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 3;
+        gridBagConstraints.ipady = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
+        jLayeredPane1.add(jPanel1, gridBagConstraints);
+        jLayeredPane1.setLayer(jPanel1, 2);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -156,11 +205,13 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
         image = null;
         paintMarker = false;
         if (value instanceof Sb_stadtbildserieGridObject) {
-            image = ((Sb_stadtbildserieGridObject)value).getImage(grid.getFixedCellDimension(), false);
-            markerFraction = ((Sb_stadtbildserieGridObject)value).getFraction();
-            paintMarker = ((Sb_stadtbildserieGridObject)value).isMarker();
-            final int amountImages = ((Sb_stadtbildserieGridObject)value).getAmountImages();
-            final int amountSelectedImages = ((Sb_stadtbildserieGridObject)value).getAmountSelectedImages();
+            final Sb_stadtbildserieGridObject gridObject = ((Sb_stadtbildserieGridObject)value);
+            image = gridObject.getImage(grid.getFixedCellDimension(), false);
+            markerFraction = gridObject.getFraction();
+            paintMarker = gridObject.isMarker();
+            final int amountImages = gridObject.getAmountImages();
+            final int amountSelectedImages = gridObject.getAmountSelectedImages();
+            determineColor(gridObject);
             lblAmount.setText(amountSelectedImages + " von " + amountImages);
         }
 
@@ -220,5 +271,30 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
             }
             g2.dispose();
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  gridObject  DOCUMENT ME!
+     */
+    private void determineColor(final Sb_stadtbildserieGridObject gridObject) {
+        Sb_stadtbildUtils.RestrictionLevel level = Sb_stadtbildUtils.RestrictionLevel.NoneAllowed;
+        if (gridObject != null) {
+            final CidsBean stadtbildserie = gridObject.getCidsBean();
+            level = Sb_stadtbildUtils.determineRestrictionLevelForStadtbildserie(stadtbildserie);
+        }
+        String colorPath = "/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_red.png";
+        switch (level) {
+            case AllAllowed: {
+                colorPath = "/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_green.png";
+                break;
+            }
+            case OnlyPreview: {
+                colorPath = "/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_yellow.png";
+                break;
+            }
+        }
+        lblColor.setIcon(new javax.swing.ImageIcon(getClass().getResource(colorPath)));
     }
 }
