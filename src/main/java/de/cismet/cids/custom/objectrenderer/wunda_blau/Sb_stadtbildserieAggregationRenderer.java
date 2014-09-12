@@ -754,19 +754,21 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
                         final CidsBean stadtbildserie = gridObject.getCidsBean();
                         final Set<CidsBean> stadtbilder = gridObject.getSelectedBildnummernOfSerie();
-                        final Boolean internalUsage = (Boolean)stadtbildserie.getProperty("interner_gebrauch");
+                        final boolean previewAllowed = Sb_stadtbildUtils.determineRestrictionLevelForStadtbildserie(
+                                stadtbildserie)
+                                    .isPreviewAllowed();
                         for (final CidsBean stadtbild : stadtbilder) {
                             final String bildnummer = (String)stadtbild.getProperty("bildnummer");
                             Image image;
-                            if (Boolean.TRUE.equals(internalUsage)) {
-                                image = Sb_stadtbildUtils.ERROR_IMAGE;
-                            } else {
+                            if (previewAllowed) {
                                 try {
                                     image = Sb_stadtbildUtils.downloadImageForBildnummer(bildnummer);
                                 } catch (Exception ex) {
                                     LOG.error("Image could not be fetched.", ex);
                                     image = Sb_stadtbildUtils.ERROR_IMAGE;
                                 }
+                            } else {
+                                image = Sb_stadtbildUtils.ERROR_IMAGE;
                             }
                             stadtbilderReportBeans.add(new StadtbildReportBean(stadtbildserie, stadtbild, image));
                         }
@@ -863,8 +865,10 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                 final Sb_stadtbildserieGridObject gridObject = (Sb_stadtbildserieGridObject)e.nextElement();
 
                 final CidsBean stadtbildserie = gridObject.getCidsBean();
-                final Boolean internal_usage = (Boolean)stadtbildserie.getProperty("interner_gebrauch");
-                if (!Boolean.TRUE.equals(internal_usage)) {
+                final boolean downloadAllowed = Sb_stadtbildUtils.determineRestrictionLevelForStadtbildserie(
+                        stadtbildserie)
+                            .isDownloadAllowed();
+                if (downloadAllowed) {
                     for (final CidsBean stadtbild : gridObject.getSelectedBildnummernOfSerie()) {
                         final String imageNumber = (String)stadtbild.getProperty("bildnummer");
                         downloads.add(new TifferDownload(
@@ -1170,7 +1174,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
     /**
      * Only enable the HighResDownload button if at least one image is accessible. This means that a high-res picture
-     * must exist and the image must not be intended for the internal usage.
+     * must exist and the download must be allowed.
      */
     private void setEnableHighResDownload() {
         // create an array with Sb_stadtbildserieGridObject of the current vorschau.
@@ -1192,8 +1196,10 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                     // GridObject
                     for (final Sb_stadtbildserieGridObject gridObject : gridObjectArr) {
                         final CidsBean stadtbildserie = gridObject.getCidsBean();
-                        final Boolean internal_usage = (Boolean)stadtbildserie.getProperty("interner_gebrauch");
-                        if (!Boolean.TRUE.equals(internal_usage)) {
+                        final boolean downloadAllowed = Sb_stadtbildUtils.determineRestrictionLevelForStadtbildserie(
+                                stadtbildserie)
+                                    .isDownloadAllowed();
+                        if (downloadAllowed) {
                             for (final CidsBean stadtbild : gridObject.getSelectedBildnummernOfSerie()) {
                                 final String imageNumber = (String)stadtbild.getProperty("bildnummer");
                                 if (Sb_stadtbildUtils.getFormatOfHighResPicture(imageNumber) != null) {
