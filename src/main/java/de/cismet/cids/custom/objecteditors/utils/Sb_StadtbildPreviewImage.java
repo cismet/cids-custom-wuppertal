@@ -430,13 +430,10 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
     }
 
     /**
-     * Loads the photo of the currently selected stadtbild. The photo is not loaded if the stadtbildserie is restricted,
-     * but the photo is always loaded if the {@code stadtbildserieProvider} is an Editor.
+     * Loads the photo of the currently selected stadtbild. The photo is not loaded if the stadtbildserie is restricted.
      */
     private void loadPhoto() {
-        if (!stadtbildserieProvider.getRestrictionLevel().isPreviewAllowed() && !stadtbildserieProvider.isEditable()) {
-            indicateInternalUsage();
-        } else {
+        if (stadtbildserieProvider.getRestrictionLevel().isPreviewAllowed()) {
             final Object stadtbild = stadtbildserieProvider.getSelectedStadtbild();
             if (fotoCidsBean != null) {
                 fotoCidsBean.removePropertyChangeListener(listRepaintListener);
@@ -452,6 +449,8 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
                 image = null;
                 lblPicture.setIcon(FOLDER_ICON);
             }
+        } else {
+            indicateInternalUsage();
         }
     }
 
@@ -595,8 +594,12 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
 
         @Override
         public void setEnabled(final boolean enable) {
-            super.setEnabled(enable && stadtbildserieProvider.getRestrictionLevel().isDownloadAllowed()
-                        && stadtbildserieProvider.isEditable());
+            boolean isDownloadAllowed = false;
+            if (stadtbildserieProvider != null) {
+                isDownloadAllowed = stadtbildserieProvider.getRestrictionLevel().isDownloadAllowed();
+            }
+
+            super.setEnabled(enable && isDownloadAllowed);
         }
     }
 
@@ -761,12 +764,11 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
          */
         @Override
         protected Boolean doInBackground() throws Exception {
-            if (stadtbildserieProvider.getRestrictionLevel().isDownloadAllowed()
-                        && !stadtbildserieProvider.isEditable()) {
-                return false;
-            } else {
+            if (stadtbildserieProvider.getRestrictionLevel().isDownloadAllowed()) {
                 return Sb_stadtbildUtils.getFormatOfHighResPicture(imageNumber)
                             != null;
+            } else {
+                return false;
             }
         }
 
