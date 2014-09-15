@@ -25,6 +25,7 @@ import javax.imageio.ImageIO;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 
@@ -55,10 +56,11 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.JLayeredPane jLayeredPane1;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblAmount;
     private javax.swing.JLabel lblIcon;
     private org.jdesktop.swingx.JXImagePanel pnlBullet;
+    private javax.swing.JPanel pnlBulletPoint;
+    private javax.swing.JPanel pnlMarker;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -82,7 +84,7 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
         java.awt.GridBagConstraints gridBagConstraints;
 
         jLayeredPane1 = new javax.swing.JLayeredPane();
-        jPanel1 = new javax.swing.JPanel();
+        pnlBulletPoint = new javax.swing.JPanel();
         pnlBullet = new org.jdesktop.swingx.JXImagePanel();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
@@ -103,6 +105,7 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
                     super.paintComponent(g);
                 }
             };
+        pnlMarker = new MarkerPanel();
         lblIcon = new javax.swing.JLabel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
@@ -113,11 +116,11 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
 
         jLayeredPane1.setLayout(new java.awt.GridBagLayout());
 
-        jPanel1.setMaximumSize(new java.awt.Dimension(51, 16));
-        jPanel1.setMinimumSize(new java.awt.Dimension(51, 16));
-        jPanel1.setOpaque(false);
-        jPanel1.setPreferredSize(new java.awt.Dimension(51, 16));
-        jPanel1.setLayout(new java.awt.GridBagLayout());
+        pnlBulletPoint.setMaximumSize(new java.awt.Dimension(51, 16));
+        pnlBulletPoint.setMinimumSize(new java.awt.Dimension(51, 16));
+        pnlBulletPoint.setOpaque(false);
+        pnlBulletPoint.setPreferredSize(new java.awt.Dimension(51, 16));
+        pnlBulletPoint.setLayout(new java.awt.GridBagLayout());
 
         pnlBullet.setToolTipText(org.openide.util.NbBundle.getMessage(
                 Sb_stadtbildserieGridRenderer.class,
@@ -129,7 +132,7 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-        jPanel1.add(pnlBullet, gridBagConstraints);
+        pnlBulletPoint.add(pnlBullet, gridBagConstraints);
         try {
             final Image image = ImageIO.read(getClass().getResource(
                         "/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_red.png"));
@@ -142,7 +145,7 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        jPanel1.add(filler2, gridBagConstraints);
+        pnlBulletPoint.add(filler2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -151,8 +154,8 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
         gridBagConstraints.ipadx = 3;
         gridBagConstraints.ipady = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
-        jLayeredPane1.add(jPanel1, gridBagConstraints);
-        jLayeredPane1.setLayer(jPanel1, 2);
+        jLayeredPane1.add(pnlBulletPoint, gridBagConstraints);
+        jLayeredPane1.setLayer(pnlBulletPoint, 3);
 
         lblAmount.setBackground(new java.awt.Color(190, 187, 182));
         lblAmount.setForeground(new java.awt.Color(0, 0, 0));
@@ -173,7 +176,15 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
         gridBagConstraints.ipady = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
         jLayeredPane1.add(lblAmount, gridBagConstraints);
-        jLayeredPane1.setLayer(lblAmount, 1);
+        jLayeredPane1.setLayer(lblAmount, 2);
+
+        pnlMarker.setOpaque(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jLayeredPane1.add(pnlMarker, gridBagConstraints);
+        jLayeredPane1.setLayer(pnlMarker, 1);
 
         lblIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -238,51 +249,6 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
         return this;
     }
 
-    @Override
-    protected void paintComponent(final Graphics g) {
-        super.paintComponent(g);
-        final Graphics2D g2 = (Graphics2D)g.create();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setComposite(AlphaComposite.getInstance(
-                AlphaComposite.SRC_OVER));
-
-        if (image != null) {
-            if (paintMarker) {
-                final int x = (int)(getWidth() * markerFraction);
-                g2.setStroke(new BasicStroke(3.5f));
-                g2.setColor(new Color(50, 50, 50));
-                g2.drawLine(x, 0, x, getHeight());
-
-                g2.setStroke(new BasicStroke(2.5f));
-                g2.setColor(new Color(248, 211, 80));
-                g2.drawLine(x, 0, x, getHeight());
-            }
-            g2.dispose();
-        }
-    }
-
-    @Override
-    public void paint(final Graphics g) {
-        super.paint(g);
-        final Graphics2D g2 = (Graphics2D)g.create();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setComposite(AlphaComposite.getInstance(
-                AlphaComposite.SRC_OVER));
-        if (image != null) {
-            if (paintMarker) {
-                final int x = (int)(getWidth() * markerFraction);
-                g2.setStroke(new BasicStroke(3.5f));
-                g2.setColor(new Color(50, 50, 50));
-                g2.drawLine(x, 0, x, getHeight());
-
-                g2.setStroke(new BasicStroke(2.5f));
-                g2.setColor(new Color(248, 211, 80));
-                g2.drawLine(x, 0, x, getHeight());
-            }
-            g2.dispose();
-        }
-    }
-
     /**
      * DOCUMENT ME!
      *
@@ -309,6 +275,62 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
             pnlBullet.setImage(ImageIO.read(getClass().getResource(colorPath)));
         } catch (IOException ex) {
             LOG.error(ex, ex);
+        }
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class MarkerPanel extends JPanel {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void paint(final Graphics g) {
+            super.paint(g);
+            final Graphics2D g2 = (Graphics2D)g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setComposite(AlphaComposite.getInstance(
+                    AlphaComposite.SRC_OVER));
+            if (image != null) {
+                if (paintMarker) {
+                    final int x = (int)(getWidth() * markerFraction);
+                    g2.setStroke(new BasicStroke(3.5f));
+                    g2.setColor(new Color(50, 50, 50));
+                    g2.drawLine(x, 0, x, getHeight());
+
+                    g2.setStroke(new BasicStroke(2.5f));
+                    g2.setColor(new Color(248, 211, 80));
+                    g2.drawLine(x, 0, x, getHeight());
+                }
+                g2.dispose();
+            }
+        }
+
+        @Override
+        public void paintComponent(final Graphics g) {
+            super.paintComponent(g);
+            final Graphics2D g2 = (Graphics2D)g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setComposite(AlphaComposite.getInstance(
+                    AlphaComposite.SRC_OVER));
+            if (image != null) {
+                if (paintMarker) {
+                    final int x = (int)(getWidth() * markerFraction);
+                    g2.setStroke(new BasicStroke(3.5f));
+                    g2.setColor(new Color(50, 50, 50));
+                    g2.drawLine(x, 0, x, getHeight());
+
+                    g2.setStroke(new BasicStroke(2.5f));
+                    g2.setColor(new Color(248, 211, 80));
+                    g2.drawLine(x, 0, x, getHeight());
+                }
+                g2.dispose();
+            }
         }
     }
 }
