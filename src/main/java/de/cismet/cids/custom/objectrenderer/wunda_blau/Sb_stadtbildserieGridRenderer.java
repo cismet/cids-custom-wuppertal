@@ -19,6 +19,10 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -53,8 +57,8 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblAmount;
-    private javax.swing.JLabel lblColor;
     private javax.swing.JLabel lblIcon;
+    private org.jdesktop.swingx.JXImagePanel pnlBullet;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -78,7 +82,11 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
         java.awt.GridBagConstraints gridBagConstraints;
 
         jLayeredPane1 = new javax.swing.JLayeredPane();
-        lblIcon = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        pnlBullet = new org.jdesktop.swingx.JXImagePanel();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
         lblAmount = new JLabel() {
 
                 @Override
@@ -95,11 +103,7 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
                     super.paintComponent(g);
                 }
             };
-        jPanel1 = new javax.swing.JPanel();
-        lblColor = new javax.swing.JLabel();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
+        lblIcon = new javax.swing.JLabel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
@@ -109,23 +113,46 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
 
         jLayeredPane1.setLayout(new java.awt.GridBagLayout());
 
-        lblIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblIcon,
-            org.openide.util.NbBundle.getMessage(
+        jPanel1.setMaximumSize(new java.awt.Dimension(51, 16));
+        jPanel1.setMinimumSize(new java.awt.Dimension(51, 16));
+        jPanel1.setOpaque(false);
+        jPanel1.setPreferredSize(new java.awt.Dimension(51, 16));
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        pnlBullet.setToolTipText(org.openide.util.NbBundle.getMessage(
                 Sb_stadtbildserieGridRenderer.class,
-                "Sb_stadtbildserieGridRenderer.lblIcon.text")); // NOI18N
-        lblIcon.setFocusable(false);
+                "Sb_stadtbildserieGridRenderer.pnlBullet.toolTipText")); // NOI18N
+        pnlBullet.setMinimumSize(new java.awt.Dimension(16, 16));
+        pnlBullet.setName("");                                           // NOI18N
+        pnlBullet.setOpaque(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        jPanel1.add(pnlBullet, gridBagConstraints);
+        try {
+            final Image image = ImageIO.read(getClass().getResource(
+                        "/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_red.png"));
+            pnlBullet.setImage(image);
+        } catch (Exception ex) {
+            // do nothing - will be changed later anyway
+        }
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel1.add(filler2, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        jLayeredPane1.add(lblIcon, gridBagConstraints);
-        jLayeredPane1.setLayer(lblIcon, 0);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 3;
+        gridBagConstraints.ipady = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
+        jLayeredPane1.add(jPanel1, gridBagConstraints);
+        jLayeredPane1.setLayer(jPanel1, 2);
 
         lblAmount.setBackground(new java.awt.Color(190, 187, 182));
         lblAmount.setForeground(new java.awt.Color(0, 0, 0));
@@ -148,40 +175,23 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
         jLayeredPane1.add(lblAmount, gridBagConstraints);
         jLayeredPane1.setLayer(lblAmount, 1);
 
-        jPanel1.setMaximumSize(new java.awt.Dimension(51, 16));
-        jPanel1.setMinimumSize(new java.awt.Dimension(51, 16));
-        jPanel1.setOpaque(false);
-        jPanel1.setPreferredSize(new java.awt.Dimension(51, 16));
-        jPanel1.setLayout(new java.awt.GridBagLayout());
-
-        lblColor.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_red.png"))); // NOI18N
+        lblIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         org.openide.awt.Mnemonics.setLocalizedText(
-            lblColor,
+            lblIcon,
             org.openide.util.NbBundle.getMessage(
                 Sb_stadtbildserieGridRenderer.class,
-                "Sb_stadtbildserieGridRenderer.lblColor.text"));                                             // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-        jPanel1.add(lblColor, gridBagConstraints);
+                "Sb_stadtbildserieGridRenderer.lblIcon.text")); // NOI18N
+        lblIcon.setFocusable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
-        jPanel1.add(filler2, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 3;
-        gridBagConstraints.ipady = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
-        jLayeredPane1.add(jPanel1, gridBagConstraints);
-        jLayeredPane1.setLayer(jPanel1, 2);
+        gridBagConstraints.weighty = 1.0;
+        jLayeredPane1.add(lblIcon, gridBagConstraints);
+        jLayeredPane1.setLayer(lblIcon, 0);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -295,6 +305,10 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
                 break;
             }
         }
-        lblColor.setIcon(new javax.swing.ImageIcon(getClass().getResource(colorPath)));
+        try {
+            pnlBullet.setImage(ImageIO.read(getClass().getResource(colorPath)));
+        } catch (IOException ex) {
+            LOG.error(ex, ex);
+        }
     }
 }
