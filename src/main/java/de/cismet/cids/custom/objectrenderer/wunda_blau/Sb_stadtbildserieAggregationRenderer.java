@@ -125,6 +125,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblMiddle;
+    private javax.swing.JLabel lblSubtitle;
     private javax.swing.JLabel lblSwitchToBin;
     private javax.swing.JLabel lblSwitchToSerie;
     private javax.swing.JLabel lblTitle;
@@ -152,6 +153,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         ((PictureSelectionJGrid)grdStadtbildserien).updateInfoPanel();
 
         sldSize.setValue(grdStadtbildserien.getFixedCellDimension());
+        switchToSerie();
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -182,12 +184,12 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         btnRemoveWarenkorb = new javax.swing.JButton();
         btnBinRecycle = new javax.swing.JButton();
         pnlLeuchtkasten = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        grdStadtbildserien = new PictureSelectionJGrid();
         jScrollPane3 = new javax.swing.JScrollPane();
         grdWarenkorb = new de.cismet.cids.custom.objectrenderer.wunda_blau.Sb_SingleStadtbildJGrid();
         jScrollPane2 = new javax.swing.JScrollPane();
         grdBin = new PictureSelectionJGrid();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        grdStadtbildserien = new PictureSelectionJGrid();
         pnlSlider = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         sldSize = new javax.swing.JSlider();
@@ -200,6 +202,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         infoPanel = new de.cismet.cids.custom.objectrenderer.wunda_blau.Sb_stadtbildserieAggregationRendererInfoPanel();
         infoNotAvailable =
             new de.cismet.cids.custom.objectrenderer.wunda_blau.Sb_stadtbildserieAggregationRendererInfoPanel();
+        lblSubtitle = new javax.swing.JLabel();
 
         panFooter.setOpaque(false);
         panFooter.setLayout(new java.awt.GridBagLayout());
@@ -485,17 +488,6 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         pnlLeuchtkasten.setOpaque(false);
         pnlLeuchtkasten.setLayout(new java.awt.CardLayout());
 
-        jScrollPane1.setBorder(null);
-        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        jScrollPane1.setOpaque(false);
-
-        grdStadtbildserien.setOpaque(false);
-        jScrollPane1.setViewportView(grdStadtbildserien);
-        grdStadtbildserien.getModel().addListDataListener(this);
-
-        pnlLeuchtkasten.add(jScrollPane1, "SERIEN");
-        jScrollPane1.getViewport().setOpaque(false);
-
         jScrollPane3.setBorder(null);
         jScrollPane3.setOpaque(false);
 
@@ -514,6 +506,17 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
         pnlLeuchtkasten.add(jScrollPane2, "BIN");
         jScrollPane2.getViewport().setOpaque(false);
+
+        jScrollPane1.setBorder(null);
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane1.setOpaque(false);
+
+        grdStadtbildserien.setOpaque(false);
+        jScrollPane1.setViewportView(grdStadtbildserien);
+        grdStadtbildserien.getModel().addListDataListener(this);
+
+        pnlLeuchtkasten.add(jScrollPane1, "SERIEN");
+        jScrollPane1.getViewport().setOpaque(false);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -607,6 +610,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         roundedPanel1.add(filler1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -626,12 +631,26 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(pnlInfoPanels, gridBagConstraints);
-    } // </editor-fold>//GEN-END:initComponents
+
+        lblSubtitle.setFont(new java.awt.Font("Dialog", 1, 18));           // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblSubtitle,
+            org.openide.util.NbBundle.getMessage(
+                Sb_stadtbildserieAggregationRenderer.class,
+                "Sb_stadtbildserieAggregationRenderer.lblSubtitle.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 5, 5);
+        add(lblSubtitle, gridBagConstraints);
+    }                                                                      // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
@@ -900,6 +919,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         showInfoPanel(wasInfoPanelVisibleBeforeSwitch);
 
         btnMoveSerienToWarenkorb.setVisible(true);
+
+        lblSubtitle.setText("Vorauswahl");
     }
 
     /**
@@ -922,6 +943,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         showInfoPanel(wasInfoPanelVisibleBeforeSwitch);
 
         btnMoveSerienToWarenkorb.setVisible(false);
+
+        lblSubtitle.setText("Papierkorb");
     }
 
     /**
@@ -945,6 +968,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         showInfoPanel(false);
 
         btnMoveSerienToWarenkorb.setVisible(false);
+
+        lblSubtitle.setText("Warenkorb");
     }
 
     @Override
