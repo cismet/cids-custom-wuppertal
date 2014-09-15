@@ -14,18 +14,23 @@ import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.event.MouseEvent;
 
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 
@@ -261,20 +266,42 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
             level = Sb_stadtbildUtils.determineRestrictionLevelForStadtbildserie(stadtbildserie);
         }
         String colorPath = "/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_red.png";
+        String tooltipText = "Weder für externe noch für interne Zwecke freigegeben.";
         switch (level) {
             case AllAllowed: {
                 colorPath = "/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_green.png";
+                tooltipText = "Für externe und für interne Zwecke freigegeben.";
                 break;
             }
             case OnlyPreview: {
                 colorPath = "/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_yellow.png";
+                tooltipText = "Nur für interne Zwecke freigegeben.";
                 break;
             }
         }
+
+        pnlBullet.setToolTipText(tooltipText);
         try {
             pnlBullet.setImage(ImageIO.read(getClass().getResource(colorPath)));
         } catch (IOException ex) {
             LOG.error(ex, ex);
+        }
+    }
+
+    /**
+     * Check if the tooltip of the bullet point can be shown.
+     *
+     * @param   event  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Override
+    public String getToolTipText(final MouseEvent event) {
+        final Point bulletPointCoordinates = SwingUtilities.convertPoint(this, event.getPoint(), pnlBulletPoint);
+        if (pnlBullet.getBounds().contains(bulletPointCoordinates)) {
+            return pnlBullet.getToolTipText(event);
+        } else {
+            return super.getToolTipText(event);
         }
     }
 
