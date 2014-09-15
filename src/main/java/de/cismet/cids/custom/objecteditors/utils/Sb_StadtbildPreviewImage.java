@@ -363,7 +363,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
                             + imageNumber,
                             "stadtbild_"
                             + imageNumber,
-                            stadtbildserieProvider.getStadtbildserie().toString(),
+                            imageNumber,
                             "1"));
         }
     }                                                                                           //GEN-LAST:event_btnDownloadHighResImageActionPerformed
