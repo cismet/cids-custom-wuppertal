@@ -26,11 +26,12 @@ import java.lang.ref.SoftReference;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
@@ -84,14 +85,8 @@ public class Sb_stadtbildUtils {
 
     private static final int CACHE_SIZE = 100;
 
-    private static final Map<String, SoftReference<BufferedImage>> IMAGE_CACHE =
-        new LinkedHashMap<String, SoftReference<BufferedImage>>(CACHE_SIZE) {
-
-            @Override
-            protected boolean removeEldestEntry(final Map.Entry<String, SoftReference<BufferedImage>> eldest) {
-                return size() >= CACHE_SIZE;
-            }
-        };
+    private static final ConcurrentLRUCache<String, SoftReference<BufferedImage>> IMAGE_CACHE =
+        new ConcurrentLRUCache<String, SoftReference<BufferedImage>>(CACHE_SIZE);
 
     private static final PriorityExecutor unboundUEHThreadPoolExecutor;
     public static final int HIGH_PRIORITY = 1;
@@ -862,6 +857,89 @@ public class Sb_stadtbildUtils {
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public static class ConcurrentLRUCache<Key, Value> {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private final int maxSize;
+        private ConcurrentHashMap<Key, Value> map;
+        private ConcurrentLinkedQueue<Key> queue;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new ConcurrentLRUCache object.
+         *
+         * @param  maxSize  DOCUMENT ME!
+         */
+        public ConcurrentLRUCache(final int maxSize) {
+            this.maxSize = maxSize;
+            map = new ConcurrentHashMap<Key, Value>(maxSize);
+            queue = new ConcurrentLinkedQueue<Key>();
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  key    - may not be null!
+         * @param  value  - may not be null!
+         */
+        public void put(final Key key, final Value value) {
+            queue.remove(key); // remove the key from the FIFO queue
+
+            while (queue.size() >= maxSize) {
+                final Key oldestKey = queue.poll();
+                if (null != oldestKey) {
+                    map.remove(oldestKey);
+                }
+            }
+            queue.add(key);
+            map.put(key, value);
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   key  - may not be null!
+         *
+         * @return  the value associated to the given key or null
+         */
+        public Value get(final Key key) {
+            if (queue.remove(key)) {
+                queue.add(key);
+            }
+            return map.get(key);
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   bildnummer  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        private boolean containsKey(final Key bildnummer) {
+            return map.containsKey(bildnummer);
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  key  DOCUMENT ME!
+         */
+        private void remove(final Key key) {
+            queue.remove(key);
+            map.get(key);
         }
     }
 }
