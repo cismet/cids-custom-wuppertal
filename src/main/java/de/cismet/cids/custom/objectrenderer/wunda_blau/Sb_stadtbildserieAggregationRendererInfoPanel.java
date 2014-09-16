@@ -64,7 +64,7 @@ public class Sb_stadtbildserieAggregationRendererInfoPanel extends javax.swing.J
 
     private CidsBean stadtbildserie;
     private Sb_stadtbildserieAggregationRenderer aggregationRenderer;
-    private Sb_stadtbildUtils.RestrictionLevel restrictedLevel = Sb_stadtbildUtils.RestrictionLevel.NoneAllowed;
+    private Sb_stadtbildUtils.RestrictionLevel restrictedLevel = new Sb_stadtbildUtils.RestrictionLevel();
     private Sb_stadtbildserieGridObject gridObject;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

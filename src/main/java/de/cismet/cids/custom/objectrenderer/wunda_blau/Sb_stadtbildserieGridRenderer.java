@@ -14,7 +14,6 @@ import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -27,7 +26,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -260,23 +258,21 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
      * @param  gridObject  DOCUMENT ME!
      */
     private void determineColor(final Sb_stadtbildserieGridObject gridObject) {
-        Sb_stadtbildUtils.RestrictionLevel level = Sb_stadtbildUtils.RestrictionLevel.NoneAllowed;
+        Sb_stadtbildUtils.RestrictionLevel level = new Sb_stadtbildUtils.RestrictionLevel();
         if (gridObject != null) {
             final CidsBean stadtbildserie = gridObject.getCidsBean();
             level = Sb_stadtbildUtils.determineRestrictionLevelForStadtbildserie(stadtbildserie);
         }
         String colorPath = "/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_red.png";
         String tooltipText = "Weder für externe noch für interne Zwecke freigegeben.";
-        switch (level) {
-            case AllAllowed: {
+
+        if (level.isInternalUsageAllowed()) {
+            if (level.isExternalUsageAllowed()) {
                 colorPath = "/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_green.png";
                 tooltipText = "Für externe und für interne Zwecke freigegeben.";
-                break;
-            }
-            case OnlyPreview: {
+            } else {
                 colorPath = "/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_yellow.png";
                 tooltipText = "Nur für interne Zwecke freigegeben.";
-                break;
             }
         }
 

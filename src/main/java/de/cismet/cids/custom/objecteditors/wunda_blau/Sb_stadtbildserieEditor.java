@@ -166,7 +166,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     Geometry lastRefreshedGeometry = null;
     XBoundingBox lastRefreshedBoundingBox = null;
     private CidsBean cidsBean;
-    private Sb_stadtbildUtils.RestrictionLevel restrictedLevel = Sb_stadtbildUtils.RestrictionLevel.NoneAllowed;
+    private Sb_stadtbildUtils.RestrictionLevel restrictedLevel = new Sb_stadtbildUtils.RestrictionLevel();
     private String title;
     private final Converter<Timestamp, Date> timeStampConverter = new Converter<Timestamp, Date>() {
 

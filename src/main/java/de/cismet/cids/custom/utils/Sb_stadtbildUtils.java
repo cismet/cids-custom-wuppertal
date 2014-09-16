@@ -138,58 +138,6 @@ public class Sb_stadtbildUtils {
                 new ThreadPoolExecutor.AbortPolicy());
     }
 
-    //~ Enums ------------------------------------------------------------------
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    public enum RestrictionLevel {
-
-        //~ Enum constants -----------------------------------------------------
-
-        AllAllowed(true, true), OnlyPreview(true, false), NoneAllowed(false, false);
-
-        //~ Instance fields ----------------------------------------------------
-
-        private boolean previewAllowed;
-        private boolean downloadAllowed;
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new RestrictionLevel object.
-         *
-         * @param  previewAllowed   DOCUMENT ME!
-         * @param  downloadAllowed  DOCUMENT ME!
-         */
-        private RestrictionLevel(final boolean previewAllowed, final boolean downloadAllowed) {
-            this.previewAllowed = previewAllowed;
-            this.downloadAllowed = downloadAllowed;
-        }
-
-        //~ Methods ------------------------------------------------------------
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public boolean isPreviewAllowed() {
-            return previewAllowed;
-        }
-
-        /**
-         * DOCUMENT ME!
-         *
-         * @return  DOCUMENT ME!
-         */
-        public boolean isDownloadAllowed() {
-            return downloadAllowed;
-        }
-    }
-
     //~ Methods ----------------------------------------------------------------
 
     /**
@@ -537,7 +485,7 @@ public class Sb_stadtbildUtils {
      * @return  DOCUMENT ME!
      */
     public static RestrictionLevel determineRestrictionLevelForStadtbildserie(final CidsBean stadtbildserie) {
-        RestrictionLevel level = RestrictionLevel.NoneAllowed;
+        final RestrictionLevel level = new RestrictionLevel();
         if (stadtbildserie != null) {
             final CidsBean nutzungseinschraenkung = (CidsBean)stadtbildserie.getProperty("nutzungseinschraenkung");
             if (nutzungseinschraenkung != null) {
@@ -545,15 +493,18 @@ public class Sb_stadtbildUtils {
                 if (StringUtils.isNotBlank(key)) {
                     final String actionTagPreview = "custom.stadtbilder." + key + ".preview";
                     final String actionTagDownload = "custom.stadtbilder." + key + ".download";
+                    final String actionTagInternalUsage = "custom.stadtbilder." + key + ".internalUsage";
+                    final String actionTagExternalUsage = "custom.stadtbilder." + key + ".externalUsage";
+
                     final boolean previewAllowed = ObjectRendererUtils.checkActionTag(actionTagPreview);
                     final boolean downloadAllowed = ObjectRendererUtils.checkActionTag(actionTagDownload);
-                    if (previewAllowed) {
-                        if (downloadAllowed) {
-                            level = RestrictionLevel.AllAllowed;
-                        } else {
-                            level = RestrictionLevel.OnlyPreview;
-                        }
-                    }
+                    final boolean internalUsageAllowed = ObjectRendererUtils.checkActionTag(actionTagInternalUsage);
+                    final boolean externalUsageAllowed = ObjectRendererUtils.checkActionTag(actionTagExternalUsage);
+
+                    level.setPreviewAllowed(previewAllowed);
+                    level.setDownloadAllowed(downloadAllowed);
+                    level.setInternalUsageAllowed(internalUsageAllowed);
+                    level.setExternalUsageAllowed(externalUsageAllowed);
                 }
             }
         }
@@ -561,6 +512,95 @@ public class Sb_stadtbildUtils {
     }
 
     //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public static class RestrictionLevel {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private boolean previewAllowed;
+        private boolean downloadAllowed;
+        private boolean internalUsageAllowed;
+        private boolean externalUsageAllowed;
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public boolean isPreviewAllowed() {
+            return previewAllowed;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  previewAllowed  DOCUMENT ME!
+         */
+        public void setPreviewAllowed(final boolean previewAllowed) {
+            this.previewAllowed = previewAllowed;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public boolean isDownloadAllowed() {
+            return downloadAllowed;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  downloadAllowed  DOCUMENT ME!
+         */
+        public void setDownloadAllowed(final boolean downloadAllowed) {
+            this.downloadAllowed = downloadAllowed;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public boolean isInternalUsageAllowed() {
+            return internalUsageAllowed;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  internalUsageAllowed  DOCUMENT ME!
+         */
+        public void setInternalUsageAllowed(final boolean internalUsageAllowed) {
+            this.internalUsageAllowed = internalUsageAllowed;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public boolean isExternalUsageAllowed() {
+            return externalUsageAllowed;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  externalUsageAllowed  DOCUMENT ME!
+         */
+        public void setExternalUsageAllowed(final boolean externalUsageAllowed) {
+            this.externalUsageAllowed = externalUsageAllowed;
+        }
+    }
 
     /**
      * DOCUMENT ME!
