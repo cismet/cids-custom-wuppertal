@@ -242,6 +242,7 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
                     Sb_stadtbildUtils.ERROR_IMAGE,
                     grid.getFixedCellDimension(),
                     false);
+            image = scaledErrorImage;
             pnlImage.setImage(scaledErrorImage);
         }
 

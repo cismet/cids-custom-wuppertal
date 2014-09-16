@@ -26,8 +26,9 @@ import java.lang.ref.SoftReference;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
@@ -87,6 +88,7 @@ public class Sb_stadtbildUtils {
 
     private static final ConcurrentLRUCache<String, SoftReference<BufferedImage>> IMAGE_CACHE =
         new ConcurrentLRUCache<String, SoftReference<BufferedImage>>(CACHE_SIZE);
+    private static final Set<String> FAILED_IMAGES = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
 
     private static final PriorityExecutor unboundUEHThreadPoolExecutor;
     public static final int HIGH_PRIORITY = 1;
@@ -363,9 +365,13 @@ public class Sb_stadtbildUtils {
      * @throws  Exception  java.lang.Exception
      */
     public static BufferedImage downloadImageForBildnummer(final String bildnummer) throws Exception {
-        final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
-        if (cachedImageRef != null) {
-            return cachedImageRef.get();
+        if (isBildnummerInCache(bildnummer)) {
+            final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
+            if (cachedImageRef != null) {
+                return cachedImageRef.get();
+            } else {
+                return null;
+            }
         }
 
         final URL urlLowResImage = Sb_stadtbildUtils.getURLOfLowResPicture(bildnummer);
@@ -376,8 +382,13 @@ public class Sb_stadtbildUtils {
                 final BufferedImage img = ImageIO.read(is);
                 if (img != null) {
                     IMAGE_CACHE.put(bildnummer, new SoftReference<BufferedImage>(img));
+                } else {
+                    FAILED_IMAGES.add(bildnummer);
                 }
                 return img;
+            } catch (Exception ex) {
+                FAILED_IMAGES.add(bildnummer);
+                throw ex;
             } finally {
                 if (is != null) {
                     try {
@@ -405,9 +416,13 @@ public class Sb_stadtbildUtils {
     public static Object fetchImageForBildnummer(final CidsBean statdbildserie,
             final String bildnummer,
             final int priority) {
-        final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
-        if (cachedImageRef != null) {
-            return cachedImageRef.get();
+        if (isBildnummerInCache(bildnummer)) {
+            final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
+            if (cachedImageRef != null) {
+                return cachedImageRef.get();
+            } else {
+                return null;
+            }
         }
         final Future futureImage = unboundUEHThreadPoolExecutor.submit(new FetchImagePriorityCallable(
                     statdbildserie,
@@ -424,7 +439,7 @@ public class Sb_stadtbildUtils {
      * @return  DOCUMENT ME!
      */
     public static boolean isBildnummerInCache(final String bildnummer) {
-        return IMAGE_CACHE.containsKey(bildnummer);
+        return IMAGE_CACHE.containsKey(bildnummer) || FAILED_IMAGES.contains(bildnummer);
     }
 
     /**
@@ -451,6 +466,7 @@ public class Sb_stadtbildUtils {
      */
     public static void removeFromImageCache(final CidsBean cidsBean) {
         IMAGE_CACHE.remove(cidsBean.toString());
+        FAILED_IMAGES.remove(cidsBean.toString());
     }
 
     /**
@@ -695,9 +711,13 @@ public class Sb_stadtbildUtils {
             }
 
             // the image might have already been fetched by a previous thread
-            final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
-            if (cachedImageRef != null) {
-                return cachedImageRef.get();
+            if (isBildnummerInCache(bildnummer)) {
+                final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
+                if (cachedImageRef != null) {
+                    return cachedImageRef.get();
+                } else {
+                    return null;
+                }
             }
 
             final URL urlLowResImage = Sb_stadtbildUtils.getURLOfLowResPicture(bildnummer);
@@ -708,8 +728,13 @@ public class Sb_stadtbildUtils {
                     final BufferedImage img = ImageIO.read(is);
                     if (img != null) {
                         IMAGE_CACHE.put(bildnummer, new SoftReference<BufferedImage>(img));
+                    } else {
+                        FAILED_IMAGES.add(bildnummer);
                     }
                     return img;
+                } catch (Exception ex) {
+                    FAILED_IMAGES.add(bildnummer);
+                    throw ex;
                 } finally {
                     if (is != null) {
                         try {
@@ -720,6 +745,7 @@ public class Sb_stadtbildUtils {
                     }
                 }
             }
+            FAILED_IMAGES.add(bildnummer);
             return null;
         }
     }
