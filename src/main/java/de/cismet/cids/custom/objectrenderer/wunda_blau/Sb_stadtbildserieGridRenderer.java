@@ -22,8 +22,6 @@ import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 
-import java.io.IOException;
-
 import javax.imageio.ImageIO;
 
 import javax.swing.JLabel;
@@ -46,6 +44,37 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             Sb_stadtbildserieGridRenderer.class);
+
+    private static Image FULL_RESTRICTION;
+    private static Image NO_RESTRICTION;
+    private static Image MIDDLE_RESTRICTION = Sb_stadtbildUtils.ERROR_IMAGE;
+    private static String FULL_RESTRICTION_TOOLTIP;
+    private static String NO_RESTRICTION_TOOLTIP;
+    private static String MIDDLE_RESTRICTION_TOOLTIP = "";
+
+    static {
+        try {
+            FULL_RESTRICTION = ImageIO.read(Sb_stadtbildserieGridRenderer.class.getResource(
+                        "/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_red.png"));
+            FULL_RESTRICTION_TOOLTIP = org.openide.util.NbBundle.getMessage(
+                    Sb_stadtbildserieGridRenderer.class,
+                    "Sb_stadtbildserieGridRenderer.determineColor().tooltip.fullRestriction");
+
+            MIDDLE_RESTRICTION = ImageIO.read(Sb_stadtbildserieGridRenderer.class.getResource(
+                        "/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_yellow.png"));
+            MIDDLE_RESTRICTION_TOOLTIP = org.openide.util.NbBundle.getMessage(
+                    Sb_stadtbildserieGridRenderer.class,
+                    "Sb_stadtbildserieGridRenderer.determineColor().tooltip.middleRestriction");
+
+            NO_RESTRICTION = ImageIO.read(Sb_stadtbildserieGridRenderer.class.getResource(
+                        "/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_green.png"));
+            NO_RESTRICTION_TOOLTIP = org.openide.util.NbBundle.getMessage(
+                    Sb_stadtbildserieGridRenderer.class,
+                    "Sb_stadtbildserieGridRenderer.determineColor().tooltip.NoRestriction");
+        } catch (Exception ex) {
+            LOG.error("Error in the static block", ex);
+        }
+    }
 
     //~ Instance fields --------------------------------------------------------
 
@@ -260,25 +289,21 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
             final CidsBean stadtbildserie = gridObject.getCidsBean();
             level = Sb_stadtbildUtils.determineRestrictionLevelForStadtbildserie(stadtbildserie);
         }
-        String colorPath = "/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_red.png";
-        String tooltipText = "Weder für externe noch für interne Zwecke freigegeben.";
+        Image colorImage = FULL_RESTRICTION;
+        String tooltipText = FULL_RESTRICTION_TOOLTIP;
 
         if (level.isInternalUsageAllowed()) {
             if (level.isExternalUsageAllowed()) {
-                colorPath = "/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_green.png";
-                tooltipText = "Für externe und für interne Zwecke freigegeben.";
+                colorImage = NO_RESTRICTION;
+                tooltipText = NO_RESTRICTION_TOOLTIP;
             } else {
-                colorPath = "/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_yellow.png";
-                tooltipText = "Nur für interne Zwecke freigegeben.";
+                colorImage = MIDDLE_RESTRICTION;
+                tooltipText = MIDDLE_RESTRICTION_TOOLTIP;
             }
         }
 
         pnlBullet.setToolTipText(tooltipText);
-        try {
-            pnlBullet.setImage(ImageIO.read(getClass().getResource(colorPath)));
-        } catch (IOException ex) {
-            LOG.error(ex, ex);
-        }
+        pnlBullet.setImage(colorImage);
     }
 
     /**
