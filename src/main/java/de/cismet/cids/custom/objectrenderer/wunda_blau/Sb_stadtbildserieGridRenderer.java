@@ -14,6 +14,7 @@ import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -220,9 +221,12 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
             final boolean cellHasFocus) {
         image = null;
         paintMarker = false;
+        final int fixedCellDimension = grid.getFixedCellDimension();
+        pnlImage.setPreferredSize(new Dimension(fixedCellDimension, fixedCellDimension));
+
         if (value instanceof Sb_stadtbildserieGridObject) {
             final Sb_stadtbildserieGridObject gridObject = ((Sb_stadtbildserieGridObject)value);
-            image = gridObject.getImage(grid.getFixedCellDimension(), false);
+            image = gridObject.getImage(fixedCellDimension, false);
             markerFraction = gridObject.getFraction();
             paintMarker = gridObject.isMarker();
             final int amountImages = gridObject.getAmountImages();
