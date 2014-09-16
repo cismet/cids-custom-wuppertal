@@ -401,17 +401,22 @@ public class Sb_stadtbildUtils {
      * cache. If this is the case the cached image is returned. If not the image corresponding to the number is
      * downloaded. In that case a Future&lt;Image&gt; is returned.
      *
-     * @param   bildnummer  DOCUMENT ME!
-     * @param   priority    DOCUMENT ME!
+     * @param   statdbildserie  DOCUMENT ME!
+     * @param   bildnummer      DOCUMENT ME!
+     * @param   priority        DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static Object fetchImageForBildnummer(final String bildnummer, final int priority) {
+    public static Object fetchImageForBildnummer(final CidsBean statdbildserie,
+            final String bildnummer,
+            final int priority) {
         final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
         if (cachedImageRef != null) {
             return cachedImageRef.get();
         }
-        final Future futureImage = unboundUEHThreadPoolExecutor.submit(new FetchImagePriorityCallable(bildnummer),
+        final Future futureImage = unboundUEHThreadPoolExecutor.submit(new FetchImagePriorityCallable(
+                    statdbildserie,
+                    bildnummer),
                 priority);
         return futureImage;
     }
@@ -430,13 +435,14 @@ public class Sb_stadtbildUtils {
     /**
      * Checks if the Stadtbilder are in the cache. If not they will be downloaded. Returns immediately.
      *
-     * @param  stadtbilder  DOCUMENT ME!
+     * @param  stadtbildserie  DOCUMENT ME!
+     * @param  stadtbilder     DOCUMENT ME!
      */
-    public static void cacheImagesForStadtbilder(final List<CidsBean> stadtbilder) {
+    public static void cacheImagesForStadtbilder(final CidsBean stadtbildserie, final List<CidsBean> stadtbilder) {
         for (int i = 0; (i < CACHE_SIZE) && (i < stadtbilder.size()); i++) {
             final String bildnummer = (String)stadtbilder.get(i).getProperty("bildnummer");
             try {
-                fetchImageForBildnummer(bildnummer, NORMAL_PRIORITY);
+                fetchImageForBildnummer(stadtbildserie, bildnummer, NORMAL_PRIORITY);
             } catch (Exception ex) {
                 LOG.error("Problem while loading image " + bildnummer);
             }
@@ -669,6 +675,7 @@ public class Sb_stadtbildUtils {
 
         //~ Instance fields ----------------------------------------------------
 
+        CidsBean stadtbildserie;
         String bildnummer;
 
         //~ Constructors -------------------------------------------------------
@@ -676,9 +683,11 @@ public class Sb_stadtbildUtils {
         /**
          * Creates a new PriorityCallable object.
          *
-         * @param  bildnummer  DOCUMENT ME!
+         * @param  stadtbildserie  DOCUMENT ME!
+         * @param  bildnummer      DOCUMENT ME!
          */
-        public FetchImagePriorityCallable(final String bildnummer) {
+        public FetchImagePriorityCallable(final CidsBean stadtbildserie, final String bildnummer) {
+            this.stadtbildserie = stadtbildserie;
             this.bildnummer = bildnummer;
         }
 
@@ -686,6 +695,10 @@ public class Sb_stadtbildUtils {
 
         @Override
         public Image call() throws Exception {
+            if (!Sb_stadtbildUtils.determineRestrictionLevelForStadtbildserie(stadtbildserie).isPreviewAllowed()) {
+                return null;
+            }
+
             // the image might have already been fetched by a previous thread
             final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
             if (cachedImageRef != null) {

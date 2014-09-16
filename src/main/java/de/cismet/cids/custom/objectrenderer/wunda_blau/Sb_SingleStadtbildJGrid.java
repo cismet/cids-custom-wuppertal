@@ -260,6 +260,11 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
             final CidsBean stadtbildserie = locationOfStadtbild.getCidsBean();
             return Sb_stadtbildUtils.determineRestrictionLevelForStadtbildserie(stadtbildserie).isPreviewAllowed();
         }
+
+        @Override
+        protected CidsBean getStadtbildserie() {
+            return locationOfStadtbild.getStadtbildserie();
+        }
     }
 
     /**

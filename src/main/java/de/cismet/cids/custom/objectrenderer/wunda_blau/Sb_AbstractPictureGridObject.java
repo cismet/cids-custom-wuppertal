@@ -8,7 +8,6 @@
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import java.awt.Image;
-import java.awt.image.BufferedImage;
 
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -17,6 +16,8 @@ import java.util.concurrent.Future;
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
+
+import de.cismet.cids.dynamics.CidsBean;
 
 /**
  * DOCUMENT ME!
@@ -52,6 +53,12 @@ public abstract class Sb_AbstractPictureGridObject {
      * @return  DOCUMENT ME!
      */
     protected abstract boolean isPreviewAllowed();
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    protected abstract CidsBean getStadtbildserie();
 
     /**
      * DOCUMENT ME!
@@ -69,10 +76,6 @@ public abstract class Sb_AbstractPictureGridObject {
      * @return  DOCUMENT ME!
      */
     public Image getImage(final int cellDimension, final boolean invert) {
-        if (!isPreviewAllowed()) {
-            return null;
-        }
-
         final String bildnummer = getBildnummer();
 
         if ((lastShowImage != null) && lastShowImage.bildnummer.equals(bildnummer)) {
@@ -87,16 +90,18 @@ public abstract class Sb_AbstractPictureGridObject {
         final int priority = getDownloadPrority();
 
         final Object mightBeAnImage = Sb_stadtbildUtils.fetchImageForBildnummer(
+                getStadtbildserie(),
                 bildnummer,
                 priority);
         if (mightBeAnImage instanceof Image) {
             lastShowImage = new LastShownImage(bildnummer, (Image)mightBeAnImage);
             final Image toReturn = (Image)mightBeAnImage;
             return Sb_stadtbildUtils.scaleImage(toReturn, cellDimension, invert);
-        } else {
-            // mightBeAnImage must be a Future<Image>
+        } else if (mightBeAnImage instanceof Future) {
             retrieveFutureImage((Future<Image>)mightBeAnImage, bildnummer);
             return Sb_stadtbildUtils.scaleImage(Sb_stadtbildUtils.PLACEHOLDER_IMAGE, cellDimension, invert);
+        } else {
+            return null;
         }
     }
 

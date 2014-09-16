@@ -91,6 +91,11 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
         }
     }
 
+    @Override
+    public CidsBean getStadtbildserie() {
+        return stadtbildserie;
+    }
+
     /**
      * Returns the statdbild under the marker, if such an image does not exist the vorschaubild will be returned.
      *
@@ -113,7 +118,7 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
      */
     public void setMarker(final boolean marker) {
         if (marker) {
-            Sb_stadtbildUtils.cacheImagesForStadtbilder(imagesToShow);
+            Sb_stadtbildUtils.cacheImagesForStadtbilder(getStadtbildserie(), imagesToShow);
         }
         this.marker = marker;
     }

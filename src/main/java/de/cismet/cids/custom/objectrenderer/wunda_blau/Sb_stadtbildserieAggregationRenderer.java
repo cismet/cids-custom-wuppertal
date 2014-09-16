@@ -1020,7 +1020,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                 gridObject.addStadtbildChosenListener(this);
                 model.addElement(gridObject);
 
-                Sb_stadtbildUtils.cacheImagesForStadtbilder(bean.getBeanCollectionProperty("stadtbilder_arr"));
+                Sb_stadtbildUtils.cacheImagesForStadtbilder(bean, bean.getBeanCollectionProperty("stadtbilder_arr"));
             }
             updateFooterLabels();
             setTitle("");
