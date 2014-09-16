@@ -25,7 +25,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -60,9 +59,9 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
     private javax.swing.Box.Filler filler2;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JLabel lblAmount;
-    private javax.swing.JLabel lblIcon;
     private org.jdesktop.swingx.JXImagePanel pnlBullet;
     private javax.swing.JPanel pnlBulletPoint;
+    private org.jdesktop.swingx.JXImagePanel pnlImage;
     private javax.swing.JPanel pnlMarker;
     // End of variables declaration//GEN-END:variables
 
@@ -109,7 +108,7 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
                 }
             };
         pnlMarker = new MarkerPanel();
-        lblIcon = new javax.swing.JLabel();
+        pnlImage = new org.jdesktop.swingx.JXImagePanel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
@@ -189,13 +188,6 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
         jLayeredPane1.add(pnlMarker, gridBagConstraints);
         jLayeredPane1.setLayer(pnlMarker, 1);
 
-        lblIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblIcon,
-            org.openide.util.NbBundle.getMessage(
-                Sb_stadtbildserieGridRenderer.class,
-                "Sb_stadtbildserieGridRenderer.lblIcon.text")); // NOI18N
-        lblIcon.setFocusable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -204,8 +196,8 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        jLayeredPane1.add(lblIcon, gridBagConstraints);
-        jLayeredPane1.setLayer(lblIcon, 0);
+        jLayeredPane1.add(pnlImage, gridBagConstraints);
+        jLayeredPane1.setLayer(pnlImage, 0);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -240,13 +232,13 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
         }
 
         if (image != null) {
-            lblIcon.setIcon(new ImageIcon(image));
+            pnlImage.setImage(image);
         } else {
             final Image scaledErrorImage = Sb_stadtbildUtils.scaleImage(
                     Sb_stadtbildUtils.ERROR_IMAGE,
                     grid.getFixedCellDimension(),
                     false);
-            lblIcon.setIcon(new ImageIcon(scaledErrorImage));
+            pnlImage.setImage(scaledErrorImage);
         }
 
         return this;
