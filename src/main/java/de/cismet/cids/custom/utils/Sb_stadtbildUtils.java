@@ -15,6 +15,8 @@ import Sirius.server.middleware.types.MetaObject;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.jdesktop.swingx.graphics.GraphicsUtilities;
+
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
@@ -475,22 +477,24 @@ public class Sb_stadtbildUtils {
      * is false the element of the grid will be filled up completely with the image, but the image may be cut off. This
      * is due to that the ratio of the image is preserved.
      *
+     * <p>Uses GraphicsUtilities.createThumbnail()</p>
+     *
      * @param   toScale           DOCUMENT ME!
      * @param   dimension         DOCUMENT ME!
      * @param   showWholePicture  DOCUMENT ME!
      *
-     * @return  DOCUMENT ME!
+     * @return  a scaled image
      */
     public static Image scaleImage(final Image toScale, final int dimension, final boolean showWholePicture) {
-        Image toReturn = toScale;
-        if (toReturn instanceof BufferedImage) {
-            if ((toScale.getHeight(null) > toScale.getWidth(null)) ^ showWholePicture) {
-                toReturn = ((BufferedImage)toReturn).getScaledInstance(dimension, -1, Image.SCALE_SMOOTH);
+        if (toScale instanceof BufferedImage) {
+            if (showWholePicture) {
+                return GraphicsUtilities.createThumbnail((BufferedImage)toScale, dimension, dimension);
             } else {
-                toReturn = ((BufferedImage)toReturn).getScaledInstance(-1, dimension, Image.SCALE_SMOOTH);
+                return GraphicsUtilities.createThumbnail((BufferedImage)toScale, dimension);
             }
+        } else {
+            return toScale;
         }
-        return toReturn;
     }
 
     /**
