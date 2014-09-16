@@ -195,6 +195,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
         gridBagConstraints.weighty = 1.0;
         pnlVorschau.add(pnlFoto, gridBagConstraints);
 
+        pnlCtrlBtn.setMinimumSize(new java.awt.Dimension(100, 50));
         pnlCtrlBtn.setOpaque(false);
         pnlCtrlBtn.setPreferredSize(new java.awt.Dimension(100, 50));
         pnlCtrlBtn.setLayout(new java.awt.GridBagLayout());
@@ -494,7 +495,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
      */
     private void indicateError(final String tooltip) {
         lblPicture.setIcon(new ImageIcon(Sb_stadtbildUtils.ERROR_IMAGE));
-        lblPicture.setText("Fehler beim Übertragen des Bildes!");
+        lblPicture.setText("<html>Fehler beim Übertragen des Bildes!</html>");
         lblPicture.setToolTipText(tooltip);
         showWait(false);
     }
@@ -505,7 +506,10 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
      * @param  tooltip  DOCUMENT ME!
      */
     public void indicateNotAvailable(final String tooltip) {
-        indicateNotAvailable(tooltip, new ImageIcon(Sb_stadtbildUtils.ERROR_IMAGE), "Kein Vorschaubild vorhanden.");
+        indicateNotAvailable(
+            tooltip,
+            new ImageIcon(Sb_stadtbildUtils.ERROR_IMAGE),
+            "<html>Kein Vorschaubild vorhanden.</html>");
     }
 
     /**
@@ -527,7 +531,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
      */
     private void indicateInternalUsage() {
         lblPicture.setIcon(new ImageIcon(Sb_stadtbildUtils.ERROR_IMAGE));
-        lblPicture.setText("Bild ist nicht zur Publikation freigegeben!");
+        lblPicture.setText("<html>Bild ist nicht zur Publikation freigegeben!</html>");
         lblPicture.setToolTipText("");
         showWait(false);
     }
@@ -646,7 +650,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
                 } catch (ExecutionException ex) {
                     LOG.error(ex, ex);
                     lblPicture.setIcon(null);
-                    lblPicture.setText("Fehler beim Skalieren!");
+                    lblPicture.setText("<html>Fehler beim Skalieren!</html>");
                 } finally {
                     if (currentResizeWorker == this) {
                         currentResizeWorker = null;
