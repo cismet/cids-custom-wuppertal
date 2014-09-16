@@ -480,6 +480,9 @@ public class Sb_stadtbildUtils {
      * Determine the restriction level for a stadtbildserie. The restriction level depends on the action tags which the
      * user possesses. It allows the user to download or preview stadtbilder of the serie.
      *
+     * <p>The determined restriction level is saved in the extension attribute tmp_restriction_level, so the fetch is
+     * faster for the CidsBean the next time.</p>
+     *
      * @param   stadtbildserie  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
@@ -487,6 +490,11 @@ public class Sb_stadtbildUtils {
     public static RestrictionLevel determineRestrictionLevelForStadtbildserie(final CidsBean stadtbildserie) {
         final RestrictionLevel level = new RestrictionLevel();
         if (stadtbildserie != null) {
+            final Object tmp_level = stadtbildserie.getProperty("tmp_restriction_level");
+            if (tmp_level instanceof RestrictionLevel) {
+                return (RestrictionLevel)tmp_level;
+            }
+
             final CidsBean nutzungseinschraenkung = (CidsBean)stadtbildserie.getProperty("nutzungseinschraenkung");
             if (nutzungseinschraenkung != null) {
                 final String key = (String)nutzungseinschraenkung.getProperty("key");
@@ -505,6 +513,12 @@ public class Sb_stadtbildUtils {
                     level.setDownloadAllowed(downloadAllowed);
                     level.setInternalUsageAllowed(internalUsageAllowed);
                     level.setExternalUsageAllowed(externalUsageAllowed);
+
+                    try {
+                        stadtbildserie.setProperty("tmp_restriction_level", level);
+                    } catch (Exception ex) {
+                        LOG.error("Could not set property tmp_restriction_level of the stadtbildserie", ex);
+                    }
                 }
             }
         }
