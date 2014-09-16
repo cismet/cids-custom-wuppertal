@@ -487,7 +487,7 @@ public class Sb_stadtbildUtils {
      */
     public static Image scaleImage(final Image toScale, final int dimension, final boolean showWholePicture) {
         if (toScale instanceof BufferedImage) {
-            if ((toScale.getWidth(null) > dimension) || (toScale.getHeight(null) > dimension)) {
+            if ((toScale.getWidth(null) > dimension) && (toScale.getHeight(null) > dimension)) {
                 if (showWholePicture) {
                     return GraphicsUtilities.createThumbnail((BufferedImage)toScale, dimension);
                 } else {

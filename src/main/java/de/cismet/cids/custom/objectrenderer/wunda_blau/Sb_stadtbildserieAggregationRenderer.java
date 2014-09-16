@@ -543,7 +543,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
         sldSize.setMaximum(512);
         sldSize.setMinimum(64);
-        sldSize.setMinimumSize(new java.awt.Dimension(100, 16));
+        sldSize.setMinimumSize(new java.awt.Dimension(200, 16));
         sldSize.setOpaque(false);
         sldSize.addChangeListener(new javax.swing.event.ChangeListener() {
 
