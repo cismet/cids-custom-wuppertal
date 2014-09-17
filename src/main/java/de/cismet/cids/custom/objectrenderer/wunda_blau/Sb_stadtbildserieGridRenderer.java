@@ -48,37 +48,6 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             Sb_stadtbildserieGridRenderer.class);
 
-    private static Image FULL_RESTRICTION;
-    private static Image NO_RESTRICTION;
-    private static Image MIDDLE_RESTRICTION = Sb_stadtbildUtils.ERROR_IMAGE;
-    private static String FULL_RESTRICTION_TOOLTIP;
-    private static String NO_RESTRICTION_TOOLTIP;
-    private static String MIDDLE_RESTRICTION_TOOLTIP = "";
-
-    static {
-        try {
-            FULL_RESTRICTION = ImageIO.read(Sb_stadtbildserieGridRenderer.class.getResource(
-                        "/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_red.png"));
-            FULL_RESTRICTION_TOOLTIP = org.openide.util.NbBundle.getMessage(
-                    Sb_stadtbildserieGridRenderer.class,
-                    "Sb_stadtbildserieGridRenderer.determineColor().tooltip.fullRestriction");
-
-            MIDDLE_RESTRICTION = ImageIO.read(Sb_stadtbildserieGridRenderer.class.getResource(
-                        "/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_yellow.png"));
-            MIDDLE_RESTRICTION_TOOLTIP = org.openide.util.NbBundle.getMessage(
-                    Sb_stadtbildserieGridRenderer.class,
-                    "Sb_stadtbildserieGridRenderer.determineColor().tooltip.middleRestriction");
-
-            NO_RESTRICTION = ImageIO.read(Sb_stadtbildserieGridRenderer.class.getResource(
-                        "/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_green.png"));
-            NO_RESTRICTION_TOOLTIP = org.openide.util.NbBundle.getMessage(
-                    Sb_stadtbildserieGridRenderer.class,
-                    "Sb_stadtbildserieGridRenderer.determineColor().tooltip.NoRestriction");
-        } catch (Exception ex) {
-            LOG.error("Error in the static block", ex);
-        }
-    }
-
     //~ Instance fields --------------------------------------------------------
 
     private Image image;
@@ -287,26 +256,10 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
      * @param  gridObject  DOCUMENT ME!
      */
     private void determineColor(final Sb_stadtbildserieGridObject gridObject) {
-        RestrictionLevel level = new RestrictionLevel();
-        if (gridObject != null) {
-            final CidsBean stadtbildserie = gridObject.getCidsBean();
-            level = Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(stadtbildserie);
-        }
-        Image colorImage = FULL_RESTRICTION;
-        String tooltipText = FULL_RESTRICTION_TOOLTIP;
-
-        if (level.isInternalUsageAllowed()) {
-            if (level.isExternalUsageAllowed()) {
-                colorImage = NO_RESTRICTION;
-                tooltipText = NO_RESTRICTION_TOOLTIP;
-            } else {
-                colorImage = MIDDLE_RESTRICTION;
-                tooltipText = MIDDLE_RESTRICTION_TOOLTIP;
-            }
-        }
-
-        pnlBullet.setToolTipText(tooltipText);
-        pnlBullet.setImage(colorImage);
+        final Object[] imageAndInfo = Sb_RestrictionLevelUtils.determineBulletPointAndInfoText(gridObject
+                        .getCidsBean());
+        pnlBullet.setImage((Image)imageAndInfo[0]);
+        pnlBullet.setToolTipText((String)imageAndInfo[1]);
     }
 
     /**

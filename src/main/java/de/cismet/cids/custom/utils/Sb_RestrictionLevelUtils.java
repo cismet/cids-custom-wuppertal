@@ -15,7 +15,12 @@ import Sirius.server.middleware.types.MetaObject;
 
 import org.apache.commons.lang.StringUtils;
 
+import java.awt.Image;
+
+import javax.imageio.ImageIO;
+
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.wunda_blau.Sb_stadtbildserieGridObject;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -36,8 +41,37 @@ public class Sb_RestrictionLevelUtils {
 
     private static final CidsBean NO_RESTRICTION;
 
+    private static Image FULL_RESTRICTION_IMAGE = Sb_stadtbildUtils.ERROR_IMAGE;
+    private static Image NO_RESTRICTION_IMAGE = Sb_stadtbildUtils.ERROR_IMAGE;
+    private static Image MIDDLE_RESTRICTION_IMAGE = Sb_stadtbildUtils.ERROR_IMAGE;
+    private static String FULL_RESTRICTION_TOOLTIP = "";
+    private static String NO_RESTRICTION_TOOLTIP = "";
+    private static String MIDDLE_RESTRICTION_TOOLTIP = "";
+
     static {
         NO_RESTRICTION = getNutzungseinschraenkungNoRestriction();
+
+        try {
+            FULL_RESTRICTION_IMAGE = ImageIO.read(Sb_RestrictionLevelUtils.class.getResource(
+                        "/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_red.png"));
+            FULL_RESTRICTION_TOOLTIP = org.openide.util.NbBundle.getMessage(
+                    Sb_RestrictionLevelUtils.class,
+                    "Sb_stadtbildserieGridRenderer.determineColor().tooltip.fullRestriction");
+
+            MIDDLE_RESTRICTION_IMAGE = ImageIO.read(Sb_RestrictionLevelUtils.class.getResource(
+                        "/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_yellow.png"));
+            MIDDLE_RESTRICTION_TOOLTIP = org.openide.util.NbBundle.getMessage(
+                    Sb_RestrictionLevelUtils.class,
+                    "Sb_stadtbildserieGridRenderer.determineColor().tooltip.middleRestriction");
+
+            NO_RESTRICTION_IMAGE = ImageIO.read(Sb_RestrictionLevelUtils.class.getResource(
+                        "/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_green.png"));
+            NO_RESTRICTION_TOOLTIP = org.openide.util.NbBundle.getMessage(
+                    Sb_RestrictionLevelUtils.class,
+                    "Sb_stadtbildserieGridRenderer.determineColor().tooltip.NoRestriction");
+        } catch (Exception ex) {
+            LOG.error("Error in the static block", ex);
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -134,6 +168,41 @@ public class Sb_RestrictionLevelUtils {
             }
         }
         return level;
+    }
+
+    /**
+     * Returns an array with two entries:
+     *
+     * <ul>
+     *   <li>bullet point Image of the restriction</li>
+     *   <li>information String about the restriction</li>
+     * </ul>
+     *
+     * <p>To do this the RetsrictionLevel of {@code gridObject} is determined, afterwards it is checked if the user is
+     * allowed to use the images of the Stadtbildserie internally or externally.</p>
+     *
+     * @param   stadtbildserie  gridObject DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static Object[] determineBulletPointAndInfoText(final CidsBean stadtbildserie) {
+        final RestrictionLevel level = Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(
+                stadtbildserie);
+
+        Image colorImage = FULL_RESTRICTION_IMAGE;
+        String tooltipText = FULL_RESTRICTION_TOOLTIP;
+
+        if (level.isInternalUsageAllowed()) {
+            if (level.isExternalUsageAllowed()) {
+                colorImage = NO_RESTRICTION_IMAGE;
+                tooltipText = NO_RESTRICTION_TOOLTIP;
+            } else {
+                colorImage = MIDDLE_RESTRICTION_IMAGE;
+                tooltipText = MIDDLE_RESTRICTION_TOOLTIP;
+            }
+        }
+
+        return new Object[] { colorImage, tooltipText };
     }
 
     //~ Inner Classes ----------------------------------------------------------
