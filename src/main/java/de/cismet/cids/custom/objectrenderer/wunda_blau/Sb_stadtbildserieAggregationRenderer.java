@@ -49,6 +49,7 @@ import javax.swing.event.ListSelectionListener;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
+import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils;
 import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 import de.cismet.cids.custom.utils.TifferDownload;
 
@@ -753,9 +754,9 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
                         final CidsBean stadtbildserie = gridObject.getCidsBean();
                         final Set<CidsBean> stadtbilder = gridObject.getSelectedBildnummernOfSerie();
-                        final boolean previewAllowed = Sb_stadtbildUtils.determineRestrictionLevelForStadtbildserie(
-                                stadtbildserie)
-                                    .isPreviewAllowed();
+                        final boolean previewAllowed = Sb_RestrictionLevelUtils
+                                    .determineRestrictionLevelForStadtbildserie(
+                                        stadtbildserie).isPreviewAllowed();
                         for (final CidsBean stadtbild : stadtbilder) {
                             final String bildnummer = (String)stadtbild.getProperty("bildnummer");
                             Image image;
@@ -864,7 +865,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                 final Sb_stadtbildserieGridObject gridObject = (Sb_stadtbildserieGridObject)e.nextElement();
 
                 final CidsBean stadtbildserie = gridObject.getCidsBean();
-                final boolean downloadAllowed = Sb_stadtbildUtils.determineRestrictionLevelForStadtbildserie(
+                final boolean downloadAllowed = Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(
                         stadtbildserie)
                             .isDownloadAllowed();
                 if (downloadAllowed) {
@@ -1195,9 +1196,9 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                     // GridObject
                     for (final Sb_stadtbildserieGridObject gridObject : gridObjectArr) {
                         final CidsBean stadtbildserie = gridObject.getCidsBean();
-                        final boolean downloadAllowed = Sb_stadtbildUtils.determineRestrictionLevelForStadtbildserie(
-                                stadtbildserie)
-                                    .isDownloadAllowed();
+                        final boolean downloadAllowed = Sb_RestrictionLevelUtils
+                                    .determineRestrictionLevelForStadtbildserie(
+                                        stadtbildserie).isDownloadAllowed();
                         if (downloadAllowed) {
                             for (final CidsBean stadtbild : gridObject.getSelectedBildnummernOfSerie()) {
                                 final String imageNumber = (String)stadtbild.getProperty("bildnummer");

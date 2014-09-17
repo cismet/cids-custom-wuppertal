@@ -14,6 +14,7 @@ import java.util.Set;
 
 import javax.swing.DefaultListModel;
 
+import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils;
 import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -413,6 +414,6 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
 
     @Override
     protected boolean isPreviewAllowed() {
-        return Sb_stadtbildUtils.determineRestrictionLevelForStadtbildserie(stadtbildserie).isPreviewAllowed();
+        return Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(stadtbildserie).isPreviewAllowed();
     }
 }

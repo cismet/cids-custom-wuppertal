@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 
+import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils;
 import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -258,7 +259,8 @@ public class Sb_SingleStadtbildJGrid extends JGrid implements Sb_stadtbildserieG
         @Override
         protected boolean isPreviewAllowed() {
             final CidsBean stadtbildserie = locationOfStadtbild.getCidsBean();
-            return Sb_stadtbildUtils.determineRestrictionLevelForStadtbildserie(stadtbildserie).isPreviewAllowed();
+            return Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(stadtbildserie)
+                        .isPreviewAllowed();
         }
 
         @Override

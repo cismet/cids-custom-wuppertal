@@ -28,12 +28,15 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils;
+import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils.RestrictionLevel;
 import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 
 /**
- * DOCUMENT ME!
+ * A JGrid renderer for a Stadtbildserie. It is used in the Vorschau and Bin panel of the
+ * {@link Sb_stadtbildserieAggregationRenderer}.
  *
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
@@ -284,10 +287,10 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
      * @param  gridObject  DOCUMENT ME!
      */
     private void determineColor(final Sb_stadtbildserieGridObject gridObject) {
-        Sb_stadtbildUtils.RestrictionLevel level = new Sb_stadtbildUtils.RestrictionLevel();
+        RestrictionLevel level = new RestrictionLevel();
         if (gridObject != null) {
             final CidsBean stadtbildserie = gridObject.getCidsBean();
-            level = Sb_stadtbildUtils.determineRestrictionLevelForStadtbildserie(stadtbildserie);
+            level = Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(stadtbildserie);
         }
         Image colorImage = FULL_RESTRICTION;
         String tooltipText = FULL_RESTRICTION_TOOLTIP;

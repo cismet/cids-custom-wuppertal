@@ -76,6 +76,8 @@ import de.cismet.cids.custom.objecteditors.utils.RendererTools;
 import de.cismet.cids.custom.objecteditors.utils.Sb_StadtbildserieProvider;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils;
+import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils.RestrictionLevel;
 import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
 import de.cismet.cids.custom.wunda_blau.search.actions.Sb_stadtbildserieUpdatePruefhinweisAction;
@@ -166,7 +168,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     Geometry lastRefreshedGeometry = null;
     XBoundingBox lastRefreshedBoundingBox = null;
     private CidsBean cidsBean;
-    private Sb_stadtbildUtils.RestrictionLevel restrictedLevel = new Sb_stadtbildUtils.RestrictionLevel();
+    private RestrictionLevel restrictedLevel = new RestrictionLevel();
     private String title;
     private final Converter<Timestamp, Date> timeStampConverter = new Converter<Timestamp, Date>() {
 
@@ -2002,7 +2004,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                 this.cidsBean);
             initMap();
 
-            restrictedLevel = Sb_stadtbildUtils.determineRestrictionLevelForStadtbildserie(cidsBean);
+            restrictedLevel = Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(cidsBean);
 
             bindingGroup.bind();
             if (this.cidsBean.getMetaObject().getStatus() == MetaObject.NEW) {
@@ -2316,7 +2318,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
             LOG.error(ex, ex);
         }
         try {
-            cidsBean.setProperty("nutzungseinschraenkung", Sb_stadtbildUtils.getNoRestriction());
+            cidsBean.setProperty("nutzungseinschraenkung", Sb_RestrictionLevelUtils.getNoRestriction());
         } catch (Exception ex) {
             LOG.error(ex, ex);
         }
@@ -2375,7 +2377,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     }
 
     @Override
-    public Sb_stadtbildUtils.RestrictionLevel getRestrictionLevel() {
+    public RestrictionLevel getRestrictionLevel() {
         return restrictedLevel;
     }
 
