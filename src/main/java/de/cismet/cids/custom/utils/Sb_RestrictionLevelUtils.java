@@ -56,19 +56,19 @@ public class Sb_RestrictionLevelUtils {
                         "/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_red.png"));
             FULL_RESTRICTION_TOOLTIP = org.openide.util.NbBundle.getMessage(
                     Sb_RestrictionLevelUtils.class,
-                    "Sb_stadtbildserieGridRenderer.determineColor().tooltip.fullRestriction");
+                    "Sb_RestrictionLevelUtils.fullRestriction.info");
 
             MIDDLE_RESTRICTION_IMAGE = ImageIO.read(Sb_RestrictionLevelUtils.class.getResource(
                         "/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_yellow.png"));
             MIDDLE_RESTRICTION_TOOLTIP = org.openide.util.NbBundle.getMessage(
                     Sb_RestrictionLevelUtils.class,
-                    "Sb_stadtbildserieGridRenderer.determineColor().tooltip.middleRestriction");
+                    "Sb_RestrictionLevelUtils.middleRestriction.info");
 
             NO_RESTRICTION_IMAGE = ImageIO.read(Sb_RestrictionLevelUtils.class.getResource(
                         "/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_green.png"));
             NO_RESTRICTION_TOOLTIP = org.openide.util.NbBundle.getMessage(
                     Sb_RestrictionLevelUtils.class,
-                    "Sb_stadtbildserieGridRenderer.determineColor().tooltip.NoRestriction");
+                    "Sb_RestrictionLevelUtils.noRestriction.info");
         } catch (Exception ex) {
             LOG.error("Error in the static block", ex);
         }
@@ -86,9 +86,9 @@ public class Sb_RestrictionLevelUtils {
     }
 
     /**
-     * DOCUMENT ME!
+     * Fetches the Sb_Nutzungseinschraenkung with the key "noRestriction" from the database.
      *
-     * @return  DOCUMENT ME!
+     * @return  the Sb_Nutzungseinschraenkung "noRestriction" or null, in case of error.
      */
     private static CidsBean getNutzungseinschraenkungNoRestriction() {
         try {
