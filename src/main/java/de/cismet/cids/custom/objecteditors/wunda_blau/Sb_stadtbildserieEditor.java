@@ -131,7 +131,8 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     TitleComponentProvider,
     FooterComponentProvider,
     BeanInitializerProvider,
-    Sb_StadtbildserieProvider {
+    Sb_StadtbildserieProvider,
+    EditorSaveListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -2463,6 +2464,21 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     @Override
     public void previewImageChanged() {
         lstBildnummern.repaint();
+    }
+
+    @Override
+    public void editorClosed(final EditorClosedEvent event) {
+    }
+
+    @Override
+    public boolean prepareForSave() {
+        try {
+            cidsBean.setProperty("tmp_restriction_level", null);
+            return true;
+        } catch (Exception ex) {
+            LOG.warn(ex, ex);
+            return false;
+        }
     }
 
     //~ Inner Classes ----------------------------------------------------------
