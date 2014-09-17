@@ -30,8 +30,6 @@ import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.JXList;
 import org.jdesktop.swingx.error.ErrorInfo;
 
-import org.openide.util.Exceptions;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -93,6 +91,8 @@ import de.cismet.cids.editors.DefaultBeanInitializer;
 import de.cismet.cids.editors.DefaultBindableJCheckBox;
 import de.cismet.cids.editors.DefaultBindableReferenceCombo;
 import de.cismet.cids.editors.DefaultCustomObjectEditor;
+import de.cismet.cids.editors.EditorClosedEvent;
+import de.cismet.cids.editors.EditorSaveListener;
 import de.cismet.cids.editors.FastBindableReferenceCombo;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
@@ -2120,9 +2120,28 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
      * Retrieve the image and the tooltip for the bullet point, which follows the title.
      */
     private void determineBulletPoint() {
-        final Object[] imageAndInfo = Sb_RestrictionLevelUtils.determineBulletPointAndInfoText(cidsBean);
-        imgpBulletPoint.setImage((Image)imageAndInfo[0]);
-        imgpBulletPoint.setToolTipText((String)imageAndInfo[1]);
+        imgpBulletPoint.setImage(null);
+        imgpBulletPoint.setToolTipText("");
+        new SwingWorker<Object[], Void>() {
+
+                @Override
+                protected Object[] doInBackground() throws Exception {
+                    return Sb_RestrictionLevelUtils.determineBulletPointAndInfoText(cidsBean);
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        final Object[] imageAndInfo = get();
+                        imgpBulletPoint.setImage((Image)imageAndInfo[0]);
+                        imgpBulletPoint.setToolTipText((String)imageAndInfo[1]);
+                    } catch (InterruptedException ex) {
+                        LOG.error(ex, ex);
+                    } catch (ExecutionException ex) {
+                        LOG.error(ex, ex);
+                    }
+                }
+            }.execute();
     }
 
     /**

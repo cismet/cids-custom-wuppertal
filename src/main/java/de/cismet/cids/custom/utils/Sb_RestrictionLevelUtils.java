@@ -20,7 +20,6 @@ import java.awt.Image;
 import javax.imageio.ImageIO;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
-import de.cismet.cids.custom.objectrenderer.wunda_blau.Sb_stadtbildserieGridObject;
 
 import de.cismet.cids.dynamics.CidsBean;
 
