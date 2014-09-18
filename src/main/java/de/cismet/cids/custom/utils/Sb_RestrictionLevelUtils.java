@@ -138,16 +138,24 @@ public class Sb_RestrictionLevelUtils {
             if (tmp_level instanceof RestrictionLevel) {
                 determinedLevel = (RestrictionLevel)tmp_level;
             } else {
-                final CidsBean nutzungseinschraenkung = (CidsBean)stadtbildserie.getProperty("nutzungseinschraenkung");
-                final RestrictionLevel level = determineRestrictionLevelForNutzungseinschraenkung(
-                        nutzungseinschraenkung);
-                if (level != null) {
-                    try {
-                        stadtbildserie.setProperty("tmp_restriction_level", level);
-                    } catch (Exception ex) {
-                        LOG.error("Could not set property tmp_restriction_level of the stadtbildserie", ex);
+                synchronized (stadtbildserie) {
+                    final Object tmp_level_inner = stadtbildserie.getProperty("tmp_restriction_level");
+                    if (tmp_level_inner instanceof RestrictionLevel) {
+                        determinedLevel = (RestrictionLevel)tmp_level_inner;
+                    } else {
+                        final CidsBean nutzungseinschraenkung = (CidsBean)stadtbildserie.getProperty(
+                                "nutzungseinschraenkung");
+                        final RestrictionLevel level = determineRestrictionLevelForNutzungseinschraenkung(
+                                nutzungseinschraenkung);
+                        if (level != null) {
+                            try {
+                                stadtbildserie.setProperty("tmp_restriction_level", level);
+                            } catch (Exception ex) {
+                                LOG.error("Could not set property tmp_restriction_level of the stadtbildserie", ex);
+                            }
+                            determinedLevel = level;
+                        }
                     }
-                    determinedLevel = level;
                 }
             }
         }
