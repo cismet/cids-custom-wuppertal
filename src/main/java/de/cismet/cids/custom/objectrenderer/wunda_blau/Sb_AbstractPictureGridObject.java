@@ -30,7 +30,8 @@ public abstract class Sb_AbstractPictureGridObject {
     //~ Instance fields --------------------------------------------------------
 
     private SwingWorker<Image, Void> worker;
-    private LastShownImage lastShowImage;
+    /** The image which was shown the last time. This is a small cache for Sb_AbstractPictureGridObject; */
+    private LastShownImage lastShownImage;
 
     //~ Methods ----------------------------------------------------------------
 
@@ -78,9 +79,9 @@ public abstract class Sb_AbstractPictureGridObject {
     public Image getImage(final int cellDimension, final boolean invert) {
         final String bildnummer = getBildnummer();
 
-        if ((lastShowImage != null) && lastShowImage.bildnummer.equals(bildnummer)) {
-            final Image imageToReturn = lastShowImage.image;
-            if (lastShowImage.image == null) {
+        if ((lastShownImage != null) && lastShownImage.bildnummer.equals(bildnummer)) {
+            final Image imageToReturn = lastShownImage.image;
+            if (lastShownImage.image == null) {
                 return null;
             } else {
                 return Sb_stadtbildUtils.scaleImage(imageToReturn, cellDimension, invert);
@@ -94,7 +95,7 @@ public abstract class Sb_AbstractPictureGridObject {
                 bildnummer,
                 priority);
         if (mightBeAnImage instanceof Image) {
-            lastShowImage = new LastShownImage(bildnummer, (Image)mightBeAnImage);
+            lastShownImage = new LastShownImage(bildnummer, (Image)mightBeAnImage);
             final Image toReturn = (Image)mightBeAnImage;
             return Sb_stadtbildUtils.scaleImage(toReturn, cellDimension, invert);
         } else if (mightBeAnImage instanceof Future) {
@@ -128,14 +129,14 @@ public abstract class Sb_AbstractPictureGridObject {
                     try {
                         final Image image = get();
                         if (image != null) {
-                            lastShowImage = new LastShownImage(bildnummer, image);
+                            lastShownImage = new LastShownImage(bildnummer, image);
                         } else {
-                            lastShowImage = new LastShownImage(bildnummer, null);
+                            lastShownImage = new LastShownImage(bildnummer, null);
                         }
                     } catch (InterruptedException ex) {
-                        lastShowImage = new LastShownImage(bildnummer, null);
+                        lastShownImage = new LastShownImage(bildnummer, null);
                     } catch (ExecutionException ex) {
-                        lastShowImage = new LastShownImage(bildnummer, null);
+                        lastShownImage = new LastShownImage(bildnummer, null);
                     } catch (CancellationException ex) {
                     } finally {
                         notifyModel();
@@ -144,6 +145,16 @@ public abstract class Sb_AbstractPictureGridObject {
             };
         this.worker = worker;
         worker.execute();
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void clearLastShownImage() {
+        if (lastShownImage != null) {
+            lastShownImage.bildnummer = "";
+            lastShownImage.image = null;
+        }
     }
 
     //~ Inner Classes ----------------------------------------------------------
