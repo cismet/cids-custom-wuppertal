@@ -1709,7 +1709,7 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
                     if (fotos != null) {
                         fotos.remove(cidesBeanToRemove);
                     }
-                    Sb_stadtbildUtils.removeFromImageCache(cidesBeanToRemove);
+                    Sb_stadtbildUtils.removeBildnummerFromImageCacheAndFailedSet(cidesBeanToRemove.toString());
                 } catch (Exception e) {
                     LOG.error(e, e);
                     final ErrorInfo ei = new ErrorInfo(

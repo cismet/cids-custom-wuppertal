@@ -83,8 +83,10 @@ public class Sb_stadtbildUtils {
 
     private static final int CACHE_SIZE = 100;
 
+    /** A cache whose key is a bildnummer and the value is the corresponding image. */
     private static final ConcurrentLRUCache<String, SoftReference<BufferedImage>> IMAGE_CACHE =
         new ConcurrentLRUCache<String, SoftReference<BufferedImage>>(CACHE_SIZE);
+    /** A set with bildnummern (image numbers) which could not be loaded. */
     private static final Set<String> FAILED_IMAGES = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
 
     private static final PriorityExecutor unboundUEHThreadPoolExecutor;
@@ -316,7 +318,7 @@ public class Sb_stadtbildUtils {
      * @throws  Exception  java.lang.Exception
      */
     public static BufferedImage downloadImageForBildnummer(final String bildnummer) throws Exception {
-        if (isBildnummerInCache(bildnummer)) {
+        if (isBildnummerInCacheOrFailed(bildnummer)) {
             final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
             if (cachedImageRef != null) {
                 return cachedImageRef.get();
@@ -367,7 +369,7 @@ public class Sb_stadtbildUtils {
     public static Object fetchImageForBildnummer(final CidsBean statdbildserie,
             final String bildnummer,
             final int priority) {
-        if (isBildnummerInCache(bildnummer)) {
+        if (isBildnummerInCacheOrFailed(bildnummer)) {
             final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
             if (cachedImageRef != null) {
                 return cachedImageRef.get();
@@ -383,14 +385,25 @@ public class Sb_stadtbildUtils {
     }
 
     /**
-     * DOCUMENT ME!
+     * Checks if the bildnummer has an entry in the image cache, or if the bildnummer could not be loaded.
      *
      * @param   bildnummer  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static boolean isBildnummerInCache(final String bildnummer) {
+    public static boolean isBildnummerInCacheOrFailed(final String bildnummer) {
         return IMAGE_CACHE.containsKey(bildnummer) || FAILED_IMAGES.contains(bildnummer);
+    }
+
+    /**
+     * Checks if the bildnummer could not be loaded.
+     *
+     * @param   bildnummer  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static boolean isBildnummerInFailedSet(final String bildnummer) {
+        return FAILED_IMAGES.contains(bildnummer);
     }
 
     /**
@@ -411,13 +424,22 @@ public class Sb_stadtbildUtils {
     }
 
     /**
-     * Removes a bildnummer from the image cache.
+     * Removes a bildnummer from the image cache, and also its entry in the failed set.
      *
-     * @param  cidsBean  DOCUMENT ME!
+     * @param  bildnummer  cidsBean DOCUMENT ME!
      */
-    public static void removeFromImageCache(final CidsBean cidsBean) {
-        IMAGE_CACHE.remove(cidsBean.toString());
-        FAILED_IMAGES.remove(cidsBean.toString());
+    public static void removeBildnummerFromImageCacheAndFailedSet(final String bildnummer) {
+        IMAGE_CACHE.remove(bildnummer);
+        FAILED_IMAGES.remove(bildnummer);
+    }
+
+    /**
+     * Removes a bildnummer from the failed set.
+     *
+     * @param  bildnummer  cidsBean DOCUMENT ME!
+     */
+    public static void removeBildnummerFromFailedSet(final String bildnummer) {
+        FAILED_IMAGES.remove(bildnummer);
     }
 
     /**
@@ -554,7 +576,7 @@ public class Sb_stadtbildUtils {
             }
 
             // the image might have already been fetched by a previous thread
-            if (isBildnummerInCache(bildnummer)) {
+            if (isBildnummerInCacheOrFailed(bildnummer)) {
                 final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
                 if (cachedImageRef != null) {
                     return cachedImageRef.get();

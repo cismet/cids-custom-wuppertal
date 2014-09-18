@@ -683,7 +683,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
             this.bildnummer = toLoad;
             lblPicture.setText("");
             lblPicture.setToolTipText(null);
-            showWait(!Sb_stadtbildUtils.isBildnummerInCache(bildnummer));
+            showWait(!Sb_stadtbildUtils.isBildnummerInCacheOrFailed(bildnummer));
         }
 
         //~ Methods ------------------------------------------------------------
