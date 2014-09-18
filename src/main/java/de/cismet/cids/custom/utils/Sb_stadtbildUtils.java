@@ -13,6 +13,8 @@ import Sirius.navigator.exception.ConnectionException;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
+import org.jdesktop.swingx.graphics.GraphicsUtilities;
+
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
@@ -24,11 +26,13 @@ import java.lang.ref.SoftReference;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import java.util.LinkedHashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
@@ -79,14 +83,11 @@ public class Sb_stadtbildUtils {
 
     private static final int CACHE_SIZE = 100;
 
-    private static final Map<String, SoftReference<BufferedImage>> IMAGE_CACHE =
-        new LinkedHashMap<String, SoftReference<BufferedImage>>(CACHE_SIZE) {
-
-            @Override
-            protected boolean removeEldestEntry(final Map.Entry<String, SoftReference<BufferedImage>> eldest) {
-                return size() >= CACHE_SIZE;
-            }
-        };
+    /** A cache whose key is a bildnummer and the value is the corresponding image. */
+    private static final ConcurrentLRUCache<String, SoftReference<BufferedImage>> IMAGE_CACHE =
+        new ConcurrentLRUCache<String, SoftReference<BufferedImage>>(CACHE_SIZE);
+    /** A set with bildnummern (image numbers) which could not be loaded. */
+    private static final Set<String> FAILED_IMAGES = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
 
     private static final PriorityExecutor unboundUEHThreadPoolExecutor;
     public static final int HIGH_PRIORITY = 1;
@@ -317,9 +318,13 @@ public class Sb_stadtbildUtils {
      * @throws  Exception  java.lang.Exception
      */
     public static BufferedImage downloadImageForBildnummer(final String bildnummer) throws Exception {
-        final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
-        if (cachedImageRef != null) {
-            return cachedImageRef.get();
+        if (isBildnummerInCacheOrFailed(bildnummer)) {
+            final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
+            if (cachedImageRef != null) {
+                return cachedImageRef.get();
+            } else {
+                return null;
+            }
         }
 
         final URL urlLowResImage = Sb_stadtbildUtils.getURLOfLowResPicture(bildnummer);
@@ -330,8 +335,13 @@ public class Sb_stadtbildUtils {
                 final BufferedImage img = ImageIO.read(is);
                 if (img != null) {
                     IMAGE_CACHE.put(bildnummer, new SoftReference<BufferedImage>(img));
+                } else {
+                    FAILED_IMAGES.add(bildnummer);
                 }
                 return img;
+            } catch (Exception ex) {
+                FAILED_IMAGES.add(bildnummer);
+                throw ex;
             } finally {
                 if (is != null) {
                     try {
@@ -350,42 +360,63 @@ public class Sb_stadtbildUtils {
      * cache. If this is the case the cached image is returned. If not the image corresponding to the number is
      * downloaded. In that case a Future&lt;Image&gt; is returned.
      *
-     * @param   bildnummer  DOCUMENT ME!
-     * @param   priority    DOCUMENT ME!
+     * @param   statdbildserie  DOCUMENT ME!
+     * @param   bildnummer      DOCUMENT ME!
+     * @param   priority        DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static Object fetchImageForBildnummer(final String bildnummer, final int priority) {
-        final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
-        if (cachedImageRef != null) {
-            return cachedImageRef.get();
+    public static Object fetchImageForBildnummer(final CidsBean statdbildserie,
+            final String bildnummer,
+            final int priority) {
+        if (isBildnummerInCacheOrFailed(bildnummer)) {
+            final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
+            if (cachedImageRef != null) {
+                return cachedImageRef.get();
+            } else {
+                return null;
+            }
         }
-        final Future futureImage = unboundUEHThreadPoolExecutor.submit(new FetchImagePriorityCallable(bildnummer),
+        final Future futureImage = unboundUEHThreadPoolExecutor.submit(new FetchImagePriorityCallable(
+                    statdbildserie,
+                    bildnummer),
                 priority);
         return futureImage;
     }
 
     /**
-     * DOCUMENT ME!
+     * Checks if the bildnummer has an entry in the image cache, or if the bildnummer could not be loaded.
      *
      * @param   bildnummer  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static boolean isBildnummerInCache(final String bildnummer) {
-        return IMAGE_CACHE.containsKey(bildnummer);
+    public static boolean isBildnummerInCacheOrFailed(final String bildnummer) {
+        return IMAGE_CACHE.containsKey(bildnummer) || FAILED_IMAGES.contains(bildnummer);
+    }
+
+    /**
+     * Checks if the bildnummer could not be loaded.
+     *
+     * @param   bildnummer  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static boolean isBildnummerInFailedSet(final String bildnummer) {
+        return FAILED_IMAGES.contains(bildnummer);
     }
 
     /**
      * Checks if the Stadtbilder are in the cache. If not they will be downloaded. Returns immediately.
      *
-     * @param  stadtbilder  DOCUMENT ME!
+     * @param  stadtbildserie  DOCUMENT ME!
+     * @param  stadtbilder     DOCUMENT ME!
      */
-    public static void cacheImagesForStadtbilder(final List<CidsBean> stadtbilder) {
+    public static void cacheImagesForStadtbilder(final CidsBean stadtbildserie, final List<CidsBean> stadtbilder) {
         for (int i = 0; (i < CACHE_SIZE) && (i < stadtbilder.size()); i++) {
             final String bildnummer = (String)stadtbilder.get(i).getProperty("bildnummer");
             try {
-                fetchImageForBildnummer(bildnummer, NORMAL_PRIORITY);
+                fetchImageForBildnummer(stadtbildserie, bildnummer, NORMAL_PRIORITY);
             } catch (Exception ex) {
                 LOG.error("Problem while loading image " + bildnummer);
             }
@@ -393,12 +424,22 @@ public class Sb_stadtbildUtils {
     }
 
     /**
-     * Removes a bildnummer from the image cache.
+     * Removes a bildnummer from the image cache, and also its entry in the failed set.
      *
-     * @param  cidsBean  DOCUMENT ME!
+     * @param  bildnummer  cidsBean DOCUMENT ME!
      */
-    public static void removeFromImageCache(final CidsBean cidsBean) {
-        IMAGE_CACHE.remove(cidsBean.toString());
+    public static void removeBildnummerFromImageCacheAndFailedSet(final String bildnummer) {
+        IMAGE_CACHE.remove(bildnummer);
+        FAILED_IMAGES.remove(bildnummer);
+    }
+
+    /**
+     * Removes a bildnummer from the failed set.
+     *
+     * @param  bildnummer  cidsBean DOCUMENT ME!
+     */
+    public static void removeBildnummerFromFailedSet(final String bildnummer) {
+        FAILED_IMAGES.remove(bildnummer);
     }
 
     /**
@@ -407,13 +448,42 @@ public class Sb_stadtbildUtils {
      * is false the element of the grid will be filled up completely with the image, but the image may be cut off. This
      * is due to that the ratio of the image is preserved.
      *
+     * <p>Tries to use GraphicsUtilities.createThumbnail(), as it works only if the image is smaller.</p>
+     *
+     * @param   toScale           DOCUMENT ME!
+     * @param   dimension         DOCUMENT ME!
+     * @param   showWholePicture  DOCUMENT ME!
+     *
+     * @return  a scaled image
+     */
+    public static Image scaleImage(final Image toScale, final int dimension, final boolean showWholePicture) {
+        if (toScale instanceof BufferedImage) {
+            if ((toScale.getWidth(null) > dimension) && (toScale.getHeight(null) > dimension)) {
+                if (showWholePicture) {
+                    return GraphicsUtilities.createThumbnail((BufferedImage)toScale, dimension);
+                } else {
+                    return GraphicsUtilities.createThumbnail((BufferedImage)toScale, dimension, dimension);
+                }
+            } else if ((toScale.getWidth(null) < dimension) || (toScale.getHeight(null) < dimension)) {
+                return oldScaleImage(toScale, dimension, showWholePicture);
+            } else {
+                return toScale;
+            }
+        } else {
+            return toScale;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param   toScale           DOCUMENT ME!
      * @param   dimension         DOCUMENT ME!
      * @param   showWholePicture  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public static Image scaleImage(final Image toScale, final int dimension, final boolean showWholePicture) {
+    private static Image oldScaleImage(final Image toScale, final int dimension, final boolean showWholePicture) {
         Image toReturn = toScale;
         if (toReturn instanceof BufferedImage) {
             if ((toScale.getHeight(null) > toScale.getWidth(null)) ^ showWholePicture) {
@@ -422,7 +492,7 @@ public class Sb_stadtbildUtils {
                 toReturn = ((BufferedImage)toReturn).getScaledInstance(-1, dimension, Image.SCALE_SMOOTH);
             }
         }
-        return toReturn;
+        return GraphicsUtilities.convertToBufferedImage(toReturn);
     }
 
     //~ Inner Classes ----------------------------------------------------------
@@ -480,6 +550,7 @@ public class Sb_stadtbildUtils {
 
         //~ Instance fields ----------------------------------------------------
 
+        CidsBean stadtbildserie;
         String bildnummer;
 
         //~ Constructors -------------------------------------------------------
@@ -487,9 +558,11 @@ public class Sb_stadtbildUtils {
         /**
          * Creates a new PriorityCallable object.
          *
-         * @param  bildnummer  DOCUMENT ME!
+         * @param  stadtbildserie  DOCUMENT ME!
+         * @param  bildnummer      DOCUMENT ME!
          */
-        public FetchImagePriorityCallable(final String bildnummer) {
+        public FetchImagePriorityCallable(final CidsBean stadtbildserie, final String bildnummer) {
+            this.stadtbildserie = stadtbildserie;
             this.bildnummer = bildnummer;
         }
 
@@ -497,10 +570,19 @@ public class Sb_stadtbildUtils {
 
         @Override
         public Image call() throws Exception {
+            if (!Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(stadtbildserie)
+                        .isPreviewAllowed()) {
+                return null;
+            }
+
             // the image might have already been fetched by a previous thread
-            final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
-            if (cachedImageRef != null) {
-                return cachedImageRef.get();
+            if (isBildnummerInCacheOrFailed(bildnummer)) {
+                final SoftReference<BufferedImage> cachedImageRef = IMAGE_CACHE.get(bildnummer);
+                if (cachedImageRef != null) {
+                    return cachedImageRef.get();
+                } else {
+                    return null;
+                }
             }
 
             final URL urlLowResImage = Sb_stadtbildUtils.getURLOfLowResPicture(bildnummer);
@@ -511,8 +593,13 @@ public class Sb_stadtbildUtils {
                     final BufferedImage img = ImageIO.read(is);
                     if (img != null) {
                         IMAGE_CACHE.put(bildnummer, new SoftReference<BufferedImage>(img));
+                    } else {
+                        FAILED_IMAGES.add(bildnummer);
                     }
                     return img;
+                } catch (Exception ex) {
+                    FAILED_IMAGES.add(bildnummer);
+                    throw ex;
                 } finally {
                     if (is != null) {
                         try {
@@ -523,6 +610,7 @@ public class Sb_stadtbildUtils {
                     }
                 }
             }
+            FAILED_IMAGES.add(bildnummer);
             return null;
         }
     }
@@ -660,6 +748,89 @@ public class Sb_stadtbildUtils {
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public static class ConcurrentLRUCache<Key, Value> {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private final int maxSize;
+        private ConcurrentHashMap<Key, Value> map;
+        private ConcurrentLinkedQueue<Key> queue;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new ConcurrentLRUCache object.
+         *
+         * @param  maxSize  DOCUMENT ME!
+         */
+        public ConcurrentLRUCache(final int maxSize) {
+            this.maxSize = maxSize;
+            map = new ConcurrentHashMap<Key, Value>(maxSize);
+            queue = new ConcurrentLinkedQueue<Key>();
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  key    - may not be null!
+         * @param  value  - may not be null!
+         */
+        public void put(final Key key, final Value value) {
+            queue.remove(key); // remove the key from the FIFO queue
+
+            while (queue.size() >= maxSize) {
+                final Key oldestKey = queue.poll();
+                if (null != oldestKey) {
+                    map.remove(oldestKey);
+                }
+            }
+            queue.add(key);
+            map.put(key, value);
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   key  - may not be null!
+         *
+         * @return  the value associated to the given key or null
+         */
+        public Value get(final Key key) {
+            if (queue.remove(key)) {
+                queue.add(key);
+            }
+            return map.get(key);
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   bildnummer  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        private boolean containsKey(final Key bildnummer) {
+            return map.containsKey(bildnummer);
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  key  DOCUMENT ME!
+         */
+        private void remove(final Key key) {
+            queue.remove(key);
+            map.get(key);
         }
     }
 }

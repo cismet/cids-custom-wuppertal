@@ -496,7 +496,7 @@
                 <Property name="maximum" type="int" value="512"/>
                 <Property name="minimum" type="int" value="64"/>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[100, 16]"/>
+                  <Dimension value="[200, 16]"/>
                 </Property>
                 <Property name="opaque" type="boolean" value="false"/>
               </Properties>

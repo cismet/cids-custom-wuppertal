@@ -8,7 +8,6 @@
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
 import java.awt.Image;
-import java.awt.image.BufferedImage;
 
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -17,6 +16,8 @@ import java.util.concurrent.Future;
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
+
+import de.cismet.cids.dynamics.CidsBean;
 
 /**
  * DOCUMENT ME!
@@ -29,7 +30,8 @@ public abstract class Sb_AbstractPictureGridObject {
     //~ Instance fields --------------------------------------------------------
 
     private SwingWorker<Image, Void> worker;
-    private LastShownImage lastShowImage;
+    /** The image which was shown the last time. This is a small cache for Sb_AbstractPictureGridObject; */
+    private LastShownImage lastShownImage;
 
     //~ Methods ----------------------------------------------------------------
 
@@ -47,11 +49,17 @@ public abstract class Sb_AbstractPictureGridObject {
     protected abstract int getDownloadPrority();
 
     /**
-     * Returns a boolean, if true the image is only for the internal usage.
+     * Returns a boolean, if true the preview images can be shown.
      *
      * @return  DOCUMENT ME!
      */
-    protected abstract boolean isInternalUsage();
+    protected abstract boolean isPreviewAllowed();
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    protected abstract CidsBean getStadtbildserie();
 
     /**
      * DOCUMENT ME!
@@ -60,8 +68,8 @@ public abstract class Sb_AbstractPictureGridObject {
 
     /**
      * Get a scaled image for a Stadtbild. The exact stadtbild is provided by the method <code>getBildnummer()</code>.
-     * If the image has to be loaded first a Placeholder image will be returned. If something went wrong, e.g. while
-     * loading the image, null will be returned.
+     * If the image has to be loaded, a Placeholder image will be returned. If something went wrong, e.g. while loading
+     * the image, null will be returned.
      *
      * @param   cellDimension  DOCUMENT ME!
      * @param   invert         DOCUMENT ME!
@@ -69,15 +77,11 @@ public abstract class Sb_AbstractPictureGridObject {
      * @return  DOCUMENT ME!
      */
     public Image getImage(final int cellDimension, final boolean invert) {
-        if (isInternalUsage()) {
-            return null;
-        }
-
         final String bildnummer = getBildnummer();
 
-        if ((lastShowImage != null) && lastShowImage.bildnummer.equals(bildnummer)) {
-            final Image imageToReturn = lastShowImage.image;
-            if (lastShowImage.image == null) {
+        if ((lastShownImage != null) && lastShownImage.bildnummer.equals(bildnummer)) {
+            final Image imageToReturn = lastShownImage.image;
+            if (lastShownImage.image == null) {
                 return null;
             } else {
                 return Sb_stadtbildUtils.scaleImage(imageToReturn, cellDimension, invert);
@@ -87,16 +91,18 @@ public abstract class Sb_AbstractPictureGridObject {
         final int priority = getDownloadPrority();
 
         final Object mightBeAnImage = Sb_stadtbildUtils.fetchImageForBildnummer(
+                getStadtbildserie(),
                 bildnummer,
                 priority);
         if (mightBeAnImage instanceof Image) {
-            lastShowImage = new LastShownImage(bildnummer, (Image)mightBeAnImage);
+            lastShownImage = new LastShownImage(bildnummer, (Image)mightBeAnImage);
             final Image toReturn = (Image)mightBeAnImage;
             return Sb_stadtbildUtils.scaleImage(toReturn, cellDimension, invert);
-        } else {
-            // mightBeAnImage must be a Future<Image>
+        } else if (mightBeAnImage instanceof Future) {
             retrieveFutureImage((Future<Image>)mightBeAnImage, bildnummer);
             return Sb_stadtbildUtils.scaleImage(Sb_stadtbildUtils.PLACEHOLDER_IMAGE, cellDimension, invert);
+        } else {
+            return null;
         }
     }
 
@@ -123,14 +129,14 @@ public abstract class Sb_AbstractPictureGridObject {
                     try {
                         final Image image = get();
                         if (image != null) {
-                            lastShowImage = new LastShownImage(bildnummer, image);
+                            lastShownImage = new LastShownImage(bildnummer, image);
                         } else {
-                            lastShowImage = new LastShownImage(bildnummer, null);
+                            lastShownImage = new LastShownImage(bildnummer, null);
                         }
                     } catch (InterruptedException ex) {
-                        lastShowImage = new LastShownImage(bildnummer, null);
+                        lastShownImage = new LastShownImage(bildnummer, null);
                     } catch (ExecutionException ex) {
-                        lastShowImage = new LastShownImage(bildnummer, null);
+                        lastShownImage = new LastShownImage(bildnummer, null);
                     } catch (CancellationException ex) {
                     } finally {
                         notifyModel();
@@ -139,6 +145,16 @@ public abstract class Sb_AbstractPictureGridObject {
             };
         this.worker = worker;
         worker.execute();
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void clearLastShownImage() {
+        if (lastShownImage != null) {
+            lastShownImage.bildnummer = "";
+            lastShownImage.image = null;
+        }
     }
 
     //~ Inner Classes ----------------------------------------------------------

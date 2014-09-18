@@ -195,6 +195,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
         gridBagConstraints.weighty = 1.0;
         pnlVorschau.add(pnlFoto, gridBagConstraints);
 
+        pnlCtrlBtn.setMinimumSize(new java.awt.Dimension(100, 50));
         pnlCtrlBtn.setOpaque(false);
         pnlCtrlBtn.setPreferredSize(new java.awt.Dimension(100, 50));
         pnlCtrlBtn.setLayout(new java.awt.GridBagLayout());
@@ -407,7 +408,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
         this.bildnummer = bildnummer;
         if (bildnummer != null) {
             new CheckAccessibilityOfHighResImage(bildnummer).execute();
-            loadFoto();
+            loadPhoto();
             final String oldPreviewImage = (String)stadtbildserieProvider.getStadtbildserie()
                         .getProperty("vorschaubild.bildnummer");
             final boolean isPreviewImage = (oldPreviewImage != null)
@@ -430,12 +431,10 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
     }
 
     /**
-     * DOCUMENT ME!
+     * Loads the photo of the currently selected stadtbild. The photo is not loaded if the stadtbildserie is restricted.
      */
-    private void loadFoto() {
-        if (stadtbildserieProvider.isInternalUsageAndRenderer()) {
-            indicateInternalUsage();
-        } else {
+    private void loadPhoto() {
+        if (stadtbildserieProvider.getRestrictionLevel().isPreviewAllowed()) {
             final Object stadtbild = stadtbildserieProvider.getSelectedStadtbild();
             if (fotoCidsBean != null) {
                 fotoCidsBean.removePropertyChangeListener(listRepaintListener);
@@ -451,6 +450,8 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
                 image = null;
                 lblPicture.setIcon(FOLDER_ICON);
             }
+        } else {
+            indicateInternalUsage();
         }
     }
 
@@ -494,7 +495,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
      */
     private void indicateError(final String tooltip) {
         lblPicture.setIcon(new ImageIcon(Sb_stadtbildUtils.ERROR_IMAGE));
-        lblPicture.setText("Fehler beim Übertragen des Bildes!");
+        lblPicture.setText("<html>Fehler beim Übertragen des Bildes!</html>");
         lblPicture.setToolTipText(tooltip);
         showWait(false);
     }
@@ -505,7 +506,10 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
      * @param  tooltip  DOCUMENT ME!
      */
     public void indicateNotAvailable(final String tooltip) {
-        indicateNotAvailable(tooltip, new ImageIcon(Sb_stadtbildUtils.ERROR_IMAGE), "Kein Vorschaubild vorhanden.");
+        indicateNotAvailable(
+            tooltip,
+            new ImageIcon(Sb_stadtbildUtils.ERROR_IMAGE),
+            "<html>Kein Vorschaubild vorhanden.</html>");
     }
 
     /**
@@ -527,7 +531,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
      */
     private void indicateInternalUsage() {
         lblPicture.setIcon(new ImageIcon(Sb_stadtbildUtils.ERROR_IMAGE));
-        lblPicture.setText("Bild ist nicht zur Publikation freigegeben!");
+        lblPicture.setText("<html>Bild ist nicht zur Publikation freigegeben!</html>");
         lblPicture.setToolTipText("");
         showWait(false);
     }
@@ -594,7 +598,12 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
 
         @Override
         public void setEnabled(final boolean enable) {
-            super.setEnabled(enable && !stadtbildserieProvider.isInternalUsageAndRenderer());
+            boolean isDownloadAllowed = false;
+            if (stadtbildserieProvider != null) {
+                isDownloadAllowed = stadtbildserieProvider.getRestrictionLevel().isDownloadAllowed();
+            }
+
+            super.setEnabled(enable && isDownloadAllowed);
         }
     }
 
@@ -641,7 +650,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
                 } catch (ExecutionException ex) {
                     LOG.error(ex, ex);
                     lblPicture.setIcon(null);
-                    lblPicture.setText("Fehler beim Skalieren!");
+                    lblPicture.setText("<html>Fehler beim Skalieren!</html>");
                 } finally {
                     if (currentResizeWorker == this) {
                         currentResizeWorker = null;
@@ -674,7 +683,7 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
             this.bildnummer = toLoad;
             lblPicture.setText("");
             lblPicture.setToolTipText(null);
-            showWait(!Sb_stadtbildUtils.isBildnummerInCache(bildnummer));
+            showWait(!Sb_stadtbildUtils.isBildnummerInCacheOrFailed(bildnummer));
         }
 
         //~ Methods ------------------------------------------------------------
@@ -759,11 +768,11 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
          */
         @Override
         protected Boolean doInBackground() throws Exception {
-            if (stadtbildserieProvider.isInternalUsageAndRenderer()) {
-                return false;
-            } else {
+            if (stadtbildserieProvider.getRestrictionLevel().isDownloadAllowed()) {
                 return Sb_stadtbildUtils.getFormatOfHighResPicture(imageNumber)
                             != null;
+            } else {
+                return false;
             }
         }
 

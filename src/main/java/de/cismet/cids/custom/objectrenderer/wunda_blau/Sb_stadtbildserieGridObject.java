@@ -14,6 +14,7 @@ import java.util.Set;
 
 import javax.swing.DefaultListModel;
 
+import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils;
 import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -91,6 +92,11 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
         }
     }
 
+    @Override
+    public CidsBean getStadtbildserie() {
+        return stadtbildserie;
+    }
+
     /**
      * Returns the statdbild under the marker, if such an image does not exist the vorschaubild will be returned.
      *
@@ -113,7 +119,7 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
      */
     public void setMarker(final boolean marker) {
         if (marker) {
-            Sb_stadtbildUtils.cacheImagesForStadtbilder(imagesToShow);
+            Sb_stadtbildUtils.cacheImagesForStadtbilder(getStadtbildserie(), imagesToShow);
         }
         this.marker = marker;
     }
@@ -276,6 +282,14 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
         }
     }
 
+    /**
+     * Returns the bildnummer corresponding to the this grid object. This means that usually the bildnummer of the image
+     * under the marker is returned. If the Stadtbildserie has only one image, its number is returned.
+     *
+     * <p>If this does not work, the image number of the vorschaubild is returned.</p>
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     protected String getBildnummer() {
         final String bildnummer;
@@ -407,8 +421,7 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
     }
 
     @Override
-    protected boolean isInternalUsage() {
-        final Boolean internalUsage = (Boolean)stadtbildserie.getProperty("interner_gebrauch");
-        return Boolean.TRUE.equals(internalUsage);
+    protected boolean isPreviewAllowed() {
+        return Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(stadtbildserie).isPreviewAllowed();
     }
 }

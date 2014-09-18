@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -50,6 +49,7 @@ import javax.swing.event.ListSelectionListener;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
+import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils;
 import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 import de.cismet.cids.custom.utils.TifferDownload;
 
@@ -544,7 +544,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
         sldSize.setMaximum(512);
         sldSize.setMinimum(64);
-        sldSize.setMinimumSize(new java.awt.Dimension(100, 16));
+        sldSize.setMinimumSize(new java.awt.Dimension(200, 16));
         sldSize.setOpaque(false);
         sldSize.addChangeListener(new javax.swing.event.ChangeListener() {
 
@@ -726,7 +726,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     }
 
     /**
-     * DOCUMENT ME!
+     * Generate a report to order the Stadtbilder from the Warenkorb.
      *
      * @param  evt  DOCUMENT ME!
      */
@@ -754,19 +754,21 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
                         final CidsBean stadtbildserie = gridObject.getCidsBean();
                         final Set<CidsBean> stadtbilder = gridObject.getSelectedBildnummernOfSerie();
-                        final Boolean internalUsage = (Boolean)stadtbildserie.getProperty("interner_gebrauch");
+                        final boolean previewAllowed = Sb_RestrictionLevelUtils
+                                    .determineRestrictionLevelForStadtbildserie(
+                                        stadtbildserie).isPreviewAllowed();
                         for (final CidsBean stadtbild : stadtbilder) {
                             final String bildnummer = (String)stadtbild.getProperty("bildnummer");
                             Image image;
-                            if (Boolean.TRUE.equals(internalUsage)) {
-                                image = Sb_stadtbildUtils.ERROR_IMAGE;
-                            } else {
+                            if (previewAllowed) {
                                 try {
                                     image = Sb_stadtbildUtils.downloadImageForBildnummer(bildnummer);
                                 } catch (Exception ex) {
                                     LOG.error("Image could not be fetched.", ex);
                                     image = Sb_stadtbildUtils.ERROR_IMAGE;
                                 }
+                            } else {
+                                image = Sb_stadtbildUtils.ERROR_IMAGE;
                             }
                             stadtbilderReportBeans.add(new StadtbildReportBean(stadtbildserie, stadtbild, image));
                         }
@@ -863,8 +865,10 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                 final Sb_stadtbildserieGridObject gridObject = (Sb_stadtbildserieGridObject)e.nextElement();
 
                 final CidsBean stadtbildserie = gridObject.getCidsBean();
-                final Boolean internal_usage = (Boolean)stadtbildserie.getProperty("interner_gebrauch");
-                if (!Boolean.TRUE.equals(internal_usage)) {
+                final boolean downloadAllowed = Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(
+                        stadtbildserie)
+                            .isDownloadAllowed();
+                if (downloadAllowed) {
                     for (final CidsBean stadtbild : gridObject.getSelectedBildnummernOfSerie()) {
                         final String imageNumber = (String)stadtbild.getProperty("bildnummer");
                         downloads.add(new TifferDownload(
@@ -1017,7 +1021,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                 gridObject.addStadtbildChosenListener(this);
                 model.addElement(gridObject);
 
-                Sb_stadtbildUtils.cacheImagesForStadtbilder(bean.getBeanCollectionProperty("stadtbilder_arr"));
+                Sb_stadtbildUtils.cacheImagesForStadtbilder(bean, bean.getBeanCollectionProperty("stadtbilder_arr"));
             }
             updateFooterLabels();
             setTitle("");
@@ -1170,7 +1174,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
     /**
      * Only enable the HighResDownload button if at least one image is accessible. This means that a high-res picture
-     * must exist and the image must not be intended for the internal usage.
+     * must exist and the download must be allowed.
      */
     private void setEnableHighResDownload() {
         // create an array with Sb_stadtbildserieGridObject of the current vorschau.
@@ -1192,8 +1196,10 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                     // GridObject
                     for (final Sb_stadtbildserieGridObject gridObject : gridObjectArr) {
                         final CidsBean stadtbildserie = gridObject.getCidsBean();
-                        final Boolean internal_usage = (Boolean)stadtbildserie.getProperty("interner_gebrauch");
-                        if (!Boolean.TRUE.equals(internal_usage)) {
+                        final boolean downloadAllowed = Sb_RestrictionLevelUtils
+                                    .determineRestrictionLevelForStadtbildserie(
+                                        stadtbildserie).isDownloadAllowed();
+                        if (downloadAllowed) {
                             for (final CidsBean stadtbild : gridObject.getSelectedBildnummernOfSerie()) {
                                 final String imageNumber = (String)stadtbild.getProperty("bildnummer");
                                 if (Sb_stadtbildUtils.getFormatOfHighResPicture(imageNumber) != null) {
@@ -1227,7 +1233,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     //~ Inner Classes ----------------------------------------------------------
 
     /**
-     * DOCUMENT ME!
+     * A JGrid with different adaptations for this case. E.g. on click on a grid element, information about this element
+     * is shown in the InfoPanel.
      *
      * @version  $Revision$, $Date$
      */
@@ -1260,6 +1267,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
          * DOCUMENT ME!
          */
         private void init() {
+            // only Sb_stadtbildserieGridObject will be shown and they will be renderered by
+            // Sb_stadtbildserieGridRenderer
             final DefaultListModel<Sb_stadtbildserieGridObject> gridModel =
                 new DefaultListModel<Sb_stadtbildserieGridObject>();
             this.setModel(gridModel);
@@ -1269,10 +1278,13 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
             this.addMouseListener(new MouseAdapter() {
 
-                    @Override
                     /**
-                     * Select or unselect the Stadtbild under the marker
+                     * On double click, select or deselect the Stadtbild under the marker in the current grid element.
+                     * Thus it is added or removed from the Warenkorb.
+                     *
+                     * @param  e  DOCUMENT ME!
                      */
+                    @Override
                     public void mouseClicked(final MouseEvent e) {
                         if (e.getClickCount() >= 2) {
                             final List<Sb_stadtbildserieGridObject> selectedSerien = PictureSelectionJGrid.this
@@ -1291,7 +1303,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
                     @Override
                     /**
-                     * draw the marker
+                     * Draw the marker.
                      */
                     public void mouseMoved(final MouseEvent e) {
                         if ((lastIndex >= 0) && (lastIndex < PictureSelectionJGrid.this.getModel().getSize())) {
@@ -1329,17 +1341,37 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                 });
             this.addListSelectionListener(new ListSelectionListener() {
 
+                    /**
+                     * Show the selected grid object in the info panel and reload the image if it was previously loaded
+                     * with an error.
+                     *
+                     * @param  e  DOCUMENT ME!
+                     */
                     @Override
                     public void valueChanged(final ListSelectionEvent e) {
                         if (!e.getValueIsAdjusting()) {
                             updateInfoPanel();
+                            reloadIfImageWithError();
+                        }
+                    }
+
+                    private void reloadIfImageWithError() {
+                        final List selectedObject = PictureSelectionJGrid.this.getSelectedValuesList();
+                        if (selectedObject.size() == 1) {
+                            final Sb_stadtbildserieGridObject gridObject = (Sb_stadtbildserieGridObject)
+                                selectedObject.get(0);
+                            final String bildnummer = gridObject.getBildnummer();
+                            if (Sb_stadtbildUtils.isBildnummerInFailedSet(bildnummer)) {
+                                Sb_stadtbildUtils.removeBildnummerFromFailedSet(bildnummer);
+                                gridObject.clearLastShownImage();
+                            }
                         }
                     }
                 });
         }
 
         /**
-         * DOCUMENT ME!
+         * If only one grid object is selected, show it in the info panel.
          */
         public void updateInfoPanel() {
             int[] indexes = new int[0];
@@ -1364,7 +1396,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     }
 
     /**
-     * DOCUMENT ME!
+     * A Java Bean which is used to create the report for ordering the stadtbilder from the Warenkorb.
      *
      * @version  $Revision$, $Date$
      */

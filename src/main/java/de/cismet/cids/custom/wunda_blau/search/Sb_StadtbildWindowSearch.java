@@ -21,6 +21,7 @@ import Sirius.navigator.search.dynamic.SearchControlPanel;
 import Sirius.server.middleware.types.LightweightMetaObject;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
+import Sirius.server.newuser.User;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -64,6 +65,8 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.Sb_stadtbildserieEditor;
 import de.cismet.cids.custom.objecteditors.wunda_blau.Sb_stadtbildserieEditorAddSuchwortDialog;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils;
+import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils.RestrictionLevel;
 import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 import de.cismet.cids.custom.wunda_blau.search.server.MetaObjectNodesStadtbildSerieSearchStatement;
 import de.cismet.cids.custom.wunda_blau.search.server.MetaObjectNodesStadtbildSerieSearchStatement.Interval;
@@ -104,6 +107,9 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     private static final String ACTION_TAG = "custom.stadtbilder.search@WUNDA_BLAU";
     private static final Pattern SIMPLE_INTERVAL_PATTERN = Pattern.compile("(^\\d+$)|(^[A-Z]\\d+$)");
     private static final Pattern BILDNUMMER_PATTERN = Pattern.compile("^[A-Z]?\\d+[a-z]?$");
+    private static final ArrayList<Integer> GREEN_NUTZUNGSEINSCHRAENKUNGEN = new ArrayList<Integer>();
+    private static final ArrayList<Integer> YELLOW_NUTZUNGSEINSCHRAENKUNGEN = new ArrayList<Integer>();
+    private static final ArrayList<Integer> RED_NUTZUNGSEINSCHRAENKUNGEN = new ArrayList<Integer>();
 
     //~ Instance fields --------------------------------------------------------
 
@@ -120,6 +126,9 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     private javax.swing.JCheckBox cbMapSearch;
     private javax.swing.JComboBox cboOrt;
     private javax.swing.JComboBox cboStreet;
+    private javax.swing.JCheckBox chbInternal;
+    private javax.swing.JCheckBox chbInternalAndExternal;
+    private javax.swing.JCheckBox chbNeitherInternalNorExternal;
     private javax.swing.JCheckBox chboBodennaheAufnahme;
     private javax.swing.JCheckBox chboLuftbildschraegaufnahme;
     private javax.swing.JCheckBox chboLuftbildsenkrechtaufnahme;
@@ -133,9 +142,16 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblHausnummer;
+    private javax.swing.JLabel lblInternal;
+    private javax.swing.JLabel lblInternalExternal;
+    private javax.swing.JLabel lblNeitherInternalNorExternal;
     private javax.swing.JLabel lblOrtsname;
     private javax.swing.JLabel lblStrasse;
     private javax.swing.JList lstSuchworte;
@@ -237,6 +253,8 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             }
 
             cboOrt.setSelectedItem(Sb_stadtbildUtils.getWUPPERTAL());
+
+            fetchAndClassifyNutzungseinschraenkungen();
         } catch (Throwable e) {
             LOG.warn("Error in Constructor of Sb_StadtbildWindowSearch. Search will not work properly.", e);
         }
@@ -310,6 +328,16 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 32767));
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        chbInternalAndExternal = new javax.swing.JCheckBox();
+        lblInternalExternal = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        chbInternal = new javax.swing.JCheckBox();
+        lblInternal = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        chbNeitherInternalNorExternal = new javax.swing.JCheckBox();
+        lblNeitherInternalNorExternal = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(70, 20));
         setLayout(new java.awt.BorderLayout());
@@ -324,7 +352,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 org.openide.util.NbBundle.getMessage(
                     Sb_StadtbildWindowSearch.class,
                     "Sb_StadtbildWindowSearch.pnlKindOfImage.border.title"))); // NOI18N
-        pnlKindOfImage.setLayout(new javax.swing.BoxLayout(pnlKindOfImage, javax.swing.BoxLayout.PAGE_AXIS));
+        pnlKindOfImage.setLayout(new java.awt.GridBagLayout());
 
         chboLuftbildschraegaufnahme.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -332,7 +360,12 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             org.openide.util.NbBundle.getMessage(
                 Sb_StadtbildWindowSearch.class,
                 "Sb_StadtbildWindowSearch.chboLuftbildschraegaufnahme.text")); // NOI18N
-        pnlKindOfImage.add(chboLuftbildschraegaufnahme);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
+        pnlKindOfImage.add(chboLuftbildschraegaufnahme, gridBagConstraints);
 
         chboLuftbildsenkrechtaufnahme.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -340,7 +373,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             org.openide.util.NbBundle.getMessage(
                 Sb_StadtbildWindowSearch.class,
                 "Sb_StadtbildWindowSearch.chboLuftbildsenkrechtaufnahme.text")); // NOI18N
-        pnlKindOfImage.add(chboLuftbildsenkrechtaufnahme);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        pnlKindOfImage.add(chboLuftbildsenkrechtaufnahme, gridBagConstraints);
 
         chboBodennaheAufnahme.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -348,7 +388,14 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             org.openide.util.NbBundle.getMessage(
                 Sb_StadtbildWindowSearch.class,
                 "Sb_StadtbildWindowSearch.chboBodennaheAufnahme.text")); // NOI18N
-        pnlKindOfImage.add(chboBodennaheAufnahme);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
+        pnlKindOfImage.add(chboBodennaheAufnahme, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -760,6 +807,132 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         gridBagConstraints.weighty = 1.0;
         pnlScrollPane.add(filler1, gridBagConstraints);
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                org.openide.util.NbBundle.getMessage(
+                    Sb_StadtbildWindowSearch.class,
+                    "Sb_StadtbildWindowSearch.jPanel1.border.title"))); // NOI18N
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
+        chbInternalAndExternal.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            chbInternalAndExternal,
+            org.openide.util.NbBundle.getMessage(
+                Sb_StadtbildWindowSearch.class,
+                "Sb_StadtbildWindowSearch.chbInternalAndExternal.text")); // NOI18N
+        jPanel2.add(chbInternalAndExternal, new java.awt.GridBagConstraints());
+
+        lblInternalExternal.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_green.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblInternalExternal,
+            org.openide.util.NbBundle.getMessage(
+                Sb_StadtbildWindowSearch.class,
+                "Sb_StadtbildWindowSearch.lblInternalExternal.text"));                                         // NOI18N
+        lblInternalExternal.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+        lblInternalExternal.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblInternalExternalMouseClicked(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel2.add(lblInternalExternal, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
+        jPanel1.add(jPanel2, gridBagConstraints);
+
+        jPanel3.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            chbInternal,
+            org.openide.util.NbBundle.getMessage(
+                Sb_StadtbildWindowSearch.class,
+                "Sb_StadtbildWindowSearch.chbInternal.text")); // NOI18N
+        jPanel3.add(chbInternal, new java.awt.GridBagConstraints());
+
+        lblInternal.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_yellow.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblInternal,
+            org.openide.util.NbBundle.getMessage(
+                Sb_StadtbildWindowSearch.class,
+                "Sb_StadtbildWindowSearch.lblInternal.text"));                                                  // NOI18N
+        lblInternal.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+        lblInternal.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblInternalMouseClicked(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel3.add(lblInternal, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        jPanel1.add(jPanel3, gridBagConstraints);
+
+        jPanel4.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            chbNeitherInternalNorExternal,
+            org.openide.util.NbBundle.getMessage(
+                Sb_StadtbildWindowSearch.class,
+                "Sb_StadtbildWindowSearch.chbNeitherInternalNorExternal.text")); // NOI18N
+        jPanel4.add(chbNeitherInternalNorExternal, new java.awt.GridBagConstraints());
+
+        lblNeitherInternalNorExternal.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_red.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            lblNeitherInternalNorExternal,
+            org.openide.util.NbBundle.getMessage(
+                Sb_StadtbildWindowSearch.class,
+                "Sb_StadtbildWindowSearch.lblNeitherInternalNorExternal.text"));                             // NOI18N
+        lblNeitherInternalNorExternal.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+        lblNeitherInternalNorExternal.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblNeitherInternalNorExternalMouseClicked(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel4.add(lblNeitherInternalNorExternal, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
+        jPanel1.add(jPanel4, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 20);
+        pnlScrollPane.add(jPanel1, gridBagConstraints);
+
         jScrollPane1.setViewportView(pnlScrollPane);
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -857,6 +1030,9 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         cboOrt.setSelectedItem(Sb_stadtbildUtils.getWUPPERTAL());
         txtHausnummer.setText("");
         cbMapSearch.setSelected(false);
+        chbInternalAndExternal.setSelected(true);
+        chbInternal.setSelected(false);
+        chbNeitherInternalNorExternal.setSelected(false);
     }                                                                                //GEN-LAST:event_btnNewSearchActionPerformed
 
     /**
@@ -872,6 +1048,33 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             RendererTools.showErrorState(cboStreet);
         }
     }                                                                            //GEN-LAST:event_cboStreetItemStateChanged
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lblInternalExternalMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblInternalExternalMouseClicked
+        chbInternalAndExternal.setSelected(!chbInternalAndExternal.isSelected());
+    }                                                                                   //GEN-LAST:event_lblInternalExternalMouseClicked
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lblInternalMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblInternalMouseClicked
+        chbInternal.setSelected(!chbInternal.isSelected());
+    }                                                                           //GEN-LAST:event_lblInternalMouseClicked
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lblNeitherInternalNorExternalMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblNeitherInternalNorExternalMouseClicked
+        chbNeitherInternalNorExternal.setSelected(!chbNeitherInternalNorExternal.isSelected());
+    }                                                                                             //GEN-LAST:event_lblNeitherInternalNorExternalMouseClicked
 
     /**
      * DOCUMENT ME!
@@ -974,6 +1177,18 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         }
         stadtbildSerieSearchStatement.setBildtypen(bildtyp);
 
+        final ArrayList<Integer> nutzungseinschraenkungenIDs = new ArrayList<Integer>();
+        if (chbInternalAndExternal.isSelected()) {
+            nutzungseinschraenkungenIDs.addAll(GREEN_NUTZUNGSEINSCHRAENKUNGEN);
+        }
+        if (chbInternal.isSelected()) {
+            nutzungseinschraenkungenIDs.addAll(YELLOW_NUTZUNGSEINSCHRAENKUNGEN);
+        }
+        if (chbNeitherInternalNorExternal.isSelected()) {
+            nutzungseinschraenkungenIDs.addAll(RED_NUTZUNGSEINSCHRAENKUNGEN);
+        }
+        stadtbildSerieSearchStatement.setNutzungseinschraenkungIDs(nutzungseinschraenkungenIDs);
+
         final ArrayList<Integer> suchwortIDs = new ArrayList<Integer>();
         for (final Object object : ((DefaultListModel<CidsBean>)lstSuchworte.getModel()).toArray()) {
             final Integer id = ((CidsBean)object).getPrimaryKeyValue();
@@ -1059,6 +1274,40 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     }
 
     /**
+     * Fetch all Einschraenkungen from SB_NUTZUNGSEINSCHRAENKUNG and classify them, thus add them to one of the three
+     * lists e.g. {@code GREEN_NUTZUNGSEINSCHRAENKUNGEN}.
+     */
+    private void fetchAndClassifyNutzungseinschraenkungen() {
+        try {
+            final MetaClass mc = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "SB_NUTZUNGSEINSCHRAENKUNG");
+            final User user = SessionManager.getSession().getUser();
+            final String query = "select " + mc.getID() + "," + mc.getPrimaryKey() + " from " + mc.getTableName();
+            final MetaObject[] einschraenkungenMo = SessionManager.getProxy()
+                        .getMetaObjectByQuery(user, query, "WUNDA_BLAU");
+            final ArrayList<CidsBean> einschraenkungen = new ArrayList<CidsBean>(einschraenkungenMo.length);
+            for (final MetaObject mo : einschraenkungenMo) {
+                einschraenkungen.add(mo.getBean());
+            }
+
+            for (final CidsBean einschraenkung : einschraenkungen) {
+                final RestrictionLevel level = Sb_RestrictionLevelUtils
+                            .determineRestrictionLevelForNutzungseinschraenkung(einschraenkung);
+                if (level.isInternalUsageAllowed()) {
+                    if (level.isExternalUsageAllowed()) {
+                        GREEN_NUTZUNGSEINSCHRAENKUNGEN.add(einschraenkung.getPrimaryKeyValue());
+                    } else {
+                        YELLOW_NUTZUNGSEINSCHRAENKUNGEN.add(einschraenkung.getPrimaryKeyValue());
+                    }
+                } else {
+                    RED_NUTZUNGSEINSCHRAENKUNGEN.add(einschraenkung.getPrimaryKeyValue());
+                }
+            }
+        } catch (ConnectionException ex) {
+            LOG.error("Could not fetch and classify Nutzungseinschraenkungen", ex);
+        }
+    }
+
+    /**
      * DOCUMENT ME!
      *
      * @param  title    DOCUMENT ME!
@@ -1104,6 +1353,8 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
      * @return  DOCUMENT ME!
      *
      * @throws  NotAValidIntervalException  DOCUMENT ME!
+     *
+     * @see     Sb_StadtbildWindowSearchTest
      */
     Interval getIntervalForSearch(
             String imageNrFrom,

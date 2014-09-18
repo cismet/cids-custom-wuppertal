@@ -7,10 +7,13 @@
 ****************************************************/
 package de.cismet.cids.custom.objecteditors.utils;
 
+import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils.RestrictionLevel;
+
 import de.cismet.cids.dynamics.CidsBean;
 
 /**
- * DOCUMENT ME!
+ * This interface is needed to make the {@link Sb_StadtbildPreviewImage} reuseable, as it permits a possibility to
+ * transfer information between the two classes.
  *
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
@@ -67,7 +70,7 @@ public interface Sb_StadtbildserieProvider {
      *
      * @return  DOCUMENT ME!
      */
-    boolean isInternalUsageAndRenderer();
+    RestrictionLevel getRestrictionLevel();
 
     /**
      * DOCUMENT ME!
