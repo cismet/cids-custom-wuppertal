@@ -21,6 +21,7 @@ import Sirius.navigator.search.dynamic.SearchControlPanel;
 import Sirius.server.middleware.types.LightweightMetaObject;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
+import Sirius.server.newuser.User;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -64,6 +65,8 @@ import de.cismet.cids.custom.objecteditors.wunda_blau.Sb_stadtbildserieEditor;
 import de.cismet.cids.custom.objecteditors.wunda_blau.Sb_stadtbildserieEditorAddSuchwortDialog;
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils;
+import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils.RestrictionLevel;
 import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 import de.cismet.cids.custom.wunda_blau.search.server.MetaObjectNodesStadtbildSerieSearchStatement;
 import de.cismet.cids.custom.wunda_blau.search.server.MetaObjectNodesStadtbildSerieSearchStatement.Interval;
@@ -104,6 +107,9 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     private static final String ACTION_TAG = "custom.stadtbilder.search@WUNDA_BLAU";
     private static final Pattern SIMPLE_INTERVAL_PATTERN = Pattern.compile("(^\\d+$)|(^[A-Z]\\d+$)");
     private static final Pattern BILDNUMMER_PATTERN = Pattern.compile("^[A-Z]?\\d+[a-z]?$");
+    private static final ArrayList<Integer> GREEN_NUTZUNGSEINSCHRAENKUNGEN = new ArrayList<Integer>();
+    private static final ArrayList<Integer> YELLOW_NUTZUNGSEINSCHRAENKUNGEN = new ArrayList<Integer>();
+    private static final ArrayList<Integer> RED_NUTZUNGSEINSCHRAENKUNGEN = new ArrayList<Integer>();
 
     //~ Instance fields --------------------------------------------------------
 
@@ -247,6 +253,8 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             }
 
             cboOrt.setSelectedItem(Sb_stadtbildUtils.getWUPPERTAL());
+
+            fetchAndClassifyNutzungseinschraenkungen();
         } catch (Throwable e) {
             LOG.warn("Error in Constructor of Sb_StadtbildWindowSearch. Search will not work properly.", e);
         }
@@ -1120,6 +1128,18 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         }
         stadtbildSerieSearchStatement.setBildtypen(bildtyp);
 
+        final ArrayList<Integer> nutzungseinschraenkungenIDs = new ArrayList<Integer>();
+        if (chbInternalAndExternal.isSelected()) {
+            nutzungseinschraenkungenIDs.addAll(GREEN_NUTZUNGSEINSCHRAENKUNGEN);
+        }
+        if (chbInternal.isSelected()) {
+            nutzungseinschraenkungenIDs.addAll(YELLOW_NUTZUNGSEINSCHRAENKUNGEN);
+        }
+        if (chbNeitherInternalNorExternal.isSelected()) {
+            nutzungseinschraenkungenIDs.addAll(RED_NUTZUNGSEINSCHRAENKUNGEN);
+        }
+        stadtbildSerieSearchStatement.setNutzungseinschraenkungIDs(nutzungseinschraenkungenIDs);
+
         final ArrayList<Integer> suchwortIDs = new ArrayList<Integer>();
         for (final Object object : ((DefaultListModel<CidsBean>)lstSuchworte.getModel()).toArray()) {
             final Integer id = ((CidsBean)object).getPrimaryKeyValue();
@@ -1205,6 +1225,40 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     }
 
     /**
+     * Fetch all Einschraenkungen from SB_NUTZUNGSEINSCHRAENKUNG and classify them, thus add them to one of the three
+     * lists e.g. {@code GREEN_NUTZUNGSEINSCHRAENKUNGEN}.
+     */
+    private void fetchAndClassifyNutzungseinschraenkungen() {
+        try {
+            final MetaClass mc = ClassCacheMultiple.getMetaClass("WUNDA_BLAU", "SB_NUTZUNGSEINSCHRAENKUNG");
+            final User user = SessionManager.getSession().getUser();
+            final String query = "select " + mc.getID() + "," + mc.getPrimaryKey() + " from " + mc.getTableName();
+            final MetaObject[] einschraenkungenMo = SessionManager.getProxy()
+                        .getMetaObjectByQuery(user, query, "WUNDA_BLAU");
+            final ArrayList<CidsBean> einschraenkungen = new ArrayList<CidsBean>(einschraenkungenMo.length);
+            for (final MetaObject mo : einschraenkungenMo) {
+                einschraenkungen.add(mo.getBean());
+            }
+
+            for (final CidsBean einschraenkung : einschraenkungen) {
+                final RestrictionLevel level = Sb_RestrictionLevelUtils
+                            .determineRestrictionLevelForNutzungseinschraenkung(einschraenkung);
+                if (level.isInternalUsageAllowed()) {
+                    if (level.isExternalUsageAllowed()) {
+                        GREEN_NUTZUNGSEINSCHRAENKUNGEN.add(einschraenkung.getPrimaryKeyValue());
+                    } else {
+                        YELLOW_NUTZUNGSEINSCHRAENKUNGEN.add(einschraenkung.getPrimaryKeyValue());
+                    }
+                } else {
+                    RED_NUTZUNGSEINSCHRAENKUNGEN.add(einschraenkung.getPrimaryKeyValue());
+                }
+            }
+        } catch (ConnectionException ex) {
+            LOG.error("Could not fetch and classify Nutzungseinschraenkungen", ex);
+        }
+    }
+
+    /**
      * DOCUMENT ME!
      *
      * @param  title    DOCUMENT ME!
@@ -1250,6 +1304,8 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
      * @return  DOCUMENT ME!
      *
      * @throws  NotAValidIntervalException  DOCUMENT ME!
+     *
+     * @see     Sb_StadtbildWindowSearchTest
      */
     Interval getIntervalForSearch(
             String imageNrFrom,

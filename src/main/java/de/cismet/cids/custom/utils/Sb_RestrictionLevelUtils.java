@@ -132,41 +132,60 @@ public class Sb_RestrictionLevelUtils {
      * @return  DOCUMENT ME!
      */
     public static RestrictionLevel determineRestrictionLevelForStadtbildserie(final CidsBean stadtbildserie) {
-        final RestrictionLevel level = new RestrictionLevel();
+        RestrictionLevel determinedLevel = new RestrictionLevel();
         if (stadtbildserie != null) {
             final Object tmp_level = stadtbildserie.getProperty("tmp_restriction_level");
             if (tmp_level instanceof RestrictionLevel) {
-                return (RestrictionLevel)tmp_level;
-            }
-
-            final CidsBean nutzungseinschraenkung = (CidsBean)stadtbildserie.getProperty("nutzungseinschraenkung");
-            if (nutzungseinschraenkung != null) {
-                final String key = (String)nutzungseinschraenkung.getProperty("key");
-                if (StringUtils.isNotBlank(key)) {
-                    final String actionTagPreview = "custom.stadtbilder." + key + ".preview";
-                    final String actionTagDownload = "custom.stadtbilder." + key + ".download";
-                    final String actionTagInternalUsage = "custom.stadtbilder." + key + ".internalUsage";
-                    final String actionTagExternalUsage = "custom.stadtbilder." + key + ".externalUsage";
-
-                    final boolean previewAllowed = ObjectRendererUtils.checkActionTag(actionTagPreview);
-                    final boolean downloadAllowed = ObjectRendererUtils.checkActionTag(actionTagDownload);
-                    final boolean internalUsageAllowed = ObjectRendererUtils.checkActionTag(actionTagInternalUsage);
-                    final boolean externalUsageAllowed = ObjectRendererUtils.checkActionTag(actionTagExternalUsage);
-
-                    level.setPreviewAllowed(previewAllowed);
-                    level.setDownloadAllowed(downloadAllowed);
-                    level.setInternalUsageAllowed(internalUsageAllowed);
-                    level.setExternalUsageAllowed(externalUsageAllowed);
-
+                determinedLevel = (RestrictionLevel)tmp_level;
+            } else {
+                final CidsBean nutzungseinschraenkung = (CidsBean)stadtbildserie.getProperty("nutzungseinschraenkung");
+                final RestrictionLevel level = determineRestrictionLevelForNutzungseinschraenkung(
+                        nutzungseinschraenkung);
+                if (level != null) {
                     try {
                         stadtbildserie.setProperty("tmp_restriction_level", level);
                     } catch (Exception ex) {
                         LOG.error("Could not set property tmp_restriction_level of the stadtbildserie", ex);
                     }
+                    determinedLevel = level;
                 }
             }
         }
-        return level;
+        return determinedLevel;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   nutzungseinschraenkung  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static RestrictionLevel determineRestrictionLevelForNutzungseinschraenkung(
+            final CidsBean nutzungseinschraenkung) {
+        if (nutzungseinschraenkung != null) {
+            final RestrictionLevel level = new RestrictionLevel();
+            final String key = (String)nutzungseinschraenkung.getProperty("key");
+            if (StringUtils.isNotBlank(key)) {
+                final String actionTagPreview = "custom.stadtbilder." + key + ".preview";
+                final String actionTagDownload = "custom.stadtbilder." + key + ".download";
+                final String actionTagInternalUsage = "custom.stadtbilder." + key + ".internalUsage";
+                final String actionTagExternalUsage = "custom.stadtbilder." + key + ".externalUsage";
+
+                final boolean previewAllowed = ObjectRendererUtils.checkActionTag(actionTagPreview);
+                final boolean downloadAllowed = ObjectRendererUtils.checkActionTag(actionTagDownload);
+                final boolean internalUsageAllowed = ObjectRendererUtils.checkActionTag(actionTagInternalUsage);
+                final boolean externalUsageAllowed = ObjectRendererUtils.checkActionTag(actionTagExternalUsage);
+
+                level.setPreviewAllowed(previewAllowed);
+                level.setDownloadAllowed(downloadAllowed);
+                level.setInternalUsageAllowed(internalUsageAllowed);
+                level.setExternalUsageAllowed(externalUsageAllowed);
+            }
+            return level;
+        } else {
+            return null;
+        }
     }
 
     /**
