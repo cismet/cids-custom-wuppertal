@@ -815,6 +815,7 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
+        chbInternalAndExternal.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(
             chbInternalAndExternal,
             org.openide.util.NbBundle.getMessage(
@@ -1029,8 +1030,8 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         cboOrt.setSelectedItem(Sb_stadtbildUtils.getWUPPERTAL());
         txtHausnummer.setText("");
         cbMapSearch.setSelected(false);
+        chbInternalAndExternal.setSelected(true);
         chbInternal.setSelected(false);
-        chbInternalAndExternal.setSelected(false);
         chbNeitherInternalNorExternal.setSelected(false);
     }                                                                                //GEN-LAST:event_btnNewSearchActionPerformed
 
