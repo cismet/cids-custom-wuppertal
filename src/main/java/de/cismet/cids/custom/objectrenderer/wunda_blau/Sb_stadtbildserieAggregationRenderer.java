@@ -726,7 +726,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     }
 
     /**
-     * DOCUMENT ME!
+     * Generate a report to order the Stadtbilder from the Warenkorb.
      *
      * @param  evt  DOCUMENT ME!
      */
@@ -1233,7 +1233,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     //~ Inner Classes ----------------------------------------------------------
 
     /**
-     * DOCUMENT ME!
+     * A JGrid with different adaptations for this case. E.g. on click on a grid element, information about this element
+     * is shown in the InfoPanel.
      *
      * @version  $Revision$, $Date$
      */
@@ -1266,6 +1267,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
          * DOCUMENT ME!
          */
         private void init() {
+            // only Sb_stadtbildserieGridObject will be shown and they will be renderered by
+            // Sb_stadtbildserieGridRenderer
             final DefaultListModel<Sb_stadtbildserieGridObject> gridModel =
                 new DefaultListModel<Sb_stadtbildserieGridObject>();
             this.setModel(gridModel);
@@ -1275,10 +1278,13 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
             this.addMouseListener(new MouseAdapter() {
 
-                    @Override
                     /**
-                     * Select or unselect the Stadtbild under the marker
+                     * On double click, select or deselect the Stadtbild under the marker in the current grid element.
+                     * Thus it is added or removed from the Warenkorb.
+                     *
+                     * @param  e  DOCUMENT ME!
                      */
+                    @Override
                     public void mouseClicked(final MouseEvent e) {
                         if (e.getClickCount() >= 2) {
                             final List<Sb_stadtbildserieGridObject> selectedSerien = PictureSelectionJGrid.this
@@ -1297,7 +1303,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
 
                     @Override
                     /**
-                     * draw the marker
+                     * Draw the marker.
                      */
                     public void mouseMoved(final MouseEvent e) {
                         if ((lastIndex >= 0) && (lastIndex < PictureSelectionJGrid.this.getModel().getSize())) {
@@ -1335,6 +1341,11 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                 });
             this.addListSelectionListener(new ListSelectionListener() {
 
+                    /**
+                     * Show the selected grid object in the info panel.
+                     *
+                     * @param  e  DOCUMENT ME!
+                     */
                     @Override
                     public void valueChanged(final ListSelectionEvent e) {
                         if (!e.getValueIsAdjusting()) {
@@ -1345,7 +1356,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
         }
 
         /**
-         * DOCUMENT ME!
+         * If only one grid object is selected, show it in the info panel.
          */
         public void updateInfoPanel() {
             int[] indexes = new int[0];
@@ -1370,7 +1381,7 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
     }
 
     /**
-     * DOCUMENT ME!
+     * A Java Bean which is used to create the report for ordering the stadtbilder from the Warenkorb.
      *
      * @version  $Revision$, $Date$
      */
