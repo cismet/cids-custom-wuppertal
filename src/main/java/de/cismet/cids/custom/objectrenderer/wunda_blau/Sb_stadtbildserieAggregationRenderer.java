@@ -1342,7 +1342,8 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
             this.addListSelectionListener(new ListSelectionListener() {
 
                     /**
-                     * Show the selected grid object in the info panel.
+                     * Show the selected grid object in the info panel and reload the image if it was previously loaded
+                     * with an error.
                      *
                      * @param  e  DOCUMENT ME!
                      */
@@ -1350,6 +1351,20 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                     public void valueChanged(final ListSelectionEvent e) {
                         if (!e.getValueIsAdjusting()) {
                             updateInfoPanel();
+                            reloadIfImageWithError();
+                        }
+                    }
+
+                    private void reloadIfImageWithError() {
+                        final List selectedObject = PictureSelectionJGrid.this.getSelectedValuesList();
+                        if (selectedObject.size() == 1) {
+                            final Sb_stadtbildserieGridObject gridObject = (Sb_stadtbildserieGridObject)
+                                selectedObject.get(0);
+                            final String bildnummer = gridObject.getBildnummer();
+                            if (Sb_stadtbildUtils.isBildnummerInFailedSet(bildnummer)) {
+                                Sb_stadtbildUtils.removeBildnummerFromFailedSet(bildnummer);
+                                gridObject.clearLastShownImage();
+                            }
                         }
                     }
                 });

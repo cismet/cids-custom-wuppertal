@@ -282,6 +282,14 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
         }
     }
 
+    /**
+     * Returns the bildnummer corresponding to the this grid object. This means that usually the bildnummer of the image
+     * under the marker is returned. If the Stadtbildserie has only one image, its number is returned.
+     *
+     * <p>If this does not work, the image number of the vorschaubild is returned.</p>
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     protected String getBildnummer() {
         final String bildnummer;
