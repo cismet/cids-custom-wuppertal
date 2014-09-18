@@ -142,9 +142,6 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -152,6 +149,9 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblHausnummer;
+    private javax.swing.JLabel lblInternal;
+    private javax.swing.JLabel lblInternalExternal;
+    private javax.swing.JLabel lblNeitherInternalNorExternal;
     private javax.swing.JLabel lblOrtsname;
     private javax.swing.JLabel lblStrasse;
     private javax.swing.JList lstSuchworte;
@@ -331,13 +331,13 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         chbInternalAndExternal = new javax.swing.JCheckBox();
-        jLabel6 = new javax.swing.JLabel();
+        lblInternalExternal = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         chbInternal = new javax.swing.JCheckBox();
-        jLabel5 = new javax.swing.JLabel();
+        lblInternal = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         chbNeitherInternalNorExternal = new javax.swing.JCheckBox();
-        jLabel4 = new javax.swing.JLabel();
+        lblNeitherInternalNorExternal = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(70, 20));
         setLayout(new java.awt.BorderLayout());
@@ -822,18 +822,25 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 "Sb_StadtbildWindowSearch.chbInternalAndExternal.text")); // NOI18N
         jPanel2.add(chbInternalAndExternal, new java.awt.GridBagConstraints());
 
-        jLabel6.setIcon(new javax.swing.ImageIcon(
+        lblInternalExternal.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_green.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel6,
+            lblInternalExternal,
             org.openide.util.NbBundle.getMessage(
                 Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.jLabel6.text"));                                                     // NOI18N
-        jLabel6.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+                "Sb_StadtbildWindowSearch.lblInternalExternal.text"));                                         // NOI18N
+        lblInternalExternal.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+        lblInternalExternal.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblInternalExternalMouseClicked(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        jPanel2.add(jLabel6, gridBagConstraints);
+        jPanel2.add(lblInternalExternal, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -851,18 +858,25 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 "Sb_StadtbildWindowSearch.chbInternal.text")); // NOI18N
         jPanel3.add(chbInternal, new java.awt.GridBagConstraints());
 
-        jLabel5.setIcon(new javax.swing.ImageIcon(
+        lblInternal.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_yellow.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel5,
+            lblInternal,
             org.openide.util.NbBundle.getMessage(
                 Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.jLabel5.text"));                                                      // NOI18N
-        jLabel5.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+                "Sb_StadtbildWindowSearch.lblInternal.text"));                                                  // NOI18N
+        lblInternal.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+        lblInternal.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblInternalMouseClicked(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        jPanel3.add(jLabel5, gridBagConstraints);
+        jPanel3.add(lblInternal, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -882,18 +896,25 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
                 "Sb_StadtbildWindowSearch.chbNeitherInternalNorExternal.text")); // NOI18N
         jPanel4.add(chbNeitherInternalNorExternal, new java.awt.GridBagConstraints());
 
-        jLabel4.setIcon(new javax.swing.ImageIcon(
+        lblNeitherInternalNorExternal.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/cids/custom/objectrenderer/wunda_blau/bullet_red.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
-            jLabel4,
+            lblNeitherInternalNorExternal,
             org.openide.util.NbBundle.getMessage(
                 Sb_StadtbildWindowSearch.class,
-                "Sb_StadtbildWindowSearch.jLabel4.text"));                                                   // NOI18N
-        jLabel4.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+                "Sb_StadtbildWindowSearch.lblNeitherInternalNorExternal.text"));                             // NOI18N
+        lblNeitherInternalNorExternal.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+        lblNeitherInternalNorExternal.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final java.awt.event.MouseEvent evt) {
+                    lblNeitherInternalNorExternalMouseClicked(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        jPanel4.add(jLabel4, gridBagConstraints);
+        jPanel4.add(lblNeitherInternalNorExternal, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1026,6 +1047,33 @@ public class Sb_StadtbildWindowSearch extends javax.swing.JPanel implements Cids
             RendererTools.showErrorState(cboStreet);
         }
     }                                                                            //GEN-LAST:event_cboStreetItemStateChanged
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lblInternalExternalMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblInternalExternalMouseClicked
+        chbInternalAndExternal.setSelected(!chbInternalAndExternal.isSelected());
+    }                                                                                   //GEN-LAST:event_lblInternalExternalMouseClicked
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lblInternalMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblInternalMouseClicked
+        chbInternal.setSelected(!chbInternal.isSelected());
+    }                                                                           //GEN-LAST:event_lblInternalMouseClicked
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void lblNeitherInternalNorExternalMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_lblNeitherInternalNorExternalMouseClicked
+        chbNeitherInternalNorExternal.setSelected(!chbNeitherInternalNorExternal.isSelected());
+    }                                                                                             //GEN-LAST:event_lblNeitherInternalNorExternalMouseClicked
 
     /**
      * DOCUMENT ME!
