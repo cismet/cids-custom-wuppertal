@@ -289,6 +289,50 @@ public class BillingStatisticsReport {
         /**
          * DOCUMENT ME!
          *
+         * @return  DOCUMENT ME!
+         */
+        public JRDataSource getKundenUmsatz() {
+            return getResource(GeschaeftsberichtBranchenAmounts.KUNDEN_UMSATZ);
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public JRDataSource getProdukteCommonDownloads() {
+            return getResource(GeschaeftsberichtBranchenAmounts.PRODUKTE_COMMON_DOWNLOADS);
+        }
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public JRDataSource getProdukteDownloads() {
+            return getResource(GeschaeftsberichtBranchenAmounts.PRODUKTE_DOWNLOADS);
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public JRDataSource getProdukteEinnahmen() {
+            return getResource(GeschaeftsberichtBranchenAmounts.PRODUKTE_EINNAHMEN);
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public JRDataSource getEinnahmen() {
+            return getResource(GeschaeftsberichtBranchenAmounts.EINNAHMEN);
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
          * @param   key  DOCUMENT ME!
          *
          * @return  DOCUMENT ME!
