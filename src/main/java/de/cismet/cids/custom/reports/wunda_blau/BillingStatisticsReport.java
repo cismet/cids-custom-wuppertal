@@ -150,34 +150,7 @@ public class BillingStatisticsReport {
 
                 @Override
                 public Map generateParamters() {
-                    final HashMap params = new HashMap();
-
-                    params.put("from", from);
-                    if (till == null) {
-                        params.put("till", from);
-                    } else {
-                        params.put("till", till);
-                    }
-
-                    params.put("amountTotalDownloads", amountTotalDownloads);
-                    params.put("amountWithCosts", amountWithCosts);
-                    params.put("amountWithoutCosts", amountWithoutCosts);
-                    params.put("amountWithCostsVU", amountWithCostsVU);
-                    params.put("amountWithCostsWiederver", amountWithCostsWiederver);
-
-                    params.put("earningsWithCostsVU", earningsWithCostsVU);
-                    params.put("earningsWithCostsWiederver", earningsWithCostsWiederver);
-
-                    params.put("amountVUamtlicherLageplan", amountVUamtlicherLageplan);
-                    params.put("amountVUamtlicherLageplanGB", amountVUamtlicherLageplanGB);
-                    params.put("amountVUhoheitlicheVermessung", amountVUhoheitlicheVermessung);
-                    params.put("amountVUhoheitlicheVermessungGB", amountVUhoheitlicheVermessungGB);
-                    params.put("amountVUsonstige", amountVUsonstige);
-                    params.put("amountVUsonstigeGB", amountVUsonstigeGB);
-                    params.put("amountWiederverkaeufe", amountWiederverkaeufe);
-                    params.put("amountWiederverkaeufeGB", amountWiederverkaeufeGB);
-
-                    return params;
+                    return BillingStatisticsReport.this.generateParamters();
                 }
             };
 
@@ -195,5 +168,43 @@ public class BillingStatisticsReport {
                             title,
                             filename));
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    Map generateParamters() {
+        final HashMap params = new HashMap();
+
+        params.put("from", from);
+        if (till == null) {
+            params.put("till", from);
+        } else {
+            params.put("till", till);
+        }
+
+        params.put("billingBeans", billingBeans);
+
+        params.put("amountTotalDownloads", amountTotalDownloads);
+        params.put("amountWithCosts", amountWithCosts);
+        params.put("amountWithoutCosts", amountWithoutCosts);
+        params.put("amountWithCostsVU", amountWithCostsVU);
+        params.put("amountWithCostsWiederver", amountWithCostsWiederver);
+
+        params.put("earningsWithCostsVU", earningsWithCostsVU);
+        params.put("earningsWithCostsWiederver", earningsWithCostsWiederver);
+
+        params.put("amountVUamtlicherLageplan", amountVUamtlicherLageplan);
+        params.put("amountVUamtlicherLageplanGB", amountVUamtlicherLageplanGB);
+        params.put("amountVUhoheitlicheVermessung", amountVUhoheitlicheVermessung);
+        params.put("amountVUhoheitlicheVermessungGB", amountVUhoheitlicheVermessungGB);
+        params.put("amountVUsonstige", amountVUsonstige);
+        params.put("amountVUsonstigeGB", amountVUsonstigeGB);
+        params.put("amountWiederverkaeufe", amountWiederverkaeufe);
+        params.put("amountWiederverkaeufeGB", amountWiederverkaeufeGB);
+
+        return params;
     }
 }
