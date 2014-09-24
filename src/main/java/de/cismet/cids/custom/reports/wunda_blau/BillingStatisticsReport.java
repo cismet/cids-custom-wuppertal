@@ -22,7 +22,7 @@ import java.util.Map;
 
 import javax.swing.SwingWorker;
 
-import de.cismet.cids.custom.wunda_blau.search.server.GeschaeftsberichtBranchenAmounts;
+import de.cismet.cids.custom.wunda_blau.search.server.BillingStatisticsReportServerSearch;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -240,6 +240,7 @@ public class BillingStatisticsReport {
      * although this ServerSearch uses multiple queries.
      *
      * @version  $Revision$, $Date$
+     * @see BillingStatisticsReportServerSearch
      */
     public class DataSourceAccumulation {
 
@@ -266,7 +267,7 @@ public class BillingStatisticsReport {
          * @return  DOCUMENT ME!
          */
         public JRDataSource getKundeBranche() {
-            return getResource(GeschaeftsberichtBranchenAmounts.BRANCHEN_AMOUNTS);
+            return getResource(BillingStatisticsReportServerSearch.BRANCHEN_AMOUNTS);
         }
 
         /**
@@ -275,7 +276,7 @@ public class BillingStatisticsReport {
          * @return  DOCUMENT ME!
          */
         public JRDataSource getKundenAntraege() {
-            return getResource(GeschaeftsberichtBranchenAmounts.ANTRAEGE_AMOUNTS);
+            return getResource(BillingStatisticsReportServerSearch.ANTRAEGE_AMOUNTS);
         }
         /**
          * DOCUMENT ME!
@@ -283,7 +284,7 @@ public class BillingStatisticsReport {
          * @return  DOCUMENT ME!
          */
         public JRDataSource getAnzahlDownloads() {
-            return getResource(GeschaeftsberichtBranchenAmounts.DOWNLOADS_AMOUNTS);
+            return getResource(BillingStatisticsReportServerSearch.DOWNLOADS_AMOUNTS);
         }
 
         /**
@@ -292,7 +293,7 @@ public class BillingStatisticsReport {
          * @return  DOCUMENT ME!
          */
         public JRDataSource getKundenUmsatz() {
-            return getResource(GeschaeftsberichtBranchenAmounts.KUNDEN_UMSATZ);
+            return getResource(BillingStatisticsReportServerSearch.KUNDEN_UMSATZ);
         }
 
         /**
@@ -301,7 +302,7 @@ public class BillingStatisticsReport {
          * @return  DOCUMENT ME!
          */
         public JRDataSource getProdukteCommonDownloads() {
-            return getResource(GeschaeftsberichtBranchenAmounts.PRODUKTE_COMMON_DOWNLOADS);
+            return getResource(BillingStatisticsReportServerSearch.PRODUKTE_COMMON_DOWNLOADS);
         }
         /**
          * DOCUMENT ME!
@@ -309,7 +310,7 @@ public class BillingStatisticsReport {
          * @return  DOCUMENT ME!
          */
         public JRDataSource getProdukteDownloads() {
-            return getResource(GeschaeftsberichtBranchenAmounts.PRODUKTE_DOWNLOADS);
+            return getResource(BillingStatisticsReportServerSearch.PRODUKTE_DOWNLOADS);
         }
 
         /**
@@ -318,7 +319,7 @@ public class BillingStatisticsReport {
          * @return  DOCUMENT ME!
          */
         public JRDataSource getProdukteEinnahmen() {
-            return getResource(GeschaeftsberichtBranchenAmounts.PRODUKTE_EINNAHMEN);
+            return getResource(BillingStatisticsReportServerSearch.PRODUKTE_EINNAHMEN);
         }
 
         /**
@@ -327,7 +328,7 @@ public class BillingStatisticsReport {
          * @return  DOCUMENT ME!
          */
         public JRDataSource getEinnahmen() {
-            return getResource(GeschaeftsberichtBranchenAmounts.EINNAHMEN);
+            return getResource(BillingStatisticsReportServerSearch.EINNAHMEN);
         }
 
         /**
@@ -343,18 +344,19 @@ public class BillingStatisticsReport {
         }
 
         /**
-         * DOCUMENT ME!
+         * Gets the data for the charts, if something goes wrong an empty HashMap is returned.
          *
          * @return  DOCUMENT ME!
          */
         private HashMap<String, Collection> fetchSearchResults() {
             try {
                 final String ids = joinCidsBeanIds(billingBeans, ", ");
-                final GeschaeftsberichtBranchenAmounts search = new GeschaeftsberichtBranchenAmounts(SessionManager
+                final BillingStatisticsReportServerSearch search = new BillingStatisticsReportServerSearch(SessionManager
                                 .getSession().getUser(),
                         ids);
                 final Collection searchResultsCol = SessionManager.getConnection()
                             .customServerSearch(SessionManager.getSession().getUser(), search);
+                // get the HashMap from the search results, it is supposed that it is the only result.
                 return (HashMap<String, Collection>)searchResultsCol.iterator().next();
             } catch (ConnectionException ex) {
                 LOG.error("Could not fetch the data for the report.", ex);
