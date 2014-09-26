@@ -5,15 +5,17 @@
 *              ... and it just works.
 *
 ****************************************************/
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.cismet.cids.custom.reports.wunda_blau;
 
+import java.text.SimpleDateFormat;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
+
+import de.cismet.cids.client.tools.DevelopmentTools;
 
 import de.cismet.cids.dynamics.CidsBean;
 
@@ -67,30 +69,77 @@ public class PrintStatisticsReport {
 
     /**
      * DOCUMENT ME!
+     *
+     * @param   args  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public static void main(final String[] args) throws Exception {
+        final CidsBean[] billings = new CidsBean[] {
+                DevelopmentTools.createCidsBeanFromRMIConnectionOnLocalhost(
+                    "WUNDA_BLAU",
+                    "Administratoren",
+                    "admin",
+                    "kif",
+                    "billing_billing",
+                    6838)
+            };
+        final ArrayList<CidsBean> list = new ArrayList<CidsBean>(1);
+        list.add(billings[0]);
+
+        System.out.println(PrintStatisticsReport.class.getResourceAsStream(
+                "/de/cismet/cids/custom/reports/wunda_blau/geschaeftsstatisktik.jasper"));
+
+        final SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+        final Date start = formatter.parse("01.05.2013");
+        final Date end = formatter.parse("31.05.2013");
+
+        final PrintStatisticsReport printStatisticsReport = new PrintStatisticsReport(
+                new Date[] { start, end },
+                list);
+        final BillingStatisticsReport report = printStatisticsReport.createReport();
+        final Map params = report.generateParamters();
+        DevelopmentTools.showReportForBeans(
+            "/de/cismet/cids/custom/reports/wunda_blau/geschaeftsstatisktik.jasper",
+            list,
+            params);
+    }
+
+    /**
+     * DOCUMENT ME!
      */
     public void print() {
         if (!billingsBeans.isEmpty()) {
-            final BillingStatisticsReport report = new BillingStatisticsReport(
-                    billingsBeans,
-                    fromDate_tillDate[0],
-                    fromDate_tillDate[1],
-                    amountTotalDownloads,
-                    amountWithCosts,
-                    amountWithoutCosts,
-                    amountVUamtlicherLageplan,
-                    amountVUhoheitlicheVermessung,
-                    amountVUsonstige,
-                    amountVUamtlicherLageplanGB,
-                    amountVUhoheitlicheVermessungGB,
-                    amountVUsonstigeGB,
-                    amountWithCostsVU,
-                    amountWithCostsWiederver,
-                    earningsWithCostsVU,
-                    earningsWithCostsWiederver,
-                    amountWiederverkaeufe,
-                    amountWiederverkaeufeGB);
+            final BillingStatisticsReport report = createReport();
             report.generateReport();
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private BillingStatisticsReport createReport() {
+        return new BillingStatisticsReport(
+                billingsBeans,
+                fromDate_tillDate[0],
+                fromDate_tillDate[1],
+                amountTotalDownloads,
+                amountWithCosts,
+                amountWithoutCosts,
+                amountVUamtlicherLageplan,
+                amountVUhoheitlicheVermessung,
+                amountVUsonstige,
+                amountVUamtlicherLageplanGB,
+                amountVUhoheitlicheVermessungGB,
+                amountVUsonstigeGB,
+                amountWithCostsVU,
+                amountWithCostsWiederver,
+                earningsWithCostsVU,
+                earningsWithCostsWiederver,
+                amountWiederverkaeufe,
+                amountWiederverkaeufeGB);
     }
 
     /**
