@@ -213,7 +213,9 @@ public class AlkisUtils {
         if (address != null) {
             final StringBuilder addressStringBuilder = new StringBuilder();
             if (address.getStreet() != null) {
-                addressStringBuilder.append(address.getStreet()).append(" ");
+                addressStringBuilder.append(address.getHerkunftAdress() + "-->")
+                        .append(address.getStreet())
+                        .append(" ");
             }
             if (address.getHouseNumber() != null) {
                 addressStringBuilder.append(address.getHouseNumber());
