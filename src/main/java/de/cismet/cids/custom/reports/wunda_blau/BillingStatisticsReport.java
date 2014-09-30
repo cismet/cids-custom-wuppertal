@@ -240,7 +240,7 @@ public class BillingStatisticsReport {
      * although this ServerSearch uses multiple queries.
      *
      * @version  $Revision$, $Date$
-     * @see BillingStatisticsReportServerSearch
+     * @see      BillingStatisticsReportServerSearch
      */
     public class DataSourceAccumulation {
 
@@ -351,8 +351,8 @@ public class BillingStatisticsReport {
         private HashMap<String, Collection> fetchSearchResults() {
             try {
                 final String ids = joinCidsBeanIds(billingBeans, ", ");
-                final BillingStatisticsReportServerSearch search = new BillingStatisticsReportServerSearch(SessionManager
-                                .getSession().getUser(),
+                final BillingStatisticsReportServerSearch search = new BillingStatisticsReportServerSearch(
+                        SessionManager.getSession().getUser(),
                         ids);
                 final Collection searchResultsCol = SessionManager.getConnection()
                             .customServerSearch(SessionManager.getSession().getUser(), search);
