@@ -28,8 +28,6 @@ import Sirius.navigator.exception.ConnectionException;
 
 import Sirius.server.middleware.impls.domainserver.DomainServerImpl;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.aedsicad.aaaweb.service.util.Address;
@@ -39,22 +37,11 @@ import de.aedsicad.aaaweb.service.util.LandParcel;
 import de.aedsicad.aaaweb.service.util.Owner;
 import de.aedsicad.aaaweb.service.util.Point;
 
-import javafx.beans.binding.StringBinding;
-
 import org.apache.commons.lang.ArrayUtils;
-
-import org.openide.util.Exceptions;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-
-import java.net.URL;
 
 import java.util.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -64,10 +51,7 @@ import de.cismet.cids.custom.wunda_blau.search.actions.ServerAlkisSoapAction;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cids.server.actions.HttpTunnelAction;
 import de.cismet.cids.server.actions.ServerActionParameter;
-
-import de.cismet.commons.security.AccessHandler;
 
 /**
  * DOCUMENT ME!
@@ -99,6 +83,9 @@ public class AlkisUtils {
             buchungsblattbezirke = new Buchungsblattbezirke();
         }
     }
+
+    public static final String ADRESS_HERKUNFT_KATASTERAMT = "Katasteramt";
+    public static final String ADRESS_HERKUNFT_GRUNDBUCHAMT = "Grundbuchamt";
 
     //~ Methods ----------------------------------------------------------------
 
@@ -212,6 +199,7 @@ public class AlkisUtils {
     public static String addressToString(final Address address) {
         if (address != null) {
             final StringBuilder addressStringBuilder = new StringBuilder();
+            addressStringBuilder.append(getAddressBoldOpenTag(address));
             if (address.getStreet() != null) {
                 addressStringBuilder.append(address.getStreet()).append(" ");
             }
@@ -230,7 +218,61 @@ public class AlkisUtils {
             if (addressStringBuilder.length() > 0) {
                 addressStringBuilder.append(AlkisConstants.NEWLINE);
             }
+            addressStringBuilder.append(getAdressPostfix(address));
+            addressStringBuilder.append(AlkisConstants.NEWLINE);
+            addressStringBuilder.append(getAddressBoldCloseTag(address));
             return addressStringBuilder.toString();
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   address  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static String getAdressPostfix(final Address address) {
+        if (address.getHerkunftAdress().equals(ADRESS_HERKUNFT_KATASTERAMT)) {
+            return java.util.ResourceBundle.getBundle("de/cismet/cids/custom/wunda_blau/res/alkis/AdressPostfixStrings")
+                        .getString("kataster");
+        } else if (address.getHerkunftAdress().equals(ADRESS_HERKUNFT_GRUNDBUCHAMT)) {
+            return java.util.ResourceBundle.getBundle("de/cismet/cids/custom/wunda_blau/res/alkis/AdressPostfixStrings")
+                        .getString("grundbuch");
+        } else {
+            return String.format(java.util.ResourceBundle.getBundle(
+                        "de/cismet/cids/custom/wunda_blau/res/alkis/AdressPostfixStrings").getString("else"),
+                    address.getHerkunftAdress());
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   address  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static String getAddressBoldOpenTag(final Address address) {
+        if (address.getHerkunftAdress().equals(ADRESS_HERKUNFT_KATASTERAMT)) {
+            return "<b>";
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   address  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static String getAddressBoldCloseTag(final Address address) {
+        if (address.getHerkunftAdress().equals(ADRESS_HERKUNFT_KATASTERAMT)) {
+            return "</b>";
         } else {
             return "";
         }
@@ -443,7 +485,14 @@ public class AlkisUtils {
             final Address[] addresses = owner.getAddresses();
             if (addresses != null) {
                 for (final Address address : addresses) {
-                    if (address != null) {
+                    if ((address != null) && address.getHerkunftAdress().equals(ADRESS_HERKUNFT_KATASTERAMT)) {
+                        ownerStringBuilder.append("<tr><td></td>").append(spacing).append("<td>");
+                        ownerStringBuilder.append(addressToString(address)).append(AlkisConstants.NEWLINE);
+                        ownerStringBuilder.append("</td><td></td><td></td></tr>");
+                    }
+                }
+                for (final Address address : addresses) {
+                    if ((address != null) && !address.getHerkunftAdress().equals(ADRESS_HERKUNFT_KATASTERAMT)) {
                         ownerStringBuilder.append("<tr><td></td>").append(spacing).append("<td>");
                         ownerStringBuilder.append(addressToString(address)).append(AlkisConstants.NEWLINE);
                         ownerStringBuilder.append("</td><td></td><td></td></tr>");
