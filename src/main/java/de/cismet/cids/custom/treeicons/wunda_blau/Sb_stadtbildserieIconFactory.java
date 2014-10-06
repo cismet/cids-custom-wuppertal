@@ -41,7 +41,7 @@ public class Sb_stadtbildserieIconFactory implements CidsTreeObjectIconFactory {
     //~ Static fields/initializers ---------------------------------------------
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
-            Alb_baulastblattIconFactory.class);
+            Sb_stadtbildserieIconFactory.class);
 
     //~ Instance fields --------------------------------------------------------
 

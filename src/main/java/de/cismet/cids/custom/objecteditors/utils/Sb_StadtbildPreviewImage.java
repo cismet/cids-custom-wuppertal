@@ -9,6 +9,8 @@ package de.cismet.cids.custom.objecteditors.utils;
 
 import com.sun.jersey.api.client.UniformInterfaceException;
 
+import com.vividsolutions.jts.geom.Geometry;
+
 import java.awt.CardLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -29,6 +31,8 @@ import javax.swing.Timer;
 
 import de.cismet.cids.custom.objecteditors.wunda_blau.Sb_stadtbildserieEditor;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
+import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 import de.cismet.cids.custom.utils.TifferDownload;
 
@@ -352,20 +356,28 @@ public class Sb_StadtbildPreviewImage extends javax.swing.JPanel {
      * @param  evt  DOCUMENT ME!
      */
     private void btnDownloadHighResImageActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDownloadHighResImageActionPerformed
-        if (DownloadManagerDialog.showAskingForUserTitle(
-                        this)) {
-            final String jobname = DownloadManagerDialog.getJobname();
-            final String imageNumber = (String)stadtbildserieProvider.getSelectedStadtbild().getProperty("bildnummer");
-            DownloadManager.instance()
-                    .add(
-                        new TifferDownload(
-                            jobname,
-                            "Stadtbild "
-                            + imageNumber,
-                            "stadtbild_"
-                            + imageNumber,
-                            imageNumber,
-                            "1"));
+        final String jobname = DownloadManagerDialog.getJobname();
+        final String imageNumber = (String)stadtbildserieProvider.getSelectedStadtbild().getProperty("bildnummer");
+        try {
+            if (BillingPopup.doBilling(
+                            "stb",
+                            "not.yet",
+                            (Geometry)null,
+                            new ProductGroupAmount("ea", 1)) && DownloadManagerDialog.showAskingForUserTitle(
+                            this)) {
+                DownloadManager.instance()
+                        .add(
+                            new TifferDownload(
+                                jobname,
+                                "Stadtbild "
+                                + imageNumber,
+                                "stadtbild_"
+                                + imageNumber,
+                                imageNumber,
+                                "1"));
+            }
+        } catch (Exception ex) {
+            LOG.error("Error when trying to download an high res image", ex);
         }
     }                                                                                           //GEN-LAST:event_btnDownloadHighResImageActionPerformed
 

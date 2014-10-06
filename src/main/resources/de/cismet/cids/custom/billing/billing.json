@@ -190,6 +190,22 @@
             "ea":20.0
         },
         "mwst":0.0
+	},{
+        "name":"Bestandsnachweis stichtagsbezogen (NRW)",
+        "id":"bestnw",
+        "description":"[x] Einzelobjektrenderer ALKIS-Buchungsblätter / Produkte / PDF-Produkte / Bestandsnachweis stichtagsbezogen (NRW) und Aggregierender Renderer ALKIS-Buchungsblätter / PDF-Produkte / Bestandsnachweis stichtagsbezogen (NRW)",
+        "discounts":{
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
+            "WV ein":1.0,
+            "eigG frei":0.0
+        },
+        "prices":{
+            "ea":20.0
+        },
+        "mwst":0.0
     },{
         "name":"Bestandsnachweis (kommunal)",
         "id":"bekom",
@@ -743,10 +759,10 @@
         "id":"ofkom4",
         "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto; Formate DINA4 Hochformat oder DINA4 Querformat",
         "discounts":{
-            "eigG":1.0,
-            "VU aL":1.0,
-            "VU s":1.0,
-            "VU hV":1.0,
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
             "WV ein":1.0,
             "eigG frei":0.0
         },
@@ -759,10 +775,10 @@
         "id":"ofkom3",
         "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto; Formate DINA3 Hochformat oder DINA3 Querformat",
         "discounts":{
-            "eigG":1.0,
-            "VU aL":1.0,
-            "VU s":1.0,
-            "VU hV":1.0,
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
             "WV ein":1.0,
             "eigG frei":0.0
         },
@@ -775,10 +791,10 @@
         "id":"ofkom2",
         "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto; Formate DINA2 Hochformat oder DINA2 Querformat",
         "discounts":{
-            "eigG":1.0,
-            "VU aL":1.0,
-            "VU s":1.0,
-            "VU hV":1.0,
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
             "WV ein":1.0,
             "eigG frei":0.0
         },
@@ -791,10 +807,10 @@
         "id":"ofkom1",
         "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto; Formate DINA1 Hochformat oder DINA1 Querformat",
         "discounts":{
-            "eigG":1.0,
-            "VU aL":1.0,
-            "VU s":1.0,
-            "VU hV":1.0,
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
             "WV ein":1.0,
             "eigG frei":0.0
         },
@@ -807,10 +823,10 @@
         "id":"ofkom0",
         "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto; Formate DINA0 Hochformat oder DINA0 Querformat",
         "discounts":{
-            "eigG":1.0,
-            "VU aL":1.0,
-            "VU s":1.0,
-            "VU hV":1.0,
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
             "WV ein":1.0,
             "eigG frei":0.0
         },
@@ -1063,10 +1079,10 @@
         "id":"dgkhkom4",
         "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte DGK mit Höhenlinien; Formate DINA4 Hochformat oder DINA4 Querformat",
         "discounts":{
-            "eigG":1.0,
-            "VU aL":1.0,
-            "VU s":1.0,
-            "VU hV":1.0,
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
             "WV ein":1.0,
             "eigG frei":0.0
         },
@@ -1079,10 +1095,10 @@
         "id":"dgkhkom3",
         "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte DGK mit Höhenlinien; Formate DINA3 Hochformat oder DINA3 Querformat",
         "discounts":{
-            "eigG":1.0,
-            "VU aL":1.0,
-            "VU s":1.0,
-            "VU hV":1.0,
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
             "WV ein":1.0,
             "eigG frei":0.0
         },
@@ -1095,10 +1111,10 @@
         "id":"dgkhkom2",
         "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte DGK mit Höhenlinien; Formate DINA2 Hochformat oder DINA2 Querformat",
         "discounts":{
-            "eigG":1.0,
-            "VU aL":1.0,
-            "VU s":1.0,
-            "VU hV":1.0,
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
             "WV ein":1.0,
             "eigG frei":0.0
         },
@@ -1111,10 +1127,10 @@
         "id":"dgkhkom1",
         "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte DGK mit Höhenlinien; Formate DINA1 Hochformat oder DINA1 Querformat",
         "discounts":{
-            "eigG":1.0,
-            "VU aL":1.0,
-            "VU s":1.0,
-            "VU hV":1.0,
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
             "WV ein":1.0,
             "eigG frei":0.0
         },
@@ -1127,10 +1143,10 @@
         "id":"dgkhkom0",
         "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte DGK mit Höhenlinien; Formate DINA0 Hochformat oder DINA0 Querformat",
         "discounts":{
-            "eigG":1.0,
-            "VU aL":1.0,
-            "VU s":1.0,
-            "VU hV":1.0,
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
             "WV ein":1.0,
             "eigG frei":0.0
         },
@@ -1143,10 +1159,10 @@
         "id":"skhkom4",
         "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Stadtgrundkarte mit Höhenlinien; Formate DINA4 Hochformat oder DINA4 Querformat",
         "discounts":{
-            "eigG":1.0,
-            "VU aL":1.0,
-            "VU s":1.0,
-            "VU hV":1.0,
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
             "WV ein":1.0,
             "eigG frei":0.0
         },
@@ -1159,10 +1175,10 @@
         "id":"skhkom3",
         "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Stadtgrundkarte mit Höhenlinien; Formate DINA3 Hochformat oder DINA3 Querformat",
         "discounts":{
-            "eigG":1.0,
-            "VU aL":1.0,
-            "VU s":1.0,
-            "VU hV":1.0,
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
             "WV ein":1.0,
             "eigG frei":0.0
         },
@@ -1175,10 +1191,10 @@
         "id":"skhkom2",
         "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Stadtgrundkarte mit Höhenlinien; Formate DINA2 Hochformat oder DINA2 Querformat",
         "discounts":{
-            "eigG":1.0,
-            "VU aL":1.0,
-            "VU s":1.0,
-            "VU hV":1.0,
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
             "WV ein":1.0,
             "eigG frei":0.0
         },
@@ -1191,10 +1207,10 @@
         "id":"skhkom1",
         "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Stadtgrundkarte mit Höhenlinien; Formate DINA1 Hochformat oder DINA1 Querformat",
         "discounts":{
-            "eigG":1.0,
-            "VU aL":1.0,
-            "VU s":1.0,
-            "VU hV":1.0,
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
             "WV ein":1.0,
             "eigG frei":0.0
         },
@@ -1207,10 +1223,10 @@
         "id":"skhkom0",
         "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Stadtgrundkarte mit Höhenlinien; Formate DINA0 Hochformat oder DINA0 Querformat",
         "discounts":{
-            "eigG":1.0,
-            "VU aL":1.0,
-            "VU s":1.0,
-            "VU hV":1.0,
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
             "WV ein":1.0,
             "eigG frei":0.0
         },
@@ -1223,10 +1239,10 @@
         "id":"ofkkom4",
         "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto mit Katasterdarstellung; Formate DINA4 Hochformat oder DINA4 Querformat",
         "discounts":{
-            "eigG":1.0,
-            "VU aL":1.0,
-            "VU s":1.0,
-            "VU hV":1.0,
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
             "WV ein":1.0,
             "eigG frei":0.0
         },
@@ -1239,10 +1255,10 @@
         "id":"ofkkom3",
         "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto mit Katasterdarstellung; Formate DINA3 Hochformat oder DINA3 Querformat",
         "discounts":{
-            "eigG":1.0,
-            "VU aL":1.0,
-            "VU s":1.0,
-            "VU hV":1.0,
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
             "WV ein":1.0,
             "eigG frei":0.0
         },
@@ -1255,10 +1271,10 @@
         "id":"ofkkom2",
         "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto mit Katasterdarstellung; Formate DINA2 Hochformat oder DINA2 Querformat",
         "discounts":{
-            "eigG":1.0,
-            "VU aL":1.0,
-            "VU s":1.0,
-            "VU hV":1.0,
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
             "WV ein":1.0,
             "eigG frei":0.0
         },
@@ -1271,10 +1287,10 @@
         "id":"ofkkom1",
         "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto mit Katasterdarstellung; Formate DINA1 Hochformat oder DINA1 Querformat",
         "discounts":{
-            "eigG":1.0,
-            "VU aL":1.0,
-            "VU s":1.0,
-            "VU hV":1.0,
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
             "WV ein":1.0,
             "eigG frei":0.0
         },
@@ -1287,10 +1303,10 @@
         "id":"ofkkom0",
         "description":"[x] ALKIS-Druck: Produktklasse WUP-Kommunal; Produkte Orthofoto mit Katasterdarstellung; Formate DINA0 Hochformat oder DINA0 Querformat",
         "discounts":{
-            "eigG":1.0,
-            "VU aL":1.0,
-            "VU s":1.0,
-            "VU hV":1.0,
+            "eigG":0.75,
+            "VU aL":0.75,
+            "VU s":0.75,
+            "VU hV":0.75,
             "WV ein":1.0,
             "eigG frei":0.0
         },
@@ -1442,6 +1458,26 @@
         },
         "mwst":0.0
     },{
+        "name":"Eigentümerliste (kommunal)",
+        "id":"eiglkom",
+        "description":"# GUI in WuNDa fehlt noch, kann noch nicht implementiert werden",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0
+        },
+        "prices":{
+            "eaflst_1000":0.45,
+            "eaflst_1001-10000":0.225,
+            "eaflst_10001-100000":0.1125,
+            "eaflst_100001-1000000":0.05625,
+            "eaflst_1000001":0.028125            
+        },
+        "mwst":0.0
+    },{	
         "name":"DXF-Daten (Stadtgrundkarte kommunal)",
         "id":"skmekomdxf",
         "description":"# GUI in WuNDa fehlt noch, kann noch nicht implementiert werden",
@@ -1507,5 +1543,21 @@
             "eaqkm":7.5
         },
         "mwst":0.0
+    },{
+        "name":"Stadtbild",
+        "id":"stb",
+        "description":"[x] Einzelobjektrenderer Stadtbildserie / Download Stadtbild und Aggregierender Renderer Stadtbildserie / Donwload Stadtbild",
+        "discounts":{
+            "eigG":0.5,
+            "VU aL":0.5,
+            "VU s":0.5,
+            "VU hV":0.5,
+            "WV ein":1.0,
+            "eigG frei":0.0
+        },
+        "prices":{
+            "ea":10.0
+        },
+        "mwst":19.0	
     }]
 }

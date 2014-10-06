@@ -38,6 +38,8 @@ import javax.swing.text.StyleConstants;
 
 import de.cismet.cids.client.tools.DevelopmentTools;
 
+import de.cismet.cids.custom.objectrenderer.wunda_blau.BillingKundeRenderer;
+
 import de.cismet.cids.dynamics.CidsBean;
 
 import de.cismet.cids.navigator.utils.ClassCacheMultiple;
@@ -97,6 +99,10 @@ public class BillingPopup extends javax.swing.JDialog {
     Product currentProduct = null;
     Modus currentMode = null;
     Usage currentUsage = null;
+    /**
+     * E.g. an URL to a webservice such that an alkis product can be downloaded again in the
+     * {@link BillingKundeRenderer}
+     */
     String request = null;
     Geometry geom = null;
     CidsBean logEntry = null;
@@ -160,7 +166,8 @@ public class BillingPopup extends javax.swing.JDialog {
      * DOCUMENT ME!
      *
      * @param   product  DOCUMENT ME!
-     * @param   request  DOCUMENT ME!
+     * @param   request  E.g. an URL to a webservice such that an alkis product can be downloaded again in the
+     *                   {@link BillingKundeRenderer}
      * @param   geom     DOCUMENT ME!
      * @param   amounts  DOCUMENT ME!
      *
@@ -196,7 +203,8 @@ public class BillingPopup extends javax.swing.JDialog {
      * DOCUMENT ME!
      *
      * @param   product  DOCUMENT ME!
-     * @param   request  DOCUMENT ME!
+     * @param   request  E.g. an URL to a webservice such that an alkis product can be downloaded again in the
+     *                   {@link BillingKundeRenderer}
      * @param   gBuchNr  DOCUMENT ME!
      * @param   geom     DOCUMENT ME!
      * @param   amounts  DOCUMENT ME!
