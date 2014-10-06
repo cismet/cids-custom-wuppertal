@@ -235,16 +235,21 @@ public class AlkisUtils {
      * @return  DOCUMENT ME!
      */
     private static String getAdressPostfix(final Address address) {
-        if (address.getHerkunftAdress().equals(ADRESS_HERKUNFT_KATASTERAMT)) {
+        if ((address.getHerkunftAdress() != null) && address.getHerkunftAdress().equals(ADRESS_HERKUNFT_KATASTERAMT)) {
             return java.util.ResourceBundle.getBundle("de/cismet/cids/custom/wunda_blau/res/alkis/AdressPostfixStrings")
                         .getString("kataster");
-        } else if (address.getHerkunftAdress().equals(ADRESS_HERKUNFT_GRUNDBUCHAMT)) {
+        } else if ((address.getHerkunftAdress() != null)
+                    && address.getHerkunftAdress().equals(ADRESS_HERKUNFT_GRUNDBUCHAMT)) {
             return java.util.ResourceBundle.getBundle("de/cismet/cids/custom/wunda_blau/res/alkis/AdressPostfixStrings")
                         .getString("grundbuch");
         } else {
+            String herkunft = address.getHerkunftAdress();
+            if (herkunft == null) {
+                herkunft = "-";
+            }
             return String.format(java.util.ResourceBundle.getBundle(
                         "de/cismet/cids/custom/wunda_blau/res/alkis/AdressPostfixStrings").getString("else"),
-                    address.getHerkunftAdress());
+                    herkunft);
         }
     }
 
@@ -256,7 +261,7 @@ public class AlkisUtils {
      * @return  DOCUMENT ME!
      */
     private static String getAddressBoldOpenTag(final Address address) {
-        if (address.getHerkunftAdress().equals(ADRESS_HERKUNFT_KATASTERAMT)) {
+        if ((address.getHerkunftAdress() != null) && address.getHerkunftAdress().equals(ADRESS_HERKUNFT_KATASTERAMT)) {
             return "<b>";
         } else {
             return "";
@@ -271,7 +276,7 @@ public class AlkisUtils {
      * @return  DOCUMENT ME!
      */
     private static String getAddressBoldCloseTag(final Address address) {
-        if (address.getHerkunftAdress().equals(ADRESS_HERKUNFT_KATASTERAMT)) {
+        if ((address.getHerkunftAdress() != null) && address.getHerkunftAdress().equals(ADRESS_HERKUNFT_KATASTERAMT)) {
             return "</b>";
         } else {
             return "";
@@ -485,14 +490,17 @@ public class AlkisUtils {
             final Address[] addresses = owner.getAddresses();
             if (addresses != null) {
                 for (final Address address : addresses) {
-                    if ((address != null) && address.getHerkunftAdress().equals(ADRESS_HERKUNFT_KATASTERAMT)) {
+                    if ((address != null) && (address.getHerkunftAdress() != null)
+                                && address.getHerkunftAdress().equals(ADRESS_HERKUNFT_KATASTERAMT)) {
                         ownerStringBuilder.append("<tr><td></td>").append(spacing).append("<td>");
                         ownerStringBuilder.append(addressToString(address)).append(AlkisConstants.NEWLINE);
                         ownerStringBuilder.append("</td><td></td><td></td></tr>");
                     }
                 }
                 for (final Address address : addresses) {
-                    if ((address != null) && !address.getHerkunftAdress().equals(ADRESS_HERKUNFT_KATASTERAMT)) {
+                    if ((address != null)
+                                && ((address.getHerkunftAdress() == null)
+                                    || (!address.getHerkunftAdress().equals(ADRESS_HERKUNFT_KATASTERAMT)))) {
                         ownerStringBuilder.append("<tr><td></td>").append(spacing).append("<td>");
                         ownerStringBuilder.append(addressToString(address)).append(AlkisConstants.NEWLINE);
                         ownerStringBuilder.append("</td><td></td><td></td></tr>");
