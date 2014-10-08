@@ -202,7 +202,7 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
     }
 
     /**
-     * DOCUMENT ME!
+     * Get the stadtbilder which are in the warenkorb.
      *
      * @return  DOCUMENT ME!
      */
@@ -229,7 +229,8 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
     }
 
     /**
-     * Select a stadtbild if the the stadtbildserie is not in the bin and the serie actually contains the stadtbild.
+     * Select (Move to warenkorb) a stadtbild if the stadtbildserie is not in the bin and the serie actually contains
+     * the stadtbild.
      *
      * @param  bildnummer  DOCUMENT ME!
      */
