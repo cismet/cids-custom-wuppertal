@@ -862,52 +862,65 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
             new Sb_stadtbildserieGridObject[grdStadtbildserien.getModel().getSize()];
         ((DefaultListModel)grdStadtbildserien.getModel()).copyInto(gridObjectArr);
 
-        final ArrayList<Download> downloads = new ArrayList<Download>();
+        // the download has to be started in a SwingWorker, because it has to be checked which images are available in
+        // high resolution. this is done via a network connection and therefore might freeze the GUI otherwise.
+        new SwingWorker<Void, Void>() {
 
-        // iterate over the Sb_stadtbildserieGridObject then over the selected Stadtbilder of each GridObject
-        final Enumeration<Sb_stadtbildserieGridObject> e = ((DefaultListModel)grdStadtbildserien.getModel()).elements();
-        while (e.hasMoreElements()) {
-            final Sb_stadtbildserieGridObject gridObject = (Sb_stadtbildserieGridObject)e.nextElement();
+                final ArrayList<Download> downloads = new ArrayList<Download>();
 
-            final CidsBean stadtbildserie = gridObject.getCidsBean();
-            final boolean downloadAllowed = Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(
-                    stadtbildserie)
-                        .isDownloadAllowed();
-            if (downloadAllowed) {
-                for (final CidsBean stadtbild : gridObject.getSelectedBildnummernOfSerie()) {
-                    final String imageNumber = (String)stadtbild.getProperty("bildnummer");
-                    if (Sb_stadtbildUtils.getFormatOfHighResPicture(imageNumber) != null) {
-                        downloads.add(new TifferDownload(
-                                jobname,
-                                "Stadtbild "
-                                        + imageNumber,
-                                "stadtbild_"
-                                        + imageNumber,
-                                stadtbild.toString(),
-                                "1"));
+                @Override
+                protected Void doInBackground() throws Exception {
+                    // iterate over the Sb_stadtbildserieGridObject then over the selected Stadtbilder of each
+                    // GridObject
+                    for (final Sb_stadtbildserieGridObject gridObject : gridObjectArr) {
+                        final CidsBean stadtbildserie = gridObject.getCidsBean();
+                        final boolean downloadAllowed = Sb_RestrictionLevelUtils
+                                    .determineRestrictionLevelForStadtbildserie(
+                                        stadtbildserie).isDownloadAllowed();
+                        if (downloadAllowed) {
+                            for (final CidsBean stadtbild : gridObject.getSelectedBildnummernOfSerie()) {
+                                final String imageNumber = (String)stadtbild.getProperty("bildnummer");
+                                if (Sb_stadtbildUtils.getFormatOfHighResPicture(imageNumber) != null) {
+                                    downloads.add(new TifferDownload(
+                                            jobname,
+                                            "Stadtbild "
+                                                    + imageNumber,
+                                            "stadtbild_"
+                                                    + imageNumber,
+                                            stadtbild.toString(),
+                                            "1"));
+                                }
+                            }
+                        }
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        get();
+                        final int amountDownloads = downloads.size();
+                        if (
+                            BillingPopup.doBilling(
+                                        "stb",
+                                        "not.yet",
+                                        (Geometry)null,
+                                        new ProductGroupAmount("ea", amountDownloads))
+                                    && DownloadManagerDialog.showAskingForUserTitle(
+                                        Sb_stadtbildserieAggregationRenderer.this)) {
+                            if (amountDownloads == 1) {
+                                DownloadManager.instance().add(downloads.get(0));
+                            } else if (amountDownloads > 1) {
+                                DownloadManager.instance()
+                                        .add(new MultipleDownload(downloads, "Ausgewählte Stadtbilder"));
+                            }
+                        }
+                    } catch (Exception ex) {
+                        LOG.error("Error when trying to download the high res image(s)", ex);
                     }
                 }
-            }
-        }
-        final int amountDownloads = downloads.size();
-        try {
-            if (
-                BillingPopup.doBilling(
-                            "stb",
-                            "not.yet",
-                            (Geometry)null,
-                            new ProductGroupAmount("ea", amountDownloads))
-                        && DownloadManagerDialog.showAskingForUserTitle(
-                            this)) {
-                if (amountDownloads == 1) {
-                    DownloadManager.instance().add(downloads.get(0));
-                } else if (amountDownloads > 1) {
-                    DownloadManager.instance().add(new MultipleDownload(downloads, "Ausgewählte Stadtbilder"));
-                }
-            }
-        } catch (Exception ex) {
-            LOG.error("Error when trying to download the high res image(s)", ex);
-        }
+            }.execute();
     } //GEN-LAST:event_btnDownloadHighResImageActionPerformed
 
     /**
