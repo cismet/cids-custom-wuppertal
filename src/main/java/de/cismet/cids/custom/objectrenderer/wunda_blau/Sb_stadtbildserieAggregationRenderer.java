@@ -857,6 +857,10 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
      */
     private void btnDownloadHighResImageActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnDownloadHighResImageActionPerformed
         final String jobname = DownloadManagerDialog.getJobname();
+        // create an array with Sb_stadtbildserieGridObject of the current vorschau.
+        final Sb_stadtbildserieGridObject[] gridObjectArr =
+            new Sb_stadtbildserieGridObject[grdStadtbildserien.getModel().getSize()];
+        ((DefaultListModel)grdStadtbildserien.getModel()).copyInto(gridObjectArr);
 
         final ArrayList<Download> downloads = new ArrayList<Download>();
 
@@ -872,14 +876,16 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
             if (downloadAllowed) {
                 for (final CidsBean stadtbild : gridObject.getSelectedBildnummernOfSerie()) {
                     final String imageNumber = (String)stadtbild.getProperty("bildnummer");
-                    downloads.add(new TifferDownload(
-                            jobname,
-                            "Stadtbild "
-                                    + imageNumber,
-                            "stadtbild_"
-                                    + imageNumber,
-                            stadtbild.toString(),
-                            "1"));
+                    if (Sb_stadtbildUtils.getFormatOfHighResPicture(imageNumber) != null) {
+                        downloads.add(new TifferDownload(
+                                jobname,
+                                "Stadtbild "
+                                        + imageNumber,
+                                "stadtbild_"
+                                        + imageNumber,
+                                stadtbild.toString(),
+                                "1"));
+                    }
                 }
             }
         }
