@@ -13,6 +13,8 @@ import Sirius.navigator.exception.ConnectionException;
 import Sirius.server.middleware.types.MetaClass;
 import Sirius.server.middleware.types.MetaObject;
 
+import org.apache.commons.lang.StringUtils;
+
 import org.jdesktop.swingx.graphics.GraphicsUtilities;
 
 import java.awt.Image;
@@ -86,8 +88,8 @@ public class Sb_stadtbildUtils {
     /** A cache whose key is a bildnummer and the value is the corresponding image. */
     private static final ConcurrentLRUCache<String, SoftReference<BufferedImage>> IMAGE_CACHE =
         new ConcurrentLRUCache<String, SoftReference<BufferedImage>>(CACHE_SIZE);
-    /** A set with bildnummern (image numbers) which could not be loaded. */
-    private static final Set<String> FAILED_IMAGES = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
+    /** A map with bildnummern (image numbers) which could not be loaded. */
+    private static final ConcurrentHashMap<String, String> FAILED_IMAGES = new ConcurrentHashMap<String, String>();
 
     private static final PriorityExecutor unboundUEHThreadPoolExecutor;
     public static final int HIGH_PRIORITY = 1;
@@ -336,11 +338,15 @@ public class Sb_stadtbildUtils {
                 if (img != null) {
                     IMAGE_CACHE.put(bildnummer, new SoftReference<BufferedImage>(img));
                 } else {
-                    FAILED_IMAGES.add(bildnummer);
+                    FAILED_IMAGES.put(
+                        bildnummer,
+                        "The image for "
+                                + bildnummer
+                                + " returned from the server was apparently null.");
                 }
                 return img;
             } catch (Exception ex) {
-                FAILED_IMAGES.add(bildnummer);
+                FAILED_IMAGES.put(bildnummer, ex.getMessage());
                 throw ex;
             } finally {
                 if (is != null) {
@@ -392,7 +398,7 @@ public class Sb_stadtbildUtils {
      * @return  DOCUMENT ME!
      */
     public static boolean isBildnummerInCacheOrFailed(final String bildnummer) {
-        return IMAGE_CACHE.containsKey(bildnummer) || FAILED_IMAGES.contains(bildnummer);
+        return IMAGE_CACHE.containsKey(bildnummer) || FAILED_IMAGES.containsKey(bildnummer);
     }
 
     /**
@@ -403,7 +409,22 @@ public class Sb_stadtbildUtils {
      * @return  DOCUMENT ME!
      */
     public static boolean isBildnummerInFailedSet(final String bildnummer) {
-        return FAILED_IMAGES.contains(bildnummer);
+        return FAILED_IMAGES.containsKey(bildnummer);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   bildnummer  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String getErrorMessageForFailedImage(final String bildnummer) {
+        String message = FAILED_IMAGES.get(bildnummer);
+        if (StringUtils.isBlank(message)) {
+            message = "No message for image " + bildnummer;
+        }
+        return message;
     }
 
     /**
@@ -594,11 +615,15 @@ public class Sb_stadtbildUtils {
                     if (img != null) {
                         IMAGE_CACHE.put(bildnummer, new SoftReference<BufferedImage>(img));
                     } else {
-                        FAILED_IMAGES.add(bildnummer);
+                        FAILED_IMAGES.put(
+                            bildnummer,
+                            "The image "
+                                    + bildnummer
+                                    + " returned from the server was apparently null.");
                     }
                     return img;
                 } catch (Exception ex) {
-                    FAILED_IMAGES.add(bildnummer);
+                    FAILED_IMAGES.put(bildnummer, ex.getMessage());
                     throw ex;
                 } finally {
                     if (is != null) {
@@ -610,7 +635,7 @@ public class Sb_stadtbildUtils {
                     }
                 }
             }
-            FAILED_IMAGES.add(bildnummer);
+            FAILED_IMAGES.put(bildnummer, "No url exists to retrieve the image " + bildnummer + ".");
             return null;
         }
     }

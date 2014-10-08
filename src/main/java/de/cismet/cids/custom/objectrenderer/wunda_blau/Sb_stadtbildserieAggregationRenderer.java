@@ -1376,6 +1376,13 @@ public class Sb_stadtbildserieAggregationRenderer extends javax.swing.JPanel imp
                                 selectedObject.get(0);
                             final String bildnummer = gridObject.getBildnummer();
                             if (Sb_stadtbildUtils.isBildnummerInFailedSet(bildnummer)) {
+                                if (LOG.isDebugEnabled()) {
+                                    LOG.debug(
+                                        "The image "
+                                                + bildnummer
+                                                + " could not be loaded the last time because:\n"
+                                                + Sb_stadtbildUtils.getErrorMessageForFailedImage(bildnummer));
+                                }
                                 Sb_stadtbildUtils.removeBildnummerFromFailedSet(bildnummer);
                                 gridObject.clearLastShownImage();
                             }
