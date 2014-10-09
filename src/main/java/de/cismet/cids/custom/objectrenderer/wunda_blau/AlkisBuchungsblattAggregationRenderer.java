@@ -12,6 +12,7 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
+import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import com.vividsolutions.jts.geom.Geometry;
@@ -31,6 +32,7 @@ import java.net.URL;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -45,7 +47,9 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.StichtagChooserDialog;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
@@ -65,6 +69,7 @@ import de.cismet.cismap.commons.raster.wms.simple.SimpleWmsGetMapUrl;
 
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import de.cismet.tools.gui.downloadmanager.HttpDownload;
@@ -89,6 +94,8 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
         "custom.alkis.product.bestandsnachweis_kom@WUNDA_BLAU";
     private static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN =
         "custom.alkis.product.bestandsnachweis_kom_intern@WUNDA_BLAU";
+    private static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_STICHSTAGSBEZOGEN_NRW =
+        "custom.alkis.product.bestandsnachweis_stichtagsbezogen_nrw@WUNDA_BLAU";
 
     private static final Color[] COLORS = new Color[] {
             new Color(247, 150, 70, 192),
@@ -109,6 +116,7 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
     private Thread mapThread;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private org.jdesktop.swingx.JXHyperlink hlBestandsnachweisStichtagNRW;
     private org.jdesktop.swingx.JXHyperlink jxlBestandsnachweisKommunal;
     private org.jdesktop.swingx.JXHyperlink jxlBestandsnachweisKommunalIntern;
     private org.jdesktop.swingx.JXHyperlink jxlBestandsnachweisNRW;
@@ -175,6 +183,7 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
         jxlBestandsnachweisNRW = new org.jdesktop.swingx.JXHyperlink();
         jxlBestandsnachweisKommunal = new org.jdesktop.swingx.JXHyperlink();
         jxlBestandsnachweisKommunalIntern = new org.jdesktop.swingx.JXHyperlink();
+        hlBestandsnachweisStichtagNRW = new org.jdesktop.swingx.JXHyperlink();
         pnlBuchungsblaetter = new RoundedPanel();
         srpHeaderBuchungsblaetter = new de.cismet.tools.gui.SemiRoundedPanel();
         lblHeaderBuchungsblaetter = new javax.swing.JLabel();
@@ -238,7 +247,7 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(7, 10, 7, 10);
@@ -258,11 +267,30 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(7, 10, 7, 10);
         pnlButtons.add(jxlBestandsnachweisKommunalIntern, gridBagConstraints);
+
+        hlBestandsnachweisStichtagNRW.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/icons/pdf.png")));             // NOI18N
+        hlBestandsnachweisStichtagNRW.setText(org.openide.util.NbBundle.getMessage(
+                AlkisBuchungsblattAggregationRenderer.class,
+                "AlkisBuchungsblattAggregationRenderer.hlBestandsnachweisStichtagNRW.text")); // NOI18N
+        hlBestandsnachweisStichtagNRW.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    hlBestandsnachweisStichtagNRWActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(7, 10, 7, 10);
+        pnlButtons.add(hlBestandsnachweisStichtagNRW, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -410,6 +438,61 @@ public class AlkisBuchungsblattAggregationRenderer extends javax.swing.JPanel im
         map.gotoInitialBoundingBox();
         tblBuchungsblaetter.clearSelection();
     }                                                                                //GEN-LAST:event_tblBuchungsblaetterFocusLost
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void hlBestandsnachweisStichtagNRWActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlBestandsnachweisStichtagNRWActionPerformed
+        try {
+            int stueck = 0;
+            for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
+                if (cidsBeanWrapper.isSelected()) {
+                    stueck++;
+                }
+            }
+
+            final StichtagChooserDialog stichtagDialog = new StichtagChooserDialog(ComponentRegistry.getRegistry()
+                            .getMainWindow());
+            StaticSwingTools.showDialog(stichtagDialog);
+            final Date stichtag = stichtagDialog.getDate();
+            if (stichtag != null) {
+                if (BillingPopup.doBilling("bestnw", "no.yet", (Geometry)null, new ProductGroupAmount("ea", stueck))) {
+                    final List<Download> downloads = new LinkedList<Download>();
+                    for (final CidsBeanWrapper cidsBeanWrapper : cidsBeanWrappers) {
+                        if (!cidsBeanWrapper.isSelected()) {
+                            continue;
+                        }
+                        final Download d = AlkisProductDownloadHelper.createStichtagProductDownload(
+                                stichtag,
+                                hlBestandsnachweisStichtagNRW.getText(),
+                                AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF,
+                                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_STICHSTAGSBEZOGEN_NRW,
+                                getCompleteBuchungsblattCode(cidsBeanWrapper.getCidsBean()),
+                                this);
+                        downloads.add(d);
+                    }
+
+                    if (downloads.size() > 1) {
+                        String jobname = hlBestandsnachweisStichtagNRW.getText();
+                        if (DownloadManagerDialog.showAskingForUserTitle(this)) {
+                            jobname = DownloadManagerDialog.getJobname();
+                            if ((jobname == null) || jobname.isEmpty()) {
+                                jobname = hlBestandsnachweisStichtagNRW.getText();
+                            }
+                        }
+                        DownloadManager.instance().add(new MultipleDownload(downloads, jobname));
+                    } else if (downloads.size() == 1) {
+                        DownloadManager.instance().add(downloads.get(0));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Error when trying to produce a alkis product", e);
+            // Hier noch ein Fehlerdialog
+        }
+    } //GEN-LAST:event_hlBestandsnachweisStichtagNRWActionPerformed
 
     @Override
     public Collection<CidsBean> getCidsBeans() {
