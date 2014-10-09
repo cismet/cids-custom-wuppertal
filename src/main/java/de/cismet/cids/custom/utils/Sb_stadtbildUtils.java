@@ -593,6 +593,8 @@ public class Sb_stadtbildUtils {
         public Image call() throws Exception {
             if (!Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(stadtbildserie)
                         .isPreviewAllowed()) {
+                FAILED_IMAGES.put(bildnummer, "The user is not allowed to see the image "
+                            + bildnummer);
                 return null;
             }
 
