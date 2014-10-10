@@ -2123,19 +2123,19 @@ public class Sb_stadtbildserieEditor extends JPanel implements CidsBeanRenderer,
     private void determineBulletPoint() {
         imgpBulletPoint.setImage(null);
         imgpBulletPoint.setToolTipText("");
-        new SwingWorker<Object[], Void>() {
+        new SwingWorker<Sb_RestrictionLevelUtils.BulletPointSettings, Void>() {
 
                 @Override
-                protected Object[] doInBackground() throws Exception {
+                protected Sb_RestrictionLevelUtils.BulletPointSettings doInBackground() throws Exception {
                     return Sb_RestrictionLevelUtils.determineBulletPointAndInfoText(cidsBean);
                 }
 
                 @Override
                 protected void done() {
                     try {
-                        final Object[] imageAndInfo = get();
-                        imgpBulletPoint.setImage((Image)imageAndInfo[0]);
-                        imgpBulletPoint.setToolTipText((String)imageAndInfo[1]);
+                        final Sb_RestrictionLevelUtils.BulletPointSettings imageAndInfo = get();
+                        imgpBulletPoint.setImage(imageAndInfo.getColorImage());
+                        imgpBulletPoint.setToolTipText(imageAndInfo.getTooltipText());
                     } catch (InterruptedException ex) {
                         LOG.error(ex, ex);
                     } catch (ExecutionException ex) {

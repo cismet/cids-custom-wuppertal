@@ -28,9 +28,7 @@ import java.lang.ref.SoftReference;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
@@ -483,7 +481,25 @@ public class Sb_stadtbildUtils {
                 if (showWholePicture) {
                     return GraphicsUtilities.createThumbnail((BufferedImage)toScale, dimension);
                 } else {
-                    return GraphicsUtilities.createThumbnail((BufferedImage)toScale, dimension, dimension);
+                    final double reduce = Math.min(toScale.getWidth(null), toScale.getHeight(null)) * 1d / dimension;
+                    final int newWidth = (int)Math.round(toScale.getWidth(null) / reduce);
+                    final int newHeight = (int)Math.round(toScale.getHeight(null) / reduce);
+                    final BufferedImage thumbnail = GraphicsUtilities.createThumbnail((BufferedImage)toScale,
+                            newWidth,
+                            newHeight);
+                    try {
+                        return thumbnail.getSubimage((thumbnail.getWidth() - dimension) / 2,
+                                (thumbnail.getHeight()
+                                            - dimension)
+                                        / 2,
+                                dimension,
+                                dimension);
+                    } catch (Exception ex) {
+                        LOG.error("Something went wrong while cropping the image.", ex);
+                        return GraphicsUtilities.createThumbnail((BufferedImage)toScale,
+                                dimension,
+                                dimension);
+                    }
                 }
             } else if ((toScale.getWidth(null) < dimension) || (toScale.getHeight(null) < dimension)) {
                 return oldScaleImage(toScale, dimension, showWholePicture);

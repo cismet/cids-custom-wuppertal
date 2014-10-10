@@ -29,10 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils;
-import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils.RestrictionLevel;
 import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
-
-import de.cismet.cids.dynamics.CidsBean;
 
 /**
  * A JGrid renderer for a Stadtbildserie. It is used in the Vorschau and Bin panel of the
@@ -232,7 +229,8 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
             paintMarker = gridObject.isMarker();
             final int amountImages = gridObject.getAmountImages();
             final int amountSelectedImages = gridObject.getAmountSelectedImages();
-            determineColor(gridObject);
+            final Sb_RestrictionLevelUtils.BulletPointSettings pointSettings = gridObject.determineBulletPointColor();
+            setBulletPointColor(pointSettings);
             lblAmount.setText(amountSelectedImages + " von " + amountImages);
         }
 
@@ -251,18 +249,6 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
     }
 
     /**
-     * DOCUMENT ME!
-     *
-     * @param  gridObject  DOCUMENT ME!
-     */
-    private void determineColor(final Sb_stadtbildserieGridObject gridObject) {
-        final Object[] imageAndInfo = Sb_RestrictionLevelUtils.determineBulletPointAndInfoText(gridObject
-                        .getCidsBean());
-        pnlBullet.setImage((Image)imageAndInfo[0]);
-        pnlBullet.setToolTipText((String)imageAndInfo[1]);
-    }
-
-    /**
      * Check if the tooltip of the bullet point can be shown.
      *
      * @param   event  DOCUMENT ME!
@@ -276,6 +262,21 @@ public class Sb_stadtbildserieGridRenderer extends javax.swing.JPanel implements
             return pnlBullet.getToolTipText(event);
         } else {
             return super.getToolTipText(event);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  pointSettings  DOCUMENT ME!
+     */
+    private void setBulletPointColor(final Sb_RestrictionLevelUtils.BulletPointSettings pointSettings) {
+        if (pointSettings == null) {
+            pnlBullet.setToolTipText(null);
+            pnlBullet.setImage(null);
+        } else {
+            pnlBullet.setToolTipText(pointSettings.getTooltipText());
+            pnlBullet.setImage(pointSettings.getColorImage());
         }
     }
 
