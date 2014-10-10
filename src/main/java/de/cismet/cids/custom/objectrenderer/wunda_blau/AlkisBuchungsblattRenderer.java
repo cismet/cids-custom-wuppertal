@@ -16,14 +16,11 @@
  */
 package de.cismet.cids.custom.objectrenderer.wunda_blau;
 
-import Sirius.navigator.connection.SessionManager;
 import Sirius.navigator.exception.ConnectionException;
 import Sirius.navigator.ui.ComponentRegistry;
 import Sirius.navigator.ui.RequestsFullSizeComponent;
 
 import Sirius.server.middleware.types.MetaClass;
-import Sirius.server.middleware.types.MetaObject;
-import Sirius.server.newuser.User;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
@@ -39,12 +36,8 @@ import de.aedsicad.aaaweb.service.util.Owner;
 import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
 import edu.umd.cs.piccolo.event.PInputEvent;
 
-import org.apache.commons.lang.ArrayUtils;
-
 import org.jdesktop.swingbinding.JListBinding;
 import org.jdesktop.swingx.graphics.ReflectionRenderer;
-
-import org.openide.util.Exceptions;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -67,6 +60,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,7 +85,9 @@ import javax.swing.text.html.StyleSheet;
 
 import de.cismet.cids.custom.objectrenderer.utils.CidsBeanSupport;
 import de.cismet.cids.custom.objectrenderer.utils.ObjectRendererUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisProductDownloadHelper;
 import de.cismet.cids.custom.objectrenderer.utils.alkis.AlkisUtils;
+import de.cismet.cids.custom.objectrenderer.utils.alkis.StichtagChooserDialog;
 import de.cismet.cids.custom.objectrenderer.utils.billing.BillingPopup;
 import de.cismet.cids.custom.objectrenderer.utils.billing.ProductGroupAmount;
 import de.cismet.cids.custom.utils.alkis.AlkisConstants;
@@ -122,6 +118,7 @@ import de.cismet.tools.gui.FooterComponentProvider;
 import de.cismet.tools.gui.RoundedPanel;
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.TitleComponentProvider;
+import de.cismet.tools.gui.downloadmanager.Download;
 import de.cismet.tools.gui.downloadmanager.DownloadManager;
 import de.cismet.tools.gui.downloadmanager.DownloadManagerDialog;
 import de.cismet.tools.gui.downloadmanager.HttpDownload;
@@ -157,6 +154,8 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     //
     private static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_NRW =
         "custom.alkis.product.bestandsnachweis_nrw@WUNDA_BLAU";
+    private static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_STICHSTAGSBEZOGEN_NRW =
+        "custom.alkis.product.bestandsnachweis_stichtagsbezogen_nrw@WUNDA_BLAU";
     private static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM =
         "custom.alkis.product.bestandsnachweis_kom@WUNDA_BLAU";
     private static final String PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_KOM_INTERN =
@@ -168,6 +167,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     //~ Instance fields --------------------------------------------------------
 
     private ImageIcon BESTAND_NRW_PDF;
+    private ImageIcon BESTAND_NRW_STICHTAG_PDF;
     private ImageIcon BESTAND_NRW_HTML;
     private ImageIcon BESTAND_KOM_PDF;
     private ImageIcon BESTAND_KOM_HTML;
@@ -200,6 +200,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
     private org.jdesktop.swingx.JXHyperlink hlBestandsnachweisKomPdf;
     private org.jdesktop.swingx.JXHyperlink hlBestandsnachweisNrwHtml;
     private org.jdesktop.swingx.JXHyperlink hlBestandsnachweisNrwPdf;
+    private org.jdesktop.swingx.JXHyperlink hlBestandsnachweisNrwStichtagPdf;
     private org.jdesktop.swingx.JXHyperlink hlGrundstuecksnachweisNrwHtml;
     private org.jdesktop.swingx.JXHyperlink hlGrundstuecksnachweisNrwPdf;
     private javax.swing.JLabel jLabel1;
@@ -349,6 +350,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         BufferedImage i4 = null;
         BufferedImage i5 = null;
         BufferedImage i6 = null;
+        BufferedImage i7 = null;
         try {
             // TODO: Richtige Screenshots machen und zuordnen!
             i1 = reflectionRenderer.appendReflection(ImageIO.read(
@@ -363,10 +365,13 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
                         getClass().getResource(ALKIS_RES_PACKAGE + "bestandsnachweispdf.png")));
             i6 = reflectionRenderer.appendReflection(ImageIO.read(
                         getClass().getResource(ALKIS_RES_PACKAGE + "bestandsachweishtml.png")));
+            i7 = reflectionRenderer.appendReflection(ImageIO.read(
+                        getClass().getResource(ALKIS_RES_PACKAGE + "bestandsachweisStichtagPdf.png")));
         } catch (Exception ex) {
             LOG.error(ex, ex);
         }
         BESTAND_NRW_PDF = new ImageIcon(i1);
+        BESTAND_NRW_STICHTAG_PDF = new ImageIcon(i7);
         BESTAND_NRW_HTML = new ImageIcon(i2);
         BESTAND_KOM_PDF = new ImageIcon(i3);
         BESTAND_KOM_HTML = new ImageIcon(i4);
@@ -422,6 +427,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
      */
     private void initProductPreviewImages() {
         productPreviewImages.put(hlBestandsnachweisNrwPdf, BESTAND_NRW_PDF);
+        productPreviewImages.put(hlBestandsnachweisNrwStichtagPdf, BESTAND_NRW_STICHTAG_PDF);
         productPreviewImages.put(hlBestandsnachweisNrwHtml, BESTAND_NRW_HTML);
         productPreviewImages.put(hlBestandsnachweisKomPdf, BESTAND_KOM_PDF);
         productPreviewImages.put(hlBestandsnachweisKomHtml, BESTAND_KOM_HTML);
@@ -432,6 +438,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         final ProductLabelMouseAdaper productListener = new ProductLabelMouseAdaper();
         hlBestandsnachweisNrwHtml.addMouseListener(productListener);
         hlBestandsnachweisNrwPdf.addMouseListener(productListener);
+        hlBestandsnachweisNrwStichtagPdf.addMouseListener(productListener);
         hlBestandsnachweisKomHtml.addMouseListener(productListener);
         hlBestandsnachweisKomPdf.addMouseListener(productListener);
         hlBestandsnachweisKomInternHtml.addMouseListener(productListener);
@@ -529,6 +536,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         hlBestandsnachweisKomPdf = new org.jdesktop.swingx.JXHyperlink();
         hlGrundstuecksnachweisNrwPdf = new org.jdesktop.swingx.JXHyperlink();
         hlBestandsnachweisKomInternPdf = new org.jdesktop.swingx.JXHyperlink();
+        hlBestandsnachweisNrwStichtagPdf = new org.jdesktop.swingx.JXHyperlink();
         jPanel9 = new javax.swing.JPanel();
         panProductPreview = new RoundedPanel();
         lblProductPreview = new javax.swing.JLabel();
@@ -946,14 +954,14 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 4;
+        gridBagConstraints.gridheight = 5;
         gridBagConstraints.weighty = 1.0;
         panProduktePDF.add(jPanel7, gridBagConstraints);
 
         jPanel8.setOpaque(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.weightx = 1.0;
         panProduktePDF.add(jPanel8, gridBagConstraints);
 
@@ -984,7 +992,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 5);
         panProduktePDF.add(hlBestandsnachweisKomPdf, gridBagConstraints);
@@ -1002,7 +1010,7 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 5);
         panProduktePDF.add(hlGrundstuecksnachweisNrwPdf, gridBagConstraints);
@@ -1019,10 +1027,27 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 5);
         panProduktePDF.add(hlBestandsnachweisKomInternPdf, gridBagConstraints);
+
+        hlBestandsnachweisNrwStichtagPdf.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/cids/custom/icons/pdf.png"))); // NOI18N
+        hlBestandsnachweisNrwStichtagPdf.setLabel("Bestandsnachweis stichtagsbezogen (NRW)");
+        hlBestandsnachweisNrwStichtagPdf.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    hlBestandsnachweisNrwStichtagPdfActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 5);
+        panProduktePDF.add(hlBestandsnachweisNrwStichtagPdf, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1498,6 +1523,40 @@ public class AlkisBuchungsblattRenderer extends javax.swing.JPanel implements Ci
         map.gotoInitialBoundingBox();
         lstBuchungsstellen.clearSelection();
     }                                                                               //GEN-LAST:event_lstBuchungsstellenFocusLost
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void hlBestandsnachweisNrwStichtagPdfActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlBestandsnachweisNrwStichtagPdfActionPerformed
+        if (!demoMode) {
+            try {
+                final StichtagChooserDialog stichtagDialog = new StichtagChooserDialog(ComponentRegistry.getRegistry()
+                                .getMainWindow());
+                StaticSwingTools.showDialog(stichtagDialog);
+                final Date stichtag = stichtagDialog.getDate();
+                if (stichtag != null) {
+                    if (BillingPopup.doBilling("bestnw", "no.yet", (Geometry)null, new ProductGroupAmount("ea", 1))) {
+                        final Download d = AlkisProductDownloadHelper.createStichtagProductDownload(
+                                stichtag,
+                                hlBestandsnachweisNrwStichtagPdf.getText(),
+                                AlkisUtils.PRODUCTS.BESTANDSNACHWEIS_STICHTAGSBEZOGEN_NRW_PDF,
+                                PRODUCT_ACTION_TAG_BESTANDSNACHWEIS_STICHSTAGSBEZOGEN_NRW,
+                                getCompleteBuchungsblattCode(),
+                                this);
+
+                        DownloadManager.instance().add(d);
+                    }
+                }
+            } catch (Exception e) {
+                LOG.error("Error when trying to produce a alkis product", e);
+                // Hier noch ein Fehlerdialog
+            }
+        } else {
+            BrowserLauncher.openURLorFile(AlkisConstants.COMMONS.DEMOSERVICEURL + "bestandsnachweis_nrw.pdf");
+        }
+    } //GEN-LAST:event_hlBestandsnachweisNrwStichtagPdfActionPerformed
 
     /**
      * DOCUMENT ME!

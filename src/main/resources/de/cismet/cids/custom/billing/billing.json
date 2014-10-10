@@ -1543,7 +1543,7 @@
             "eaqkm":7.5
         },
         "mwst":0.0
-    },{
+	},{
         "name":"Stadtbild",
         "id":"stb",
         "description":"[x] Einzelobjektrenderer Stadtbildserie / Download Stadtbild und Aggregierender Renderer Stadtbildserie / Donwload Stadtbild",
