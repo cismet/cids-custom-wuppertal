@@ -11,14 +11,19 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 
 import javax.swing.DefaultListModel;
+import javax.swing.SwingWorker;
 
 import de.cismet.cids.custom.utils.Sb_RestrictionLevelUtils;
 import de.cismet.cids.custom.utils.Sb_stadtbildUtils;
 
 import de.cismet.cids.dynamics.CidsBean;
 import de.cismet.cids.dynamics.CidsBeanStore;
+
+import de.cismet.commons.concurrency.CismetExecutors;
 
 /**
  * DOCUMENT ME!
@@ -32,6 +37,7 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
             Sb_stadtbildserieGridObject.class);
+    private static final ExecutorService bulletPointFetcherThreadPool = CismetExecutors.newFixedThreadPool(20);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -57,6 +63,7 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
      * stadtbildserie.getBeanCollectionProperty("stadtbilder_arr"), but might be ordered.
      */
     private List<CidsBean> imagesToShow;
+    private Sb_RestrictionLevelUtils.BulletPointSettings bulletPointSettings = null;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -424,5 +431,38 @@ public class Sb_stadtbildserieGridObject extends Sb_AbstractPictureGridObject im
     @Override
     protected boolean isPreviewAllowed() {
         return Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(stadtbildserie).isPreviewAllowed();
+    }
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public Sb_RestrictionLevelUtils.BulletPointSettings determineBulletPointColor() {
+        if (bulletPointSettings != null) {
+            return bulletPointSettings;
+        } else {
+            final SwingWorker worker = new SwingWorker<Sb_RestrictionLevelUtils.BulletPointSettings, Void>() {
+
+                    @Override
+                    protected Sb_RestrictionLevelUtils.BulletPointSettings doInBackground() throws Exception {
+                        return Sb_RestrictionLevelUtils.determineBulletPointAndInfoText(Sb_stadtbildserieGridObject.this
+                                        .getCidsBean());
+                    }
+
+                    @Override
+                    protected void done() {
+                        try {
+                            bulletPointSettings = get();
+                            notifyModel();
+                        } catch (InterruptedException ex) {
+                            LOG.error(ex, ex);
+                        } catch (ExecutionException ex) {
+                            LOG.error(ex, ex);
+                        }
+                    }
+                };
+            bulletPointFetcherThreadPool.submit(worker);
+            return null;
+        }
     }
 }

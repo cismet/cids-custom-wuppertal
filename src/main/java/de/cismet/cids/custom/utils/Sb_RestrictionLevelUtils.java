@@ -169,7 +169,7 @@ public class Sb_RestrictionLevelUtils {
      *
      * @return  DOCUMENT ME!
      */
-    public static RestrictionLevel determineRestrictionLevelForNutzungseinschraenkung(
+    public static synchronized RestrictionLevel determineRestrictionLevelForNutzungseinschraenkung(
             final CidsBean nutzungseinschraenkung) {
         if (nutzungseinschraenkung != null) {
             final RestrictionLevel level = new RestrictionLevel();
@@ -211,7 +211,7 @@ public class Sb_RestrictionLevelUtils {
      *
      * @return  DOCUMENT ME!
      */
-    public static Object[] determineBulletPointAndInfoText(final CidsBean stadtbildserie) {
+    public static BulletPointSettings determineBulletPointAndInfoText(final CidsBean stadtbildserie) {
         final RestrictionLevel level = Sb_RestrictionLevelUtils.determineRestrictionLevelForStadtbildserie(
                 stadtbildserie);
 
@@ -228,10 +228,56 @@ public class Sb_RestrictionLevelUtils {
             }
         }
 
-        return new Object[] { colorImage, tooltipText };
+        return new BulletPointSettings(colorImage, tooltipText);
     }
 
     //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    public static class BulletPointSettings {
+
+        //~ Instance fields ----------------------------------------------------
+
+        Image colorImage;
+        String tooltipText;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new BulletPointSettings object.
+         *
+         * @param  colorImage   DOCUMENT ME!
+         * @param  tooltipText  DOCUMENT ME!
+         */
+        public BulletPointSettings(final Image colorImage, final String tooltipText) {
+            this.colorImage = colorImage;
+            this.tooltipText = tooltipText;
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public Image getColorImage() {
+            return colorImage;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public String getTooltipText() {
+            return tooltipText;
+        }
+    }
 
     /**
      * DOCUMENT ME!
